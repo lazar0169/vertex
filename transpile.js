@@ -10,6 +10,8 @@ let maper = JSON.parse(fs.readFileSync('maper.json', 'utf8'));
 let objects = merge(getFiles('objects'), true);
 let views = fs.readdirSync('views');
 let core = getFiles('core');
+let coreScripts = core.filter(file => file.split('.')[file.split('.').length - 1] === 'js');
+let coreStyles = core.filter(file => file.split('.')[file.split('.').length - 1] === 'css');
 let vendorSafe = isVendorSafe(getFiles('vendor'));
 
 let buildFolder = 'bin';
@@ -23,8 +25,8 @@ if (!fs.existsSync(buildFolder)) {
 for (let view of views) {
     if (view.split('.')[1] !== 'html') continue;
     view = view.split('.')[0];
-    let js = merge(core),
-        css = '',
+    let js = merge(coreScripts),
+        css = merge(coreStyles),
         styles = maper.styles[view].map(path => `./styles/${path}`),
         scripts = maper.scripts[view].map(path => `./scripts/${path}`);
 
@@ -52,6 +54,7 @@ for (let view of views) {
 
     try {
         js += merge(scripts);
+        js = '"use strict"; \r' + js;
         fs.writeFileSync(`./${buildFolder}/js/${view}.js`, js);
 
         css += merge(styles);
