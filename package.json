@@ -1,0 +1,26 @@
+{
+  "name": "hexworks",
+  "version": "1.0.0",
+  "description": "Hexanim framework",
+  "main": "transpile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lazar0169/hexworks.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lazar0169/hexworks/issues"
+  },
+  "homepage": "https://github.com/lazar0169/hexworks#readme",
+  "devDependencies": {
+    "jsdom": "^11.11.0",
+    "pretty": "^2.0.0"
+  },
+  "dependencies": {
+    "npm": "^6.2.0"
+  }
+}
