@@ -14,7 +14,8 @@ const sidebar = (function () {
     let globalList = $$('.lists');
     let logoWrapper = $$('#sidebar-bottom');
     let listName = $$('.list-name');
-    let iconList = $$('.icon-list');
+    let teamName = $$('#team-name');
+    let appName = $$('#head-name');
 
     window.addEventListener('load', () => {
         makeMenu();
@@ -57,6 +58,10 @@ const sidebar = (function () {
             menu.classList.add('expand');
             sidebarHeader.classList.add('expand');
             logoWrapper.classList.add('expand');
+            teamName.classList.add('expand');
+            appName.classList.add('expand');
+            globalSearch.classList.add('expand');
+            expandButton.classList.add('expand');
             for (let list of listName) {
                 list.classList.add('hide');
             }
@@ -69,6 +74,10 @@ const sidebar = (function () {
             menu.classList.remove('expand');
             sidebarHeader.classList.remove('expand');
             logoWrapper.classList.remove('expand');
+            teamName.classList.remove('expand');
+            appName.classList.remove('expand');
+            globalSearch.classList.remove('expand');
+            expandButton.classList.remove('expand');
             for (let list of listName) {
                 list.classList.remove('hide');
             }

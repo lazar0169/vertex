@@ -4,7 +4,7 @@
     position: absolute;
     display: flex;
     flex-flow: column wrap;
-    width: 20%;
+    width: 12%;
     height: 100%;
     left: 0;
     color: rgb(150, 150, 150);
@@ -13,7 +13,7 @@
 }
 
 #sidebar.expand {
-    width: 5%;
+    width: 2.5%;
 }
 
 #sidebar-top {
@@ -21,42 +21,59 @@
     padding: 0;
     position: absolute;
     width: 100%;
-    height: 15%;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
+    height: 14%;
+    display: inline;
+    float: left;
     margin-bottom: 1%;
     background-color: rgb(60, 60, 60);
+    font-size: 1vw;
 }
 
 #sidebar-top.expand {
+    display: flex;
     flex-flow: column wrap;
+    justify-content: center;
+    align-items: center
 }
 
-#app-name {
-    margin: 0;
-    padding: 0;
-    width: 80%;
-    display: flex;
-    align-items: center;
-    cursor: default;
+#team-name {
+    visibility: visible;
+    width: auto;
+    font-size: 1vw;
+}
+
+#team-name.expand {
+    visibility: hidden;
+    width: 0;
 }
 
 #icon-expand {
-    width: 20%;
+    height: 33%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    position: absolute;
+    right: 0;
+}
+
+#icon-expand.expand {
+    left: 0;
 }
 
 #icon-search {
     width: 95%;
+    height: 33%;
     display: flex;
     align-items: center;
     padding-left: 5%;
     cursor: pointer;
+    position: absolute;
+    bottom: 0;
+}
+
+#icon-search>p {
+    font-size: 1vw;
 }
 
 #global-search {
@@ -68,13 +85,23 @@
     border-bottom: 2px solid white;
 }
 
+#icon-search.expand {
+    justify-content: center;
+}
+
+.expand>p {
+    visibility: hidden;
+    width: 0;
+}
+
 #sidebar-middle {
     margin: 0;
     padding: 0;
     position: absolute;
-    top: 15%;
+    top: 14%;
     width: 100%;
     background-color: transparent;
+    font-size: 1vw;
 }
 
 #sidebar-middle>.list-management {
@@ -90,7 +117,7 @@
     background-color: rgb(60, 60, 60);
     cursor: pointer;
     text-transform: capitalize;
-    height: 50px;
+    height: 60px;
     display: flex;
     align-items: center;
 }
@@ -117,6 +144,7 @@
     justify-content: center;
     align-items: center;
     visibility: visible;
+    font-size: 1vw;
 }
 
 #sidebar-bottom.expand {
@@ -135,13 +163,14 @@
     overflow: auto;
     background-color: rgb(60, 60, 60);
     color: rgb(150, 150, 150);
+    font-size: 1vw;
 }
 
 #sidebar-navigation.expand {
     visibility: visible;
     animation-name: slideIn;
     animation-duration: 0.5s;
-    width: 40%;
+    width: 19%;
 }
 
 #sidebar-navigation.hide {
@@ -159,14 +188,36 @@
     align-items: center;
 }
 
+#head-name {
+    width: 80%;
+    height: 33%;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    float: left;
+    padding-left: 5%;
+    position: absolute;
+    top: 0;
+    font-size: 1vw;
+}
+
+#head-name.expand {
+    justify-content: center;
+}
+
 #navigation-top>h2 {
     width: 100%;
+    font-size: 1vw;
+    padding-left: 5%;
+}
+
+#navigation-top>p, #navigation-top>input {
+    font-size: 1vw;
 }
 
 #chosen-link {
     width: 80%;
     text-transform: capitalize;
-    padding-left: 5%;
     cursor: default;
 }
 
@@ -176,6 +227,8 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    font-size: 1vw;
+    padding-left: 5%;
 }
 
 #navigation-content {
@@ -213,6 +266,20 @@ h3 {
     background-color: transparent;
 }
 
+#sidebar-navigation::-webkit-scrollbar {
+    width: 3%;
+}
+
+#sidebar-navigation::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(42, 42, 42);
+    background-color: rgb(100, 100, 100);
+}
+
+#sidebar-navigation::-webkit-scrollbar-thumb {
+    background-color: rgb(42, 42, 42);
+    border-radius: 50px;
+}
+
 @keyframes slideIn {
     0% {
         width: 0;
@@ -221,16 +288,16 @@ h3 {
         width: 0;
     }
     100% {
-        width: 40%;
+        width: 19%;
     }
 }
 
 @keyframes slideOut {
     0% {
-        width: 40%;
+        width: 19%;
     }
     75% {
-        width: 40%;
+        width: 19%;
     }
     100% {
         width: 0;
