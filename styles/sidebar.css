@@ -1,0 +1,238 @@
+#sidebar {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    display: flex;
+    flex-flow: column wrap;
+    width: 20%;
+    height: 100%;
+    left: 0;
+    color: rgb(150, 150, 150);
+    background-color: rgb(30, 30, 30);
+    margin-right: 1%;
+}
+
+#sidebar.expand {
+    width: 5%;
+}
+
+#sidebar-top {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    width: 100%;
+    height: 15%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1%;
+    background-color: rgb(60, 60, 60);
+}
+
+#sidebar-top.expand {
+    flex-flow: column wrap;
+}
+
+#app-name {
+    margin: 0;
+    padding: 0;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
+
+#icon-expand {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#icon-search {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+    cursor: pointer;
+}
+
+#global-search {
+    width: 80%;
+    background-color: rgb(60, 60, 60);
+    color: rgb(150, 150, 150);
+    border: 0;
+    outline: none;
+    border-bottom: 2px solid white;
+}
+
+#sidebar-middle {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 15%;
+    width: 100%;
+    background-color: transparent;
+}
+
+#sidebar-middle>.list-management {
+    margin-top: 1%;
+}
+
+.list-management {
+    margin: 0;
+    padding: 0;
+    padding-left: 5%;
+    list-style-type: none;
+    width: 95%;
+    background-color: rgb(60, 60, 60);
+    cursor: pointer;
+    text-transform: capitalize;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.list-name {
+    width: 80%;
+    visibility: visible;
+}
+
+.list-name.hide {
+    width: 0;
+    visibility: hidden;
+}
+
+#sidebar-bottom {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15%;
+    background-color: rgb(60, 60, 60);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: visible;
+}
+
+#sidebar-bottom.expand {
+    visibility: hidden;
+    width: 0;
+}
+
+#sidebar-navigation {
+    width: 0;
+    height: 100%;
+    position: absolute;
+    display: block;
+    background-color: gray;
+    visibility: hidden;
+    left: 0;
+    overflow: auto;
+    background-color: rgb(60, 60, 60);
+    color: rgb(150, 150, 150);
+}
+
+#sidebar-navigation.expand {
+    visibility: visible;
+    animation-name: slideIn;
+    animation-duration: 0.5s;
+    width: 40%;
+}
+
+#sidebar-navigation.hide {
+    visibility: visible;
+    animation-name: slideOut;
+    animation-duration: 0.5s;
+    width: 0;
+}
+
+#navigation-top {
+    height: 15%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+#navigation-top>h2 {
+    width: 100%;
+}
+
+#chosen-link {
+    width: 80%;
+    text-transform: capitalize;
+    padding-left: 5%;
+    cursor: default;
+}
+
+#back-button {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#navigation-content {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.lists {
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+.link-list {
+    display: block;
+    width: 80%;
+    cursor: pointer;
+    margin: 2px;
+}
+
+h3 {
+    width: 80%;
+    text-transform: uppercase;
+    cursor: default;
+    border-bottom: 2px solid rgb(30, 30, 30);
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+@keyframes slideIn {
+    0% {
+        width: 0;
+    }
+    75% {
+        width: 0;
+    }
+    100% {
+        width: 40%;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        width: 40%;
+    }
+    75% {
+        width: 40%;
+    }
+    100% {
+        width: 0;
+    }
+}
