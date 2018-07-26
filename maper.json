@@ -1,17 +1,13 @@
 {
     "scripts": {
         "index": [
-            "index.js",
-            "welcome.js",
             "data.js",
-            "settings.js",
             "sidebar.js"
         ]
     },
     "styles": {
         "index": [
             "index.css",
-            "welcome.css",
             "sidebar.css"
         ]
     }

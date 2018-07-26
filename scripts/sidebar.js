@@ -1,8 +1,8 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
     let menu = $$('#sidebar');
-    let sidebarHeader = $$('#sidebar-top');
-    let linkWrapper = $$('#sidebar-middle');
+    let sidebarHeader = $$('#sidebar-name');
+    let linkWrapper = $$('#sidebar-link');
     let listMenu = $$('.list-management');
     let expandButton = $$('#icon-expand');
     let navigation = $$('#sidebar-navigation');
@@ -12,10 +12,13 @@ const sidebar = (function () {
     let linkList = $$('.link-list');
     let globalSearch = $$('#icon-search');
     let globalList = $$('.lists');
-    let logoWrapper = $$('#sidebar-bottom');
+    let logoWrapper = $$('#sidebar-logo');
     let listName = $$('.list-name');
     let teamName = $$('#team-name');
     let appName = $$('#head-name');
+
+    // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed
+    let isExpand = true;
 
     window.addEventListener('load', () => {
         makeMenu();

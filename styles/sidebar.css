@@ -1,10 +1,19 @@
+#sidebar-wrapper {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    width: 19%;
+    height: 100%;
+}
+
 #sidebar {
     margin: 0;
     padding: 0;
     position: absolute;
     display: flex;
     flex-flow: column wrap;
-    width: 12%;
+    width: 64%;
     height: 100%;
     left: 0;
     color: rgb(150, 150, 150);
@@ -13,10 +22,10 @@
 }
 
 #sidebar.expand {
-    width: 2.5%;
+    width: 12.5%;
 }
 
-#sidebar-top {
+#sidebar-name {
     margin: 0;
     padding: 0;
     position: absolute;
@@ -29,7 +38,7 @@
     font-size: 1vw;
 }
 
-#sidebar-top.expand {
+#sidebar-name.expand {
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -94,7 +103,7 @@
     width: 0;
 }
 
-#sidebar-middle {
+#sidebar-link {
     margin: 0;
     padding: 0;
     position: absolute;
@@ -104,7 +113,7 @@
     font-size: 1vw;
 }
 
-#sidebar-middle>.list-management {
+#sidebar-link>.list-management {
     margin-top: 1%;
 }
 
@@ -132,7 +141,7 @@
     visibility: hidden;
 }
 
-#sidebar-bottom {
+#sidebar-logo {
     margin: 0;
     padding: 0;
     position: absolute;
@@ -147,7 +156,7 @@
     font-size: 1vw;
 }
 
-#sidebar-bottom.expand {
+#sidebar-logo.expand {
     visibility: hidden;
     width: 0;
 }
@@ -170,7 +179,7 @@
     visibility: visible;
     animation-name: slideIn;
     animation-duration: 0.5s;
-    width: 19%;
+    width: 100%;
 }
 
 #sidebar-navigation.hide {
@@ -288,16 +297,16 @@ h3 {
         width: 0;
     }
     100% {
-        width: 19%;
+        width: 100%;
     }
 }
 
 @keyframes slideOut {
     0% {
-        width: 19%;
+        width: 100%;
     }
     75% {
-        width: 19%;
+        width: 100%;
     }
     100% {
         width: 0;
