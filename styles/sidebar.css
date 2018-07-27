@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'roboto';
+    src: url('../fonts/roboto.ttf') format('truetype');
+}
+
 #sidebar-wrapper {
     margin: 0;
     padding: 0;
@@ -5,6 +10,7 @@
     left: 0;
     width: 19%;
     height: 100%;
+    font-family: 'roboto';
 }
 
 #sidebar {
@@ -33,7 +39,6 @@
     height: 14%;
     display: inline;
     float: left;
-    margin-bottom: 1%;
     background-color: rgb(60, 60, 60);
     font-size: 1vw;
 }
@@ -51,29 +56,9 @@
     font-size: 1vw;
 }
 
-.expand #team-name {
-    visibility: hidden;
-    width: 0;
-}
-
-.expand #global-search>div {
-    visibility: hidden;
-    width: 0;
-}
-
-.expand .list-name {
-    visibility: hidden;
-    width: 0;
-}
-
 .expand .list-management {
     justify-content: center;
     background-color: transparent;
-}
-
-.expand #sidebar-logo {
-    visibility: hidden;
-    width: 0;
 }
 
 .expand #head-name {
@@ -88,6 +73,7 @@
     cursor: pointer;
     position: absolute;
     right: 0;
+    padding-right: 5%;
 }
 
 .expand #icon-expand {
@@ -180,7 +166,7 @@
     font-size: 1vw;
 }
 
-#sidebar-local.expand {
+#sidebar-local.show {
     visibility: visible;
     animation-name: slideIn;
     animation-duration: 0.5s;
@@ -274,6 +260,11 @@ h3 {
     align-items: center;
     justify-content: center;
     background-color: transparent;
+}
+
+.expand .list-name, .expand #global-search>div, .expand #team-name, .expand>#sidebar-logo {
+    visibility: hidden;
+    width: 0;
 }
 
 #sidebar-local::-webkit-scrollbar {
