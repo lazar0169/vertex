@@ -38,7 +38,7 @@
     font-size: 1vw;
 }
 
-#sidebar-name.expand {
+.expand>#sidebar-name {
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -51,9 +51,33 @@
     font-size: 1vw;
 }
 
-#team-name.expand {
+.expand #team-name {
     visibility: hidden;
     width: 0;
+}
+
+.expand #global-search>div {
+    visibility: hidden;
+    width: 0;
+}
+
+.expand .list-name {
+    visibility: hidden;
+    width: 0;
+}
+
+.expand .list-management {
+    justify-content: center;
+    background-color: transparent;
+}
+
+.expand #sidebar-logo {
+    visibility: hidden;
+    width: 0;
+}
+
+.expand #head-name {
+    justify-content: center;
 }
 
 #icon-expand {
@@ -66,11 +90,15 @@
     right: 0;
 }
 
-#icon-expand.expand {
+.expand #icon-expand {
     left: 0;
 }
 
-#icon-search {
+.expand #global-search {
+    justify-content: center;
+}
+
+#global-search {
     width: 95%;
     height: 33%;
     display: flex;
@@ -81,26 +109,13 @@
     bottom: 0;
 }
 
-#icon-search>p {
-    font-size: 1vw;
-}
-
-#global-search {
+#local-search {
     width: 80%;
     background-color: rgb(60, 60, 60);
     color: rgb(150, 150, 150);
     border: 0;
     outline: none;
     border-bottom: 2px solid white;
-}
-
-#icon-search.expand {
-    justify-content: center;
-}
-
-.expand>p {
-    visibility: hidden;
-    width: 0;
 }
 
 #sidebar-link {
@@ -136,11 +151,6 @@
     visibility: visible;
 }
 
-.list-name.hide {
-    width: 0;
-    visibility: hidden;
-}
-
 #sidebar-logo {
     margin: 0;
     padding: 0;
@@ -156,12 +166,7 @@
     font-size: 1vw;
 }
 
-#sidebar-logo.expand {
-    visibility: hidden;
-    width: 0;
-}
-
-#sidebar-navigation {
+#sidebar-local {
     width: 0;
     height: 100%;
     position: absolute;
@@ -175,21 +180,21 @@
     font-size: 1vw;
 }
 
-#sidebar-navigation.expand {
+#sidebar-local.expand {
     visibility: visible;
     animation-name: slideIn;
     animation-duration: 0.5s;
     width: 100%;
 }
 
-#sidebar-navigation.hide {
+#sidebar-local.hide {
     visibility: visible;
     animation-name: slideOut;
     animation-duration: 0.5s;
     width: 0;
 }
 
-#navigation-top {
+#navigation-name {
     height: 15%;
     display: flex;
     flex-flow: row wrap;
@@ -210,17 +215,13 @@
     font-size: 1vw;
 }
 
-#head-name.expand {
-    justify-content: center;
-}
-
-#navigation-top>h2 {
+#navigation-name>h2 {
     width: 100%;
     font-size: 1vw;
     padding-left: 5%;
 }
 
-#navigation-top>p, #navigation-top>input {
+#navigation-name>input {
     font-size: 1vw;
 }
 
@@ -275,16 +276,16 @@ h3 {
     background-color: transparent;
 }
 
-#sidebar-navigation::-webkit-scrollbar {
+#sidebar-local::-webkit-scrollbar {
     width: 3%;
 }
 
-#sidebar-navigation::-webkit-scrollbar-track {
+#sidebar-local::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(42, 42, 42);
     background-color: rgb(100, 100, 100);
 }
 
-#sidebar-navigation::-webkit-scrollbar-thumb {
+#sidebar-local::-webkit-scrollbar-thumb {
     background-color: rgb(42, 42, 42);
     border-radius: 50px;
 }

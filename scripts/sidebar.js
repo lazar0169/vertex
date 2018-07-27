@@ -1,122 +1,96 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
     let menu = $$('#sidebar');
-    let sidebarHeader = $$('#sidebar-name');
     let linkWrapper = $$('#sidebar-link');
     let listMenu = $$('.list-management');
     let expandButton = $$('#icon-expand');
-    let navigation = $$('#sidebar-navigation');
+    let navigation = $$('#sidebar-local');
     let back = $$('#back-button');
     let chosenLink = $$('#chosen-link');
     let listWrapper = $$('#navigation-content');
     let linkList = $$('.link-list');
-    let globalSearch = $$('#icon-search');
+    let globalSearch = $$('#global-search');
     let globalList = $$('.lists');
-    let logoWrapper = $$('#sidebar-logo');
-    let listName = $$('.list-name');
-    let teamName = $$('#team-name');
-    let appName = $$('#head-name');
-
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed
     let isExpand = true;
-
     window.addEventListener('load', () => {
-        makeMenu();
+        generateMenu();
     });
     expandButton.addEventListener('click', () => {
         expand();
     });
-
     back.addEventListener('click', () => {
-        navigation.classList.remove('expand');
         navigation.classList.add('hide');
-
-
+        navigation.classList.remove('expand');
     });
-
     globalSearch.addEventListener('click', () => {
         chosenLink.innerHTML = 'Search';
-        makeLinks();
+        generateLink();
         navigation.classList.add('expand');
         navigation.classList.remove('hide');
-
     });
-
-    function makeMenu() {
-        for (let count of arrayList) {
-            linkWrapper.innerHTML += `<div class="list-management" data-id="${count}"><span class="mdi mdi-magnify"></span><div class="list-name">${count}</div></div>`;
-        }
-        for (let list of listMenu) {
-            list.addEventListener('click', () => {
-                chosenLink.dataset.id = list.dataset.id;
-                chosenLink.innerHTML = list.textContent;
-                makeLinks(list.dataset.id);
+    function generateMenu() {
+        let fragment = document.createDocumentFragment();
+        for (let count in arrayList) {
+            let tempFragment = document.createElement('div');
+            tempFragment.innerHTML = `<div class="list-management" data-id="${arrayList[count]}"><span class="mdi mdi-magnify"></span><div class="list-name">${arrayList[count]}</div></div>`;
+            tempFragment.childNodes[0].addEventListener('click', function () {
+                alert(listMenu[count].dataset.id);
+                chosenLink.dataset.id = listMenu[count].dataset.id;
+                chosenLink.innerHTML = listMenu[count].textContent;
+                generateLink(listMenu[count].dataset.id);
                 navigation.classList.add('expand');
                 navigation.classList.remove('hide');
             });
+            fragment.appendChild(tempFragment.childNodes[0]);
         }
+        linkWrapper.appendChild(fragment);
     }
     function expand() {
         if (isExpand) {
             menu.classList.add('expand');
-            sidebarHeader.classList.add('expand');
-            logoWrapper.classList.add('expand');
-            teamName.classList.add('expand');
-            appName.classList.add('expand');
-            globalSearch.classList.add('expand');
-            expandButton.classList.add('expand');
-            for (let list of listName) {
-                list.classList.add('hide');
-            }
-            for (let list of listMenu) {
-                list.classList.add('center');
-            }
-            isExpand = false;
         }
         else {
             menu.classList.remove('expand');
-            sidebarHeader.classList.remove('expand');
-            logoWrapper.classList.remove('expand');
-            teamName.classList.remove('expand');
-            appName.classList.remove('expand');
-            globalSearch.classList.remove('expand');
-            expandButton.classList.remove('expand');
-            for (let list of listName) {
-                list.classList.remove('hide');
-            }
-            for (let list of listMenu) {
-                list.classList.remove('center');
-            }
-            isExpand = true;
         }
-
+        isExpand = !isExpand;
     }
-
-    function makeLinks(id) {
+    function generateLink(id) {
         listWrapper.innerHTML = '';
+        let fragment = document.createDocumentFragment();
         if (id) {
-            for (let count of data[id]) {
-                listWrapper.innerHTML += `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
+            for (let count in data[id]) {
+                let tempFragment = document.createElement('a');
+                tempFragment.innerHTML = `<a class="link-list" data-id="${data[id][count].id}">${data[id][count].name}</a>`;
+                tempFragment.childNodes[0].addEventListener('click', function () {
+                    alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
+                    navigation.classList.add('hide');
+                    navigation.classList.remove('expand');
+                });
+                fragment.appendChild(tempFragment.childNodes[0]);
             }
-
+            listWrapper.appendChild(fragment);
         }
         else {
             for (let list of arrayList) {
-                listWrapper.innerHTML += `<div class="lists" data-id=${list}><h3>${list}</h3></div>`;
+                let tempFragment = document.createElement('div');
+                tempFragment.innerHTML = `<div class="lists" data-id=${list}><h3>${list}</h3></div>`;
+                fragment.appendChild(tempFragment.childNodes[0]);
             }
+            listWrapper.appendChild(fragment);
             for (let list in arrayList) {
                 for (let count of data[arrayList[list]]) {
-                    globalList[list].innerHTML += `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
+                    let tempFragment = document.createElement('a');
+                    tempFragment.innerHTML += `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
+                    tempFragment.childNodes[0].addEventListener('click', function () {
+                        alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
+                        navigation.classList.add('hide');
+                        navigation.classList.remove('expand');
+                    });
+                    fragment.appendChild(tempFragment.childNodes[0]);
                 }
+                globalList[list].appendChild(fragment);
             }
         }
-        for (let link of linkList) {
-            link.addEventListener('click', () => {
-                alert(`ja imam id = ${link.dataset.id}, i trebam prikazati tabelu za ${link.textContent} i da vratim menu`);
-                navigation.classList.remove('expand');
-                navigation.classList.add('hide');
-            });
-        }
     }
-
 })();
