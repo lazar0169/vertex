@@ -11,6 +11,8 @@
     width: 19%;
     height: 100%;
     font-family: 'roboto';
+    color: rgb(150, 150, 150);
+    cursor: default;
 }
 
 #sidebar {
@@ -19,15 +21,18 @@
     position: absolute;
     display: flex;
     flex-flow: column wrap;
+    /* animation-name: slideExpand;
+    animation-duration: 0.1s; */
     width: 64%;
     height: 100%;
     left: 0;
-    color: rgb(150, 150, 150);
     background-color: rgb(30, 30, 30);
     margin-right: 1%;
 }
 
-#sidebar.expand {
+#sidebar.collapse {
+    /* animation-name: slideCollapse;
+    animation-duration: 0.1s; */
     width: 12.5%;
 }
 
@@ -37,13 +42,11 @@
     position: absolute;
     width: 100%;
     height: 14%;
-    display: inline;
-    float: left;
     background-color: rgb(60, 60, 60);
     font-size: 1vw;
 }
 
-.expand>#sidebar-name {
+.collapse>#sidebar-name {
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -56,16 +59,21 @@
     font-size: 1vw;
 }
 
-.expand .list-management {
-    justify-content: center;
+.collapse .list-management {
+    background-color: rgb(30, 30, 30);
+}
+
+.collapse .list-management>.icon-tooltip, .collapse #global-search>.icon-tooltip {
+    width: 100%;
+    text-align: center;
     background-color: transparent;
 }
 
-.expand #head-name {
+.collapse #head-name {
     justify-content: center;
 }
 
-#icon-expand {
+#icon-collapse {
     height: 33%;
     display: flex;
     justify-content: center;
@@ -76,12 +84,8 @@
     padding-right: 5%;
 }
 
-.expand #icon-expand {
+.collapse #icon-collapse {
     left: 0;
-}
-
-.expand #global-search {
-    justify-content: center;
 }
 
 #global-search {
@@ -98,10 +102,10 @@
 #local-search {
     width: 80%;
     background-color: rgb(60, 60, 60);
-    color: rgb(150, 150, 150);
     border: 0;
     outline: none;
     border-bottom: 2px solid white;
+    color: white;
 }
 
 #sidebar-link {
@@ -130,6 +134,27 @@
     height: 60px;
     display: flex;
     align-items: center;
+}
+
+.list-management:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover {
+    color: blue;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 0;
+}
+
+.collapse .list-management:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
+    color: rgb(150, 150, 150);
+    visibility: visible;
+    background-color: rgb(30, 30, 30);
+    width: auto;
+    margin-left: 100%;
+    position: absolute;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 5px 5px 5px;
 }
 
 .list-name {
@@ -214,10 +239,9 @@
 #chosen-link {
     width: 80%;
     text-transform: capitalize;
-    cursor: default;
 }
 
-#back-button {
+#back-to-menu {
     width: 15%;
     display: flex;
     justify-content: center;
@@ -251,7 +275,6 @@
 h3 {
     width: 80%;
     text-transform: uppercase;
-    cursor: default;
     border-bottom: 2px solid rgb(30, 30, 30);
 }
 
@@ -262,9 +285,15 @@ h3 {
     background-color: transparent;
 }
 
-.expand .list-name, .expand #global-search>div, .expand #team-name, .expand>#sidebar-logo {
+.collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse>#sidebar-logo {
+    /* animation-name: slideHide;
+    animation-duration: 0.5s; */
     visibility: hidden;
     width: 0;
+}
+
+.list-active, .link-active {
+    color: white;
 }
 
 #sidebar-local::-webkit-scrollbar {
@@ -303,4 +332,73 @@ h3 {
     100% {
         width: 0;
     }
+}
+
+/* @keyframes slideCollapse {
+    0% {
+        width: 64%;
+    }
+    75% {
+        width: 64%;
+    }
+    100% {
+        width: 12.5%;
+    }
+}
+
+@keyframes slideExpand {
+    0% {
+        width: 12.5%;
+    }
+    75% {
+        width: 12.5%;
+    }
+    100% {
+        width: 64%;
+    }
+}
+
+ @keyframes slideHide {
+    0% {
+        width: 100%;
+    }
+    75% {
+        width: 0%;
+    }
+    100% {
+        width: 0%;
+    }
+}  */
+
+.button {
+    outline: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    color: rgb(150, 150, 150);
+}
+
+.button:hover {
+    padding: 5px;
+    border-radius: 5px;
+    color: black;
+    font-weight: bold;
+}
+
+.confirm:hover {
+    background-color: green;
+}
+
+.utility:hover {
+    background-color: skyblue;
+}
+
+.discard:hover {
+    background-color: red;
+}
+
+.new:hover {
+    background-color: white;
 }
