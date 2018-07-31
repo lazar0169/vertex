@@ -16,6 +16,9 @@ const sidebar = (function () {
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
+    //variable for list id and link id
+    let listId;
+    let linkId;
     window.addEventListener('load', () => {
         generateMenu();
     });
@@ -26,7 +29,6 @@ const sidebar = (function () {
         collapse();
     });
     globalSearch.addEventListener('click', () => {
-        chosenLink.innerHTML = 'Search';
         generateLink();
         collapse();
     });
@@ -39,11 +41,6 @@ const sidebar = (function () {
                 <div class="list-name">${arrayList[count]}</div>
                 <span class="tooltip-text">${arrayList[count]}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
-                if (listSelected[0]) {
-                    listSelected[0].classList.remove('list-active');
-                }
-                // alert(listMenu[count].dataset.id);
-                listMenu[count].classList.add('list-active');
                 generateLink(listMenu[count].dataset.id);
                 chosenLink.dataset.id = listMenu[count].dataset.id;
                 chosenLink.innerHTML = chosenLink.dataset.id;
@@ -77,7 +74,8 @@ const sidebar = (function () {
     function generateLink(id) {
         let fragment = document.createDocumentFragment();
         if (id) {
-            if (id === chosenLink.dataset.id) {
+            if (String(id) === String(chosenLink.dataset.id)) {
+                selectLink(linkId);
                 collapse();
             }
             else {
@@ -86,22 +84,23 @@ const sidebar = (function () {
                     let tempFragment = document.createElement('a');
                     tempFragment.innerHTML = `<a class="link-list" data-id="${data[id][count].id}">${data[id][count].name}</a>`;
                     tempFragment.childNodes[0].addEventListener('click', function () {
-                        if (linkSelected[0]) {
-                            linkSelected[0].classList.remove('link-active');
-                        }
-                        linkList[count].classList.add('link-active');
+                        linkId = linkList[count].dataset.id;
+                        selectList(id);
                         //alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
                         collapse();
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
                 listWrapper.appendChild(fragment);
+                if (linkId) {
+                    selectLink(linkId);
+                }
                 collapse();
-
             }
-
         }
         else {
+            chosenLink.innerHTML = 'Search';
+            chosenLink.dataset.id = 'globalSearch';
             listWrapper.innerHTML = '';
             for (let list of arrayList) {
                 let tempFragment = document.createElement('div');
@@ -113,13 +112,42 @@ const sidebar = (function () {
                 for (let count of data[arrayList[list]]) {
                     let tempFragment = document.createElement('a');
                     tempFragment.innerHTML += `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
+                    selectLink(linkId);
                     tempFragment.childNodes[0].addEventListener('click', function () {
+                        listId = globalList[list].dataset.id;
+                        linkId = count.id;
+                        generateLink(listId);
+                        selectList(listId);
+                        chosenLink.dataset.id = listId;
+                        chosenLink.innerHTML = chosenLink.dataset.id;
+                        selectLink(linkId);
                         //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
-                        collapse();
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
                 globalList[list].appendChild(fragment);
+            }
+        }
+    }
+    function selectList(id) {
+        if (listSelected[0]) {
+            listSelected[0].classList.remove('list-active');
+        }
+        for (let list of listMenu) {
+            if (String(list.dataset.id) === String(id)) {
+                list.classList.add('list-active');
+                break;
+            }
+        }
+    }
+    function selectLink(id) {
+        if (linkSelected[0]) {
+            linkSelected[0].classList.remove('link-active');
+        }
+        for (let link of linkList) {
+            if (Number(link.dataset.id) === Number(id)) {
+                link.classList.add('link-active');
+                break;
             }
         }
     }

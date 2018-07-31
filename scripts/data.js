@@ -24,23 +24,23 @@ let data = {
 
     tickets: [
         {
-            id: 1,
+            id: 5,
             name: 'Bolnica t'
 
 
         },
         {
-            id: 2,
+            id: 6,
             name: 'Kalca t'
 
         },
         {
-            id: 3,
+            id: 7,
             name: 'Marger t'
 
         },
         {
-            id: 4,
+            id: 8,
             name: 'Durlan 1 t'
 
         }
@@ -48,23 +48,23 @@ let data = {
 
     AFT: [
         {
-            id: 1,
+            id: 9,
             name: 'Bolnica a'
 
 
         },
         {
-            id: 2,
+            id: 10,
             name: 'Kalca a'
 
         },
         {
-            id: 3,
+            id: 11,
             name: 'Marger a'
 
         },
         {
-            id: 4,
+            id: 12,
             name: 'Durlan 1 a'
 
         }
@@ -72,23 +72,23 @@ let data = {
 
     machines: [
         {
-            id: 1,
+            id: 13,
             name: 'Bolnica m'
 
 
         },
         {
-            id: 2,
+            id: 13,
             name: 'Kalca m'
 
         },
         {
-            id: 3,
+            id: 14,
             name: 'Marger m'
 
         },
         {
-            id: 4,
+            id: 15,
             name: 'Durlan 1 m'
 
         }
@@ -96,23 +96,23 @@ let data = {
 
     users: [
         {
-            id: 1,
+            id: 16,
             name: 'Bolnica u'
 
 
         },
         {
-            id: 2,
+            id: 17,
             name: 'Kalca u'
 
         },
         {
-            id: 3,
+            id: 18,
             name: 'Marger u'
 
         },
         {
-            id: 4,
+            id: 19,
             name: 'Durlan 1 u'
 
         }
@@ -120,23 +120,23 @@ let data = {
 
     service: [
         {
-            id: 1,
+            id: 20,
             name: 'Bolnica s'
 
 
         },
         {
-            id: 2,
+            id: 21,
             name: 'Kalca s'
 
         },
         {
-            id: 3,
+            id: 22,
             name: 'Marger s'
 
         },
         {
-            id: 4,
+            id: 23,
             name: 'Durlan 1 s'
 
         }

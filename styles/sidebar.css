@@ -369,36 +369,3 @@ h3 {
         width: 0%;
     }
 }  */
-
-.button {
-    outline: none;
-    margin: 0;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-    color: rgb(150, 150, 150);
-}
-
-.button:hover {
-    padding: 5px;
-    border-radius: 5px;
-    color: black;
-    font-weight: bold;
-}
-
-.confirm:hover {
-    background-color: green;
-}
-
-.utility:hover {
-    background-color: skyblue;
-}
-
-.discard:hover {
-    background-color: red;
-}
-
-.new:hover {
-    background-color: white;
-}
