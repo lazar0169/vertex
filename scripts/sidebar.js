@@ -37,7 +37,7 @@ const sidebar = (function () {
         for (let count in arrayList) {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class="list-management tooltip" data-id="${arrayList[count]}">
-                <span class="mdi mdi-magnify icon-tooltip"></span>
+                <span class="mdi mdi-magnify icon-tooltip center"></span>
                 <div class="list-name">${arrayList[count]}</div>
                 <span class="tooltip-text">${arrayList[count]}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
@@ -112,7 +112,7 @@ const sidebar = (function () {
                 for (let count of data[arrayList[list]]) {
                     let tempFragment = document.createElement('a');
                     tempFragment.innerHTML += `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
-                    selectLink(linkId);
+
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         listId = globalList[list].dataset.id;
                         linkId = count.id;
@@ -127,6 +127,7 @@ const sidebar = (function () {
                 }
                 globalList[list].appendChild(fragment);
             }
+            selectLink(linkId);
         }
     }
     function selectList(id) {
@@ -141,14 +142,17 @@ const sidebar = (function () {
         }
     }
     function selectLink(id) {
-        if (linkSelected[0]) {
-            linkSelected[0].classList.remove('link-active');
-        }
-        for (let link of linkList) {
-            if (Number(link.dataset.id) === Number(id)) {
-                link.classList.add('link-active');
-                break;
+        if (id) {
+            if (linkSelected[0]) {
+                linkSelected[0].classList.remove('link-active');
+            }
+            for (let link of linkList) {
+                if (Number(link.dataset.id) === Number(id)) {
+                    link.classList.add('link-active');
+                    break;
+                }
             }
         }
+
     }
 })();
