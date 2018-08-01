@@ -36,9 +36,10 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         for (let count in arrayList) {
             let tempFragment = document.createElement('div');
-            tempFragment.innerHTML = `<div class="list-management tooltip" data-id="${arrayList[count]}">
+            tempFragment.innerHTML = `<div class='center'><div class="list-management tooltip center" data-id="${arrayList[count]}">
                 <span class="mdi mdi-magnify icon-tooltip center"></span>
                 <div class="list-name">${arrayList[count]}</div>
+                </div>
                 <span class="tooltip-text">${arrayList[count]}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
                 generateLink(listMenu[count].dataset.id);
@@ -111,7 +112,7 @@ const sidebar = (function () {
             for (let list in arrayList) {
                 for (let count of data[arrayList[list]]) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.innerHTML += `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
+                    tempFragment.innerHTML = `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
 
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         listId = globalList[list].dataset.id;
@@ -124,6 +125,7 @@ const sidebar = (function () {
                         //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
+                    
                 }
                 globalList[list].appendChild(fragment);
             }

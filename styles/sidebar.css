@@ -118,18 +118,17 @@
     font-size: 1vw;
 }
 
-#sidebar-link>.list-management {
+#sidebar-link>div {
+    cursor: pointer;
     margin-top: 1%;
 }
 
 .list-management {
     margin: 0;
     padding: 0;
-    padding-left: 5%;
     list-style-type: none;
-    width: 95%;
+    width: 100%;
     background-color: rgb(60, 60, 60);
-    cursor: pointer;
     text-transform: capitalize;
     height: 60px;
     display: flex;
@@ -143,18 +142,31 @@
 .tooltip-text {
     visibility: hidden;
     width: 0;
-}
-
-.collapse .list-management:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
     color: rgb(150, 150, 150);
-    visibility: visible;
     background-color: rgb(30, 30, 30);
-    width: auto;
-    margin-left: 100%;
     position: absolute;
     text-align: center;
     border-radius: 5px;
     padding: 5px 5px 5px 5px;
+    text-transform: capitalize;
+}
+
+ .tooltip-text:before {
+    content:"";
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-top: 0.2em solid transparent;
+    border-right: 0.4em solid rgb(30, 30, 30);
+    border-bottom: 0.2em solid transparent;
+ } 
+
+.collapse div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
+    visibility: visible;
+    width: auto;
+    left: 120%;
 }
 
 .list-name {
