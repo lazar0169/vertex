@@ -125,7 +125,7 @@ const sidebar = (function () {
                         //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
-                    
+
                 }
                 globalList[list].appendChild(fragment);
             }
@@ -156,5 +156,16 @@ const sidebar = (function () {
             }
         }
 
+    }
+    $$('#check1').addEventListener('click', function () {
+        isChecked();
+    });
+    function isChecked() {
+        if ($$('#check1').checked) {
+            alert('cekiran sam');
+        }
+        else {
+            alert('nisam cekiran');
+        }
     }
 })();
