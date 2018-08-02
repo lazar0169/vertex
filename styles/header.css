@@ -1,0 +1,13 @@
+#header-wrapper {
+
+    background-color: aquamarine;
+    height: 20%;
+    margin-left: 12%;
+    border-left: 5px solid rgb(30, 30, 30);
+    box-sizing: border-box;
+}
+
+#header-wrapper.expand {
+    margin-left: 2.5%;
+    border:none;
+}

@@ -1,10 +1,11 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
+    let sidebarWrapper = $$('#sidebar-wrapper');
     let menu = $$('#sidebar');
     let linkWrapper = $$('#sidebar-link');
     let listMenu = $$('.list-management');
     let collapseButton = $$('#icon-collapse');
-    let navigation = $$('#sidebar-local');
+    let navigation = $$('#sidebar-hidden');
     let back = $$('#back-to-menu');
     let chosenLink = $$('#chosen-link');
     let listWrapper = $$('#navigation-content');
@@ -13,6 +14,8 @@ const sidebar = (function () {
     let globalList = $$('.lists');
     let listSelected = $$('.list-active');
     let linkSelected = $$('.link-active');
+    let header = $$('#header-wrapper');
+    let contentWrapper = $$('#content');
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
@@ -53,10 +56,14 @@ const sidebar = (function () {
     function collapse(container) {
         if (String(container) === 'sidebar') {
             if (isExpand) {
-                menu.classList.add('collapse');
+                sidebarWrapper.classList.add('collapse');
+                header.classList.add('expand');
+                contentWrapper.classList.add('expand');
             }
             else {
-                menu.classList.remove('collapse');
+                sidebarWrapper.classList.remove('collapse');
+                header.classList.remove('expand');
+                contentWrapper.classList.remove('expand');
             }
             isExpand = !isExpand;
         }
@@ -157,15 +164,15 @@ const sidebar = (function () {
         }
 
     }
-    $$('#check1').addEventListener('click', function () {
-        isChecked();
-    });
-    function isChecked() {
-        if ($$('#check1').checked) {
-            alert('cekiran sam');
-        }
-        else {
-            alert('nisam cekiran');
-        }
-    }
+    // $$('#check1').addEventListener('click', function () {
+    //     isChecked();
+    // });
+    // function isChecked() {
+    //     if ($$('#check1').checked) {
+    //         alert('cekiran sam');
+    //     }
+    //     else {
+    //         alert('nisam cekiran');
+    //     }
+    // }
 })();

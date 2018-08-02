@@ -8,45 +8,38 @@
     padding: 0;
     position: absolute;
     left: 0;
-    width: 19%;
+    top: 0;
+    width: 12%;
     height: 100%;
     font-family: 'roboto';
     color: rgb(150, 150, 150);
     cursor: default;
-}
-
-#sidebar {
-    margin: 0;
-    padding: 0;
-    position: absolute;
     display: flex;
     flex-flow: column wrap;
     /* animation-name: slideExpand;
     animation-duration: 0.1s; */
-    width: 64%;
-    height: 100%;
-    left: 0;
-    background-color: rgb(30, 30, 30);
-    margin-right: 1%;
+    background-color: rgb(60, 60, 60);
 }
 
-#sidebar.collapse {
+#sidebar {
+    width: 100%;
+}
+
+#sidebar-wrapper.collapse {
     /* animation-name: slideCollapse;
     animation-duration: 0.1s; */
-    width: 12.5%;
+    width: 2.5%;
+    background-color: rgb(30, 30, 30);
 }
 
 #sidebar-name {
-    margin: 0;
-    padding: 0;
     position: absolute;
     width: 100%;
     height: 14%;
-    background-color: rgb(60, 60, 60);
     font-size: 1vw;
 }
 
-.collapse>#sidebar-name {
+.collapse #sidebar-name {
     display: flex;
     flex-flow: column wrap;
     justify-content: center;
@@ -59,18 +52,19 @@
     font-size: 1vw;
 }
 
-.collapse .list-management {
-    background-color: rgb(30, 30, 30);
-}
-
 .collapse .list-management>.icon-tooltip, .collapse #global-search>.icon-tooltip {
     width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border: 4px solid rgb(30, 30, 30);
+    border-radius: 1em;
     text-align: center;
     background-color: transparent;
 }
 
 .collapse #head-name {
     justify-content: center;
+    width: 100%;
 }
 
 #icon-collapse {
@@ -85,6 +79,8 @@
 }
 
 .collapse #icon-collapse {
+    margin: 0;
+    padding: 0;
     left: 0;
 }
 
@@ -101,38 +97,27 @@
 
 #local-search {
     width: 80%;
-    background-color: rgb(60, 60, 60);
-    border: 0;
-    outline: none;
-    border-bottom: 2px solid white;
-    color: white;
 }
 
 #sidebar-link {
-    margin: 0;
-    padding: 0;
     position: absolute;
     top: 14%;
     width: 100%;
     background-color: transparent;
     font-size: 1vw;
+    border-bottom: 2px solid rgb(30, 30, 30);
 }
 
 #sidebar-link>div {
     cursor: pointer;
-    margin-top: 1%;
+    border-top: 2px solid rgb(30, 30, 30);
 }
 
 .list-management {
-    margin: 0;
-    padding: 0;
     list-style-type: none;
     width: 100%;
-    background-color: rgb(60, 60, 60);
     text-transform: capitalize;
     height: 60px;
-    display: flex;
-    align-items: center;
 }
 
 .list-management:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover {
@@ -146,27 +131,31 @@
     background-color: rgb(30, 30, 30);
     position: absolute;
     text-align: center;
-    border-radius: 5px;
-    padding: 5px 5px 5px 5px;
+    border-radius: 1em;
+    padding: 0.5em;
     text-transform: capitalize;
 }
 
- .tooltip-text:before {
-    content:"";
+.tooltip-text:before {
+    content: "";
     position: absolute;
-    right: 100%;
+    right: 95%;
     top: 50%;
     width: 0;
     height: 0;
-    border-top: 0.2em solid transparent;
-    border-right: 0.4em solid rgb(30, 30, 30);
-    border-bottom: 0.2em solid transparent;
- } 
+    border-top: 0.3em solid transparent;
+    border-right: 0.6em solid rgb(30, 30, 30);
+    border-bottom: 0.3em solid transparent;
+}
 
 .collapse div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
     visibility: visible;
     width: auto;
     left: 120%;
+}
+
+.collapse .icon-tooltip:hover {
+    background-color: rgb(60, 60, 60);
 }
 
 .list-name {
@@ -175,8 +164,6 @@
 }
 
 #sidebar-logo {
-    margin: 0;
-    padding: 0;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -189,10 +176,10 @@
     font-size: 1vw;
 }
 
-#sidebar-local {
+#sidebar-hidden {
     width: 0;
     height: 100%;
-    position: absolute;
+    position: fixed;
     display: block;
     background-color: gray;
     visibility: hidden;
@@ -203,14 +190,14 @@
     font-size: 1vw;
 }
 
-#sidebar-local.show {
+#sidebar-hidden.show {
     visibility: visible;
     animation-name: slideIn;
     animation-duration: 0.5s;
-    width: 100%;
+    width: 19%;
 }
 
-#sidebar-local.hide {
+#sidebar-hidden.hide {
     visibility: visible;
     animation-name: slideOut;
     animation-duration: 0.5s;
@@ -281,7 +268,6 @@
     display: block;
     width: 80%;
     cursor: pointer;
-    margin: 2px;
 }
 
 h3 {
@@ -296,7 +282,7 @@ h3 {
     justify-content: center;
 }
 
-.collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse>#sidebar-logo {
+.collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {
     /* animation-name: slideHide;
     animation-duration: 0.5s; */
     visibility: hidden;
@@ -307,16 +293,16 @@ h3 {
     color: white;
 }
 
-#sidebar-local::-webkit-scrollbar {
+#sidebar-hidden::-webkit-scrollbar {
     width: 3%;
 }
 
-#sidebar-local::-webkit-scrollbar-track {
+#sidebar-hidden::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(42, 42, 42);
     background-color: rgb(100, 100, 100);
 }
 
-#sidebar-local::-webkit-scrollbar-thumb {
+#sidebar-hidden::-webkit-scrollbar-thumb {
     background-color: rgb(42, 42, 42);
     border-radius: 50px;
 }
@@ -329,16 +315,16 @@ h3 {
         width: 0;
     }
     100% {
-        width: 100%;
+        width: 19%;
     }
 }
 
 @keyframes slideOut {
     0% {
-        width: 100%;
+        width: 19%;
     }
     75% {
-        width: 100%;
+        width: 19%;
     }
     100% {
         width: 0;

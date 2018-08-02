@@ -8,7 +8,9 @@
     "styles": {
         "index": [
             "index.css",
-            "sidebar.css"
+            "sidebar.css",
+            "header.css",
+            "content.css"
         ]
     }
 }
