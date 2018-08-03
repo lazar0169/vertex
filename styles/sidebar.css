@@ -23,6 +23,7 @@
 
 #sidebar {
     width: 100%;
+    height: 100%;
 }
 
 #sidebar-wrapper.collapse {
@@ -151,10 +152,10 @@
 .collapse div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
     visibility: visible;
     width: auto;
-    left: 120%;
+    left: 115%;
 }
 
-.collapse .icon-tooltip:hover {
+.collapse .icon-tooltip:hover{
     background-color: rgb(60, 60, 60);
 }
 
