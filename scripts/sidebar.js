@@ -181,9 +181,26 @@ const sidebar = (function () {
         }
 
     }
-
+    //ovo je proba na dole
+    let machineTab = $$('.machine-tab');
+    for (let tab of machineTab) {
+        tab.addEventListener('click', function () {
+            let machineTabActive = $$('.machine-tab-active');
+            if (machineTabActive[0]) {
+                machineTabActive[0].classList.remove('machine-tab-active');
+            }
+            tab.classList.add('machine-tab-active');
+        });
+    }
     function proba() {
         machineWrapper.classList.add('show');
+    }
+    $$('#machine-close').addEventListener('click', function () {
+        machineClose();
+    });
+    function machineClose() {
+        machineWrapper.classList.remove('show');
+
     }
     // $$('.checkSlide')[0].addEventListener('click', function () {
     //     isChecked();
