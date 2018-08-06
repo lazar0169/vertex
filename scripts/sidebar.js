@@ -1,7 +1,6 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
     let sidebarWrapper = $$('#sidebar-wrapper');
-    let menu = $$('#sidebar');
     let linkWrapper = $$('#sidebar-link');
     let listMenu = $$('.list-management');
     let collapseButton = $$('#icon-collapse');
@@ -16,6 +15,8 @@ const sidebar = (function () {
     let linkSelected = $$('.link-active');
     let header = $$('#header-wrapper');
     let contentWrapper = $$('#content');
+    let navigationWrapper = $$('.opacity');
+    let machineWrapper = $$('#machine-wrapper');
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
@@ -29,12 +30,13 @@ const sidebar = (function () {
         collapse('sidebar');
     });
     back.addEventListener('click', () => {
-        collapse();
+        collapse('navigation');
     });
     globalSearch.addEventListener('click', () => {
         generateLink();
-        collapse();
+        collapse('navigation');
     });
+    // generate menu lists from data, and set click listener  
     function generateMenu() {
         let fragment = document.createDocumentFragment();
         for (let count in arrayList) {
@@ -53,38 +55,49 @@ const sidebar = (function () {
         }
         linkWrapper.appendChild(fragment);
     }
+    // function for collapse sidebar, show or hide navigation, and expand other section  
     function collapse(container) {
-        if (String(container) === 'sidebar') {
-            if (isExpand) {
-                sidebarWrapper.classList.add('collapse');
-                header.classList.add('expand');
-                contentWrapper.classList.add('expand');
-            }
-            else {
-                sidebarWrapper.classList.remove('collapse');
-                header.classList.remove('expand');
-                contentWrapper.classList.remove('expand');
-            }
-            isExpand = !isExpand;
+        switch (container) {
+
+            case 'sidebar':
+                if (isExpand) {
+                    sidebarWrapper.classList.add('collapse');
+                    header.classList.add('expand');
+                    contentWrapper.classList.add('expand');
+                }
+                else {
+                    sidebarWrapper.classList.remove('collapse');
+                    header.classList.remove('expand');
+                    contentWrapper.classList.remove('expand');
+                }
+                isExpand = !isExpand;
+                break;
+
+            case 'navigation':
+                if (isExpandNav) {
+                    navigation.classList.add('show');
+                    navigation.classList.remove('hide');
+                    navigationWrapper[0].classList.add('show');
+                }
+                else {
+                    navigation.classList.add('hide');
+                    navigation.classList.remove('show');
+                    navigationWrapper[0].classList.remove('show');
+                }
+                isExpandNav = !isExpandNav;
+
+
         }
-        else {
-            if (isExpandNav) {
-                navigation.classList.add('show');
-                navigation.classList.remove('hide');
-            }
-            else {
-                navigation.classList.add('hide');
-                navigation.classList.remove('show');
-            }
-            isExpandNav = !isExpandNav;
-        }
+
+
     }
+    // generate links when you click on list from menu, and set click listener
     function generateLink(id) {
         let fragment = document.createDocumentFragment();
         if (id) {
             if (String(id) === String(chosenLink.dataset.id)) {
                 selectLink(linkId);
-                collapse();
+                collapse('navigation');
             }
             else {
                 listWrapper.innerHTML = '';
@@ -95,7 +108,9 @@ const sidebar = (function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
                         //alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
-                        collapse();
+                        collapse('navigation');
+                        proba();
+
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
@@ -103,7 +118,7 @@ const sidebar = (function () {
                 if (linkId) {
                     selectLink(linkId);
                 }
-                collapse();
+                collapse('navigation');
             }
         }
         else {
@@ -139,6 +154,7 @@ const sidebar = (function () {
             selectLink(linkId);
         }
     }
+    // highlight chosen list
     function selectList(id) {
         if (listSelected[0]) {
             listSelected[0].classList.remove('list-active');
@@ -150,6 +166,7 @@ const sidebar = (function () {
             }
         }
     }
+    // highlight chosen link
     function selectLink(id) {
         if (id) {
             if (linkSelected[0]) {
@@ -164,11 +181,15 @@ const sidebar = (function () {
         }
 
     }
-    // $$('#check1').addEventListener('click', function () {
+
+    function proba() {
+        machineWrapper.classList.add('show');
+    }
+    // $$('.checkSlide')[0].addEventListener('click', function () {
     //     isChecked();
     // });
     // function isChecked() {
-    //     if ($$('#check1').checked) {
+    //     if ($$('.checkSlide')[0].checked) {
     //         alert('cekiran sam');
     //     }
     //     else {

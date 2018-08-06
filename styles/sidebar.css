@@ -1,7 +1,3 @@
-@font-face {
-    font-family: 'roboto';
-    src: url('../fonts/roboto.ttf') format('truetype');
-}
 
 #sidebar-wrapper {
     margin: 0;
@@ -11,30 +7,27 @@
     top: 0;
     width: 12%;
     height: 100%;
-    font-family: 'roboto';
     color: rgb(150, 150, 150);
     cursor: default;
     display: flex;
     flex-flow: column wrap;
-    /* animation-name: slideExpand;
-    animation-duration: 0.1s; */
     background-color: rgb(60, 60, 60);
+    font-size: 1vw;
 }
 
 #sidebar {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-flow: column wrap;
 }
 
 #sidebar-wrapper.collapse {
-    /* animation-name: slideCollapse;
-    animation-duration: 0.1s; */
     width: 2.5%;
     background-color: rgb(30, 30, 30);
 }
 
 #sidebar-name {
-    position: absolute;
     width: 100%;
     height: 14%;
     font-size: 1vw;
@@ -63,20 +56,20 @@
     background-color: transparent;
 }
 
-.collapse #head-name {
+.collapse #head-name, .collapse #icon-collapse, .collapse #global-search {
+    padding: 0;
     justify-content: center;
     width: 100%;
+    height: 33%;
 }
 
 #icon-collapse {
-    height: 33%;
+    height: 50%;
+    width: 15%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    position: absolute;
-    right: 0;
-    padding-right: 5%;
 }
 
 .collapse #icon-collapse {
@@ -87,13 +80,11 @@
 
 #global-search {
     width: 95%;
-    height: 33%;
+    height: 50%;
     display: flex;
     align-items: center;
     padding-left: 5%;
     cursor: pointer;
-    position: absolute;
-    bottom: 0;
 }
 
 #local-search {
@@ -101,10 +92,6 @@
 }
 
 #sidebar-link {
-    position: absolute;
-    top: 14%;
-    width: 100%;
-    background-color: transparent;
     font-size: 1vw;
     border-bottom: 2px solid rgb(30, 30, 30);
 }
@@ -155,7 +142,7 @@
     left: 115%;
 }
 
-.collapse .icon-tooltip:hover{
+.collapse .icon-tooltip:hover {
     background-color: rgb(60, 60, 60);
 }
 
@@ -169,7 +156,6 @@
     bottom: 0;
     width: 100%;
     height: 15%;
-    background-color: rgb(60, 60, 60);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -189,19 +175,16 @@
     background-color: rgb(60, 60, 60);
     color: rgb(150, 150, 150);
     font-size: 1vw;
+    transition: 0.2s ease-in-out;
 }
 
 #sidebar-hidden.show {
     visibility: visible;
-    animation-name: slideIn;
-    animation-duration: 0.5s;
     width: 19%;
 }
 
 #sidebar-hidden.hide {
     visibility: visible;
-    animation-name: slideOut;
-    animation-duration: 0.5s;
     width: 0;
 }
 
@@ -215,15 +198,12 @@
 
 #head-name {
     width: 80%;
-    height: 33%;
+    height: 50%;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
     float: left;
     padding-left: 5%;
-    position: absolute;
-    top: 0;
-    font-size: 1vw;
 }
 
 #navigation-name>h2 {
@@ -284,8 +264,6 @@ h3 {
 }
 
 .collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {
-    /* animation-name: slideHide;
-    animation-duration: 0.5s; */
     visibility: hidden;
     width: 0;
 }
@@ -307,63 +285,3 @@ h3 {
     background-color: rgb(42, 42, 42);
     border-radius: 50px;
 }
-
-@keyframes slideIn {
-    0% {
-        width: 0;
-    }
-    75% {
-        width: 0;
-    }
-    100% {
-        width: 19%;
-    }
-}
-
-@keyframes slideOut {
-    0% {
-        width: 19%;
-    }
-    75% {
-        width: 19%;
-    }
-    100% {
-        width: 0;
-    }
-}
-
-/* @keyframes slideCollapse {
-    0% {
-        width: 64%;
-    }
-    75% {
-        width: 64%;
-    }
-    100% {
-        width: 12.5%;
-    }
-}
-
-@keyframes slideExpand {
-    0% {
-        width: 12.5%;
-    }
-    75% {
-        width: 12.5%;
-    }
-    100% {
-        width: 64%;
-    }
-}
-
- @keyframes slideHide {
-    0% {
-        width: 100%;
-    }
-    75% {
-        width: 0%;
-    }
-    100% {
-        width: 0%;
-    }
-}  */

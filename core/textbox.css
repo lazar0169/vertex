@@ -1,0 +1,9 @@
+.textBox {
+    background: rgb(30, 30, 30);
+    border: none;
+    border-bottom: 2px solid lightblue;
+    color: white;
+    padding: 0.7em;
+    outline: none;
+    font-family: 'roboto';
+}

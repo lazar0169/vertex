@@ -140,5 +140,28 @@ let data = {
             name: 'Durlan 1 s'
 
         }
+    ],
+    proba: [
+        {
+            id: 24,
+            name: 'Bolnica p'
+
+
+        },
+        {
+            id: 25,
+            name: 'Kalca p'
+
+        },
+        {
+            id: 26,
+            name: 'Marger p'
+
+        },
+        {
+            id: 27,
+            name: 'Durlan 1 p'
+
+        }
     ]
 };

@@ -10,7 +10,8 @@
             "index.css",
             "sidebar.css",
             "header.css",
-            "content.css"
+            "content.css", 
+            "machine-info.css"
         ]
     }
 }
