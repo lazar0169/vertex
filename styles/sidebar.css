@@ -1,4 +1,3 @@
-
 #sidebar-wrapper {
     margin: 0;
     padding: 0;
@@ -13,6 +12,8 @@
     flex-flow: column wrap;
     background-color: rgb(60, 60, 60);
     font-size: 1vw;
+    border-right: 5px solid rgb(30, 30, 30);
+    box-sizing: border-box;
 }
 
 #sidebar {
@@ -91,21 +92,24 @@
     width: 80%;
 }
 
-#sidebar-link {
+#sidebar-list {
     font-size: 1vw;
     border-bottom: 2px solid rgb(30, 30, 30);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-#sidebar-link>div {
+#sidebar-list>div {
     cursor: pointer;
     border-top: 2px solid rgb(30, 30, 30);
+    height: 60px;
 }
 
 .list-management {
     list-style-type: none;
     width: 100%;
     text-transform: capitalize;
-    height: 60px;
+    
 }
 
 .list-management:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover {

@@ -11,4 +11,5 @@ body {
     background: black;
     overflow: hidden;
     font-family: 'roboto';
+    user-select: none;
 }

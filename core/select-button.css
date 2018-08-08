@@ -1,0 +1,43 @@
+.select-div {
+    background-color: rgb(60, 60, 60);
+    cursor: pointer;
+    width: 200px;
+}
+
+.arrow {
+    color: lightblue;
+    float: right;
+}
+
+.fixed-select {
+    position: fixed;
+    background-color: rgb(60, 60, 60);
+    height: 0;
+}
+
+.show>.fixed-select {
+    width: 200px;
+    height: auto;
+}
+
+.select {
+    border: 1px solid rgb(30, 30, 30);
+    border-bottom-color: white;
+    box-sizing: border-box;
+    padding: 0.5em;
+}
+
+.select-show {
+    visibility: hidden;
+    height: 0;
+    padding: 0.5em;
+}
+
+.select-show:hover {
+    background-color: rgb(30, 30, 30);
+}
+
+.show .select-show {
+    visibility: visible;
+    height: auto;
+}

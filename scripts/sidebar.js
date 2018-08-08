@@ -1,13 +1,13 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
     let sidebarWrapper = $$('#sidebar-wrapper');
-    let linkWrapper = $$('#sidebar-link');
+    let listWrapper = $$('#sidebar-list');
     let listMenu = $$('.list-management');
     let collapseButton = $$('#icon-collapse');
     let navigation = $$('#sidebar-hidden');
     let back = $$('#back-to-menu');
     let chosenLink = $$('#chosen-link');
-    let listWrapper = $$('#navigation-content');
+    let linkWrapper = $$('#navigation-content');
     let linkList = $$('.link-list');
     let globalSearch = $$('#global-search');
     let globalList = $$('.lists');
@@ -53,7 +53,7 @@ const sidebar = (function () {
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
-        linkWrapper.appendChild(fragment);
+        listWrapper.appendChild(fragment);
     }
     // function for collapse sidebar, show or hide navigation, and expand other section  
     function collapse(container) {
@@ -85,11 +85,7 @@ const sidebar = (function () {
                     navigationWrapper[0].classList.remove('show');
                 }
                 isExpandNav = !isExpandNav;
-
-
         }
-
-
     }
     // generate links when you click on list from menu, and set click listener
     function generateLink(id) {
@@ -100,21 +96,22 @@ const sidebar = (function () {
                 collapse('navigation');
             }
             else {
-                listWrapper.innerHTML = '';
+                linkWrapper.innerHTML = '';
                 for (let count in data[id]) {
                     let tempFragment = document.createElement('a');
                     tempFragment.innerHTML = `<a class="link-list" data-id="${data[id][count].id}">${data[id][count].name}</a>`;
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
+                        proba();
                         //alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
                         collapse('navigation');
-                        proba();
+
 
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
-                listWrapper.appendChild(fragment);
+                linkWrapper.appendChild(fragment);
                 if (linkId) {
                     selectLink(linkId);
                 }
@@ -124,13 +121,13 @@ const sidebar = (function () {
         else {
             chosenLink.innerHTML = 'Search';
             chosenLink.dataset.id = 'globalSearch';
-            listWrapper.innerHTML = '';
+            linkWrapper.innerHTML = '';
             for (let list of arrayList) {
                 let tempFragment = document.createElement('div');
                 tempFragment.innerHTML = `<div class="lists" data-id=${list}><h3>${list}</h3></div>`;
                 fragment.appendChild(tempFragment.childNodes[0]);
             }
-            listWrapper.appendChild(fragment);
+            linkWrapper.appendChild(fragment);
             for (let list in arrayList) {
                 for (let count of data[arrayList[list]]) {
                     let tempFragment = document.createElement('a');
@@ -202,6 +199,8 @@ const sidebar = (function () {
         machineWrapper.classList.remove('show');
 
     }
+    
+
     // $$('.checkSlide')[0].addEventListener('click', function () {
     //     isChecked();
     // });
