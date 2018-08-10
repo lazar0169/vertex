@@ -78,17 +78,17 @@ let data = {
 
         },
         {
-            id: 13,
+            id: 14,
             name: 'Kalca m'
 
         },
         {
-            id: 14,
+            id: 15,
             name: 'Marger m'
 
         },
         {
-            id: 15,
+            id: 16,
             name: 'Durlan 1 m'
 
         }
@@ -96,23 +96,23 @@ let data = {
 
     users: [
         {
-            id: 16,
+            id: 17,
             name: 'Bolnica u'
 
 
         },
         {
-            id: 17,
+            id: 18,
             name: 'Kalca u'
 
         },
         {
-            id: 18,
+            id: 19,
             name: 'Marger u'
 
         },
         {
-            id: 19,
+            id: 20,
             name: 'Durlan 1 u'
 
         }
@@ -120,46 +120,46 @@ let data = {
 
     service: [
         {
-            id: 20,
+            id: 21,
             name: 'Bolnica s'
 
 
         },
         {
-            id: 21,
+            id: 22,
             name: 'Kalca s'
 
         },
         {
-            id: 22,
+            id: 23,
             name: 'Marger s'
 
         },
         {
-            id: 23,
+            id: 24,
             name: 'Durlan 1 s'
 
         }
     ],
     proba: [
         {
-            id: 24,
+            id: 25,
             name: 'Bolnica p'
 
 
         },
         {
-            id: 25,
+            id: 26,
             name: 'Kalca p'
 
         },
         {
-            id: 26,
+            id: 27,
             name: 'Marger p'
 
         },
         {
-            id: 27,
+            id: 28,
             name: 'Durlan 1 p'
 
         }

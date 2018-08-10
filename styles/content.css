@@ -1,11 +1,47 @@
 #content {
-    background-color: rgb(30, 30, 30);
-    height: 80%;
+    background-color: brown;
+    height: 90%;
     margin-left: 12%;
     position: relative;
+    color: rgb(150, 150, 150);
+    padding: 0 1em;
 }
 
 #content.expand {
     margin-left: 2.5%;
     border: none;
+}
+
+#machine-filter {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    width: 50%;
+    padding: 0.5em;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    box-sizing: border-box;
+}
+
+#machine-filter>div, #machine-filter>input {
+    margin-left: 0.5em;
+}
+
+#table-wrapper {
+    display: grid;
+    gap: 0.5em;
+    background-color: yellow;
+    width: 100%;
+    height: 100%;
+}
+
+#table-wrapper.show {}
+
+.columns {
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.table-col-desc {
+    background-color: tan;
 }

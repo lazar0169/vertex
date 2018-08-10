@@ -17,6 +17,7 @@ const sidebar = (function () {
     let contentWrapper = $$('#content');
     let navigationWrapper = $$('.opacity');
     let machineWrapper = $$('#machine-wrapper');
+    let sidebarOpacity = sidebarWrapper.children[1];
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
@@ -34,6 +35,9 @@ const sidebar = (function () {
     });
     globalSearch.addEventListener('click', () => {
         generateLink();
+        collapse('navigation');
+    });
+    sidebarOpacity.addEventListener('click', function () {
         collapse('navigation');
     });
     // generate menu lists from data, and set click listener  
@@ -103,7 +107,12 @@ const sidebar = (function () {
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
-                        proba();
+
+                        trigger('sidebar/chosenList', { list: id, casino: data[id][count].name });
+
+                        if (id === 'machines') {
+                            trigger('sidebar/machine', { data: 1 });
+                        }
                         //alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
                         collapse('navigation');
 
@@ -138,9 +147,15 @@ const sidebar = (function () {
                         linkId = count.id;
                         generateLink(listId);
                         selectList(listId);
+                        trigger('sidebar/chosenList', { list: listId, casino: count.name });
+
                         chosenLink.dataset.id = listId;
                         chosenLink.innerHTML = chosenLink.dataset.id;
                         selectLink(linkId);
+                        if (listId === 'machines') {
+                            trigger('sidebar/machine', { data: 1 });
+                        }
+
                         //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
@@ -189,9 +204,7 @@ const sidebar = (function () {
             tab.classList.add('machine-tab-active');
         });
     }
-    function proba() {
-        machineWrapper.classList.add('show');
-    }
+
     $$('#machine-close').addEventListener('click', function () {
         machineClose();
     });
@@ -199,7 +212,7 @@ const sidebar = (function () {
         machineWrapper.classList.remove('show');
 
     }
-    
+
 
     // $$('.checkSlide')[0].addEventListener('click', function () {
     //     isChecked();

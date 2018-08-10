@@ -26,6 +26,7 @@
 #sidebar-wrapper.collapse {
     width: 2.5%;
     background-color: rgb(30, 30, 30);
+    border: 0;
 }
 
 #sidebar-name {
@@ -109,7 +110,6 @@
     list-style-type: none;
     width: 100%;
     text-transform: capitalize;
-    
 }
 
 .list-management:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover {
@@ -261,11 +261,7 @@ h3 {
     border-bottom: 2px solid rgb(30, 30, 30);
 }
 
-.center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+
 
 .collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {
     visibility: hidden;

@@ -1,8 +1,7 @@
 .show-info {
     margin: 0;
-    padding: 0.5em;
     text-align: center;
-    border: 1px solid transparent;
     background: rgb(30, 30, 30);
     border-radius: 2em;
+    color: white;
 }

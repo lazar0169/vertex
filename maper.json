@@ -2,7 +2,10 @@
     "scripts": {
         "index": [
             "data.js",
-            "sidebar.js"
+            "data-machine.js",
+            "sidebar.js",
+            "header.js",
+            "content.js"
         ]
     },
     "styles": {
@@ -10,7 +13,7 @@
             "index.css",
             "sidebar.css",
             "header.css",
-            "content.css", 
+            "content.css",
             "machine-info.css"
         ]
     }
