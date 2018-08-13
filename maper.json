@@ -2,19 +2,13 @@
     "scripts": {
         "index": [
             "data.js",
-            "data-machine.js",
-            "sidebar.js",
-            "header.js",
-            "content.js"
+            "sidebar.js"
         ]
     },
     "styles": {
         "index": [
             "index.css",
-            "sidebar.css",
-            "header.css",
-            "content.css",
-            "machine-info.css"
+            "sidebar.css"
         ]
     }
 }

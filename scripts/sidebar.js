@@ -13,11 +13,9 @@ const sidebar = (function () {
     let globalList = $$('.lists');
     let listSelected = $$('.list-active');
     let linkSelected = $$('.link-active');
-    let header = $$('#header-wrapper');
-    let contentWrapper = $$('#content');
-    let navigationWrapper = $$('.opacity');
-    let machineWrapper = $$('#machine-wrapper');
-    let sidebarOpacity = sidebarWrapper.children[1];
+    let search = $$('#search-link');
+    let opacity = sidebarWrapper.children[1];
+
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
@@ -29,7 +27,6 @@ const sidebar = (function () {
     });
     collapseButton.addEventListener('click', () => {
         collapse('sidebar');
-        machineWrapper.classList.add('show');
     });
     back.addEventListener('click', () => {
         collapse('navigation');
@@ -38,8 +35,11 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', () => {
         generateLink();
         collapse('navigation');
+        search.focus();
+
+
     });
-    sidebarOpacity.addEventListener('click', function () {
+    opacity.addEventListener('click', function () {
         collapse('navigation');
     });
     // generate menu lists from data, and set click listener  
@@ -56,25 +56,23 @@ const sidebar = (function () {
                 generateLink(listMenu[count].dataset.id);
                 chosenLink.dataset.id = listMenu[count].dataset.id;
                 chosenLink.innerHTML = chosenLink.dataset.id;
+                search.focus();
+
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
     }
-    // function for collapse sidebar, show or hide navigation, and expand other section  
+    // function for collapse sidebar, show or hide navigation
     function collapse(container) {
         switch (container) {
 
             case 'sidebar':
                 if (isExpand) {
                     sidebarWrapper.classList.add('collapse');
-                    header.classList.add('expand');
-                    contentWrapper.classList.add('expand');
                 }
                 else {
                     sidebarWrapper.classList.remove('collapse');
-                    header.classList.remove('expand');
-                    contentWrapper.classList.remove('expand');
                 }
                 isExpand = !isExpand;
                 break;
@@ -83,12 +81,12 @@ const sidebar = (function () {
                 if (isExpandNav) {
                     navigation.classList.add('show');
                     navigation.classList.remove('hide');
-                    navigationWrapper[0].classList.add('show');
+                    opacity.classList.add('show')
                 }
                 else {
                     navigation.classList.add('hide');
                     navigation.classList.remove('show');
-                    navigationWrapper[0].classList.remove('show');
+                    opacity.classList.remove('show');
                 }
                 isExpandNav = !isExpandNav;
         }
@@ -109,16 +107,12 @@ const sidebar = (function () {
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
-
-                        trigger('sidebar/chosenList', { list: id, casino: data[id][count].name });
-
                         if (id === 'machines') {
-                            trigger('sidebar/machine', { data: 1 });
+                            //alert('tabela za masine');
                         }
                         //alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
+
                         collapse('navigation');
-
-
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
@@ -135,7 +129,7 @@ const sidebar = (function () {
             linkWrapper.innerHTML = '';
             for (let list of arrayList) {
                 let tempFragment = document.createElement('div');
-                tempFragment.innerHTML = `<div class="lists" data-id=${list}><h3>${list}</h3></div>`;
+                tempFragment.innerHTML = `<div class="lists center" data-id=${list}><h3>${list}</h3></div>`;
                 fragment.appendChild(tempFragment.childNodes[0]);
             }
             linkWrapper.appendChild(fragment);
@@ -149,13 +143,11 @@ const sidebar = (function () {
                         linkId = count.id;
                         generateLink(listId);
                         selectList(listId);
-                        trigger('sidebar/chosenList', { list: listId, casino: count.name });
-
                         chosenLink.dataset.id = listId;
                         chosenLink.innerHTML = chosenLink.dataset.id;
                         selectLink(linkId);
                         if (listId === 'machines') {
-                            trigger('sidebar/machine', { data: 1 });
+                            //alert('tabela za masine');
                         }
 
                         //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
@@ -193,38 +185,5 @@ const sidebar = (function () {
                 }
             }
         }
-
     }
-    //ovo je proba na dole
-    let machineTab = $$('.machine-tab');
-    for (let tab of machineTab) {
-        tab.addEventListener('click', function () {
-            let machineTabActive = $$('.machine-tab-active');
-            if (machineTabActive[0]) {
-                machineTabActive[0].classList.remove('machine-tab-active');
-            }
-            tab.classList.add('machine-tab-active');
-        });
-    }
-
-    $$('#machine-close').addEventListener('click', function () {
-        machineClose();
-    });
-    function machineClose() {
-        machineWrapper.classList.remove('show');
-
-    }
-
-
-    // $$('.checkSlide')[0].addEventListener('click', function () {
-    //     isChecked();
-    // });
-    // function isChecked() {
-    //     if ($$('.checkSlide')[0].checked) {
-    //         alert('cekiran sam');
-    //     }
-    //     else {
-    //         alert('nisam cekiran');
-    //     }
-    // }
 })();

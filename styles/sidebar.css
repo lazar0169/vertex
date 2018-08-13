@@ -31,15 +31,13 @@
 
 #sidebar-name {
     width: 100%;
-    height: 14%;
-    font-size: 1vw;
+    height: 15%;
+    border-bottom: 2px solid rgb(30, 30, 30);
+    flex-flow: row wrap;
 }
 
-.collapse #sidebar-name {
-    display: flex;
+.collapse>#sidebar-name {
     flex-flow: column wrap;
-    justify-content: center;
-    align-items: center
 }
 
 #team-name {
@@ -49,11 +47,6 @@
 }
 
 .collapse .list-management>.icon-tooltip, .collapse #global-search>.icon-tooltip {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    border: 4px solid rgb(30, 30, 30);
-    border-radius: 1em;
     text-align: center;
     background-color: transparent;
 }
@@ -68,9 +61,6 @@
 #icon-collapse {
     height: 50%;
     width: 15%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
 }
 
@@ -83,37 +73,51 @@
 #global-search {
     width: 95%;
     height: 50%;
-    display: flex;
-    align-items: center;
     padding-left: 5%;
     cursor: pointer;
+    justify-content: flex-start;
 }
 
-#local-search {
+#search {
     width: 80%;
 }
 
 #sidebar-list {
     font-size: 1vw;
-    border-bottom: 2px solid rgb(30, 30, 30);
     overflow-x: hidden;
     overflow-y: auto;
+    height: 70%;
 }
 
 #sidebar-list>div {
+    position: relative;
     cursor: pointer;
-    border-top: 2px solid rgb(30, 30, 30);
-    height: 60px;
+    border-bottom: 2px solid rgb(30, 30, 30);
+    padding: 0.5em;
 }
 
 .list-management {
     list-style-type: none;
     width: 100%;
     text-transform: capitalize;
+    padding: 0.5em;
 }
 
-.list-management:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover {
-    color: blue;
+.collapse .list-management {
+    border-radius: 20%;
+}
+
+.collapse #sidebar-list>div {
+    border: none;
+}
+
+#sidebar-list>div:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover, #back-to-menu:hover {
+    color: lightblue;
+    background-color: rgb(30, 30, 30);
+}
+
+.collapse #sidebar-list>div:hover>.list-management, .collapse #global-search:hover, .collapse #icon-collapse:hover, .collapse #back-to-menu:hover {
+    background-color: rgb(60, 60, 60);
 }
 
 .tooltip-text {
@@ -121,7 +125,7 @@
     width: 0;
     color: rgb(150, 150, 150);
     background-color: rgb(30, 30, 30);
-    position: absolute;
+    position: fixed;
     text-align: center;
     border-radius: 1em;
     padding: 0.5em;
@@ -143,11 +147,7 @@
 .collapse div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
     visibility: visible;
     width: auto;
-    left: 115%;
-}
-
-.collapse .icon-tooltip:hover {
-    background-color: rgb(60, 60, 60);
+    left: 3%;
 }
 
 .list-name {
@@ -160,9 +160,6 @@
     bottom: 0;
     width: 100%;
     height: 15%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     visibility: visible;
     font-size: 1vw;
 }
@@ -173,7 +170,6 @@
     position: fixed;
     display: block;
     background-color: gray;
-    visibility: hidden;
     left: 0;
     overflow: auto;
     background-color: rgb(60, 60, 60);
@@ -183,29 +179,23 @@
 }
 
 #sidebar-hidden.show {
-    visibility: visible;
     width: 19%;
 }
 
 #sidebar-hidden.hide {
-    visibility: visible;
     width: 0;
 }
 
 #navigation-name {
     height: 15%;
-    display: flex;
     flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
 }
 
 #head-name {
     width: 80%;
     height: 50%;
-    display: flex;
+    justify-content: flex-start;
     flex-flow: row wrap;
-    align-items: center;
     float: left;
     padding-left: 5%;
 }
@@ -227,26 +217,19 @@
 
 #back-to-menu {
     width: 15%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
     font-size: 1vw;
     padding-left: 5%;
 }
 
 #navigation-content {
-    display: flex;
     flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
 }
 
 .lists {
     width: 100%;
-    display: flex;
     flex-flow: column wrap;
-    align-items: center;
+    justify-content: flex-start;
 }
 
 .link-list {
@@ -261,8 +244,6 @@ h3 {
     border-bottom: 2px solid rgb(30, 30, 30);
 }
 
-
-
 .collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {
     visibility: hidden;
     width: 0;
@@ -270,6 +251,20 @@ h3 {
 
 .list-active, .link-active {
     color: white;
+}
+
+#sidebar-list::-webkit-scrollbar {
+    width: 3%;
+}
+
+#sidebar-list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(42, 42, 42);
+    background-color: rgb(100, 100, 100);
+}
+
+#sidebar-list::-webkit-scrollbar-thumb {
+    background-color: rgb(42, 42, 42);
+    border-radius: 10px;
 }
 
 #sidebar-hidden::-webkit-scrollbar {
