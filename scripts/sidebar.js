@@ -29,9 +29,11 @@ const sidebar = (function () {
     });
     collapseButton.addEventListener('click', () => {
         collapse('sidebar');
+        machineWrapper.classList.add('show');
     });
     back.addEventListener('click', () => {
         collapse('navigation');
+
     });
     globalSearch.addEventListener('click', () => {
         generateLink();

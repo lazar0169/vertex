@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    right: 0;
+    float: right;
     top: 0;
     width: 0;
     height: 100%;
@@ -48,7 +48,7 @@
 }
 
 #machine-name {
-   width: 100%;
+    width: 100%;
 }
 
 #machine-casino {
