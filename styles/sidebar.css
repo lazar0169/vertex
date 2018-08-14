@@ -6,13 +6,13 @@
     top: 0;
     width: 12%;
     height: 100%;
-    color: rgb(150, 150, 150);
+    color: rgb(119, 125, 132);
     cursor: default;
     display: flex;
     flex-flow: column wrap;
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(45, 51, 61);
     font-size: 1vw;
-    border-right: 5px solid rgb(30, 30, 30);
+    border-right: 5px solid rgb(27, 31, 37);
     box-sizing: border-box;
 }
 
@@ -25,14 +25,14 @@
 
 #sidebar-wrapper.collapse {
     width: 2.5%;
-    background-color: rgb(30, 30, 30);
+    background-color: rgb(27, 31, 37);
     border: 0;
 }
 
 #sidebar-name {
     width: 100%;
     height: 15%;
-    border-bottom: 2px solid rgb(30, 30, 30);
+    border-bottom: 2px solid rgb(27, 31, 37);
     flex-flow: row wrap;
 }
 
@@ -78,8 +78,8 @@
     justify-content: flex-start;
 }
 
-#search {
-    width: 80%;
+#search-link {
+    width: 70%;
 }
 
 #sidebar-list {
@@ -92,7 +92,7 @@
 #sidebar-list>div {
     position: relative;
     cursor: pointer;
-    border-bottom: 2px solid rgb(30, 30, 30);
+    border-bottom: 2px solid rgb(27, 31, 37);
     padding: 0.5em;
 }
 
@@ -112,19 +112,19 @@
 }
 
 #sidebar-list>div:hover, #global-search:hover, #icon-collapse:hover, .link-list:hover, #back-to-menu:hover {
-    color: lightblue;
-    background-color: rgb(30, 30, 30);
+    color: rgb(30, 155, 227);
+    background-color: rgb(27, 31, 37);
 }
 
 .collapse #sidebar-list>div:hover>.list-management, .collapse #global-search:hover, .collapse #icon-collapse:hover, .collapse #back-to-menu:hover {
-    background-color: rgb(60, 60, 60);
+    background-color: rgb(45, 51, 61);
 }
 
 .tooltip-text {
     visibility: hidden;
     width: 0;
-    color: rgb(150, 150, 150);
-    background-color: rgb(30, 30, 30);
+    color: rgb(119, 125, 132);
+    background-color: rgb(0, 0, 0);
     position: fixed;
     text-align: center;
     border-radius: 1em;
@@ -140,7 +140,7 @@
     width: 0;
     height: 0;
     border-top: 0.3em solid transparent;
-    border-right: 0.6em solid rgb(30, 30, 30);
+    border-right: 0.6em solid rgb(0, 0, 0);
     border-bottom: 0.3em solid transparent;
 }
 
@@ -172,8 +172,8 @@
     background-color: gray;
     left: 0;
     overflow: auto;
-    background-color: rgb(60, 60, 60);
-    color: rgb(150, 150, 150);
+    background-color: rgb(45, 51, 61);
+    color: rgb(119, 125, 132);
     font-size: 1vw;
     transition: 0.2s ease-in-out;
 }
@@ -211,19 +211,19 @@
 }
 
 #chosen-link {
-    width: 80%;
+    width: 85%;
     text-transform: capitalize;
+    color: white;
 }
 
 #back-to-menu {
     width: 15%;
     cursor: pointer;
-    font-size: 1vw;
-    padding-left: 5%;
 }
 
 #navigation-content {
     flex-flow: column wrap;
+    padding-top: 1em;
 }
 
 .lists {
@@ -234,14 +234,18 @@
 
 .link-list {
     display: block;
-    width: 80%;
+    width: 100%;
     cursor: pointer;
+    padding-bottom: 0.1em;
+    padding-left: 6em;
 }
 
-h3 {
-    width: 80%;
+.lists>h4 {
+    width: 70%;
     text-transform: uppercase;
-    border-bottom: 2px solid rgb(30, 30, 30);
+    border-bottom: 2px solid rgb(27, 31, 37);
+    color: white;
+    padding-bottom: 0.1em;
 }
 
 .collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {

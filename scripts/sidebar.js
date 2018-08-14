@@ -129,7 +129,7 @@ const sidebar = (function () {
             linkWrapper.innerHTML = '';
             for (let list of arrayList) {
                 let tempFragment = document.createElement('div');
-                tempFragment.innerHTML = `<div class="lists center" data-id=${list}><h3>${list}</h3></div>`;
+                tempFragment.innerHTML = `<div class="lists center" data-id=${list}><h4>${list}</h4></div>`;
                 fragment.appendChild(tempFragment.childNodes[0]);
             }
             linkWrapper.appendChild(fragment);
