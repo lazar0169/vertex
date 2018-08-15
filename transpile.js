@@ -6,7 +6,7 @@ const path = require('path');
 const { JSDOM } = require("jsdom");
 const pretty = require('pretty');
 
-let maper = JSON.parse(fs.readFileSync('maper.json', 'utf8'));
+let mapper = JSON.parse(fs.readFileSync('mapper.json', 'utf8'));
 let objects = merge(getFiles('objects'), true);
 let views = fs.readdirSync('views');
 let core = getFiles('core');
@@ -27,8 +27,8 @@ for (let view of views) {
     view = view.split('.')[0];
     let js = merge(coreScripts),
         css = merge(coreStyles),
-        styles = maper.styles[view].map(path => `./styles/${path}`),
-        scripts = maper.scripts[view].map(path => `./scripts/${path}`);
+        styles = mapper.styles[view].map(path => `./styles/${path}`),
+        scripts = mapper.scripts[view].map(path => `./scripts/${path}`);
 
     let document = new JSDOM(fs.readFileSync(`./views/${view}.html`, 'utf8')).window.document;
     let head = document.head;
@@ -60,7 +60,7 @@ for (let view of views) {
         css += merge(styles);
         fs.writeFileSync(`./${buildFolder}/css/${view}.css`, css);
     } catch (error) {
-        console.log('Error: Transpilation failed! Please check maper.json or admin rights');
+        console.log('Error: Transpilation failed! Please check mapper.json or admin rights');
         return;
     }
     console.log(`> ${view}`);
