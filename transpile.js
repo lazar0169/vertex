@@ -27,8 +27,8 @@ for (let view of views) {
     view = view.split('.')[0];
     let js = merge(coreScripts),
         css = merge(coreStyles),
-        styles = mapper.styles[view].map(path => `./styles/${path}`),
-        scripts = mapper.scripts[view].map(path => `./scripts/${path}`);
+        styles = mapper[view].styles.map(path => `./styles/${path}`),
+        scripts = mapper[view].scripts.map(path => `./scripts/${path}`);
 
     let document = new JSDOM(fs.readFileSync(`./views/${view}.html`, 'utf8')).window.document;
     let head = document.head;

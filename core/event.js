@@ -1,25 +1,32 @@
-let eventList;
+let events = {};
 
 function on(event, callback, count = Number.MAX_SAFE_INTEGER) {
-    if (!eventList) eventList = {};
-    if (!eventList[event]) eventList[event] = [];
-    eventList[event].push({
+    if (!events[event]) { events[event] = []; }
+    events[event].push({
         callback: callback,
         count: count
     });
 }
 
-function trigger(name, data) {
-    if (!eventList) return;
-    if (!eventList[name]) return;
-    for (let event of eventList[name]) {
-        if (event.count > 0) {
-            event.callback(data);
-            event.count--;
+function trigger(event, data) {
+    if (!events[event]) { return; }
+    let garbageCollector = [];
+    for (let eventData of events[event]) {
+        if (eventData.count > 0) {
+            eventData.callback(data);
+            if (eventData.count > 1) {
+                eventData.count--;
+            } else {
+                garbageCollector.push(eventData);
+            }
         } else {
-            eventList[name].splice(eventList[name].indexOf(event), 1);
+            garbageCollector.push(eventData);
         }
     }
+    for (let eventData of garbageCollector) {
+        events[event].splice(events[event].indexOf(eventData), 1);
+    }
+    if (events[event].length === 0) {
+        delete events[event];
+    }
 }
-
-
