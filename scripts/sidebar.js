@@ -15,7 +15,7 @@ const sidebar = (function () {
     let listSelected = $$('.list-active');
     let linkSelected = $$('.link-active');
     let search = $$('#search-link');
-    let opacity = sidebarWrapper.children[1];
+    let blackArea = sidebarWrapper.children[1];
     let teamLogo = $$('#team-logo');
 
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
@@ -38,7 +38,7 @@ const sidebar = (function () {
         collapse('navigation');
         search.focus();
     });
-    opacity.addEventListener('click', function () {
+    blackArea.addEventListener('click', function () {
         collapse('navigation');
     });
     // generate menu lists from data, and set click listener  
@@ -85,13 +85,11 @@ const sidebar = (function () {
             case 'navigation':
                 if (isExpandNav) {
                     navigationMenu.classList.add('expand');
-                    navigationMenu.classList.remove('collapse');
-                    opacity.classList.add('show')
+                    blackArea.classList.add('show')
                 }
                 else {
-                    navigationMenu.classList.add('collapse');
                     navigationMenu.classList.remove('expand');
-                    opacity.classList.remove('show');
+                    blackArea.classList.remove('show');
                 }
                 isExpandNav = !isExpandNav;
         }
