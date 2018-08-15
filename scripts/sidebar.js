@@ -29,6 +29,7 @@ const sidebar = (function () {
     });
     collapseButton.addEventListener('click', () => {
         collapse('sidebar');
+        trigger('sidebar/collapse', { data: isExpand })
     });
     back.addEventListener('click', () => {
         collapse('navigation');

@@ -14,7 +14,7 @@
     font-size: 1vw;
     border-right: 5px solid rgb(27, 31, 37);
     box-sizing: border-box;
-    transition: 0.2s ease-in-out;
+    transition: all 0.2s ease;
 }
 
 #sidebar {
@@ -98,7 +98,7 @@
     padding: 0.5em;
 }
 
-.collapse #sidebar-list>div {
+.collapse #sidebar-list>div, .collapse #sidebar-name {
     border: none;
 }
 
@@ -174,7 +174,7 @@
 #navigation-sidebar {
     width: 19%;
     height: 100%;
-    transform: translate(-100%, 0);
+    transform: translateX(-100%);
     position: fixed;
     display: block;
     background-color: gray;
@@ -188,7 +188,7 @@
 }
 
 #navigation-sidebar.expand {
-    transform: translate(0, 0);
+    transform: translateX(0);
     box-shadow: 50px 5px 50px rgba(45, 51, 61, 0.2);
 }
 

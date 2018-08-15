@@ -2,13 +2,15 @@
     "scripts": {
         "index": [
             "data.js",
-            "sidebar.js"
+            "sidebar.js",
+            "main-content.js"
         ]
     },
     "styles": {
         "index": [
             "index.css",
-            "sidebar.css"
+            "sidebar.css",
+            "main-content.css"
         ]
     }
 }

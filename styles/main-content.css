@@ -1,0 +1,12 @@
+#main-content {
+    background-color: gray;
+    height: 100%;
+    width: 88%;
+    float: right;
+    transform: translateX(0);
+    transition: all 0.2s ease;
+}
+
+#main-content.expand {
+    width: 97.5%;
+}
