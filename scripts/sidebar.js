@@ -1,10 +1,11 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
     let sidebarWrapper = $$('#sidebar-wrapper');
+    let sidebarMenu = $$('#sidebar')
     let listWrapper = $$('#sidebar-list');
     let listMenu = $$('.list-management');
     let collapseButton = $$('#icon-collapse');
-    let navigation = $$('#sidebar-hidden');
+    let navigationMenu = $$('#navigation-sidebar');
     let back = $$('#back-to-menu');
     let chosenLink = $$('#chosen-link');
     let linkWrapper = $$('#navigation-content');
@@ -15,6 +16,7 @@ const sidebar = (function () {
     let linkSelected = $$('.link-active');
     let search = $$('#search-link');
     let opacity = sidebarWrapper.children[1];
+    let teamLogo = $$('#team-logo');
 
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
@@ -30,14 +32,11 @@ const sidebar = (function () {
     });
     back.addEventListener('click', () => {
         collapse('navigation');
-
     });
     globalSearch.addEventListener('click', () => {
         generateLink();
         collapse('navigation');
         search.focus();
-
-
     });
     opacity.addEventListener('click', function () {
         collapse('navigation');
@@ -49,15 +48,14 @@ const sidebar = (function () {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class='center'><div class="list-management tooltip center" data-id="${arrayList[count]}">
                 <span class="mdi mdi-magnify icon-tooltip center"></span>
-                <div class="list-name">${arrayList[count]}</div>
+                <div class="list-name">${data[arrayList[count]].list}</div>
                 </div>
-                <span class="tooltip-text">${arrayList[count]}</span></div>`;
+                <span class="tooltip-text hide">${data[arrayList[count]].list}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
                 generateLink(listMenu[count].dataset.id);
                 chosenLink.dataset.id = listMenu[count].dataset.id;
-                chosenLink.innerHTML = chosenLink.dataset.id;
+                chosenLink.innerHTML = data[arrayList[count]].list;
                 search.focus();
-
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
@@ -69,23 +67,30 @@ const sidebar = (function () {
 
             case 'sidebar':
                 if (isExpand) {
-                    sidebarWrapper.classList.add('collapse');
+                    sidebarWrapper.classList.add('maximise');
+                    sidebarMenu.classList.remove('expand');
+                    sidebarMenu.classList.add('collapse');
+                    teamLogo.classList.remove('hide');
                 }
                 else {
-                    sidebarWrapper.classList.remove('collapse');
+                    sidebarWrapper.classList.remove('maximise');
+                    sidebarMenu.classList.remove('collapse');
+                    sidebarMenu.classList.add('expand');
+                    teamLogo.classList.add('hide');
+
                 }
                 isExpand = !isExpand;
                 break;
 
             case 'navigation':
                 if (isExpandNav) {
-                    navigation.classList.add('show');
-                    navigation.classList.remove('hide');
+                    navigationMenu.classList.add('expand');
+                    navigationMenu.classList.remove('collapse');
                     opacity.classList.add('show')
                 }
                 else {
-                    navigation.classList.add('hide');
-                    navigation.classList.remove('show');
+                    navigationMenu.classList.add('collapse');
+                    navigationMenu.classList.remove('expand');
                     opacity.classList.remove('show');
                 }
                 isExpandNav = !isExpandNav;
@@ -101,9 +106,9 @@ const sidebar = (function () {
             }
             else {
                 linkWrapper.innerHTML = '';
-                for (let count in data[id]) {
+                for (let count in data[id].value) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.innerHTML = `<a class="link-list" data-id="${data[id][count].id}">${data[id][count].name}</a>`;
+                    tempFragment.innerHTML = `<a class="link-list" data-id="${data[id]['value'][count].id}">${data[id]['value'][count].name}</a>`;
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
@@ -129,15 +134,14 @@ const sidebar = (function () {
             linkWrapper.innerHTML = '';
             for (let list of arrayList) {
                 let tempFragment = document.createElement('div');
-                tempFragment.innerHTML = `<div class="lists center" data-id=${list}><h4>${list}</h4></div>`;
+                tempFragment.innerHTML = `<div class="lists center" data-id=${list}><h4>${data[list].list}</h4></div>`;
                 fragment.appendChild(tempFragment.childNodes[0]);
             }
             linkWrapper.appendChild(fragment);
             for (let list in arrayList) {
-                for (let count of data[arrayList[list]]) {
+                for (let count of data[arrayList[list]]['value']) {
                     let tempFragment = document.createElement('a');
                     tempFragment.innerHTML = `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
-
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         listId = globalList[list].dataset.id;
                         linkId = count.id;
@@ -149,11 +153,9 @@ const sidebar = (function () {
                         if (listId === 'machines') {
                             //alert('tabela za masine');
                         }
-
                         //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
-
                 }
                 globalList[list].appendChild(fragment);
             }

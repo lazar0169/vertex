@@ -1,7 +1,8 @@
 .textBox {
-    background: rgb(30, 30, 30);
+    background-color: rgb(27, 31, 37);
     border: none;
-    border-bottom: 1px solid lightblue;
+    border-bottom: 1px solid rgb(30, 155, 227);
+    ;
     padding: 0.5em;
     user-select: none;
 }

@@ -6,7 +6,7 @@
 }
 
 .arrow {
-    color: lightblue;
+    color: rgb(30, 155, 227);;
     float: right;
     cursor: pointer;
 }
@@ -22,7 +22,7 @@
 }
 
 .select {
-    border: 1px solid rgb(30, 30, 30);
+    border: 1px solid rgb(27, 31, 37);
     border-bottom-color: white;
     box-sizing: border-box;
     padding: 0.5em;
@@ -39,7 +39,7 @@
 }
 
 .select-show:hover {
-    background-color: rgb(30, 30, 30);
+    background-color: rgb(27, 31, 37);
 }
 
 .show .select-show {
