@@ -1,4 +1,3 @@
-// Shorter replacement for DOM selection
 function $$(selector) {
     switch (selector[0]) {
         case '.':
@@ -10,7 +9,6 @@ function $$(selector) {
     }
 }
 
-// Global flags
 let isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
 let isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 let isIphone = navigator.platform && /iPhone|iPod/.test(navigator.platform);
