@@ -1,4 +1,6 @@
-let icon = '<span class="mdi mdi-hexagon-outline" id="hexagon"></span>'
+let iconData = {
+    icon: '<span class="mdi mdi-hexagon-outline" id="hexagon"></span>'
+}
 
 // Define 'init' event
 on('init', function (data) {
@@ -6,5 +8,5 @@ on('init', function (data) {
     $$('#label').innerHTML = welcomeMessage;
 }, 1);
 
-// Trigger the 'init' event
-trigger('init', { icon: icon });
+// Trigger the 'init' event and pass data
+trigger('init', iconData);

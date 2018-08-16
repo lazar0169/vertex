@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require("jsdom");
 const pretty = require('pretty');
+const purify = require('purify-css');
+const babel = require('babel-core');
 
 let mapper = JSON.parse(fs.readFileSync('mapper.json', 'utf8'));
 let objects = merge(getFiles('objects'), true);
@@ -39,25 +41,29 @@ for (let view of views) {
         object.remove();
     }
 
-    fs.writeFileSync(`./${buildFolder}/${view}.html`, pretty(
+    let viewContent = pretty(
         `<html>
             <head>
                 ${head.innerHTML}
+                <script src="js/${view}.js" ${vendorSafe ? 'async' : 'defer'}></script>
                 <link rel="stylesheet" href="css/${view}.css">
             </head>
             <body>
                 ${body.innerHTML}
-                <script src="js/${view}.js" ${vendorSafe ? 'async' : 'defer'}></script>
             </body>
-        </html>`)
-    );
+        </html>`);
+
+    fs.writeFileSync(`./${buildFolder}/${view}.html`, viewContent);
+
+    js = '"use strict"; \r' + js;
+    js += merge(scripts);
+    css += merge(styles);
+
+    css = purify(viewContent, css);
+    js = babel.transform(js, { presets: ['es2015'], plugins: ['transform-for-of-as-array'], comments: false }).code;
 
     try {
-        js += merge(scripts);
-        js = '"use strict"; \r' + js;
         fs.writeFileSync(`./${buildFolder}/js/${view}.js`, js);
-
-        css += merge(styles);
         fs.writeFileSync(`./${buildFolder}/css/${view}.css`, css);
     } catch (error) {
         console.log('Error: Transpilation failed! Please check mapper.json or admin rights');
