@@ -1,5 +1,6 @@
 'use strict';
-console.log('--- STARTED: ');
+process.stdout.write('\u001B[2J\u001B[0;0f');
+console.log('Transpiling... ');
 
 const fs = require('fs');
 const path = require('path');
@@ -79,8 +80,6 @@ try {
 } catch (error) {
     console.log('Error: Copying failed! Please check resource (images, fonts, vendor)');
 }
-
-console.log('--- DONE!');
 
 function isVendorSafe(vendor) {
     for (let item of vendor) {
