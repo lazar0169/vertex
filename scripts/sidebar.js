@@ -17,7 +17,6 @@ const sidebar = (function () {
     let search = $$('#search-link');
     let blackArea = sidebarWrapper.children[1];
     let teamLogo = $$('#team-logo');
-
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
@@ -65,7 +64,6 @@ const sidebar = (function () {
     // function for collapse sidebar, show or hide navigation
     function collapse(container) {
         switch (container) {
-
             case 'sidebar':
                 if (isExpand) {
                     sidebarWrapper.classList.add('maximise');
@@ -78,7 +76,6 @@ const sidebar = (function () {
                     sidebarMenu.classList.remove('collapse');
                     sidebarMenu.classList.add('expand');
                     teamLogo.classList.add('hide');
-
                 }
                 isExpand = !isExpand;
                 break;
@@ -112,10 +109,8 @@ const sidebar = (function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
                         if (id === 'machines') {
-                            //alert('tabela za masine');
-                        }
-                        //alert(`ja imam id = ${linkList[count].dataset.id}, i trebam prikazati tabelu za ${linkList[count].textContent} i da vratim menu`);
 
+                        }
                         collapse('navigation');
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
@@ -150,9 +145,8 @@ const sidebar = (function () {
                         chosenLink.innerHTML = chosenLink.dataset.id;
                         selectLink(linkId);
                         if (listId === 'machines') {
-                            //alert('tabela za masine');
+
                         }
-                        //alert(`ja imam id = ${linkList[list].dataset.id}, i trebam prikazati tabelu za ${linkList[list].textContent} i da vratim menu`);
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
