@@ -1,10 +1,12 @@
 'use strict';
-console.log('--- STARTED: ');
+process.stdout.write('\u001B[2J\u001B[0;0f');
+console.log('Transpiling... ');
 
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require("jsdom");
 const pretty = require('pretty');
+const babel = require('babel-core');
 
 let mapper = JSON.parse(fs.readFileSync('mapper.json', 'utf8'));
 let objects = merge(getFiles('objects'), true);
@@ -39,7 +41,7 @@ for (let view of views) {
         object.remove();
     }
 
-    fs.writeFileSync(`./${buildFolder}/${view}.html`, pretty(
+    let viewContent = pretty(
         `<html>
             <head>
                 ${head.innerHTML}
@@ -49,15 +51,18 @@ for (let view of views) {
                 ${body.innerHTML}
                 <script src="js/${view}.js" ${vendorSafe ? 'async' : 'defer'}></script>
             </body>
-        </html>`)
-    );
+        </html>`);
+
+    fs.writeFileSync(`./${buildFolder}/${view}.html`, viewContent);
+
+    js = '"use strict"; \r' + js;
+    js += merge(scripts);
+    css += merge(styles);
+
+    js = babel.transform(js, { presets: ['es2015'], plugins: ['transform-for-of-as-array'], comments: false }).code;
 
     try {
-        js += merge(scripts);
-        js = '"use strict"; \r' + js;
         fs.writeFileSync(`./${buildFolder}/js/${view}.js`, js);
-
-        css += merge(styles);
         fs.writeFileSync(`./${buildFolder}/css/${view}.css`, css);
     } catch (error) {
         console.log('Error: Transpilation failed! Please check mapper.json or admin rights');
@@ -73,8 +78,6 @@ try {
 } catch (error) {
     console.log('Error: Copying failed! Please check resource (images, fonts, vendor)');
 }
-
-console.log('--- DONE!');
 
 function isVendorSafe(vendor) {
     for (let item of vendor) {
