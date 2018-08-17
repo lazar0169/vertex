@@ -64,25 +64,14 @@ const sidebar = (function () {
     function collapse(container) {
         switch (container) {
             case 'sidebar':
-                if (isExpand) {
-                    sidebarMenu.classList.add('collapse');
-                }
-                else {
-                    sidebarMenu.classList.remove('collapse');
-                }
+                sidebarMenu.classList[isExpand ? 'add' : 'remove']('collapse');
                 isExpand = !isExpand;
                 break;
-
             case 'navigation':
-                if (isExpandNav) {
-                    navigationMenu.classList.add('collapse');
-                    blackArea.classList.add('show');
-                }
-                else {
-                    navigationMenu.classList.remove('collapse');
-                    blackArea.classList.remove('show');
-                }
+                navigationMenu.classList[isExpandNav ? 'add' : 'remove']('collapse');
+                blackArea.classList[isExpandNav ? 'add' : 'remove']('show');
                 isExpandNav = !isExpandNav;
+                break;
         }
     }
     // generate links when you click on list from menu, and set click listener
@@ -101,9 +90,6 @@ const sidebar = (function () {
                     tempFragment.childNodes[0].addEventListener('click', function () {
                         linkId = linkList[count].dataset.id;
                         selectList(id);
-                        if (id === 'machines') {
-
-                        }
                         collapse('navigation');
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
@@ -137,9 +123,6 @@ const sidebar = (function () {
                         chosenLink.dataset.id = listId;
                         chosenLink.innerHTML = chosenLink.dataset.id;
                         selectLink(linkId);
-                        if (listId === 'machines') {
-
-                        }
                     });
                     fragment.appendChild(tempFragment.childNodes[0]);
                 }
@@ -150,37 +133,27 @@ const sidebar = (function () {
     }
     // highlight chosen list
     function selectList(id) {
-        if (listSelected[0]) {
-            listSelected[0].classList.remove('list-active');
-        }
+
         for (let list of listMenu) {
-            if (String(list.dataset.id) === String(id)) {
-                list.classList.add('list-active');
-                break;
-            }
+
+            list.classList[String(list.dataset.id) === String(id) ? 'add' : 'remove']('list-active');
         }
     }
     // highlight chosen link
     function selectLink(id) {
-        if (id) {
-            if (linkSelected[0]) {
-                linkSelected[0].classList.remove('link-active');
-            }
-            for (let link of linkList) {
-                if (Number(link.dataset.id) === Number(id)) {
-                    link.classList.add('link-active');
-                    break;
-                }
-            }
+
+
+        for (let link of linkList) {
+
+            link.classList[Number(link.dataset.id) === Number(id) ? 'add' : 'remove']('link-active');
+
+
+
         }
+
     }
 
     function collapseMain() {
-        if (isExpand) {
-            mainWrapper.classList.remove('expand');
-        }
-        else {
-            mainWrapper.classList.add('expand');
-        }
+        mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }
 })();
