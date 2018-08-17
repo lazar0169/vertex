@@ -1,6 +1,5 @@
 const sidebar = (function () {
     let arrayList = Object.keys(data);
-    let sidebarWrapper = $$('#sidebar-wrapper');
     let sidebarMenu = $$('#sidebar')
     let listWrapper = $$('#sidebar-list');
     let listMenu = $$('.list-management');
@@ -15,25 +14,25 @@ const sidebar = (function () {
     let listSelected = $$('.list-active');
     let linkSelected = $$('.link-active');
     let search = $$('#search-link');
-    let blackArea = sidebarWrapper.children[1];
-    let teamLogo = $$('#team-logo');
+    let blackArea = $$('#black-area');
+    let mainWrapper = $$('#main-content');
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
     //variable for list id and link id
     let listId;
     let linkId;
-    window.addEventListener('load', () => {
+    window.addEventListener('load', function () {
         generateMenu();
     });
-    collapseButton.addEventListener('click', () => {
+    collapseButton.addEventListener('click', function () {
         collapse('sidebar');
-        trigger('sidebar/collapse', { data: isExpand })
+        collapseMain();
     });
-    back.addEventListener('click', () => {
+    back.addEventListener('click', function () {
         collapse('navigation');
     });
-    globalSearch.addEventListener('click', () => {
+    globalSearch.addEventListener('click', function () {
         generateLink();
         collapse('navigation');
         search.focus();
@@ -66,27 +65,21 @@ const sidebar = (function () {
         switch (container) {
             case 'sidebar':
                 if (isExpand) {
-                    sidebarWrapper.classList.add('maximise');
-                    sidebarMenu.classList.remove('expand');
                     sidebarMenu.classList.add('collapse');
-                    teamLogo.classList.remove('hide');
                 }
                 else {
-                    sidebarWrapper.classList.remove('maximise');
                     sidebarMenu.classList.remove('collapse');
-                    sidebarMenu.classList.add('expand');
-                    teamLogo.classList.add('hide');
                 }
                 isExpand = !isExpand;
                 break;
 
             case 'navigation':
                 if (isExpandNav) {
-                    navigationMenu.classList.add('expand');
-                    blackArea.classList.add('show')
+                    navigationMenu.classList.add('collapse');
+                    blackArea.classList.add('show');
                 }
                 else {
-                    navigationMenu.classList.remove('expand');
+                    navigationMenu.classList.remove('collapse');
                     blackArea.classList.remove('show');
                 }
                 isExpandNav = !isExpandNav;
@@ -179,6 +172,15 @@ const sidebar = (function () {
                     break;
                 }
             }
+        }
+    }
+
+    function collapseMain() {
+        if (isExpand) {
+            mainWrapper.classList.remove('expand');
+        }
+        else {
+            mainWrapper.classList.add('expand');
         }
     }
 })();

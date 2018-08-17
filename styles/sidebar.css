@@ -1,4 +1,4 @@
-#sidebar-wrapper {
+#sidebar {
     margin: 0;
     padding: 0;
     position: absolute;
@@ -15,16 +15,10 @@
     border-right: 5px solid rgb(27, 31, 37);
     box-sizing: border-box;
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
-#sidebar {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: column wrap;
-}
-
-#sidebar-wrapper.maximise {
+#sidebar.collapse {
     width: 2.5%;
     background-color: rgb(27, 31, 37);
     border: 0;
@@ -38,9 +32,9 @@
 }
 
 #team-name {
-    visibility: visible;
     width: auto;
     font-size: 1vw;
+    transition: all 0.2s ease;
 }
 
 .collapse .list-management>.icon-tooltip, .collapse #global-search>.icon-tooltip {
@@ -67,6 +61,10 @@
     padding-left: 1.5em;
     cursor: pointer;
     justify-content: flex-start;
+}
+
+#global-search>div {
+    transition: all 0.2s ease;
 }
 
 #search-link {
@@ -122,6 +120,7 @@
     text-align: center;
     border-radius: 10%;
     padding: 0.3em;
+    left: 3%;
 }
 
 .tooltip-text:before {
@@ -136,16 +135,34 @@
     border-bottom: 0.3em solid transparent;
 }
 
-.collapse div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
+#team-logo {
+    width: 0;
+    height: 0;
+    font-size: 0;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.collapse #team-logo {
     visibility: visible;
     width: auto;
     height: auto;
-    left: 3%;
+    opacity: 1;
+    font-size: 1vw;
+}
+
+.collapse #sidebar-list>div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
+    visibility: visible;
+    width: auto;
+    height: auto;
+    opacity: 1;
 }
 
 .list-name {
     width: 80%;
-    visibility: visible;
+    opacity: 1;
+    font-size: 1vw;
+    transition: all 0.2s ease;
 }
 
 #sidebar-logo {
@@ -153,21 +170,19 @@
     bottom: 0;
     width: 100%;
     height: 15%;
-    visibility: visible;
     font-size: 1vw;
+    transition: all 0.2s ease
 }
 
-.black-area {
+#black-area {
     position: fixed;
     width: 0;
     height: 100%;
     opacity: 0.5;
     background-color: rgb(0, 0, 0);
-    visibility: hidden;
 }
 
-.black-area.show {
-    visibility: visible;
+#black-area.show {
     width: 100%;
 }
 
@@ -187,7 +202,7 @@
     transition: all 0.2s ease;
 }
 
-#navigation-sidebar.expand {
+#navigation-sidebar.collapse {
     transform: translateX(0);
     box-shadow: 50px 5px 50px rgba(45, 51, 61, 0.2);
 }
@@ -253,18 +268,25 @@
 }
 
 .collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {
-    animation: slideOut 0.19s;
-    opacity: 0;
+    font-size: 0;
     width: 0;
-}
-
-.expand .list-name, .expand #global-search>div, .expand #team-name, .expand #sidebar-logo {
-    animation: slideIn 0.21s;
-    opacity: 1;
+    opacity: 0;
 }
 
 .list-active, .link-active {
-    color: white;
+    color: white !important;
+}
+
+#main-content {
+    background-color: gray;
+    height: 100%;
+    width: 88%;
+    float: right;
+    transition: all 0.2s ease;
+}
+
+#main-content.expand {
+    width: 97.5%;
 }
 
 #sidebar-list::-webkit-scrollbar {
@@ -293,28 +315,4 @@
 #navigation-sidebar::-webkit-scrollbar-thumb {
     background-color: rgb(42, 42, 42);
     border-radius: 50px;
-}
-
-@keyframes slideIn {
-    0% {
-        opacity: 0;
-    }
-    75% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    0% {
-        opacity: 1;
-    }
-    25% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 0;
-    }
 }
