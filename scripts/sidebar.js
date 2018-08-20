@@ -2,28 +2,33 @@ const sidebar = (function () {
     let arrayList = Object.keys(data);
     let sidebarMenu = $$('#sidebar')
     let listWrapper = $$('#sidebar-list');
-    let listMenu = $$('.list-management');
     let collapseButton = $$('#icon-collapse');
     let navigationMenu = $$('#navigation-sidebar');
     let back = $$('#back-to-menu');
     let chosenLink = $$('#chosen-link');
     let linkWrapper = $$('#navigation-content');
-    let linkList = $$('.link-list');
     let globalSearch = $$('#global-search');
     let globalList = $$('.lists');
-    let listSelected = $$('.list-active');
-    let linkSelected = $$('.link-active');
     let search = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainWrapper = $$('#main-content');
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
     let isExpand = true;
     let isExpandNav = true;
-    //variable for list id and link id
-    let listId;
-    let linkId;
+    // variable for selected list and link
+    let listSelected = arrayList[0];
+    let linkSelected = data[listSelected]['value'][0]['id'];
+    let previousListSelectedDOM;
+    let previousLinkSelectedDOM;
+
+
+
     window.addEventListener('load', function () {
         generateMenu();
+        selectList(listSelected);
+        generateLink(listSelected);
+        selectLink(linkSelected);
+        chosenLink.innerHTML = data[listSelected].list;
     });
     collapseButton.addEventListener('click', function () {
         collapse('sidebar');
@@ -45,20 +50,23 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         for (let count in arrayList) {
             let tempFragment = document.createElement('div');
-            tempFragment.innerHTML = `<div class='center'><div class="list-management tooltip center" data-id="${arrayList[count]}">
+            tempFragment.innerHTML = `<div class='center'><div id="${arrayList[count]}" class="list-management tooltip center">
                 <span class="mdi mdi-magnify icon-tooltip center"></span>
                 <div class="list-name">${data[arrayList[count]].list}</div>
                 </div>
                 <span class="tooltip-text hide">${data[arrayList[count]].list}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
-                generateLink(listMenu[count].dataset.id);
-                chosenLink.dataset.id = listMenu[count].dataset.id;
+                generateLink(arrayList[count]); ////////////
                 chosenLink.innerHTML = data[arrayList[count]].list;
                 search.focus();
+
+                collapse('navigation');
+
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
+
     }
     // function for collapse sidebar, show or hide navigation
     function collapse(container) {
@@ -79,81 +87,77 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         if (id) {
             if (String(id) === String(chosenLink.dataset.id)) {
-                selectLink(linkId);
-                collapse('navigation');
+
             }
             else {
                 linkWrapper.innerHTML = '';
-                for (let count in data[id].value) {
+                for (let categoryValue of data[id].value) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.innerHTML = `<a class="link-list" data-id="${data[id]['value'][count].id}">${data[id]['value'][count].name}</a>`;
-                    tempFragment.childNodes[0].addEventListener('click', function () {
-                        linkId = linkList[count].dataset.id;
+                    tempFragment.id = categoryValue.id;
+                    tempFragment.classList = 'link-list';
+                    tempFragment.innerHTML = categoryValue.name;
+                    tempFragment.addEventListener('click', function () {
+                        linkSelected = categoryValue.id;
+                        chosenLink.innerHTML = data[id].list;
                         selectList(id);
+                        selectLink(linkSelected);
                         collapse('navigation');
                     });
-                    fragment.appendChild(tempFragment.childNodes[0]);
+                    fragment.appendChild(tempFragment);
                 }
                 linkWrapper.appendChild(fragment);
-                if (linkId) {
-                    selectLink(linkId);
-                }
-                collapse('navigation');
             }
         }
         else {
             chosenLink.innerHTML = 'Search';
-            chosenLink.dataset.id = 'globalSearch';
             linkWrapper.innerHTML = '';
-            for (let list of arrayList) {
-                let tempFragment = document.createElement('div');
-                tempFragment.innerHTML = `<div class="lists center" data-id=${list}><h4>${data[list].list}</h4></div>`;
-                fragment.appendChild(tempFragment.childNodes[0]);
+
+            for (let category in data) {
+                let tempCategory = document.createElement('div');
+                tempCategory.className = 'lists center';
+                tempCategory.innerHTML = `<h4>${data[category].list}</h4>`;
+                for (let value of data[category].value) {
+                    let tempValue = document.createElement('a');
+                    tempValue.classList = 'link-list';
+                    tempValue.id = value.id;
+                    tempValue.innerHTML = value.name;
+                    tempValue.addEventListener('click', function () {
+                        listSelected = category;
+                        linkSelected = value.id;
+                        generateLink(listSelected);
+                        selectList(listSelected);
+                        chosenLink.innerHTML = category.list;
+                        collapse('navigation');
+                    });
+                    tempCategory.appendChild(tempValue);
+                }
+                fragment.appendChild(tempCategory);
             }
             linkWrapper.appendChild(fragment);
-            for (let list in arrayList) {
-                for (let count of data[arrayList[list]]['value']) {
-                    let tempFragment = document.createElement('a');
-                    tempFragment.innerHTML = `<a class="link-list" data-id="${count.id}">${count.name}</a>`;
-                    tempFragment.childNodes[0].addEventListener('click', function () {
-                        listId = globalList[list].dataset.id;
-                        linkId = count.id;
-                        generateLink(listId);
-                        selectList(listId);
-                        chosenLink.dataset.id = listId;
-                        chosenLink.innerHTML = chosenLink.dataset.id;
-                        selectLink(linkId);
-                    });
-                    fragment.appendChild(tempFragment.childNodes[0]);
-                }
-                globalList[list].appendChild(fragment);
-            }
-            selectLink(linkId);
         }
+    }
+
+    // highlight chosen link
+    function selectLink(id) {
+        if (previousLinkSelectedDOM) {
+            previousLinkSelectedDOM.classList.remove('list-active');
+        }
+        let linkSelectedDOM = $$(`#${id}`);
+        linkSelectedDOM.classList.add('list-active');
+        previousLinkSelectedDOM = linkSelectedDOM;
     }
     // highlight chosen list
     function selectList(id) {
-
-        for (let list of listMenu) {
-
-            list.classList[String(list.dataset.id) === String(id) ? 'add' : 'remove']('list-active');
+        if (previousListSelectedDOM) {
+            previousListSelectedDOM.classList.remove('list-active');
         }
-    }
-    // highlight chosen link
-    function selectLink(id) {
-
-
-        for (let link of linkList) {
-
-            link.classList[Number(link.dataset.id) === Number(id) ? 'add' : 'remove']('link-active');
-
-
-
-        }
-
+        let listSelectedDOM = $$(`#${id}`);
+        listSelectedDOM.classList.add('list-active');
+        previousListSelectedDOM = listSelectedDOM;
     }
 
     function collapseMain() {
         mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }
 })();
+
