@@ -16,14 +16,14 @@ const sidebar = (function () {
     let isExpandNav = true;
     // variable for selected list and link
     let listSelectedId = arrayList[0];
-    let linkSelectedId = data[listSelectedId]['value'][0]['id'];
+    let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
     window.addEventListener('load', function () {
         generateMenu();
         generateLink(listSelectedId);
         selectList(listSelectedId);
-        chosenLink.innerHTML = data[listSelected].category;
+        chosenLink.innerHTML = data[listSelectedId].category;
     });
     collapseButton.addEventListener('click', function () {
         collapse('sidebar');
@@ -81,11 +81,11 @@ const sidebar = (function () {
             linkWrapper.innerHTML = '';
             for (let categoryValue of data[id].value) {
                 let tempFragment = document.createElement('a');
-                tempFragment.id = categoryValue.id;
+                tempFragment.id = `link-${categoryValue.id}`;
                 tempFragment.classList = 'link-list';
                 tempFragment.innerHTML = categoryValue.name;
                 tempFragment.addEventListener('click', function () {
-                    linkSelectedId = categoryValue.id;
+                    linkSelectedId = `link-${categoryValue.id}`;
                     chosenLink.innerHTML = data[id].category;
                     selectList(id);
                     selectLink(linkSelectedId);
@@ -105,11 +105,11 @@ const sidebar = (function () {
                 for (let value of data[category].value) {
                     let tempValue = document.createElement('a');
                     tempValue.classList = 'link-list';
-                    tempValue.id = value.id;
+                    tempValue.id = `link-${value.id}`;
                     tempValue.innerHTML = value.name;
                     tempValue.addEventListener('click', function () {
                         listSelectedId = category;
-                        linkSelectedId = value.id;
+                        linkSelectedId = `link-${value.id}`;
                         generateLink(listSelectedId);
                         selectList(listSelectedId);
                         chosenLink.innerHTML = category.category;
