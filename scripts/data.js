@@ -1,4 +1,26 @@
 let data = {
+    casino: {
+        category: 'Casino',
+        value: [
+            {
+                id: 25,
+                name: 'Bolnica c'
+            },
+            {
+                id: 26,
+                name: 'Kalca c'
+            },
+            {
+                id: 27,
+                name: 'Marger c'
+            },
+            {
+                id: 28,
+                name: 'Durlan c'
+            }
+
+        ]
+    },
     jackpot: {
         category: 'Jackpot',
         value: [
@@ -88,6 +110,27 @@ let data = {
             }
         ]
     },
+    reports: {
+        category: 'Reports',
+        value: [
+            {
+                id: 29,
+                name: 'Bolnica r'
+            },
+            {
+                id: 30,
+                name: 'Kalca r'
+            },
+            {
+                id: 31,
+                name: 'Marger r'
+            },
+            {
+                id: 32,
+                name: 'Durlan r'
+            }
+        ]
+    },
 
     users: {
         category: 'Users',
@@ -137,5 +180,6 @@ let data = {
             }
         ]
     }
-    
+
 };
+let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];

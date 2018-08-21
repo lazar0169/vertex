@@ -11,7 +11,7 @@ const sidebar = (function () {
     let search = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainWrapper = $$('#main-content');
-    // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like iscollapse
+    // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpand = true;
     let isExpandNav = true;
     // variable for selected list and link
@@ -19,34 +19,40 @@ const sidebar = (function () {
     let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
+
     window.addEventListener('load', function () {
         generateMenu();
         generateLink(listSelectedId);
         selectList(listSelectedId);
         chosenLink.innerHTML = data[listSelectedId].category;
     });
+
     collapseButton.addEventListener('click', function () {
         collapse('sidebar');
         collapseMain();
     });
+
     back.addEventListener('click', function () {
         collapse('navigation');
     });
+
     globalSearch.addEventListener('click', function () {
         generateLink();
         collapse('navigation');
         search.focus();
     });
+
     blackArea.addEventListener('click', function () {
         collapse('navigation');
     });
+
     // generate menu lists from data, and set click listener  
     function generateMenu() {
         let fragment = document.createDocumentFragment();
         for (let count in arrayList) {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class='center'><div id="${arrayList[count]}" class="list-management tooltip center">
-                <span class="mdi mdi-magnify icon-tooltip center"></span>
+                <span class="mdi mdi-${icons[count]} icon-tooltip center"></span>
                 <div class="list-name">${data[arrayList[count]].category}</div>
                 </div>
                 <span class="tooltip-text hide">${data[arrayList[count]].category}</span></div>`;
@@ -60,6 +66,7 @@ const sidebar = (function () {
         }
         listWrapper.appendChild(fragment);
     }
+
     // function for collapse sidebar, show or hide navigation
     function collapse(container) {
         switch (container) {
@@ -74,6 +81,7 @@ const sidebar = (function () {
                 break;
         }
     }
+
     // generate links when you click on list from menu, and set click listener
     function generateLink(id) {
         let fragment = document.createDocumentFragment();
@@ -123,6 +131,7 @@ const sidebar = (function () {
         }
         selectLink(linkSelectedId);
     }
+
     // highlight chosen link
     function selectLink(id) {
         if (previousLinkSelected) {
@@ -134,6 +143,7 @@ const sidebar = (function () {
             previousLinkSelected = linkSelected;
         }
     }
+
     // highlight chosen list
     function selectList(id) {
         if (previousListSelected) {
@@ -143,6 +153,7 @@ const sidebar = (function () {
         listSelected.classList.add('list-active');
         previousListSelected = listSelected;
     }
+
     function collapseMain() {
         mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }

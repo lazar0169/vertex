@@ -157,6 +157,7 @@
     width: 80%;
     opacity: 1;
     font-size: 1vw;
+    padding-left: 0.3em;
     transition: all 0.1s ease;
 }
 
