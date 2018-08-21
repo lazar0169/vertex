@@ -23,6 +23,7 @@
     "css-minifiers": "^3.0.0",
     "jsdom": "^11.11.0",
     "node-minify": "^3.3.0",
+    "node-watch": "^0.5.8",
     "pretty": "^2.0.0"
   },
   "dependencies": {

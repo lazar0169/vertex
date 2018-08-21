@@ -6,6 +6,12 @@
             "request": "launch",
             "name": "transpile",
             "program": "${workspaceFolder}/transpile.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "watch",
+            "program": "${workspaceFolder}/watch.js"
         }
     ]
 }

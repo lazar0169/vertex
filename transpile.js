@@ -59,13 +59,13 @@ for (let view of views) {
     js += merge(scripts);
     css += merge(styles);
 
-    // js = babel.transform(js, { presets: ['es2015'], plugins: ['transform-for-of-as-array'], comments: false }).code;
+    js = babel.transform(js, { presets: ['es2015'], plugins: ['transform-for-of-as-array'], comments: false }).code;
 
     try {
         fs.writeFileSync(`./${buildFolder}/js/${view}.js`, js);
         fs.writeFileSync(`./${buildFolder}/css/${view}.css`, css);
     } catch (error) {
-        console.log('Error: Transpilation failed! Please check mapper.json or admin rights');
+        console.log('Error: Transpilation failed! Please check mapper.json or js/css folders inside "bin"');
         return;
     }
     console.log(`> ${view}`);
