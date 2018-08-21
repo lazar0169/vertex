@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require("jsdom");
 const pretty = require('pretty');
-const purify = require('purify-css');
 const babel = require('babel-core');
 
 let mapper = JSON.parse(fs.readFileSync('mapper.json', 'utf8'));
@@ -55,19 +54,18 @@ for (let view of views) {
         </html>`);
 
     fs.writeFileSync(`./${buildFolder}/${view}.html`, viewContent);
-    
+
     js = '"use strict"; \r' + js;
     js += merge(scripts);
     css += merge(styles);
 
-    css = purify(viewContent, css);
     js = babel.transform(js, { presets: ['es2015'], plugins: ['transform-for-of-as-array'], comments: false }).code;
 
     try {
         fs.writeFileSync(`./${buildFolder}/js/${view}.js`, js);
         fs.writeFileSync(`./${buildFolder}/css/${view}.css`, css);
     } catch (error) {
-        console.log('Error: Transpilation failed! Please check mapper.json or admin rights');
+        console.log('Error: Transpilation failed! Please check mapper.json or js/css folders inside "bin"');
         return;
     }
     console.log(`> ${view}`);
