@@ -151,11 +151,10 @@
     font-size: 1vw;
 }
 
-.collapse #sidebar-list>div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text {
+.collapse #sidebar-list>div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text, .collapse #icon-collapse:hover>.tooltip-text {
     visibility: visible;
     width: auto;
     height: auto;
-    opacity: 1;
 }
 
 .list-name {

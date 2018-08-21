@@ -1,6 +1,6 @@
 let data = {
     jackpot: {
-        list: 'Jackpot',
+        category: 'Jackpot',
         value: [
             {
                 id: 1,
@@ -23,7 +23,7 @@ let data = {
     },
 
     tickets: {
-        list: 'Tikets',
+        category: 'Tikets',
         value: [
             {
                 id: 5,
@@ -46,7 +46,7 @@ let data = {
 
     AFT:
     {
-        list: 'AFT',
+        category: 'AFT',
         value: [
             {
                 id: 9,
@@ -68,7 +68,7 @@ let data = {
     },
 
     machines: {
-        list: 'Machines',
+        category: 'Machines',
         value: [
             {
                 id: 13,
@@ -90,7 +90,7 @@ let data = {
     },
 
     users: {
-        list: 'Users',
+        category: 'Users',
         value: [
             {
                 id: 17,
@@ -112,7 +112,7 @@ let data = {
     },
 
     service: {
-        list: 'Service',
+        category: 'Service',
         value: [
             {
                 id: 21,

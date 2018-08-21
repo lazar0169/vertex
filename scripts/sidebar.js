@@ -8,7 +8,6 @@ const sidebar = (function () {
     let chosenLink = $$('#chosen-link');
     let linkWrapper = $$('#navigation-content');
     let globalSearch = $$('#global-search');
-    let globalList = $$('.lists');
     let search = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainWrapper = $$('#main-content');
@@ -16,19 +15,15 @@ const sidebar = (function () {
     let isExpand = true;
     let isExpandNav = true;
     // variable for selected list and link
-    let listSelected = arrayList[0];
-    let linkSelected = data[listSelected]['value'][0]['id'];
-    let previousListSelectedDOM;
-    let previousLinkSelectedDOM;
-
-
-
+    let listSelectedId = arrayList[0];
+    let linkSelectedId = data[listSelectedId]['value'][0]['id'];
+    let previousListSelected;
+    let previousLinkSelected;
     window.addEventListener('load', function () {
         generateMenu();
-        selectList(listSelected);
-        generateLink(listSelected);
-        selectLink(linkSelected);
-        chosenLink.innerHTML = data[listSelected].list;
+        generateLink(listSelectedId);
+        selectList(listSelectedId);
+        chosenLink.innerHTML = data[listSelected].category;
     });
     collapseButton.addEventListener('click', function () {
         collapse('sidebar');
@@ -52,21 +47,18 @@ const sidebar = (function () {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class='center'><div id="${arrayList[count]}" class="list-management tooltip center">
                 <span class="mdi mdi-magnify icon-tooltip center"></span>
-                <div class="list-name">${data[arrayList[count]].list}</div>
+                <div class="list-name">${data[arrayList[count]].category}</div>
                 </div>
-                <span class="tooltip-text hide">${data[arrayList[count]].list}</span></div>`;
+                <span class="tooltip-text hide">${data[arrayList[count]].category}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
-                generateLink(arrayList[count]); ////////////
-                chosenLink.innerHTML = data[arrayList[count]].list;
+                generateLink(arrayList[count]);
+                chosenLink.innerHTML = data[arrayList[count]].category;
                 search.focus();
-
                 collapse('navigation');
-
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
-
     }
     // function for collapse sidebar, show or hide navigation
     function collapse(container) {
@@ -86,47 +78,41 @@ const sidebar = (function () {
     function generateLink(id) {
         let fragment = document.createDocumentFragment();
         if (id) {
-            if (String(id) === String(chosenLink.dataset.id)) {
-
+            linkWrapper.innerHTML = '';
+            for (let categoryValue of data[id].value) {
+                let tempFragment = document.createElement('a');
+                tempFragment.id = categoryValue.id;
+                tempFragment.classList = 'link-list';
+                tempFragment.innerHTML = categoryValue.name;
+                tempFragment.addEventListener('click', function () {
+                    linkSelectedId = categoryValue.id;
+                    chosenLink.innerHTML = data[id].category;
+                    selectList(id);
+                    selectLink(linkSelectedId);
+                    collapse('navigation');
+                });
+                fragment.appendChild(tempFragment);
             }
-            else {
-                linkWrapper.innerHTML = '';
-                for (let categoryValue of data[id].value) {
-                    let tempFragment = document.createElement('a');
-                    tempFragment.id = categoryValue.id;
-                    tempFragment.classList = 'link-list';
-                    tempFragment.innerHTML = categoryValue.name;
-                    tempFragment.addEventListener('click', function () {
-                        linkSelected = categoryValue.id;
-                        chosenLink.innerHTML = data[id].list;
-                        selectList(id);
-                        selectLink(linkSelected);
-                        collapse('navigation');
-                    });
-                    fragment.appendChild(tempFragment);
-                }
-                linkWrapper.appendChild(fragment);
-            }
+            linkWrapper.appendChild(fragment);
         }
         else {
             chosenLink.innerHTML = 'Search';
             linkWrapper.innerHTML = '';
-
             for (let category in data) {
                 let tempCategory = document.createElement('div');
                 tempCategory.className = 'lists center';
-                tempCategory.innerHTML = `<h4>${data[category].list}</h4>`;
+                tempCategory.innerHTML = `<h4>${data[category].category}</h4>`;
                 for (let value of data[category].value) {
                     let tempValue = document.createElement('a');
                     tempValue.classList = 'link-list';
                     tempValue.id = value.id;
                     tempValue.innerHTML = value.name;
                     tempValue.addEventListener('click', function () {
-                        listSelected = category;
-                        linkSelected = value.id;
-                        generateLink(listSelected);
-                        selectList(listSelected);
-                        chosenLink.innerHTML = category.list;
+                        listSelectedId = category;
+                        linkSelectedId = value.id;
+                        generateLink(listSelectedId);
+                        selectList(listSelectedId);
+                        chosenLink.innerHTML = category.category;
                         collapse('navigation');
                     });
                     tempCategory.appendChild(tempValue);
@@ -135,29 +121,29 @@ const sidebar = (function () {
             }
             linkWrapper.appendChild(fragment);
         }
+        selectLink(linkSelectedId);
     }
-
     // highlight chosen link
     function selectLink(id) {
-        if (previousLinkSelectedDOM) {
-            previousLinkSelectedDOM.classList.remove('list-active');
+        if (previousLinkSelected) {
+            previousLinkSelected.classList.remove('list-active');
         }
-        let linkSelectedDOM = $$(`#${id}`);
-        linkSelectedDOM.classList.add('list-active');
-        previousLinkSelectedDOM = linkSelectedDOM;
+        let linkSelected = $$(`#${id}`);
+        if (linkSelected) {
+            linkSelected.classList.add('list-active');
+            previousLinkSelected = linkSelected;
+        }
     }
     // highlight chosen list
     function selectList(id) {
-        if (previousListSelectedDOM) {
-            previousListSelectedDOM.classList.remove('list-active');
+        if (previousListSelected) {
+            previousListSelected.classList.remove('list-active');
         }
-        let listSelectedDOM = $$(`#${id}`);
-        listSelectedDOM.classList.add('list-active');
-        previousListSelectedDOM = listSelectedDOM;
+        let listSelected = $$(`#${id}`);
+        listSelected.classList.add('list-active');
+        previousListSelected = listSelected;
     }
-
     function collapseMain() {
         mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }
 })();
-
