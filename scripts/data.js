@@ -16,7 +16,7 @@ let data = {
             },
             {
                 id: 4,
-                name: 'Durlan 1 j'
+                name: 'Durlan j'
             }
 
         ]
@@ -39,7 +39,7 @@ let data = {
             },
             {
                 id: 8,
-                name: 'Durlan 1 t'
+                name: 'Durlan t'
             }
         ]
     },
@@ -62,7 +62,7 @@ let data = {
             },
             {
                 id: 12,
-                name: 'Durlan 1 a'
+                name: 'Durlan a'
             }
         ]
     },
@@ -84,7 +84,7 @@ let data = {
             },
             {
                 id: 16,
-                name: 'Durlan 1 m'
+                name: 'Durlan m'
             }
         ]
     },
@@ -106,7 +106,7 @@ let data = {
             },
             {
                 id: 20,
-                name: 'Durlan 1 u'
+                name: 'Durlan u'
             }
         ]
     },
@@ -132,7 +132,7 @@ let data = {
             },
             {
                 id: 24,
-                name: 'Durlan 1 s'
+                name: 'Durlan s'
 
             }
         ]

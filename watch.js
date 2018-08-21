@@ -4,8 +4,10 @@ const fs = require('fs');
 const { JSDOM } = require("jsdom");
 var watch = require('node-watch');
 
+let mapper = {};
+
 try {
-    let mapper = JSON.parse(fs.readFileSync('mapper.json', 'utf8'));
+    mapper = JSON.parse(fs.readFileSync('mapper.json', 'utf8'));
 } catch (error) {
     console.log('ERROR: Parsing mapper failed!');
 }

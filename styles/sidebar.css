@@ -100,13 +100,9 @@
     border: none;
 }
 
-#icon-collapse:hover>.mdi, #back-to-menu:hover {
+#sidebar-list>div:hover, #global-search:hover, .link-list:hover, #icon-collapse:hover>.mdi, #back-to-menu:hover {
     color: rgb(30, 155, 227);
-}
-
-#sidebar-list>div:hover, #global-search:hover, .link-list:hover {
-    color: rgb(30, 155, 227);
-    background-color: rgb(38, 50, 56);
+    /* background-color: rgb(38, 50, 56); */
 }
 
 .collapse>#sidebar-list>div:hover>.list-management, .collapse #global-search:hover>.mdi, .collapse #icon-collapse:hover>.mdi, .collapse #back-to-menu:hover {
@@ -253,10 +249,9 @@
 
 .link-list {
     display: block;
-    width: 100%;
+    width: 70%;
     cursor: pointer;
-    padding-bottom: 0.1em;
-    padding-left: 6em;
+    margin: auto;
 }
 
 .lists>h4 {
