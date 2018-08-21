@@ -1,4 +1,3 @@
-// Shorter replacement for DOM selection
 function $$(selector) {
     switch (selector[0]) {
         case '.':
@@ -10,11 +9,12 @@ function $$(selector) {
     }
 }
 
-// Global flags
-let isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
-let isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-let isIphone = navigator.platform && /iPhone|iPod/.test(navigator.platform);
-let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-let isFirefox = typeof InstallTrigger !== 'undefined';
-let isSafari = navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-let isEdge = /Edge\/\d./i.test(navigator.userAgent);
+const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isChrome = !!window.chrome && (!!window.chrome.webstore || isMobile);
+const isFirefox = typeof InstallTrigger !== 'undefined';
+const isEdge = /Edge\/\d./i.test(navigator.userAgent);
+const isIe = !!navigator.userAgent.match(/Trident.*rv\:11\./);
+const isSafari = navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+const isOpera = !!window.opera || navigator.userAgent.indexOf('Opera') >= 0;

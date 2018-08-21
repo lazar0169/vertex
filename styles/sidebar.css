@@ -1,0 +1,340 @@
+#sidebar {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 12%;
+    height: 100%;
+    color: rgb(119, 143, 155);
+    cursor: default;
+    display: flex;
+    flex-flow: column wrap;
+    background-color: rgb(55, 71, 79);
+    font-size: 1vw;
+    border-right: 2px solid rgb(38, 50, 56);
+    box-sizing: border-box;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+}
+
+#sidebar.collapse {
+    width: 2.5%;
+    background-color: rgb(38, 50, 56);
+    border: 0;
+}
+
+#sidebar-name {
+    width: 100%;
+    height: 15%;
+    border-bottom: 2px solid rgb(38, 50, 56);
+    flex-flow: row wrap;
+}
+
+#team-name {
+    width: auto;
+    font-size: 1vw;
+    transition: all 0.1s ease;
+}
+
+.collapse .list-management>.icon-tooltip,
+.collapse #global-search>.icon-tooltip {
+    text-align: center;
+    background-color: transparent;
+}
+
+.collapse #head-name,
+.collapse #icon-collapse,
+.collapse #global-search {
+    padding: 0;
+    justify-content: center;
+    width: 100%;
+    height: 33%;
+}
+
+#icon-collapse {
+    height: 50%;
+    width: 15%;
+    cursor: pointer;
+}
+
+#global-search {
+    width: 100%;
+    height: 50%;
+    padding-left: 1.5em;
+    cursor: pointer;
+    justify-content: flex-start;
+}
+
+#global-search>div {
+    transition: all 0.1s ease;
+}
+
+#search-link {
+    width: 70%;
+}
+
+.search {
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    border-bottom: 2px solid rgb(30, 155, 227);
+    color: white;
+}
+
+#sidebar-list {
+    font-size: 1vw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 70%;
+}
+
+#sidebar-list>div {
+    position: relative;
+    cursor: pointer;
+    border-bottom: 2px solid rgb(38, 50, 56);
+    padding: 0.5em;
+}
+
+.list-management {
+    list-style-type: none;
+    width: 100%;
+    padding: 0.5em;
+}
+
+.collapse .list-management,
+.collapse #icon-collapse>.mdi,
+.collapse #global-search>.mdi {
+    border-radius: 5%;
+    padding: 0.5em;
+}
+
+.collapse #sidebar-list>div,
+.collapse #sidebar-name {
+    border: none;
+}
+
+#sidebar-list>div:hover,
+#global-search:hover,
+.link-list:hover,
+#icon-collapse:hover>.mdi,
+#back-to-menu:hover {
+    color: rgb(30, 155, 227);
+    /* background-color: rgb(38, 50, 56); */
+}
+
+.collapse>#sidebar-list>div:hover>.list-management,
+.collapse #global-search:hover>.mdi,
+.collapse #icon-collapse:hover>.mdi,
+.collapse #back-to-menu:hover {
+    background-color: rgb(55, 71, 79);
+}
+
+.tooltip-text {
+    color: rgb(119, 143, 155);
+    background-color: rgb(0, 0, 0);
+    position: fixed;
+    text-align: center;
+    border-radius: 10%;
+    padding: 0.3em;
+    left: 3%;
+}
+
+.tooltip-text:before {
+    content: "";
+    position: absolute;
+    right: 95%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border-top: 0.3em solid transparent;
+    border-right: 0.6em solid rgb(0, 0, 0);
+    border-bottom: 0.3em solid transparent;
+}
+
+#team-logo {
+    width: 0;
+    height: 0;
+    font-size: 0;
+    opacity: 0;
+    transition: all 0.1s ease;
+}
+
+.collapse #team-logo {
+    visibility: visible;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    font-size: 1vw;
+}
+
+.collapse #sidebar-list>div:hover>.tooltip-text,
+.collapse #global-search:hover>.tooltip-text,
+.collapse #icon-collapse:hover>.tooltip-text {
+    visibility: visible;
+    width: auto;
+    height: auto;
+}
+
+.list-name {
+    width: 80%;
+    opacity: 1;
+    font-size: 1vw;
+    padding-left: 0.3em;
+    transition: all 0.1s ease;
+}
+
+#sidebar-logo {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15%;
+    font-size: 1vw;
+    transition: all 0.1s ease
+}
+
+#black-area {
+    position: fixed;
+    width: 0;
+    height: 100%;
+    opacity: 0.5;
+    background-color: rgb(0, 0, 0);
+}
+
+#black-area.show {
+    width: 100%;
+}
+
+#navigation-sidebar {
+    width: 19%;
+    height: 100%;
+    transform: translateX(-100%);
+    position: fixed;
+    display: block;
+    background-color: gray;
+    left: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: rgb(55, 71, 79);
+    color: rgb(119, 143, 155);
+    font-size: 1vw;
+    transition: all 0.2s ease;
+}
+
+#navigation-sidebar.collapse {
+    transform: translateX(0);
+    box-shadow: 50px 5px 50px rgba(45, 51, 61, 0.2);
+}
+
+#navigation-name {
+    height: 15%;
+    flex-flow: row wrap;
+}
+
+#head-name {
+    width: 80%;
+    height: 50%;
+    justify-content: flex-start;
+    flex-flow: row wrap;
+    float: left;
+    padding-left: 5%;
+}
+
+#navigation-name>h2 {
+    width: 100%;
+    font-size: 1vw;
+    padding-left: 5%;
+}
+
+#navigation-name>input {
+    font-size: 1vw;
+}
+
+#chosen-link {
+    width: 85%;
+    color: white;
+}
+
+#back-to-menu {
+    width: 15%;
+    cursor: pointer;
+}
+
+#navigation-content {
+    flex-flow: column wrap;
+    padding-top: 1em;
+}
+
+.lists {
+    width: 100%;
+    flex-flow: column wrap;
+    justify-content: flex-start;
+}
+
+.link-list {
+    display: block;
+    width: 70%;
+    cursor: pointer;
+    margin: auto;
+}
+
+.lists>h4 {
+    width: 70%;
+    border-bottom: 2px solid rgb(38, 50, 56);
+    color: white;
+    padding-bottom: 0.1em;
+}
+
+.collapse .list-name,
+.collapse #global-search>div,
+.collapse #team-name,
+.collapse #sidebar-logo {
+    font-size: 0;
+    width: 0;
+    opacity: 0;
+}
+
+.list-active,
+.link-active {
+    color: white !important;
+}
+
+#main-content {
+    background-color: gray;
+    height: 100%;
+    width: 88%;
+    float: right;
+    transition: all 0.1s ease;
+}
+
+#main-content.expand {
+    width: 97.5%;
+}
+
+#sidebar-list::-webkit-scrollbar {
+    width: 3%;
+}
+
+#sidebar-list::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(42, 42, 42);
+    background-color: rgb(100, 100, 100);
+}
+
+#sidebar-list::-webkit-scrollbar-thumb {
+    background-color: rgb(42, 42, 42);
+    border-radius: 10px;
+}
+
+#navigation-sidebar::-webkit-scrollbar {
+    width: 3%;
+}
+
+#navigation-sidebar::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(42, 42, 42);
+    background-color: rgb(100, 100, 100);
+}
+
+#navigation-sidebar::-webkit-scrollbar-thumb {
+    background-color: rgb(42, 42, 42);
+    border-radius: 50px;
+}
