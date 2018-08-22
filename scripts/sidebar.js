@@ -8,7 +8,7 @@ const sidebar = (function () {
     let chosenLink = $$('#chosen-link');
     let linkWrapper = $$('#navigation-content');
     let globalSearch = $$('#global-search');
-    let search = $$('#search-link');
+    let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainWrapper = $$('#main-content');
     // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
@@ -19,6 +19,9 @@ const sidebar = (function () {
     let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
+    //variable for search function
+    let activeNavBar;
+
 
     window.addEventListener('load', function () {
         generateMenu();
@@ -38,13 +41,22 @@ const sidebar = (function () {
 
     globalSearch.addEventListener('click', function () {
         generateLink();
+        activeNavBar = undefined;
         collapse('navigation');
-        search.focus();
+        searchLink.focus();
     });
 
     blackArea.addEventListener('click', function () {
         collapse('navigation');
     });
+    ////////////////////////////////
+    searchLink.addEventListener('keyup', function (event) {
+        if (event.keyCode === 13) {
+            search(activeNavBar);
+        }
+    });
+
+
 
     // generate menu lists from data, and set click listener  
     function generateMenu() {
@@ -57,14 +69,17 @@ const sidebar = (function () {
                 </div>
                 <span class="tooltip-text hide">${data[arrayList[count]].category}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
-                generateLink(arrayList[count]);
+                listSelectedId = arrayList[count];
+                generateLink(listSelectedId);
                 chosenLink.innerHTML = data[arrayList[count]].category;
-                search.focus();
+                searchLink.focus();
                 collapse('navigation');
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
+
+
     }
 
     // function for collapse sidebar, show or hide navigation
@@ -130,6 +145,7 @@ const sidebar = (function () {
             linkWrapper.appendChild(fragment);
         }
         selectLink(linkSelectedId);
+        activeNavBar = id;
     }
 
     // highlight chosen link
@@ -156,5 +172,41 @@ const sidebar = (function () {
 
     function collapseMain() {
         mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
+    }
+
+    function search(id) {
+        let filter = searchLink.value.toUpperCase();
+        let arrayResult = [];
+        let i = 0;
+        if (!id) {
+            for (let category in data) {
+                for (let value of data[category].value) {
+                    let valueName = value.name.toUpperCase();
+                    let allWords = valueName.split(' ');
+                    for (let word of allWords) {
+                        let slicedWord = word.slice(0, filter.length);
+                        if (slicedWord === filter) {
+                            arrayResult[i] = valueName;
+                            i++
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            for (let value of data[id].value) {
+                let valueName = value.name.toUpperCase();
+                let allWords = valueName.split(' ');
+                for (let word of allWords) {
+                    let slicedWord = word.slice(0, filter.length);
+                    if (slicedWord === filter) {
+                        arrayResult[i] = valueName;
+                        i++
+                    }
+                }
+            }
+        }
+        alert(`rezultati pretrage za ${filter} su:   ${arrayResult}`);
+
     }
 })();
