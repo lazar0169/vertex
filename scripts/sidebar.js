@@ -21,11 +21,12 @@ const sidebar = (function () {
     let previousLinkSelected;
     //variable for search function
     let activeNavBar;
+    let newData = {};
 
 
     window.addEventListener('load', function () {
         generateMenu();
-        generateLink(listSelectedId);
+        generateLink(listSelectedId, data);
         selectList(listSelectedId);
         chosenLink.innerHTML = data[listSelectedId].category;
     });
@@ -40,8 +41,8 @@ const sidebar = (function () {
     });
 
     globalSearch.addEventListener('click', function () {
-        generateLink();
         activeNavBar = undefined;
+        generateLink(activeNavBar, data);
         collapse('navigation');
         searchLink.focus();
     });
@@ -51,9 +52,18 @@ const sidebar = (function () {
     });
     ////////////////////////////////
     searchLink.addEventListener('keyup', function (event) {
-        if (event.keyCode === 13) {
-            search(activeNavBar);
+        if (event.keyCode) {
+            let termin = searchLink.value.toUpperCase();
+            if (termin) {
+                search(termin, activeNavBar);
+                generateLink(activeNavBar, newData);
+            }
+            else {
+                generateLink(activeNavBar, data);
+            }
         }
+
+
     });
 
 
@@ -70,7 +80,7 @@ const sidebar = (function () {
                 <span class="tooltip-text hide">${data[arrayList[count]].category}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
                 listSelectedId = arrayList[count];
-                generateLink(listSelectedId);
+                generateLink(listSelectedId, data);
                 chosenLink.innerHTML = data[arrayList[count]].category;
                 searchLink.focus();
                 collapse('navigation');
@@ -98,19 +108,20 @@ const sidebar = (function () {
     }
 
     // generate links when you click on list from menu, and set click listener
-    function generateLink(id) {
+    function generateLink(category, showData) {
         let fragment = document.createDocumentFragment();
-        if (id) {
-            linkWrapper.innerHTML = '';
-            for (let categoryValue of data[id].value) {
+        linkWrapper.innerHTML = '';
+        if (category) {
+
+            for (let categoryValue of showData[category].value) {
                 let tempFragment = document.createElement('a');
                 tempFragment.id = `link-${categoryValue.id}`;
                 tempFragment.classList = 'link-list';
                 tempFragment.innerHTML = categoryValue.name;
                 tempFragment.addEventListener('click', function () {
                     linkSelectedId = `link-${categoryValue.id}`;
-                    chosenLink.innerHTML = data[id].category;
-                    selectList(id);
+                    chosenLink.innerHTML = showData[category].category;
+                    selectList(category);
                     selectLink(linkSelectedId);
                     collapse('navigation');
                 });
@@ -120,12 +131,12 @@ const sidebar = (function () {
         }
         else {
             chosenLink.innerHTML = 'Search';
-            linkWrapper.innerHTML = '';
-            for (let category in data) {
+
+            for (let category in showData) {
                 let tempCategory = document.createElement('div');
                 tempCategory.className = 'lists center';
-                tempCategory.innerHTML = `<h4>${data[category].category}</h4>`;
-                for (let value of data[category].value) {
+                tempCategory.innerHTML = `<h4>${showData[category].category}</h4>`;
+                for (let value of showData[category].value) {
                     let tempValue = document.createElement('a');
                     tempValue.classList = 'link-list';
                     tempValue.id = `link-${value.id}`;
@@ -133,7 +144,7 @@ const sidebar = (function () {
                     tempValue.addEventListener('click', function () {
                         listSelectedId = category;
                         linkSelectedId = `link-${value.id}`;
-                        generateLink(listSelectedId);
+                        generateLink(listSelectedId, data);
                         selectList(listSelectedId);
                         chosenLink.innerHTML = category.category;
                         collapse('navigation');
@@ -145,15 +156,15 @@ const sidebar = (function () {
             linkWrapper.appendChild(fragment);
         }
         selectLink(linkSelectedId);
-        activeNavBar = id;
+        activeNavBar = category;
     }
 
     // highlight chosen link
-    function selectLink(id) {
+    function selectLink(name) {
         if (previousLinkSelected) {
             previousLinkSelected.classList.remove('list-active');
         }
-        let linkSelected = $$(`#${id}`);
+        let linkSelected = $$(`#${name}`);
         if (linkSelected) {
             linkSelected.classList.add('list-active');
             previousLinkSelected = linkSelected;
@@ -161,11 +172,11 @@ const sidebar = (function () {
     }
 
     // highlight chosen list
-    function selectList(id) {
+    function selectList(category) {
         if (previousListSelected) {
             previousListSelected.classList.remove('list-active');
         }
-        let listSelected = $$(`#${id}`);
+        let listSelected = $$(`#${category}`);
         listSelected.classList.add('list-active');
         previousListSelected = listSelected;
     }
@@ -174,39 +185,36 @@ const sidebar = (function () {
         mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }
 
-    function search(id) {
-        let filter = searchLink.value.toUpperCase();
+    function search(termin, category) {
         let arrayResult = [];
-        let i = 0;
-        if (!id) {
+        if (!category) {
             for (let category in data) {
-                for (let value of data[category].value) {
-                    let valueName = value.name.toUpperCase();
-                    let allWords = valueName.split(' ');
-                    for (let word of allWords) {
-                        let slicedWord = word.slice(0, filter.length);
-                        if (slicedWord === filter) {
-                            arrayResult[i] = valueName;
-                            i++
-                        }
-                    }
-                }
+                search(termin, category);
+                let newObject = new Object({ 'category': data[category].category, 'value': arrayResult });
+                newData[category] = newObject;
             }
         }
         else {
-            for (let value of data[id].value) {
+            search(termin, category);
+            let newObject = new Object({ 'category': data[category].category, 'value': arrayResult });
+            newData[category] = newObject;
+        }
+
+        function search(termin, category) {
+            let i = 0;
+            arrayResult = [];
+            for (let value of data[category].value) {
                 let valueName = value.name.toUpperCase();
-                let allWords = valueName.split(' ');
-                for (let word of allWords) {
-                    let slicedWord = word.slice(0, filter.length);
-                    if (slicedWord === filter) {
-                        arrayResult[i] = valueName;
-                        i++
-                    }
+                let valueCity = value.city.toUpperCase();
+                let index = valueName.indexOf(termin);
+                let index1 = valueName.indexOf(` ${termin}`);
+                let index2 = valueCity.indexOf(termin);
+                let index3 = valueCity.indexOf(` ${termin}`)
+                if (index === 0 || index1 !== -1 || index2 === 0 || index3 !== -1) {
+                    arrayResult[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
+                    i++;
                 }
             }
         }
-        alert(`rezultati pretrage za ${filter} su:   ${arrayResult}`);
-
     }
 })();

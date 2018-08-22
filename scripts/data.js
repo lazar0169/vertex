@@ -4,19 +4,23 @@ let data = {
         value: [
             {
                 id: 25,
-                name: 'Bolnica c'
+                name: 'Bolnica c',
+                city: 'Nis'
             },
             {
                 id: 26,
-                name: 'Kalca c'
+                name: 'Kalca c',
+                city: 'Beograd'
             },
             {
                 id: 27,
-                name: 'Marger c'
+                name: 'Marger c',
+                city: 'Nis'
             },
             {
                 id: 28,
-                name: 'Durlan c'
+                name: 'Durlan c',
+                city: 'Subotica'
             }
 
         ]
@@ -26,19 +30,23 @@ let data = {
         value: [
             {
                 id: 1,
-                name: 'Bolnica j'
+                name: 'Bolnica j',
+                city: 'Cacak'
             },
             {
                 id: 2,
-                name: 'Kalca j'
+                name: 'Kalca j',
+                city: 'Surdulica'
             },
             {
                 id: 3,
-                name: 'Marger j'
+                name: 'Marger j',
+                city: 'Vranje'
             },
             {
                 id: 4,
-                name: 'Durlan j'
+                name: 'Durlan j',
+                city: 'Kragujevac'
             }
 
         ]
@@ -49,19 +57,23 @@ let data = {
         value: [
             {
                 id: 5,
-                name: 'Bolnica t'
+                name: 'Bolnica t',
+                city: 'Kraljevo'
             },
             {
                 id: 6,
-                name: 'Kalca t'
+                name: 'Kalca t',
+                city: 'Sid'
             },
             {
                 id: 7,
-                name: 'Marger t'
+                name: 'Marger t',
+                city: 'Novi Sad'
             },
             {
                 id: 8,
-                name: 'Durlan t'
+                name: 'Durlan t',
+                city: 'Beograd'
             }
         ]
     },
@@ -72,19 +84,23 @@ let data = {
         value: [
             {
                 id: 9,
-                name: 'Bolnica a'
+                name: 'Bolnica a',
+                city: 'Vrsac'
             },
             {
                 id: 10,
-                name: 'Kalca a'
+                name: 'Kalca a',
+                city: 'Pirot'
             },
             {
                 id: 11,
-                name: 'Marger a'
+                name: 'Marger a',
+                city: 'Kragujevac'
             },
             {
                 id: 12,
-                name: 'Durlan a'
+                name: 'Durlan a',
+                city: 'Nis'
             }
         ]
     },
@@ -94,19 +110,23 @@ let data = {
         value: [
             {
                 id: 13,
-                name: 'Bolnica m'
+                name: 'Bolnica m',
+                city: 'Leskovac'
             },
             {
                 id: 14,
-                name: 'Kalca m'
+                name: 'Kalca m',
+                city: 'Negotin'
             },
             {
                 id: 15,
-                name: 'Marger m'
+                name: 'Marger m',
+                city: 'Krusevac'
             },
             {
                 id: 16,
-                name: 'Durlan m'
+                name: 'Durlan m',
+                city: 'Valjevo'
             }
         ]
     },
@@ -115,19 +135,23 @@ let data = {
         value: [
             {
                 id: 29,
-                name: 'Bolnica r'
+                name: 'Bolnica r',
+                city: 'Smederevo'
             },
             {
                 id: 30,
-                name: 'Kalca r'
+                name: 'Kalca r',
+                city: 'Nis'
             },
             {
                 id: 31,
-                name: 'Marger r'
+                name: 'Marger r',
+                city: 'Beograd'
             },
             {
                 id: 32,
-                name: 'Durlan r'
+                name: 'Durlan r',
+                city: 'Subotica'
             }
         ]
     },
@@ -137,19 +161,23 @@ let data = {
         value: [
             {
                 id: 17,
-                name: 'Bolnica u'
+                name: 'Bolnica u',
+                city: 'Cacak'
             },
             {
                 id: 18,
-                name: 'Kalca u'
+                name: 'Kalca u',
+                city: 'Surdulica'
             },
             {
                 id: 19,
-                name: 'Marger u'
+                name: 'Marger u',
+                city: 'Vranje'
             },
             {
                 id: 20,
-                name: 'Durlan u'
+                name: 'Durlan u',
+                city: 'Leskovac'
             }
         ]
     },
@@ -159,23 +187,27 @@ let data = {
         value: [
             {
                 id: 21,
-                name: 'Bolnica s'
+                name: 'Bolnica s',
+                city: 'Beograd'
 
 
             },
             {
                 id: 22,
-                name: 'Kalca s'
+                name: 'Kalca s',
+                city: 'Surdulica'
 
             },
             {
                 id: 23,
-                name: 'Marger s'
+                name: 'Marger s',
+                city: 'Vranje'
 
             },
             {
                 id: 24,
-                name: 'Durlan s'
+                name: 'Durlan s',
+                city: 'Leskovac'
 
             }
         ]
