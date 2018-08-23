@@ -1,5 +1,5 @@
 const sidebar = (function () {
-    let arrayList = Object.keys(data);
+
     let sidebarMenu = $$('#sidebar')
     let listWrapper = $$('#sidebar-list');
     let collapseButton = $$('#icon-collapse');
@@ -15,10 +15,12 @@ const sidebar = (function () {
     let isExpand = true;
     let isExpandNav = true;
     // variable for selected list and link
-    let listSelectedId = arrayList[0];
+    let listSelectedId = Object.keys(data)[0];
     let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
+    //for search
+    let searchCategory;
 
     window.addEventListener('load', function () {
         generateMenu(data);
@@ -38,8 +40,8 @@ const sidebar = (function () {
 
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
-        listSelectedId = undefined;
-        generateLinks(listSelectedId);
+        searchCategory = undefined;
+        generateLinks(searchCategory);
         collapse('navigation');
         searchLink.focus();
     });
@@ -52,7 +54,7 @@ const sidebar = (function () {
         if (event.keyCode) {
             let termin = searchLink.value.toUpperCase();
             if (termin) {
-                let result = search(termin, listSelectedId);
+                let result = search(termin, searchCategory);
                 generateLinks(result);
             }
             else {
@@ -71,9 +73,10 @@ const sidebar = (function () {
                 <span class="mdi mdi-${icons[i]} icon-tooltip center"></span>
                 <div class="list-name">${data[category].category}</div>
                 </div>
-                <span class="tooltip-text hide">${category}</span></div>`;
+                <span class="tooltip-text hide">${data[category].category}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
                 listSelectedId = category;
+                searchCategory = listSelectedId;
                 generateLinks(listSelectedId);
                 chosenLink.innerHTML = data[category].category;
                 searchLink.focus();
@@ -114,8 +117,8 @@ const sidebar = (function () {
         }
 
         function generateLinksData(tempData) {
-            if (listSelectedId) {
-                for (let categoryValue of tempData[listSelectedId].value) {
+            if (searchCategory) {
+                for (let categoryValue of tempData[searchCategory].value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.id = `link-${categoryValue.id}`;
                     tempFragment.classList = 'link-list';
@@ -141,6 +144,7 @@ const sidebar = (function () {
                         tempValue.innerHTML = value.name;
                         tempValue.addEventListener('click', function () {
                             listSelectedId = category;
+                            searchCategory = listSelectedId;
                             linkSelectedId = `link-${value.id}`;
                             generateLinks(listSelectedId);
                             selectList(listSelectedId);
@@ -185,11 +189,12 @@ const sidebar = (function () {
     function search(termin, category) {
         let newData = {};
         if (category) {
-            search(termin, category);
+            newData[category] = search(termin, category);
         }
         else {
+
             for (let category in data) {
-                search(termin, category);
+                newData[category] = search(termin, category);
             }
         }
         return newData;
@@ -213,8 +218,7 @@ const sidebar = (function () {
                 'category': data[category].category,
                 'value': arrayResult
             };
-            newData[category] = newObject;
+            return newObject;
         }
-
     }
 })();
