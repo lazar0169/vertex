@@ -19,14 +19,10 @@ const sidebar = (function () {
     let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
-    //variable for search function
-    let activeNavBar;
-    let newData = {};
-
 
     window.addEventListener('load', function () {
-        generateMenu();
-        generateLink(listSelectedId, data);
+        generateMenu(data);
+        generateLinks(listSelectedId);
         selectList(listSelectedId);
         chosenLink.innerHTML = data[listSelectedId].category;
     });
@@ -41,8 +37,9 @@ const sidebar = (function () {
     });
 
     globalSearch.addEventListener('click', function () {
-        activeNavBar = undefined;
-        generateLink(activeNavBar, data);
+        chosenLink.innerHTML = 'Search';
+        listSelectedId = undefined;
+        generateLinks(listSelectedId);
         collapse('navigation');
         searchLink.focus();
     });
@@ -55,41 +52,38 @@ const sidebar = (function () {
         if (event.keyCode) {
             let termin = searchLink.value.toUpperCase();
             if (termin) {
-                search(termin, activeNavBar);
-                generateLink(activeNavBar, newData);
+                let result = search(termin, listSelectedId);
+                generateLinks(result);
             }
             else {
-                generateLink(activeNavBar, data);
+                generateLinks(listSelectedId);
             }
         }
-
-
     });
 
-
-
     // generate menu lists from data, and set click listener  
-    function generateMenu() {
+    function generateMenu(data) {
         let fragment = document.createDocumentFragment();
-        for (let count in arrayList) {
+        let i = 0;
+        for (let category in data) {
             let tempFragment = document.createElement('div');
-            tempFragment.innerHTML = `<div class='center'><div id="${arrayList[count]}" class="list-management tooltip center">
-                <span class="mdi mdi-${icons[count]} icon-tooltip center"></span>
-                <div class="list-name">${data[arrayList[count]].category}</div>
+            tempFragment.innerHTML = `<div class='center'><div id="${category}" class="list-management tooltip center">
+                <span class="mdi mdi-${icons[i]} icon-tooltip center"></span>
+                <div class="list-name">${data[category].category}</div>
                 </div>
-                <span class="tooltip-text hide">${data[arrayList[count]].category}</span></div>`;
+                <span class="tooltip-text hide">${category}</span></div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
-                listSelectedId = arrayList[count];
-                generateLink(listSelectedId, data);
-                chosenLink.innerHTML = data[arrayList[count]].category;
+                listSelectedId = category;
+                generateLinks(listSelectedId);
+                chosenLink.innerHTML = data[category].category;
                 searchLink.focus();
                 collapse('navigation');
+
             });
+            i++;
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
-
-
     }
 
     // function for collapse sidebar, show or hide navigation
@@ -108,55 +102,58 @@ const sidebar = (function () {
     }
 
     // generate links when you click on list from menu, and set click listener
-    function generateLink(category, showData) {
+    function generateLinks(category) {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
-        if (category) {
 
-            for (let categoryValue of showData[category].value) {
-                let tempFragment = document.createElement('a');
-                tempFragment.id = `link-${categoryValue.id}`;
-                tempFragment.classList = 'link-list';
-                tempFragment.innerHTML = categoryValue.name;
-                tempFragment.addEventListener('click', function () {
-                    linkSelectedId = `link-${categoryValue.id}`;
-                    chosenLink.innerHTML = showData[category].category;
-                    selectList(category);
-                    selectLink(linkSelectedId);
-                    collapse('navigation');
-                });
-                fragment.appendChild(tempFragment);
-            }
-            linkWrapper.appendChild(fragment);
+        if (!category || data[category]) {
+            generateLinksData(data);
         }
         else {
-            chosenLink.innerHTML = 'Search';
+            generateLinksData(category);
+        }
 
-            for (let category in showData) {
-                let tempCategory = document.createElement('div');
-                tempCategory.className = 'lists center';
-                tempCategory.innerHTML = `<h4>${showData[category].category}</h4>`;
-                for (let value of showData[category].value) {
-                    let tempValue = document.createElement('a');
-                    tempValue.classList = 'link-list';
-                    tempValue.id = `link-${value.id}`;
-                    tempValue.innerHTML = value.name;
-                    tempValue.addEventListener('click', function () {
-                        listSelectedId = category;
-                        linkSelectedId = `link-${value.id}`;
-                        generateLink(listSelectedId, data);
-                        selectList(listSelectedId);
-                        chosenLink.innerHTML = category.category;
+        function generateLinksData(tempData) {
+            if (listSelectedId) {
+                for (let categoryValue of tempData[listSelectedId].value) {
+                    let tempFragment = document.createElement('a');
+                    tempFragment.id = `link-${categoryValue.id}`;
+                    tempFragment.classList = 'link-list';
+                    tempFragment.innerHTML = categoryValue.name;
+                    tempFragment.addEventListener('click', function () {
+                        linkSelectedId = `link-${categoryValue.id}`;
+                        selectList(category);
+                        selectLink(linkSelectedId);
                         collapse('navigation');
                     });
-                    tempCategory.appendChild(tempValue);
+                    fragment.appendChild(tempFragment);
                 }
-                fragment.appendChild(tempCategory);
             }
-            linkWrapper.appendChild(fragment);
+            else {
+                for (let category in tempData) {
+                    let tempCategory = document.createElement('div');
+                    tempCategory.className = 'lists center';
+                    tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
+                    for (let value of tempData[category].value) {
+                        let tempValue = document.createElement('a');
+                        tempValue.classList = 'link-list';
+                        tempValue.id = `link-${value.id}`;
+                        tempValue.innerHTML = value.name;
+                        tempValue.addEventListener('click', function () {
+                            listSelectedId = category;
+                            linkSelectedId = `link-${value.id}`;
+                            generateLinks(listSelectedId);
+                            selectList(listSelectedId);
+                            collapse('navigation');
+                        });
+                        tempCategory.appendChild(tempValue);
+                    }
+                    fragment.appendChild(tempCategory);
+                }
+            }
         }
+        linkWrapper.appendChild(fragment);
         selectLink(linkSelectedId);
-        activeNavBar = category;
     }
 
     // highlight chosen link
@@ -186,23 +183,20 @@ const sidebar = (function () {
     }
 
     function search(termin, category) {
-        let arrayResult = [];
-        if (!category) {
-            for (let category in data) {
-                search(termin, category);
-                let newObject = new Object({ 'category': data[category].category, 'value': arrayResult });
-                newData[category] = newObject;
-            }
+        let newData = {};
+        if (category) {
+            search(termin, category);
         }
         else {
-            search(termin, category);
-            let newObject = new Object({ 'category': data[category].category, 'value': arrayResult });
-            newData[category] = newObject;
+            for (let category in data) {
+                search(termin, category);
+            }
         }
+        return newData;
 
         function search(termin, category) {
             let i = 0;
-            arrayResult = [];
+            let arrayResult = [];
             for (let value of data[category].value) {
                 let valueName = value.name.toUpperCase();
                 let valueCity = value.city.toUpperCase();
@@ -215,6 +209,12 @@ const sidebar = (function () {
                     i++;
                 }
             }
+            let newObject = {
+                'category': data[category].category,
+                'value': arrayResult
+            };
+            newData[category] = newObject;
         }
+
     }
 })();
