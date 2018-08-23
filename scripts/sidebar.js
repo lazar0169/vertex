@@ -1,5 +1,4 @@
 const sidebar = (function () {
-
     let sidebarMenu = $$('#sidebar')
     let listWrapper = $$('#sidebar-list');
     let collapseButton = $$('#icon-collapse');
@@ -19,7 +18,8 @@ const sidebar = (function () {
     let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
-    //for search
+    //variable for search, searchCategory is used to check which category is active, 
+    //if you click on general search it will be set to false in other case it will be set like list
     let searchCategory;
 
     window.addEventListener('load', function () {
@@ -49,7 +49,7 @@ const sidebar = (function () {
     blackArea.addEventListener('click', function () {
         collapse('navigation');
     });
-    ////////////////////////////////
+
     searchLink.addEventListener('keyup', function (event) {
         if (event.keyCode) {
             let termin = searchLink.value.toUpperCase();
@@ -66,11 +66,11 @@ const sidebar = (function () {
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
-        let i = 0;
+        let iconNo = 0;
         for (let category in data) {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class='center'><div id="${category}" class="list-management tooltip center">
-                <span class="mdi mdi-${icons[i]} icon-tooltip center"></span>
+                <span class="mdi mdi-${icons[iconNo]} icon-tooltip center"></span>
                 <div class="list-name">${data[category].category}</div>
                 </div>
                 <span class="tooltip-text hide">${data[category].category}</span></div>`;
@@ -83,7 +83,7 @@ const sidebar = (function () {
                 collapse('navigation');
 
             });
-            i++;
+            iconNo++;
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
@@ -186,6 +186,7 @@ const sidebar = (function () {
         mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }
 
+    //data search
     function search(termin, category) {
         let newData = {};
         if (category) {
@@ -209,7 +210,10 @@ const sidebar = (function () {
                 let index1 = valueName.indexOf(` ${termin}`);
                 let index2 = valueCity.indexOf(termin);
                 let index3 = valueCity.indexOf(` ${termin}`)
-                if (index === 0 || index1 !== -1 || index2 === 0 || index3 !== -1) {
+                if (index === 0 ||
+                    index1 !== -1 ||
+                    index2 === 0 ||
+                    index3 !== -1) {
                     arrayResult[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
                     i++;
                 }
