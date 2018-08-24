@@ -125,25 +125,29 @@ const sidebar = (function () {
                 }
             } else {
                 for (let category in tempData) {
-                    let tempCategory = document.createElement('div');
-                    tempCategory.className = 'lists center';
-                    tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
-                    for (let value of tempData[category].value) {
-                        let tempValue = document.createElement('a');
-                        tempValue.classList = 'link-list';
-                        tempValue.id = `link-${value.id}`;
-                        tempValue.innerHTML = value.name;
-                        tempValue.addEventListener('click', function () {
-                            listSelectedId = category;
-                            searchCategory = listSelectedId;
-                            linkSelectedId = `link-${value.id}`;
-                            generateLinks(listSelectedId);
-                            selectList(listSelectedId);
-                            collapse('navigation');
-                        });
-                        tempCategory.appendChild(tempValue);
+                    if (tempData[category].value.length !== 0) {
+                        let tempCategory = document.createElement('div');
+                        tempCategory.className = 'lists center';
+                        tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
+                        for (let value of tempData[category].value) {
+                            let tempValue = document.createElement('a');
+                            tempValue.classList = 'link-list';
+                            tempValue.id = `link-${value.id}`;
+                            tempValue.innerHTML = value.name;
+                            tempValue.addEventListener('click', function () {
+                                listSelectedId = category;
+                                searchCategory = listSelectedId;
+                                linkSelectedId = `link-${value.id}`;
+                                generateLinks(listSelectedId);
+                                selectList(listSelectedId);
+                                collapse('navigation');
+                            });
+                            tempCategory.appendChild(tempValue);
+                        }
+                        fragment.appendChild(tempCategory);
+
                     }
-                    fragment.appendChild(tempCategory);
+
                 }
             }
         }
