@@ -52,38 +52,35 @@ const sidebar = (function () {
 
     searchLink.addEventListener('keyup', function (event) {
         if (event.keyCode) {
-            let termin = searchLink.value.toUpperCase();
-            if (termin) {
-                let result = search(termin, searchCategory);
-                generateLinks(result);
+            let results = listSelectedId;
+            if (searchLink.value !== '') {
+                results = search(searchLink.value.toLowerCase(), searchCategory);
             }
-            else {
-                generateLinks(listSelectedId);
-            }
+            generateLinks(results);
         }
     });
 
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
-        let iconNo = 0;
         for (let category in data) {
             let tempFragment = document.createElement('div');
-            tempFragment.innerHTML = `<div class='center'><div id="${category}" class="list-management tooltip center">
-                <span class="mdi mdi-${icons[iconNo]} icon-tooltip center"></span>
-                <div class="list-name">${data[category].category}</div>
-                </div>
-                <span class="tooltip-text hide">${data[category].category}</span></div>`;
+            tempFragment.innerHTML = `<div class='center'>
+                                        <div id="${category}" class="list-management tooltip center">
+                                            <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} icon-tooltip center"></span>
+                                            <div class="list-name">${data[category].category}</div>
+                                        </div>
+                                        <span class="tooltip-text hide">${data[category].category}</span>
+                                    </div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
                 listSelectedId = category;
-                searchCategory = listSelectedId;
-                generateLinks(listSelectedId);
+                searchCategory = category;
+                generateLinks(category);
                 chosenLink.innerHTML = data[category].category;
                 searchLink.focus();
                 collapse('navigation');
 
             });
-            iconNo++;
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
@@ -109,12 +106,7 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
 
-        if (!category || data[category]) {
-            generateLinksData(data);
-        }
-        else {
-            generateLinksData(category);
-        }
+        generateLinksData(!category || data[category] ? data : category);
 
         function generateLinksData(tempData) {
             if (searchCategory) {
@@ -131,8 +123,7 @@ const sidebar = (function () {
                     });
                     fragment.appendChild(tempFragment);
                 }
-            }
-            else {
+            } else {
                 for (let category in tempData) {
                     let tempCategory = document.createElement('div');
                     tempCategory.className = 'lists center';
@@ -191,9 +182,7 @@ const sidebar = (function () {
         let newData = {};
         if (category) {
             newData[category] = search(termin, category);
-        }
-        else {
-
+        } else {
             for (let category in data) {
                 newData[category] = search(termin, category);
             }
@@ -204,8 +193,8 @@ const sidebar = (function () {
             let i = 0;
             let arrayResult = [];
             for (let value of data[category].value) {
-                let valueName = value.name.toUpperCase();
-                let valueCity = value.city.toUpperCase();
+                let valueName = value.name.toLowerCase();
+                let valueCity = value.city.toLowerCase();
                 let index = valueName.indexOf(termin);
                 let index1 = valueName.indexOf(` ${termin}`);
                 let index2 = valueCity.indexOf(termin);
