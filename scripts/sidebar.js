@@ -21,6 +21,10 @@ const sidebar = (function () {
     //variable for search, searchCategory is used to check which category is active, 
     //if you click on general search it will be set to false in other case it will be set like list
     let searchCategory;
+    let storageArray = [];
+    let sessionStorageObject = {};
+
+
 
     window.addEventListener('load', function () {
         generateMenu(data);
@@ -41,7 +45,15 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
-        generateLinks(searchCategory);
+        if (storageArray.length !== 0) {
+            generateLinks(sessionStorageObject);
+        }
+        else {
+
+            generateLinks(searchCategory);
+
+            //alert(sessionStorageObject);
+        }
         collapse('navigation');
         searchLink.focus();
     });
@@ -52,11 +64,12 @@ const sidebar = (function () {
 
     searchLink.addEventListener('keyup', function (event) {
         if (event.keyCode) {
-            let results = listSelectedId;
+            let results = searchCategory;
             if (searchLink.value !== '') {
                 results = search(searchLink.value.toLowerCase(), searchCategory);
             }
             generateLinks(results);
+
         }
     });
 
@@ -103,6 +116,7 @@ const sidebar = (function () {
 
     // generate links when you click on list from menu, and set click listener
     function generateLinks(category) {
+
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
 
@@ -124,6 +138,7 @@ const sidebar = (function () {
                     fragment.appendChild(tempFragment);
                 }
             } else {
+
                 for (let category in tempData) {
                     if (tempData[category].value.length !== 0) {
                         let tempCategory = document.createElement('div');
@@ -141,11 +156,13 @@ const sidebar = (function () {
                                 generateLinks(listSelectedId);
                                 selectList(listSelectedId);
                                 collapse('navigation');
+
+                                storageSesionArray(value.id);
+
                             });
                             tempCategory.appendChild(tempValue);
                         }
                         fragment.appendChild(tempCategory);
-
                     }
 
                 }
@@ -216,6 +233,55 @@ const sidebar = (function () {
                 'value': arrayResult
             };
             return newObject;
+        }
+    }
+
+    function storageSesionArray(linkId) {
+        sessionStorage.setItem('key', linkId);
+        if (storageArray.length !== 0) {
+            for (let i in storageArray) {
+                if (storageArray[i] === sessionStorage.getItem('key')) {
+                    let tempId = storageArray[i];
+                    for (let j = i; j < storageArray.length; j++) {
+                        storageArray[j] = storageArray[Number(j) + 1];
+                    }
+                    storageArray[storageArray.length - 1] = tempId;
+                    //alert('zameni im mesta');
+                    break;
+                }
+                else if (Number(i) + 1 === storageArray.length) {
+                    // alert('upisi novi');
+                    storageArray.push(sessionStorage.getItem('key'));
+                }
+            }
+        }
+        else {
+            storageArray.push(sessionStorage.getItem('key'));
+        }
+
+
+
+
+        for (let category in data) {
+            let proba = {};
+            let probaNiz = [];
+            let i = 0;
+            for (let value of data[category].value) {
+                for (let nesto of storageArray) {
+                    if (Number(nesto) === value.id) {
+                        probaNiz[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
+                        //alert('pronaso sam');
+                        i++;
+
+
+                    }
+                }
+                proba = {
+                    'category': data[category].category,
+                    'value': probaNiz
+                };
+                sessionStorageObject[category] = proba;
+            }
         }
     }
 })();
