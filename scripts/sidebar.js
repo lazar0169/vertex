@@ -68,6 +68,9 @@ const sidebar = (function () {
             if (searchLink.value !== '') {
                 results = search(searchLink.value.toLowerCase(), searchCategory);
             }
+            else if (storageArray.length !== 0) {
+                results = sessionStorageObject;
+            }
             generateLinks(results);
 
         }
@@ -153,11 +156,16 @@ const sidebar = (function () {
                                 listSelectedId = category;
                                 searchCategory = listSelectedId;
                                 linkSelectedId = `link-${value.id}`;
-                                generateLinks(listSelectedId);
                                 selectList(listSelectedId);
                                 collapse('navigation');
 
                                 storageSesionArray(value.id);
+                                if (category === 'search') {
+                                    generateLinks(sessionStorageObject);
+                                }
+                                else {
+                                    generateLinks(listSelectedId);
+                                }
 
                             });
                             tempCategory.appendChild(tempValue);
@@ -186,12 +194,16 @@ const sidebar = (function () {
 
     // highlight chosen list
     function selectList(category) {
-        if (previousListSelected) {
-            previousListSelected.classList.remove('list-active');
+        if (category !== 'search') {
+
+
+            if (previousListSelected) {
+                previousListSelected.classList.remove('list-active');
+            }
+            let listSelected = $$(`#${category}`);
+            listSelected.classList.add('list-active');
+            previousListSelected = listSelected;
         }
-        let listSelected = $$(`#${category}`);
-        listSelected.classList.add('list-active');
-        previousListSelected = listSelected;
     }
 
     function collapseMain() {
@@ -246,11 +258,9 @@ const sidebar = (function () {
                         storageArray[j] = storageArray[Number(j) + 1];
                     }
                     storageArray[storageArray.length - 1] = tempId;
-                    //alert('zameni im mesta');
                     break;
                 }
                 else if (Number(i) + 1 === storageArray.length) {
-                    // alert('upisi novi');
                     storageArray.push(sessionStorage.getItem('key'));
                 }
             }
@@ -259,29 +269,20 @@ const sidebar = (function () {
             storageArray.push(sessionStorage.getItem('key'));
         }
 
-
-
-
+        let valueArray = [];
         for (let category in data) {
-            let proba = {};
-            let probaNiz = [];
-            let i = 0;
             for (let value of data[category].value) {
-                for (let nesto of storageArray) {
-                    if (Number(nesto) === value.id) {
-                        probaNiz[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
-                        //alert('pronaso sam');
-                        i++;
-
-
+                for (let i = storageArray.length - 1; i >= 0; i--) {
+                    if (Number(storageArray[i]) === value.id) {
+                        valueArray[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
+                        break;
                     }
                 }
-                proba = {
-                    'category': data[category].category,
-                    'value': probaNiz
-                };
-                sessionStorageObject[category] = proba;
             }
         }
+        sessionStorageObject['search'] = {
+            'category': 'Recent search',
+            'value': valueArray.reverse()
+        };
     }
 })();
