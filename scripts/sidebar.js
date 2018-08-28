@@ -10,23 +10,29 @@ const sidebar = (function () {
     let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainWrapper = $$('#main-content');
-    // variable to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
+    // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpand = true;
     let isExpandNav = true;
-    // variable for selected list and link
+    // variables for selected list and link
     let listSelectedId = Object.keys(data)[0];
     let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
-    //variable for search, searchCategory is used to check which category is active, 
+    //variables for search, searchCategory is used to check which category is active, 
     //if you click on general search it will be set to false in other case it will be set like list
     let searchCategory;
+    // variables for recent search, storageArray contains ids of links, sessionStorageObject contains values of links,
+    // storageCounter counts elements in storageArray, valueArray contains values of picked links
     let storageArray = [];
     let sessionStorageObject = {};
+    let sessionStorageObjectProba = {};
+    let storageCounter = 0;
+    let valueArray = [];
 
 
 
     window.addEventListener('load', function () {
+        sessionStorageObjectProba = JSON.parse(sessionStorage.getItem('key'));
         generateMenu(data);
         generateLinks(listSelectedId);
         selectList(listSelectedId);
@@ -45,8 +51,9 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
-        if (storageArray.length !== 0) {
-            generateLinks(sessionStorageObject);
+        sessionStorageObjectProba = JSON.parse(sessionStorage.getItem('key'));
+        if (sessionStorageObjectProba) {
+            generateLinks(sessionStorageObjectProba);
         }
         else {
 
@@ -68,7 +75,7 @@ const sidebar = (function () {
             if (searchLink.value !== '') {
                 results = search(searchLink.value.toLowerCase(), searchCategory);
             }
-            else if (storageArray.length !== 0) {
+            else if (Object.keys(sessionStorageObject).length !== 0) {
                 results = sessionStorageObject;
             }
             generateLinks(results);
@@ -159,7 +166,7 @@ const sidebar = (function () {
                                 selectList(listSelectedId);
                                 collapse('navigation');
 
-                                storageSesionArray(value.id);
+                                storageSessionArray(value);
                                 if (category === 'search') {
                                     generateLinks(sessionStorageObject);
                                 }
@@ -248,41 +255,28 @@ const sidebar = (function () {
         }
     }
 
-    function storageSesionArray(linkId) {
-        sessionStorage.setItem('key', linkId);
-        if (storageArray.length !== 0) {
-            for (let i in storageArray) {
-                if (storageArray[i] === sessionStorage.getItem('key')) {
-                    let tempId = storageArray[i];
-                    for (let j = i; j < storageArray.length; j++) {
-                        storageArray[j] = storageArray[Number(j) + 1];
-                    }
-                    storageArray[storageArray.length - 1] = tempId;
-                    break;
-                }
-                else if (Number(i) + 1 === storageArray.length) {
-                    storageArray.push(sessionStorage.getItem('key'));
-                }
-            }
+
+
+    function storageSessionArray(valueLink) {
+
+        if (!valueArray.some((value) => value.id === valueLink.id)) {
+            valueArray.push(valueLink);
         }
         else {
-            storageArray.push(sessionStorage.getItem('key'));
-        }
-
-        let valueArray = [];
-        for (let category in data) {
-            for (let value of data[category].value) {
-                for (let i = storageArray.length - 1; i >= 0; i--) {
-                    if (Number(storageArray[i]) === value.id) {
-                        valueArray[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
-                        break;
-                    }
+            for (let val = valueArray.length - 1; val >= 0; val--) {
+                if (valueLink.id == valueArray[val].id) {
+                    for (let j = val; j < valueArray.length; j++)
+                        valueArray[j] = valueArray[j + 1];
                 }
             }
+            valueArray[valueArray.length - 1] = valueLink;
         }
+
         sessionStorageObject['search'] = {
             'category': 'Recent search',
-            'value': valueArray.reverse()
+            'value': valueArray
         };
+        let proba = JSON.stringify(sessionStorageObject);
+        sessionStorage.setItem('key', proba);
     }
 })();
