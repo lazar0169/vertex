@@ -243,8 +243,8 @@
 
 .lists {
     width: 100%;
-    flex-flow: column wrap;
-    justify-content: flex-start;
+    display: block;
+    margin-bottom: 1em;
 }
 
 .link-list {
@@ -257,7 +257,8 @@
 }
 
 .lists>h4 {
-    margin: 1em 0;
+    margin: auto;
+    margin-bottom: 0.5em;
     width: 70%;
     border-bottom: 2px solid rgb(27, 31, 37);
     color: white;

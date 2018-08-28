@@ -21,18 +21,12 @@ const sidebar = (function () {
     //variables for search, searchCategory is used to check which category is active, 
     //if you click on general search it will be set to false in other case it will be set like list
     let searchCategory;
-    // variables for recent search, storageArray contains ids of links, sessionStorageObject contains values of links,
-    // storageCounter counts elements in storageArray, valueArray contains values of picked links
-    let storageArray = [];
-    let sessionStorageObject = {};
-    let sessionStorageObjectProba = {};
-    let storageCounter = 0;
+    // valueArray contains values of picked links
     let valueArray = [];
 
 
 
     window.addEventListener('load', function () {
-        sessionStorageObjectProba = JSON.parse(sessionStorage.getItem('key'));
         generateMenu(data);
         generateLinks(listSelectedId);
         selectList(listSelectedId);
@@ -51,15 +45,12 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
-        sessionStorageObjectProba = JSON.parse(sessionStorage.getItem('key'));
-        if (sessionStorageObjectProba) {
-            generateLinks(sessionStorageObjectProba);
+        let sessionStorageObject = JSON.parse(localStorage.getItem('key'));
+        if (sessionStorageObject) {
+            generateLinks(sessionStorageObject);
         }
         else {
-
             generateLinks(searchCategory);
-
-            //alert(sessionStorageObject);
         }
         collapse('navigation');
         searchLink.focus();
@@ -79,9 +70,13 @@ const sidebar = (function () {
                 results = sessionStorageObject;
             }
             generateLinks(results);
-
         }
     });
+    // window.addEventListener('keyup', function (event) {
+    //     if (event.keyCode == 81) {
+    //         window.localStorage.clear();
+    //     }
+    // });
 
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
@@ -126,12 +121,9 @@ const sidebar = (function () {
 
     // generate links when you click on list from menu, and set click listener
     function generateLinks(category) {
-
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
-
         generateLinksData(!category || data[category] ? data : category);
-
         function generateLinksData(tempData) {
             if (searchCategory) {
                 for (let categoryValue of tempData[searchCategory].value) {
@@ -153,7 +145,12 @@ const sidebar = (function () {
                     if (tempData[category].value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
+                        if (category === 'search') {
+                            tempCategory.innerHTML = `<h4 class='hide'>${tempData[category].category}</h4>`;
+                        }
+                        else {
+                            tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
+                        }
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
                             tempValue.classList = 'link-list';
@@ -166,20 +163,18 @@ const sidebar = (function () {
                                 selectList(listSelectedId);
                                 collapse('navigation');
 
-                                storageSessionArray(value);
-                                if (category === 'search') {
-                                    generateLinks(sessionStorageObject);
-                                }
-                                else {
-                                    generateLinks(listSelectedId);
-                                }
-
+                                let results = storageSessionArray(value);
+                                let tempObject = {};
+                                tempObject['search'] = {
+                                    'category': 'Recent search',
+                                    'value': results.reverse()
+                                };
+                                localStorage.setItem('key', JSON.stringify(tempObject));
                             });
                             tempCategory.appendChild(tempValue);
                         }
                         fragment.appendChild(tempCategory);
                     }
-
                 }
             }
         }
@@ -202,8 +197,6 @@ const sidebar = (function () {
     // highlight chosen list
     function selectList(category) {
         if (category !== 'search') {
-
-
             if (previousListSelected) {
                 previousListSelected.classList.remove('list-active');
             }
@@ -254,11 +247,9 @@ const sidebar = (function () {
             return newObject;
         }
     }
-
-
-
+    // function make array of objects when user used global search
     function storageSessionArray(valueLink) {
-
+        valueArray.reverse();
         if (!valueArray.some((value) => value.id === valueLink.id)) {
             valueArray.push(valueLink);
         }
@@ -271,12 +262,6 @@ const sidebar = (function () {
             }
             valueArray[valueArray.length - 1] = valueLink;
         }
-
-        sessionStorageObject['search'] = {
-            'category': 'Recent search',
-            'value': valueArray
-        };
-        let proba = JSON.stringify(sessionStorageObject);
-        sessionStorage.setItem('key', proba);
+        return valueArray;
     }
 })();

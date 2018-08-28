@@ -1,8 +1,11 @@
 .hide {
-    visibility: hidden;
-    width: 0;
-    height: 0;
-    pointer-events: none;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    font-size: 0 !important;
 }
 
 .center {
