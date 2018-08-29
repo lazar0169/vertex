@@ -143,14 +143,8 @@ const sidebar = (function () {
                         selectList(searchCategory);
                         selectLink(linkSelectedId);
                         collapse('navigation');
-                        /////
-                        let results = storageSessionArray(categoryValue);
-                        let tempObject = {};
-                        tempObject['search'] = {
-                            'category': 'Recent search',
-                            'value': results.reverse()
-                        };
-                        localStorage.setItem('key', JSON.stringify(tempObject));
+                        ///
+                        proba(categoryValue);
 
                     });
                     fragment.appendChild(tempFragment);
@@ -176,13 +170,9 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.id}`;
                                 selectList(listSelectedId);
                                 collapse('navigation');
-                                let results = storageSessionArray(value);
-                                let tempObject = {};
-                                tempObject['search'] = {
-                                    'category': 'Recent search',
-                                    'value': results.reverse()
-                                };
-                                localStorage.setItem('key', JSON.stringify(tempObject));
+                                ////
+                                proba(value);
+
                             });
                             tempCategory.appendChild(tempValue);
                         }
@@ -191,6 +181,20 @@ const sidebar = (function () {
                 }
             }
         }
+
+        function proba(value) {
+            let results = storageSessionArray(value);
+            let tempObject = {};
+            tempObject['search'] = {
+                'category': 'Recent search',
+                'value': results.reverse()
+            };
+            localStorage.setItem('key', JSON.stringify(tempObject));
+        }
+
+
+
+
         linkWrapper.appendChild(fragment);
         selectLink(linkSelectedId);
     }
