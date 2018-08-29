@@ -21,12 +21,14 @@ const sidebar = (function () {
     //variables for search, searchCategory is used to check which category is active, 
     //if you click on general search it will be set to false in other case it will be set like list
     let searchCategory;
-    // valueArray contains values of picked links
+    let recent;
+
+    // Delete
     let valueArray = [];
     if (localStorage.length !== 0) {
         valueArray = JSON.parse(localStorage.getItem('key'))['search'].value;
     }
-    let sessionStorageObject = {};
+    // ==========
 
 
     window.addEventListener('load', function () {
@@ -49,13 +51,8 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
-        sessionStorageObject = JSON.parse(localStorage.getItem('key'));
-        if (sessionStorageObject) {
-            generateLinks(sessionStorageObject);
-        }
-        else {
-            generateLinks(searchCategory);
-        }
+        recent = JSON.parse(localStorage.getItem('key'));
+        generateLinks(recent || searchCategory);
         collapse('navigation');
         searchLink.focus();
     });
@@ -65,19 +62,13 @@ const sidebar = (function () {
     });
 
     searchLink.addEventListener('keyup', function (event) {
-        if (event.keyCode) {
-            let results = searchCategory;
-            if (searchLink.value !== '') {
-                results = search(searchLink.value.toLowerCase(), searchCategory);
-            }
-            else if (results === undefined && JSON.parse(localStorage.getItem('key'))) {
-                results = sessionStorageObject;
-            }
-
-            generateLinks(results);
-
-
+        let results = searchCategory;
+        if (searchLink.value !== '') {
+            results = search(searchLink.value.toLowerCase(), searchCategory);
+        } else if (results === undefined && recent) {
+            results = recent;
         }
+        generateLinks(results);
     });
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 81) {
@@ -281,4 +272,26 @@ const sidebar = (function () {
         }
         return valueArray;
     }
+
+
+    // function sdasd(id) {
+    //     let array = JSON.parse(localStorage.getItem('key'))['search'].value;
+    //     let index = array.indexOf(id);
+    //     let length = array.length;
+    //     array.unshift(id);
+    //     if (index !== -1) {
+    //         for (let i = length - 1; i >= 0; i--) {
+    //             if (index <= i) {
+    //                 array[i] = array[i - 1];
+    //             }
+    //         }
+    //     }
+
+    //     let object;
+    //     //make object
+
+
+    //     return object;
+    // }
+
 })();
