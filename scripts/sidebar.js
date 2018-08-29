@@ -145,12 +145,10 @@ const sidebar = (function () {
                     if (tempData[category].value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        if (category === 'search') {
-                            tempCategory.innerHTML = `<h4 class='hide'>${tempData[category].category}</h4>`;
-                        }
-                        else {
+                        if (category !== 'search') {
                             tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
                         }
+
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
                             tempValue.classList = 'link-list';
@@ -162,7 +160,6 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.id}`;
                                 selectList(listSelectedId);
                                 collapse('navigation');
-
                                 let results = storageSessionArray(value);
                                 let tempObject = {};
                                 tempObject['search'] = {
