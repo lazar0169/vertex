@@ -144,7 +144,7 @@ const sidebar = (function () {
                         selectLink(linkSelectedId);
                         collapse('navigation');
                         ///
-                        proba(categoryValue);
+                        sessionObject(categoryValue);
 
                     });
                     fragment.appendChild(tempFragment);
@@ -171,7 +171,7 @@ const sidebar = (function () {
                                 selectList(listSelectedId);
                                 collapse('navigation');
                                 ////
-                                proba(value);
+                                sessionObject(value);
 
                             });
                             tempCategory.appendChild(tempValue);
@@ -182,7 +182,7 @@ const sidebar = (function () {
             }
         }
 
-        function proba(value) {
+        function sessionObject(value) {
             let results = storageSessionArray(value);
             let tempObject = {};
             tempObject['search'] = {
