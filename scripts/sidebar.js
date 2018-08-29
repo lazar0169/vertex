@@ -23,7 +23,10 @@ const sidebar = (function () {
     let searchCategory;
     // valueArray contains values of picked links
     let valueArray = [];
-
+    if (localStorage.length !== 0) {
+        valueArray = JSON.parse(localStorage.getItem('key'))['search'].value;
+    }
+    let sessionStorageObject = {};
 
 
     window.addEventListener('load', function () {
@@ -31,6 +34,7 @@ const sidebar = (function () {
         generateLinks(listSelectedId);
         selectList(listSelectedId);
         chosenLink.innerHTML = data[listSelectedId].category;
+
     });
 
     collapseButton.addEventListener('click', function () {
@@ -45,7 +49,7 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
-        let sessionStorageObject = JSON.parse(localStorage.getItem('key'));
+        sessionStorageObject = JSON.parse(localStorage.getItem('key'));
         if (sessionStorageObject) {
             generateLinks(sessionStorageObject);
         }
@@ -66,17 +70,20 @@ const sidebar = (function () {
             if (searchLink.value !== '') {
                 results = search(searchLink.value.toLowerCase(), searchCategory);
             }
-            else if (Object.keys(sessionStorageObject).length !== 0) {
+            else if (results === undefined && JSON.parse(localStorage.getItem('key'))) {
                 results = sessionStorageObject;
             }
+
             generateLinks(results);
+
+
         }
     });
-    // window.addEventListener('keyup', function (event) {
-    //     if (event.keyCode == 81) {
-    //         window.localStorage.clear();
-    //     }
-    // });
+    window.addEventListener('keyup', function (event) {
+        if (event.keyCode == 81) {
+            window.localStorage.clear();
+        }
+    });
 
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
@@ -133,9 +140,18 @@ const sidebar = (function () {
                     tempFragment.innerHTML = categoryValue.name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.id}`;
-                        selectList(category);
+                        selectList(searchCategory);
                         selectLink(linkSelectedId);
                         collapse('navigation');
+                        /////
+                        let results = storageSessionArray(categoryValue);
+                        let tempObject = {};
+                        tempObject['search'] = {
+                            'category': 'Recent search',
+                            'value': results.reverse()
+                        };
+                        localStorage.setItem('key', JSON.stringify(tempObject));
+
                     });
                     fragment.appendChild(tempFragment);
                 }
