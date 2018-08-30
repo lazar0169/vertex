@@ -4,22 +4,22 @@ let data = {
         value: [
             {
                 id: 25,
-                name: 'Bolnica c',
+                name: 'Bolnica',
                 city: 'Nis'
             },
             {
                 id: 26,
-                name: 'Kalca c',
+                name: 'Kalca',
                 city: 'Beograd'
             },
             {
                 id: 27,
-                name: 'Marger c',
+                name: 'Marger',
                 city: 'Nis'
             },
             {
                 id: 28,
-                name: 'Durlan c',
+                name: 'Durlan',
                 city: 'Subotica'
             }
 
@@ -30,22 +30,22 @@ let data = {
         value: [
             {
                 id: 1,
-                name: 'Bolnica j',
+                name: 'Bolnica',
                 city: 'Cacak'
             },
             {
                 id: 2,
-                name: 'Kalca j',
+                name: 'Kalca',
                 city: 'Surdulica'
             },
             {
                 id: 3,
-                name: 'Marger j',
+                name: 'Marger',
                 city: 'Vranje'
             },
             {
                 id: 4,
-                name: 'Durlan j',
+                name: 'Durlan',
                 city: 'Kragujevac'
             }
 
@@ -57,22 +57,22 @@ let data = {
         value: [
             {
                 id: 5,
-                name: 'Bolnica t',
+                name: 'Bolnica',
                 city: 'Kraljevo'
             },
             {
                 id: 6,
-                name: 'Kalca t',
+                name: 'Kalca',
                 city: 'Sid'
             },
             {
                 id: 7,
-                name: 'Marger t',
+                name: 'Marger',
                 city: 'Novi Sad'
             },
             {
                 id: 8,
-                name: 'Durlan t',
+                name: 'Durlan',
                 city: 'Beograd'
             }
         ]
@@ -84,22 +84,22 @@ let data = {
         value: [
             {
                 id: 9,
-                name: 'Bolnica a',
+                name: 'Bolnica',
                 city: 'Vrsac'
             },
             {
                 id: 10,
-                name: 'Kalca a',
+                name: 'Kalca',
                 city: 'Pirot'
             },
             {
                 id: 11,
-                name: 'Marger a',
+                name: 'Marger',
                 city: 'Kragujevac'
             },
             {
                 id: 12,
-                name: 'Durlan a',
+                name: 'Durlan',
                 city: 'Nis'
             }
         ]
@@ -110,22 +110,22 @@ let data = {
         value: [
             {
                 id: 13,
-                name: 'Bolnica m',
+                name: 'Bolnica',
                 city: 'Leskovac'
             },
             {
                 id: 14,
-                name: 'Kalca m',
+                name: 'Kalca',
                 city: 'Negotin'
             },
             {
                 id: 15,
-                name: 'Marger m',
+                name: 'Marger',
                 city: 'Krusevac'
             },
             {
                 id: 16,
-                name: 'Durlan m',
+                name: 'Durlan',
                 city: 'Valjevo'
             }
         ]
@@ -135,22 +135,22 @@ let data = {
         value: [
             {
                 id: 29,
-                name: 'Bolnica r',
+                name: 'Bolnica',
                 city: 'Smederevo'
             },
             {
                 id: 30,
-                name: 'Kalca r',
+                name: 'Kalca',
                 city: 'Nis'
             },
             {
                 id: 31,
-                name: 'Marger r',
+                name: 'Marger',
                 city: 'Beograd'
             },
             {
                 id: 32,
-                name: 'Durlan r',
+                name: 'Durlan',
                 city: 'Subotica'
             }
         ]
@@ -161,22 +161,22 @@ let data = {
         value: [
             {
                 id: 17,
-                name: 'Bolnica u',
+                name: 'Bolnica',
                 city: 'Cacak'
             },
             {
                 id: 18,
-                name: 'Kalca u',
+                name: 'Kalca',
                 city: 'Surdulica'
             },
             {
                 id: 19,
-                name: 'Marger u',
+                name: 'Marger',
                 city: 'Vranje'
             },
             {
                 id: 20,
-                name: 'Durlan u',
+                name: 'Durlan',
                 city: 'Leskovac'
             }
         ]
@@ -187,26 +187,24 @@ let data = {
         value: [
             {
                 id: 21,
-                name: 'Bolnica s',
+                name: 'Bolnica',
                 city: 'Beograd'
-
-
             },
             {
                 id: 22,
-                name: 'Kalca s',
+                name: 'Kalca',
                 city: 'Surdulica'
 
             },
             {
                 id: 23,
-                name: 'Marger s',
+                name: 'Marger',
                 city: 'Vranje'
 
             },
             {
                 id: 24,
-                name: 'Durlan s',
+                name: 'Durlan',
                 city: 'Leskovac'
 
             }

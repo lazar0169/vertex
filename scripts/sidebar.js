@@ -19,7 +19,8 @@ const sidebar = (function () {
     let previousListSelected;
     let previousLinkSelected;
     //variables for search, searchCategory is used to check which category is active, 
-    //if you click on general search it will be set to false in other case it will be set like list
+    //if you click on general search it will be set to undefined in other case it will be set like list
+    //
     let searchCategory;
     let recent;
 
@@ -126,7 +127,10 @@ const sidebar = (function () {
                         selectList(searchCategory);
                         selectLink(linkSelectedId);
                         collapse('navigation');
-                        recentSearch(categoryValue);
+                        let temp = categoryValue;
+                        temp.categoryName = tempData[searchCategory].category
+                        temp.category = searchCategory;
+                        recentSearch(temp);
 
                     });
                     fragment.appendChild(tempFragment);
@@ -145,15 +149,29 @@ const sidebar = (function () {
                             let tempValue = document.createElement('a');
                             tempValue.classList = 'link-list';
                             tempValue.id = `link-${value.id}`;
-                            tempValue.innerHTML = value.name;
+                            tempValue.innerHTML = `${value.name} (${category})`;
+                            if (category === 'search') {
+                                tempValue.innerHTML = `${value.name} (${value.categoryName})`;
+                            }
+                            else {
+                                tempValue.innerHTML = value.name;
+                            }
                             tempValue.addEventListener('click', function () {
-                                categorySelectedId = category;
                                 searchCategory = categorySelectedId;
                                 linkSelectedId = `link-${value.id}`;
+                                if (category === 'search') {
+                                    categorySelectedId = value.category;
+                                    recentSearch(value);
+                                }
+                                else {
+                                    let temp = value;
+                                    temp.category = category;
+                                    temp.categoryName = tempData[category].category
+                                    categorySelectedId = category;
+                                    recentSearch(temp);
+                                }
                                 selectList(categorySelectedId);
                                 collapse('navigation');
-                                recentSearch(value);
-
                             });
                             tempCategory.appendChild(tempValue);
                         }
@@ -178,7 +196,7 @@ const sidebar = (function () {
         }
     }
 
-    // highlight chosen list
+    // highlight chosen category
     function selectList(category) {
         if (category !== 'search') {
             if (previousListSelected) {
