@@ -136,7 +136,6 @@ const sidebar = (function () {
                     fragment.appendChild(tempFragment);
                 }
             } else {
-
                 for (let category in tempData) {
                     if (tempData[category].value.length !== 0) {
                         let tempCategory = document.createElement('div');
@@ -144,7 +143,6 @@ const sidebar = (function () {
                         if (category !== 'search') {
                             tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
                         }
-
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
                             tempValue.classList = 'link-list';
@@ -152,24 +150,21 @@ const sidebar = (function () {
                             tempValue.innerHTML = `${value.name} (${category})`;
                             if (category === 'search') {
                                 tempValue.innerHTML = `${value.name} (${value.categoryName})`;
-                            }
-                            else {
+                            } else {
                                 tempValue.innerHTML = value.name;
                             }
                             tempValue.addEventListener('click', function () {
                                 searchCategory = categorySelectedId;
                                 linkSelectedId = `link-${value.id}`;
+                                let entry = value;
                                 if (category === 'search') {
                                     categorySelectedId = value.category;
-                                    recentSearch(value);
-                                }
-                                else {
-                                    let temp = value;
-                                    temp.category = category;
-                                    temp.categoryName = tempData[category].category
+                                } else {
+                                    entry.category = category;
+                                    entry.categoryName = tempData[category].category
                                     categorySelectedId = category;
-                                    recentSearch(temp);
                                 }
+                                recentSearch(entry);
                                 selectList(categorySelectedId);
                                 collapse('navigation');
                             });
