@@ -14,8 +14,8 @@ const sidebar = (function () {
     let isExpand = true;
     let isExpandNav = true;
     // variables for selected list and link
-    let listSelectedId = Object.keys(data)[0];
-    let linkSelectedId = `link-${data[listSelectedId]['value'][0]['id']}`;
+    let categorySelectedId = Object.keys(data)[0];
+    let linkSelectedId = `link-${data[categorySelectedId]['value'][0]['id']}`;
     let previousListSelected;
     let previousLinkSelected;
     //variables for search, searchCategory is used to check which category is active, 
@@ -23,19 +23,11 @@ const sidebar = (function () {
     let searchCategory;
     let recent;
 
-    // Delete
-    let valueArray = [];
-    if (localStorage.length !== 0) {
-        valueArray = JSON.parse(localStorage.getItem('key'))['search'].value;
-    }
-    // ==========
-
-
     window.addEventListener('load', function () {
         generateMenu(data);
-        generateLinks(listSelectedId);
-        selectList(listSelectedId);
-        chosenLink.innerHTML = data[listSelectedId].category;
+        generateLinks(categorySelectedId);
+        selectList(categorySelectedId);
+        chosenLink.innerHTML = data[categorySelectedId].category;
 
     });
 
@@ -51,7 +43,7 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
-        recent = JSON.parse(localStorage.getItem('key'));
+        recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);
         collapse('navigation');
         searchLink.focus();
@@ -89,7 +81,7 @@ const sidebar = (function () {
                                         <span class="tooltip-text hide">${data[category].category}</span>
                                     </div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
-                listSelectedId = category;
+                categorySelectedId = category;
                 searchCategory = category;
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].category;
@@ -134,8 +126,7 @@ const sidebar = (function () {
                         selectList(searchCategory);
                         selectLink(linkSelectedId);
                         collapse('navigation');
-                        ///
-                        sessionObject(categoryValue);
+                        recentSearch(categoryValue);
 
                     });
                     fragment.appendChild(tempFragment);
@@ -156,13 +147,12 @@ const sidebar = (function () {
                             tempValue.id = `link-${value.id}`;
                             tempValue.innerHTML = value.name;
                             tempValue.addEventListener('click', function () {
-                                listSelectedId = category;
-                                searchCategory = listSelectedId;
+                                categorySelectedId = category;
+                                searchCategory = categorySelectedId;
                                 linkSelectedId = `link-${value.id}`;
-                                selectList(listSelectedId);
+                                selectList(categorySelectedId);
                                 collapse('navigation');
-                                ////
-                                sessionObject(value);
+                                recentSearch(value);
 
                             });
                             tempCategory.appendChild(tempValue);
@@ -172,20 +162,6 @@ const sidebar = (function () {
                 }
             }
         }
-
-        function sessionObject(value) {
-            let results = storageSessionArray(value);
-            let tempObject = {};
-            tempObject['search'] = {
-                'category': 'Recent search',
-                'value': results.reverse()
-            };
-            localStorage.setItem('key', JSON.stringify(tempObject));
-        }
-
-
-
-
         linkWrapper.appendChild(fragment);
         selectLink(linkSelectedId);
     }
@@ -244,7 +220,7 @@ const sidebar = (function () {
                     index1 !== -1 ||
                     index2 === 0 ||
                     index3 !== -1) {
-                    arrayResult[i] = { 'id': value.id, 'name': value.name, 'city': value.city };
+                    arrayResult[i] = value;
                     i++;
                 }
             }
@@ -255,43 +231,23 @@ const sidebar = (function () {
             return newObject;
         }
     }
-    // function make array of objects when user used global search
-    function storageSessionArray(valueLink) {
-        valueArray.reverse();
-        if (!valueArray.some((value) => value.id === valueLink.id)) {
-            valueArray.push(valueLink);
+
+    function recentSearch(valueLink) {
+        recent = JSON.parse(localStorage.getItem('recentSearch'));
+        let recentArray = recent ? recent.search.value : [];
+
+        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        if (index !== -1) {
+            recentArray.splice(index, 1);
         }
-        else {
-            for (let val = valueArray.length - 1; val >= 0; val--) {
-                if (valueLink.id == valueArray[val].id) {
-                    for (let j = val; j < valueArray.length; j++)
-                        valueArray[j] = valueArray[j + 1];
-                }
-            }
-            valueArray[valueArray.length - 1] = valueLink;
-        }
-        return valueArray;
+        recentArray.unshift(valueLink);
+
+        let object = {};
+        object['search'] = {
+            'category': 'Recent search',
+            'value': recentArray
+        };
+        localStorage.setItem('recentSearch', JSON.stringify(object));
+
     }
-
-
-    // function sdasd(id) {
-    //     let array = JSON.parse(localStorage.getItem('key'))['search'].value;
-    //     let index = array.indexOf(id);
-    //     let length = array.length;
-    //     array.unshift(id);
-    //     if (index !== -1) {
-    //         for (let i = length - 1; i >= 0; i--) {
-    //             if (index <= i) {
-    //                 array[i] = array[i - 1];
-    //             }
-    //         }
-    //     }
-
-    //     let object;
-    //     //make object
-
-
-    //     return object;
-    // }
-
 })();
