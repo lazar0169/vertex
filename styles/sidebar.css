@@ -10,9 +10,8 @@
     cursor: default;
     display: flex;
     flex-flow: column wrap;
-    background-color: rgb(55, 71, 79);
+    background-color: rgb(38, 50, 56);
     font-size: 1vw;
-    border-right: 2px solid rgb(38, 50, 56);
     box-sizing: border-box;
     transition: all 0.1s ease;
     white-space: nowrap;
@@ -20,14 +19,11 @@
 
 #sidebar.collapse {
     width: 2.5%;
-    background-color: rgb(38, 50, 56);
-    border: 0;
 }
 
 #sidebar-name {
     width: 100%;
     height: 15%;
-    border-bottom: 2px solid rgb(38, 50, 56);
     flex-flow: row wrap;
 }
 
@@ -37,15 +33,12 @@
     transition: all 0.1s ease;
 }
 
-.collapse .list-management>.icon-tooltip,
-.collapse #global-search>.icon-tooltip {
+.collapse .list-management>.icon-tooltip, .collapse #global-search>.icon-tooltip {
     text-align: center;
     background-color: transparent;
 }
 
-.collapse #head-name,
-.collapse #icon-collapse,
-.collapse #global-search {
+.collapse #head-name, .collapse #icon-collapse, .collapse #global-search {
     padding: 0;
     justify-content: center;
     width: 100%;
@@ -92,7 +85,6 @@
 #sidebar-list>div {
     position: relative;
     cursor: pointer;
-    border-bottom: 2px solid rgb(38, 50, 56);
     padding: 0.5em;
 }
 
@@ -100,33 +92,19 @@
     list-style-type: none;
     width: 100%;
     padding: 0.5em;
+    border-radius: 5px;
 }
 
-.collapse .list-management,
-.collapse #icon-collapse>.mdi,
-.collapse #global-search>.mdi {
-    border-radius: 5%;
+.collapse #icon-collapse>.mdi, .collapse #global-search>.mdi {
+    border-radius: 5px;
     padding: 0.5em;
 }
 
-.collapse #sidebar-list>div,
-.collapse #sidebar-name {
-    border: none;
-}
-
-#sidebar-list>div:hover,
-#global-search:hover,
-.link-list:hover,
-#icon-collapse:hover>.mdi,
-#back-to-menu:hover {
+#sidebar-list>div:hover, #global-search:hover, .link-list:hover, #icon-collapse:hover>.mdi, #back-to-menu:hover {
     color: rgb(30, 155, 227);
-    /* background-color: rgb(38, 50, 56); */
 }
 
-.collapse>#sidebar-list>div:hover>.list-management,
-.collapse #global-search:hover>.mdi,
-.collapse #icon-collapse:hover>.mdi,
-.collapse #back-to-menu:hover {
+.collapse>#sidebar-list>div:hover>.list-management, .collapse #global-search:hover>.mdi, .collapse #icon-collapse:hover>.mdi, #sidebar-list>div:hover>.list-management, .link-list:hover {
     background-color: rgb(55, 71, 79);
 }
 
@@ -135,21 +113,20 @@
     background-color: rgb(0, 0, 0);
     position: fixed;
     text-align: center;
-    border-radius: 10%;
-    padding: 0.3em;
-    left: 3%;
+    border-radius: 5px;
+    left: 2.8%;
 }
 
 .tooltip-text:before {
     content: "";
     position: absolute;
-    right: 95%;
-    top: 50%;
+    right: 100%;
+    top: 30%;
     width: 0;
     height: 0;
-    border-top: 0.3em solid transparent;
-    border-right: 0.6em solid rgb(0, 0, 0);
-    border-bottom: 0.3em solid transparent;
+    border-top: 0.25em solid transparent;
+    border-right: 0.25em solid rgb(0, 0, 0);
+    border-bottom: 0.25em solid transparent;
 }
 
 #team-logo {
@@ -168,12 +145,11 @@
     font-size: 1vw;
 }
 
-.collapse #sidebar-list>div:hover>.tooltip-text,
-.collapse #global-search:hover>.tooltip-text,
-.collapse #icon-collapse:hover>.tooltip-text {
+.collapse #sidebar-list>div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text, .collapse #icon-collapse:hover>.tooltip-text {
     visibility: visible;
-    width: auto;
+    width: 7%;
     height: auto;
+    font-size: 1em;
 }
 
 .list-name {
@@ -215,7 +191,7 @@
     left: 0;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: rgb(55, 71, 79);
+    background-color: rgb(38, 50, 56);
     color: rgb(119, 143, 155);
     font-size: 1vw;
     transition: all 0.2s ease;
@@ -229,6 +205,7 @@
 #navigation-name {
     height: 15%;
     flex-flow: row wrap;
+    padding: 0 1em
 }
 
 #head-name {
@@ -262,13 +239,13 @@
 
 #navigation-content {
     flex-flow: column wrap;
-    padding-top: 1em;
+    padding: 1em;
 }
 
 .lists {
     width: 100%;
-    flex-flow: column wrap;
-    justify-content: flex-start;
+    display: block;
+    margin-bottom: 1em;
 }
 
 .link-list {
@@ -276,26 +253,26 @@
     width: 70%;
     cursor: pointer;
     margin: auto;
+    padding: 0.2em 10%;
+    border-radius: 5px;
 }
 
 .lists>h4 {
+    margin: auto;
+    margin-bottom: 0.5em;
     width: 70%;
-    border-bottom: 2px solid rgb(38, 50, 56);
+    border-bottom: 2px solid rgb(27, 31, 37);
     color: white;
     padding-bottom: 0.1em;
 }
 
-.collapse .list-name,
-.collapse #global-search>div,
-.collapse #team-name,
-.collapse #sidebar-logo {
+.collapse .list-name, .collapse #global-search>div, .collapse #team-name, .collapse #sidebar-logo {
     font-size: 0;
     width: 0;
     opacity: 0;
 }
 
-.list-active,
-.link-active {
+.list-active, .link-active {
     color: white !important;
 }
 
