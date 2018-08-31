@@ -71,8 +71,8 @@ const sidebar = (function () {
         for (let category in data) {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class='center'>
-                                        <div id="${category}" class="list-management tooltip center">
-                                            <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} icon-tooltip center"></span>
+                                        <div id="${category}" class="list-management center">
+                                            <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
                                             <div class="list-name">${data[category].category}</div>
                                         </div>
                                         <span class="tooltip-text hide">${data[category].category}</span>
