@@ -13,21 +13,22 @@ const sidebar = (function () {
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpand = true;
     let isExpandNav = true;
-    // variables for selected list and link
+    // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId = Object.keys(data)[0];
     let linkSelectedId = `link-${data[categorySelectedId]['value'][0]['id']}`;
-    let previousListSelected;
+    // variables for remembering last category and link which are picked, and they are used for marking category and link 
+    let previousCategorySelected;
     let previousLinkSelected;
     //variables for search, searchCategory is used to check which category is active, 
     //if you click on general search it will be set to undefined in other case it will be set like list
-    //
+    //recent is an object, it take value from localStorage
     let searchCategory;
     let recent;
 
     window.addEventListener('load', function () {
         generateMenu(data);
         generateLinks(categorySelectedId);
-        selectList(categorySelectedId);
+        selectCategory(categorySelectedId);
         chosenLink.innerHTML = data[categorySelectedId].category;
 
     });
@@ -63,6 +64,7 @@ const sidebar = (function () {
         }
         generateLinks(results);
     });
+    // clear localStorage 
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 81) {
             window.localStorage.clear();
@@ -88,7 +90,6 @@ const sidebar = (function () {
                 chosenLink.innerHTML = data[category].category;
                 searchLink.focus();
                 collapse('navigation');
-
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
@@ -116,7 +117,7 @@ const sidebar = (function () {
         linkWrapper.innerHTML = '';
         generateLinksData(!category || data[category] ? data : category);
         function generateLinksData(tempData) {
-            if (searchCategory) {
+            if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.id = `link-${categoryValue.id}`;
@@ -124,23 +125,22 @@ const sidebar = (function () {
                     tempFragment.innerHTML = categoryValue.name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.id}`;
-                        selectList(searchCategory);
+                        selectCategory(searchCategory);
                         selectLink(linkSelectedId);
                         collapse('navigation');
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].category
                         temp.category = searchCategory;
                         recentSearch(temp);
-
                     });
                     fragment.appendChild(tempFragment);
                 }
-            } else {
+            } else { //if searchCategory is undefined, function generates links based on object 
                 for (let category in tempData) {
                     if (tempData[category].value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        if (category !== 'search') {
+                        if (category !== 'search') { //if category isn't 'search', lists have header
                             tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
                         }
                         for (let value of tempData[category].value) {
@@ -148,7 +148,7 @@ const sidebar = (function () {
                             tempValue.classList = 'link-list';
                             tempValue.id = `link-${value.id}`;
                             tempValue.innerHTML = `${value.name} (${category})`;
-                            if (category === 'search') {
+                            if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.name} (${value.categoryName})`;
                             } else {
                                 tempValue.innerHTML = value.name;
@@ -157,15 +157,15 @@ const sidebar = (function () {
                                 searchCategory = categorySelectedId;
                                 linkSelectedId = `link-${value.id}`;
                                 let entry = value;
-                                if (category === 'search') {
+                                if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
                                     categorySelectedId = value.category;
-                                } else {
+                                } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
                                     entry.categoryName = tempData[category].category
                                     categorySelectedId = category;
                                 }
                                 recentSearch(entry);
-                                selectList(categorySelectedId);
+                                selectCategory(categorySelectedId);
                                 collapse('navigation');
                             });
                             tempCategory.appendChild(tempValue);
@@ -192,14 +192,14 @@ const sidebar = (function () {
     }
 
     // highlight chosen category
-    function selectList(category) {
+    function selectCategory(category) {
         if (category !== 'search') {
-            if (previousListSelected) {
-                previousListSelected.classList.remove('list-active');
+            if (previousCategorySelected) {
+                previousCategorySelected.classList.remove('list-active');
             }
             let listSelected = $$(`#${category}`);
             listSelected.classList.add('list-active');
-            previousListSelected = listSelected;
+            previousCategorySelected = listSelected;
         }
     }
 
@@ -245,22 +245,20 @@ const sidebar = (function () {
         }
     }
 
+    // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         let recentArray = recent ? recent.search.value : [];
-
         let index = recentArray.findIndex((item) => item.id === valueLink.id);
         if (index !== -1) {
             recentArray.splice(index, 1);
         }
         recentArray.unshift(valueLink);
-
         let object = {};
         object['search'] = {
             'category': 'Recent search',
             'value': recentArray
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
-
     }
 })();

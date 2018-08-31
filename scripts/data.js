@@ -22,7 +22,6 @@ let data = {
                 name: 'Durlan',
                 city: 'Subotica'
             }
-
         ]
     },
     jackpot: {
@@ -48,10 +47,8 @@ let data = {
                 name: 'Durlan',
                 city: 'Kragujevac'
             }
-
         ]
     },
-
     tickets: {
         category: 'Tikets',
         value: [
@@ -155,7 +152,6 @@ let data = {
             }
         ]
     },
-
     users: {
         category: 'Users',
         value: [
@@ -181,7 +177,6 @@ let data = {
             }
         ]
     },
-
     service: {
         category: 'Service',
         value: [
@@ -194,19 +189,16 @@ let data = {
                 id: 22,
                 name: 'Kalca',
                 city: 'Surdulica'
-
             },
             {
                 id: 23,
                 name: 'Marger',
                 city: 'Vranje'
-
             },
             {
                 id: 24,
                 name: 'Durlan',
                 city: 'Leskovac'
-
             }
         ]
     }
