@@ -64,12 +64,6 @@ const sidebar = (function () {
         }
         generateLinks(results);
     });
-    // clear localStorage 
-    window.addEventListener('keyup', function (event) {
-        if (event.keyCode == 81) {
-            window.localStorage.clear();
-        }
-    });
 
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
