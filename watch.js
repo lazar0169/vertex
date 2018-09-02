@@ -105,23 +105,30 @@ function transpile() {
         let js = '"use strict"; \r' + merge(coreScripts) + merge(scripts, mapper[viewShort].scripts.map(path => `scripts/${path}`)),
             css = merge(coreStyles) + merge(styles, mapper[viewShort].styles.map(path => `styles/${path}`));
 
-        let document = new JSDOM(views[view]).window.document;
-        let head = document.head;
-        let body = document.body;
-        for (let object of document.querySelectorAll('object')) {
-            let objectName = object.dataset.object;
-            object.insertAdjacentHTML('beforebegin', objects[objectName]);
-            object.remove();
+        let document = parseObjects(new JSDOM(views[view]).window.document);
+
+        function parseObjects(data) {
+            let document = data;
+            for (let object of document.querySelectorAll('object')) {
+                let objectName = object.dataset.object;
+                object.insertAdjacentHTML('beforebegin', objects[objectName]);
+                let objectDocument = new JSDOM(objects[objectName]).window.document;
+                if (objectDocument.querySelectorAll('object').length !== 0) {
+                    document.body = parseObjects(objectDocument).body;
+                }
+                object.remove();
+            }
+            return document;
         }
 
         let viewContent =
             `<html>
                 <head>
-                    ${head.innerHTML}
+                    ${document.head.innerHTML}
                     <link rel="stylesheet" href="css/${viewShort}.css">
                 </head>
                 <body>
-                    ${body.innerHTML}
+                    ${document.body.innerHTML}
                     <script src="js/${viewShort}.js" ${vendorSafe ? 'async' : 'defer'}></script>
                 </body>
             </html>`;

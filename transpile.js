@@ -1,6 +1,6 @@
 'use strict';
 process.stdout.write('\u001B[2J\u001B[0;0f');
-console.log('Transpiling... ');
+console.log('Loading transpiler data... ');
 
 const fs = require('fs');
 const path = require('path');
@@ -24,6 +24,7 @@ if (!fs.existsSync(buildFolder)) {
     fs.mkdirSync(`./${buildFolder}/css`);
 }
 
+console.log('Transpiling... ');
 for (let view of views) {
     if (view.split('.')[1] !== 'html') continue;
     view = view.split('.')[0];
@@ -32,23 +33,30 @@ for (let view of views) {
         styles = mapper[view].styles.map(path => `./styles/${path}`),
         scripts = mapper[view].scripts.map(path => `./scripts/${path}`);
 
-    let document = new JSDOM(fs.readFileSync(`./views/${view}.html`, 'utf8')).window.document;
-    let head = document.head;
-    let body = document.body;
-    for (let object of document.querySelectorAll('object')) {
-        let objectName = object.dataset.object;
-        object.insertAdjacentHTML('beforebegin', objects[objectName]);
-        object.remove();
+    let document = parseObjects(new JSDOM(fs.readFileSync(`./views/${view}.html`, 'utf8')).window.document);
+
+    function parseObjects(data) {
+        let document = data;
+        for (let object of document.querySelectorAll('object')) {
+            let objectName = object.dataset.object;
+            object.insertAdjacentHTML('beforebegin', objects[objectName]);
+            let objectDocument = new JSDOM(objects[objectName]).window.document;
+            if (objectDocument.querySelectorAll('object').length !== 0) {
+                document.body = parseObjects(objectDocument).body;
+            }
+            object.remove();
+        }
+        return document;
     }
 
     let viewContent = pretty(
         `<html>
             <head>
-                ${head.innerHTML}
+                ${document.head.innerHTML}
                 <link rel="stylesheet" href="css/${view}.css">
             </head>
             <body>
-                ${body.innerHTML}
+                ${document.body.innerHTML}
                 <script src="js/${view}.js" ${vendorSafe ? 'async' : 'defer'}></script>
             </body>
         </html>`);
