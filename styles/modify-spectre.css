@@ -1,3 +1,26 @@
 *, ::after, ::before {
     box-sizing: unset;
 }
+
+.btn-success {
+    background: rgb(30, 155, 227) !important;
+    border-color: rgb(30, 155, 227) !important;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: none;
+    color: white;
+    text-decoration: underline;
+}
+
+.btn-cancel:hover {
+    color: rgb(30, 155, 227);
+    background: transparent;
+}
+
+.btn-cancel:focus, .btn-success:focus {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
