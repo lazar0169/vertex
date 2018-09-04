@@ -28,7 +28,7 @@
 
 .form-switch .form-icon, .form-checkbox .form-icon, .form-switch input:checked+.form-icon, .form-switch input:focus+.form-icon, .form-checkbox input:focus+.form-icon, .form-checkbox input:checked+.form-icon, .form-radio input+.form-icon {
     background: rgb(55, 71, 79);
-    border: .05rem solid rgb(55, 71, 79);
+    border: .05rem solid rgb(120, 144, 156);
     box-shadow: unset;
 }
 
@@ -54,8 +54,20 @@
 
 .form-checkbox input:checked+.form-icon::before {
     border: .1rem solid rgb(30, 155, 227);
-    border-left-width: 0;
-    border-top-width: 0;
+    transform: rotate(0);
+    height: 60%;
+    left: 21%;
+    margin-left: 0px;
+    margin-top: 0px;
+    position: absolute;
+    top: 20%;
+    width: 60%;
+    background: rgb(30, 155, 227);
+}
+
+.form-checkbox input:checked+.form-icon, .form-radio input:checked+.form-icon {
+    background: white;
+    border-color: rgb(30, 155, 227);
 }
 
 .form-checkbox input:active+.form-icon, .form-radio input:active+.form-icon, .form-switch input:active+.form-icon::before {
@@ -93,4 +105,29 @@
     color: rgb(120, 144, 156);
     background: rgb(55, 71, 79);
     border-radius: 32px;
+}
+
+tr, .table.table-striped tbody tr:nth-of-type(odd) {
+    background: rgb(38, 50, 56);
+    ;
+}
+
+.table thead {
+    color: rgb(120, 144, 156);
+}
+
+.table.table-hover tbody tr:hover {
+    background: rgb(55, 71, 79);
+}
+
+.table.table-striped tbody {
+    color: white;
+}
+
+table {
+    cursor: pointer;
+}
+
+.table td, .table th {
+    border-bottom: .05rem solid rgb(120, 144, 156);
 }

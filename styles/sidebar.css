@@ -281,11 +281,12 @@
 }
 
 #main-content {
-    background-color: rgb(38, 50, 56);
+    background-color: rgb(55, 71, 79);
     height: 100%;
     width: 88%;
     float: right;
     transition: all 0.1s ease;
+    padding: 0 1%;
 }
 
 #main-content.expand {
