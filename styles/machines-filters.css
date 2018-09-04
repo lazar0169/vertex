@@ -1,0 +1,30 @@
+#machines-filters {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: rgba(38, 50, 56);
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    color: rgb(120, 144, 156);
+    height: 6%;
+}
+
+#machines-filters>div {
+    border-right: 1px solid black;
+}
+
+#show-space>span {
+    cursor: pointer;
+}
+
+#auto-select-status {
+    color: green;
+    cursor: pointer;
+}
+
+.mdi-sort-descending {
+    color: rgb(30, 155, 227);
+}
+
+.mdi-sort-ascending {
+    color: rgb(36, 82, 108);
+}

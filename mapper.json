@@ -2,12 +2,13 @@
     "index": {
         "scripts": [
             "data.js",
-            "sidebar.js"    
+            "sidebar.js"
         ],
         "styles": [
             "index.css",
             "sidebar.css",
-            "modify-spectre.css"
+            "modify-spectre.css",
+            "machines-filters.css"
         ]
     }
 }
