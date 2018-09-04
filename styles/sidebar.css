@@ -6,7 +6,7 @@
     top: 0;
     width: 12%;
     height: 100%;
-    color: rgb(119, 143, 155);
+    color: rgb(120, 144, 156);
     cursor: default;
     display: flex;
     flex-flow: column wrap;
@@ -85,7 +85,7 @@
 #sidebar-list>div {
     position: relative;
     cursor: pointer;
-    padding: 0.5em;
+    padding: 0.5em 0.2em;
 }
 
 .list-management {
@@ -111,7 +111,7 @@
 }
 
 .tooltip-text {
-    color: rgb(119, 143, 155);
+    color: rgb(120, 144, 156);
     background-color: rgb(0, 0, 0);
     position: fixed;
     text-align: center;
@@ -194,7 +194,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     background-color: rgb(38, 50, 56);
-    color: rgb(119, 143, 155);
+    color: rgb(120, 144, 156);
     font-size: 1vw;
     transition: all 0.2s ease;
 }
@@ -253,15 +253,15 @@
 
 .link-list {
     display: block;
-    width: 70%;
+    width: 100%;
     cursor: pointer;
     margin: auto;
-    padding: 0.2em 10%;
+    padding: 0.2em 15%;
     border-radius: 5px;
-    color: rgb(119, 143, 155);
+    color: rgb(120, 144, 156);
 }
 
-.lists>h4 {
+.lists>div {
     margin: auto;
     margin-bottom: 0.5em;
     width: 70%;
@@ -281,7 +281,7 @@
 }
 
 #main-content {
-    background-color: gray;
+    background-color: rgb(38, 50, 56);
     height: 100%;
     width: 88%;
     float: right;
@@ -298,7 +298,7 @@
 
 #sidebar-list::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(119, 143, 155);
+    background-color: rgb(120, 144, 156);
 }
 
 #sidebar-list::-webkit-scrollbar-thumb {
@@ -312,7 +312,7 @@
 
 #navigation-sidebar::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(119, 143, 155);
+    background-color: rgb(120, 144, 156);
 }
 
 #navigation-sidebar::-webkit-scrollbar-thumb {

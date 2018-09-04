@@ -35,7 +35,6 @@ const sidebar = (function () {
 
     collapseButton.addEventListener('click', function () {
         collapse('sidebar');
-        collapseMain();
     });
 
     back.addEventListener('click', function () {
@@ -95,11 +94,13 @@ const sidebar = (function () {
         switch (container) {
             case 'sidebar':
                 sidebarMenu.classList[isExpand ? 'add' : 'remove']('collapse');
+                mainWrapper.classList[isExpand ? 'add' : 'remove']('expand');
                 isExpand = !isExpand;
                 break;
             case 'navigation':
                 navigationMenu.classList[isExpandNav ? 'add' : 'remove']('collapse');
                 blackArea.classList[isExpandNav ? 'add' : 'remove']('show');
+
                 isExpandNav = !isExpandNav;
                 break;
         }
@@ -135,7 +136,7 @@ const sidebar = (function () {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search') { //if category isn't 'search', lists have header
-                            tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
+                            tempCategory.innerHTML = `<div>${tempData[category].category}</div>`;
                         }
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
@@ -195,10 +196,6 @@ const sidebar = (function () {
             listSelected.classList.add('list-active');
             previousCategorySelected = listSelected;
         }
-    }
-
-    function collapseMain() {
-        mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
     }
 
     //data search
