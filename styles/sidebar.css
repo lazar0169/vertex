@@ -207,7 +207,7 @@
 #navigation-name {
     height: 15%;
     flex-flow: row wrap;
-    padding: 0 1em
+    padding: 0 1em;
 }
 
 #head-name {
