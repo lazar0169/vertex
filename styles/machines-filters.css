@@ -61,8 +61,10 @@
 
 .mdi-view-sequential {
     color: rgb(30, 155, 227);
+    cursor: pointer;
 }
 
 .mdi-view-headline {
     color: rgb(36, 82, 108);
+    cursor: pointer;
 }

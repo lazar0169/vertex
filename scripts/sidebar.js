@@ -94,7 +94,7 @@ const sidebar = (function () {
         switch (container) {
             case 'sidebar':
                 sidebarMenu.classList[isExpand ? 'add' : 'remove']('collapse');
-                mainWrapper.classList[isExpand ? 'add' : 'remove']('expand');
+                //  mainWrapper.classList[isExpand ? 'add' : 'remove']('expand');
                 isExpand = !isExpand;
                 break;
             case 'navigation':
