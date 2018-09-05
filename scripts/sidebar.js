@@ -9,10 +9,8 @@ const sidebar = (function () {
     let globalSearch = $$('#global-search');
     let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
-    let mainWrapper = $$('#main-content');
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
-    let isExpand = true;
-    let isExpandNav = true;
+    let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId = Object.keys(data)[0];
     let linkSelectedId = `link-${data[categorySelectedId]['value'][0]['id']}`;
@@ -25,6 +23,30 @@ const sidebar = (function () {
     let searchCategory;
     let recent;
 
+    let sidemenu = function () {
+        return {
+            collapse: function () {
+                sidebarMenu.classList.add('collapse');
+            },
+            expand: function () {
+                sidebarMenu.classList.remove('collapse');
+            }
+        };
+    }();
+
+    let navigation = function () {
+        return {
+            hide: function () {
+                navigationMenu.classList.add('collapse');
+                blackArea.classList.remove('show');
+            },
+            show: function () {
+                navigationMenu.classList.remove('collapse');
+                blackArea.classList.add('show');
+            }
+        };
+    }();
+
     window.addEventListener('load', function () {
         generateMenu(data);
         generateLinks(categorySelectedId);
@@ -34,11 +56,18 @@ const sidebar = (function () {
     });
 
     collapseButton.addEventListener('click', function () {
-        collapse('sidebar');
+        isExpanded ?
+            sidemenu.hide() :
+            sidemenu.show();
+        isExpanded = !isExpanded;
     });
 
     back.addEventListener('click', function () {
-        collapse('navigation');
+        navigation.hide();
+    });
+
+    on('show/app', function () {
+        navigation.hide();
     });
 
     globalSearch.addEventListener('click', function () {
@@ -46,12 +75,8 @@ const sidebar = (function () {
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);
-        collapse('navigation');
+        navigation.show();
         searchLink.focus();
-    });
-
-    blackArea.addEventListener('click', function () {
-        collapse('navigation');
     });
 
     searchLink.addEventListener('keyup', function (event) {
@@ -82,28 +107,11 @@ const sidebar = (function () {
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].category;
                 searchLink.focus();
-                collapse('navigation');
+                navigation.show();
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
-    }
-
-    // function for collapse sidebar, show or hide navigation
-    function collapse(container) {
-        switch (container) {
-            case 'sidebar':
-                sidebarMenu.classList[isExpand ? 'add' : 'remove']('collapse');
-                //  mainWrapper.classList[isExpand ? 'add' : 'remove']('expand');
-                isExpand = !isExpand;
-                break;
-            case 'navigation':
-                navigationMenu.classList[isExpandNav ? 'add' : 'remove']('collapse');
-                blackArea.classList[isExpandNav ? 'add' : 'remove']('show');
-
-                isExpandNav = !isExpandNav;
-                break;
-        }
     }
 
     // generate links when you click on list from menu, and set click listener
@@ -122,7 +130,7 @@ const sidebar = (function () {
                         linkSelectedId = `link-${categoryValue.id}`;
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
-                        collapse('navigation');
+                        navigation.hide();
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].category
                         temp.category = searchCategory;
@@ -161,7 +169,7 @@ const sidebar = (function () {
                                 }
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
-                                collapse('navigation');
+                                navigation.hide();
                             });
                             tempCategory.appendChild(tempValue);
                         }

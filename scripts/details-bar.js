@@ -1,5 +1,3 @@
-const detailsbar = (function () {
-    function proba() {
-        blackArea.classList.add('show');
-    }
+const detailsBar = (function () {
+    // TODO
 })();
