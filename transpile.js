@@ -33,33 +33,19 @@ for (let view of views) {
         styles = mapper[view].styles.map(path => `./styles/${path}`),
         scripts = mapper[view].scripts.map(path => `./scripts/${path}`);
 
-    let document = parseObjects(new JSDOM(fs.readFileSync(`./views/${view}.html`, 'utf8')).window.document);
+    let document = parseObjects(fs.readFileSync(`./views/${view}.html`, 'utf8'));
+    let viewContent = `<html>
+                            <head>
+                                ${document.head.innerHTML}
+                                <link rel="stylesheet" href="css/${view}.css">
+                            </head>
+                            <body>
+                                ${document.body.innerHTML}
+                                <script src="js/${view}.js" ${vendorSafe ? 'async' : 'defer'}></script>
+                            </body>
+                        </html>`
 
-    function parseObjects(data) {
-        let document = data;
-        for (let object of document.querySelectorAll('object')) {
-            let objectName = object.dataset.object;
-            object.insertAdjacentHTML('beforebegin', objects[objectName]);
-            let objectDocument = new JSDOM(objects[objectName]).window.document;
-            if (objectDocument.querySelectorAll('object').length !== 0) {
-                document.body = parseObjects(objectDocument).body;
-            }
-            object.remove();
-        }
-        return document;
-    }
-
-    let viewContent = pretty(
-        `<html>
-            <head>
-                ${document.head.innerHTML}
-                <link rel="stylesheet" href="css/${view}.css">
-            </head>
-            <body>
-                ${document.body.innerHTML}
-                <script src="js/${view}.js" ${vendorSafe ? 'async' : 'defer'}></script>
-            </body>
-        </html>`);
+    viewContent = pretty(viewContent);
 
     fs.writeFileSync(`./${buildFolder}/${view}.html`, viewContent);
 
@@ -77,6 +63,18 @@ for (let view of views) {
         return;
     }
     console.log(`> ${view}`);
+
+    function parseObjects(html) {
+        let document = new JSDOM(html).window.document;
+        while (document.querySelectorAll('object').length !== 0) {
+            for (let object of document.querySelectorAll('object')) {
+                let objectName = object.dataset.object;
+                object.insertAdjacentHTML('beforebegin', objects[objectName]);
+                object.remove();
+            }
+        }
+        return document;
+    }
 }
 
 try {

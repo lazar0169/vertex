@@ -105,18 +105,16 @@ function transpile() {
         let js = '"use strict"; \r' + merge(coreScripts) + merge(scripts, mapper[viewShort].scripts.map(path => `scripts/${path}`)),
             css = merge(coreStyles) + merge(styles, mapper[viewShort].styles.map(path => `styles/${path}`));
 
-        let document = parseObjects(new JSDOM(views[view]).window.document);
+        let document = parseObjects(views[view]);
 
-        function parseObjects(data) {
-            let document = data;
-            for (let object of document.querySelectorAll('object')) {
-                let objectName = object.dataset.object;
-                object.insertAdjacentHTML('beforebegin', objects[objectName]);
-                let objectDocument = new JSDOM(objects[objectName]).window.document;
-                if (objectDocument.querySelectorAll('object').length !== 0) {
-                    document.body = parseObjects(objectDocument).body;
+        function parseObjects(html) {
+            let document = new JSDOM(html).window.document;
+            while (document.querySelectorAll('object').length !== 0) {
+                for (let object of document.querySelectorAll('object')) {
+                    let objectName = object.dataset.object;
+                    object.insertAdjacentHTML('beforebegin', objects[objectName]);
+                    object.remove();
                 }
-                object.remove();
             }
             return document;
         }
