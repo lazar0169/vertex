@@ -252,4 +252,59 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
+
+    //data search
+    function search(termin, category) {
+        let newData = {};
+        if (category) {
+            newData[category] = search(termin, category);
+        } else {
+            for (let category in data) {
+                newData[category] = search(termin, category);
+            }
+        }
+        return newData;
+
+        function search(termin, category) {
+            let i = 0;
+            let arrayResult = [];
+            for (let value of data[category].value) {
+                let valueName = value.name.toLowerCase();
+                let valueCity = value.city.toLowerCase();
+                let index = valueName.indexOf(termin);
+                let index1 = valueName.indexOf(` ${termin}`);
+                let index2 = valueCity.indexOf(termin);
+                let index3 = valueCity.indexOf(` ${termin}`)
+                if (index === 0 ||
+                    index1 !== -1 ||
+                    index2 === 0 ||
+                    index3 !== -1) {
+                    arrayResult[i] = value;
+                    i++;
+                }
+            }
+            let newObject = {
+                'category': data[category].category,
+                'value': arrayResult
+            };
+            return newObject;
+        }
+    }
+
+    // function to remember last search in localStorage
+    function recentSearch(valueLink) {
+        recent = JSON.parse(localStorage.getItem('recentSearch'));
+        let recentArray = recent ? recent.search.value : [];
+        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        if (index !== -1) {
+            recentArray.splice(index, 1);
+        }
+        recentArray.unshift(valueLink);
+        let object = {};
+        object['search'] = {
+            'category': 'Recent search',
+            'value': recentArray
+        };
+        localStorage.setItem('recentSearch', JSON.stringify(object));
+    }
 })();
