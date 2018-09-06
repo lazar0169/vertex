@@ -1,8 +1,85 @@
 #details-bar {
     position: absolute;
+    transform: translateX(0);
+    top: 0;
     right: 0;
     width: 40%;
     height: 100%;
     background: rgb(38, 50, 56);
     z-index: 1;
+    transition: all 0.2s ease;
+    color: rgb(120, 144, 156);
+}
+
+#details-bar.collapse {
+    transform: translateX(100%);
+}
+
+#machines-header {
+    position: relative;
+    width: 100%;
+    height: 20%;
+    background: rgb(55, 71, 79);
+}
+
+#current-machine-info {
+    display: flex;
+    align-items: center;
+    width: 30%;
+    padding: 0.5rem;
+    padding-bottom: 0;
+}
+
+#current-machines-name {
+    padding: 0 0.5rem;
+    color: white;
+}
+
+#current-machines-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: green;
+}
+
+#current-casino-name {
+    padding: 0 1.5rem;
+}
+
+#close-details-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5rem;
+    padding-bottom: 0;
+    cursor: pointer;
+}
+
+#close-details-bar:hover>span, #info-tabs>div:hover {
+    color: rgb(30, 155, 227);
+}
+
+#info-tabs {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+#info-tabs>div {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+#edit-current-machine {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: rgb(30, 155, 227);
+}
+
+.tab-active {
+    border-bottom: 2px solid rgb(30, 155, 227);
+    color: white !important;
 }

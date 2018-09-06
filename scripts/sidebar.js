@@ -9,6 +9,7 @@ const sidebar = (function () {
     let globalSearch = $$('#global-search');
     let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
+    let mainContent = $$('#main-content');
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
@@ -27,9 +28,18 @@ const sidebar = (function () {
         return {
             collapse: function () {
                 sidebarMenu.classList.add('collapse');
+                mainContent.classList.add('expand');
+                //test, need remove this lines when table for machines is finish
+                $$('#details-bar').classList.remove('collapse');
+                blackArea.classList.add('show');
             },
             expand: function () {
                 sidebarMenu.classList.remove('collapse');
+                mainContent.classList.remove('expand');
+                //test, need remove this lines when table for machines is finish
+                $$('#details-bar').classList.add('collapse');
+                blackArea.classList.remove('show');
+
             }
         };
     }();
@@ -39,6 +49,7 @@ const sidebar = (function () {
             hide: function () {
                 navigationMenu.classList.add('collapse');
                 blackArea.classList.remove('show');
+
             },
             show: function () {
                 navigationMenu.classList.remove('collapse');
@@ -57,8 +68,9 @@ const sidebar = (function () {
 
     collapseButton.addEventListener('click', function () {
         isExpanded ?
-            sidemenu.hide() :
-            sidemenu.show();
+            sidemenu.collapse() :
+            sidemenu.expand();
+
         isExpanded = !isExpanded;
     });
 
