@@ -86,14 +86,13 @@
 
 #info-content {
     height: 80%;
-    background: green;
     padding: 0.5rem;
+    overflow: auto;
 }
 
 .active-content {
     height: 100%;
     width: 100%;
-    background: greenyellow;
 }
 
 #details-info>div {
@@ -113,7 +112,27 @@
     color: white;
 }
 
-.machine-info-category>label {
+.machine-info-category>label, #machine-jackpot>label {
     display: flex;
-    padding: 0 1rem;
+    padding: 0 1.3rem;
+}
+
+#machine-last-jackpot {
+    padding: 1.3rem;
+    padding-bottom: 0;
+    color: white;
+}
+
+#info-content::-webkit-scrollbar {
+    width: 1%;
+}
+
+#info-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(55, 71, 79);
+    background-color: rgb(120, 144, 156);
+}
+
+#info-content::-webkit-scrollbar-thumb {
+    background-color: rgb(55, 71, 79);
+    border-radius: 50px;
 }
