@@ -6,6 +6,7 @@ const detailsBar = (function () {
     // TODO
 
     let previousTabSelected;
+    let previousInfoContSelected;
 
     let details = function () {
         return {
@@ -22,13 +23,12 @@ const detailsBar = (function () {
 
     window.addEventListener('load', function () {
         setTabListener();
-        selectTab('details-tab');
+        selectTab('details');
+        selectInfoContent('details')
     });
     closeDetailsBar.addEventListener('click', function () {
         details.hide();
     });
-
-
 
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 27) {
@@ -44,6 +44,7 @@ const detailsBar = (function () {
         for (let tab of tabs) {
             tab.addEventListener('click', function () {
                 selectTab(tab.id);
+                selectInfoContent(tab.id)
             });
         }
     }
@@ -55,11 +56,22 @@ const detailsBar = (function () {
         }
         let tabSelected = $$(`#${name}`);
         if (tabSelected) {
+
             tabSelected.classList.add('tab-active');
             previousTabSelected = tabSelected;
         }
     }
+    function selectInfoContent(name) {
+        if (previousInfoContSelected) {
+            previousInfoContSelected.classList.remove('active-content');
+            previousInfoContSelected.classList.add('hidden');
 
-
-
+        }
+        let infoContSelected = $$(`#${name}-info`);
+        if (infoContSelected) {
+            infoContSelected.classList.remove('hidden');
+            infoContSelected.classList.add('active-content');
+            previousInfoContSelected = infoContSelected;
+        }
+    }
 })();

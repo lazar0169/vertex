@@ -83,3 +83,37 @@
     border-bottom: 2px solid rgb(30, 155, 227);
     color: white !important;
 }
+
+#info-content {
+    height: 80%;
+    background: green;
+    padding: 0.5rem;
+}
+
+.active-content {
+    height: 100%;
+    width: 100%;
+    background: greenyellow;
+}
+
+#details-info>div {
+    padding: 1rem 0;
+}
+
+#machine-general, #machine-tito, #machine-aft {
+    border-bottom: 2px solid rgb(55, 71, 79);
+}
+
+#machine-general>label, #machine-aft-casino, #machine-tito-system {
+    display: flex;
+}
+
+#machine-general>label>div, .machine-info-category>label>div, #machine-tito-name, #machine-aft-name {
+    padding: 0 0.5rem;
+    color: white;
+}
+
+.machine-info-category>label {
+    display: flex;
+    padding: 0 1rem;
+}

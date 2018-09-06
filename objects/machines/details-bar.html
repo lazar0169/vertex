@@ -8,12 +8,55 @@
         <div id="close-details-bar">[esc]<span class="mdi mdi-close"></span></div>
 
         <div id="info-tabs" class="center">
-            <div id="details-tab" class="tabs" data-id="details-tab">DETAILS</div>
-            <div id="history-tab" class="tabs" data-id="history-tab">HISTORY</div>
-            <div id="meters-tab" class="tabs" data-id="meters-tab">METERS</div>
-            <div id="events-tab" class="tabs" data-id="events-tab">EVENTS</div>
-            <div id="service-tab" class="tabs" data-id="service-tab">SERVICE</div>
+            <div id="details" class="tabs">DETAILS</div>
+            <div id="history" class="tabs">HISTORY</div>
+            <div id="meters" class="tabs">METERS</div>
+            <div id="events" class="tabs">EVENTS</div>
+            <div id="service" class="tabs">SERVICE</div>
         </div>
         <div id="edit-current-machine">EDIT MACHINE</div>
+    </div>
+    <div id="info-content">
+        <div id="details-info" class="hidden">
+            <div id="machine-general">
+                <label>No: <div id="machine-id">2</div></label>
+                <label>Vendor: <div id="machine-vendor">EGT</div></label>
+                <label>Machine type: <div id="machine-type">Slot</div></label>
+                <label>Speed type: <div id="machine-speed">Medium</div></label>
+                <label>Notification when meter value exceeds: <div id="machine-notification">500000,00</div></label>
+            </div>
+            <div id="machine-tito">
+                <div id="machine-tito-system">
+                    <span class="mdi mdi-ticket"></span>
+                    <div id="machine-tito-name"> TITO system 3</div>
+                </div>
+                <div id="machine-tito-info" class="machine-info-category">
+                    <label>The maximum value for ticket printing: <div id="machine-tito-max">100000.00</div></label>
+                    <label>Allowed: <div id="machine-tito-promo">Yes</div></label>
+                </div>
+            </div>
+            <div id="machine-aft">
+                <div id="machine-aft-casino">
+                    <span class="mdi mdi-bank"></span>
+                    <div id="machine-aft-name"> AFT Kalca 1</div>
+                </div>
+                <div id="machine-aft-info" class="machine-info-category">
+                    <label>Allowed transactions: <div id="machine-allowed-transactions">Yes</div></label>
+                    <label>The maximum value of the transaction: <div id="machine-aft-max">9999999.99</div></label>
+                </div>
+            </div>
+            <div id="machine-jackpot">
+                <div id="machine-aft-casino">
+                    <span class="mdi mdi-currency-usd"></span>
+                    <div id="machine-aft-name">Jackpot</div>
+                </div>
+                <label id="machine-jackpot-server">Jackpot1, Gradski, TheBest One, MaxJackpot</label>
+                <label id="machine-last-jackpot">Last Jackpots</label>
+            </div>
+        </div>
+        <div id="history-info" class="hidden">HISTORY</div>
+        <div id="meters-info" class="hidden">METERS</div>
+        <div id="events-info" class="hidden">EVENTS</div>
+        <div id="service-info" class="hidden">SERVICE</div>
     </div>
 </div>

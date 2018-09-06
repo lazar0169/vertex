@@ -111,7 +111,7 @@ const sidebar = (function () {
                                             <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
                                             <div class="list-name">${data[category].category}</div>
                                         </div>
-                                        <span class="tooltip-text hide">${data[category].category}</span>
+                                        <span class="tooltip-text hidden">${data[category].category}</span>
                                     </div>`;
             tempFragment.childNodes[0].addEventListener('click', function () {
                 categorySelectedId = category;
