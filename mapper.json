@@ -2,7 +2,8 @@
     "index": {
         "scripts": [
             "data.js",
-            "sidebar.js"
+            "sidebar.js",
+            "router.js"
         ],
         "styles": [
             "index.css",
