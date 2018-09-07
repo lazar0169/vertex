@@ -276,18 +276,6 @@
     color: white !important;
 }
 
-#main-content {
-    background-color: gray;
-    height: 100%;
-    width: 88%;
-    float: right;
-    transition: all 0.1s ease;
-}
-
-#main-content.expand {
-    width: 97.5%;
-}
-
 #sidebar-list::-webkit-scrollbar {
     width: 3%;
 }
