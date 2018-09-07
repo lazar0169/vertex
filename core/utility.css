@@ -1,11 +1,12 @@
 .hidden {
     visibility: hidden;
+    display: none;
     width: 0;
     height: 0;
     border: none;
     padding: 0;
     pointer-events: none;
-    font-size: 0vw;
+    font-size: 0;
 }
 
 .center {
