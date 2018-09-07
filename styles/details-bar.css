@@ -99,15 +99,16 @@
     padding: 1rem 0;
 }
 
-#machine-general, #machine-tito, #machine-aft {
+#machine-general, #machine-tito, #machine-aft, #service-info>label {
     border-bottom: 2px solid rgb(55, 71, 79);
 }
 
-#machine-general>label, #machine-aft-casino, #machine-tito-system {
+#machine-general>label, #machine-aft-casino, #machine-tito-system, #service-info>label, #machine-service-mode, #machine-service-info>label {
     display: flex;
+    align-items: center;
 }
 
-#machine-general>label>div, .machine-info-category>label>div, #machine-tito-name, #machine-aft-name {
+#machine-general>label>div, .machine-info-category>label>div, #machine-tito-name, #machine-aft-name, #machine-service-info>label>div {
     padding: 0 0.5rem;
     color: white;
 }
@@ -135,4 +136,16 @@
 #info-content::-webkit-scrollbar-thumb {
     background-color: rgb(55, 71, 79);
     border-radius: 50px;
+}
+
+#machine-service-mode {
+    padding-left: 0.5rem;
+}
+
+#machine-service-mode>label {
+    margin-left: 0.5rem;
+}
+
+#service-info>label, #machine-service-info {
+    padding: 0.5rem 1.3rem;
 }
