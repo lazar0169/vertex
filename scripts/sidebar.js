@@ -10,6 +10,7 @@ const sidebar = (function () {
     let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainContent = $$('#main-content');
+    let editMode = $$('#edit-mode');
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
@@ -119,6 +120,8 @@ const sidebar = (function () {
                 searchCategory = category;
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].category;
+                //
+                editMode.classList.add('collapse');
                 searchLink.focus();
                 navigation.show();
             });

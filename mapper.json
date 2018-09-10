@@ -11,7 +11,8 @@
             "modify-spectre.css",
             "machines-filters.css",
             "details-bar.css",
-            "edit-mode.css"
+            "edit-mode.css",
+            "machines-table.css"
         ]
     }
 }

@@ -1,15 +1,15 @@
 #edit-mode {
     position: absolute;
     background-color: rgb(55, 71, 79);
-    height: 100%;
-    width: 97.5%;
-    right: 0;
+    height: 125%;
+    width: 100%;
+    top: -25%;
     transition: all 0.1s ease;
     padding: 1%;
     background: green;
-    transform: translateX(-0);
+    transform: translateX(0);
 }
 
 #edit-mode.collapse {
-    transform: translateX(-100%);
+    transform: translateX(105%);
 }

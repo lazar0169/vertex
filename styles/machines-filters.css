@@ -4,6 +4,7 @@
     width: 100%;
     background: rgba(38, 50, 56);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid black;
     color: rgb(120, 144, 156);
     height: 6%;
     width: 100%;
@@ -13,7 +14,6 @@
 #filters {
     width: auto;
     height: 100%;
-    border: 1px solid black;
     border: 1px solid black;
     border-bottom: 0;
     border-top: 0;
