@@ -1,12 +1,68 @@
 let router = (function(){
 
+    let pages = [
+        {
+            name: 'casino',
+            path: '/casino',
+            id: '#page-casino'
+        },
+        {
+            name: 'jackpot',
+            path: '/jackpot',
+            id: '#page-jackpot'
+        },
+        {
+            name: 'tickets',
+            path: '/tickets',
+            id: '#page-tickets'
+        },
+        {
+            name: 'AFT',
+            path: '/AFT',
+            id: '#page-AFT'
+        },
+        {
+            name: 'machines',
+            path: '/machines',
+            id: '#page-machines'
+        },
+        {
+            name: 'reports',
+            path: '/reports',
+            id: '#page-reports'
+        },
+        {
+            name: 'users',
+            path: '/users',
+            id: '#page-users'
+        },
+        {
+            name: 'service',
+            path: '/service',
+            id: '#page-service'
+        },
+        {
+            name: 'home',
+            path: '/',
+            id: '#page-home'
+        }
+    ];
+
+    let match,
+        paramsCounter = 0,
+        params = [
+            {
+                name: "",
+                type: ""
+            }
+        ];
+
     function makePageActive(pageName) {
-        let pageElement = $$('#'+pageName);
-        pageElement.classList.add('active');
+        $$(pages[pages.indexOf(pageName)].id).classList.add('active');
     }
 
     function hideActivePage(activePageName) {
-        $$('#'+activePageName).classList.remove('active');
+        $$(pages[pages.indexOf(activePageName)].id).classList.remove('active');
     }
 
     function showPage(pageName) {
@@ -18,9 +74,94 @@ let router = (function(){
         showPage(nextPageName);
     }
 
-    showPage('page-machines');
 
-    changePage('page-machines', 'page-jackpot');
+    //function that takes string and makes RegExp object
+    function buildRegExp(path) {
+        let regExPath = path;
+        let pattern = /{(.*?)}/gi;
+
+        while (match = pattern.exec(path)) {
+            let paramString = match[1],
+                [paramName, paramType] = paramString.split(":");
+
+            params[paramsCounter].name = paramName;
+            params[paramsCounter].type = paramType;
+
+            let regExPart;
+            switch (paramType) {
+                case "integer":
+                    regExPart = "(\\d+)";
+                    break;
+                case "string":
+                    regExPart = "([A-Za-z0-9-._]+)";
+            }
+
+            let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
+            regExPath = regExPath.replace(stringToReplaceInOriginalPath, regExPart);
+        }
+
+        if (pattern.exec(path)) {
+            paramsCounter++;
+            params.push({
+                name: "",
+                type: ""
+            });
+        }
+
+        regExPath = regExPath.replace(/\//g, "\\/") + "$";
+
+        let regExPathObj = new RegExp(regExPath);
+        return regExPathObj;
+    }
+
+
+    //function that checks if url is a regular expression
+    function isMatchingRoute(url, regExpObj) {
+        let match = url.match(regExpObj);
+        return match !== null;
+    };
+
+
+    function addRegExpToPages() {
+        pages.map(function(current) {
+            current.regexp = buildRegExp(current.path);
+            return current;
+        });
+    }
+
+
+    function getPageNameFromUrl(url) {
+        addRegExpToPages();
+        let pageName;
+        console.log('url', url);
+        let routeExists, isRoute;
+        for (let i = 0; i < pages.length; i++) {
+            console.log([i]+' pages', pages);
+            console.log('pages length', pages.length);
+            console.log('pages['+[i]+']', pages[i]);
+            if (isMatchingRoute(url, pages[i].regexp)) {
+                isRoute = true;
+                pageName = pages[i];
+                routeExists = true;
+                return pageName;
+            }
+        }
+        if (!isRoute) {
+            alert("Error! Ruta se ne pokpapa sa regularnim izrazom.");
+        }
+        else if (!routeExists) {
+            alert("Error! Ruta ne postoji.");
+        }
+    }
+
+    console.log(window.location.href);
+
+    showPage(getPageNameFromUrl(window.location.href));
+    // showPage('casino');
+
+    changePage(getPageNameFromUrl(window.location.href));
+    // changePage('casino', 'jackpot');
+
 
  /*   function bindNavigationLinkClickHandlers(className) {
         //pokupiti sve na osnovu klase
@@ -31,7 +172,7 @@ let router = (function(){
         bindNavigationLinkClickHandlers();
     });
 
-    on('router-change-page',function(data) {
+    on('router/change/page',function(data) {
         console.log('4', data.page);
         changePage(data.page);
     });
@@ -40,6 +181,17 @@ let router = (function(){
 
 
 })();
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -85,3 +237,41 @@ window.onhashchange = function () {alert("nesto"); console.log("nesto isto");};*
 
     });
 */
+
+
+
+//object literal that contains page-name: id pairs
+/*    const pages = {
+        casino: {
+            path: '/casino',
+            id: '#page-casino'
+        },
+        jackpot: {
+            path: '/jackpot',
+            id: '#page-jackpot'
+        },
+        tickets: {
+            path: '/tickets',
+            id: '#page-tickets'
+        },
+        AFT: {
+            path: '/AFT',
+            id: '#page-AFT'
+        },
+        machines: {
+            path: '/machines',
+            id: '#page-machines'
+        },
+        reports: {
+            path: '/reports',
+            id: '#page-reports'
+        },
+        users: {
+            path: '/users',
+            id: '#page-users'
+        },
+        service: {
+            path: '/service',
+            id: '#page-service'
+        }
+    };*/
