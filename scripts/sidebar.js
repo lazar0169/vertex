@@ -39,6 +39,7 @@ const sidebar = (function () {
                 //test, need remove this lines when table for machines is finish
                 $$('#details-bar').classList.add('collapse');
                 blackArea.classList.remove('show');
+                $$('#edit-mode').classList.add('collapse');
 
             }
         };
