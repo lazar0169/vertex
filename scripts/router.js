@@ -1,18 +1,12 @@
 let router = (function(){
 
-    function getElement(elementName) {
-        let element = document.getElementById(elementName);
-        return element;
-    }
-
     function makePageActive(pageName) {
-        let pageElement = getElement(pageName);
+        let pageElement = $$('#'+pageName);
         pageElement.classList.add('active');
     }
 
     function hideActivePage(activePageName) {
-        let activeElement = getElement(activePageName);
-        activeElement.classList.remove('active');
+        $$('#'+activePageName).classList.remove('active');
     }
 
     function showPage(pageName) {
@@ -28,7 +22,7 @@ let router = (function(){
 
     changePage('page-machines', 'page-jackpot');
 
-    function bindNavigationLinkClickHandlers(className) {
+ /*   function bindNavigationLinkClickHandlers(className) {
         //pokupiti sve na osnovu klase
         //napraviti sta se desi kada se klikne
     }
@@ -37,11 +31,13 @@ let router = (function(){
         bindNavigationLinkClickHandlers();
     });
 
-    on('router-change-page',function(e) {
-        var params = e.params();
-        changePage(e.page);
-        changePage('page-machines');
+    on('router-change-page',function(data) {
+        console.log('4', data.page);
+        changePage(data.page);
     });
+
+    trigger('router-change-page',{page:'page-machines'});*/
+
 
 })();
 
