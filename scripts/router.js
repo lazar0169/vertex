@@ -58,11 +58,29 @@ let router = (function(){
         ];
 
     function makePageActive(pageName) {
-        $$(pages[pages.indexOf(pageName)].id).classList.add('active');
+        console.log('makePageActive ime stranice koje smo dobili: ',pageName);
+        let pageElement;
+        for (let i = 0; i < pages.length; i++) {
+            // console.log('i', i);
+            // console.log(pages[i]);
+            // console.log(pages[i].name);
+            if (pages[i].name === pageName) {
+                console.log('nasli smo isto ime u nasim stranicama');
+                console.log('id za tu stranicu: ',pages[i].id);
+                console.log('stranica element: ', $$(pages[i].id));
+                pageElement = $$(pages[i].id);
+                pageElement.classList.add('active');
+                console.log('aktivan element', pageElement);
+            }
+        }
     }
 
     function hideActivePage(activePageName) {
-        $$(pages[pages.indexOf(activePageName)].id).classList.remove('active');
+        for (let i = 0; i < pages.length; i++) {
+            if (pages[i].name === activePageName) {
+                $$(pages[i].id).classList.remove('active');
+            }
+        }
     }
 
     function showPage(pageName) {
@@ -75,7 +93,7 @@ let router = (function(){
     }
 
 
-    //function that takes string and makes RegExp object
+    //function that takes string and makes a RegExp object
     function buildRegExp(path) {
         let regExPath = path;
         let pattern = /{(.*?)}/gi;
@@ -133,33 +151,36 @@ let router = (function(){
     function getPageNameFromUrl(url) {
         addRegExpToPages();
         let pageName;
-        console.log('url', url);
+        // console.log('url', url);
         let routeExists, isRoute;
         for (let i = 0; i < pages.length; i++) {
-            console.log([i]+' pages', pages);
-            console.log('pages length', pages.length);
-            console.log('pages['+[i]+']', pages[i]);
+            // console.log([i]+' pages', pages);
+            // console.log('pages length', pages.length);
+            // console.log('pages['+[i]+']', pages[i]);
             if (isMatchingRoute(url, pages[i].regexp)) {
                 isRoute = true;
-                pageName = pages[i];
+                pageName = pages[i].name;
                 routeExists = true;
+                // console.log('page name', pageName);
                 return pageName;
             }
         }
+        return pageName;
+        // console.log('page name after for loop', pageName);
         if (!isRoute) {
-            alert("Error! Ruta se ne pokpapa sa regularnim izrazom.");
+            alert("Error! Ruta se ne poklapa sa regularnim izrazom.");
         }
         else if (!routeExists) {
             alert("Error! Ruta ne postoji.");
         }
     }
 
-    console.log(window.location.href);
+    // console.log('window url', window.location.href);
 
     showPage(getPageNameFromUrl(window.location.href));
     // showPage('casino');
 
-    changePage(getPageNameFromUrl(window.location.href));
+    // changePage(getPageNameFromUrl(window.location.href));
     // changePage('casino', 'jackpot');
 
 
