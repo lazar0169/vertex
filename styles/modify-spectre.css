@@ -76,7 +76,7 @@
 }
 
 .form-select {
-    border: none !important;
+    border: 0 !important;
     border-bottom: 2px solid rgb(120, 144, 156) !important;
     border-radius: 0;
     color: rgb(120, 144, 156);

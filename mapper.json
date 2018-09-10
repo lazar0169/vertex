@@ -10,7 +10,8 @@
             "sidebar.css",
             "modify-spectre.css",
             "machines-filters.css",
-            "details-bar.css"
+            "details-bar.css",
+            "edit-mode.css"
         ]
     }
 }

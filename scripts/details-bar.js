@@ -3,6 +3,8 @@ const detailsBar = (function () {
     let closeDetailsBar = $$('#close-details-bar');
     let blackArea = $$('#black-area');
     let tabs = $$('.tabs');
+    let editCurrentMachine = $$('#edit-current-machine');
+    let editMode = $$('#edit-mode');
     // TODO
 
     let previousTabSelected;
@@ -20,6 +22,23 @@ const detailsBar = (function () {
             }
         };
     }();
+    let editMachine = function () {
+        return {
+            hide: function () {
+                editMode.classList.add('collapse');
+            },
+            show: function () {
+                editMode.classList.remove('collapse');
+                details.hide();
+
+            }
+        };
+    }();
+
+
+    editCurrentMachine.addEventListener('click', function () {
+        editMachine.show();
+    });
 
     window.addEventListener('load', function () {
         setTabListener();

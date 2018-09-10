@@ -9,6 +9,7 @@
     z-index: 1;
     transition: all 0.2s ease;
     color: rgb(120, 144, 156);
+    overflow: hidden;
 }
 
 #details-bar.collapse {
@@ -22,7 +23,7 @@
     background: rgb(55, 71, 79);
 }
 
-#current-machine-info {
+#current-machine-details {
     display: flex;
     align-items: center;
     width: 30%;
@@ -88,11 +89,6 @@
     height: 80%;
     padding: 0.5rem;
     overflow: auto;
-}
-
-.active-content {
-    height: 100%;
-    width: 100%;
 }
 
 #details-info>div {
@@ -169,16 +165,21 @@
 }
 
 #table-head {
-    height: 10%;
+    position: absolute;
+    width: 100%;
+    height: 80%;
 }
 
 #table-body {
-    height: 90%;
-    overflow: auto;
+    position: absolute;
+    margin-top: 5%;
+    width: 100%;
+    height: 80%;
+    overflow-y: auto;
 }
 
 #table-head>table>tbody {
-    display: none;
+    visibility: hidden;
 }
 
 #table-body>table>thead {
