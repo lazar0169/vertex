@@ -58,19 +58,11 @@ let router = (function(){
         ];
 
     function makePageActive(pageName) {
-        console.log('makePageActive ime stranice koje smo dobili: ',pageName);
         let pageElement;
         for (let i = 0; i < pages.length; i++) {
-            // console.log('i', i);
-            // console.log(pages[i]);
-            // console.log(pages[i].name);
             if (pages[i].name === pageName) {
-                console.log('nasli smo isto ime u nasim stranicama');
-                console.log('id za tu stranicu: ',pages[i].id);
-                console.log('stranica element: ', $$(pages[i].id));
                 pageElement = $$(pages[i].id);
                 pageElement.classList.add('active');
-                console.log('aktivan element', pageElement);
             }
         }
     }
@@ -91,7 +83,6 @@ let router = (function(){
         hideActivePage(currentPageName);
         showPage(nextPageName);
     }
-
 
     //function that takes string and makes a RegExp object
     function buildRegExp(path) {
@@ -132,14 +123,13 @@ let router = (function(){
         return regExPathObj;
     }
 
-
-    //function that checks if url is a regular expression
+    //function that checks if the given url is a regular expression
     function isMatchingRoute(url, regExpObj) {
         let match = url.match(regExpObj);
         return match !== null;
     };
 
-
+    //function that adds regular expressions to all of the pages
     function addRegExpToPages() {
         pages.map(function(current) {
             current.regexp = buildRegExp(current.path);
@@ -147,26 +137,20 @@ let router = (function(){
         });
     }
 
-
+    //function that gets name of the page from window url
     function getPageNameFromUrl(url) {
         addRegExpToPages();
         let pageName;
-        // console.log('url', url);
         let routeExists, isRoute;
         for (let i = 0; i < pages.length; i++) {
-            // console.log([i]+' pages', pages);
-            // console.log('pages length', pages.length);
-            // console.log('pages['+[i]+']', pages[i]);
             if (isMatchingRoute(url, pages[i].regexp)) {
                 isRoute = true;
                 pageName = pages[i].name;
                 routeExists = true;
-                // console.log('page name', pageName);
                 return pageName;
             }
         }
         return pageName;
-        // console.log('page name after for loop', pageName);
         if (!isRoute) {
             alert("Error! Ruta se ne poklapa sa regularnim izrazom.");
         }
@@ -175,13 +159,14 @@ let router = (function(){
         }
     }
 
-    // console.log('window url', window.location.href);
+    let currentPageUrl = getPageNameFromUrl(window.location.href);
 
-    showPage(getPageNameFromUrl(window.location.href));
-    // showPage('casino');
+    showPage(currentPageUrl);
 
     // changePage(getPageNameFromUrl(window.location.href));
     // changePage('casino', 'jackpot');
+
+
 
 
  /*   function bindNavigationLinkClickHandlers(className) {
@@ -199,7 +184,6 @@ let router = (function(){
     });
 
     trigger('router-change-page',{page:'page-machines'});*/
-
 
 })();
 
