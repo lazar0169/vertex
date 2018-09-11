@@ -52,7 +52,7 @@ let router = (function(){
     }
 
     function getActivePageElement() {
-        var active =  $$('.active'); //TODO dodaj nacin da se handle-uje kad postoji vise elemenata sa klasom 'active'
+        let active =  $$('.active');
         if (active.length > 0) {
             return active[0];
         }
@@ -150,83 +150,34 @@ let router = (function(){
     }
 
     //events
-    on('router/change/page',function() {
+    on('router/change/page', function(param) {
         let route = null;
-        if (params.pageName) {
-            route = getPageElementFromName(params.pageName);
+        if (param.pageName) {
+            route = param.pageName;
         }
-        else if (params.url) {
-            route = getPageNameFromUrl(params.url);
+        else if (param.url) {
+            route = getPageNameFromUrl(param.url);
         }
         if (route == null) {
             console.error('that route does not exist');
         }
         else {
-            changePage(route.name);
+            changePage(route);
         }
     });
 
     init();
 
- /*   function bindNavigationLinkClickHandlers(className) {
+/*   function bindNavigationLinkClickHandlers(className) {
         //pokupiti sve na osnovu klase
         //napraviti sta se desi kada se klikne
     }
 
     on('router-bind-navigation-click-handler',function() {
         bindNavigationLinkClickHandlers();
-    });
+    });*/
 
-    on('router/change/page',function(data) {
-        console.log('4', data.page);
-        changePage(data.page);
-    });
-
-    trigger('router-change-page',{page:'page-machines'});*/
+    trigger('router/change/page', {pageName: "casino"});
+    trigger('router/change/page', {url: "/casino"});
 
 })();
-
-
-
-
-
-
-
-
-/*
-function bindNavigationLinkClickHandlers() {
-    //pokupis sve na osnovu klase
-    //napravis sta se desi kad kliknes
-}
-
-on('router-bind-navigation-click-handler',function() {
-    bindNavigationLinkClickHandlers();
-});
-
-function changePage(activePage,params) {
-
-}
-*/
-
-/*window.addEventListener('popstate', function(e){console.log('url changed')});
-console.log("ulazi u funkciju");
-*/
-
-/*checkURLchange();
-
-window.onhashchange = funcRef;
-
-window.onhashchange = function () {alert("nesto"); console.log("nesto isto");};
-
-
-window.addEventListener("beforeunload", function (event) {
-    // Most browsers.
-    event.preventDefault();
-
-    // Chrome/Chromium based browsers still need this one.
-    event.returnValue = "\o/";
-    console.log(event, location);
-    alert(window.location);
-
-});
-*/
