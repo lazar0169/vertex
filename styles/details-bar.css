@@ -90,31 +90,39 @@
     padding: 0.5rem;
 }
 
-#details-info>div {
+#machine-details-tab-info>div {
     padding: 1rem 0;
 }
 
-#machine-general, #machine-tito, #machine-aft, #service-info>label {
+#machine-general-info, #machine-tito, #machine-aft, #machine-service-tab-info>div:first-child {
     border-bottom: 2px solid rgb(55, 71, 79);
 }
 
-#machine-general>label, #machine-aft-casino, #machine-tito-system, #service-info>label, #machine-service-mode, #machine-service-info>label {
+#machine-general-info>div, #machine-aft-casino, #machine-tito-system, #machine-service-tab-info>div:first-child, #machine-service-mode, #machine-service-info>div {
     display: flex;
     align-items: center;
 }
 
-#machine-general>label>div, .machine-info-category>label>div, #machine-tito-name, #machine-aft-name, #machine-service-info>label>div {
+#machine-general-info>div>div, .machine-category-info>div>div, #machine-tito-name, #machine-aft-name, #machine-service-info>div>div {
     padding: 0 0.5rem;
     color: white;
 }
 
-.machine-info-category>label, #machine-jackpot>label {
+#machine-general-info>div>div:first-child, .machine-category-info>div>div:first-child, #machine-service-info>div>div:first-child {
+    color: rgb(120, 144, 156);
+}
+
+.machine-category-info>div {
     display: flex;
     padding: 0 1.3rem;
 }
 
+#machine-jackpot-server {
+    margin-left: 1.3rem;
+}
+
 #machine-last-jackpot {
-    padding: 1.3rem;
+    padding: 0.5rem 1.3rem;
     padding-bottom: 0;
     color: white;
 }
@@ -137,7 +145,9 @@
     padding: 0 0.5rem;
 }
 
-#service-info>label, #machine-service-info {
+#machine-service-info {}
+
+#machine-service-tab-info>div {
     padding: 0.5rem 1.3rem;
 }
 

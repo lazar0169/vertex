@@ -1,9 +1,9 @@
 #edit-mode {
     position: absolute;
     background-color: rgb(55, 71, 79);
-    height: 125%;
+    height: 106%;
     width: 100%;
-    top: -25%;
+    top: -6%;
     transition: all 0.1s ease;
     padding: 1rem 0;
     transform: translateX(0);

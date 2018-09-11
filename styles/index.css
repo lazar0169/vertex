@@ -28,14 +28,14 @@ body {
 #main-content {
     background-color: rgb(55, 71, 79);
     height: 100%;
-    width: 88%;
+    width: calc(100% - 230px);
     float: right;
     transition: all 0.1s ease;
     padding: 0 1%;
 }
 
 #main-content.expand {
-    width: 97.5%;
+    width: calc(100% - 50px);
 }
 
 #machines-content {
