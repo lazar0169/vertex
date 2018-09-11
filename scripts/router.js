@@ -64,8 +64,7 @@ let router = (function(){
     }
 
     function hideActivePage() {
-        console.log(getActivePageElement());
-        getActivePageElement().classList.remove('active'); //nece ako postoji vise stranica koje su active
+        getActivePageElement().classList.remove('active');
     }
 
     function showPage(pageName) {
@@ -194,15 +193,7 @@ let router = (function(){
 
 
 
-
-
-
-
-
 /*
-const routesEnum = { "casino": "page-casino"};
-
-
 function bindNavigationLinkClickHandlers() {
     //pokupis sve na osnovu klase
     //napravis sta se desi kad kliknes
@@ -225,144 +216,17 @@ console.log("ulazi u funkciju");
 
 window.onhashchange = funcRef;
 
-window.onhashchange = function () {alert("nesto"); console.log("nesto isto");};*/
-
-/*
-    window.addEventListener("beforeunload", function (event) {
-        // Most browsers.
-        event.preventDefault();
-
-        // Chrome/Chromium based browsers still need this one.
-        event.returnValue = "\o/";
-        console.log(event, location);
-        alert(window.location);
-
-    });
-*/
+window.onhashchange = function () {alert("nesto"); console.log("nesto isto");};
 
 
+window.addEventListener("beforeunload", function (event) {
+    // Most browsers.
+    event.preventDefault();
 
-//object literal that contains page-name: id pairs
-/*    const pages = {
-        casino: {
-            path: '/casino',
-            id: '#page-casino'
-        },
-        jackpot: {
-            path: '/jackpot',
-            id: '#page-jackpot'
-        },
-        tickets: {
-            path: '/tickets',
-            id: '#page-tickets'
-        },
-        AFT: {
-            path: '/AFT',
-            id: '#page-AFT'
-        },
-        machines: {
-            path: '/machines',
-            id: '#page-machines'
-        },
-        reports: {
-            path: '/reports',
-            id: '#page-reports'
-        },
-        users: {
-            path: '/users',
-            id: '#page-users'
-        },
-        service: {
-            path: '/service',
-            id: '#page-service'
-        }
-    };*/
+    // Chrome/Chromium based browsers still need this one.
+    event.returnValue = "\o/";
+    console.log(event, location);
+    alert(window.location);
 
-
-
-
-/*    function getKeyByValue(object, val) {
-        console.log('object', object);
-        console.log('val', val);
-        object.forEach(function(value, key, map) {
-            console.log('map', map);
-            console.log('value', value);
-            console.log('val', val);
-            console.log('key', key);
-            console.log('map.value', map[);
-            console.log('value.val', value.val);
-            console.log('map[key].val', map[key]);
-            if (map[key].val){
-                console.log('MATCH', key);
-                return key;
-            }
-        });
-    }*/
-
-
-/*
-    //ToDo: ovo se ne koristi
-    let pages = [
-        {
-            name: 'casino',
-            path: '/casino',
-            id: '#page-casino'
-        },
-        {
-            name: 'jackpot',
-            path: '/jackpot',
-            id: '#page-jackpot'
-        },
-        {
-            name: 'tickets',
-            path: '/tickets',
-            id: '#page-tickets'
-        },
-        {
-            name: 'AFT',
-            path: '/AFT',
-            id: '#page-AFT'
-        },
-        {
-            name: 'machines',
-            path: '/machines',
-            id: '#page-machines'
-        },
-        {
-            name: 'reports',
-            path: '/reports',
-            id: '#page-reports'
-        },
-        {
-            name: 'users',
-            path: '/users',
-            id: '#page-users'
-        },
-        {
-            name: 'service',
-            path: '/service',
-            id: '#page-service'
-        },
-        {
-            name: 'home',
-            path: '/',
-            id: '#page-home'
-        }
-    ];*/
-
-
-/*
-function getKeyByValue(routes, value) {
-    let key = routes.keys(routes).find(key => routes[key] === value);
-    console.log(key);
-    return key;
-
-    function isMatch(val, key, routes) {
-        if (routes[key].value == val) {
-            return key;
-        }
-    }
-
-    routes.foreach(isMatch(value, key, routes));
-}
+});
 */
