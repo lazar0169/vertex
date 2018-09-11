@@ -1,52 +1,42 @@
 let router = (function(){
 
-    let pages = [
-        {
-            name: 'casino',
-            path: '/casino',
-            id: '#page-casino'
-        },
-        {
-            name: 'jackpot',
-            path: '/jackpot',
-            id: '#page-jackpot'
-        },
-        {
-            name: 'tickets',
-            path: '/tickets',
-            id: '#page-tickets'
-        },
-        {
-            name: 'AFT',
-            path: '/AFT',
-            id: '#page-AFT'
-        },
-        {
-            name: 'machines',
-            path: '/machines',
-            id: '#page-machines'
-        },
-        {
-            name: 'reports',
-            path: '/reports',
-            id: '#page-reports'
-        },
-        {
-            name: 'users',
-            path: '/users',
-            id: '#page-users'
-        },
-        {
-            name: 'service',
-            path: '/service',
-            id: '#page-service'
-        },
-        {
-            name: 'home',
-            path: '/',
-            id: '#page-home'
-        }
-    ];
+    let routes = new Map();
+    routes.set('casino', {
+        path: '/casino',
+        id: '#page-casino'
+        });
+    routes.set('jackpot', {
+        path: '/jackpot',
+        id: '#page-jackpot'
+    });
+    routes.set('tickets', {
+        path: '/tickets',
+        id: '#page-tickets'
+    });
+    routes.set('AFT', {
+        path: '/AFT',
+        id: '#page-AFT'
+    });
+    routes.set('machines',{
+        path: '/machines',
+        id: '#page-machines'
+    });
+    routes.set('reports',{
+        path: '/reports',
+        id: '#page-reports'
+    });
+    routes.set('users',{
+        path: '/users',
+        id: '#page-users'
+    });
+    routes.set('service',{
+        path: '/service',
+        id: '#page-service'
+    });
+    routes.set('home',{
+        path: '/',
+        id: '#page-home'
+    });
 
     let match,
         paramsCounter = 0,
@@ -57,31 +47,34 @@ let router = (function(){
             }
         ];
 
-    function makePageActive(pageName) {
-        let pageElement;
-        for (let i = 0; i < pages.length; i++) {
-            if (pages[i].name === pageName) {
-                pageElement = $$(pages[i].id);
-                pageElement.classList.add('active');
-            }
-        }
+    function getPageElementFromName(pageName) {
+        return $$(routes.get(pageName).id);
     }
 
-    function hideActivePage(activePageName) {
-        for (let i = 0; i < pages.length; i++) {
-            if (pages[i].name === activePageName) {
-                $$(pages[i].id).classList.remove('active');
-            }
+    function getActivePageElement() {
+        var active =  $$('.active'); //TODO dodaj nacin da se handle-uje kad postoji vise elemenata sa klasom 'active'
+        if (active.length > 0) {
+            return active[0];
         }
+        return null;
+    }
+
+    function makePageActive(pageName) {
+        getPageElementFromName(pageName).classList.add('active');
+    }
+
+    function hideActivePage() {
+        console.log(getActivePageElement());
+        getActivePageElement().classList.remove('active'); //nece ako postoji vise stranica koje su active
     }
 
     function showPage(pageName) {
         makePageActive(pageName);
     }
 
-    function changePage(currentPageName, nextPageName) {
-        hideActivePage(currentPageName);
-        showPage(nextPageName);
+    function changePage(pageName) {
+        hideActivePage();
+        showPage(pageName);
     }
 
     //function that takes string and makes a RegExp object
@@ -123,51 +116,58 @@ let router = (function(){
         return regExPathObj;
     }
 
-    //function that checks if the given url is a regular expression
-    function isMatchingRoute(url, regExpObj) {
+    //function that checks if string matches give RegExp object
+    function matchRegExp(url, regExpObj) {
         let match = url.match(regExpObj);
         return match !== null;
-    };
+    }
 
     //function that adds regular expressions to all of the pages
     function addRegExpToPages() {
-        pages.map(function(current) {
+        routes.forEach(function(current) {
             current.regexp = buildRegExp(current.path);
             return current;
         });
     }
 
-    //function that gets name of the page from window url
+    //gets page name from url and checks if it is valid regexp
     function getPageNameFromUrl(url) {
-        addRegExpToPages();
-        let pageName;
-        let routeExists, isRoute;
-        for (let i = 0; i < pages.length; i++) {
-            if (isMatchingRoute(url, pages[i].regexp)) {
-                isRoute = true;
-                pageName = pages[i].name;
-                routeExists = true;
-                return pageName;
-            }
-        }
-        return pageName;
-        if (!isRoute) {
-            alert("Error! Ruta se ne poklapa sa regularnim izrazom.");
-        }
-        else if (!routeExists) {
-            alert("Error! Ruta ne postoji.");
-        }
+        let route = null;
+        routes.forEach(function(value, key, map) {
+           if (matchRegExp(url, value.regexp)){
+               route =  key;
+               //ToDo: break foreach loop here if we can
+               return false;
+           }
+        });
+        return route;
     }
 
-    let currentPageUrl = getPageNameFromUrl(window.location.href);
+    function init() {
+        addRegExpToPages();
+        getPageNameFromUrl('/jackpot');
+        showPage('jackpot');
+        changePage('casino');
+    }
 
-    showPage(currentPageUrl);
+    //events
+    on('router/change/page',function() {
+        let route = null;
+        if (params.pageName) {
+            route = getPageElementFromName(params.pageName);
+        }
+        else if (params.url) {
+            route = getPageNameFromUrl(params.url);
+        }
+        if (route == null) {
+            console.error('that route does not exist');
+        }
+        else {
+            changePage(route.name);
+        }
+    });
 
-    // changePage(getPageNameFromUrl(window.location.href));
-    // changePage('casino', 'jackpot');
-
-
-
+    init();
 
  /*   function bindNavigationLinkClickHandlers(className) {
         //pokupiti sve na osnovu klase
@@ -210,9 +210,6 @@ function bindNavigationLinkClickHandlers() {
 
 on('router-bind-navigation-click-handler',function() {
     bindNavigationLinkClickHandlers();
-});
-on('router-change-page',function() {
-    changePage(activePage,params);
 });
 
 function changePage(activePage,params) {
@@ -280,3 +277,92 @@ window.onhashchange = function () {alert("nesto"); console.log("nesto isto");};*
             id: '#page-service'
         }
     };*/
+
+
+
+
+/*    function getKeyByValue(object, val) {
+        console.log('object', object);
+        console.log('val', val);
+        object.forEach(function(value, key, map) {
+            console.log('map', map);
+            console.log('value', value);
+            console.log('val', val);
+            console.log('key', key);
+            console.log('map.value', map[);
+            console.log('value.val', value.val);
+            console.log('map[key].val', map[key]);
+            if (map[key].val){
+                console.log('MATCH', key);
+                return key;
+            }
+        });
+    }*/
+
+
+/*
+    //ToDo: ovo se ne koristi
+    let pages = [
+        {
+            name: 'casino',
+            path: '/casino',
+            id: '#page-casino'
+        },
+        {
+            name: 'jackpot',
+            path: '/jackpot',
+            id: '#page-jackpot'
+        },
+        {
+            name: 'tickets',
+            path: '/tickets',
+            id: '#page-tickets'
+        },
+        {
+            name: 'AFT',
+            path: '/AFT',
+            id: '#page-AFT'
+        },
+        {
+            name: 'machines',
+            path: '/machines',
+            id: '#page-machines'
+        },
+        {
+            name: 'reports',
+            path: '/reports',
+            id: '#page-reports'
+        },
+        {
+            name: 'users',
+            path: '/users',
+            id: '#page-users'
+        },
+        {
+            name: 'service',
+            path: '/service',
+            id: '#page-service'
+        },
+        {
+            name: 'home',
+            path: '/',
+            id: '#page-home'
+        }
+    ];*/
+
+
+/*
+function getKeyByValue(routes, value) {
+    let key = routes.keys(routes).find(key => routes[key] === value);
+    console.log(key);
+    return key;
+
+    function isMatch(val, key, routes) {
+        if (routes[key].value == val) {
+            return key;
+        }
+    }
+
+    routes.foreach(isMatch(value, key, routes));
+}
+*/
