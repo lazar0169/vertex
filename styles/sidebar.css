@@ -4,14 +4,14 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 12%;
+    width: 230;
     height: 100%;
     color: rgb(120, 144, 156);
     cursor: default;
     display: flex;
     flex-flow: column wrap;
     background-color: rgb(38, 50, 56);
-    font-size: 1vw;
+    font-size: 20px;
     box-sizing: border-box;
     transition: all 0.1s ease;
     white-space: nowrap;
@@ -29,7 +29,6 @@
 
 .team-name {
     width: auto;
-    font-size: 1vw;
     transition: all 0.1s ease;
 }
 
@@ -76,7 +75,6 @@
 }
 
 #sidebar-list {
-    font-size: 1vw;
     overflow-x: hidden;
     overflow-y: auto;
     height: 70%;
@@ -145,35 +143,30 @@
     width: auto;
     height: auto;
     opacity: 1;
-    font-size: 1vw;
+    font-size: 20px;
 }
 
 .collapse #sidebar-list>div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text, .collapse #icon-collapse:hover>.tooltip-text {
     visibility: visible;
     width: 7%;
     height: auto;
-    font-size: 1em;
 }
 
 .list-name {
     width: 80%;
     opacity: 1;
-    font-size: 1vw;
     padding-left: 0.3em;
     transition: all 0.1s ease;
 }
 
 #sidebar-logo {
-    position: absolute;
-    bottom: 0;
     width: 100%;
     height: 15%;
-    font-size: 1vw;
     transition: all 0.1s ease;
 }
 
 #navigation-sidebar {
-    width: 19%;
+    width: 365px;
     height: 100%;
     transform: translateX(0);
     position: fixed;
@@ -184,9 +177,9 @@
     overflow-x: hidden;
     background-color: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
-    font-size: 1vw;
     transition: all 0.2s ease;
     z-index: 1;
+    font-size: 20px;
 }
 
 #navigation-sidebar.collapse {
@@ -211,14 +204,11 @@
 
 #navigation-name>.team-name {
     width: 100%;
-    font-size: 1vw;
     padding-left: 5%;
     opacity: 1;
 }
 
-#navigation-name>input {
-    font-size: 1vw;
-}
+#navigation-name>input {}
 
 #chosen-link {
     width: 85%;
@@ -270,6 +260,7 @@
 
 .list-active, .link-active {
     color: white !important;
+    background: rgb(55, 71, 79) !important;
 }
 
 #sidebar-list::-webkit-scrollbar {

@@ -7,8 +7,6 @@
     border-bottom: 1px solid black;
     color: rgb(120, 144, 156);
     height: 6%;
-    width: 100%;
-    justify-content: flex-start;
 }
 
 #filters {
@@ -17,6 +15,8 @@
     border: 1px solid black;
     border-bottom: 0;
     border-top: 0;
+    display: inline-flex;
+    align-items: center;
 }
 
 #filters>div {
@@ -25,38 +25,37 @@
 
 #search-machine {
     padding: 0 0.5rem;
-    width: 3%
-}
-
-#auto-search-status {
-    width: 44%;
+    display: inline-flex;
+    height: 100%;
 }
 
 #auto-select-status {
-    color: green;
+    color: red;
+    padding-left: 0.5rem;
     cursor: pointer;
 }
 
+#auto-search-status>div {
+    height: 100%;
+}
+
 #show-space {
-    width: 25%;
+    padding: 0.5rem;
 }
 
 #number-machines {
     padding: 0 0.5rem;
-    width: 38%;
-    border-right: 0 !important;
 }
 
 .right-filter {
-    position: absolute;
-    right: 1%;
-    height: 6%;
-    width: 20%;
+    display: inline-flex;
+    float: right;
+    height: 100%;
 }
 
 .right-filter>div {
     border-left: 1px solid black;
-    height: 100%;
+    padding: 0 0.5rem;
 }
 
 .mdi-view-sequential {

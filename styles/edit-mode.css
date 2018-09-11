@@ -5,11 +5,31 @@
     width: 100%;
     top: -25%;
     transition: all 0.1s ease;
-    padding: 1%;
-    background: green;
+    padding: 1rem 0;
     transform: translateX(0);
 }
 
 #edit-mode.collapse {
     transform: translateX(105%);
+}
+
+.machine-edit-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: rgb(38, 50, 56);
+    border-bottom: 1px solid black;
+    padding: 0.5rem 0;
+}
+
+.machine-edit-info>div {
+    margin-left: 1rem;
+}
+
+#machine-edit-remove {
+    color: red;
+}
+
+#machine-edit-remove:hover {
+    background: rgb(55, 71, 79);
 }

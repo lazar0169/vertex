@@ -42,8 +42,8 @@ const detailsBar = (function () {
 
     window.addEventListener('load', function () {
         setTabListener();
-        selectTab('details');
-        selectInfoContent('details')
+        selectTab('machine-details-tab');
+        selectInfoContent('machine-details-tab')
     });
     closeDetailsBar.addEventListener('click', function () {
         details.hide();

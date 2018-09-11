@@ -1,8 +1,41 @@
 <div id="edit-mode" class="collapse">
     <div id="edit-machine-header">
-        <div id="edit-machine-info">
-            <div id="machine-number" class="info-box"> No</div>
+        <div class="machine-edit-info">
+            <div id="machine-edit-id" class="info-box"> No</div>
+            <div id="machine-edit-name" class="info-box"> Machine name</div>
+            <div id="machine-edit-vendor">
+                <select class="form-select">
+                    <option style="display: none">Vendors</option>
+                    <option>Fazi</option>
+                    <option>Admiral</option>
+                    <option>Favorit</option>
+                </select></div>
+            <div id="machine-edit-type">
+                <select class="form-select">
+                    <option style="display: none">Type</option>
+                    <option>Slot Machine</option>
+                    <option>Rulet</option>
+                </select></div>
+        </div>
+
+        <div class="machine-edit-info">
+            <div id="machine-edit-serial" class="info-box">Serial Number</div>
+            <div id="machine-edit-serial-select">
+                <select class="form-select">
+                    <option style="display: none">X000000</option>
+                    <option>1111111</option>
+                    <option>2222222</option>
+                    <option>3333333</option>
+                    <option>4444444</option>
+                    <option>5555555</option>
+                </select>
+            </div>
+            <div>
+                <button id="machine-edit-remove" class="btn btn-cancel">Remove from casino</button>
+            </div>
         </div>
 
     </div>
+
+</div>
 </div>

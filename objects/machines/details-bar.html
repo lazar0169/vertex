@@ -8,16 +8,16 @@
         <div id="close-details-bar">[esc]<span class="mdi mdi-close"></span></div>
 
         <div id="info-tabs" class="center">
-            <div id="details" class="tabs">DETAILS</div>
-            <div id="history" class="tabs">HISTORY</div>
-            <div id="meters" class="tabs">METERS</div>
-            <div id="events" class="tabs">EVENTS</div>
-            <div id="service" class="tabs">SERVICE</div>
+            <div id="machine-details-tab" class="tabs">DETAILS</div>
+            <div id="machine-history-tab" class="tabs">HISTORY</div>
+            <div id="machine-meters-tab" class="tabs">METERS</div>
+            <div id="machine-events-tab" class="tabs">EVENTS</div>
+            <div id="machine-service-tab" class="tabs">SERVICE</div>
         </div>
         <div id="edit-current-machine">EDIT MACHINE</div>
     </div>
     <div id="info-content">
-        <div id="details-info" class="hidden">
+        <div id="machine-details-tab-info" class="hidden">
             <div id="machine-general">
                 <label>No: <div id="machine-id">2</div></label>
                 <label>Vendor: <div id="machine-vendor">EGT</div></label>
@@ -86,12 +86,12 @@
                 </div>
             </div>
         </div>
-        <div id="history-info" class="hidden table-overflow-x>
+        <div id="machine-history-tab-info" class="hidden table-overflow-x">
 
 
 
-            <div class=" table-body ">
-                <table class="table table-striped table-hover ">
+            <div class="table-body">
+                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Time</th>
@@ -207,8 +207,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-head ">
-                <table class="table table-striped table-hover ">
+            <div class="table-head">
+                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Time</th>
@@ -317,25 +317,24 @@
                                 </tr>
                     </tbody>
                 </table>
-
             </div>
 
         </div>
-        <div id="meters-info " class="hidden ">METERS</div>
-        <div id="events-info " class="hidden ">EVENTS</div>
-        <div id="service-info " class="hidden ">
+        <div id="machine-meters-tab-info" class="hidden">METERS</div>
+        <div id="machine-events-tab-info" class="hidden">EVENTS</div>
+        <div id="machine-service-tab-info" class="hidden">
             <label>Service mode:
-                <div id="machine-service-mode ">Off</div>
-                <label class="form-switch ">
-                    <input type="checkbox ">
-                    <i class="form-icon "></i>
+                <div id="machine-service-mode">Off</div>
+                <label class="form-switch">
+                    <input type="checkbox">
+                    <i class="form-icon"></i>
                 </label>
 
             </label>
-            <div id="machine-service-info ">
-                <label>Serial number: <div id="machine-service-serial ">6456E56</div></label>
-                <label>Code: <div id="machine-code ">X00003</div></label>
-                <label>GMCID: <div id="machine-service-gmcid ">33193329841023</div></label>
+            <div id="machine-service-info">
+                <label>Serial number: <div id="machine-service-serial">6456E56</div></label>
+                <label>Code: <div id="machine-code">X00003</div></label>
+                <label>GMCID: <div id="machine-service-gmcid">33193329841023</div></label>
             </div>
         </div>
 
