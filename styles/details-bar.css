@@ -88,7 +88,6 @@
 #info-content {
     height: 80%;
     padding: 0.5rem;
-    overflow: auto;
 }
 
 #details-info>div {
@@ -142,15 +141,11 @@
     padding: 0.5rem 1.3rem;
 }
 
-#history-info {
+#machine-history-tab-info {
     position: relative;
     padding: 0 0.8rem;
     overflow-x: auto;
     overflow-y: hidden;
-}
-
-#history-info>table>tbody {
-    overflow-y: auto;
 }
 
 .active-content {

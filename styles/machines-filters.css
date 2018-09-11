@@ -30,7 +30,7 @@
 }
 
 #auto-select-status {
-    color: red;
+    color: green;
     padding-left: 0.5rem;
     cursor: pointer;
 }
