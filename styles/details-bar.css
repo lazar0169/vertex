@@ -145,8 +145,6 @@
     padding: 0 0.5rem;
 }
 
-#machine-service-info {}
-
 #machine-service-tab-info>div {
     padding: 0.5rem 1.3rem;
 }
@@ -174,6 +172,7 @@
     position: absolute;
     width: auto;
     height: 100%;
+    padding-bottom: 0.5rem;
     overflow-y: auto;
 }
 

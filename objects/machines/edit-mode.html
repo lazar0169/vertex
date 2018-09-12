@@ -1,8 +1,14 @@
 <div id="edit-mode" class="collapse">
     <div id="edit-machine-header">
         <div class="machine-edit-info">
-            <div id="machine-edit-id" class="info-box"> No</div>
-            <div id="machine-edit-name" class="info-box"> Machine name</div>
+            <div id="machine-edit-id">
+                <input class="form-input" type="text" placeholder="No">
+            </div>
+            <div id="machine-edit-name">
+                <input class="form-input" type="text" placeholder="Machine name">
+            </div>
+
+
             <div id="machine-edit-vendor">
                 <select class="form-select">
                     <option style="display: none">Vendors</option>
@@ -19,7 +25,9 @@
         </div>
 
         <div class="machine-edit-info">
-            <div id="machine-edit-serial" class="info-box">Serial Number</div>
+            <div id="machine-edit-serial">
+                <input class="form-input" type="text" placeholder="Serial Number">
+            </div>
             <div id="machine-edit-serial-select">
                 <select class="form-select">
                     <option style="display: none">X000000</option>
@@ -34,8 +42,57 @@
                 <button id="machine-edit-remove" class="btn btn-cancel">Remove from casino</button>
             </div>
         </div>
+    </div>
+    <div id="edit-machine-content">
+        <div id="edit-machine-max-ticket" class="edit-machine-content-info">
+            <label class="form-label" for="input-example-1">The max value for ticket printing:*</label>
+            <input class="form-input" type="text" id="input-example-1" placeholder="7.000,00">
+        </div>
+        <div id="edit-machine-notification-value" class="edit-machine-content-info">
+            <label class="form-label" for="input-example-2">Notification when meter value exceeds:</label>
+            <input class="form-input" type="text" id="input-example-2" placeholder="1.000.000,00">
+        </div>
+        <div id="machine-edit-allow-promo-ticket">
+            <label class="form-checkbox">
+                <input type="checkbox">
+                <i class="form-icon"></i> <div>Allow the promo ticket on the machine</div>
+            </label>
+        </div>
+        <div class="machine-edit-speed-type">
+            <label class="form-label">Speed type:*</label>
+            <label class="form-radio">
+                <input type="radio" name="gender">
+                <i class="form-icon"></i> <div>Slow</div>
+            </label>
+            <label class="form-radio">
+                <input type="radio" name="gender" checked>
+                <i class="form-icon"></i> <div>Medium</div>
+            </label>
+            <label class="form-radio">
+                <input type="radio" name="gender">
+                <i class="form-icon"></i> <div>Fast</div>
+            </label>
+        </div>
+
+        <div id="machine-edit-enable-AFT">
+            <div>
+                <label class="form-checkbox">
+                    <input type="checkbox">
+                    <i class="form-icon"></i> <div>Enable AFT transaction</div>
+                </label>
+            </div>
+
+            <div>
+                <label class="form-label" for="input-example-3">The max value of transaction:</label>
+                <input class="form-input" type="text" id="input-example-3" placeholder="100.000,00">
+            </div>
+        </div>
+
+        <div>
+            <button id="machine-edit-save" class="btn btn-success">SAVE</button>
+            <button id="machine-edit-back" class="btn btn-cancel">Back</button>
+        </div>
+
 
     </div>
-
-</div>
 </div>

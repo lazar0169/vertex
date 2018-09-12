@@ -3,8 +3,6 @@
     padding: 0;
     width: 100%;
     background: rgba(38, 50, 56);
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid black;
     color: rgb(120, 144, 156);
     height: 6%;
     display: inline-block;
@@ -58,12 +56,11 @@
     padding: 0 0.5rem;
 }
 
-.mdi-view-sequential {
-    color: rgb(30, 155, 227);
+.mdi-view-sequential, .mdi-view-headline {
+    color: rgb(36, 82, 108);
     cursor: pointer;
 }
 
-.mdi-view-headline {
-    color: rgb(36, 82, 108);
-    cursor: pointer;
+.show-space-active {
+    color: rgb(30, 155, 227);
 }
