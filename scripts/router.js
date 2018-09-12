@@ -1,41 +1,50 @@
-let router = (function(){
+let router = (function () {
 
     let routes = new Map();
     routes.set('casino', {
         path: '/casino',
-        id: '#page-casino'
-        });
+        id: '#page-casino',
+        page:'casino'
+    });
     routes.set('jackpot', {
         path: '/jackpot',
-        id: '#page-jackpot'
+        id: '#page-jackpot',
+        page:'jackpot'
     });
     routes.set('tickets', {
         path: '/tickets',
-        id: '#page-tickets'
+        id: '#page-tickets',
+        page:'tickets'
     });
     routes.set('AFT', {
         path: '/AFT',
-        id: '#page-AFT'
+        id: '#page-AFT',
+        page:'AFT'
     });
-    routes.set('machines',{
+    routes.set('machines', {
         path: '/machines',
-        id: '#page-machines'
+        id: '#page-machines',
+        page:'machines'
     });
-    routes.set('reports',{
+    routes.set('reports', {
         path: '/reports',
-        id: '#page-reports'
+        id: '#page-reports',
+        page:'reports'
     });
-    routes.set('users',{
+    routes.set('users', {
         path: '/users',
-        id: '#page-users'
+        id: '#page-users',
+        page:'users'
     });
-    routes.set('service',{
+    routes.set('service', {
         path: '/service',
-        id: '#page-service'
+        id: '#page-service',
+        page:'service'
     });
-    routes.set('home',{
+    routes.set('home', {
         path: '/',
-        id: '#page-home'
+        id: '#page-home',
+        page: 'home'
     });
 
     let match,
@@ -52,7 +61,7 @@ let router = (function(){
     }
 
     function getActivePageElement() {
-        let active =  $$('.active');
+        let active = $$('.active');
         if (active.length > 0) {
             return active[0];
         }
@@ -64,7 +73,9 @@ let router = (function(){
     }
 
     function hideActivePage() {
-        getActivePageElement().classList.remove('active');
+        if (getActivePageElement() != null) {
+            getActivePageElement().classList.remove('active');
+        }
     }
 
     function showPage(pageName) {
@@ -123,7 +134,7 @@ let router = (function(){
 
     //function that adds regular expressions to all of the pages
     function addRegExpToPages() {
-        routes.forEach(function(current) {
+        routes.forEach(function (current) {
             current.regexp = buildRegExp(current.path);
             return current;
         });
@@ -132,25 +143,58 @@ let router = (function(){
     //gets page name from url and checks if it is valid regexp
     function getPageNameFromUrl(url) {
         let route = null;
-        routes.forEach(function(value, key, map) {
-           if (matchRegExp(url, value.regexp)){
-               route =  key;
-               //ToDo: break foreach loop here if we can
-               return false;
-           }
+        routes.forEach(function (value, key, map) {
+            if (matchRegExp(url, value.regexp)) {
+                route = key;
+                //ToDo: break foreach loop here if we can
+                return false;
+            }
         });
         return route;
     }
 
     function init() {
+        console.log(routes.get("casino"));
+        window.history.pushState(routes.get("casino"), null, routes.get("casino").path);
+        showPage("casino");
         addRegExpToPages();
-        getPageNameFromUrl('/jackpot');
-        showPage('jackpot');
-        changePage('casino');
+        bindNavigationLinkHandlers();
+    }
+
+    //kad se klinkne na back
+    window.onpopstate = function (event) {
+        event.preventDefault();
+        console.log('event.state', event.state);
+
+        if (typeof event.state.page !== 'undefined') {
+            var page = event.state.page;
+            console.log(page);
+            changePage(page);
+        }
+    };
+
+    function bindNavigationLinkHandlers() {
+        let elements = $$('.element-navigation-link');
+        for (let i = 0; i < elements.length; i++) {
+            let element = elements[i];
+            bindNavigationHandler(element);
+        }
+    }
+
+    function bindNavigationHandler(element) {
+        element.addEventListener('click', handleLinkClick);
+    }
+
+    function handleLinkClick(e) {
+        e.preventDefault();
+        let url = e.target.getAttribute('href'); //e.target je link //target.href je href linka
+        let pageName = getPageNameFromUrl(url);
+        changePage(pageName);
+        window.history.pushState(routes.get(pageName), null, url);
     }
 
     //events
-    on('router/change/page', function(param) {
+    on('router/change/page', function (param) {
         let route = null;
         if (param.pageName) {
             route = param.pageName;
@@ -166,18 +210,14 @@ let router = (function(){
         }
     });
 
+    on('router/bind-handlers/navigation-links', function() {
+        handleLinkClick();
+    });
+
     init();
 
-/*   function bindNavigationLinkClickHandlers(className) {
-        //pokupiti sve na osnovu klase
-        //napraviti sta se desi kada se klikne
-    }
-
-    on('router-bind-navigation-click-handler',function() {
-        bindNavigationLinkClickHandlers();
-    });*/
-
-    trigger('router/change/page', {pageName: "casino"});
-    trigger('router/change/page', {url: "/casino"});
-
+    //trigger('router/change/page', {pageName: 'casino'});
+    //trigger('router/change/page', {url: '/casino'});
+    //trigger('click-handler', 'casino');
 })();
+

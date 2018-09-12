@@ -3,12 +3,22 @@
     background-color: white;
     height: 100%;
     max-width: 88%;
-    float: right;
     transition: all 0.1s ease;
 }
 
 #main-content.expand {
     width: 97.5%;
+}
+
+.navigation-links {
+    display: block;
+    float: left;
+}
+
+.element-navigation-link {
+    margin: 10px;
+    float: left;
+    display: block;
 }
 
 .element-page {
@@ -17,6 +27,7 @@
 
 .element-page.active {
     display: block;
+    float: left;
 }
 
 .hidden {
