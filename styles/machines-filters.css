@@ -7,6 +7,7 @@
     border-bottom: 1px solid black;
     color: rgb(120, 144, 156);
     height: 6%;
+    display: inline-block;
 }
 
 #filters {
@@ -26,7 +27,6 @@
 #search-machine {
     padding: 0 0.5rem;
     display: inline-flex;
-    height: 100%;
 }
 
 #auto-select-status {
