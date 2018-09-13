@@ -1,5 +1,5 @@
 const sidebar = (function () {
-    let sidebarMenu = $$('#sidebar')
+    let sidebarMenu = $$('#sidebar');
     let listWrapper = $$('#sidebar-list');
     let collapseButton = $$('#icon-collapse');
     let navigationMenu = $$('#navigation-sidebar');
@@ -115,7 +115,10 @@ const sidebar = (function () {
                 for (let categoryValue of tempData[searchCategory].value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.id = `link-${categoryValue.id}`;
-                    tempFragment.classList = 'link-list';
+                    //element-navigation-link class is needed for functionalities in router
+                    tempFragment.classList = 'link-list element-navigation-link';
+                    //ToDo: Lazar - map links and actual routes - hardcoded to casino
+                    tempFragment.setAttribute('href', '/casino');
                     tempFragment.innerHTML = categoryValue.name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.id}`;
@@ -139,7 +142,10 @@ const sidebar = (function () {
                         }
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
-                            tempValue.classList = 'link-list';
+                            //element-navigation-link class is needed for functionalities in router
+                            tempValue.classList = 'link-list element-navigation-link';
+                            //ToDo: Lazar - map links and actual routes - hardcoded to casino
+                            tempValue.setAttribute('href', '/casino');
                             tempValue.id = `link-${value.id}`;
                             tempValue.innerHTML = `${value.name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
@@ -255,4 +261,7 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
+
+    //bind handlers to elements that are added dynamically after router init event
+    trigger('router/bind-handlers/navigation-links');
 })();

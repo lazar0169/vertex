@@ -195,30 +195,31 @@ let router = (function () {
         let route = routes.get(pageName);
         if (route != null) {
             pushToHistoryStack(route);
-            showPage(pageName);
+            showPage(route.page);
         }
         else {
-            console.error('ova ruta ne postoji');
-            pushToHistoryStack(routes.get('home'));
-            showPage("home");
+            //console.error('Page not found!');
+            let homeRoute = routes.get('home');
+            pushToHistoryStack(homeRoute);
+            showPage(homeRoute.page);
         }
         bindNavigationLinkHandlers();
     }
 
     //events
     on('router/change/page', function (param) {
-        let route = null;
+        let pageName = null;
         if (param.pageName) {
-            route = param.pageName;
+            pageName = param.pageName;
         }
         else if (param.url) {
-            route = getPageNameFromUrl(param.url);
+            pageName = getPageNameFromUrl(param.url);
         }
-        if (route === null) {
+        if (pageName === null) {
             console.error('that route does not exist');
         }
         else {
-            changePage(route);
+            changePage(pageName);
         }
     });
 
