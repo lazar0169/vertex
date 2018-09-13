@@ -1,6 +1,16 @@
 let router = (function () {
 
     let routes = new Map();
+    routes.set('home', {
+        page: 'home',
+        path: '/',
+        id: '#page-home'
+    });
+    routes.set('casino/edit', {
+        page:'casino/edit',
+        path: '/casino/{casinoId:integer}',
+        id: '#page-casino-edit'
+    });
     routes.set('casino', {
         page:'casino',
         path: '/casino',
@@ -40,11 +50,6 @@ let router = (function () {
         page:'service',
         path: '/service',
         id: '#page-service'
-    });
-    routes.set('home', {
-        page: 'home',
-        path: '/',
-        id: '#page-home'
     });
 
     let match,
@@ -139,11 +144,9 @@ let router = (function () {
 
     function getPageNameFromUrl(url) {
         let route = null;
-        routes.forEach(function (value, key) {
+        routes.forEach(function (value, key, map) {
             if (matchRegExp(url, value.regexp)) {
                 route = key;
-                //ToDo: break foreach loop here if we can
-                return false;
             }
         });
         return route;
@@ -175,13 +178,30 @@ let router = (function () {
         let url = e.target.getAttribute('href');
         let pageName = getPageNameFromUrl(url);
         changePage(pageName);
-        window.history.pushState(routes.get(pageName), null, url);
+        pushToHistoryStack(routes.get(pageName));
+    }
+
+    function pushToHistoryStack(route) {
+        let currentState = window.history.state;
+        if (currentState == null || currentState.page !== route.page) {
+            window.history.pushState(route, null, route.path);
+        }
     }
 
     function init() {
-        window.history.pushState(routes.get("casino"), null, routes.get("casino").path);
-        showPage("casino");
         addRegExpToPages();
+        let path = window.location.href;
+        let pageName = getPageNameFromUrl(path);
+        let route = routes.get(pageName);
+        if (route != null) {
+            pushToHistoryStack(route);
+            showPage(pageName);
+        }
+        else {
+            console.error('ova ruta ne postoji');
+            pushToHistoryStack(routes.get('home'));
+            showPage("home");
+        }
         bindNavigationLinkHandlers();
     }
 
@@ -194,7 +214,7 @@ let router = (function () {
         else if (param.url) {
             route = getPageNameFromUrl(param.url);
         }
-        if (route == null) {
+        if (route === null) {
             console.error('that route does not exist');
         }
         else {
@@ -208,7 +228,4 @@ let router = (function () {
 
     init();
 
-    //trigger('router/change/page', {pageName: 'casino'});
-    //trigger('router/change/page', {url: '/casino'});
-    //trigger('router/bind-handlers/navigation-links');
 })();
