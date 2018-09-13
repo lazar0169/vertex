@@ -4,6 +4,7 @@
 }
 
 body {
+    display: flex;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -11,6 +12,7 @@ body {
     background: white;
     font-family: 'roboto';
     user-select: none;
+    overflow: hidden;
 }
 
 #black-area {
@@ -28,14 +30,10 @@ body {
 #main-content {
     background-color: rgb(55, 71, 79);
     height: 100%;
-    width: calc(100% - 230px);
+    flex: 1;
     float: right;
     transition: all 0.1s ease;
     padding: 0 1%;
-}
-
-#main-content.expand {
-    width: calc(100% - 50px);
 }
 
 #machines-content {

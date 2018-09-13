@@ -1,7 +1,4 @@
 #machine-table {
-    position: relative;
-    overflow-x: auto;
-    overflow-y: hidden;
     height: 94%;
     width: 100%;
     box-shadow: inset 0px 0.3rem 0.3rem 0px rgba(0, 0, 0, 0.4);
@@ -10,5 +7,5 @@
 }
 
 .table th {
-    padding-top: .1rem;
+    padding-top: 0.1rem;
 }

@@ -1,10 +1,10 @@
 #details-bar {
-    position: fixed;
+    position: absolute;
     transform: translateX(0);
-    top: 0;
-    right: 0;
+    top: -6%;
+    right: -1%;
     width: 40%;
-    height: 100%;
+    height: 106%;
     background: rgb(38, 50, 56);
     z-index: 1;
     transition: all 0.2s ease;
@@ -13,7 +13,7 @@
 }
 
 #details-bar.collapse {
-    transform: translateX(100%);
+    transform: translateX(101%);
 }
 
 #machines-header {
@@ -150,10 +150,7 @@
 }
 
 #machine-history-tab-info {
-    position: relative;
     padding: 0 0.8rem;
-    overflow-x: auto;
-    overflow-y: hidden;
 }
 
 .active-content {
@@ -198,6 +195,12 @@
     border-radius: 50px;
 }
 
+.table-overflow-x {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
 .table-overflow-x::-webkit-scrollbar {
     height: 2%;
 }
@@ -208,6 +211,58 @@
 }
 
 .table-overflow-x::-webkit-scrollbar-thumb {
+    background-color: rgb(55, 71, 79);
+    border-radius: 50px;
+}
+
+#machine-meters-tab-info {
+    display: flex;
+    flex-flow: column;
+}
+
+#machine-meters-tab-header {
+    width: 100%;
+    background: yellow;
+}
+
+#machine-meters-content {
+    flex: 1;
+}
+
+#machine-meters-content>div {
+    display: inline-flex;
+    border-bottom: 1px solid rgb(55, 71, 79);
+    cursor: pointer;
+}
+
+#machine-meters-content>div:hover {
+    color: white;
+}
+
+.machine-meter-wrapper>div, .machine-meter-wrapper-time>div, .machine-meter-wrapper-info>div, .machine-meter-wrapper-info>div>div:not(:first-child), .machine-meter-wrapper-edit>div {
+    display: flex;
+    padding: 0 0.3rem;
+}
+
+.machine-meter-wrapper-edit {
+    display: inline-flex;
+    align-items: center;
+}
+
+.overflow-content {
+    overflow: auto;
+}
+
+.overflow-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.overflow-content::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgb(55, 71, 79);
+    background-color: rgb(120, 144, 156);
+}
+
+.overflow-content::-webkit-scrollbar-thumb {
     background-color: rgb(55, 71, 79);
     border-radius: 50px;
 }
