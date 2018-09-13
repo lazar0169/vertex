@@ -2,34 +2,34 @@ let router = (function () {
 
     let routes = new Map();
     routes.set('casino', {
+        page:'casino',
         path: '/casino',
-        id: '#page-casino',
-        page:'casino'
+        id: '#page-casino'
     });
     routes.set('jackpot', {
+        page:'jackpot',
         path: '/jackpot',
         id: '#page-jackpot',
-        page:'jackpot'
     });
     routes.set('tickets', {
+        page:'tickets',
         path: '/tickets',
-        id: '#page-tickets',
-        page:'tickets'
+        id: '#page-tickets'
     });
     routes.set('AFT', {
+        page:'AFT',
         path: '/AFT',
-        id: '#page-AFT',
-        page:'AFT'
+        id: '#page-AFT'
     });
     routes.set('machines', {
+        page:'machines',
         path: '/machines',
-        id: '#page-machines',
-        page:'machines'
+        id: '#page-machines'
     });
     routes.set('reports', {
+        page:'reports',
         path: '/reports',
-        id: '#page-reports',
-        page:'reports'
+        id: '#page-reports'
     });
     routes.set('users', {
         path: '/users',
@@ -37,14 +37,14 @@ let router = (function () {
         page:'users'
     });
     routes.set('service', {
+        page:'service',
         path: '/service',
-        id: '#page-service',
-        page:'service'
+        id: '#page-service'
     });
     routes.set('home', {
+        page: 'home',
         path: '/',
-        id: '#page-home',
-        page: 'home'
+        id: '#page-home'
     });
 
     let match,
@@ -56,25 +56,25 @@ let router = (function () {
             }
         ];
 
-    function getPageElementFromName(pageName) {
+    function getElementFromPageName(pageName) {
         return $$(routes.get(pageName).id);
     }
 
-    function getActivePageElement() {
-        let active = $$('.active');
-        if (active.length > 0) {
-            return active[0];
+    function getActiveElement() {
+        let activeElements = $$('.active');
+        if (activeElements.length > 0) {
+            return activeElements[0];
         }
         return null;
     }
 
     function makePageActive(pageName) {
-        getPageElementFromName(pageName).classList.add('active');
+        getElementFromPageName(pageName).classList.add('active');
     }
 
     function hideActivePage() {
-        if (getActivePageElement() != null) {
-            getActivePageElement().classList.remove('active');
+        if (getActiveElement() != null) {
+            getActiveElement().classList.remove('active');
         }
     }
 
@@ -87,9 +87,8 @@ let router = (function () {
         showPage(pageName);
     }
 
-    //function that takes string and makes a RegExp object
     function buildRegExp(path) {
-        let regExPath = path;
+        let regExpPath = path;
         let pattern = /{(.*?)}/gi;
 
         while (match = pattern.exec(path)) {
@@ -99,17 +98,17 @@ let router = (function () {
             params[paramsCounter].name = paramName;
             params[paramsCounter].type = paramType;
 
-            let regExPart;
+            let regExpPart;
             switch (paramType) {
                 case "integer":
-                    regExPart = "(\\d+)";
+                    regExpPart = "(\\d+)";
                     break;
                 case "string":
-                    regExPart = "([A-Za-z0-9-._]+)";
+                    regExpPart = "([A-Za-z0-9-._]+)";
             }
 
             let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
-            regExPath = regExPath.replace(stringToReplaceInOriginalPath, regExPart);
+            regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
         }
 
         if (pattern.exec(path)) {
@@ -120,30 +119,27 @@ let router = (function () {
             });
         }
 
-        regExPath = regExPath.replace(/\//g, "\\/") + "$";
+        regExpPath = regExpPath.replace(/\//g, "\\/") + "$";
 
-        let regExPathObj = new RegExp(regExPath);
-        return regExPathObj;
+        let regExpPathObj = new RegExp(regExpPath);
+        return regExpPathObj;
     }
 
-    //function that checks if string matches give RegExp object
     function matchRegExp(url, regExpObj) {
         let match = url.match(regExpObj);
         return match !== null;
     }
 
-    //function that adds regular expressions to all of the pages
     function addRegExpToPages() {
-        routes.forEach(function (current) {
-            current.regexp = buildRegExp(current.path);
-            return current;
+        routes.forEach(function (element) {
+            element.regexp = buildRegExp(element.path);
+            return element;
         });
     }
 
-    //gets page name from url and checks if it is valid regexp
     function getPageNameFromUrl(url) {
         let route = null;
-        routes.forEach(function (value, key, map) {
+        routes.forEach(function (value, key) {
             if (matchRegExp(url, value.regexp)) {
                 route = key;
                 //ToDo: break foreach loop here if we can
@@ -153,44 +149,40 @@ let router = (function () {
         return route;
     }
 
-    function init() {
-        console.log(routes.get("casino"));
-        window.history.pushState(routes.get("casino"), null, routes.get("casino").path);
-        showPage("casino");
-        addRegExpToPages();
-        bindNavigationLinkHandlers();
-    }
-
-    //kad se klinkne na back
+    //clicking back
     window.onpopstate = function (event) {
         event.preventDefault();
-        console.log('event.state', event.state);
-
         if (typeof event.state.page !== 'undefined') {
-            var page = event.state.page;
-            console.log(page);
-            changePage(page);
+            let previousPage = event.state.page;
+            changePage(previousPage);
         }
     };
 
     function bindNavigationLinkHandlers() {
-        let elements = $$('.element-navigation-link');
-        for (let i = 0; i < elements.length; i++) {
-            let element = elements[i];
-            bindNavigationHandler(element);
+        let navigationElements = $$('.element-navigation-link');
+        for (let i = 0; i < navigationElements.length; i++) {
+            let navigationElement = navigationElements[i];
+            bindNavigationLinkHandler(navigationElement);
         }
     }
 
-    function bindNavigationHandler(element) {
+    function bindNavigationLinkHandler(element) {
         element.addEventListener('click', handleLinkClick);
     }
 
     function handleLinkClick(e) {
         e.preventDefault();
-        let url = e.target.getAttribute('href'); //e.target je link //target.href je href linka
+        let url = e.target.getAttribute('href');
         let pageName = getPageNameFromUrl(url);
         changePage(pageName);
         window.history.pushState(routes.get(pageName), null, url);
+    }
+
+    function init() {
+        window.history.pushState(routes.get("casino"), null, routes.get("casino").path);
+        showPage("casino");
+        addRegExpToPages();
+        bindNavigationLinkHandlers();
     }
 
     //events
@@ -211,13 +203,12 @@ let router = (function () {
     });
 
     on('router/bind-handlers/navigation-links', function() {
-        handleLinkClick();
+        bindNavigationLinkHandlers();
     });
 
     init();
 
     //trigger('router/change/page', {pageName: 'casino'});
     //trigger('router/change/page', {url: '/casino'});
-    //trigger('click-handler', 'casino');
+    //trigger('router/bind-handlers/navigation-links');
 })();
-
