@@ -7,47 +7,47 @@ let router = (function () {
         id: '#page-home'
     });
     routes.set('casino/edit', {
-        page:'casino/edit',
+        page: 'casino/edit',
         path: '/casino/{casinoId:integer}',
         id: '#page-casino-edit'
     });
     routes.set('casino', {
-        page:'casino',
+        page: 'casino',
         path: '/casino',
         id: '#page-casino'
     });
     routes.set('jackpot', {
-        page:'jackpot',
+        page: 'jackpot',
         path: '/jackpot',
         id: '#page-jackpot',
     });
     routes.set('tickets', {
-        page:'tickets',
+        page: 'tickets',
         path: '/tickets',
         id: '#page-tickets'
     });
     routes.set('AFT', {
-        page:'AFT',
+        page: 'AFT',
         path: '/AFT',
         id: '#page-AFT'
     });
     routes.set('machines', {
-        page:'machines',
+        page: 'machines',
         path: '/machines',
         id: '#page-machines'
     });
     routes.set('reports', {
-        page:'reports',
+        page: 'reports',
         path: '/reports',
         id: '#page-reports'
     });
     routes.set('users', {
         path: '/users',
         id: '#page-users',
-        page:'users'
+        page: 'users'
     });
     routes.set('service', {
-        page:'service',
+        page: 'service',
         path: '/service',
         id: '#page-service'
     });
@@ -87,10 +87,27 @@ let router = (function () {
         makePageActive(pageName);
     }
 
-    function changePage(pageName) {
+    function changePage(pageName, addStateToHistory) {
+        if (pageName === null || pageName === undefined) {
+            pageName = "home";
+        }
+        if (typeof addStateToHistory === 'undefined') {
+            addStateToHistory = true;
+        }
+        if (addStateToHistory) {
+            pushToHistoryStack(routes.get(pageName));
+        }
         hideActivePage();
         showPage(pageName);
+
+        //vraca novo stanje
+        //url se promenio nakon show page;
+        console.log(window.location);
+
+        return routes.get(pageName);
+        //da vrati parametre iz URL-a
     }
+
 
     function buildRegExp(path) {
         let regExpPath = path;
@@ -161,6 +178,7 @@ let router = (function () {
     }
 
     function bindNavigationLinkHandler(element) {
+        element.removeEventListener('click', handleLinkClick);
         element.addEventListener('click', handleLinkClick);
     }
 
@@ -184,8 +202,8 @@ let router = (function () {
         let pageName = getPageNameFromUrl(path);
         let route = routes.get(pageName);
         if (route != null) {
-            pushToHistoryStack(route);
             showPage(route.page);
+            pushToHistoryStack(route);
         }
         else {
             console.error('Page not found!');
@@ -196,6 +214,16 @@ let router = (function () {
     }
 
     //events
+    //clicking back
+    window.onpopstate = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (typeof event.state.page !== 'undefined') {
+            let previousPage = event.state.page;
+            changePage(previousPage, false);
+        }
+    };
+
     on('router/change/page', function (param) {
         let pageName = null;
         if (param.pageName) {
@@ -204,15 +232,13 @@ let router = (function () {
         else if (param.url) {
             pageName = getPageNameFromUrl(param.url);
         }
-        if (pageName === null) {
-            console.error('that route does not exist');
-        }
-        else {
-            changePage(pageName);
+        changePage(pageName);
+        if (typeof param.callbackEvent !== "undefined") {
+            trigger(param.callbackEvent,param);
         }
     });
 
-    on('router/bind-handlers/navigation-links', function() {
+    on('router/bind-handlers/navigation-links', function () {
         bindNavigationLinkHandlers();
     });
 
