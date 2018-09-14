@@ -56,8 +56,9 @@ let router = (function () {
         paramsCounter = 0,
         params = [
             {
-                name: "",
-                type: ""
+                name: '',
+                type: '',
+                regexp: ''
             }
         ];
 
@@ -89,7 +90,7 @@ let router = (function () {
 
     function changePage(pageName, addStateToHistory) {
         if (pageName === null || pageName === undefined) {
-            pageName = "home";
+            pageName = 'home';
         }
         if (typeof addStateToHistory === 'undefined') {
             addStateToHistory = true;
@@ -102,10 +103,20 @@ let router = (function () {
 
         //vraca novo stanje
         //url se promenio nakon show page;
-        console.log(window.location);
+        // let currentUrl = console.log('WINDOW LOCATION', window.location);
+        let currentUrl = window.location.href;
 
-        return routes.get(pageName);
-        //da vrati parametre iz URL-a
+        console.log('window location current href', currentUrl);
+
+        console.log('params', params);
+
+        let paramValue;
+
+        console.log('change page paramvalue usli smo tu');
+
+        paramValue = getParamValue(currentUrl);
+
+        return paramValue;
     }
 
 
@@ -131,19 +142,24 @@ let router = (function () {
 
             let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
             regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
+
+            params[paramsCounter].regexp = regExpPath;
         }
 
         if (pattern.exec(path)) {
             paramsCounter++;
             params.push({
-                name: "",
-                type: ""
+                name: '',
+                type: '',
+                regexp: ''
             });
         }
 
         regExpPath = regExpPath.replace(/\//g, "\\/") + "$";
 
         let regExpPathObj = new RegExp(regExpPath);
+        console.log('params', params);
+        console.log('regexpobject', regExpPathObj);
         return regExpPathObj;
     }
 
@@ -157,6 +173,20 @@ let router = (function () {
             element.regexp = buildRegExp(element.path);
             return element;
         });
+    }
+
+    function getParamValue(currentUrl) {
+        console.log('usli smo u get param value');
+        let pageName = getPageNameFromUrl(currentUrl);
+        console.log('page name get param value', pageName);
+        let pageNameRegexp = routes.get(pageName).regexp;
+        console.log('pageNameRegexp', pageNameRegexp);
+        // console.log('regExpUrl u get param value', regExpUrl);
+        for (let i = 0; i < params.length; i++) {
+            if (pageNameRegexp === params[i].regexp) {
+                console.log('ovde treba da izvucemo parametar');
+            }
+        }
     }
 
     function getPageNameFromUrl(url) {
@@ -202,8 +232,10 @@ let router = (function () {
         let pageName = getPageNameFromUrl(path);
         let route = routes.get(pageName);
         if (route != null) {
-            showPage(route.page);
-            pushToHistoryStack(route);
+            console.log('da li smo mozda usli gde se ne poziva change page');
+            changePage(route.page);
+            // showPage(route.page);
+            // pushToHistoryStack(route);
         }
         else {
             console.error('Page not found!');
