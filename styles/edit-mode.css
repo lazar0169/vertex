@@ -1,4 +1,4 @@
-#edit-mode {
+#machine-edit-mode {
     position: absolute;
     background-color: rgb(55, 71, 79);
     height: 106%;
@@ -11,7 +11,7 @@
     flex-flow: column;
 }
 
-#edit-mode.collapse {
+#machine-edit-mode.collapse {
     transform: translateX(105%);
 }
 
@@ -27,7 +27,7 @@
     margin-left: 1rem;
 }
 
-#edit-machine-header>div:not(:first-child) {
+#machine-edit-header>div:not(:first-child) {
     box-shadow: inset 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.4);
 }
 
@@ -63,20 +63,20 @@
     background: rgb(55, 71, 79);
 }
 
-#edit-machine-content {
+#machine-edit-content {
     margin-top: 1rem;
     width: 100%;
     background: rgb(38, 50, 56);
     flex: 1;
 }
 
-#edit-machine-content>div {
+#machine-edit-content>div {
     padding: 0 1rem;
     padding-top: 1rem;
     width: 320px
 }
 
-#edit-machine-content>div:last-child {
+#machine-edit-content>div:last-child {
     padding-bottom: 1rem;
 }
 

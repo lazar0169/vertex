@@ -23,7 +23,7 @@
     background: rgb(55, 71, 79);
 }
 
-#current-machine-details {
+#machine-current-details {
     display: flex;
     align-items: center;
     width: 30%;
@@ -31,23 +31,23 @@
     padding-bottom: 0;
 }
 
-#current-machines-name {
+#machine-current-name {
     padding: 0 0.5rem;
     color: white;
 }
 
-#current-machines-status {
+#machine-current-status {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background: green;
 }
 
-#current-casino-name {
+#machine-curent-casino {
     padding: 0 1.5rem;
 }
 
-#close-details-bar {
+#machine-close-details-bar {
     position: absolute;
     top: 0;
     right: 0;
@@ -56,7 +56,7 @@
     cursor: pointer;
 }
 
-#close-details-bar:hover>span, #info-tabs>div:hover {
+#machine-close-details-bar:hover>span, #info-tabs>div:hover {
     color: rgb(30, 155, 227);
 }
 
@@ -85,7 +85,7 @@
     color: white !important;
 }
 
-#info-content {
+#machine-info-content {
     height: 80%;
     padding: 0.5rem;
 }
@@ -142,16 +142,16 @@
     flex: 1;
 }
 
-#info-content::-webkit-scrollbar {
+#machine-info-content::-webkit-scrollbar {
     width: 1%;
 }
 
-#info-content::-webkit-scrollbar-track {
+#machine-info-content::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(55, 71, 79);
     background-color: rgb(120, 144, 156);
 }
 
-#info-content::-webkit-scrollbar-thumb {
+#machine-info-content::-webkit-scrollbar-thumb {
     background-color: rgb(55, 71, 79);
     border-radius: 50px;
 }

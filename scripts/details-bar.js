@@ -1,10 +1,10 @@
 const detailsBar = (function () {
     let detailsBar = $$('#details-bar');
-    let closeDetailsBar = $$('#close-details-bar');
+    let closeDetailsBar = $$('#machine-close-details-bar');
     let blackArea = $$('#black-area');
     let tabs = $$('.tabs');
     let editCurrentMachine = $$('#edit-current-machine');
-    let editMode = $$('#edit-mode');
+    let editMode = $$('#machine-edit-mode');
     // TODO
 
     let previousTabSelected;

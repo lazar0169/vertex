@@ -10,7 +10,7 @@ const sidebar = (function () {
     let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
     let mainContent = $$('#main-content');
-    let editMode = $$('#edit-mode');
+    let editMode = $$('#machine-edit-mode');
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
@@ -40,7 +40,7 @@ const sidebar = (function () {
                 //test, need remove this lines when table for machines is finish
                 $$('#details-bar').classList.add('collapse');
                 blackArea.classList.remove('show');
-                $$('#edit-mode').classList.add('collapse');
+                editMode.classList.add('collapse');
 
             }
         };
