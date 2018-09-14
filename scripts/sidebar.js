@@ -31,6 +31,8 @@ const sidebar = (function () {
         selectCategory(categorySelectedId);
         chosenLink.innerHTML = data[categorySelectedId].category;
 
+
+
     });
 
     collapseButton.addEventListener('click', function () {
@@ -88,6 +90,7 @@ const sidebar = (function () {
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
+
     }
 
     // function for collapse sidebar, show or hide navigation
@@ -176,7 +179,11 @@ const sidebar = (function () {
             }
         }
         linkWrapper.appendChild(fragment);
+        //bind handlers to elements that are added dynamically after router init event
+        trigger('router/bind-handlers/navigation-links');;
         selectLink(linkSelectedId);
+
+
     }
 
     // highlight chosen link
@@ -262,6 +269,4 @@ const sidebar = (function () {
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
 
-    //bind handlers to elements that are added dynamically after router init event
-    trigger('router/bind-handlers/navigation-links');
 })();

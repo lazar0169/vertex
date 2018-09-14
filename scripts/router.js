@@ -152,15 +152,6 @@ let router = (function () {
         return route;
     }
 
-    //clicking back
-    window.onpopstate = function (event) {
-        event.preventDefault();
-        if (typeof event.state.page !== 'undefined') {
-            let previousPage = event.state.page;
-            changePage(previousPage);
-        }
-    };
-
     function bindNavigationLinkHandlers() {
         let navigationElements = $$('.element-navigation-link');
         for (let i = 0; i < navigationElements.length; i++) {
@@ -178,7 +169,6 @@ let router = (function () {
         let url = e.target.getAttribute('href');
         let pageName = getPageNameFromUrl(url);
         changePage(pageName);
-        pushToHistoryStack(routes.get(pageName));
     }
 
     function pushToHistoryStack(route) {
@@ -198,10 +188,9 @@ let router = (function () {
             showPage(route.page);
         }
         else {
-            //console.error('Page not found!');
+            console.error('Page not found!');
             let homeRoute = routes.get('home');
-            pushToHistoryStack(homeRoute);
-            showPage(homeRoute.page);
+            changePage(homeRoute.page);
         }
         bindNavigationLinkHandlers();
     }
