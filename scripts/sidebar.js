@@ -35,7 +35,6 @@ const sidebar = (function () {
 
     collapseButton.addEventListener('click', function () {
         collapse('sidebar');
-        collapseMain();
     });
 
     back.addEventListener('click', function () {
@@ -71,8 +70,8 @@ const sidebar = (function () {
         for (let category in data) {
             let tempFragment = document.createElement('div');
             tempFragment.innerHTML = `<div class='center'>
-                                        <div id="${category}" class="list-management tooltip center">
-                                            <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} icon-tooltip center"></span>
+                                        <div id="${category}" class="list-management center">
+                                            <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
                                             <div class="list-name">${data[category].category}</div>
                                         </div>
                                         <span class="tooltip-text hide">${data[category].category}</span>
@@ -95,11 +94,13 @@ const sidebar = (function () {
         switch (container) {
             case 'sidebar':
                 sidebarMenu.classList[isExpand ? 'add' : 'remove']('collapse');
+                mainWrapper.classList[isExpand ? 'add' : 'remove']('expand');
                 isExpand = !isExpand;
                 break;
             case 'navigation':
                 navigationMenu.classList[isExpandNav ? 'add' : 'remove']('collapse');
                 blackArea.classList[isExpandNav ? 'add' : 'remove']('show');
+
                 isExpandNav = !isExpandNav;
                 break;
         }
@@ -135,7 +136,7 @@ const sidebar = (function () {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search') { //if category isn't 'search', lists have header
-                            tempCategory.innerHTML = `<h4>${tempData[category].category}</h4>`;
+                            tempCategory.innerHTML = `<div>${tempData[category].category}</div>`;
                         }
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
@@ -197,8 +198,59 @@ const sidebar = (function () {
         }
     }
 
-    function collapseMain() {
-        mainWrapper.classList[isExpandNav ? 'add' : 'remove']('expand');
+    //data search
+    function search(termin, category) {
+        let newData = {};
+        if (category) {
+            newData[category] = search(termin, category);
+        } else {
+            for (let category in data) {
+                newData[category] = search(termin, category);
+            }
+        }
+        return newData;
+
+        function search(termin, category) {
+            let i = 0;
+            let arrayResult = [];
+            for (let value of data[category].value) {
+                let valueName = value.name.toLowerCase();
+                let valueCity = value.city.toLowerCase();
+                let index = valueName.indexOf(termin);
+                let index1 = valueName.indexOf(` ${termin}`);
+                let index2 = valueCity.indexOf(termin);
+                let index3 = valueCity.indexOf(` ${termin}`)
+                if (index === 0 ||
+                    index1 !== -1 ||
+                    index2 === 0 ||
+                    index3 !== -1) {
+                    arrayResult[i] = value;
+                    i++;
+                }
+            }
+            let newObject = {
+                'category': data[category].category,
+                'value': arrayResult
+            };
+            return newObject;
+        }
+    }
+
+    // function to remember last search in localStorage
+    function recentSearch(valueLink) {
+        recent = JSON.parse(localStorage.getItem('recentSearch'));
+        let recentArray = recent ? recent.search.value : [];
+        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        if (index !== -1) {
+            recentArray.splice(index, 1);
+        }
+        recentArray.unshift(valueLink);
+        let object = {};
+        object['search'] = {
+            'category': 'Recent search',
+            'value': recentArray
+        };
+        localStorage.setItem('recentSearch', JSON.stringify(object));
     }
 
     //data search
