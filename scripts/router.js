@@ -1,16 +1,29 @@
 let router = (function () {
 
     let routes = new Map();
-    routes.set('home', {
-        page: 'home',
-        id: '#page-home',
-        path: '/'
-    });
+
     routes.set('casino/edit', {
         page: 'casino/edit',
         id: '#page-casino-edit',
         path: '/casino/edit/{casinoId:integer}'
     });
+
+    routes.set('casino/name', {
+        page: 'casino/name',
+        id: '#page-casino-add',
+        path: '/casino/{casinoName:string}/player/{playerId:integer}'
+    });
+    routes.set('casino/name/player', {
+        page: 'casino/name/player',
+        id: '#page-casino-add',
+        path: '/casino/{casinoId:integer}/player/{playerId:integer}'
+    });
+    routes.set('home', {
+        page: 'home',
+        id: '#page-home',
+        path: '/'
+    });
+
     routes.set('casino', {
         page: 'casino',
         id: '#page-casino',
@@ -52,16 +65,6 @@ let router = (function () {
         path: '/service'
     });
 
-    let paramsCounter = -1,
-        params = [
-            {
-                name: '',
-                type: '',
-                regexp: '',
-                value: ''
-            }
-        ];
-
     function getElementFromPageName(pageName) {
         return $$(routes.get(pageName).id);
     }
@@ -75,7 +78,14 @@ let router = (function () {
     }
 
     function makePageActive(pageName) {
-        getElementFromPageName(pageName).classList.add('active');
+        let pageElement = getElementFromPageName(pageName);
+
+        if (pageElement != null) {
+            pageElement.classList.add('active');
+        }
+        else {
+            console.error('Selected page does not have page element');
+        }
     }
 
     function hideActivePage() {
@@ -89,71 +99,151 @@ let router = (function () {
     }
 
     function changePage(pageName, addStateToHistory) {
+
+
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
         }
         if (typeof addStateToHistory === 'undefined') {
             addStateToHistory = true;
         }
+
+        let currentRoute = routes.get(pageName);
+        let currentUrl = window.location.pathname;
+        let params = getParamsFromUrl(currentUrl, currentRoute);
+
+
         if (addStateToHistory) {
-            pushToHistoryStack(routes.get(pageName));
+            pushToHistoryStack(routes.get(pageName),params);
         }
         hideActivePage();
         showPage(pageName);
-        let currentUrl = window.location.pathname;
-        let paramValue = getParamsFromUrl(currentUrl);
-        return paramValue;
+
+
+
+        let eventName = 'page-'+pageName+'-activated';
+        //trigger load event of selected page
+        //event name convention page-PAGENAME-activated
+        trigger(eventName,{'params':params});
+
+
+
     }
 
-    function buildRegExpFromPagePath(path) {
-        let regExpPath = path,
-            pattern = /{(.*?)}/gi, //bilo sta izmedju {} zagrada
-            paramStringMatch = pattern.exec(regExpPath);
-        if (paramStringMatch) {
-            paramsCounter++;
-            let [paramName, paramType] = paramStringMatch[1].split(":");
-            params[paramsCounter].name = paramName;
-            params[paramsCounter].type = paramType;
-            let regExpPart;
-            switch (paramType) {
-                case "integer":
-                    regExpPart = "(\\d+)";
-                    break;
-                case "string":
-                    regExpPart = "([A-Za-z0-9-._]+)";
-            }
-            let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
-            regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
-            let regExpPathObj1 = new RegExp(regExpPath);
-            params[paramsCounter].regexp = regExpPathObj1;
-            params.push({
-                name: '',
-                type: '',
-                regexp: '',
-                value: ''
+    function createUrl(route,params) {
+        let url = route.path;
+        for (let i = 0;i<params.length;i++) {
+            var param = params[i];
+            var paramString =  "{" + param.name +":" + param.type +"}";
+
+            url = url.replace(paramString,param.value);
+        }
+        return url;
+    }
+
+    function buildParamRegex(paramType) {
+
+        switch (paramType) {
+            case "integer":
+                return "(\\d+)";
+            case "string":
+                return "([A-Za-z0-9-._]+)";
+            default:
+                return "([A-Za-z0-9-._]+)";
+        }
+    }
+
+    function buildRegExpFromPagePath(route) {
+        let regExpPath = route.path;
+        let paramPattern = /{(.*?)}/gi; //bilo sta izmedju {} zagrada
+
+        let paramsArray = regExpPath.match(paramPattern);
+
+        route.params = [];
+
+        if (paramsArray !== null) {
+
+            paramsArray.forEach(function (element) {
+                element = element.replace("{", "").replace("}", "");
+
+                let paramArray = element.split(":");
+                route.params.push({
+                    name: paramArray[0],
+                    type: paramArray[1]
+                });
+
+                let regExpPart = buildParamRegex(paramArray[1]);
+
+                let stringToReplaceInOriginalPath = "{" + paramArray[0] + ":" + paramArray[1] + "}";
+                regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
+
             });
         }
-        regExpPath = regExpPath.replace(/\//g, "\\/") + "$";
-        let regExpPathObj = new RegExp(regExpPath);
-        return regExpPathObj;
+        regExpPath += "$";
+        route.regexp = new RegExp(regExpPath);
+    }
+
+    function getParamValue(paramType, value) {
+        switch (paramType) {
+            case "integer":
+                return parseInt(value);
+            case "string":
+                return value;
+            default:
+                return value;
+        }
+
+    }
+
+    function validateParam(paramType, value) {
+        let regExp = null;
+        switch (paramType) {
+            case "integer":
+                regExp = new RegExp("^(\\d+)$");
+                break;
+            case "string":
+                regExp = new RegExp("^([A-Za-z0-9-._]+)$");
+                break;
+            default:
+                regExp = null;
+                break;
+        }
+        if (regExp === null) {
+            return false;
+        }
+        return regExp.test(value);
     }
 
 
-    function getParamsFromUrl(url) {
-        let value;
-        for (let i = 0; i < params.length-1; i++) {
-            let regExp = params[i].regexp;
-            if (regExp.exec(url)) {
-                value = regExp.exec(url)[1];
+    function getParamsFromUrl(url, route) {
+
+        if (typeof route === 'undefined') {
+            let page = getPageNameFromUrl(url);
+            route = routes.get(page);
+        }
+
+        let params = url.match(route.regexp);
+
+        if (params != null) {
+
+            let currentParams = route.params.slice(0);
+
+            for (let i = 1; i <= params.length - 1; i++) {
+                let paramValue = params[i];
+                let paramType = currentParams[i - 1].type;
+                if (validateParam(paramType, paramValue)) {
+                    currentParams[i - 1].value = getParamValue(paramType, paramValue);
+                }
+                else {
+                    console.error('Param type is not correct');
+                    return false;
+                }
             }
+            return currentParams;
         }
-        if (value) {
-            return value;
-        }
-        else {
-            return null;
-        }
+        return [];
     }
+
 
     function matchRegExp(url, regExpObj) {
         let match = url.match(regExpObj);
@@ -162,14 +252,18 @@ let router = (function () {
 
     function addRegExpToPages() {
         routes.forEach(function (element) {
-            element.regexp = buildRegExpFromPagePath(element.path);
-            return element;
+            //element.regexp = buildRegExpFromPagePath(element);
+            buildRegExpFromPagePath(element);
+            //return element;
         });
     }
 
     function getPageNameFromUrl(url) {
         let pageName = null;
-        routes.forEach(function (value, key, map) {
+
+
+        routes.forEach(function (value, key) {
+
             if (matchRegExp(url, value.regexp)) {
                 pageName = key;
             }
@@ -197,16 +291,29 @@ let router = (function () {
         changePage(pageName);
     }
 
-    function pushToHistoryStack(route) {
+    function pushToHistoryStack(route,params) {
         let currentState = window.history.state;
-        let currentUrl = window.location.href;
-        if (currentState == null || currentState.page !== route.page) {
+
+        let currentUrl = createUrl(route,params);
+
+        let previousUrl = false;
+
+
+        if (currentState !== null) {
+            previousUrl = typeof currentState.activeUrl !== "undefined" && currentState.activeUrl !== null ? currentState.activeUrl : false;
+        }
+
+        let pageChanged =  !previousUrl || (previousUrl && previousUrl !== currentUrl);
+
+        if (pageChanged) {
+            route.activeUrl = currentUrl;
             window.history.pushState(route, null, currentUrl);
         }
     }
 
     function init() {
         addRegExpToPages();
+
         let path = window.location.href;
         let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
@@ -240,7 +347,7 @@ let router = (function () {
         }
         changePage(pageName);
         if (typeof param.callbackEvent !== "undefined") {
-            trigger(param.callbackEvent,param);
+            trigger(param.callbackEvent, param);
         }
     });
 
