@@ -101,30 +101,22 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
-
-        //vraca novo stanje
-        //url se promenio nakon show page;
-        // let currentUrl = console.log('WINDOW LOCATION', window.location);
         let currentUrl = window.location.href;
         console.log('window location current href', currentUrl);
         console.log('params', params);
-
-        let paramValue = getParamValue(currentUrl);
-        return paramValue;
+/*        let paramValue = getParamValue(currentUrl);
+        return paramValue;*/
     }
 
 
     function buildRegExp(path) {
         let regExpPath = path;
         let pattern = /{(.*?)}/gi;
-
         while (match = pattern.exec(path)) {
             let paramString = match[1],
                 [paramName, paramType] = paramString.split(":");
-
             params[paramsCounter].name = paramName;
             params[paramsCounter].type = paramType;
-
             let regExpPart;
             switch (paramType) {
                 case "integer":
@@ -133,13 +125,11 @@ let router = (function () {
                 case "string":
                     regExpPart = "([A-Za-z0-9-._]+)";
             }
-
             let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
             regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
 
             params[paramsCounter].regexp = regExpPath;
         }
-
         if (pattern.exec(path)) {
             paramsCounter++;
             params.push({
@@ -149,9 +139,7 @@ let router = (function () {
                 value: ''
             });
         }
-
         regExpPath = regExpPath.replace(/\//g, "\\/") + "$";
-
         let regExpPathObj = new RegExp(regExpPath);
         console.log('params', params);
         console.log('regexpobject', regExpPathObj);
