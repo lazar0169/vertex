@@ -100,13 +100,8 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
-
-        let currentUrl = window.location.href;
-
-        console.log('window location current href', currentUrl);
-        console.log('params', params);
+        let currentUrl = window.location.pathname;
         let paramValue = getParamsFromUrl(currentUrl);
-        console.log('paramValue koju smo dobili iz URL u change page', paramValue);
         return paramValue;
     }
 
@@ -129,7 +124,8 @@ let router = (function () {
             }
             let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
             regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
-            params[paramsCounter].regexp = regExpPath;
+            let regExpPathObj1 = new RegExp(regExpPath);
+            params[paramsCounter].regexp = regExpPathObj1;
             params.push({
                 name: '',
                 type: '',
@@ -144,28 +140,14 @@ let router = (function () {
 
 
     function getParamsFromUrl(url) {
-        console.log('usli smo u getparamsfromurl');
         let value;
         for (let i = 0; i < params.length-1; i++) {
-            console.log('url', url);
             let regExp = params[i].regexp;
-            console.log('regExp', regExp);
-            if (url.match(regExp)) {
-                value = regExp.exec(url);
-                params[i].value = value;
-                console.log('exec value', value);
+            if (regExp.exec(url)) {
+                value = regExp.exec(url)[1];
             }
         }
         if (value) {
-            routes.forEach(function (element) {
-                for (let k = 0; k < params.length; k++) {
-                    if (element.regexp === params[k].regexp) {
-                        element.params = params[k];
-                    }
-                }
-            });
-            console.log(routes);
-            console.log(value);
             return value;
         }
         else {
@@ -217,14 +199,14 @@ let router = (function () {
 
     function pushToHistoryStack(route) {
         let currentState = window.history.state;
+        let currentUrl = window.location.href;
         if (currentState == null || currentState.page !== route.page) {
-            window.history.pushState(route, null, route.path);
+            window.history.pushState(route, null, currentUrl);
         }
     }
 
     function init() {
         addRegExpToPages();
-        console.log('routes pri initu: ', routes);
         let path = window.location.href;
         let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
@@ -235,7 +217,6 @@ let router = (function () {
             changePage('home');
         }
         bindNavigationLinkHandlers();
-        console.log('route na kraju inita', routes);
     }
 
     //events
