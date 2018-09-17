@@ -9,7 +9,7 @@ let router = (function () {
     routes.set('casino/edit', {
         page: 'casino/edit',
         id: '#page-casino-edit',
-    path: '/casino/{casinoId:integer}'
+        path: '/casino/{casinoId:integer}'
     });
     routes.set('casino', {
         page: 'casino',
@@ -58,7 +58,8 @@ let router = (function () {
             {
                 name: '',
                 type: '',
-                regexp: ''
+                regexp: '',
+                value: ''
             }
         ];
 
@@ -144,7 +145,8 @@ let router = (function () {
             params.push({
                 name: '',
                 type: '',
-                regexp: ''
+                regexp: '',
+                value: ''
             });
         }
 
@@ -183,13 +185,13 @@ let router = (function () {
     }
 
     function getPageNameFromUrl(url) {
-        let route = null;
+        let pageName = null;
         routes.forEach(function (value, key, map) {
             if (matchRegExp(url, value.regexp)) {
-                route = key;
+                pageName = key;
             }
         });
-        return route;
+        return pageName;
     }
 
     function bindNavigationLinkHandlers() {
@@ -221,6 +223,7 @@ let router = (function () {
 
     function init() {
         addRegExpToPages();
+        console.log(routes);
         let path = window.location.href;
         let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
