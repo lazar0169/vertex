@@ -106,6 +106,7 @@ let router = (function () {
         console.log('window location current href', currentUrl);
         console.log('params', params);
         let paramValue = getParamsFromUrl(currentUrl);
+        console.log('paramValue koju smo dobili iz URL u change page', paramValue);
         return paramValue;
     }
 
@@ -143,26 +144,34 @@ let router = (function () {
 
 
     function getParamsFromUrl(url) {
+        console.log('usli smo u getparamsfromurl');
         let value;
-        for (let i = 0; i < params.length; i++) {
-            if (url.match(params[i].regexp)) {
-                params[i].value = 'cao';
-                value = 'cao';
+        for (let i = 0; i < params.length-1; i++) {
+            console.log('url', url);
+            let regExp = params[i].regexp;
+            console.log('regExp', regExp);
+            if (url.match(regExp)) {
+                value = regExp.exec(url);
+                params[i].value = value;
+                console.log('exec value', value);
             }
         }
-        routes.forEach(function (element) {
-            for (let k = 0; k < params.length; k++) {
-                if (element.regexp === params[k].regexp) {
-                    element.params = params[k];
+        if (value) {
+            routes.forEach(function (element) {
+                for (let k = 0; k < params.length; k++) {
+                    if (element.regexp === params[k].regexp) {
+                        element.params = params[k];
+                    }
                 }
-            }
-            return element;
-        });
-        console.log(routes);
-        console.log(value);
-        return value;
+            });
+            console.log(routes);
+            console.log(value);
+            return value;
+        }
+        else {
+            return null;
+        }
     }
-
 
     function matchRegExp(url, regExpObj) {
         let match = url.match(regExpObj);
@@ -175,20 +184,6 @@ let router = (function () {
             return element;
         });
     }
-
-/*    function getParamValue(currentUrl) {
-        console.log('usli smo u get param value');
-        let pageName = getPageNameFromUrl(currentUrl);
-        console.log('page name get param value', pageName);
-        let pageNameRegexp = routes.get(pageName).regexp;
-        console.log('pageNameRegexp', pageNameRegexp);
-        // console.log('regExpUrl u get param value', regExpUrl);
-        for (let i = 0; i < params.length; i++) {
-            if (pageNameRegexp === params[i].regexp) {
-                console.log('ovde treba da izvucemo parametar');
-            }
-        }
-    }*/
 
     function getPageNameFromUrl(url) {
         let pageName = null;
@@ -240,6 +235,7 @@ let router = (function () {
             changePage('home');
         }
         bindNavigationLinkHandlers();
+        console.log('route na kraju inita', routes);
     }
 
     //events
