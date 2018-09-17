@@ -3,53 +3,53 @@ let router = (function () {
     let routes = new Map();
     routes.set('home', {
         page: 'home',
-        path: '/',
-        id: '#page-home'
+        id: '#page-home',
+        path: '/'
     });
     routes.set('casino/edit', {
         page: 'casino/edit',
-        path: '/casino/{casinoId:integer}',
-        id: '#page-casino-edit'
+        id: '#page-casino-edit',
+    path: '/casino/{casinoId:integer}'
     });
     routes.set('casino', {
         page: 'casino',
-        path: '/casino',
-        id: '#page-casino'
+        id: '#page-casino',
+        path: '/casino'
     });
     routes.set('jackpot', {
         page: 'jackpot',
-        path: '/jackpot',
         id: '#page-jackpot',
+        path: '/jackpot'
     });
     routes.set('tickets', {
         page: 'tickets',
-        path: '/tickets',
-        id: '#page-tickets'
+        id: '#page-tickets',
+        path: '/tickets'
     });
     routes.set('AFT', {
         page: 'AFT',
-        path: '/AFT',
-        id: '#page-AFT'
+        id: '#page-AFT',
+        path: '/AFT'
     });
     routes.set('machines', {
         page: 'machines',
-        path: '/machines',
-        id: '#page-machines'
+        id: '#page-machines',
+        path: '/machines'
     });
     routes.set('reports', {
         page: 'reports',
-        path: '/reports',
-        id: '#page-reports'
+        id: '#page-reports',
+        path: '/reports'
     });
     routes.set('users', {
-        path: '/users',
+        page: 'users',
         id: '#page-users',
-        page: 'users'
+        path: '/users'
     });
     routes.set('service', {
         page: 'service',
-        path: '/service',
-        id: '#page-service'
+        id: '#page-service',
+        path: '/service'
     });
 
     let match,
@@ -105,17 +105,10 @@ let router = (function () {
         //url se promenio nakon show page;
         // let currentUrl = console.log('WINDOW LOCATION', window.location);
         let currentUrl = window.location.href;
-
         console.log('window location current href', currentUrl);
-
         console.log('params', params);
 
-        let paramValue;
-
-        console.log('change page paramvalue usli smo tu');
-
-        paramValue = getParamValue(currentUrl);
-
+        let paramValue = getParamValue(currentUrl);
         return paramValue;
     }
 
@@ -230,17 +223,12 @@ let router = (function () {
         addRegExpToPages();
         let path = window.location.href;
         let pageName = getPageNameFromUrl(path);
-        let route = routes.get(pageName);
-        if (route != null) {
-            console.log('da li smo mozda usli gde se ne poziva change page');
-            changePage(route.page);
-            // showPage(route.page);
-            // pushToHistoryStack(route);
+        if (pageName != null) {
+            changePage(pageName);
         }
         else {
             console.error('Page not found!');
-            let homeRoute = routes.get('home');
-            changePage(homeRoute.page);
+            changePage('home');
         }
         bindNavigationLinkHandlers();
     }
