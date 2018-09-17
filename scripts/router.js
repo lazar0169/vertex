@@ -9,7 +9,7 @@ let router = (function () {
     routes.set('casino/edit', {
         page: 'casino/edit',
         id: '#page-casino-edit',
-        path: '/casino/{casinoId:integer}'
+        path: '/casino/edit/{casinoId:integer}'
     });
     routes.set('casino', {
         page: 'casino',
@@ -52,8 +52,7 @@ let router = (function () {
         path: '/service'
     });
 
-    let match,
-        paramsCounter = 0,
+    let paramsCounter = -1,
         params = [
             {
                 name: '',
@@ -101,20 +100,22 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
+
         let currentUrl = window.location.href;
+
         console.log('window location current href', currentUrl);
         console.log('params', params);
-/*        let paramValue = getParamValue(currentUrl);
-        return paramValue;*/
+        let paramValue = getParamsFromUrl(currentUrl);
+        return paramValue;
     }
 
-
-    function buildRegExp(path) {
-        let regExpPath = path;
-        let pattern = /{(.*?)}/gi;
-        while (match = pattern.exec(path)) {
-            let paramString = match[1],
-                [paramName, paramType] = paramString.split(":");
+    function buildRegExpFromPagePath(path) {
+        let regExpPath = path,
+            pattern = /{(.*?)}/gi, //bilo sta izmedju {} zagrada
+            paramStringMatch = pattern.exec(regExpPath);
+        if (paramStringMatch) {
+            paramsCounter++;
+            let [paramName, paramType] = paramStringMatch[1].split(":");
             params[paramsCounter].name = paramName;
             params[paramsCounter].type = paramType;
             let regExpPart;
@@ -127,11 +128,7 @@ let router = (function () {
             }
             let stringToReplaceInOriginalPath = "{" + paramName + ":" + paramType + "}";
             regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
-
             params[paramsCounter].regexp = regExpPath;
-        }
-        if (pattern.exec(path)) {
-            paramsCounter++;
             params.push({
                 name: '',
                 type: '',
@@ -141,10 +138,31 @@ let router = (function () {
         }
         regExpPath = regExpPath.replace(/\//g, "\\/") + "$";
         let regExpPathObj = new RegExp(regExpPath);
-        console.log('params', params);
-        console.log('regexpobject', regExpPathObj);
         return regExpPathObj;
     }
+
+
+    function getParamsFromUrl(url) {
+        let value;
+        for (let i = 0; i < params.length; i++) {
+            if (url.match(params[i].regexp)) {
+                params[i].value = 'cao';
+                value = 'cao';
+            }
+        }
+        routes.forEach(function (element) {
+            for (let k = 0; k < params.length; k++) {
+                if (element.regexp === params[k].regexp) {
+                    element.params = params[k];
+                }
+            }
+            return element;
+        });
+        console.log(routes);
+        console.log(value);
+        return value;
+    }
+
 
     function matchRegExp(url, regExpObj) {
         let match = url.match(regExpObj);
@@ -153,12 +171,12 @@ let router = (function () {
 
     function addRegExpToPages() {
         routes.forEach(function (element) {
-            element.regexp = buildRegExp(element.path);
+            element.regexp = buildRegExpFromPagePath(element.path);
             return element;
         });
     }
 
-    function getParamValue(currentUrl) {
+/*    function getParamValue(currentUrl) {
         console.log('usli smo u get param value');
         let pageName = getPageNameFromUrl(currentUrl);
         console.log('page name get param value', pageName);
@@ -170,7 +188,7 @@ let router = (function () {
                 console.log('ovde treba da izvucemo parametar');
             }
         }
-    }
+    }*/
 
     function getPageNameFromUrl(url) {
         let pageName = null;
@@ -211,7 +229,7 @@ let router = (function () {
 
     function init() {
         addRegExpToPages();
-        console.log(routes);
+        console.log('routes pri initu: ', routes);
         let path = window.location.href;
         let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
