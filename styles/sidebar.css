@@ -35,9 +35,7 @@
     transition: all 0.1s ease;
 }
 
-.collapse .list-management>.custom-tooltip, .collapse #global-search>.custom-tooltip {
-    text-align: center;
-    background-color: transparent;
+.collapse #global-search>.custom-tooltip, .collapse #icon-collapse>.custom-tooltip {
     width: 100%;
 }
 
@@ -83,7 +81,6 @@
 }
 
 #sidebar-list {
-    /* tooltip-text conflict */
     overflow-x: hidden;
     overflow-y: auto;
     height: 70%;
@@ -117,18 +114,23 @@
     text-decoration: none;
 }
 
-.tooltip-text {
+#tooltip-text {
     color: rgb(120, 144, 156);
     background-color: rgb(0, 0, 0);
-    position: absolute;
+    position: fixed;
     text-align: center;
     border-radius: 5px;
-    left: 50px;
+    left: 55px;
     display: block;
-    z-index: 1;
+    visibility: visible;
+    padding: 0 1rem;
+    width: auto;
+    height: auto;
+    font-size: 20px;
+    z-index: 1000;
 }
 
-.tooltip-text:before {
+#tooltip-text:before {
     content: "";
     position: absolute;
     right: 100%;
@@ -138,6 +140,16 @@
     border-top: 0.25em solid transparent;
     border-right: 0.25em solid rgb(0, 0, 0);
     border-bottom: 0.25em solid transparent;
+}
+
+#tooltip-text.hidden {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    border: none;
+    padding: 0;
+    pointer-events: none;
+    font-size: 0;
 }
 
 #team-logo {
@@ -153,14 +165,6 @@
     width: auto;
     height: auto;
     opacity: 1;
-    font-size: 20px;
-}
-
-.collapse #sidebar-list>div:hover>.tooltip-text, .collapse #global-search:hover>.tooltip-text, .collapse #icon-collapse:hover>.tooltip-text {
-    visibility: visible;
-    padding: 0 1rem;
-    width: auto;
-    height: auto;
     font-size: 20px;
 }
 

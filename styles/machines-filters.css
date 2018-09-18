@@ -4,13 +4,16 @@
     width: 100%;
     background: rgba(38, 50, 56);
     color: rgb(120, 144, 156);
-    height: 6%;
     display: inline-block;
+}
+
+#machines-filter>div {
+    display: inline-flex;
+    align-items: center;
 }
 
 #machine-filters-content {
     width: auto;
-    height: 100%;
     border: 1px solid black;
     border-bottom: 0;
     border-top: 0;
@@ -19,11 +22,11 @@
 }
 
 #machine-filters-content>div {
-    padding: 0 0.5rem;
+    padding: 0.5rem;
 }
 
 #machine-search {
-    padding: 0 0.5rem;
+    padding: 0.5rem;
     display: inline-flex;
 }
 
@@ -33,27 +36,14 @@
     cursor: pointer;
 }
 
-#auto-select-status-details>div {
-    height: 100%;
-}
-
-#machine-filters-show-space {
-    padding: 0.5rem;
-}
-
-#machine-filters-number-machines {
-    padding: 0 0.5rem;
-}
-
 .machine-filters-right {
     display: inline-flex;
     float: right;
-    height: 100%;
 }
 
 .machine-filters-right>div {
-    border-left: 1px solid black;
-    padding: 0 0.5rem;
+     border-left: 1px solid black;
+    padding: 0.5rem;
 }
 
 .mdi-view-sequential, .mdi-view-headline {

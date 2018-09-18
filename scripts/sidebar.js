@@ -11,6 +11,7 @@ const sidebar = (function () {
     let blackArea = $$('#black-area');
     let mainContent = $$('#main-content');
     let editMode = $$('#machine-edit-mode');
+    let tooltipText = $$('#tooltip-text');
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
@@ -113,8 +114,18 @@ const sidebar = (function () {
                                             <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
                                             <div class="list-name">${data[category].category}</div>
                                         </div>
-                                        <span class="tooltip-text hidden">${data[category].category}</span>
                                     </div>`;
+            tempFragment.childNodes[0].addEventListener('mouseenter', function () {
+                if (sidebarMenu.classList.contains('collapse')) {
+                    showTooltip(category);
+                }
+            });
+            tempFragment.childNodes[0].addEventListener('mouseleave', function () {
+                if (sidebarMenu.classList.contains('collapse')) {
+                    tooltipText.classList.add('hidden');
+                }
+            });
+
             tempFragment.childNodes[0].addEventListener('click', function () {
                 categorySelectedId = category;
                 searchCategory = category;
@@ -330,5 +341,12 @@ const sidebar = (function () {
             'value': recentArray
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
+    }
+
+    function showTooltip(category) {
+        let rect = $$(`#${category}`).getBoundingClientRect();
+        tooltipText.style.top = rect.top + rect.height / 4;
+        tooltipText.innerHTML = data[category].category;
+        tooltipText.classList.remove('hidden');
     }
 })();
