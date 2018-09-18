@@ -4,4 +4,4 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^(.*)$ /bin/index.html [L,QSA] #ovo ce da nam sav saobracaj sve zahteve preusmeri na index.html
+RewriteRule ^(.*)$ index.html [L,QSA] #redirect all traffic to index.html
