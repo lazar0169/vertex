@@ -130,18 +130,18 @@ let router = (function () {
         route.params = [];
         if (paramsArray !== null) {
             paramsArray.forEach(function (element) {
-                element = element.replace("{", "").replace("}", "");
-                let paramArray = element.split(":");
+                element = element.replace('{', '').replace('}', '');
+                let paramArray = element.split(':');
                 route.params.push({
                     name: paramArray[0],
                     type: paramArray[1]
                 });
                 let regExpPart = buildParamRegex(paramArray[1]);
-                let stringToReplaceInOriginalPath = "{" + paramArray[0] + ":" + paramArray[1] + "}";
+                let stringToReplaceInOriginalPath = '{' + paramArray[0] + ':' + paramArray[1] + '}';
                 regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
             });
         }
-        regExpPath += "$";
+        regExpPath +='$';
         route.regexp = new RegExp(regExpPath);
     }
 
@@ -173,7 +173,7 @@ let router = (function () {
         let url = route.path;
         for (let i = 0; i < params.length; i++) {
             let param = params[i];
-            let paramString =  "{" + param.name +":" + param.type +"}";
+            let paramString =  '{' + param.name +':' + param.type +'}';
             url = url.replace(paramString,param.value);
         }
         return url;
@@ -181,20 +181,20 @@ let router = (function () {
 
     function buildParamRegex(paramType) {
         switch (paramType) {
-            case "integer":
-                return "(\\d+)";
-            case "string":
-                return "([A-Za-z0-9-._]+)";
+            case 'integer':
+                return '(\\d+)';
+            case 'string':
+                return '([A-Za-z0-9-._]+)';
             default:
-                return "([A-Za-z0-9-._]+)";
+                return '([A-Za-z0-9-._]+)';
         }
     }
 
     function getParamValue(paramType, value) {
         switch (paramType) {
-            case "integer":
+            case 'integer':
                 return parseInt(value);
-            case "string":
+            case 'string':
                 return value;
             default:
                 return value;
@@ -204,11 +204,11 @@ let router = (function () {
     function validateParam(paramType, value) {
         let regExp = null;
         switch (paramType) {
-            case "integer":
-                regExp = new RegExp("^(\\d+)$");
+            case 'integer':
+                regExp = new RegExp('^(\\d+)$');
                 break;
-            case "string":
-                regExp = new RegExp("^([A-Za-z0-9-._]+)$");
+            case 'string':
+                regExp = new RegExp('^([A-Za-z0-9-._]+)$');
                 break;
             default:
                 regExp = null;
@@ -251,7 +251,7 @@ let router = (function () {
             currentUrl = createUrlFromRouteAndParams(route, params),
             previousUrl = false;
         if (currentState !== null) {
-            previousUrl = typeof currentState.activeUrl !== "undefined" && currentState.activeUrl !== null ? currentState.activeUrl : false;
+            previousUrl = typeof currentState.activeUrl !== 'undefined' && currentState.activeUrl !== null ? currentState.activeUrl : false;
         }
         let pageChanged =  !previousUrl || (previousUrl && previousUrl !== currentUrl);
         if (pageChanged) {
@@ -321,7 +321,7 @@ let router = (function () {
             pageName = getPageNameFromUrl(param.url);
         }
         changePage(pageName);
-        if (typeof param.callbackEvent !== "undefined") {
+        if (typeof param.callbackEvent !== 'undefined') {
             trigger(param.callbackEvent, param);
         }
     });
