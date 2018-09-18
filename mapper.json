@@ -8,8 +8,7 @@
         "styles": [
             "index.css",
             "sidebar.css",
-            "main-content.css"
-            "sidebar.css",
+            "main-content.css",
             "modify-spectre.css"
         ]
     }

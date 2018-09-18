@@ -114,7 +114,7 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
-        let eventName = 'page-'+pageName+'-activated';
+        let eventName = 'page-' + pageName + '-activated';
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
@@ -141,7 +141,7 @@ let router = (function () {
                 regExpPath = regExpPath.replace(stringToReplaceInOriginalPath, regExpPart);
             });
         }
-        regExpPath +='$';
+        regExpPath += '$';
         route.regexp = new RegExp(regExpPath);
     }
 
@@ -173,8 +173,8 @@ let router = (function () {
         let url = route.path;
         for (let i = 0; i < params.length; i++) {
             let param = params[i];
-            let paramString =  '{' + param.name +':' + param.type +'}';
-            url = url.replace(paramString,param.value);
+            let paramString = '{' + param.name + ':' + param.type + '}';
+            url = url.replace(paramString, param.value);
         }
         return url;
     }
@@ -253,9 +253,10 @@ let router = (function () {
         if (currentState !== null) {
             previousUrl = typeof currentState.activeUrl !== 'undefined' && currentState.activeUrl !== null ? currentState.activeUrl : false;
         }
-        let pageChanged =  !previousUrl || (previousUrl && previousUrl !== currentUrl);
+        let pageChanged = !previousUrl || (previousUrl && previousUrl !== currentUrl);
         if (pageChanged) {
             route.activeUrl = currentUrl;
+            //avoid state duplication on clicking back
             window.history.pushState(route, null, currentUrl);
         }
     }
@@ -303,14 +304,18 @@ let router = (function () {
     //events
 
     //clicking back
-    window.onpopstate = function (event) {
+    window.addEventListener('popstate', function (event) {
         event.preventDefault();
         event.stopPropagation();
+        if (event.state === null && window.history.length > 0) {
+            history.back();
+            return;
+        }
         if (typeof event.state.page !== 'undefined') {
             let previousPage = event.state.page;
             changePage(previousPage, false);
         }
-    };
+    });
 
     on('router/change/page', function (param) {
         let pageName = null;
