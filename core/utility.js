@@ -9,9 +9,7 @@ function $$(selector) {
     }
 }
 
-//add i remove class
-
-
+//add and remove class
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
 const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;

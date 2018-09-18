@@ -30,9 +30,6 @@ const sidebar = (function () {
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
         chosenLink.innerHTML = data[categorySelectedId].category;
-
-
-
     });
 
     collapseButton.addEventListener('click', function () {
@@ -121,8 +118,8 @@ const sidebar = (function () {
                     tempFragment.id = `link-${categoryValue.id}`;
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
-                    //ToDo: Lazar - map links and actual routes - hardcoded to casino
-                    tempFragment.setAttribute('href', '/casino');
+                    //elements in search mapped to coresponding path
+                    tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.id}`;
                     tempFragment.innerHTML = categoryValue.name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.id}`;
@@ -148,12 +145,13 @@ const sidebar = (function () {
                             let tempValue = document.createElement('a');
                             //element-navigation-link class is needed for functionalities in router
                             tempValue.classList = 'link-list element-navigation-link';
-                            //ToDo: Lazar - map links and actual routes - hardcoded to casino
-                            tempValue.setAttribute('href', '/casino');
+                            //elements in search mapped to coresponding path
+                            tempValue.href = `/${category.toLowerCase()}/${value.id}`;
                             tempValue.id = `link-${value.id}`;
                             tempValue.innerHTML = `${value.name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.name} (${value.categoryName})`;
+                                tempValue.href = `/${value.category.toLowerCase()}/${value.id}`;
                             } else {
                                 tempValue.innerHTML = value.name;
                             }
@@ -183,8 +181,6 @@ const sidebar = (function () {
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');;
         selectLink(linkSelectedId);
-
-
     }
 
     // highlight chosen link
