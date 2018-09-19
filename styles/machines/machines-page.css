@@ -1,0 +1,7 @@
+#machines-content {
+    position: relative;
+    width: 100%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+}

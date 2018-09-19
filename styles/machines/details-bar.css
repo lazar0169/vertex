@@ -124,6 +124,7 @@
 
 #machine-jackpot-server {
     margin-left: 1.3rem;
+    padding-top: 0.5rem;
 }
 
 #machine-jackpot {
@@ -238,7 +239,7 @@
 
 #machine-meters-tab-header {
     width: 100%;
-    background: yellow;
+    border-bottom: 1px solid rgb(55, 71, 79);
 }
 
 #machine-meters-content {
