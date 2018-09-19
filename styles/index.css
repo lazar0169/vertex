@@ -25,18 +25,3 @@ body {
 #black-area.show {
     width: 100%;
 }
-
-#main-content {
-    background-color: rgb(55, 71, 79);
-    height: 100%;
-    flex: 1;
-    float: right;
-    transition: all 0.1s ease;
-    padding: 0 1%;
-}
-
-#top-bar {
-    background: transparent;
-    color: white;
-    height: 5%;
-}

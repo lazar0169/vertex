@@ -3,7 +3,8 @@
         "scripts": [
             "data.js",
             "sidebar.js",
-            "details-bar.js"
+            "details-bar.js",
+            "router.js"
         ],
         "styles": [
             "index.css",
@@ -13,7 +14,9 @@
             "machines/machines-filters.css",
             "machines/machines-table.css",
             "machines/details-bar.css",
-            "machines/edit-page.css"
+            "machines/edit-page.css",
+            "main-content.css",
+            "modify-spectre.css"
         ]
     }
 }

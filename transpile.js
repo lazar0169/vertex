@@ -85,6 +85,13 @@ try {
     console.log('Error: Copying failed! Please check resource (images, fonts, vendor)');
 }
 
+try {
+    copy('.htaccess', `${buildFolder}/.htaccess`);
+    copy('web.config', `${buildFolder}/web.config`);
+} catch (error) {
+    console.log('Error: Copying failed! Please check server config files (.htaccess, web.config)');
+}
+
 function isVendorSafe(vendor) {
     for (let item of vendor) {
         if (item.includes('.js')) {
@@ -138,12 +145,13 @@ function copyDir(src, dest) {
             copy(path.join(src, files[i]), path.join(dest, files[i]));
         }
     }
-    function copy(src, dest) {
-        var oldFile = fs.createReadStream(src);
-        var newFile = fs.createWriteStream(dest);
-        oldFile.pipe(newFile);
-    };
 }
+
+function copy(src, dest) {
+    var oldFile = fs.createReadStream(src);
+    var newFile = fs.createWriteStream(dest);
+    oldFile.pipe(newFile);
+};
 
 function removeFolder(path) {
     if (fs.existsSync(path)) {

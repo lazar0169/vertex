@@ -16,7 +16,10 @@
     text-decoration: underline;
 }
 
-.btn-cancel:focus, .btn-success:focus, .btn-success:hover, .btn-cancel:hover {
+.btn-cancel:focus,
+.btn-success:focus,
+.btn-success:hover,
+.btn-cancel:hover {
     border: none;
     background: transparent;
     box-shadow: unset !important;
@@ -36,17 +39,27 @@
     background: rgb(36, 82, 108) !important;
 }
 
-.form-switch, .form-checkbox, .form-radio {
+.form-switch,
+.form-checkbox,
+.form-radio {
     color: rgb(120, 144, 156);
 }
 
-.form-switch .form-icon, .form-checkbox .form-icon, .form-switch input:checked+.form-icon, .form-switch input:focus+.form-icon, .form-checkbox input:focus+.form-icon, .form-checkbox input:checked+.form-icon, .form-radio input+.form-icon {
+.form-switch .form-icon,
+.form-checkbox .form-icon,
+.form-switch input:checked+.form-icon,
+.form-switch input:focus+.form-icon,
+.form-checkbox input:focus+.form-icon,
+.form-checkbox input:checked+.form-icon,
+.form-radio input+.form-icon {
     background: rgb(55, 71, 79);
     border: .05rem solid rgb(120, 144, 156);
     box-shadow: unset;
 }
 
-.form-radio input:checked+.form-icon, .form-radio input:active+.form-icon, .form-radio input:focus+.form-icon {
+.form-radio input:checked+.form-icon,
+.form-radio input:active+.form-icon,
+.form-radio input:focus+.form-icon {
     background: white;
     border: .05rem solid white;
     box-shadow: unset;
@@ -80,16 +93,20 @@
     background: rgb(30, 155, 227);
 }
 
-.form-checkbox input:checked+.form-icon, .form-radio input:checked+.form-icon {
+.form-checkbox input:checked+.form-icon,
+.form-radio input:checked+.form-icon {
     background: white;
     border-color: rgb(30, 155, 227);
 }
 
-.form-checkbox input:checked+.form-icon+div, .form-radio input:checked+.form-icon+div {
+.form-checkbox input:checked+.form-icon+div,
+.form-radio input:checked+.form-icon+div {
     color: white;
 }
 
-.form-checkbox input:active+.form-icon, .form-radio input:active+.form-icon, .form-switch input:active+.form-icon::before {
+.form-checkbox input:active+.form-icon,
+.form-radio input:active+.form-icon,
+.form-switch input:active+.form-icon::before {
     background: rgb(55, 71, 79);
 }
 
@@ -102,7 +119,8 @@
     background: rgb(55, 71, 79) url("data:image/svg+xml;charset=utf8,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%204%205'%3E%3Cpath%20fill='%23667189'%20d='M2%200L0%202h4zm0%205L0%203h4z'/%3E%3C/svg%3E") no-repeat right .35rem center/.4rem .5rem !important;
 }
 
-.form-select:focus, .form-select:active {
+.form-select:focus,
+.form-select:active {
     border: none;
     border-color: unset;
     box-shadow: unset;
@@ -137,7 +155,8 @@
     border-radius: 32px;
 }
 
-tr, .table.table-striped tbody tr:nth-of-type(odd) {
+tr,
+.table.table-striped tbody tr:nth-of-type(odd) {
     background: rgb(38, 50, 56);
     ;
 }
@@ -158,6 +177,7 @@ table {
     cursor: pointer;
 }
 
-.table td, .table th {
+.table td,
+.table th {
     border-bottom: .05rem solid rgb(120, 144, 156);
 }
