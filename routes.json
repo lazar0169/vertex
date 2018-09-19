@@ -1,0 +1,66 @@
+[
+  {
+    "path": "/aft",
+    "view": "/views/aft/aft.html"
+  },
+  {
+    "path": "/",
+    "view": "/views/login/login.html"
+  },
+  {
+    "path": "/login",
+    "view": "/views/login/login.html"
+  },
+  {
+    "path": "/home",
+    "view": "/views/home/home.html"
+  },
+  {
+    "path": "/jackpots",
+    "view": "/views/jackpots/jackpots.html"
+  },
+  {
+    "path": "/jackpots/add",
+    "view": "/views/jackpots/add-jackpot.html"
+  },
+  {
+    "path": "/login",
+    "view": "/views/login/login.html"
+  },
+  {
+    "path": "/machines",
+    "view": "/views/machines/machines.html"
+  },
+  {
+    "path": "/machines/manage-machines/{id:string}",
+    "view": "/views/machines/manage-machines.html"
+  },
+  {
+    "path": "/machines/manage-machines/{id:integer}",
+    "view": "/views/machines/manage-machines.html"
+  },
+  {
+    "path": "/service",
+    "view": "/views/service/service.html"
+  },
+  {
+    "path": "/tickets",
+    "view": "/views/tickets/tickets.html"
+  },
+  {
+    "path": "/users",
+    "view": "/views/users/users-list.html"
+  },
+  {
+    "path": "/users/add",
+    "view": "/views/users/add-user.html"
+  },
+  {
+    "path": "/users/edit-user/{id:string}",
+    "view": "/views/users/edit-user.html"
+  },
+  {
+    "path": "/users/edit-user/{id: }",
+    "view": "/views/users/edit-user.html"
+  }
+]

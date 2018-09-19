@@ -1,5 +1,5 @@
 const sidebar = (function () {
-    let sidebarMenu = $$('#sidebar')
+    let sidebarMenu = $$('#sidebar');
     let listWrapper = $$('#sidebar-list');
     let collapseButton = $$('#icon-collapse');
     let navigationMenu = $$('#navigation-sidebar');
@@ -30,7 +30,6 @@ const sidebar = (function () {
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
         chosenLink.innerHTML = data[categorySelectedId].category;
-
     });
 
     collapseButton.addEventListener('click', function () {
@@ -87,6 +86,7 @@ const sidebar = (function () {
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
+
     }
 
     // function for collapse sidebar, show or hide navigation
@@ -116,7 +116,10 @@ const sidebar = (function () {
                 for (let categoryValue of tempData[searchCategory].value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.id = `link-${categoryValue.id}`;
-                    tempFragment.classList = 'link-list';
+                    //element-navigation-link class is needed for functionalities in router
+                    tempFragment.classList = 'link-list element-navigation-link';
+                    //elements in search mapped to coresponding path
+                    tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.id}`;
                     tempFragment.innerHTML = categoryValue.name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.id}`;
@@ -140,11 +143,15 @@ const sidebar = (function () {
                         }
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
-                            tempValue.classList = 'link-list';
+                            //element-navigation-link class is needed for functionalities in router
+                            tempValue.classList = 'link-list element-navigation-link';
+                            //elements in search mapped to coresponding path
+                            tempValue.href = `/${category.toLowerCase()}/${value.id}`;
                             tempValue.id = `link-${value.id}`;
                             tempValue.innerHTML = `${value.name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.name} (${value.categoryName})`;
+                                tempValue.href = `/${value.category.toLowerCase()}/${value.id}`;
                             } else {
                                 tempValue.innerHTML = value.name;
                             }
@@ -171,6 +178,8 @@ const sidebar = (function () {
             }
         }
         linkWrapper.appendChild(fragment);
+        //bind handlers to elements that are added dynamically after router init event
+        trigger('router/bind-handlers/navigation-links');;
         selectLink(linkSelectedId);
     }
 
@@ -307,4 +316,5 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
+
 })();

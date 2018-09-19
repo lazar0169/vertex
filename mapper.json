@@ -2,11 +2,13 @@
     "index": {
         "scripts": [
             "data.js",
-            "sidebar.js"    
+            "sidebar.js",
+            "router.js"
         ],
         "styles": [
             "index.css",
             "sidebar.css",
+            "main-content.css",
             "modify-spectre.css"
         ]
     }
