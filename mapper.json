@@ -3,7 +3,8 @@
         "scripts": [
             "data.js",
             "sidebar.js",
-            "router.js"
+            "router.js",
+            "template-engine.js"
         ],
         "styles": [
             "index.css",
