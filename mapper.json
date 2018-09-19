@@ -9,10 +9,11 @@
             "index.css",
             "sidebar.css",
             "modify-spectre.css",
-            "machines-filters.css",
-            "details-bar.css",
-            "edit-mode.css",
-            "machines-table.css"
+            "machines/machines-page.css",
+            "machines/machines-filters.css",
+            "machines/machines-table.css",
+            "machines/details-bar.css",
+            "machines/edit-page.css"
         ]
     }
 }
