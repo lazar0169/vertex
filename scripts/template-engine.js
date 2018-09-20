@@ -2,17 +2,20 @@ let template = (function(){
 
     let model = {
         home: {
-            name: 'nesto'
+            name: 'Home name'
         },
         casino: {
-            name: 'First casino',
-            edit: 'Nesto edit'
+            name: 'Casino name',
+            edit: 'Casino edit'
         },
         jackpot: {
             number: 123
         },
         tickets: {
-            nubmer: 15
+            number: 15
+        },
+        aft: {
+            name: 'AFT name'
         },
         machine: {
             number: 24
@@ -29,11 +32,9 @@ let template = (function(){
         }
     };
 
-    let templ = '<h1>Casino {{model.casino.name}}</h1>';
+    let templ = '<h1>Casino {{casino.name}}</h1>';
 
     function render(elementName, model) {
-        console.log('Element name: ', elementName);
-
         let paramPattern = /{{(.*?)}}/gi,
             placeholders,
             elementString,
@@ -47,25 +48,40 @@ let template = (function(){
 
         if (elementString.match(paramPattern)) {
             placeholders = elementString.match(paramPattern);
-            console.log('Placeholders: ', placeholders);
             for (let i = 0; i < placeholders.length; i++) {
                 let placeholder = placeholders[i],
                     value;
-                console.log('Placeholder: ', placeholder);
                 let placeholderValue = placeholder.replace('{{', '').replace('}}', '');
-                console.log('Placeholder value: ', placeholderValue);
-                value = eval(placeholderValue);
-                console.log('Value: ', value);
+                value = getValueFromModel(placeholderValue, model);
                 elementString = elementString.replace(placeholder, value);
-                console.log('Element string after the value has been replaced: ', elementString);
-                //TODO: Here we take js string and turn it into HTML
-                // element.innerHTML = elementString;
+                element.innerHTML = elementString;
             }
         }
         return element;
     }
 
+    function getValueFromModel(placeholderValue, model) {
+        let value = placeholderValue.split('.').reduce(function (prev, curr) {
+            return prev ? prev[curr] : null
+        }, model || self);
+        if (validateValue(value)) {
+            return value;
+        }
+        return null;
+    }
+
+    function validateValue(value) {
+        return !Array.isArray(value);
+    }
+
+    console.log(render('#page-home', model));
+    console.log(render('#page-casino-edit', model));
     console.log(render('#page-casino', model));
+    console.log(render('#page-jackpot', model));
+    console.log(render('#page-tickets', model));
+    console.log(render('#page-AFT', model));
+    console.log(render('#page-machines', model));
+    console.log(render('#page-reports', model));
     console.log(render('#page-users', model));
 
 })();
