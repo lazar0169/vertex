@@ -1,0 +1,98 @@
+<div id="machine-edit-mode" class="collapse">
+    <div id="machine-edit-header">
+        <div class="machine-edit-info">
+            <div id="machine-edit-id">
+                <input class="form-input" type="text" placeholder="No">
+            </div>
+            <div id="machine-edit-name">
+                <input class="form-input" type="text" placeholder="Machine name">
+            </div>
+
+
+            <div id="machine-edit-vendor">
+                <select class="form-select">
+                    <option style="display: none">Vendors</option>
+                    <option>Fazi</option>
+                    <option>Admiral</option>
+                    <option>Favorit</option>
+                </select></div>
+            <div id="machine-edit-type">
+                <select class="form-select">
+                    <option style="display: none">Type</option>
+                    <option>Slot Machine</option>
+                    <option>Rulet</option>
+                </select></div>
+        </div>
+
+        <div class="machine-edit-info">
+            <div id="machine-edit-serial">
+                <input class="form-input" type="text" placeholder="Serial Number">
+            </div>
+            <div id="machine-edit-serial-select">
+                <select class="form-select">
+                    <option style="display: none">X000000</option>
+                    <option>1111111</option>
+                    <option>2222222</option>
+                    <option>3333333</option>
+                    <option>4444444</option>
+                    <option>5555555</option>
+                </select>
+            </div>
+            <div>
+                <button id="machine-edit-remove" class="btn btn-cancel">Remove from casino</button>
+            </div>
+        </div>
+    </div>
+    <div id="machine-edit-content" class="overflow-content">
+        <div id="machine-edit-max-ticket" class="machine-edit-content-info">
+            <label class="form-label" for="max-ticket-printing">The max value for ticket printing:*</label>
+            <input class="form-input" type="text" id="max-ticket-printing" placeholder="7.000,00">
+        </div>
+        <div id="machine-edit-notification-value" class="machine-edit-content-info">
+            <label class="form-label" for="meter-value-exceeds">Notification when meter value exceeds:</label>
+            <input class="form-input" type="text" id="meter-value-exceeds" placeholder="1.000.000,00">
+        </div>
+        <div id="machine-edit-allow-promo-ticket">
+            <label class="form-checkbox">
+                <input type="checkbox">
+                <i class="form-icon"></i> <div>Allow the promo ticket on the machine</div>
+            </label>
+        </div>
+        <div class="machine-edit-speed-type">
+            <label class="form-label">Speed type:*</label>
+            <label class="form-radio">
+                <input type="radio" name="gender">
+                <i class="form-icon"></i> <div>Slow</div>
+            </label>
+            <label class="form-radio">
+                <input type="radio" name="gender" checked>
+                <i class="form-icon"></i> <div>Medium</div>
+            </label>
+            <label class="form-radio">
+                <input type="radio" name="gender">
+                <i class="form-icon"></i> <div>Fast</div>
+            </label>
+        </div>
+
+        <div id="machine-edit-enable-AFT">
+            <div>
+                <label class="form-checkbox">
+                    <input type="checkbox">
+                    <i class="form-icon"></i> <div>Enable AFT transaction</div>
+                </label>
+            </div>
+
+            <div>
+                <label class="form-label" for="max-value-transaction">The max value of transaction:</label>
+                <input class="form-input" type="text" id="max-value-transaction" placeholder="100.000,00">
+            </div>
+        </div>
+
+        <div>
+            <button id="machine-edit-save" class="btn btn-success">SAVE</button>
+            <button id="machine-edit-back" class="btn btn-cancel">Back</button>
+        </div>
+
+
+    </div>
+</div>

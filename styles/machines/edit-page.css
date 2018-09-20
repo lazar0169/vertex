@@ -1,0 +1,86 @@
+#machine-edit-mode {
+    position: absolute;
+    background-color: rgb(55, 71, 79);
+    height: 106%;
+    width: 100%;
+    top: -6%;
+    transition: all 0.1s ease;
+    padding: 1rem 0;
+    transform: translateX(0);
+    display: flex;
+    flex-flow: column;
+}
+
+#machine-edit-mode.collapse {
+    transform: translateX(105%);
+}
+
+.machine-edit-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: rgb(38, 50, 56);
+    padding: 0.5rem 0;
+}
+
+.machine-edit-info>div {
+    margin-left: 1rem;
+}
+
+#machine-edit-header>div:not(:first-child) {
+    box-shadow: inset 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.4);
+}
+
+#machine-edit-id {
+    width: 50px;
+}
+
+.machine-edit-info>div:last-child {
+    margin-right: 1rem;
+}
+
+#machine-edit-id>input {
+    text-align: center;
+}
+
+.machine-edit-info>#machine-edit-name, .machine-edit-info>#machine-edit-vendor, .machine-edit-info>#machine-edit-type {
+    width: 250px;
+}
+
+#machine-edit-serial {
+    width: 320px;
+}
+
+#machine-edit-serial-select {
+    width: 115px;
+}
+
+#machine-edit-remove {
+    color: red;
+}
+
+#machine-edit-remove:hover {
+    background: rgb(55, 71, 79);
+}
+
+#machine-edit-content {
+    margin-top: 1rem;
+    width: 100%;
+    background: rgb(38, 50, 56);
+    flex: 1;
+}
+
+#machine-edit-content>div {
+    padding: 0 1rem;
+    padding-top: 1rem;
+    width: 320px
+}
+
+#machine-edit-content>div:last-child {
+    padding-bottom: 1rem;
+}
+
+#machine-edit-enable-AFT>div:last-child {
+    padding: 0 1rem;
+    width: 320px
+}

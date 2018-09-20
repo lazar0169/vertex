@@ -1,35 +1,32 @@
 #main-content {
-    padding-left: 13%;
-    background-color: white;
+    background-color: rgb(55, 71, 79);
     height: 100%;
-    max-width: 88%;
+    flex: 1;
+    float: right;
+    padding: 0 1%;
     transition: all 0.1s ease;
+}
+
+#top-bar {
+    background: transparent;
+    color: white;
+    height: 5%;
 }
 
 #main-content.expand {
     width: 97.5%;
 }
 
-.navigation-links {
-    display: block;
-    float: left;
-}
-
 .element-navigation-link {
-    margin: 10px;
     float: left;
     display: block;
 }
 
 .element-page {
-    display: none;
+    display: none !important;
 }
 
 .element-page.active {
-    display: block;
+    display: block !important;
     float: left;
-}
-
-.hidden {
-    display: none;
 }
