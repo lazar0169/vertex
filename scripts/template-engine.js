@@ -34,30 +34,13 @@ let template = (function(){
 
     let templ = '<h1>Casino {{casino.name}}</h1>';
 
-    function render(elementName, model) {
-        let paramPattern = /{{(.*?)}}/gi,
-            placeholders,
-            elementString,
-            element = $$(elementName);
+    function getPlaceholders(elementString) {
+        let paramPattern = /{{(.*?)}}/gi;
+        return elementString.match(paramPattern);
+    }
 
-        if (element.length > 0) {
-            element = element[0];
-        }
-
-        elementString = element.outerHTML;
-
-        if (elementString.match(paramPattern)) {
-            placeholders = elementString.match(paramPattern);
-            for (let i = 0; i < placeholders.length; i++) {
-                let placeholder = placeholders[i],
-                    value;
-                let placeholderValue = placeholder.replace('{{', '').replace('}}', '');
-                value = getValueFromModel(placeholderValue, model);
-                elementString = elementString.replace(placeholder, value);
-                element.innerHTML = elementString;
-            }
-        }
-        return element;
+    function validateValue(value) {
+        return !Array.isArray(value);
     }
 
     function getValueFromModel(placeholderValue, model) {
@@ -70,8 +53,29 @@ let template = (function(){
         return null;
     }
 
-    function validateValue(value) {
-        return !Array.isArray(value);
+    function replaceValueInHtml(elementString, element) {
+        if (getPlaceholders(elementString)) {
+            let placeholders = getPlaceholders(elementString);
+            for (let i = 0; i < placeholders.length; i++) {
+                let placeholder = placeholders[i],
+                    value;
+                let placeholderValue = placeholder.replace('{{', '').replace('}}', '');
+                value = getValueFromModel(placeholderValue, model);
+                elementString = elementString.replace(placeholder, value);
+                element.innerHTML = elementString;
+            }
+        }
+    }
+
+    function render(elementName, model) {
+        let elementString,
+            element = $$(elementName);
+        if (element.length > 0) {
+            element = element[0];
+        }
+        elementString = element.outerHTML;
+        replaceValueInHtml(elementString, element);
+        return element;
     }
 
     console.log(render('#page-home', model));
@@ -83,5 +87,10 @@ let template = (function(){
     console.log(render('#page-machines', model));
     console.log(render('#page-reports', model));
     console.log(render('#page-users', model));
+
+    //trigerujemo callback event, kao u ruteru
+    if (typeof param.callbackEvent !== 'undefined') {
+        trigger(param.callbackEvent, {model:model, element:element});
+    }
 
 })();
