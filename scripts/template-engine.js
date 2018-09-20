@@ -1,4 +1,4 @@
-let template = (function(){
+let template = (function () {
 
     let model = {
         home: {
@@ -32,15 +32,32 @@ let template = (function(){
         }
     };
 
-    let templ = '<h1>Casino {{casino.name}}</h1>';
-
     function getPlaceholders(elementString) {
         let paramPattern = /{{(.*?)}}/gi;
         return elementString.match(paramPattern);
     }
 
     function validateValue(value) {
-        return !Array.isArray(value);
+        let valid = true;
+        if (typeof value === 'object' || Array.isArray(value)) {
+            valid = false;
+        }
+        if (!valid) {
+            console.error(value + "is not valid");
+        }
+        return valid;
+    }
+
+    function getPlaceholderValues(placeholders, model) {
+        let placeholderValues = [];
+        if (placeholders !== null && placeholders.length > 0) {
+            for (let i = 0; i < placeholders.length; i++) {
+                let placeholder = placeholders[i];
+                let property = placeholder.replace("{{", "").replace("}}", "").replace("model.", "");
+                placeholderValues.push({placeholder: placeholder, value: getValueFromModel(property, model)});
+            }
+        }
+        return placeholderValues;
     }
 
     function getValueFromModel(placeholderValue, model) {
@@ -53,45 +70,89 @@ let template = (function(){
         return null;
     }
 
-    function replaceValueInHtml(elementString, element, model) {
+    function replaceValueInHtml(elementString, placeholderValues) {
         if (getPlaceholders(elementString)) {
             let value;
-            let placeholders = getPlaceholders(elementString);
-            for (let i = 0; i < placeholders.length; i++) {
-                let placeholder = placeholders[i],
-                    value,
-                    placeholderValue = placeholder.replace('{{', '').replace('}}', '');
-                value = getValueFromModel(placeholderValue, model);
+            for (let i = 0; i < placeholderValues.length; i++) {
+                let placeholder = placeholderValues[i].placeholder;
+                value = placeholderValues[i].value;
                 elementString = elementString.replace(placeholder, value);
-                element.innerHTML = elementString;
             }
         }
+        return elementString;
     }
 
-    function render(elementName, model) {
-        let elementString,
-            element = $$(elementName);
-        if (element.length > 0) {
+    //TODO:
+    function createDomElementFromHtml(html) {
+        return document.createRange().createContextualFragment(html);
+    }
+
+    function render(templateElementSelector, model, callbackEvent) {
+        let element = $$(templateElementSelector);
+        if (element === null || element.length <= 0) {
+            console.error('template element does not exists');
+        }
+        else if (element.length > 0) {
             element = element[0];
         }
-        elementString = element.outerHTML;
-        replaceValueInHtml(elementString, element, model);
-        return element;
+        let placeholders = getPlaceholders(element.outerHTML),
+            placeholderValues = getPlaceholderValues(placeholders,model),
+            elementString = element.outerHTML,
+            replacedString = replaceValueInHtml(elementString, placeholderValues);
+        //TODO: let newElement =  createDomElementFromHtml(replacedString);
+        element.innerHTML = replacedString;
+        if (typeof callbackEvent !== 'undefined') {
+            trigger(callbackEvent, {model: model, element: element});
+        }
     }
 
-    console.log(render('#page-home', model));
-    console.log(render('#page-casino-edit', model));
-    console.log(render('#page-casino', model));
-    console.log(render('#page-jackpot', model));
-    console.log(render('#page-tickets', model));
-    console.log(render('#page-AFT', model));
-    console.log(render('#page-machines', model));
-    console.log(render('#page-reports', model));
-    console.log(render('#page-users', model));
-
-    //trigerujemo callback event, kao u ruteru
-    if (typeof param.callbackEvent !== 'undefined') {
-        trigger(param.callbackEvent, {model:model, element:element});
-    }
+    on('template/render', function (param) {
+        let templateElementSelector = param.templateElementSelector;
+        let model = param.model;
+        if (typeof param.callbackEvent !== 'undefined') {
+            render(templateElementSelector, model, param.callbackEvent);
+        }
+        else {
+            render(templateElementSelector, model);
+        }
+    });
 
 })();
+
+trigger('template/render', {
+    model : {
+        home: {
+            name: 'Home name'
+        },
+        casino: {
+            name: 'Casino name',
+            edit: 'Casino edit'
+        },
+        jackpot: {
+            number: 123
+        },
+        tickets: {
+            number: 15
+        },
+        aft: {
+            name: 'AFT name'
+        },
+        machine: {
+            number: 24
+        },
+        user: {
+            name: 'Jovana',
+            surname: 'Mitic',
+            tickets: {
+                number: 18
+            }
+        },
+        service: {
+            number: 58
+        }
+    },
+    templateElementSelector: "#user-template",
+    callbackEvent: 'replace-tickets'
+});
+
+
