@@ -81,8 +81,6 @@
 }
 
 #sidebar-list {
-    overflow-x: hidden;
-    overflow-y: auto;
     height: 70%;
 }
 
@@ -181,6 +179,7 @@
     width: 100%;
     height: 15%;
     transition: all 0.1s ease;
+    background: rgb(38, 50, 56);
 }
 
 #navigation-sidebar {
@@ -269,34 +268,6 @@
 .list-active, .link-active {
     color: white !important;
     background: rgb(55, 71, 79) !important;
-}
-
-#sidebar-list::-webkit-scrollbar {
-    width: 3%;
-}
-
-#sidebar-list::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
-}
-
-#sidebar-list::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
-    border-radius: 10px;
-}
-
-#navigation-content::-webkit-scrollbar {
-    width: 3%;
-}
-
-#navigation-content::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
-}
-
-#navigation-content::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
-    border-radius: 50px;
 }
 
 #test-enable-details {

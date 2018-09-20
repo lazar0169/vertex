@@ -143,20 +143,6 @@
     flex: 1;
 }
 
-#machine-info-content::-webkit-scrollbar {
-    width: 1%;
-}
-
-#machine-info-content::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
-}
-
-#machine-info-content::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
-    border-radius: 50px;
-}
-
 #machine-service-mode {
     padding: 0 0.5rem;
 }
@@ -166,6 +152,7 @@
 }
 
 #machine-history-tab-info {
+    position: relative;
     padding: 0 0.8rem;
 }
 
@@ -187,7 +174,6 @@
     width: auto;
     height: 100%;
     padding-bottom: 0.5rem;
-    overflow-y: auto;
 }
 
 .table-head>table>tbody {
@@ -196,40 +182,6 @@
 
 .table-body>table>thead {
     visibility: hidden;
-}
-
-.table-body::-webkit-scrollbar {
-    width: 1%;
-}
-
-.table-body::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
-}
-
-.table-body::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
-    border-radius: 50px;
-}
-
-.table-overflow-x {
-    position: relative;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
-
-.table-overflow-x::-webkit-scrollbar {
-    height: 2%;
-}
-
-.table-overflow-x::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
-}
-
-.table-overflow-x::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
-    border-radius: 50px;
 }
 
 #machine-meters-tab-info {
@@ -264,22 +216,4 @@
 .machine-meter-wrapper-edit {
     display: inline-flex;
     align-items: center;
-}
-
-.overflow-content {
-    overflow: auto;
-}
-
-.overflow-content::-webkit-scrollbar {
-    width: 10px;
-}
-
-.overflow-content::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
-}
-
-.overflow-content::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
-    border-radius: 50px;
 }
