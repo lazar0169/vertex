@@ -53,8 +53,17 @@ let template = (function(){
         return null;
     }
 
-    function replaceValueInHtml(elementString, element) {
+    function replaceValueInHtml(elementString, element, model) {
+        let placeholders = getPlaceholders(elementString);
+        let placeholderValues = getPlaceholersValues(placeholders);
         if (getPlaceholders(elementString)) {
+            let value;
+            for (let i = 0; i < placeholderValues; i++) {
+                value = getValueFromModel(placeholderValues[i], model);
+                elementString = elementString.replace(placeholders[i], value);
+                element.innerHTML = elementString;
+            }
+
             let placeholders = getPlaceholders(elementString);
             for (let i = 0; i < placeholders.length; i++) {
                 let placeholder = placeholders[i],
@@ -67,6 +76,16 @@ let template = (function(){
         }
     }
 
+    function getPlaceholersValues(placeholders) {
+        let placeholderValues = [];
+        for (let i = 0; i < placeholders.length; i++) {
+            let placeholder = placeholders[i];
+            placeholderValues.push(placeholder.replace('{{', '').replace('}}', ''));
+            console.log('placeholder Values: ', placeholderValues);
+        }
+        return placeholderValues;
+    }
+
     function render(elementName, model) {
         let elementString,
             element = $$(elementName);
@@ -74,7 +93,7 @@ let template = (function(){
             element = element[0];
         }
         elementString = element.outerHTML;
-        replaceValueInHtml(elementString, element);
+        replaceValueInHtml(elementString, element, model);
         return element;
     }
 
