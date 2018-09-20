@@ -82,27 +82,43 @@ let template = (function () {
         return elementString;
     }
 
-    //TODO:
-    function createDomElementFromHtml(html) {
-        return document.createRange().createContextualFragment(html);
-    }
+/*
+    function createDomElementFromHtml (elementString, templateElement) {
+        if (document.createRange) {     // all browsers, except IE before version 9
+            let rangeObj = document.createRange ();
+            if (rangeObj.createContextualFragment) {    // all browsers, except IE
 
-    function render(templateElementSelector, model, callbackEvent) {
-        let element = $$(templateElementSelector);
-        if (element === null || element.length <= 0) {
+                let documentFragment = rangeObj.createContextualFragment(elementString);
+                templateElement.parentNode.insertBefore(documentFragment, templateElement);
+                templateElement.style.display = 'none';
+            }
+            else {      // Internet Explorer from version 9
+                templateElement.insertAdjacentHTML ("beforeBegin", elementString);
+            }
+        }
+        else {      // Internet Explorer before version 9
+            templateElement.insertAdjacentHTML ("beforeBegin", elementString);
+        }
+    }
+    */
+
+    function render(templateElementSelector, model, targetElementSelector, callbackEvent) {
+        let templateElement = $$(templateElementSelector);
+        let targetElement = $$(targetElementSelector);
+        if (templateElement === null || templateElement.length <= 0) {
             console.error('template element does not exists');
         }
-        else if (element.length > 0) {
-            element = element[0];
+        else if (templateElement.length > 0) {
+            templateElement = templateElement[0];
         }
-        let placeholders = getPlaceholders(element.outerHTML),
-            placeholderValues = getPlaceholderValues(placeholders,model),
-            elementString = element.outerHTML,
-            replacedString = replaceValueInHtml(elementString, placeholderValues);
-        //TODO: let newElement =  createDomElementFromHtml(replacedString);
-        element.innerHTML = replacedString;
+        let placeholders = getPlaceholders(templateElement.innerHTML);
+        let placeholderValues = getPlaceholderValues(placeholders, model);
+        let elementString = templateElement.innerHTML;
+        let replacedString = replaceValueInHtml(elementString, placeholderValues);
+        targetElement.innerHTML = replacedString;
+        // createDomElementFromHtml(replacedString, templateElement);
         if (typeof callbackEvent !== 'undefined') {
-            trigger(callbackEvent, {model: model, element: element});
+            trigger(callbackEvent, {element: templateElement, model: model});
         }
     }
 
@@ -117,9 +133,17 @@ let template = (function () {
         }
     });
 
+    render('#template-page-home', model, '#page-home');
+    render('#template-page-casino', model, '#page-casino');
+    render('#template-page-casino-edit', model, '#page-casino-edit');
+    render('#template-page-jackpot', model, '#page-jackpot');
+    render('#template-page-tickets', model, '#page-tickets');
+    render('#template-page-machines', model, '#page-machines');
+    render('#template-page-reports', model, '#page-reports');
+
 })();
 
-trigger('template/render', {
+/*trigger('template/render', {
     model : {
         home: {
             name: 'Home name'
@@ -153,6 +177,6 @@ trigger('template/render', {
     },
     templateElementSelector: "#user-template",
     callbackEvent: 'replace-tickets'
-});
+});*/
 
 

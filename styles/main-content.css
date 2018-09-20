@@ -10,6 +10,10 @@
     width: 97.5%;
 }
 
+.element-template {
+    display: none;
+}
+
 .navigation-links {
     display: block;
     float: left;
