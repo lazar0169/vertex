@@ -5,7 +5,6 @@ const detailsBar = (function () {
     let tabs = $$('.tabs');
     let editCurrentMachine = $$('#edit-current-machine');
     let editMode = $$('#machine-edit-mode');
-    // TODO
 
     let previousTabSelected;
     let previousInfoContSelected;
@@ -30,11 +29,9 @@ const detailsBar = (function () {
             show: function () {
                 editMode.classList.remove('collapse');
                 details.hide();
-
             }
         };
     }();
-
 
     editCurrentMachine.addEventListener('click', function () {
         editMachine.show();
@@ -67,7 +64,6 @@ const detailsBar = (function () {
             });
         }
     }
-
     // highlight chosen tab
     function selectTab(name) {
         if (previousTabSelected) {
@@ -80,6 +76,7 @@ const detailsBar = (function () {
             previousTabSelected = tabSelected;
         }
     }
+    //shows content for selected tab
     function selectInfoContent(name) {
         if (previousInfoContSelected) {
             previousInfoContSelected.classList.remove('active-content');

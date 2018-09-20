@@ -31,18 +31,10 @@ const sidebar = (function () {
             collapse: function () {
                 sidebarMenu.classList.add('collapse');
                 mainContent.classList.add('expand');
-                //test, need remove this lines when table for machines is finish
-                $$('#details-bar').classList.remove('collapse');
-                blackArea.classList.add('show');
             },
             expand: function () {
                 sidebarMenu.classList.remove('collapse');
                 mainContent.classList.remove('expand');
-                //test, need remove this lines when table for machines is finish
-                $$('#details-bar').classList.add('collapse');
-                blackArea.classList.remove('show');
-                editMode.classList.add('collapse');
-
             }
         };
     }();
@@ -52,7 +44,6 @@ const sidebar = (function () {
             hide: function () {
                 navigationMenu.classList.add('collapse');
                 blackArea.classList.remove('show');
-
             },
             show: function () {
                 navigationMenu.classList.remove('collapse');
@@ -72,7 +63,6 @@ const sidebar = (function () {
         isExpanded ?
             sidemenu.collapse() :
             sidemenu.expand();
-
         isExpanded = !isExpanded;
     });
 
@@ -85,6 +75,7 @@ const sidebar = (function () {
     });
 
     globalSearch.addEventListener('click', function () {
+        editMode.classList.add('collapse');
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -102,7 +93,6 @@ const sidebar = (function () {
         }
         generateLinks(results);
     });
-
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
@@ -130,7 +120,6 @@ const sidebar = (function () {
                 searchCategory = category;
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].category;
-                //
                 editMode.classList.add('collapse');
                 searchLink.focus();
                 navigation.show();
@@ -139,7 +128,6 @@ const sidebar = (function () {
         }
         listWrapper.appendChild(fragment);
     }
-
     // generate links when you click on list from menu, and set click listener
     function generateLinks(category) {
         let fragment = document.createDocumentFragment();
@@ -216,7 +204,6 @@ const sidebar = (function () {
         trigger('router/bind-handlers/navigation-links');;
         selectLink(linkSelectedId);
     }
-
     // highlight chosen link
     function selectLink(name) {
         if (previousLinkSelected) {
@@ -228,7 +215,6 @@ const sidebar = (function () {
             previousLinkSelected = linkSelected;
         }
     }
-
     // highlight chosen category
     function selectCategory(category) {
         if (category !== 'search') {
@@ -240,7 +226,6 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
-
     //data search
     function search(termin, category) {
         let newData = {};
@@ -278,7 +263,6 @@ const sidebar = (function () {
             return newObject;
         }
     }
-
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -295,7 +279,6 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
-
     //data search
     function search(termin, category) {
         let newData = {};
@@ -333,7 +316,6 @@ const sidebar = (function () {
             return newObject;
         }
     }
-
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -350,11 +332,38 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
-
+    //function for tooltip
     function showTooltip(category) {
         let rect = $$(`#${category}`).getBoundingClientRect();
         tooltipText.style.top = rect.top + rect.height / 4;
         tooltipText.innerHTML = data[category].category;
         tooltipText.classList.remove('hidden');
     }
+
+
+
+
+    //test, if you don't need it anymore, remove it
+    let isActiveDetailsTest = true;
+    let detailsmenutest = function () {
+        return {
+            collapse: function () {
+                //test, if you don't need it anymore, remove it
+                $$('#details-bar').classList.remove('collapse');
+                blackArea.classList.add('show');
+            },
+            expand: function () {
+                //test, if you don't need it anymore, remove it
+                $$('#details-bar').classList.add('collapse');
+                blackArea.classList.remove('show');
+                editMode.classList.add('collapse');
+            }
+        };
+    }();
+    //test, if you don't need it anymore, remove it
+    $$('#test-enable-details').addEventListener('click', function () {
+        isActiveDetailsTest ?
+            detailsmenutest.collapse() :
+            detailsmenutest.expand();
+    });
 })();

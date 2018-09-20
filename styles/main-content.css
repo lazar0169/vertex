@@ -17,13 +17,7 @@
     width: 97.5%;
 }
 
-.navigation-links {
-    display: block;
-    float: left;
-}
-
 .element-navigation-link {
-    margin: 10px;
     float: left;
     display: block;
 }
