@@ -54,36 +54,18 @@ let template = (function(){
     }
 
     function replaceValueInHtml(elementString, element, model) {
-        let placeholders = getPlaceholders(elementString);
-        let placeholderValues = getPlaceholersValues(placeholders);
         if (getPlaceholders(elementString)) {
             let value;
-            for (let i = 0; i < placeholderValues; i++) {
-                value = getValueFromModel(placeholderValues[i], model);
-                elementString = elementString.replace(placeholders[i], value);
-                element.innerHTML = elementString;
-            }
-
             let placeholders = getPlaceholders(elementString);
             for (let i = 0; i < placeholders.length; i++) {
                 let placeholder = placeholders[i],
-                    value;
-                let placeholderValue = placeholder.replace('{{', '').replace('}}', '');
+                    value,
+                    placeholderValue = placeholder.replace('{{', '').replace('}}', '');
                 value = getValueFromModel(placeholderValue, model);
                 elementString = elementString.replace(placeholder, value);
                 element.innerHTML = elementString;
             }
         }
-    }
-
-    function getPlaceholersValues(placeholders) {
-        let placeholderValues = [];
-        for (let i = 0; i < placeholders.length; i++) {
-            let placeholder = placeholders[i];
-            placeholderValues.push(placeholder.replace('{{', '').replace('}}', ''));
-            console.log('placeholder Values: ', placeholderValues);
-        }
-        return placeholderValues;
     }
 
     function render(elementName, model) {
