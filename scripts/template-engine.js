@@ -6,6 +6,7 @@ let template = (function () {
         },
         casino: {
             name: 'Casino name',
+            address: 'Casino address',
             edit: 'Casino edit'
         },
         jackpot: {
@@ -70,7 +71,7 @@ let template = (function () {
         return null;
     }
 
-    function replaceValueInHtml(elementString, placeholderValues) {
+    function replaceValueInTemplate(elementString, placeholderValues) {
         if (getPlaceholders(elementString)) {
             let value;
             for (let i = 0; i < placeholderValues.length; i++) {
@@ -82,49 +83,31 @@ let template = (function () {
         return elementString;
     }
 
-    function cloneTemplateElement(element) {
-        let newElement = element.cloneNode(true);
+    function cloneTemplateElement(templateElement) {
+        let newElement = templateElement.cloneNode(true);
         newElement.removeAttribute('id');
         newElement.classList.remove('element-template');
         return newElement;
     }
 
-    //TODO:
-    function createDomElementFromHtml(html) {
-        return document.createRange().createContextualFragment(html);
-    }
-
     function render(templateElementSelector, model, callbackEvent) {
-        let element = $$(templateElementSelector);
-        if (element === null || element.length <= 0) {
-            console.error('template element does not exists');
+        let templateElement = $$(templateElementSelector);
+        if (templateElement === null || templateElement.length <= 0) {
+            console.error('Template element does not exists!');
         }
-        else if (element.length > 0) {
-            element = element[0];
+        else if (templateElement.length > 0) {
+            templateElement = templateElement[0];
         }
-
-        let newElement = cloneTemplateElement(element);
-
-
-        let placeholders = getPlaceholders(element.outerHTML),
-            placeholderValues = getPlaceholderValues(placeholders,model),
-            elementString = newElement.outerHTML;
-
-
-        //TODO: let newElement =  createDomElementFromHtml(replacedString);
-        //newElement type == return type $('')
-
-
-        //let newElement = replacedString;
-        //remove element-template class and id
-        let replacedString = replaceValueInHtml(elementString, placeholderValues);
-        newElement.outerHTML  = replacedString;
-
-        //
-
+        let newElement = cloneTemplateElement(templateElement);
+        let newElementString = newElement.innerHTML;
+        let placeholders = getPlaceholders(newElementString);
+        let placeholderValues = getPlaceholderValues(placeholders, model);
+        let replacedString = replaceValueInTemplate(newElementString, placeholderValues);
+        newElement.innerHTML  = replacedString;
         if (typeof callbackEvent !== 'undefined') {
             trigger(callbackEvent, {model: model, element: newElement});
         }
+        return newElement;
     }
 
     on('template/render', function (param) {
@@ -138,49 +121,7 @@ let template = (function () {
         }
     });
 
+    //For testing:
+    render('#casino-template', model);
+
 })();
-
-
-on('replace-tickets',function(e) {
-    console.log(e);
-    $$('#tiketi-za-usera').append(e.element);
-});
-
-trigger('template/render', {
-    model : {
-        home: {
-            name: 'Home name'
-        },
-        casino: {
-            name: 'Casino name',
-            edit: 'Casino edit'
-        },
-        jackpot: {
-            number: 123
-        },
-        tickets: {
-            number: 15
-        },
-        aft: {
-            name: 'AFT name'
-        },
-        machine: {
-            number: 24
-        },
-        user: {
-            name: 'Jovana',
-            surname: 'Mitic',
-            tickets: {
-                number: 18
-            }
-        },
-        service: {
-            number: 58
-        }
-    },
-    templateElementSelector: "#ticket-template",
-    callbackEvent: 'replace-tickets'
-});
-
-
-

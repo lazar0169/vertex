@@ -4,7 +4,8 @@
             "data.js",
             "sidebar.js",
             "router.js",
-            "template-engine.js"
+            "template-engine.js",
+            "casino.js"
         ],
         "styles": [
             "index.css",
