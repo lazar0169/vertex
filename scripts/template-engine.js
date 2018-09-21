@@ -82,43 +82,36 @@ let template = (function () {
         return elementString;
     }
 
-/*
-    function createDomElementFromHtml (elementString, templateElement) {
-        if (document.createRange) {     // all browsers, except IE before version 9
-            let rangeObj = document.createRange ();
-            if (rangeObj.createContextualFragment) {    // all browsers, except IE
-
-                let documentFragment = rangeObj.createContextualFragment(elementString);
-                templateElement.parentNode.insertBefore(documentFragment, templateElement);
-                templateElement.style.display = 'none';
-            }
-            else {      // Internet Explorer from version 9
-                templateElement.insertAdjacentHTML ("beforeBegin", elementString);
-            }
-        }
-        else {      // Internet Explorer before version 9
-            templateElement.insertAdjacentHTML ("beforeBegin", elementString);
-        }
+    //TODO:
+    function createDomElementFromHtml(html) {
+        return document.createRange().createContextualFragment(html);
     }
-    */
 
-    function render(templateElementSelector, model, targetElementSelector, callbackEvent) {
-        let templateElement = $$(templateElementSelector);
-        let targetElement = $$(targetElementSelector);
-        if (templateElement === null || templateElement.length <= 0) {
+    function render(templateElementSelector, model, callbackEvent) {
+        let element = $$(templateElementSelector);
+        if (element === null || element.length <= 0) {
             console.error('template element does not exists');
         }
-        else if (templateElement.length > 0) {
-            templateElement = templateElement[0];
+        else if (element.length > 0) {
+            element = element[0];
         }
-        let placeholders = getPlaceholders(templateElement.innerHTML);
-        let placeholderValues = getPlaceholderValues(placeholders, model);
-        let elementString = templateElement.innerHTML;
-        let replacedString = replaceValueInHtml(elementString, placeholderValues);
-        targetElement.innerHTML = replacedString;
-        // createDomElementFromHtml(replacedString, templateElement);
+        let placeholders = getPlaceholders(element.outerHTML),
+            placeholderValues = getPlaceholderValues(placeholders,model),
+            elementString = element.outerHTML,
+            replacedString = replaceValueInHtml(elementString, placeholderValues);
+
+        //TODO: let newElement =  createDomElementFromHtml(replacedString);
+        //newElement type == return type $('')
+
+
+        let newElement = replacedString;
+        //remove element-template class and id
+        newElement.classlist.remove('element-template');
+        newElement.setAttribute('id','');
+        //
+
         if (typeof callbackEvent !== 'undefined') {
-            trigger(callbackEvent, {element: templateElement, model: model});
+            trigger(callbackEvent, {model: model, element: newElement});
         }
     }
 
@@ -133,17 +126,15 @@ let template = (function () {
         }
     });
 
-    render('#template-page-home', model, '#page-home');
-    render('#template-page-casino', model, '#page-casino');
-    render('#template-page-casino-edit', model, '#page-casino-edit');
-    render('#template-page-jackpot', model, '#page-jackpot');
-    render('#template-page-tickets', model, '#page-tickets');
-    render('#template-page-machines', model, '#page-machines');
-    render('#template-page-reports', model, '#page-reports');
-
 })();
 
-/*trigger('template/render', {
+
+on('replace-tickets',function(e) {
+    console.log(e);
+    $$('#tiketi-za-usera').innerHTML = e.element;
+});
+
+trigger('template/render', {
     model : {
         home: {
             name: 'Home name'
@@ -175,8 +166,27 @@ let template = (function () {
             number: 58
         }
     },
-    templateElementSelector: "#user-template",
+    templateElementSelector: "#ticket-template",
     callbackEvent: 'replace-tickets'
-});*/
+});
 
 
+
+function createDomElement(html) {
+    //nadji prvi element htmla
+    let prviElement = "div";
+    switch("div") {
+        templateElement = "div"
+
+    }
+    td
+    templateElement = "tr"
+
+
+    var template = document.createElement(templateElement);
+    html = html.trim(); // Never return a text node of whitespace as the result
+    template.innerHTML = html;
+    return template.content.firstChild;
+}
+
+$('')
