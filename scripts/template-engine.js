@@ -82,6 +82,13 @@ let template = (function () {
         return elementString;
     }
 
+    function cloneTemplateElement(element) {
+        let newElement = element.cloneNode(true);
+        newElement.removeAttribute('id');
+        newElement.classList.remove('element-template');
+        return newElement;
+    }
+
     //TODO:
     function createDomElementFromHtml(html) {
         return document.createRange().createContextualFragment(html);
@@ -95,19 +102,24 @@ let template = (function () {
         else if (element.length > 0) {
             element = element[0];
         }
+
+        let newElement = cloneTemplateElement(element);
+
+
         let placeholders = getPlaceholders(element.outerHTML),
             placeholderValues = getPlaceholderValues(placeholders,model),
-            elementString = element.outerHTML,
-            replacedString = replaceValueInHtml(elementString, placeholderValues);
+            elementString = newElement.outerHTML;
+
 
         //TODO: let newElement =  createDomElementFromHtml(replacedString);
         //newElement type == return type $('')
 
 
-        let newElement = replacedString;
+        //let newElement = replacedString;
         //remove element-template class and id
-        newElement.classlist.remove('element-template');
-        newElement.setAttribute('id','');
+        let replacedString = replaceValueInHtml(elementString, placeholderValues);
+        newElement.outerHTML  = replacedString;
+
         //
 
         if (typeof callbackEvent !== 'undefined') {
@@ -131,7 +143,7 @@ let template = (function () {
 
 on('replace-tickets',function(e) {
     console.log(e);
-    $$('#tiketi-za-usera').innerHTML = e.element;
+    $$('#tiketi-za-usera').append(e.element);
 });
 
 trigger('template/render', {
@@ -172,21 +184,3 @@ trigger('template/render', {
 
 
 
-function createDomElement(html) {
-    //nadji prvi element htmla
-    let prviElement = "div";
-    switch("div") {
-        templateElement = "div"
-
-    }
-    td
-    templateElement = "tr"
-
-
-    var template = document.createElement(templateElement);
-    html = html.trim(); // Never return a text node of whitespace as the result
-    template.innerHTML = html;
-    return template.content.firstChild;
-}
-
-$('')
