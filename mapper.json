@@ -6,7 +6,8 @@
             "router.js",
             "template-engine.js",
             "details-bar.js",
-            "casino.js"
+            "casino.js",
+            "communication.js"
         ],
         "styles": [
             "index.css",
