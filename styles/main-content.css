@@ -7,14 +7,23 @@
     transition: all 0.1s ease;
 }
 
+#main-content.expand {
+    width: 97.5%;
+}
+
 #top-bar {
     background: transparent;
     color: white;
     height: 5%;
 }
 
-#main-content.expand {
-    width: 97.5%;
+.element-template {
+    display: none;
+}
+
+.navigation-links {
+    display: block;
+    float: left;
 }
 
 .element-navigation-link {

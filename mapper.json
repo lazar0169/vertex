@@ -3,8 +3,10 @@
         "scripts": [
             "data.js",
             "sidebar.js",
+            "router.js",
+            "template-engine.js",
             "details-bar.js",
-            "router.js"
+            "casino.js"
         ],
         "styles": [
             "index.css",
