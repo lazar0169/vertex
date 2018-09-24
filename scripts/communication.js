@@ -5,7 +5,7 @@ let communication = (function() {
         post: "POST"
     }
 
-    const apiUrl = "http://api.vertex.com/";
+    const apiUrl = "https://jsonplaceholder.typicode.com/";
 
     function createRequest(route, requestType, data, callabackEvent) {
         let xhr;
@@ -18,16 +18,16 @@ let communication = (function() {
         console.log('xhr: ', xhr);
         xhr.onreadystatechange = function(e){
             if (xhr.readyState == 4 && xhr.status == 200) {
-                success(xhr,callabackEvent);
+                success(xhr, callabackEvent);
             }
             else if (xhr.status >= 400) {
-                error(xhr,callabackEvent);
+                error(xhr, callabackEvent);
             }
         }
         return xhr;
     }
 
-    function createGetRequest(route,data) {
+    function createGetRequest(route, data) {
         let xhr = new XMLHttpRequest();
         console.log('xhr get', xhr);
         xhr.open('GET', apiUrl+route,true);
@@ -35,7 +35,7 @@ let communication = (function() {
         return xhr;
     }
 
-    function createPostRequest(route,data) {
+    function createPostRequest(route, data) {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", apiUrl+route, true);
         //TODO: see if it works like this
@@ -49,6 +49,7 @@ let communication = (function() {
         if (typeof  xhr.customData !== 'undefined') {
             return xhr.send(xhr.customData);
         }
+        console.log('xhr in send:', xhr);
        return xhr.send();
    }
 
@@ -94,16 +95,17 @@ let communication = (function() {
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         let callbackEventName = params.callbackEvent;
-        let route = "http://www.google.com/";
+        let route = "todos/1";
         let data = typeof params.data === "undefined" ? null : params.data;
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
+        console.log('xhr after setting default headers: ', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
 
 
-    // trigger('communicate/casino-info', {data:{"testParam":"test"},callbackEvent:"casino/display-casino-info/"});
+    // trigger('communicate/casino-info', {data:{"testParam":"test"}, callbackEvent: "casino/display-casino-info/"});
 
 
     //events for jackpot
