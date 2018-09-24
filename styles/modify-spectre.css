@@ -1,25 +1,39 @@
+.btn {
+    padding: 0 1rem;
+}
+
 .btn-success {
     background: rgb(30, 155, 227) !important;
     border-color: rgb(30, 155, 227) !important;
     border: none !important;
+    text-decoration: none !important;
 }
 
 .btn-cancel {
     background: transparent;
     border: none;
-    color: white;
+    color: rgb(120, 144, 156);
+    text-decoration: underline;
+}
+
+.btn-cancel:focus, .btn-success:focus, .btn-success:hover, .btn-cancel:hover {
+    border: none;
+    background: transparent;
+    box-shadow: unset !important;
     text-decoration: underline;
 }
 
 .btn-cancel:hover {
-    color: rgb(244, 67, 54);
-    background: transparent;
+    color: white;
+    background: rgb(55, 71, 79);
 }
 
-.btn-cancel:focus, .btn-success:focus, .btn:active, .btn.btn-success:focus, .btn.btn-success:hover, .btn.btn-cancel:focus, .btn.btn-cancel:hover {
-    border: none;
-    background: transparent;
-    box-shadow: unset;
+.btn-cancel:active {
+    text-decoration: none;
+}
+
+.btn-success:active {
+    background: rgb(36, 82, 108) !important;
 }
 
 .form-switch, .form-checkbox, .form-radio {
@@ -71,6 +85,10 @@
     border-color: rgb(30, 155, 227);
 }
 
+.form-checkbox input:checked+.form-icon+div, .form-radio input:checked+.form-icon+div {
+    color: white;
+}
+
 .form-checkbox input:active+.form-icon, .form-radio input:active+.form-icon, .form-switch input:active+.form-icon::before {
     background: rgb(55, 71, 79);
 }
@@ -103,7 +121,11 @@
 
 .form-input:focus {
     border-color: rgb(120, 144, 156);
-    box-shadow: none;
+    box-shadow: unset;
+}
+
+.form-label {
+    color: rgb(120, 144, 156);
 }
 
 .info-box-round {
@@ -138,4 +160,10 @@ table {
 
 .table td, .table th {
     border-bottom: .05rem solid rgb(120, 144, 156);
+}
+
+a:active, a:focus, a:visited {
+    color: rgb(120, 144, 156);
+    box-shadow: unset;
+    text-decoration: none;
 }

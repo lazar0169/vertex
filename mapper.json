@@ -5,13 +5,19 @@
             "sidebar.js",
             "router.js",
             "template-engine.js",
+            "details-bar.js",
             "casino.js"
         ],
         "styles": [
             "index.css",
             "sidebar.css",
-            "main-content.css",
-            "modify-spectre.css"
+            "modify-spectre.css",
+            "machines/machines-page.css",
+            "machines/machines-filters.css",
+            "machines/machines-table.css",
+            "machines/details-bar.css",
+            "machines/edit-page.css",
+            "main-content.css"
         ]
     }
 }

@@ -1,38 +1,38 @@
 <div id="sidebar">
-    <div id="sidebar-name" class="center">
-        <div id="head-name" class="center">
-            <span id="team-logo" class="mdi mdi-vuejs"></span>
-            <div class="team-name">Vertex manager</div>
+    <div id="sidebar-name">
+        <div id="head-name">
+            <div>
+                <span id="team-logo" class="mdi mdi-vuejs center"></span>
+                <div class="team-name">Vertex manager</div>
+            </div>
+            <div id="icon-collapse">
+                <span class="mdi mdi-menu custom-tooltip center"></span>
+            </div>
         </div>
-        <div id="icon-collapse" class="center">
-            <span class="mdi mdi-menu"></span>
-            <span class="tooltip-text hide">Expand</span>
-        </div>
-        <div id="global-search" class="center" data-id="global-search">
+        <div id="global-search" data-id="global-search">
             <span class="mdi mdi-magnify custom-tooltip center"></span>
-            <span class="tooltip-text hide">Search</span>
             <div>Search</div>
         </div>
     </div>
-    <div id="sidebar-list"></div>
+    <div id="sidebar-list" class="overflow-y"></div>
     <div id="sidebar-logo" class="center">
         <span class="mdi mdi-feather"></span>
     </div>
 </div>
-
-<div id="black-area">
-</div>
-
-<div id="navigation-sidebar">
-    <div id="navigation-name" class="center">
+<div id="navigation-sidebar" class="collapse">
+    <div id="navigation-name">
         <div class="team-name">Vertex manager</div>
-        <div id="back-to-menu" class="center">
-            <span class="mdi mdi-arrow-left"></span>
+        <div class="center">
+            <div id="back-to-menu">
+                <span class="mdi mdi-arrow-left"></span>
+            </div>
+            <div id="chosen-link"></div>
         </div>
-        <div id="chosen-link"></div>
-        <input id="search-link" class="search" type="text" onfocus="value=''" placeholder="Search">
+        <div class="center">
+            <input id="search-link" class="search" type="text" onfocus="value=''" placeholder="Search">
+        </div>
     </div>
-    <div id="navigation-content" class="center">
-
+    <div id="navigation-content" class="overflow-content">
     </div>
 </div>
+<div id="tooltip-text" class="hidden"></div>

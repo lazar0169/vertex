@@ -9,10 +9,11 @@ const sidebar = (function () {
     let globalSearch = $$('#global-search');
     let searchLink = $$('#search-link');
     let blackArea = $$('#black-area');
-    let mainWrapper = $$('#main-content');
+    let mainContent = $$('#main-content');
+    let editMode = $$('#machine-edit-mode');
+    let tooltipText = $$('#tooltip-text');
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
-    let isExpand = true;
-    let isExpandNav = true;
+    let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId = Object.keys(data)[0];
     let linkSelectedId = `link-${data[categorySelectedId]['value'][0]['id']}`;
@@ -25,6 +26,32 @@ const sidebar = (function () {
     let searchCategory;
     let recent;
 
+    let sidemenu = function () {
+        return {
+            collapse: function () {
+                sidebarMenu.classList.add('collapse');
+                mainContent.classList.add('expand');
+            },
+            expand: function () {
+                sidebarMenu.classList.remove('collapse');
+                mainContent.classList.remove('expand');
+            }
+        };
+    }();
+
+    let navigation = function () {
+        return {
+            hide: function () {
+                navigationMenu.classList.add('collapse');
+                blackArea.classList.remove('show');
+            },
+            show: function () {
+                navigationMenu.classList.remove('collapse');
+                blackArea.classList.add('show');
+            }
+        };
+    }();
+
     window.addEventListener('load', function () {
         generateMenu(data);
         generateLinks(categorySelectedId);
@@ -33,24 +60,28 @@ const sidebar = (function () {
     });
 
     collapseButton.addEventListener('click', function () {
-        collapse('sidebar');
+        isExpanded ?
+            sidemenu.collapse() :
+            sidemenu.expand();
+        isExpanded = !isExpanded;
     });
 
     back.addEventListener('click', function () {
-        collapse('navigation');
+        navigation.hide();
+    });
+
+    on('show/app', function () {
+        navigation.hide();
     });
 
     globalSearch.addEventListener('click', function () {
+        editMode.classList.add('collapse');
         chosenLink.innerHTML = 'Search';
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);
-        collapse('navigation');
+        navigation.show();
         searchLink.focus();
-    });
-
-    blackArea.addEventListener('click', function () {
-        collapse('navigation');
     });
 
     searchLink.addEventListener('keyup', function (event) {
@@ -62,7 +93,6 @@ const sidebar = (function () {
         }
         generateLinks(results);
     });
-
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
@@ -73,39 +103,31 @@ const sidebar = (function () {
                                             <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
                                             <div class="list-name">${data[category].category}</div>
                                         </div>
-                                        <span class="tooltip-text hide">${data[category].category}</span>
                                     </div>`;
+            tempFragment.childNodes[0].addEventListener('mouseenter', function () {
+                if (sidebarMenu.classList.contains('collapse')) {
+                    showTooltip(category);
+                }
+            });
+            tempFragment.childNodes[0].addEventListener('mouseleave', function () {
+                if (sidebarMenu.classList.contains('collapse')) {
+                    tooltipText.classList.add('hidden');
+                }
+            });
+
             tempFragment.childNodes[0].addEventListener('click', function () {
                 categorySelectedId = category;
                 searchCategory = category;
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].category;
+                editMode.classList.add('collapse');
                 searchLink.focus();
-                collapse('navigation');
+                navigation.show();
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
         listWrapper.appendChild(fragment);
-
     }
-
-    // function for collapse sidebar, show or hide navigation
-    function collapse(container) {
-        switch (container) {
-            case 'sidebar':
-                sidebarMenu.classList[isExpand ? 'add' : 'remove']('collapse');
-                mainWrapper.classList[isExpand ? 'add' : 'remove']('expand');
-                isExpand = !isExpand;
-                break;
-            case 'navigation':
-                navigationMenu.classList[isExpandNav ? 'add' : 'remove']('collapse');
-                blackArea.classList[isExpandNav ? 'add' : 'remove']('show');
-
-                isExpandNav = !isExpandNav;
-                break;
-        }
-    }
-
     // generate links when you click on list from menu, and set click listener
     function generateLinks(category) {
         let fragment = document.createDocumentFragment();
@@ -125,7 +147,7 @@ const sidebar = (function () {
                         linkSelectedId = `link-${categoryValue.id}`;
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
-                        collapse('navigation');
+                        navigation.hide();
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].category
                         temp.category = searchCategory;
@@ -168,7 +190,7 @@ const sidebar = (function () {
                                 }
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
-                                collapse('navigation');
+                                navigation.hide();
                             });
                             tempCategory.appendChild(tempValue);
                         }
@@ -182,7 +204,6 @@ const sidebar = (function () {
         trigger('router/bind-handlers/navigation-links');;
         selectLink(linkSelectedId);
     }
-
     // highlight chosen link
     function selectLink(name) {
         if (previousLinkSelected) {
@@ -194,7 +215,6 @@ const sidebar = (function () {
             previousLinkSelected = linkSelected;
         }
     }
-
     // highlight chosen category
     function selectCategory(category) {
         if (category !== 'search') {
@@ -206,7 +226,6 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
-
     //data search
     function search(termin, category) {
         let newData = {};
@@ -244,7 +263,6 @@ const sidebar = (function () {
             return newObject;
         }
     }
-
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -261,7 +279,6 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
-
     //data search
     function search(termin, category) {
         let newData = {};
@@ -299,7 +316,6 @@ const sidebar = (function () {
             return newObject;
         }
     }
-
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -316,5 +332,38 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
+    //function for tooltip
+    function showTooltip(category) {
+        let rect = $$(`#${category}`).getBoundingClientRect();
+        tooltipText.style.top = rect.top + rect.height / 4;
+        tooltipText.innerHTML = data[category].category;
+        tooltipText.classList.remove('hidden');
+    }
 
+
+
+
+    //test, if you don't need it anymore, remove it
+    let isActiveDetailsTest = true;
+    let detailsmenutest = function () {
+        return {
+            collapse: function () {
+                //test, if you don't need it anymore, remove it
+                $$('#details-bar').classList.remove('collapse');
+                blackArea.classList.add('show');
+            },
+            expand: function () {
+                //test, if you don't need it anymore, remove it
+                $$('#details-bar').classList.add('collapse');
+                blackArea.classList.remove('show');
+                editMode.classList.add('collapse');
+            }
+        };
+    }();
+    //test, if you don't need it anymore, remove it
+    $$('#test-enable-details').addEventListener('click', function () {
+        isActiveDetailsTest ?
+            detailsmenutest.collapse() :
+            detailsmenutest.expand();
+    });
 })();
