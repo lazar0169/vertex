@@ -4,14 +4,16 @@ let communication = (function() {
     //get request
     function communication(url, requestType, data){
         const http = new XMLHttpRequest();
-        const url='https://jsonplaceholder.typicode.com/posts';
-        http .open("GET", url);
-        http .send();
-        http .onreadystatechange=(e)=>{
-            console.log(Http.responseText)
+        http.open("GET", url);
+        http.send();
+        http.onreadystatechange = (e)=>{
+            console.log(http.responseText)
         }
     }
 
+
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    communication(url);
 
     //events for casino
     on('communicate/casino', function (param) {
