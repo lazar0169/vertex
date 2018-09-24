@@ -3,29 +3,28 @@ let communication = (function() {
     //private functions
     //get request
     function communication(url, requestType, data){
-        const http = new XMLHttpRequest();
-        http.open("GET", url);
-        http.send();
-        http.onreadystatechange = (e)=>{
-            console.log(http.responseText)
+        let http = new XMLHttpRequest();
+        http.open("GET", url); //open connection
+        http.send(); //send HTTP message
+        http.onreadystatechange = function(e){ //a function to be called when the readyState property changes
+            if (http.readyState == 4 && http.status == 200) { //readyState holds the status of the XMLHttpRequest
+                console.log(http.responseText);
+            }
+
         }
     }
 
 
-    const url = 'https://jsonplaceholder.typicode.com/posts';
-    communication(url);
-
     //events for casino
     on('communicate/casino', function (param) {
-        let templateElementSelector = param.templateElementSelector;
-        let model = param.model;
-        if (typeof param.callbackEvent !== 'undefined') {
-            render(templateElementSelector, model, param.callbackEvent);
-        }
-        else {
-            render(templateElementSelector, model);
-        }
+        let url = param.url;
+        communication(url);
     });
+
+
+    // let paramUrl = 'https://www.google.com/';
+    let paramUrl = 'https://jsonplaceholder.typicode.com/posts';
+    trigger('communicate/casino', {paramUrl})
 
 
     //events for jackpot
