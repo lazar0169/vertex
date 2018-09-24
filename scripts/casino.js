@@ -17,6 +17,17 @@ let casino = (function () {
         $$('.casino-list')[0].appendChild(element);
     });
 
+    on('casino/display-casino-info/',function(e){
+        console.log('response u handleru:', e);
+        //data = e.data;
+        //alert(data);
+    });
+
+    on('casino/display-casino-info/error',function(e){
+        data = e.data;
+        alert('doslo je do greske');
+    });
+
 /*    //Testing cloned button
     $$('.cloning-test')[0].onclick = function (event) {
         alert('Test.');
