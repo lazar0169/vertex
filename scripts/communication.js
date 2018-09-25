@@ -1,4 +1,4 @@
-let communication = (function() {
+let communication = (function () {
 
     const requestTypes = {
         get: "GET",
@@ -9,16 +9,55 @@ let communication = (function() {
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', apiUrl+route, true);
+        console.log('New xhr', xhr);
+        xhr.open('GET', apiUrl + route, true);
+        console.log('xhr get', xhr);
         return xhr;
     }
 
     function createPostRequest(route, data) {
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", apiUrl+route, true);
+        xhr.open("POST", apiUrl + route, true);
         //TODO: see if it works like this
+        console.log('Before assignment: ', xhr.customData);
         xhr.customData = data;
+        console.log('After assignment: ', xhr.customData);
         return xhr;
+    }
+
+    function tryParseJSON(jsonString) {
+        try {
+            let o = JSON.parse(jsonString);
+            if (o && typeof o === "object") {
+                console.log('It is JSON.')
+                return o;
+            }
+        }
+        catch (e) {
+            console.error('Forwarded variable is not of JSON type!');
+        }
+        return false;
+    }
+
+    function success(xhr, callbackEvent) {
+        console.log('Response:', xhr);
+        console.log('Response text', xhr.responseText);
+        //Here we decode data
+        let data = tryParseJSON(xhr.responseText);
+        console.log('Response data JSON: ', data);
+        //Here we take token and save it into local storage
+        console.log('Callback event:', callbackEvent);
+        if (typeof callbackEvent !== "undefined" && callbackEvent !== null) {
+            trigger(callbackEvent, {data: data});
+        }
+    }
+
+    function error(xhr, callback) {
+        let data = tryParseJSON(xhr.responseText);
+        console.error(data);
+        if (typeof callback !== 'undefined') {
+            trigger(callback, {data: data});
+        }
     }
 
     function createRequest(route, requestType, data, callabackEvent) {
@@ -29,6 +68,7 @@ let communication = (function() {
         else if (requestType === 'POST') {
             xhr = createPostRequest(route, data);
         }
+        console.log('xhr request created: ', xhr);
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 success(xhr, callabackEvent);
@@ -40,53 +80,18 @@ let communication = (function() {
         return xhr;
     }
 
-    function tryParseJSON(jsonString){
-        try {
-            let o = JSON.parse(jsonString);
-            // Handle non-exception-throwing cases:
-            // Neither JSON.parse(false) or JSON.parse(1234) throw errors, hence the type-checking,
-            // but... JSON.parse(null) returns null, and typeof null === "object",
-            // so we must check for that, too. Thankfully, null is falsey, so this suffices:
-            if (o && typeof o === "object") {
-                return o;
-            }
-        }
-        catch (e) {
-            console.error('Forwarded variable is not of JSON type!');
-        }
-        return false;
-    }
-
-
-
-   function send(xhr) {
+    function send(xhr) {
         if (typeof  xhr.customData !== 'undefined') {
+            console.log('Custom data is defined.');
             return xhr.send(xhr.customData);
         }
+        console.log('xhr in send:', xhr);
         return xhr.send();
-   }
-
-    //default callbacks
-    function success(xhr, callbackEvent) {
-        //Here we decode data
-        let data = tryParseJSON(xhr.responseText);
-        //Here we take token and save it into local storage
-        if (typeof callbackEvent !== "undefined" && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data});
-        }
     }
 
-    function error(xhr, callback) {
-        //callback(xhr.error);
-        //prepare error data
-        let data = "";
-        console.error(xhr.responseText);
-        if (typeof callback !== 'undefined') {
-            trigger(callback,{data:data});
-        }
-    }
 
     //helper functions
+
     function setDefaultHeaders(xhr) {
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.setRequestHeader("Accept", "application/json");
@@ -96,7 +101,7 @@ let communication = (function() {
     function setAuthHeader(xhr) {
         let token = "";
         //Here we get token from localhost
-        xhr.setRequestHeader("Authorization", "bearer " + token);
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
     }
 
 
@@ -108,34 +113,31 @@ let communication = (function() {
         let data = typeof params.data === "undefined" ? null : params.data;
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
+        console.log('xhr after setting default headers: ', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
-        let res = xhr.responseText;
     });
 
 
-    // trigger('communicate/casino-info', {data:{"testParam":"test"}, callbackEvent: "casino/display-casino-info/"});
+    // trigger('communicate/casino-info', {data: {"testParam": "test"}, callbackEvent: "casino/display-casino-info/"});
 
 
     //events for jackpot
 
 
-
     //events for tickets
-
 
 
     //events for AFT
 
 
-
     //events for machines
-    on('communicate/machine-info', function (param) {
-        let machineId = params.machineId;
+    on('communicate/machine-info', function (params) {
+        // let machineId = params.machineId;
         let callbackEventName = params.callbackEvent;
-        let route = "machine/"+machineId;
+        let route = "machine/" + machineId;
         let data = typeof params.data === "undefined" ? null : params.data;
-        let xhr = createRequest(route,requestTypes.get,data,callbackEventName);
+        let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
@@ -145,9 +147,7 @@ let communication = (function() {
     //events for reports
 
 
-
     //events for users
-
 
 
     //events for service
