@@ -18,14 +18,13 @@ let casino = (function () {
     });
 
     on('casino/display-casino-info/',function(e){
-        console.log('Response in handler: ', e);
-        //data = e.data;
-        //alert(data);
+        // data = e.data;
+        // alert(data);
     });
 
     on('casino/display-casino-info/error',function(e){
         data = e.data;
-        alert('An error occured.');
+        alert('An error occurred.');
     });
 
 /*    //Testing cloned button

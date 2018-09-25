@@ -1,62 +1,49 @@
 let communication = (function () {
 
+    const xhrStates = {
+        unsent: 0,
+        opened: 1,
+        headersReceived: 2,
+        loading: 3,
+        done: 4
+    };
+
     const requestTypes = {
-        get: "GET",
-        post: "POST"
-    }
+        get: 'GET',
+        post: 'POST',
+        delete: 'DELETE'
+    };
 
     const apiUrl = "https://jsonplaceholder.typicode.com/";
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
-        console.log('New xhr', xhr);
         xhr.open('GET', apiUrl + route, true);
-        console.log('xhr get', xhr);
         return xhr;
     }
 
     function createPostRequest(route, data) {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", apiUrl + route, true);
-        //TODO: see if it works like this
-        console.log('Before assignment: ', xhr.customData);
         xhr.customData = data;
-        console.log('After assignment: ', xhr.customData);
         return xhr;
     }
 
-    function tryParseJSON(jsonString) {
-        try {
-            let o = JSON.parse(jsonString);
-            if (o && typeof o === "object") {
-                console.log('It is JSON.')
-                return o;
-            }
-        }
-        catch (e) {
-            console.error('Forwarded variable is not of JSON type!');
-        }
-        return false;
-    }
 
     function success(xhr, callbackEvent) {
-        console.log('Response:', xhr);
-        console.log('Response text', xhr.responseText);
         //Here we decode data
         let data = tryParseJSON(xhr.responseText);
-        console.log('Response data JSON: ', data);
         //Here we take token and save it into local storage
-        console.log('Callback event:', callbackEvent);
         if (typeof callbackEvent !== "undefined" && callbackEvent !== null) {
             trigger(callbackEvent, {data: data});
         }
     }
 
     function error(xhr, callback) {
-        let data = tryParseJSON(xhr.responseText);
-        console.error(data);
+        //ToDo - Make error data be format that Fazi API returns
+        let errorData = {"message": xhr.responseText};
         if (typeof callback !== 'undefined') {
-            trigger(callback, {data: data});
+            trigger(callback, errorData);
         }
     }
 
@@ -68,12 +55,12 @@ let communication = (function () {
         else if (requestType === 'POST') {
             xhr = createPostRequest(route, data);
         }
-        console.log('xhr request created: ', xhr);
+
         xhr.onreadystatechange = function (e) {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.readyState == xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
                 success(xhr, callabackEvent);
             }
-            else if (xhr.status >= 400) {
+            else if (xhr.readyState == xhrStates.done && xhr.status >= 400) {
                 error(xhr, callabackEvent);
             }
         }
@@ -81,16 +68,27 @@ let communication = (function () {
     }
 
     function send(xhr) {
+        //TODO nisam sigurna da moze ovako
         if (typeof  xhr.customData !== 'undefined') {
-            console.log('Custom data is defined.');
-            return xhr.send(xhr.customData);
+            return xhr.send(JSON.stringify(xhr.customData));
         }
-        console.log('xhr in send:', xhr);
         return xhr.send();
     }
 
 
     //helper functions
+    function tryParseJSON(jsonString) {
+        try {
+            let o = JSON.parse(jsonString);
+            if (o && typeof o === "object") {
+                return o;
+            }
+        }
+        catch (e) {
+            console.error('Forwarded variable is not of JSON type!');
+        }
+        return undefined;
+    }
 
     function setDefaultHeaders(xhr) {
         xhr.setRequestHeader("Content-Type", "application/json");
@@ -99,9 +97,15 @@ let communication = (function () {
     }
 
     function setAuthHeader(xhr) {
+        //ToDo: procitaj token iz lokal storage-a - nakon sto obradimo login request pisemo ovo
+
         let token = "";
         //Here we get token from localhost
         xhr.setRequestHeader("Authorization", "Bearer " + token);
+    }
+
+    function setHeader(xhr, header, value) {
+        xhr.setRequestHeader(header, value);
     }
 
 
@@ -109,17 +113,18 @@ let communication = (function () {
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         let callbackEventName = params.callbackEvent;
-        let route = "todos/1";
+        //let route = "todos/1";
+        let route = "posts";
         let data = typeof params.data === "undefined" ? null : params.data;
-        let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
+        //let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
+        let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
-        console.log('xhr after setting default headers: ', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
 
 
-    // trigger('communicate/casino-info', {data: {"testParam": "test"}, callbackEvent: "casino/display-casino-info/"});
+    trigger('communicate/casino-info', {data: {'testParam': 'test'}, callbackEvent: 'casino/display-casino-info/'});
 
 
     //events for jackpot
@@ -133,15 +138,19 @@ let communication = (function () {
 
     //events for machines
     on('communicate/machine-info', function (params) {
-        // let machineId = params.machineId;
+        let machineId = params.machineId;
         let callbackEventName = params.callbackEvent;
         let route = "machine/" + machineId;
         let data = typeof params.data === "undefined" ? null : params.data;
+        console.log('data', data);
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
     });
+
+
+    // trigger('communicate/machine-info', {machineId: 12, data: {'testParam': 'test'}, callbackEvent: 'machines/display-machine-info/'});
 
 
     //events for reports
