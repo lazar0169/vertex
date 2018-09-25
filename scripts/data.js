@@ -75,7 +75,7 @@ let data = {
         ]
     },
 
-    AFT:
+    aft:
     {
         category: 'AFT',
         value: [
