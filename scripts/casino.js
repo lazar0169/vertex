@@ -11,14 +11,12 @@ let casino = (function () {
 
     on('casino/load',function(e) {
         let element = e.element;
-        console.log(e);
         //Multiple ways to place HTML element inside HTML document:
         //$$('.casino-list')[0].innerHTML = element.innerHTML;
         $$('.casino-list')[0].appendChild(element);
     });
 
     on('casino/display-casino-info/',function(e){
-        console.log('response u handleru:', e);
         //data = e.data;
         //alert(data);
     });
