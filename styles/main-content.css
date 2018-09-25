@@ -38,4 +38,5 @@
 .element-page.active {
     display: block !important;
     float: left;
+    width: 100%;
 }

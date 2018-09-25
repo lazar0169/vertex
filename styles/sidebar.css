@@ -260,9 +260,7 @@
 }
 
 .collapse .list-name, .collapse #global-search>div, .collapse .team-name, .collapse #sidebar-logo {
-    font-size: 0;
-    width: 0;
-    opacity: 0;
+    display: none;
 }
 
 .list-active, .link-active {
