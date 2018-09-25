@@ -1,0 +1,50 @@
+#AFT-filter {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: rgba(38, 50, 56);
+    color: rgb(120, 144, 156);
+    display: inline-block;
+}
+
+#AFT-filter>div {
+    display: inline-flex;
+    padding: 0.5rem 0;
+}
+
+#AFT-filter>div:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+#AFT-advance-table-filter {
+    cursor: pointer;
+}
+
+#AFT-advance-table-filter, #AFT-right-filter>div, #AFT-add-transaction, #wrapper-aft-export-to>div {
+    padding: 0 0.5rem
+}
+
+#AFT-right-filter {
+    display: inline-flex;
+    float: right;
+    border: none;
+}
+
+#AFT-right-filter>div {
+    border-left: 1px solid black;
+}
+
+#AFT-advance-table-filter-active {
+    width: 100%;
+    display: inline-flex;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+}
+
+#AFT-advance-table-filter-active>div {
+    padding: 0.5rem;
+}
+
+.AFT-advance-active {
+    background: rgb(55, 71, 79);
+}
