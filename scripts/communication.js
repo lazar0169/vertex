@@ -65,7 +65,6 @@ let communication = (function () {
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                console.log('Success!');
                 success(xhr, callbackEvent);
             }
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
