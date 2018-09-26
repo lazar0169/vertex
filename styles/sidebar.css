@@ -4,7 +4,8 @@
     position: relative;
     left: 0;
     top: 0;
-    width: 230;
+    width: 230px;
+    min-width: 230px;
     height: 100%;
     color: rgb(120, 144, 156);
     cursor: default;
@@ -19,6 +20,7 @@
 
 #sidebar.collapse {
     width: 50px;
+    min-width: 50px;
 }
 
 #sidebar-name {
@@ -209,6 +211,7 @@
 #head-name {
     display: inline-flex;
 }
+
 
 #navigation-name>.team-name {
     opacity: 1;

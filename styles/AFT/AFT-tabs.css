@@ -1,7 +1,7 @@
 #aft-tabs-wrapper {
     display: inline-flex;
     width: 100%;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     margin: 1rem 0;
 }
@@ -38,7 +38,7 @@
 #aft-tabs-enable-transaction-info>div:not(:last-child), #aft-tabs-notification-settings-info>div:not(:last-child) {
     padding: 0.5rem;
     color: rgb(120, 144, 156);
-    width: 320px;
+    width: 650px;
     border-bottom: 1px solid rgb(120, 144, 156);
 }
 
@@ -48,4 +48,8 @@
 
 #aft-notification-another-phone, #aft-notification-another-email {
     padding-top: 0.5rem;
+}
+
+.aft-notification-settings input, .aft-enable-transaction input {
+    width: 320px;
 }

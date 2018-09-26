@@ -1,14 +1,12 @@
 #main-content {
     background-color: rgb(55, 71, 79);
     height: 100%;
+    width: 100%;
     flex: 1;
     float: right;
     padding: 0 1%;
     transition: all 0.1s ease;
-}
-
-#main-content.expand {
-    width: 97.5%;
+    overflow: hidden;
 }
 
 #top-bar {
