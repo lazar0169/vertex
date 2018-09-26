@@ -1,6 +1,6 @@
 let casino = (function () {
 
-    on('casino/add',function(e) {
+    on('casino/add', function (e) {
         let model = e.model;
         trigger('template/render', {
             model: model,
@@ -9,7 +9,7 @@ let casino = (function () {
         });
     });
 
-    on('casino/load',function(e) {
+    on('casino/load', function (e) {
         let element = e.element;
         console.log('event', e);
         //Multiple ways to place HTML element inside HTML document:
@@ -17,20 +17,21 @@ let casino = (function () {
         $$('.casino-list')[0].appendChild(element);
     });
 
-    on('casino/display-casino-info/',function(e){
-        // data = e.data;
-        // alert(data);
+    on('casino/display-casino-info/', function (e) {
+        console.log('Response in handler: ', e);
+        //data = e.data;
+        //alert(data);
     });
 
-    on('casino/display-casino-info/error',function(e){
+    on('casino/display-casino-info/error', function (e) {
         data = e.data;
-        alert('An error occurred.');
+        alert('An error occured.');
     });
 
-/*    //Testing cloned button
-    $$('.cloning-test')[0].onclick = function (event) {
-        alert('Test.');
-    };*/
+    /*    //Testing cloned button
+        $$('.cloning-test')[0].onclick = function (event) {
+            alert('Test.');
+        };*/
 
 })();
 

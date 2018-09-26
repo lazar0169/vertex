@@ -18,17 +18,22 @@ let communication = (function () {
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', apiUrl + route, true);
+        xhr.open(requestTypes.get, apiUrl + route, true);
         return xhr;
     }
 
     function createPostRequest(route, data) {
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", apiUrl + route, true);
+        xhr.open(requestTypes.post, apiUrl + route, true);
         xhr.customData = data;
         return xhr;
     }
 
+    function createDeleteRequest(route) {
+        let xhr = new XMLHttpRequest();
+        xhr.open(requestTypes.delete, apiUrl + route, true);
+        return xhr;
+    }
 
     function success(xhr, callbackEvent) {
         //Here we decode data
@@ -40,35 +45,37 @@ let communication = (function () {
     }
 
     function error(xhr, callback) {
-        //ToDo - Make error data be format that Fazi API returns
+        //ToDo - error data format is the same format that API returns
         let errorData = {"message": xhr.responseText};
         if (typeof callback !== 'undefined') {
             trigger(callback, errorData);
         }
     }
 
-    function createRequest(route, requestType, data, callabackEvent) {
+    function createRequest(route, requestType, data, callbackEvent) {
         let xhr;
-        if (requestType === 'GET') {
+        if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
         }
-        else if (requestType === 'POST') {
+        else if (requestType === requestTypes.post) {
             xhr = createPostRequest(route, data);
         }
-
+        else if (requestType === requestTypes.delete) {
+            xhr = createDeleteRequest(route);
+        }
         xhr.onreadystatechange = function (e) {
-            if (xhr.readyState == xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                success(xhr, callabackEvent);
+            if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
+                console.log('Success!');
+                success(xhr, callbackEvent);
             }
-            else if (xhr.readyState == xhrStates.done && xhr.status >= 400) {
-                error(xhr, callabackEvent);
+            else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
+                error(xhr, callbackEvent);
             }
         }
         return xhr;
     }
 
     function send(xhr) {
-        //TODO nisam sigurna da moze ovako
         if (typeof  xhr.customData !== 'undefined') {
             return xhr.send(JSON.stringify(xhr.customData));
         }
@@ -77,6 +84,7 @@ let communication = (function () {
 
 
     //helper functions
+
     function tryParseJSON(jsonString) {
         try {
             let o = JSON.parse(jsonString);
@@ -97,10 +105,8 @@ let communication = (function () {
     }
 
     function setAuthHeader(xhr) {
-        //ToDo: procitaj token iz lokal storage-a - nakon sto obradimo login request pisemo ovo
-
+        //ToDo: take token from local storage
         let token = "";
-        //Here we get token from localhost
         xhr.setRequestHeader("Authorization", "Bearer " + token);
     }
 
@@ -113,11 +119,13 @@ let communication = (function () {
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         let callbackEventName = params.callbackEvent;
-        //let route = "todos/1";
-        let route = "posts";
-        let data = typeof params.data === "undefined" ? null : params.data;
+        //let route = 'todos/1';
+        // let route = 'posts';
+        let route = 'posts/1';
+        let data = typeof params.data === 'undefined' ? null : params.data;
         //let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
-        let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
+        // let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
+        let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
@@ -142,7 +150,6 @@ let communication = (function () {
         let callbackEventName = params.callbackEvent;
         let route = "machine/" + machineId;
         let data = typeof params.data === "undefined" ? null : params.data;
-        console.log('data', data);
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
