@@ -1,5 +1,17 @@
 let communication = (function () {
 
+    const apiRoutes = {
+        authorization: {
+          login: "login/",
+          logout: "logout/",
+        },
+        aft: {
+            edit: "aft/",
+            list: "list/",
+            ticket: "ticket/"
+        }
+    }
+
     const xhrStates = {
         unsent: 0,
         opened: 1,
@@ -14,7 +26,8 @@ let communication = (function () {
         delete: 'DELETE'
     };
 
-    const apiUrl = "https://jsonplaceholder.typicode.com/";
+    // const apiUrl = "https://jsonplaceholder.typicode.com/";
+    const apiUrl = "https://api.fazigaming.com/";
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
@@ -44,15 +57,15 @@ let communication = (function () {
         }
     }
 
-    function error(xhr, callback) {
+    function error(xhr, errorEventCallback) {
         //ToDo - error data format is the same format that API returns
         let errorData = {"message": xhr.responseText};
-        if (typeof callback !== 'undefined') {
-            trigger(callback, errorData);
+        if (typeof errorEventCallback !== 'undefined') {
+            trigger(errorEventCallback, errorData);
         }
     }
 
-    function createRequest(route, requestType, data, callbackEvent) {
+    function createRequest(route, requestType, data, successEvent, errorEvent) {
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
@@ -65,10 +78,10 @@ let communication = (function () {
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                success(xhr, callbackEvent);
+                success(xhr, successEvent);
             }
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
-                error(xhr, callbackEvent);
+                error(xhr, errorEvent);
             }
         }
         return xhr;
@@ -114,10 +127,23 @@ let communication = (function () {
     }
 
 
+    //events for login
+    on('communicate/login', function (params) {
+        let successEvent = params.successEvent;
+        let errorEvent = params.errorEvent;
+        let route = apiRoutes.authorization.login;
+        let data = typeof params.data === 'undefined' ? null : params.data;
+        let xhr = createRequest(route, requestTypes.post, data, successEvent, errorEvent);
+        xhr = setDefaultHeaders(xhr);
+        //xhr = setAuthHeader(xhr);
+        send(xhr);
+    });
+
+
     //events for casino
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
-        let callbackEventName = params.callbackEvent;
+        let callbackEventName = params.successEvent;
         //let route = 'todos/1';
         // let route = 'posts';
         let route = 'posts/1';
@@ -131,7 +157,7 @@ let communication = (function () {
     });
 
 
-    trigger('communicate/casino-info', {data: {'testParam': 'test'}, callbackEvent: 'casino/display-casino-info/'});
+    // trigger('communicate/casino-info', {data: {'testParam': 'test'}, successEvent: 'casino/display-casino-info/'});
 
 
     //events for jackpot
@@ -146,7 +172,7 @@ let communication = (function () {
     //events for machines
     on('communicate/machine-info', function (params) {
         let machineId = params.machineId;
-        let callbackEventName = params.callbackEvent;
+        let callbackEventName = params.successEvent;
         let route = "machine/" + machineId;
         let data = typeof params.data === "undefined" ? null : params.data;
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
