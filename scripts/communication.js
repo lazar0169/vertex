@@ -129,12 +129,14 @@ let communication = (function () {
 
     //events for login
     on('communicate/login', function (params) {
+        console.log('We have entered communicate/login');
         let successEvent = params.successEvent;
         let errorEvent = params.errorEvent;
         let route = apiRoutes.authorization.login;
         let data = typeof params.data === 'undefined' ? null : params.data;
         let xhr = createRequest(route, requestTypes.post, data, successEvent, errorEvent);
         xhr = setDefaultHeaders(xhr);
+        console.log('xhr', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
