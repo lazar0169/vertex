@@ -1,6 +1,17 @@
 {
     "index": {
         "scripts": [
+            "login.js",
+            "session.js",
+            "communication.js"
+        ],
+        "styles": [
+            "modify-spectre.css",
+            "login.css"
+        ]
+    },
+    "main": {
+        "scripts": [
             "data.js",
             "sidebar.js",
             "router.js",
@@ -9,8 +20,8 @@
             "casino.js",
             "communication.js",
             "machines.js",
-            "session.js",
-            "login.js"
+            "session.js"
+
         ],
         "styles": [
             "index.css",
@@ -22,13 +33,6 @@
             "machines/details-bar.css",
             "machines/edit-page.css",
             "main-content.css"
-        ]
-    },
-    "main": {
-        "scripts": [
-        ],
-        "styles": [
-
         ]
     }
 }
