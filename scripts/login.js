@@ -15,15 +15,19 @@ let login = (function () {
 
     //custom event handlers
     on('login/success', function (e) {
+        sessionStorage.clear();
         trigger('session/token/save', {encodedToken: e.data});
         let token = JSON.parse(localStorage.token);
         let endpoint = JSON.parse(token.endpoint);
+        sessionStorage.setItem('status', 'loggedIn');
+        window.location.href = '/home';
         //ToDO redirect
     });
 
     //ToDo HTACCESS redirection
 
     on('login/error', function (e) {
+        sessionStorage.clear();
         let errorMessage = e.message;
         let errorMessageJson = JSON.parse(errorMessage);
         console.error('Error! Incorrect usrename and / or password.');

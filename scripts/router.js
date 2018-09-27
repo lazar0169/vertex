@@ -288,16 +288,27 @@ let router = (function () {
     //Function for initialization
     function init() {
         addRegExpToPages();
-        let path = window.location.href,
-            pageName = getPageNameFromUrl(path);
-        if (pageName != null) {
-            changePage(pageName);
+        let currentSessionStorage = sessionStorage;
+        console.log('sessionStorage', currentSessionStorage);
+        if (currentSessionStorage.status === 'loggedIn') {
+            let path = window.location.href;
+            console.log(currentSessionStorage.status);
+            console.log(currentSessionStorage);
+            let pageName = getPageNameFromUrl(path);
+            if (pageName != null) {
+                changePage(pageName);
+            }
+            else {
+                console.error('Page not found!');
+                changePage('home');
+            }
+            bindNavigationLinkHandlers();
         }
         else {
-            console.error('Page not found!');
-            changePage('home');
+            alert('You are not logged in. Please login to continue!');
+            window.location.href = '/login';
         }
-        bindNavigationLinkHandlers();
+
     }
 
 

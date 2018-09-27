@@ -21,7 +21,6 @@
             "communication.js",
             "machines.js",
             "session.js"
-
         ],
         "styles": [
             "index.css",
