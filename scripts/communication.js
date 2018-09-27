@@ -38,8 +38,14 @@ let communication = (function () {
     function createPostRequest(route, data) {
         let xhr = new XMLHttpRequest();
         xhr.open(requestTypes.post, apiUrl + route, true);
-        xhr.customData = data;
-        return xhr;
+        console.log('data.error', data.error);
+        if (data.error === 'invalid_grant') {
+            console.error(data.error);
+        }
+        else {
+            xhr.customData = data;
+            return xhr;
+        }
     }
 
     function createDeleteRequest(route) {
@@ -89,6 +95,7 @@ let communication = (function () {
 
     function send(xhr) {
         if (typeof  xhr.customData !== 'undefined') {
+            console.log('xhr.customData !== undefined');
             return xhr.send(JSON.stringify(xhr.customData));
         }
         return xhr.send();
@@ -154,6 +161,7 @@ let communication = (function () {
         // let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
         let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
+        console.log('xhr', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
