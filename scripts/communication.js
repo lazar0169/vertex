@@ -10,7 +10,7 @@ let communication = (function () {
             list: "list/",
             ticket: "ticket/"
         }
-    }
+    };
 
     const xhrStates = {
         unsent: 0,
@@ -26,8 +26,8 @@ let communication = (function () {
         delete: 'DELETE'
     };
 
-    // const apiUrl = "https://jsonplaceholder.typicode.com/";
-    const apiUrl = "https://api.fazigaming.com/";
+    // const apiUrl = 'https://jsonplaceholder.typicode.com/';
+    const apiUrl = 'https://api.fazigaming.com/';
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
@@ -38,14 +38,8 @@ let communication = (function () {
     function createPostRequest(route, data) {
         let xhr = new XMLHttpRequest();
         xhr.open(requestTypes.post, apiUrl + route, true);
-        console.log('data.error', data.error);
-        if (data.error === 'invalid_grant') {
-            console.error(data.error);
-        }
-        else {
-            xhr.customData = data;
-            return xhr;
-        }
+        xhr.customData = data;
+        return xhr;
     }
 
     function createDeleteRequest(route) {
@@ -55,16 +49,13 @@ let communication = (function () {
     }
 
     function success(xhr, callbackEvent) {
-        //Here we decode data
         let data = tryParseJSON(xhr.responseText);
-        //Here we take token and save it into local storage
         if (typeof callbackEvent !== "undefined" && callbackEvent !== null) {
             trigger(callbackEvent, {data: data});
         }
     }
 
     function error(xhr, errorEventCallback) {
-        //ToDo - error data format is the same format that API returns
         let errorData = {"message": xhr.responseText};
         if (typeof errorEventCallback !== 'undefined') {
             trigger(errorEventCallback, errorData);
@@ -95,7 +86,7 @@ let communication = (function () {
 
     function send(xhr) {
         if (typeof  xhr.customData !== 'undefined') {
-            console.log('xhr.customData !== undefined');
+
             return xhr.send(JSON.stringify(xhr.customData));
         }
         return xhr.send();
@@ -136,14 +127,12 @@ let communication = (function () {
 
     //events for login
     on('communicate/login', function (params) {
-        console.log('We have entered communicate/login');
         let successEvent = params.successEvent;
         let errorEvent = params.errorEvent;
         let route = apiRoutes.authorization.login;
         let data = typeof params.data === 'undefined' ? null : params.data;
         let xhr = createRequest(route, requestTypes.post, data, successEvent, errorEvent);
         xhr = setDefaultHeaders(xhr);
-        console.log('xhr', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
@@ -154,14 +143,13 @@ let communication = (function () {
         //let casinoId = params.casinoId;
         let callbackEventName = params.successEvent;
         //let route = 'todos/1';
-        // let route = 'posts';
+        //let route = 'posts';
         let route = 'posts/1';
         let data = typeof params.data === 'undefined' ? null : params.data;
         //let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         // let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
         let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
-        console.log('xhr', xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });

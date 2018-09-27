@@ -82,6 +82,7 @@
     background-color: #1e9be3;
     border-color: #1e9be3;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.22);
+    border-radius: 5px !important;
     text-align: center;
     color: white;
 }
