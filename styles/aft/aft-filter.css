@@ -5,6 +5,7 @@
     background: rgba(38, 50, 56);
     color: rgb(120, 144, 156);
     display: inline-block;
+    white-space: nowrap;
 }
 
 #aft-filter>div {
@@ -35,14 +36,15 @@
 }
 
 #aft-advance-table-filter-active {
-    width: 100%;
     display: inline-flex;
     background: rgb(55, 71, 79);
     color: rgb(120, 144, 156);
+    min-width: 100%;
 }
 
-#aft-advance-table-filter-active>div {
+#aft-advance-table-filter-active>div, #aft-advance-table-filter-active>div>div {
     padding: 0.5rem;
+    white-space: nowrap;
 }
 
 .aft-advance-active {
