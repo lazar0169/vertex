@@ -4,6 +4,7 @@
     z-index: 1;
     height: 100%;
 }
+
 #login section {
     display: flex;
     flex-direction: column;
@@ -12,6 +13,7 @@
     margin: auto;
     width: 360px;
 }
+
 #login section header {
     display: flex;
     flex-direction: row;
@@ -22,6 +24,7 @@
     margin: 140px 0 30px 0;
     background-color: #fbfafc;
 }
+
 #login section header h1 {
     display: flex;
     flex-direction: row;
@@ -31,11 +34,13 @@
     font-size: 60px;
     text-align: center;
 }
+
 #login section header h1::before {
     margin-bottom: -10px;
     margin-right: 3px;
     content: url("/assets/images/logo-login#png");
 }
+
 #login section form {
     display: flex;
     flex-direction: column;
@@ -50,8 +55,9 @@
     background-color: white;
     border: 1px solid #efeff0;
     border-radius: 5px;
-    box-shadow: 0 0 5px 0 rgba(210, 213, 213, 0#7);
+    box-shadow: 0 0 5px 0 rgba(210, 213, 213, 0 #7);
 }
+
 #login section form input {
     align-self: center;
     width: 100%;
@@ -65,7 +71,8 @@
     font-family: "OpenSans-Semibold";
     color: #847774;
 }
-#login section form .username-input:focus, #login section form .pass-input:focus {
+
+.username-input:focus, .pass-input:focus {
     padding-top: 7px;
     background: white;
     border: 2px solid #1e9be3;
@@ -73,7 +80,8 @@
     box-shadow: 0 0 20px rgba(30, 155, 227, 0.16), 0 0 20px rgba(30, 155, 227, 0.22) !important;
     outline: 0;
 }
-#login section form .form-submit {
+
+.form-submit {
     align-self: flex-end;
     min-width: 130px;
     max-width: 40%;
@@ -86,17 +94,20 @@
     text-align: center;
     color: white;
 }
-#login section form .form-submit:hover {
+
+.form-submit:hover {
     box-shadow: none;
     cursor: pointer;
 }
-#login section form .form-submit:focus {
+
+.form-submit:focus {
     border: 1px solid lightgray !important;
     border-radius: 5px !important;
     outline: 0;
 }
-#login .login-validation, #login .login-error, #login .login-incorrect {
-    display: flex;
+
+.login-validation, .login-error, .login-incorrect {
+    display: none;
     justify-content: center;
     align-items: center;
     position: fixed;
@@ -113,7 +124,8 @@
     text-align: center;
     z-index: 3;
 }
-#login #login-validation p, #login .login-error p, .login .login-incorrect p {
+
+#login-validation p, .login-error p, .login-incorrect p {
     display: flex;
     flex-direction: row;
     align-self: center;
@@ -123,7 +135,8 @@
     font-size: 14px;
     color: white;
 }
-#login .login-validation p::before, #login .login-error p::before, #login .login-incorrect p::before {
+
+.login-validation p::before, .login-error p::before, .login-incorrect p::before {
     display: inline-block;
     align-self: center;
     width: 20px;
@@ -134,12 +147,24 @@
     background-size: 20px;
     content: "";
 }
-#login .login-incorrect {
+
+.login-incorrect {
     z-index: 4;
 }
-#login .login-error {
+
+.login-error {
     background-color: #c75c58;
     border: 2px solid #c75c58 !important;
     color: white;
     z-index: 4;
+}
+
+.display {
+    display: flex;
+    opacity: 1;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
 }

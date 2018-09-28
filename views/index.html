@@ -8,7 +8,7 @@
     <base href="http://vertex.test"/>
 
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
     <link href="vendor/icons/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="vendor/spectre/spectre-exp.min.css" rel="stylesheet">
     <link href="vendor/spectre/spectre-icons.min.css" rel="stylesheet">
@@ -16,10 +16,12 @@
 </head>
 
 <body>
+    <!--<div class="preloader">...Loading...</div>-->
     <script>
         if (sessionStorage.status && sessionStorage.status === 'loggedIn') {
             window.location.pathname = '/home';
         }
+        // trigger('preloader/hide');
     </script>
     <object data-object="login"></object>
 </body>

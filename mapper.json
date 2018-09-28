@@ -3,7 +3,8 @@
         "scripts": [
             "login.js",
             "session.js",
-            "communication.js"
+            "communication.js",
+            "preloader.js"
         ],
         "styles": [
             "modify-spectre.css",
@@ -20,7 +21,8 @@
             "casino.js",
             "communication.js",
             "machines.js",
-            "session.js"
+            "session.js",
+            "preloader.js"
         ],
         "styles": [
             "index.css",

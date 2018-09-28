@@ -1,22 +1,20 @@
 let login = (function () {
 
-    if (sessionStorage.status && sessionStorage.status === 'loggedIn') {
-        console.log('radi li ovo bre ');
-
-        window.location.pathname = '/home';
-    }
-
     let usernameFieldName = '.username-input';
     let passwordFieldName = '.pass-input';
 
     //event handlers
-    $$('form')[0].addEventListener('submit', function(e){
+    $$('form')[0].addEventListener('submit', function (e) {
         e.preventDefault();
         let usernameField = $$(usernameFieldName)[0];
         let passwordField = $$(passwordFieldName)[0];
         let usernameValue = usernameField.value;
         let passwordValue = passwordField.value;
-        trigger('communicate/login', {data: {'UserName': usernameValue, "Password": passwordValue}, successEvent: 'login/success', errorEvent: "login/error"});
+        trigger('communicate/login', {
+            data: {'UserName': usernameValue, "Password": passwordValue},
+            successEvent: 'login/success',
+            errorEvent: "login/error"
+        });
     });
 
     //custom event handlers
@@ -27,10 +25,7 @@ let login = (function () {
         let endpoint = JSON.parse(token.endpoint);
         sessionStorage.setItem('status', 'loggedIn');
         window.location.pathname = '/home';
-        //ToDO redirect
     });
-
-    //ToDo HTACCESS redirection
 
     on('login/error', function (e) {
         sessionStorage.clear();
@@ -40,6 +35,7 @@ let login = (function () {
         console.error('Error! Incorrect usrename and / or password.');
         window.location.pathname = '/login';
     });
+
 })();
 
 
