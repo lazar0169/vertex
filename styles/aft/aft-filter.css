@@ -20,7 +20,7 @@
     cursor: pointer;
 }
 
-#aft-advance-table-filter, #aft-right-filter>div, #aft-add-transaction, #wrapper-aft-export-to>div {
+#aft-advance-table-filter>div, #aft-right-filter>div, #aft-add-transaction, #wrapper-aft-export-to>div {
     padding: 0 0.5rem
 }
 
