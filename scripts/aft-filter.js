@@ -7,9 +7,7 @@ const aftFilter = (function () {
     });
 
     function showAdvanceTableFilter() {
-        advanceTableFilter.classList.contains('aft-advance-active') ? advanceTableFilter.classList.remove('aft-advance-active') : advanceTableFilter.classList.add('aft-advance-active')
-        advanceTableFilterActive.classList.contains('hidden') ? advanceTableFilterActive.classList.remove('hidden') : advanceTableFilterActive.classList.add('hidden');
-    
+        advanceTableFilter.classList.toggle('aft-advance-active');
+        advanceTableFilterActive.classList.toggle('hidden');  
     }
-
 })();

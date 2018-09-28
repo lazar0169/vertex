@@ -2,11 +2,8 @@ const detailsBar = (function () {
     let detailsBar = $$('#details-bar');
     let closeDetailsBar = $$('#machine-close-details-bar');
     let blackArea = $$('#black-area');
-    
     let editCurrentMachine = $$('#edit-current-machine');
     let editMode = $$('#machine-edit-mode');
-
- 
 
     let details = function () {
         return {

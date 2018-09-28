@@ -6,22 +6,21 @@ const aftTabContent = (function () {
     let emailCounter = 0;
     let mobileCounter = 0;
 
-
     aftAnotherMobile.addEventListener('click', function () {
-
         let temp = document.createElement('input');
         temp.placeholder = "Your another mobile number";
         temp.classList = "form-input";
-        aftNotificationMobile.insertBefore(temp, aftNotificationMobile.childNodes[2 + mobileCounter]);
+        temp.id = `notification-mobile-phone-number-${mobileCounter}`
+        aftNotificationMobile.children[0].appendChild(temp);
         mobileCounter++;
     });
-
+    
     aftAnotherEmail.addEventListener('click', function () {
-
         let temp = document.createElement('input');
         temp.placeholder = "Your another email address";
         temp.classList = "form-input";
-        aftNotificationEmail.insertBefore(temp, aftNotificationEmail.childNodes[2 + emailCounter]);
+        temp.id = `notification-email-address-${emailCounter}`
+        aftNotificationEmail.children[0].appendChild(temp);
         emailCounter++;
     });
 })();
