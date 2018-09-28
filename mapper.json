@@ -5,8 +5,10 @@
             "sidebar.js",
             "router.js",
             "template-engine.js",
-            "details-bar.js",
-            "casino.js"
+            "machines/details-bar.js",
+            "casino.js",
+            "aft/aft-filter.js",
+            "aft/aft-tab-content.js"
         ],
         "styles": [
             "index.css",
@@ -17,6 +19,8 @@
             "machines/machines-table.css",
             "machines/details-bar.css",
             "machines/edit-page.css",
+            "aft/aft-filter.css",
+            "aft/aft-tabs.css",
             "main-content.css"
         ]
     }

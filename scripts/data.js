@@ -75,7 +75,7 @@ let data = {
         ]
     },
 
-    AFT:
+    aft:
     {
         category: 'AFT',
         value: [
@@ -202,6 +202,5 @@ let data = {
             }
         ]
     }
-
 };
 let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
