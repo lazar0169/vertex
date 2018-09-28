@@ -7,8 +7,8 @@
             "template-engine.js",
             "details-bar.js",
             "casino.js",
-            "aft-filter.js",
-            "aft-tab-content.js"
+            "blabla-filter.js",
+            "blabla-tab-content.js"
         ],
         "styles": [
             "index.css",
@@ -19,8 +19,8 @@
             "machines/machines-table.css",
             "machines/details-bar.css",
             "machines/edit-page.css",
-            "aft/aft-filter.css",
-            "aft/aft-tabs.css",
+            "blabla/blabla-filter.css",
+            "blabla/blabla-tabs.css",
             "main-content.css"
         ]
     }
