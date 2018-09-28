@@ -21,7 +21,7 @@ let router = (function () {
     routes.set('home', {
         page: 'home',
         id: '#page-home',
-        path: '/'
+        path: '/home'
     });
     routes.set('casino', {
         page: 'casino',
@@ -293,38 +293,27 @@ let router = (function () {
         console.log('sessionStorage', currentSessionStorage);
         console.log('sesionstorage status', currentSessionStorage.status);
 
-        if (currentSessionStorage.status === 'loggedIn') {
-            console.log('href', window.location.href);
-            console.log('pathname', window.location.pathname);
-            if (window.location.pathname === '/login' || window.location.pathname === '') {
-                console.log('da li je href /login ili nista');
-                changePage('home');
-            }
-            console.log('3');
-            let path = window.location.pathname;
-            console.log('path', path);
-            console.log(currentSessionStorage.status);
-            console.log(currentSessionStorage);
-            let pageName = getPageNameFromUrl(path);
-            if (pageName != null) {
-                changePage(pageName);
-            }
-            else {
-                console.error('Page not found!');
-                changePage('home');
-            }
-            bindNavigationLinkHandlers();
+        console.log('href', window.location.href);
+        console.log('pathname', window.location.pathname);
+        if (window.location.pathname === '/login' || window.location.pathname === '') {
+            console.log('da li je href /login ili nista');
+            changePage('home');
+        }
+        console.log('3');
+        let path = window.location.pathname;
+        console.log('path', path);
+        console.log(currentSessionStorage.status);
+        console.log(currentSessionStorage);
+        let pageName = getPageNameFromUrl(path);
+        if (pageName != null) {
+            changePage(pageName);
         }
         else {
-            console.log('4');
-            if (window.location.pathname !== '' || window.location.pathname !== '/login') {
-                alert('You are not logged in. Please login to continue!');
-                window.location.href = '/login';
-            }
-            else {
-                window.location.pathname = '/login';
-            }
+            console.error('Page not found!');
+            changePage('home');
         }
+        bindNavigationLinkHandlers();
+
     }
 
 
