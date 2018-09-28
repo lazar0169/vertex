@@ -1,6 +1,8 @@
-const keys = {
-    authToken : "token"
-}
+let session = (function(){
+
+    const keys = {
+        authToken : "token"
+    }
 
 on('session/token/save', function(e) {
     if (typeof(Storage) !== "undefined") {
@@ -13,3 +15,5 @@ on('session/token/save', function(e) {
         console.error('Sorry! No Web Storage support...');
     }
 });
+
+})();
