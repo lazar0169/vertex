@@ -5,10 +5,10 @@
             "sidebar.js",
             "router.js",
             "template-engine.js",
-            "details-bar.js",
+            "machines/details-bar.js",
             "casino.js",
-            "aft-filter.js",
-            "aft-tab-content.js"
+            "aft/aft-filter.js",
+            "aft/aft-tab-content.js"
         ],
         "styles": [
             "index.css",
