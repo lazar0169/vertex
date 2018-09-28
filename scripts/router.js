@@ -80,6 +80,7 @@ let router = (function () {
     }
 
     function makePageActive(pageName) {
+
         let pageElement = getElementFromPageName(pageName);
         if (pageElement != null) {
             pageElement.classList.add('active');
@@ -290,8 +291,18 @@ let router = (function () {
         addRegExpToPages();
         let currentSessionStorage = sessionStorage;
         console.log('sessionStorage', currentSessionStorage);
+        console.log('sesionstorage status', currentSessionStorage.status);
+
         if (currentSessionStorage.status === 'loggedIn') {
-            let path = window.location.href;
+            console.log('href', window.location.href);
+            console.log('pathname', window.location.pathname);
+            if (window.location.pathname === '/login' || window.location.pathname === '') {
+                console.log('da li je href /login ili nista');
+                changePage('home');
+            }
+            console.log('3');
+            let path = window.location.pathname;
+            console.log('path', path);
             console.log(currentSessionStorage.status);
             console.log(currentSessionStorage);
             let pageName = getPageNameFromUrl(path);
@@ -305,10 +316,15 @@ let router = (function () {
             bindNavigationLinkHandlers();
         }
         else {
-            alert('You are not logged in. Please login to continue!');
-            window.location.href = '/login';
+            console.log('4');
+            if (window.location.pathname !== '' || window.location.pathname !== '/login') {
+                alert('You are not logged in. Please login to continue!');
+                window.location.href = '/login';
+            }
+            else {
+                window.location.pathname = '/login';
+            }
         }
-
     }
 
 

@@ -16,6 +16,11 @@
 </head>
 
 <body>
+    <script>
+        if (sessionStorage.status && sessionStorage.status === 'loggedIn') {
+            window.location.pathname = '/home';
+        }
+    </script>
     <object data-object="login"></object>
 </body>
 

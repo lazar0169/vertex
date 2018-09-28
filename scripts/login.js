@@ -1,5 +1,11 @@
 let login = (function () {
 
+    if (sessionStorage.status && sessionStorage.status === 'loggedIn') {
+        console.log('radi li ovo bre ');
+
+        window.location.pathname = '/home';
+    }
+
     let usernameFieldName = '.username-input';
     let passwordFieldName = '.pass-input';
 
@@ -20,7 +26,7 @@ let login = (function () {
         let token = JSON.parse(localStorage.token);
         let endpoint = JSON.parse(token.endpoint);
         sessionStorage.setItem('status', 'loggedIn');
-        window.location.href = '/home';
+        window.location.pathname = '/home';
         //ToDO redirect
     });
 
@@ -28,9 +34,11 @@ let login = (function () {
 
     on('login/error', function (e) {
         sessionStorage.clear();
+        alert('Invalid username and / or password! Please try again!');
         let errorMessage = e.message;
         let errorMessageJson = JSON.parse(errorMessage);
         console.error('Error! Incorrect usrename and / or password.');
+        window.location.pathname = '/login';
     });
 })();
 
