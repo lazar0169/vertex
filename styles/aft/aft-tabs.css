@@ -1,0 +1,55 @@
+#aft-tabs-wrapper {
+    display: inline-flex;
+    width: 100%;
+    border-bottom: 1px solid rgb(38, 50, 56);
+    color: rgb(120, 144, 156);
+    margin: 1rem 0;
+}
+
+#aft-tabs-wrapper>div {
+    padding: 0 0.5rem;
+    cursor: pointer;
+}
+
+#page-aft>div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 95%;
+}
+
+.aft-info-tab {
+    flex: 1;
+    padding: 0.5rem;
+    background: rgb(38, 50, 56);
+}
+
+#aft-enable-transaction-check, #aft-enable-notification-check {
+    display: inline-flex;
+}
+
+#aft-enable-transaction-check>div, #aft-enable-notification-check>div {
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    color: rgb(120, 144, 156);
+}
+
+#aft-tabs-enable-transaction-info>div:not(:last-child), #aft-tabs-notification-settings-info>div:not(:last-child) {
+    padding: 0.5rem;
+    color: rgb(120, 144, 156);
+    width: 650px;
+    border-bottom: 1px solid rgb(120, 144, 156);
+}
+
+#aft-tabs-enable-transaction-info>div:last-child, #aft-tabs-notification-settings-info>div:last-child {
+    padding: 1rem 0.5rem;
+}
+
+#aft-notification-another-phone, #aft-notification-another-email {
+    padding-top: 0.5rem;
+}
+
+.aft-notification-settings input, .aft-enable-transaction input {
+    width: 320px;
+}

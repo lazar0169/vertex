@@ -46,11 +46,11 @@
     padding: 0.5rem;
 }
 
-.mdi-view-sequential, .mdi-view-headline {
+.mdi-view-sequential, .mdi-view-headline  {
     color: rgb(36, 82, 108);
     cursor: pointer;
 }
 
-.machine-filters-show-space-active {
+.machine-filters-show-space-active, .show-space-active {
     color: rgb(30, 155, 227);
 }

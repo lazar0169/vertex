@@ -1,0 +1,52 @@
+#aft-filter {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: rgba(38, 50, 56);
+    color: rgb(120, 144, 156);
+    display: inline-block;
+    white-space: nowrap;
+}
+
+#aft-filter>div {
+    display: inline-flex;
+    padding: 0.5rem 0;
+}
+
+#aft-filter>div:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+#aft-advance-table-filter {
+    cursor: pointer;
+}
+
+#aft-advance-table-filter>div, #aft-right-filter>div, #aft-add-transaction, #wrapper-aft-export-to>div {
+    padding: 0 0.5rem
+}
+
+#aft-right-filter {
+    display: inline-flex;
+    float: right;
+    border: none;
+}
+
+#aft-right-filter>div {
+    border-left: 1px solid black;
+}
+
+#aft-advance-table-filter-active {
+    display: inline-flex;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    min-width: 100%;
+}
+
+#aft-advance-table-filter-active>div, #aft-advance-table-filter-active>div>div {
+    padding: 0.5rem;
+    white-space: nowrap;
+}
+
+.aft-advance-active {
+    background: rgb(55, 71, 79);
+}

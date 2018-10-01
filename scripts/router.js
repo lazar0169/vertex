@@ -38,10 +38,10 @@ let router = (function () {
         id: '#page-tickets',
         path: '/tickets'
     });
-    routes.set('AFT', {
-        page: 'AFT',
-        id: '#page-AFT',
-        path: '/AFT'
+    routes.set('aft', {
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft'
     });
     routes.set('machines', {
         page: 'machines',

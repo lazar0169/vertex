@@ -17,7 +17,9 @@
             "sidebar.js",
             "router.js",
             "template-engine.js",
-            "details-bar.js",
+            "machines/details-bar.js",
+            "aft/aft-filter.js",
+            "aft/aft-tab-content.js",
             "casino.js",
             "communication.js",
             "machines.js",
@@ -33,6 +35,8 @@
             "machines/machines-table.css",
             "machines/details-bar.css",
             "machines/edit-page.css",
+            "aft/aft-filter.css",
+            "aft/aft-tabs.css",
             "main-content.css"
         ]
     }

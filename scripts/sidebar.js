@@ -363,6 +363,9 @@ const sidebar = (function () {
     }();
     //test, if you don't need it anymore, remove it
     $$('#test-enable-details').addEventListener('click', function () {
+        selectTab('machine-details-tab');
+        selectInfoContent('machine-details-tab');
+
         isActiveDetailsTest ?
             detailsmenutest.collapse() :
             detailsmenutest.expand();
