@@ -97,6 +97,25 @@ let router = (function () {
     }
 
     function showPage(pageName) {
+/*        //local storage session fix
+        ((nm,tm) => {
+            const
+                l = localStorage,
+                s = sessionStorage,
+                tabid = s.getItem(tm) || (newid => s.setItem(tm, newid) || newid)((Math.random() * 1e8).toFixed()),
+                update = set => {
+                    let cur = JSON.parse(l.getItem(nm) || '{}');
+                    if (set && typeof cur[tabid] == 'undefined' && !Object.values(cur).reduce((a, b) => a + b, 0)) {
+                        l.clear();
+                        cur = {};
+                    }
+                    cur[tabid] = set;
+                    l.setItem(nm, JSON.stringify(cur));
+                };
+            update(1);
+            window.onbeforeunload = () => update(0);
+        })('tabs','tabid');*/
+
         makePageActive(pageName);
     }
 
