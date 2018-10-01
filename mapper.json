@@ -8,7 +8,8 @@
             "machines/details-bar.js",
             "casino.js",
             "aft/aft-filter.js",
-            "aft/aft-tab-content.js"
+            "aft/aft-tab-content.js",
+            "multi-select.js"
         ],
         "styles": [
             "index.css",
