@@ -1,14 +1,30 @@
 {
     "index": {
         "scripts": [
+            "login.js",
+            "session.js",
+            "communication.js",
+            "preloader.js"
+        ],
+        "styles": [
+            "modify-spectre.css",
+            "login.css"
+        ]
+    },
+    "main": {
+        "scripts": [
             "data.js",
             "sidebar.js",
             "router.js",
             "template-engine.js",
             "machines/details-bar.js",
-            "casino.js",
             "aft/aft-filter.js",
-            "aft/aft-tab-content.js"
+            "aft/aft-tab-content.js",
+            "casino.js",
+            "communication.js",
+            "machines.js",
+            "session.js",
+            "preloader.js"
         ],
         "styles": [
             "index.css",

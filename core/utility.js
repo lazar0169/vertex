@@ -9,6 +9,14 @@ function $$(selector) {
     }
 }
 
+function decodeToken(encodedToken) {
+    //ToDO check if data is valid
+    let accessToken = encodedToken.access_token;
+    let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+    return decodedToken;
+}
+
+
 //add and remove class
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;

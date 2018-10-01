@@ -1,6 +1,10 @@
-$$('#black-area').addEventListener('click', function () {
-    trigger('show/app');
-});
+let blackArea = $$('#black-area');
+if (typeof blackArea !== 'undefined' && blackArea !== null) {
+    $$('#black-area').addEventListener('click', function () {
+        trigger('show/app');
+    });
+}
+
 // tab listener
 let tabs = $$('.tabs');
 window.addEventListener('load', function () {

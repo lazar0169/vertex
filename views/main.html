@@ -18,12 +18,15 @@
 <body>
     <!--<div class="preloader">...Loading...</div>-->
     <script>
-        if (sessionStorage.status && sessionStorage.status === 'loggedIn') {
-            window.location.pathname = '/home';
+        if (!sessionStorage.status || sessionStorage.status !== 'loggedIn') {
+            alert('You are not logged in. Please login to continue!');
+            window.location.pathname = '/login';
         }
         // trigger('preloader/hide');
     </script>
-    <object data-object="login"></object>
+    <object data-object="sidebar"></object>
+    <object data-object="main-content"></object>
+    <div id="black-area"></div>
 </body>
 
 </html>

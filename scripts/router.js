@@ -21,7 +21,7 @@ let router = (function () {
     routes.set('home', {
         page: 'home',
         id: '#page-home',
-        path: '/'
+        path: '/home'
     });
     routes.set('casino', {
         page: 'casino',
@@ -80,6 +80,7 @@ let router = (function () {
     }
 
     function makePageActive(pageName) {
+
         let pageElement = getElementFromPageName(pageName);
         if (pageElement != null) {
             pageElement.classList.add('active');
@@ -288,8 +289,8 @@ let router = (function () {
     //Function for initialization
     function init() {
         addRegExpToPages();
-        let path = window.location.href,
-            pageName = getPageNameFromUrl(path);
+        let path = window.location.pathname;
+        let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
             changePage(pageName);
         }

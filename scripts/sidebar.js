@@ -52,6 +52,7 @@ const sidebar = (function () {
         };
     }();
 
+
     window.addEventListener('load', function () {
         generateMenu(data);
         generateLinks(categorySelectedId);
