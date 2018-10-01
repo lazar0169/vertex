@@ -19,6 +19,7 @@
     <!--<div class="preloader">...Loading...</div>-->
     <script>
         if (!sessionStorage.status || sessionStorage.status !== 'loggedIn') {
+            console.log(sessionStorage);
             alert('You are not logged in. Please login to continue!');
             window.location.pathname = '/login';
         }

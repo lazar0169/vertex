@@ -21,6 +21,10 @@ let session = (function(){
         sessionStorage.setItem('status', 'loggedIn');
     });
 
+    on('session/logout/', function(){
+        sessionStorage.clear();
+        window.location.href = '/login';
+    });
 
     on('session/login/error', function(e){
         sessionStorage.clear();
@@ -29,4 +33,6 @@ let session = (function(){
         alert('Invalid username / password. Please try again!');
     });
 
+    // window.onload
+// takav event ce da se handluje
 })();
