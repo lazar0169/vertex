@@ -16,6 +16,7 @@ let nekiniz5 = ['proba5', 'prsadf5', 'p5'];
 let proba6 = $$('#proba6');
 let nekiniz6 = ['proba6', 'prsadf6', 'p6'];
 
+
 window.addEventListener('load', function () {
     proba.appendChild(multiselect(nekiniz));
     proba2.appendChild(multiselect(nekiniz2));
@@ -27,6 +28,8 @@ window.addEventListener('load', function () {
 
 // funkcija za visestruko selektovanje
 function multiselect(dataSelect) {
+    let clicked = false;
+    let showChosenElements = document.createElement('div');
 
     let fragment = document.createDocumentFragment();
     let tempFragmentHead = document.createElement('div');
@@ -51,24 +54,36 @@ function multiselect(dataSelect) {
 
         bodyElement.addEventListener('click', function (e) {
             e.preventDefault();
+            showChosenElements.classList.remove('hidden');
             if (bodyElement.children[0].children[0].checked == false) {
-                let temp = document.createElement('div');
-                temp.innerHTML = bodyElement.children[0].children[2].textContent;
-                temp.dataset.id = bodyElement.children[0].children[2].textContent;
-                headInitialContent.classList.add('hidden');
-                tempFragmentHead.appendChild(temp);
+                if (!clicked) {
+                    showChosenElements.innerHTML = bodyElement.children[0].children[2].textContent;
+                    headInitialContent.classList.add('hidden');
+                    tempFragmentHead.appendChild(showChosenElements);
+                    clicked = true;
+                }
+                else {
+                    showChosenElements.textContent += `,${bodyElement.children[0].children[2].textContent}`;
+                }
                 bodyElement.children[0].children[0].checked = true;
             }
             else {
-                for (let element = 0; element < tempFragmentHead.childElementCount; element++) {
-                    if (bodyElement.children[0].children[2].textContent == tempFragmentHead.children[element].dataset.id) {
-                        tempFragmentHead.children[element].remove();
-                        break;
+                var array = showChosenElements.textContent.split(",");
+                let index = 0;
+                for (let elem of array) {
+                    if (elem == bodyElement.children[0].children[2].textContent) {
+                        array.splice(index, 1);
+                    }
+                    else {
+                        index++;
                     }
                 }
+                showChosenElements.textContent = array.join(',')
                 bodyElement.children[0].children[0].checked = false;
-                if (tempFragmentHead.childElementCount === 1) {
-                    headInitialContent.classList.remove('hidden')
+                if (showChosenElements.textContent === '') {
+                    showChosenElements.classList.add('hidden');
+                    headInitialContent.classList.remove('hidden');
+                    clicked = false;
                 }
             }
         });
@@ -78,4 +93,3 @@ function multiselect(dataSelect) {
     fragment.appendChild(tempFragmentBody);
     return fragment;
 }
-

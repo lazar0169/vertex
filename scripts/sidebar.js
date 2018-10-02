@@ -247,7 +247,7 @@ const sidebar = (function () {
                 let index = valueName.indexOf(termin);
                 let index1 = valueName.indexOf(` ${termin}`);
                 let index2 = valueCity.indexOf(termin);
-                let index3 = valueCity.indexOf(` ${termin}`)
+                let index3 = valueCity.indexOf(` ${termin}`);
                 if (index === 0 ||
                     index1 !== -1 ||
                     index2 === 0 ||

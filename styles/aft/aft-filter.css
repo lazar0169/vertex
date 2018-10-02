@@ -45,6 +45,7 @@
 #aft-advance-table-filter-active>div, #aft-advance-table-filter-active>div>div {
     padding: 0.5rem;
     white-space: nowrap;
+    border-radius: 0.5rem;
 }
 
 .aft-advance-active {

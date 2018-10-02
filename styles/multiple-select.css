@@ -5,11 +5,11 @@
     cursor: pointer;
 }
 
-.multiple-select>div:first-child:before {
+.multiple-select:before {
     content: "";
     position: absolute;
-    right: 0;
-    top: 30%;
+    right: 3px;
+    top: 20px;
     width: 0;
     height: 0;
     border-top: 0.5rem solid rgb(30, 155, 227);
@@ -22,11 +22,17 @@
     padding: 0 0.5rem;
 }
 
+.multiple-select>div:first-child>div {
+    width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .multiple-select>div:not(:first-child) {
     position: fixed;
     background: rgb(38, 50, 56);
     margin-top: 0.5rem;
-    margin-left: -0.5rem;
 }
 
 .multiple-select>div>div {
