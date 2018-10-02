@@ -32,7 +32,6 @@ let session = (function () {
         alert('Invalid username / password. Please try again!');
     });
 
-
     // transfering sessionStorage from one tab to another
 
     function sessionStorage_transfer(event) {
