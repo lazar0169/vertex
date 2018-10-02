@@ -23,7 +23,7 @@
 }
 
 .multiple-select>div:first-child>div {
-    width: 70px;
+    width: 66px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
