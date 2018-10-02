@@ -19,8 +19,6 @@ let session = (function () {
 
     on('session/login/success', function (e) {
         trigger('session/token/save', {encodedToken: e.encodedToken});
-        sessionStorage.setItem('status', 'loggedIn');
-        let storage = sessionStorage;
     });
 
     on('session/logout/', function () {
@@ -37,7 +35,7 @@ let session = (function () {
 
     // transfers sessionStorage from one tab to another
     // transfers sessionStorage from one tab to another
-    var sessionStorage_transfer = function (event) {
+    function sessionStorage_transfer(event) {
         if (!event) {
             event = window.event;
         } // ie suq
@@ -49,8 +47,8 @@ let session = (function () {
             localStorage.removeItem('sessionStorage'); // <- could do short timeout as well.
         } else if (event.key == 'sessionStorage' && !sessionStorage.length) {
             // another tab sent data <- get it
-            var data = JSON.parse(event.newValue);
-            for (var key in data) {
+            let data = JSON.parse(event.newValue);
+            for (let key in data) {
                 sessionStorage.setItem(key, data[key]);
             }
         }
@@ -71,16 +69,15 @@ let session = (function () {
         localStorage.setItem('getSessionStorage', 'foobar');
         localStorage.removeItem('getSessionStorage', 'foobar');
     }
-    ;
-
 
     function isLoggedIn() {
         if (window.location.pathname.indexOf("login") < 0) {
             console.log('Checking if the user is logged in.');
-            console.log(sessionStorage.token);
+            console.log('session storage token ', sessionStorage.token);
             if (typeof sessionStorage.token != 'undefined' && sessionStorage.token != null) {
-                //decode tokend and check if it is valid
-                // decodeToken(sessionStorage.token);
+                let decodedToken = decodeToken(sessionStorage.token);
+                let endpoint = decodedToken.endpoint;
+                console.log('endpoint', endpoint);
                 console.log('The user is logged in.');
             }
             else {

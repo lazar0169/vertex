@@ -20,7 +20,10 @@ let login = (function () {
     //custom event handlers
     on('login/success', function (e) {
         trigger('session/login/success', {encodedToken: e.data});
-        if (sessionStorage.status === 'loggedIn') {
+        console.log('session storage ', sessionStorage);
+        console.log('session storage token ', sessionStorage.token);
+        console.log(!sessionStorage.token);
+        if (sessionStorage.token || sessionStorage.token !== undefined) {
             window.location.pathname = '/home';
         }
         else {

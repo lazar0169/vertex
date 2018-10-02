@@ -9,10 +9,42 @@ function $$(selector) {
     }
 }
 
+
+function validateEncodedToken(accessToken) {
+    let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+    let dotCounter = 0;
+    console.log('accessToken', accessToken);
+
+
+    let match;
+
+
+    while (match = regex.exec(accessToken)) {
+        dotCounter++;
+    }
+
+    while (accessToken.indexOf('.') > -1) {
+        dotCounter++;
+        alert (dotCounter);
+    }
+    console.log('dot counter', dotCounter);
+    if (dotCounter === 2) {
+        let accessTokenSplit = accessToken.split('.')[1];
+        console.log('accessTokenSplit', accessTokenSplit);
+        if(base64regex.test(accessTokenSplit)){
+            console.log('');
+        }
+    }
+    else return false;
+}
+
 function decodeToken(encodedToken) {
     //ToDO check if data is valid
-    let accessToken = encodedToken.access_token;
+    let encodedTokenJSON = JSON.parse(encodedToken);
+    let accessToken = encodedTokenJSON.access_token;
+    validateEncodedToken(accessToken);
     let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+    console.log('decodedToken', decodedToken);
     return decodedToken;
 }
 

@@ -8,4 +8,3 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule ^(.*)$ main.html [L,QSA] #redirect all traffic to index.html
-
