@@ -30,7 +30,8 @@
 }
 
 .multiple-select>div:not(:first-child) {
-    position: fixed;
+    position: absolute;
+    height: 140px;
     background: rgb(38, 50, 56);
     margin-top: 0.5rem;
 }

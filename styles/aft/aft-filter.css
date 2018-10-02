@@ -6,6 +6,7 @@
     color: rgb(120, 144, 156);
     display: inline-block;
     white-space: nowrap;
+    position: relative;
 }
 
 #aft-filter>div {
@@ -27,8 +28,9 @@
 
 #aft-right-filter {
     display: inline-flex;
-    float: right;
     border: none;
+    position: absolute;
+    right: 0;
 }
 
 #aft-right-filter>div {

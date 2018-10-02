@@ -51,6 +51,7 @@ function multiselect(dataSelect) {
                                             <i class="form-icon" ></i> <div>${element}</div>
                                         </label>`;
         tempFragmentBody.appendChild(bodyElement);
+        tempFragmentBody.classList.add('overflow-y');
 
         bodyElement.addEventListener('click', function (e) {
             e.preventDefault();
