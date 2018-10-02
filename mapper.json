@@ -9,7 +9,7 @@
             "casino.js",
             "aft/aft-filter.js",
             "aft/aft-tab-content.js",
-            "multi-select.js"
+            "default-select.js"
         ],
         "styles": [
             "index.css",
@@ -22,7 +22,7 @@
             "machines/edit-page.css",
             "aft/aft-filter.css",
             "aft/aft-tabs.css",
-            "multiple-select.css",
+            "default-select.css",
             "main-content.css"
         ]
     }

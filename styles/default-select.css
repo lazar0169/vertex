@@ -1,15 +1,16 @@
-.multiple-select {
+.default-select {
     background: rgb(38, 50, 56);
     color: white;
     position: relative;
     cursor: pointer;
+    border-radius: 0.2rem;
 }
 
-.multiple-select:before {
+.default-select:before {
     content: "";
     position: absolute;
     right: 3px;
-    top: 20px;
+    top: 1rem;
     width: 0;
     height: 0;
     border-top: 0.5rem solid rgb(30, 155, 227);
@@ -17,33 +18,39 @@
     border-left: 0.2rem solid transparent;
 }
 
-.multiple-select>div:first-child {
+.default-select>div:first-child {
     position: relative;
     padding: 0 0.5rem;
 }
 
-.multiple-select>div:first-child>div {
-    width: 66px;
+.default-select>div:first-child>div {
+    width: 85px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.multiple-select>div:not(:first-child) {
+.default-select>div:not(:first-child) {
     position: absolute;
     height: 140px;
     background: rgb(38, 50, 56);
-    margin-top: 0.5rem;
+    margin-top: -0.2rem;
+    margin-left: -0.5rem;
+    min-width: 100%;
 }
 
-.multiple-select>div>div {
+.default-select>div>div {
     padding: 0 0.3rem;
 }
 
-.multiple-select label {
+.default-select label {
     cursor: pointer;
 }
 
-.multiple-select>div:not(:first-child)>div:hover {
+.default-select>div:not(:first-child)>div:hover {
     background: rgb(55, 71, 79);
+}
+
+.default-select>div:first-child>div {
+    padding: 0.5rem 0;
 }

@@ -1,5 +1,5 @@
 let proba = $$('#proba');
-let nekiniz = ['proba1', 1, 'nesto', 3, 5, 4, 7];
+let nekiniz = [1, 2, 3, 5, 4, 7];
 
 let proba2 = $$('#proba2');
 let nekiniz2 = ['proba2', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
@@ -18,16 +18,17 @@ let nekiniz6 = ['proba6', 'prsadf6', 'p6'];
 
 
 window.addEventListener('load', function () {
-    proba.appendChild(multiselect(nekiniz));
-    proba2.appendChild(multiselect(nekiniz2));
-    proba3.appendChild(multiselect(nekiniz3));
-    proba4.appendChild(multiselect(nekiniz4));
-    proba5.appendChild(multiselect(nekiniz5));
-    proba6.appendChild(multiselect(nekiniz6));
+    proba.appendChild(multiselect(proba, nekiniz));
+    proba2.appendChild(multiselect(proba2, nekiniz2));
+    proba3.appendChild(multiselect(proba3, nekiniz3));
+    proba4.appendChild(multiselect(proba4, nekiniz4));
+    proba5.appendChild(multiselect(proba5, nekiniz5));
+    proba6.appendChild(multiselect(proba6, nekiniz6));
 });
 
+
 // funkcija za visestruko selektovanje
-function multiselect(dataSelect) {
+function multiselect(div, dataSelect) {
     let clicked = false;
     let showChosenElements = document.createElement('div');
 
@@ -43,6 +44,7 @@ function multiselect(dataSelect) {
 
     let tempFragmentBody = document.createElement('div');
     tempFragmentBody.classList.add('hidden');
+
 
     for (let element of dataSelect) {
         let bodyElement = document.createElement('div');
@@ -67,6 +69,7 @@ function multiselect(dataSelect) {
                     showChosenElements.textContent += `,${bodyElement.children[0].children[2].textContent}`;
                 }
                 bodyElement.children[0].children[0].checked = true;
+
             }
             else {
                 var array = showChosenElements.textContent.split(",");
@@ -92,5 +95,8 @@ function multiselect(dataSelect) {
     tempFragmentHead.appendChild(headInitialContent);
     fragment.appendChild(tempFragmentHead);
     fragment.appendChild(tempFragmentBody);
+    div.onmouseleave = function () {
+        div.children[1].classList.add('hidden');
+    }
     return fragment;
 }

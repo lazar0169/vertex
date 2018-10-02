@@ -42,10 +42,16 @@
     min-width: 100%;
 }
 
-#aft-advance-table-filter-active>div, #aft-advance-table-filter-active>div>div {
-    padding: 0.5rem;
-    white-space: nowrap;
-    border-radius: 0.5rem;
+#aft-advance-table-filter-active>div {
+    padding: 0.5rem 0;
+}
+
+#aft-advance-table-filter-active>div>div {
+    padding: 0 0.5rem;
+}
+
+#aft-advance-table-filter-active button {
+    margin: 0 0.5rem;
 }
 
 .aft-advance-active {
