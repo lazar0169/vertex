@@ -11,41 +11,33 @@ function $$(selector) {
 
 
 function validateEncodedToken(accessToken) {
-    let base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-    let dotCounter = 0;
+    let base64regex = new RegExp('^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$');
     console.log('accessToken', accessToken);
-
-
+    console.log(typeof accessToken);
     let match;
-
-
-    while (match = regex.exec(accessToken)) {
-        dotCounter++;
-    }
-
-    while (accessToken.indexOf('.') > -1) {
-        dotCounter++;
-        alert (dotCounter);
-    }
-    console.log('dot counter', dotCounter);
-    if (dotCounter === 2) {
+    match = accessToken.match(/\./g);
+    console.log('match', match);
+    if (match.length === 2) {
         let accessTokenSplit = accessToken.split('.')[1];
         console.log('accessTokenSplit', accessTokenSplit);
-        if(base64regex.test(accessTokenSplit)){
-            console.log('');
+        if (atob(accessTokenSplit)) {
+            return true;
         }
+        else return false;
     }
-    else return false;
+    console.error('Encoded token is not valid!');
+    return false;
 }
 
 function decodeToken(encodedToken) {
-    //ToDO check if data is valid
     let encodedTokenJSON = JSON.parse(encodedToken);
     let accessToken = encodedTokenJSON.access_token;
-    validateEncodedToken(accessToken);
-    let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
-    console.log('decodedToken', decodedToken);
-    return decodedToken;
+    if (validateEncodedToken(accessToken)){
+        let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+        console.log('decodedToken', decodedToken);
+        return decodedToken;
+    }
+    console.error('Could not decode token!');
 }
 
 //add and remove class
