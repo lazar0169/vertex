@@ -24,7 +24,8 @@
             "communication.js",
             "machines.js",
             "session.js",
-            "preloader.js"
+            "preloader.js",
+            "application.js"
         ],
         "styles": [
             "index.css",
