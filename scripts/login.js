@@ -30,9 +30,6 @@ let login = (function () {
 
     on('login/error', function (e) {
         trigger('session/login/error', {message: e.message});
-        console.log(e.message);
-        alert(e.message);
-        window.location.pathname = '/login';
     });
 
 

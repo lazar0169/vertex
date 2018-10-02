@@ -16,24 +16,6 @@ function decodeToken(encodedToken) {
     return decodedToken;
 }
 
-
-
-window.onbeforeunload = function() {
-    localStorage.removeItem(status);
-    return '';
-};
-
-
-/*
-window.addEventListener('onunload', function(e) {
-    alert('onunload');
-    localStorage.clear();
-    console.log('onunload');
-}, false);*/
-
-
-
-
 //add and remove class
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;

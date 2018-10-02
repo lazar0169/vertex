@@ -6,7 +6,7 @@ let router = (function () {
     routes.set('casino/edit', {
         page: 'casino/edit',
         id: '#page-casino-edit',
-        path: '/casino/edit/{casinoId:integer}'
+        path: '/casino/{casinoId:integer}'
     });
     routes.set('casino/name', {
         page: 'casino/name',

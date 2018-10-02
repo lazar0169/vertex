@@ -2,8 +2,8 @@ let communication = (function () {
 
     const apiRoutes = {
         authorization: {
-          login: "login/",
-          logout: "logout/",
+            login: "login/",
+            logout: "logout/",
         },
         aft: {
             edit: "aft/",
@@ -63,6 +63,7 @@ let communication = (function () {
     }
 
     function createRequest(route, requestType, data, successEvent, errorEvent) {
+
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
