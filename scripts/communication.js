@@ -192,5 +192,4 @@ let communication = (function () {
 
     //events for service
 
-
 })();

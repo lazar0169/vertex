@@ -11,8 +11,7 @@ function $$(selector) {
 
 
 function validateEncodedToken(accessToken) {
-    let match;
-    match = accessToken.match(/\./g);
+    let match = accessToken.match(/\./g);
     if (match.length === 2) {
         let accessTokenSplit = accessToken.split('.')[1];
         if (atob(accessTokenSplit)) {

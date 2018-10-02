@@ -33,8 +33,8 @@ let session = (function () {
     });
 
 
-    // transfers sessionStorage from one tab to another
-    // transfers sessionStorage from one tab to another
+    // transfering sessionStorage from one tab to another
+
     function sessionStorage_transfer(event) {
         if (!event) {
             event = window.event;
@@ -53,18 +53,16 @@ let session = (function () {
             }
         }
         isLoggedIn();
-    };
+    }
 
-// listen for changes to localStorage
+    // Listening for changes to localStorage
     if (window.addEventListener) {
         window.addEventListener("storage", sessionStorage_transfer, false);
     } else {
         window.attachEvent("onstorage", sessionStorage_transfer);
     }
-    ;
 
-
-// Ask other tabs for session storage (this is ONLY to trigger event)
+    // Asking other tabs for session storage (this is ONLY to trigger event)
     if (!sessionStorage.length) {
         localStorage.setItem('getSessionStorage', 'foobar');
         localStorage.removeItem('getSessionStorage', 'foobar');
