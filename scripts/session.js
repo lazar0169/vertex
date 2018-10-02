@@ -72,13 +72,9 @@ let session = (function () {
 
     function isLoggedIn() {
         if (window.location.pathname.indexOf("login") < 0) {
-            console.log('Checking if the user is logged in.');
-            console.log('session storage token ', sessionStorage.token);
             if (typeof sessionStorage.token != 'undefined' && sessionStorage.token != null) {
                 let decodedToken = decodeToken(sessionStorage.token);
                 let endpoint = decodedToken.endpoint;
-                console.log('endpoint', endpoint);
-                console.log('The user is logged in.');
             }
             else {
                 window.location.pathname = "/login";
