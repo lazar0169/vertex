@@ -32,8 +32,6 @@ const sidebar = (function () {
     let searchCategory;
     let recent;
 
-
-
     let sidemenu = function () {
         return {
             collapse: function () {
@@ -130,9 +128,7 @@ const sidebar = (function () {
 
             tempFragment.childNodes[0].addEventListener('click', function () {
                 categorySelectedId = category;
-                console.log('category selected id in generate links', categorySelectedId);
                 searchCategory = category;
-                console.log('category in generate links', category);
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].List;
                 editMode.classList.add('collapse');
@@ -384,20 +380,13 @@ const sidebar = (function () {
 
     //helper functions
     function initVariables() {
-        console.log('data init variables', data);
-
-        console.log('object keys menudata', Object.keys(menuData)[0]);
         categorySelectedId = Object.keys(menuData)[0];
-        console.log('category selected Id',categorySelectedId);
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
     //events
     on('sidebar/menu/generate', function(e){
-        console.log('data', data);
         menuData = e.menuData;
-        console.log('menuData', menuData);
         generateMenu(e.menuData);
-        console.log('categorySelectedId', categorySelectedId);
         initVariables();
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);

@@ -19,7 +19,6 @@ let session = (function () {
 
     on('session/login/success', function (e) {
         trigger('session/token/save', {encodedToken: e.encodedToken});
-        console.log('session login success');
         //trigger('application/login');
     });
 

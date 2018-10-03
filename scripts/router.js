@@ -5,7 +5,7 @@ let router = (function () {
     let routes = new Map();
     routes.set('casino/edit', {
         page: 'casino/edit',
-        id: '#page-casino-edit',
+        id: '#page-casino',
         path: '/casino/{casinoId:integer}'
     });
     routes.set('casino/name', {
@@ -13,8 +13,8 @@ let router = (function () {
         id: '#page-casino-add',
         path: '/casino/{casinoName:string}/player/{playerId:integer}'
     });
-    routes.set('casino/name/player', {
-        page: 'casino/name/player',
+    routes.set('casino/list', {
+        page: 'casino/list',
         id: '#page-casino-add',
         path: '/casino/{casinoId:integer}/player/{playerId:integer}'
     });
