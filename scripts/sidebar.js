@@ -114,7 +114,7 @@ const sidebar = (function () {
             tempFragment.innerHTML = `<div class='center'>
                                         <div id="${category}" class="list-management center">
                                             <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
-                                            <div class="list-name">${data[category].category}</div>
+                                            <div class="list-name">${data[category].List}</div>
                                         </div>
                                     </div>`;
             tempFragment.childNodes[0].addEventListener('mouseenter', function () {
@@ -132,7 +132,7 @@ const sidebar = (function () {
                 categorySelectedId = category;
                 searchCategory = category;
                 generateLinks(category);
-                chosenLink.innerHTML = data[category].category;
+                chosenLink.innerHTML = data[category].List;
                 editMode.classList.add('collapse');
                 searchLink.focus();
                 navigation.show();
@@ -162,7 +162,7 @@ const sidebar = (function () {
                         selectLink(linkSelectedId);
                         navigation.hide();
                         let temp = categoryValue;
-                        temp.categoryName = tempData[searchCategory].category
+                        temp.categoryName = tempData[searchCategory].List;
                         temp.category = searchCategory;
                         recentSearch(temp);
                     });
@@ -174,7 +174,7 @@ const sidebar = (function () {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search') { //if category isn't 'search', lists have header
-                            tempCategory.innerHTML = `<div>${tempData[category].category}</div>`;
+                            tempCategory.innerHTML = `<div>${tempData[category].List}</div>`;
                         }
                         for (let value of tempData[category].value) {
                             let tempValue = document.createElement('a');
@@ -186,7 +186,7 @@ const sidebar = (function () {
                             tempValue.innerHTML = `${value.name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.name} (${value.categoryName})`;
-                                tempValue.href = `/${value.category.toLowerCase()}/${value.id}`;
+                                tempValue.href = `/${value.List.toLowerCase()}/${value.id}`;
                             } else {
                                 tempValue.innerHTML = value.name;
                             }
@@ -195,10 +195,10 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.id}`;
                                 let entry = value;
                                 if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
-                                    categorySelectedId = value.category;
+                                    categorySelectedId = value.List;
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
-                                    entry.categoryName = tempData[category].category
+                                    entry.categoryName = tempData[category].List;
                                     categorySelectedId = category;
                                 }
                                 recentSearch(entry);
@@ -270,7 +270,7 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'category': menuData[category].category,
+                'category': menuData[category].List,
                 'value': arrayResult
             };
             return newObject;
@@ -323,7 +323,7 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'category': menuData[category].category,
+                'category': menuData[category].List,
                 'value': arrayResult
             };
             return newObject;
@@ -349,7 +349,7 @@ const sidebar = (function () {
     function showTooltip(category) {
         let rect = $$(`#${category}`).getBoundingClientRect();
         tooltipText.style.top = rect.top + rect.height / 4;
-        tooltipText.innerHTML = menuData[category].category;
+        tooltipText.innerHTML = menuData[category].List;
         tooltipText.classList.remove('hidden');
     }
 
@@ -382,21 +382,23 @@ const sidebar = (function () {
 
     //helper functions
     function initVariables() {
-        console.log(Object.keys(menuData)[0]);
-        categorySelectedId = Object.keys(menuData)[0];
-        console.log('c',categorySelectedId);
-        linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
+        console.log('data init variables', data);
 
+        console.log('object keys menudata', Object.keys(menuData)[0]);
+        categorySelectedId = Object.keys(menuData)[0];
+        console.log('category selected Id',categorySelectedId);
+        linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
     //events
     on('sidebar/menu/generate', function(e){
+        console.log('data', data);
         menuData = e.menuData;
-        console.log('data', menuData);
+        console.log('menuData', menuData);
         generateMenu(e.menuData);
         initVariables();
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
-        chosenLink.innerHTML = menuData[categorySelectedId].category;
+        chosenLink.innerHTML = menuData[categorySelectedId].List;
     });
 
 })();
