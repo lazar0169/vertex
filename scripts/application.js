@@ -1,17 +1,16 @@
 let application = (function () {
 
-    function generateMenu(endpoint) {
-        let menu = endpoint;
-        let menuJSON = JSON.parse(menu);
-        trigger('sidebar/menu/generate', {menuData: menuJSON});
+    function generateMenu() {
+        let decodedToken = decodeToken(sessionStorage.token);
+        let endpoint = decodedToken.endpoint;
+        let menu = JSON.parse(endpoint);
+        trigger('sidebar/menu/generate', {menuData: menu});
     }
 
     function checkCurrentUser() {
         if (window.location.pathname.indexOf("login") < 0) {
             if (typeof sessionStorage.token != 'undefined' && sessionStorage.token != null) {
-                let decodedToken = decodeToken(sessionStorage.token);
-                let endpoint = decodedToken.endpoint;
-                generateMenu(endpoint);
+                generateMenu();
             }
             else {
                 window.location.pathname = "/login";
