@@ -1,5 +1,5 @@
 let proba = $$('#proba');
-let nekiniz = [1, 2, 3, 5, 4, 7];
+let nekiniz = ['selektuje', 'samo', 'jedan', 'element'];
 
 let proba2 = $$('#proba2');
 let nekiniz2 = ['proba2', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
@@ -18,7 +18,7 @@ let nekiniz6 = ['proba6', 'prsadf6', 'p6'];
 
 
 window.addEventListener('load', function () {
-    proba.appendChild(multiselect(proba, nekiniz));
+    proba.appendChild(singleSelect(proba, nekiniz));
     proba2.appendChild(multiselect(proba2, nekiniz2));
     proba3.appendChild(multiselect(proba3, nekiniz3));
     proba4.appendChild(multiselect(proba4, nekiniz4));
@@ -34,8 +34,7 @@ function multiselect(div, dataSelect) {
 
     let fragment = document.createDocumentFragment();
     let tempFragmentHead = document.createElement('div');
-    let headInitialContent = document.createElement('div');
-    headInitialContent.innerHTML = '-';
+    showChosenElements.innerHTML = '-';
 
     tempFragmentHead.style.display = 'inline-flex';
     tempFragmentHead.addEventListener('click', function () {
@@ -57,11 +56,9 @@ function multiselect(div, dataSelect) {
 
         bodyElement.addEventListener('click', function (e) {
             e.preventDefault();
-            showChosenElements.classList.remove('hidden');
             if (bodyElement.children[0].children[0].checked == false) {
                 if (!clicked) {
                     showChosenElements.innerHTML = bodyElement.children[0].children[2].textContent;
-                    headInitialContent.classList.add('hidden');
                     tempFragmentHead.appendChild(showChosenElements);
                     clicked = true;
                 }
@@ -85,14 +82,54 @@ function multiselect(div, dataSelect) {
                 showChosenElements.textContent = array.join(',')
                 bodyElement.children[0].children[0].checked = false;
                 if (showChosenElements.textContent === '') {
-                    showChosenElements.classList.add('hidden');
-                    headInitialContent.classList.remove('hidden');
+                    showChosenElements.innerHTML = '-';
                     clicked = false;
                 }
             }
         });
     }
-    tempFragmentHead.appendChild(headInitialContent);
+    tempFragmentHead.appendChild(showChosenElements);
+    fragment.appendChild(tempFragmentHead);
+    fragment.appendChild(tempFragmentBody);
+    div.onmouseleave = function () {
+        div.children[1].classList.add('hidden');
+    }
+    return fragment;
+}
+
+
+// funkcija za selektovanje jednog podatka
+function singleSelect(div, dataSelect) {
+    let showChosenElements = document.createElement('div');
+
+    let fragment = document.createDocumentFragment();
+    let tempFragmentHead = document.createElement('div');
+    showChosenElements.innerHTML = dataSelect[0];
+
+
+    tempFragmentHead.style.display = 'inline-flex';
+    tempFragmentHead.addEventListener('click', function () {
+        tempFragmentBody.classList.toggle('hidden');
+    });
+
+    let tempFragmentBody = document.createElement('div');
+    tempFragmentBody.classList.add('hidden');
+
+
+    for (let element of dataSelect) {
+        let bodyElement = document.createElement('div');
+        bodyElement.innerHTML = `<div>${element}</div>`;
+        tempFragmentBody.appendChild(bodyElement);
+        tempFragmentBody.classList.add('overflow-y');
+
+        bodyElement.addEventListener('click', function (e) {
+            e.preventDefault();
+            showChosenElements.innerHTML = bodyElement.children[0].textContent;
+            tempFragmentHead.appendChild(showChosenElements);
+            tempFragmentBody.classList.add('hidden');
+        });
+    }
+    tempFragmentHead.appendChild(showChosenElements);
     fragment.appendChild(tempFragmentHead);
     fragment.appendChild(tempFragmentBody);
     div.onmouseleave = function () {

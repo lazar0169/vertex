@@ -212,7 +212,6 @@
     display: inline-flex;
 }
 
-
 #navigation-name>.team-name {
     opacity: 1;
 }
@@ -266,7 +265,7 @@
     display: none;
 }
 
-.list-active, .link-active {
+.list-active, .link-active, .select-active {
     color: white !important;
     background: rgb(55, 71, 79) !important;
 }

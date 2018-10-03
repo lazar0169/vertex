@@ -18,13 +18,8 @@
     border-left: 0.2rem solid transparent;
 }
 
-.default-select>div:first-child {
-    position: relative;
-    padding: 0 0.5rem;
-}
-
 .default-select>div:first-child>div {
-    width: 85px;
+    width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
