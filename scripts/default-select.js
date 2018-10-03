@@ -1,21 +1,20 @@
-let proba = $$('#proba');
-let nekiniz = ['selektuje', 'samo', 'jedan', 'element'];
+let proba = $$('#aft-advance-table-filter-date-range');
+let nekiniz = ['-', 'selektuje', 'samo', 'jedan', 'element'];
 
-let proba2 = $$('#proba2');
-let nekiniz2 = ['proba2', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
+let proba2 = $$('#aft-advance-table-filter-finished');
+let nekiniz2 = ['-', 'proba2', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
 
-let proba3 = $$('#proba3');
-let nekiniz3 = ['proba3', 'proba2', 'proba3'];
+let proba3 = $$('#aft-advance-table-filter-jackpot');
+let nekiniz3 = ['-', 'proba3', 'proba2', 'proba3'];
 
-let proba4 = $$('#proba4');
-let nekiniz4 = ['proba4', 'prsadf', 'p'];
+let proba4 = $$('#aft-advance-table-filter-type');
+let nekiniz4 = ['-', 'proba4', 'prsadf', 'p'];
 
-let proba5 = $$('#proba5');
-let nekiniz5 = ['proba5', 'prsadf5', 'p5'];
+let proba5 = $$('#aft-advance-table-filter-status');
+let nekiniz5 = ['-', 'proba5', 'prsadf5', 'p5'];
 
-let proba6 = $$('#proba6');
-let nekiniz6 = ['proba6', 'prsadf6', 'p6'];
-
+let proba6 = $$('#aft-advance-table-filter-column');
+let nekiniz6 = ['-', 'proba6', 'prsadf6', 'p6'];
 
 window.addEventListener('load', function () {
     proba.appendChild(singleSelect(proba, nekiniz));
@@ -26,114 +25,99 @@ window.addEventListener('load', function () {
     proba6.appendChild(multiselect(proba6, nekiniz6));
 });
 
-
 // funkcija za visestruko selektovanje
 function multiselect(div, dataSelect) {
     let clicked = false;
-    let showChosenElements = document.createElement('div');
-
-    let fragment = document.createDocumentFragment();
-    let tempFragmentHead = document.createElement('div');
-    showChosenElements.innerHTML = '-';
-
-    tempFragmentHead.style.display = 'inline-flex';
-    tempFragmentHead.addEventListener('click', function () {
-        tempFragmentBody.classList.toggle('hidden');
+    let noSelected = dataSelect.shift()
+    let select = document.createElement('div');
+    select.classList.add('default-select');
+    let selected = document.createElement('div');
+    selected.innerHTML = noSelected;
+    selected.addEventListener('click', function () {
+        optionGroup.classList.toggle('hidden');
     });
-
-    let tempFragmentBody = document.createElement('div');
-    tempFragmentBody.classList.add('hidden');
-
+    let optionGroup = document.createElement('div');
+    optionGroup.classList.add('hidden');
 
     for (let element of dataSelect) {
-        let bodyElement = document.createElement('div');
-        bodyElement.innerHTML = `<label class="form-checkbox" >
+        let option = document.createElement('div');
+        option.innerHTML = `<label class="form-checkbox" >
                                             <input type="checkbox">
                                             <i class="form-icon" ></i> <div>${element}</div>
                                         </label>`;
-        tempFragmentBody.appendChild(bodyElement);
-        tempFragmentBody.classList.add('overflow-y');
+        optionGroup.appendChild(option);
+        optionGroup.classList.add('overflow-y');
 
-        bodyElement.addEventListener('click', function (e) {
+        option.addEventListener('click', function (e) {
             e.preventDefault();
-            if (bodyElement.children[0].children[0].checked == false) {
+            if (option.children[0].children[0].checked == false) {
                 if (!clicked) {
-                    showChosenElements.innerHTML = bodyElement.children[0].children[2].textContent;
-                    tempFragmentHead.appendChild(showChosenElements);
+                    selected.innerHTML = option.children[0].children[2].innerHTML;
                     clicked = true;
                 }
                 else {
-                    showChosenElements.textContent += `,${bodyElement.children[0].children[2].textContent}`;
+                    selected.innerHTML += `,${option.children[0].children[2].innerHTML}`;
                 }
-                bodyElement.children[0].children[0].checked = true;
-
+                option.children[0].children[0].checked = true;
             }
             else {
-                var array = showChosenElements.textContent.split(",");
+                var array = selected.innerHTML.split(",");
                 let index = 0;
                 for (let elem of array) {
-                    if (elem == bodyElement.children[0].children[2].textContent) {
+                    if (elem == option.children[0].children[2].innerHTML) {
                         array.splice(index, 1);
                     }
                     else {
                         index++;
                     }
                 }
-                showChosenElements.textContent = array.join(',')
-                bodyElement.children[0].children[0].checked = false;
-                if (showChosenElements.textContent === '') {
-                    showChosenElements.innerHTML = '-';
+                selected.innerHTML = array.join(',')
+                option.children[0].children[0].checked = false;
+                if (selected.innerHTML === '') {
+                    selected.innerHTML = noSelected;
                     clicked = false;
                 }
             }
         });
     }
-    tempFragmentHead.appendChild(showChosenElements);
-    fragment.appendChild(tempFragmentHead);
-    fragment.appendChild(tempFragmentBody);
+    select.appendChild(selected);
+    select.appendChild(optionGroup);
     div.onmouseleave = function () {
-        div.children[1].classList.add('hidden');
+        div.children[1].children[1].classList.add('hidden');
     }
-    return fragment;
+    return select;
 }
-
 
 // funkcija za selektovanje jednog podatka
 function singleSelect(div, dataSelect) {
-    let showChosenElements = document.createElement('div');
+    let select = document.createElement('div');
+    select.classList.add('default-select');
+    let selected = document.createElement('div');
+    selected.innerHTML = dataSelect[0];
 
-    let fragment = document.createDocumentFragment();
-    let tempFragmentHead = document.createElement('div');
-    showChosenElements.innerHTML = dataSelect[0];
-
-
-    tempFragmentHead.style.display = 'inline-flex';
-    tempFragmentHead.addEventListener('click', function () {
-        tempFragmentBody.classList.toggle('hidden');
+    selected.addEventListener('click', function () {
+        optionGroup.classList.toggle('hidden');
     });
 
-    let tempFragmentBody = document.createElement('div');
-    tempFragmentBody.classList.add('hidden');
-
+    let optionGroup = document.createElement('div');
+    optionGroup.classList.add('hidden');
 
     for (let element of dataSelect) {
-        let bodyElement = document.createElement('div');
-        bodyElement.innerHTML = `<div>${element}</div>`;
-        tempFragmentBody.appendChild(bodyElement);
-        tempFragmentBody.classList.add('overflow-y');
+        let option = document.createElement('div');
+        option.innerHTML = element;
+        optionGroup.appendChild(option);
+        optionGroup.classList.add('overflow-y');
 
-        bodyElement.addEventListener('click', function (e) {
+        option.addEventListener('click', function (e) {
             e.preventDefault();
-            showChosenElements.innerHTML = bodyElement.children[0].textContent;
-            tempFragmentHead.appendChild(showChosenElements);
-            tempFragmentBody.classList.add('hidden');
+            selected.innerHTML = option.innerHTML;
+            optionGroup.classList.add('hidden');
         });
     }
-    tempFragmentHead.appendChild(showChosenElements);
-    fragment.appendChild(tempFragmentHead);
-    fragment.appendChild(tempFragmentBody);
+    select.appendChild(selected);
+    select.appendChild(optionGroup);
     div.onmouseleave = function () {
-        div.children[1].classList.add('hidden');
+        div.children[1].children[1].classList.add('hidden');
     }
-    return fragment;
+    return select;
 }

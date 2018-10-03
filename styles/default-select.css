@@ -18,11 +18,12 @@
     border-left: 0.2rem solid transparent;
 }
 
-.default-select>div:first-child>div {
+.default-select>div:first-child {
     width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding: 0.5rem 0;
 }
 
 .default-select>div:not(:first-child) {
@@ -32,9 +33,10 @@
     margin-top: -0.2rem;
     margin-left: -0.5rem;
     min-width: 100%;
+    padding: 0 0.3rem;
 }
 
-.default-select>div>div {
+.default-select>div:not(:first-child)>div {
     padding: 0 0.3rem;
 }
 
@@ -44,8 +46,4 @@
 
 .default-select>div:not(:first-child)>div:hover {
     background: rgb(55, 71, 79);
-}
-
-.default-select>div:first-child>div {
-    padding: 0.5rem 0;
 }
