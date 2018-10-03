@@ -29,72 +29,15 @@ let router = (function () {
         path: '/home'
     });
 
-
-
-
-
-
-
-
-    routes.set('casino/edit', {
-        page: 'casino/edit',
-        id: '#page-casino-edit',
-        path: '/casino/{casinoId:integer}'
-    });
-    routes.set('casino/name', {
-        page: 'casino/name',
-        id: '#page-casino-add',
-        path: '/casino/{casinoName:string}/player/{playerId:integer}'
-    });
-    routes.set('casino/list', {
-        page: 'casino/list',
-        id: '#page-casino-add',
-        path: '/casino/{casinoId:integer}/player/{playerId:integer}'
-    });
-    routes.set('home', {
-        page: 'home',
-        id: '#page-home',
-        path: '/home'
-    });
     routes.set('casino', {
         page: 'casino',
         id: '#page-casino',
-        path: '/casino'
+        path: '/casino/{casinoId:integer}'
     });
-    routes.set('jackpot', {
-        page: 'jackpot',
-        id: '#page-jackpot',
-        path: '/jackpot'
-    });
-    routes.set('tickets', {
-        page: 'tickets',
-        id: '#page-tickets',
-        path: '/tickets'
-    });
-    routes.set('aft', {
-        page: 'aft',
-        id: '#page-aft',
-        path: '/aft'
-    });
-    routes.set('machines', {
-        page: 'machines',
-        id: '#page-machines',
-        path: '/machines'
-    });
-    routes.set('reports', {
-        page: 'reports',
-        id: '#page-reports',
-        path: '/reports'
-    });
-    routes.set('users', {
-        page: 'users',
-        id: '#page-users',
-        path: '/users'
-    });
-    routes.set('service', {
-        page: 'service',
-        id: '#page-service',
-        path: '/service'
+    routes.set('casino/add', {
+        page: 'casino/add',
+        id: '#page-casino-add',
+        path: '/casino/{casinoName:string}/player/{playerId:integer}'
     });
 
 
