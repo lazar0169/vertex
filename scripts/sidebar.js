@@ -130,7 +130,9 @@ const sidebar = (function () {
 
             tempFragment.childNodes[0].addEventListener('click', function () {
                 categorySelectedId = category;
+                console.log('category selected id in generate links', categorySelectedId);
                 searchCategory = category;
+                console.log('category in generate links', category);
                 generateLinks(category);
                 chosenLink.innerHTML = data[category].List;
                 editMode.classList.add('collapse');
@@ -148,16 +150,16 @@ const sidebar = (function () {
         generateLinksData(!category || menuData[category] ? menuData : category);
         function generateLinksData(tempData) {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
-                for (let categoryValue of tempData[searchCategory].value) {
+                for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.id = `link-${categoryValue.id}`;
+                    tempFragment.Id = `link-${categoryValue.Id}`;
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
                     //elements in search mapped to coresponding path
                     tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.id}`;
-                    tempFragment.innerHTML = categoryValue.name;
+                    tempFragment.innerHTML = categoryValue.Name;
                     tempFragment.addEventListener('click', function () {
-                        linkSelectedId = `link-${categoryValue.id}`;
+                        linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
                         navigation.hide();
@@ -170,22 +172,22 @@ const sidebar = (function () {
                 }
             } else { //if searchCategory is undefined, function generates links based on object 
                 for (let category in tempData) {
-                    if (tempData[category].value.length !== 0) {
+                    if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search') { //if category isn't 'search', lists have header
                             tempCategory.innerHTML = `<div>${tempData[category].List}</div>`;
                         }
-                        for (let value of tempData[category].value) {
+                        for (let value of tempData[category].Value) {
                             let tempValue = document.createElement('a');
                             //element-navigation-link class is needed for functionalities in router
                             tempValue.classList = 'link-list element-navigation-link';
                             //elements in search mapped to coresponding path
-                            tempValue.href = `/${category.toLowerCase()}/${value.id}`;
-                            tempValue.id = `link-${value.id}`;
-                            tempValue.innerHTML = `${value.name} (${category})`;
+                            tempValue.href = `/${category.toLowerCase()}/${value.Id}`;
+                            tempValue.id = `link-${value.Id}`;
+                            tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
-                                tempValue.innerHTML = `${value.name} (${value.categoryName})`;
+                                tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
                                 tempValue.href = `/${value.List.toLowerCase()}/${value.id}`;
                             } else {
                                 tempValue.innerHTML = value.name;
@@ -395,6 +397,7 @@ const sidebar = (function () {
         menuData = e.menuData;
         console.log('menuData', menuData);
         generateMenu(e.menuData);
+        console.log('categorySelectedId', categorySelectedId);
         initVariables();
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
