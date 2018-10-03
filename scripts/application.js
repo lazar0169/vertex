@@ -5,6 +5,8 @@ let application = (function () {
         let endpoint = decodedToken.endpoint;
         let menu = JSON.parse(endpoint);
         trigger('sidebar/menu/generate', {menuData: menu});
+        // console.log(menu['Casinos'].Value[0]);
+        // trigger('template/render', {templateElementSelector:'#casino-template', model: menu['Casinos'].Value[0]})
     }
 
     function checkCurrentUser() {
@@ -22,5 +24,6 @@ let application = (function () {
         //ToDo: Fix timeout hotfix
         setTimeout(checkCurrentUser, 500);
     });
+
 
 })();

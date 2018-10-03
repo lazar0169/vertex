@@ -59,12 +59,6 @@ const sidebar = (function () {
     }();
 
 
-    window.addEventListener('load', function () {
-
-        //generateMenu(menuData);
-
-    });
-
     collapseButton.addEventListener('click', function () {
         isExpanded ?
             sidemenu.collapse() :
@@ -386,6 +380,8 @@ const sidebar = (function () {
     //events
     on('sidebar/menu/generate', function(e){
         menuData = e.menuData;
+        console.log('menuData ', menuData);
+
         generateMenu(e.menuData);
         initVariables();
         generateLinks(categorySelectedId);

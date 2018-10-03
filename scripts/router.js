@@ -3,6 +3,39 @@ let router = (function () {
     //Map object with routes
 
     let routes = new Map();
+    routes.set('aft', {
+       page: 'aft',
+       id: '#page-aft',
+       path: '/aft'
+    });
+    routes.set('casino', {
+        page: 'casino',
+        id: '#page-casino',
+        path: '/casino'
+    });
+    routes.set('jackpot', {
+        page: 'jackpot',
+        id: '#page-jackpot',
+        path: '/jackpot'
+    });
+    routes.set('ticket', {
+        page: 'ticket',
+        id: '#page-ticket',
+        path: '/ticket'
+    });
+    routes.set('home', {
+        page: 'home',
+        id: '#page-home',
+        path: '/home'
+    });
+
+
+
+
+
+
+
+
     routes.set('casino/edit', {
         page: 'casino/edit',
         id: '#page-casino-edit',

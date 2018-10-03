@@ -2,34 +2,27 @@ let template = (function () {
 
     let model = {
         home: {
-            name: 'Home name'
+            Name: 'Home name'
         },
         casino: {
-            name: 'Casino name',
-            address: 'Casino address',
-            edit: 'Casino edit'
+            Id: 5,
+            Name: 'Casino name',
+            City: 'Casino city'
         },
         jackpot: {
-            number: 123
+            Id: 5,
+            Name: 'Jackpot name',
+            City: 'Jackpot city'
         },
         tickets: {
-            number: 15
+            Id: 5,
+            Name: 'Ticket name',
+            City: 'Ticket city'
         },
         aft: {
-            name: 'AFT name'
-        },
-        machine: {
-            number: 24
-        },
-        user: {
-            name: 'Jovana',
-            surname: 'Mitic',
-            tickets: {
-                number: 18
-            }
-        },
-        service: {
-            number: 58
+            Id: 5,
+            Name: 'Aft name',
+            City: 'Aft city'
         }
     };
 
