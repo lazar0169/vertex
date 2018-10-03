@@ -19,6 +19,8 @@ let session = (function () {
 
     on('session/login/success', function (e) {
         trigger('session/token/save', {encodedToken: e.encodedToken});
+        console.log('session login success');
+        //trigger('application/login');
     });
 
     on('session/logout/', function () {
@@ -51,7 +53,7 @@ let session = (function () {
                 sessionStorage.setItem(key, data[key]);
             }
         }
-        trigger('application/login');
+        //trigger('application/login');
     }
 
     // Listening for changes to localStorage
@@ -67,6 +69,6 @@ let session = (function () {
         localStorage.removeItem('getSessionStorage', 'foobar');
     }
 
-    trigger('application/login');
+    // trigger('application/login');
 
 })();

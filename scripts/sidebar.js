@@ -1,4 +1,8 @@
 const sidebar = (function () {
+
+    let menuData;
+    let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
+
     let sidebarMenu = $$('#sidebar');
     let listWrapper = $$('#sidebar-list');
     let collapseButton = $$('#icon-collapse');
@@ -15,9 +19,11 @@ const sidebar = (function () {
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
-    let categorySelectedId = Object.keys(data)[0];
-    let linkSelectedId = `link-${data[categorySelectedId]['value'][0]['id']}`;
-    // variables for remembering last category and link which are picked, and they are used for marking category and link 
+    let categorySelectedId;
+        let linkSelectedId;
+   // let categorySelectedId = Object.keys(menuData)[0];
+  //  let linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
+    // variables for remembering last category and link which are picked, and they are used for marking category and link
     let previousCategorySelected;
     let previousLinkSelected;
     //variables for search, searchCategory is used to check which category is active, 
@@ -25,6 +31,8 @@ const sidebar = (function () {
     //recent is an object, it take value from localStorage
     let searchCategory;
     let recent;
+
+
 
     let sidemenu = function () {
         return {
@@ -54,10 +62,9 @@ const sidebar = (function () {
 
 
     window.addEventListener('load', function () {
-        generateMenu(data);
-        generateLinks(categorySelectedId);
-        selectCategory(categorySelectedId);
-        chosenLink.innerHTML = data[categorySelectedId].category;
+
+        //generateMenu(menuData);
+
     });
 
     collapseButton.addEventListener('click', function () {
@@ -94,6 +101,11 @@ const sidebar = (function () {
         }
         generateLinks(results);
     });
+
+
+
+
+
     // generate menu lists from data, and set click listener  
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
@@ -133,7 +145,7 @@ const sidebar = (function () {
     function generateLinks(category) {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
-        generateLinksData(!category || data[category] ? data : category);
+        generateLinksData(!category || menuData[category] ? menuData : category);
         function generateLinksData(tempData) {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].value) {
@@ -233,7 +245,7 @@ const sidebar = (function () {
         if (category) {
             newData[category] = search(termin, category);
         } else {
-            for (let category in data) {
+            for (let category in menuData) {
                 newData[category] = search(termin, category);
             }
         }
@@ -242,7 +254,7 @@ const sidebar = (function () {
         function search(termin, category) {
             let i = 0;
             let arrayResult = [];
-            for (let value of data[category].value) {
+            for (let value of menuData[category].value) {
                 let valueName = value.name.toLowerCase();
                 let valueCity = value.city.toLowerCase();
                 let index = valueName.indexOf(termin);
@@ -258,7 +270,7 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'category': data[category].category,
+                'category': menuData[category].category,
                 'value': arrayResult
             };
             return newObject;
@@ -286,7 +298,7 @@ const sidebar = (function () {
         if (category) {
             newData[category] = search(termin, category);
         } else {
-            for (let category in data) {
+            for (let category in menuData) {
                 newData[category] = search(termin, category);
             }
         }
@@ -295,7 +307,7 @@ const sidebar = (function () {
         function search(termin, category) {
             let i = 0;
             let arrayResult = [];
-            for (let value of data[category].value) {
+            for (let value of menuData[category].value) {
                 let valueName = value.name.toLowerCase();
                 let valueCity = value.city.toLowerCase();
                 let index = valueName.indexOf(termin);
@@ -311,7 +323,7 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'category': data[category].category,
+                'category': menuData[category].category,
                 'value': arrayResult
             };
             return newObject;
@@ -337,12 +349,9 @@ const sidebar = (function () {
     function showTooltip(category) {
         let rect = $$(`#${category}`).getBoundingClientRect();
         tooltipText.style.top = rect.top + rect.height / 4;
-        tooltipText.innerHTML = data[category].category;
+        tooltipText.innerHTML = menuData[category].category;
         tooltipText.classList.remove('hidden');
     }
-
-
-
 
     //test, if you don't need it anymore, remove it
     let isActiveDetailsTest = true;
@@ -370,4 +379,24 @@ const sidebar = (function () {
             detailsmenutest.collapse() :
             detailsmenutest.expand();
     });
+
+    //helper functions
+    function initVariables() {
+        console.log(Object.keys(menuData)[0]);
+        categorySelectedId = Object.keys(menuData)[0];
+        console.log('c',categorySelectedId);
+        linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
+
+    }
+    //events
+    on('sidebar/menu/generate', function(e){
+        menuData = e.menuData;
+        console.log('data', menuData);
+        generateMenu(e.menuData);
+        initVariables();
+        generateLinks(categorySelectedId);
+        selectCategory(categorySelectedId);
+        chosenLink.innerHTML = menuData[categorySelectedId].category;
+    });
+
 })();

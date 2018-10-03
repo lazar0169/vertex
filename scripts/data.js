@@ -1,3 +1,4 @@
+/*
 let data = {
     casino: {
         category: 'Casino',
@@ -203,4 +204,4 @@ let data = {
         ]
     }
 };
-let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
+let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];*/

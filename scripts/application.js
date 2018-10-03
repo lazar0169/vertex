@@ -1,14 +1,14 @@
 let application = (function(){
 
-    let menu;
 
     function generateMenu(endpoint) {
-        menu = endpoint;
+        let menu = endpoint;
         let menuJSON = JSON.parse(menu);
         console.log(menuJSON);
+        trigger('sidebar/menu/generate', {menuData: menuJSON});
     }
 
-    function isLoggedIn() {
+    function checkCurrentUser() {
         if (window.location.pathname.indexOf("login") < 0) {
             if (typeof sessionStorage.token != 'undefined' && sessionStorage.token != null) {
                 let decodedToken = decodeToken(sessionStorage.token);
@@ -22,8 +22,12 @@ let application = (function(){
     }
 
 
-    on('application/login', function() {
-        setTimeout(isLoggedIn, 500);
-    })
+    window.addEventListener('load', function () {
+        //ToDo: Fix timeout hotfix
+        setTimeout(checkCurrentUser, 500);
+        //generateMenu(menuData);
+
+    });
+
 
 })();
