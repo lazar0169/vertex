@@ -4,9 +4,9 @@ let router = (function () {
 
     let routes = new Map();
     routes.set('aft', {
-       page: 'aft',
-       id: '#page-aft',
-       path: '/aft'
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft'
     });
     routes.set('aft', {
         page: 'aft',
@@ -107,7 +107,7 @@ let router = (function () {
         }
         let currentRoute = routes.get(pageName);
         let currentUrl;
-        if(typeof url !== 'undefined'){
+        if (typeof url !== 'undefined') {
             currentUrl = url;
         } else {
             currentUrl = window.location.pathname;

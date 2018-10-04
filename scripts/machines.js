@@ -10,5 +10,4 @@ let machines = (function () {
         alert('An error occurred.');
     });
 
-
 })();

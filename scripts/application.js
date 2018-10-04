@@ -5,7 +5,7 @@ let application = (function () {
         trigger('sidebar/menu/generate', {menuData: menu});
     }
 
-    function getMenu(){
+    function getMenu() {
         let decodedToken = decodeToken(sessionStorage.token);
         let endpoint = decodedToken.endpoint;
         let menu = JSON.parse(endpoint);

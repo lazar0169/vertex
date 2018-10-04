@@ -96,7 +96,7 @@ let template = (function () {
         let placeholders = getPlaceholders(newElementString);
         let placeholderValues = getPlaceholderValues(placeholders, model);
         let replacedString = replaceValueInTemplate(newElementString, placeholderValues);
-        newElement.innerHTML  = replacedString;
+        newElement.innerHTML = replacedString;
         if (typeof callbackEvent !== 'undefined') {
             trigger(callbackEvent, {model: model, element: newElement});
         }
