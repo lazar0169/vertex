@@ -4,12 +4,12 @@ let template = (function () {
         home: {
             Name: 'Home name'
         },
-        casino: {
+        casinos: {
             Id: 5,
             Name: 'Casino name',
             City: 'Casino city'
         },
-        jackpot: {
+        jackpots: {
             Id: 5,
             Name: 'Jackpot name',
             City: 'Jackpot city'
@@ -108,6 +108,7 @@ let template = (function () {
         let model = param.model;
         if (typeof param.callbackEvent !== 'undefined') {
             render(templateElementSelector, model, param.callbackEvent);
+            console.log('render return value', render(templateElementSelector, model, param.callbackEvent));
         }
         else {
             render(templateElementSelector, model);
@@ -115,6 +116,6 @@ let template = (function () {
     });
 
     //For testing:
-    render('#casino-template', model);
+    render('#home-template', model);
 
 })();

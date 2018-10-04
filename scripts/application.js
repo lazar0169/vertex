@@ -1,12 +1,17 @@
 let application = (function () {
 
     function generateMenu() {
-        let decodedToken = decodeToken(sessionStorage.token);
-        let endpoint = decodedToken.endpoint;
-        let menu = JSON.parse(endpoint);
+        let menu = getMenu();
         trigger('sidebar/menu/generate', {menuData: menu});
         // console.log(menu['Casinos'].Value[0]);
         // trigger('template/render', {templateElementSelector:'#casino-template', model: menu['Casinos'].Value[0]})
+    }
+
+    function getMenu(){
+        let decodedToken = decodeToken(sessionStorage.token);
+        let endpoint = decodedToken.endpoint;
+        let menu = JSON.parse(endpoint);
+        return menu;
     }
 
     function checkCurrentUser() {
@@ -24,6 +29,7 @@ let application = (function () {
         //ToDo: Fix timeout hotfix
         setTimeout(checkCurrentUser, 500);
     });
+
 
 
 })();

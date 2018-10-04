@@ -8,38 +8,61 @@ let router = (function () {
        id: '#page-aft',
        path: '/aft'
     });
-    routes.set('casino', {
-        page: 'casino',
-        id: '#page-casino',
-        path: '/casino'
+    routes.set('aft', {
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft/{aftId:integer}'
     });
-    routes.set('jackpot', {
-        page: 'jackpot',
-        id: '#page-jackpot',
-        path: '/jackpot'
+    routes.set('casinos', {
+        page: 'casinos',
+        id: '#page-casinos',
+        path: '/casinos'
     });
-    routes.set('ticket', {
-        page: 'ticket',
-        id: '#page-ticket',
-        path: '/ticket'
+    routes.set('casinos', {
+        page: 'casinos',
+        id: '#page-casinos',
+        path: '/casinos/{casinoId:integer}'
+    });
+    routes.set('casinos/add', {
+        page: 'casinos/add',
+        id: '#page-casinos-add',
+        path: '/casinos/{casinoName:string}/player/{playerId:integer}'
+    });
+    routes.set('jackpots', {
+        page: 'jackpots',
+        id: '#page-jackpots',
+        path: '/jackpots'
+    });
+    routes.set('jackpots', {
+        page: 'jackpots',
+        id: '#page-jackpots',
+        path: '/jackpots/{jackpotId:integer}'
+    });
+    routes.set('tickets', {
+        page: 'tickets',
+        id: '#page-tickets',
+        path: '/tickets'
+    });
+    routes.set('tickets', {
+        page: 'tickets',
+        id: '#page-tickets',
+        path: '/tickets/{ticketId:integer}'
     });
     routes.set('home', {
         page: 'home',
         id: '#page-home',
         path: '/home'
     });
-
-    routes.set('casino', {
-        page: 'casino',
-        id: '#page-casino',
-        path: '/casino/{casinoId:integer}'
+    routes.set('machines', {
+        page: 'machines',
+        id: '#page-machines',
+        path: '/machines'
     });
-    routes.set('casino/add', {
-        page: 'casino/add',
-        id: '#page-casino-add',
-        path: '/casino/{casinoName:string}/player/{playerId:integer}'
+    routes.set('machines', {
+        page: 'machines',
+        id: '#page-machines',
+        path: '/machines/{machinesId:integer}'
     });
-
 
     //Functions for displaying page
 

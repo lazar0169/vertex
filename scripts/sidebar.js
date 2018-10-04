@@ -95,10 +95,7 @@ const sidebar = (function () {
     });
 
 
-
-
-
-    // generate menu lists from data, and set click listener  
+    // generate menu lists from data, and set click listener
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
@@ -139,14 +136,14 @@ const sidebar = (function () {
         linkWrapper.innerHTML = '';
         generateLinksData(!category || menuData[category] ? menuData : category);
         function generateLinksData(tempData) {
-            if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
+            if (searchCategory) {// if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.Id = `link-${categoryValue.Id}`;
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
                     //elements in search mapped to coresponding path
-                    tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.id}`;
+                    tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.Id}`; //ToDo LINK
                     tempFragment.innerHTML = categoryValue.Name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
@@ -156,6 +153,7 @@ const sidebar = (function () {
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].List;
                         temp.category = searchCategory;
+
                         recentSearch(temp);
                     });
                     fragment.appendChild(tempFragment);
@@ -178,7 +176,7 @@ const sidebar = (function () {
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
-                                tempValue.href = `/${value.List.toLowerCase()}/${value.id}`;
+                                tempValue.href = `/${value.List.toLowerCase()}/${value.Id}`;
                             } else {
                                 tempValue.innerHTML = value.name;
                             }
@@ -380,7 +378,6 @@ const sidebar = (function () {
     //events
     on('sidebar/menu/generate', function(e){
         menuData = e.menuData;
-        console.log('menuData ', menuData);
 
         generateMenu(e.menuData);
         initVariables();
