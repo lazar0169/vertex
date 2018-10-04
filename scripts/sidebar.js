@@ -20,13 +20,13 @@ const sidebar = (function () {
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId;
-        let linkSelectedId;
-   // let categorySelectedId = Object.keys(menuData)[0];
-  //  let linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
+    let linkSelectedId;
+    // let categorySelectedId = Object.keys(menuData)[0];
+    //  let linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
     // variables for remembering last category and link which are picked, and they are used for marking category and link
     let previousCategorySelected;
     let previousLinkSelected;
-    //variables for search, searchCategory is used to check which category is active, 
+    //variables for search, searchCategory is used to check which category is active,
     //if you click on general search it will be set to undefined in other case it will be set like list
     //recent is an object, it take value from localStorage
     let searchCategory;
@@ -158,7 +158,7 @@ const sidebar = (function () {
                     });
                     fragment.appendChild(tempFragment);
                 }
-            } else { //if searchCategory is undefined, function generates links based on object 
+            } else { //if searchCategory is undefined, function generates links based on object
                 for (let category in tempData) {
                     if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
@@ -174,7 +174,7 @@ const sidebar = (function () {
                             tempValue.href = `/${category.toLowerCase()}/${value.Id}`;
                             tempValue.id = `link-${value.Id}`;
                             tempValue.innerHTML = `${value.Name} (${category})`;
-                            if (category === 'search') {// if category is 'search', link has name and category name in brakets 
+                            if (category === 'search') {// if category is 'search', link has name and category name in brakets
                                 tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
                                 tempValue.href = `/${value.List.toLowerCase()}/${value.Id}`;
                             } else {
@@ -204,8 +204,8 @@ const sidebar = (function () {
         }
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
-        trigger('router/bind-handlers/navigation-links');;
-        selectLink(linkSelectedId);
+        trigger('router/bind-handlers/navigation-links');
+        selectLink(linkSelectedId);//ToDO ovde dolazi najverovatnije do greske pri generisanju pravog linka
     }
     // highlight chosen link
     function selectLink(name) {
@@ -229,59 +229,59 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
-    //data search
-    function search(termin, category) {
-        let newData = {};
-        if (category) {
-            newData[category] = search(termin, category);
-        } else {
-            for (let category in menuData) {
-                newData[category] = search(termin, category);
-            }
-        }
-        return newData;
-
+    /*    //data search
         function search(termin, category) {
-            let i = 0;
-            let arrayResult = [];
-            for (let value of menuData[category].value) {
-                let valueName = value.name.toLowerCase();
-                let valueCity = value.city.toLowerCase();
-                let index = valueName.indexOf(termin);
-                let index1 = valueName.indexOf(` ${termin}`);
-                let index2 = valueCity.indexOf(termin);
-                let index3 = valueCity.indexOf(` ${termin}`)
-                if (index === 0 ||
-                    index1 !== -1 ||
-                    index2 === 0 ||
-                    index3 !== -1) {
-                    arrayResult[i] = value;
-                    i++;
+            let newData = {};
+            if (category) {
+                newData[category] = search(termin, category);
+            } else {
+                for (let category in menuData) {
+                    newData[category] = search(termin, category);
                 }
             }
-            let newObject = {
-                'category': menuData[category].List,
-                'value': arrayResult
+            return newData;
+
+            function search(termin, category) {
+                let i = 0;
+                let arrayResult = [];
+                for (let value of menuData[category].value) {
+                    let valueName = value.name.toLowerCase();
+                    let valueCity = value.city.toLowerCase();
+                    let index = valueName.indexOf(termin);
+                    let index1 = valueName.indexOf(` ${termin}`);
+                    let index2 = valueCity.indexOf(termin);
+                    let index3 = valueCity.indexOf(` ${termin}`)
+                    if (index === 0 ||
+                        index1 !== -1 ||
+                        index2 === 0 ||
+                        index3 !== -1) {
+                        arrayResult[i] = value;
+                        i++;
+                    }
+                }
+                let newObject = {
+                    'category': menuData[category].List,
+                    'value': arrayResult
+                };
+                return newObject;
+            }
+        }
+        // function to remember last search in localStorage
+        function recentSearch(valueLink) {
+            recent = JSON.parse(localStorage.getItem('recentSearch'));
+            let recentArray = recent ? recent.search.value : [];
+            let index = recentArray.findIndex((item) => item.id === valueLink.id);
+            if (index !== -1) {
+                recentArray.splice(index, 1);
+            }
+            recentArray.unshift(valueLink);
+            let object = {};
+            object['search'] = {
+                'category': 'Recent search',
+                'value': recentArray
             };
-            return newObject;
-        }
-    }
-    // function to remember last search in localStorage
-    function recentSearch(valueLink) {
-        recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.value : [];
-        let index = recentArray.findIndex((item) => item.id === valueLink.id);
-        if (index !== -1) {
-            recentArray.splice(index, 1);
-        }
-        recentArray.unshift(valueLink);
-        let object = {};
-        object['search'] = {
-            'category': 'Recent search',
-            'value': recentArray
-        };
-        localStorage.setItem('recentSearch', JSON.stringify(object));
-    }
+            localStorage.setItem('recentSearch', JSON.stringify(object));
+        }*/
     //data search
     function search(termin, category) {
         let newData = {};
@@ -312,9 +312,11 @@ const sidebar = (function () {
                     i++;
                 }
             }
+            //newObject has to have same name nomenclature as API response as it represent same data used in same functions
             let newObject = {
-                'category': menuData[category].List,
+                'Category': menuData[category].List,
                 'value': arrayResult
+
             };
             return newObject;
         }
@@ -378,7 +380,6 @@ const sidebar = (function () {
     //events
     on('sidebar/menu/generate', function(e){
         menuData = e.menuData;
-
         generateMenu(e.menuData);
         initVariables();
         generateLinks(categorySelectedId);

@@ -3,8 +3,6 @@ let application = (function () {
     function generateMenu() {
         let menu = getMenu();
         trigger('sidebar/menu/generate', {menuData: menu});
-        // console.log(menu['Casinos'].Value[0]);
-        // trigger('template/render', {templateElementSelector:'#casino-template', model: menu['Casinos'].Value[0]})
     }
 
     function getMenu(){
@@ -29,7 +27,5 @@ let application = (function () {
         //ToDo: Fix timeout hotfix
         setTimeout(checkCurrentUser, 500);
     });
-
-
 
 })();

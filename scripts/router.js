@@ -79,7 +79,6 @@ let router = (function () {
     }
 
     function makePageActive(pageName) {
-
         let pageElement = getElementFromPageName(pageName);
         if (pageElement != null) {
             pageElement.classList.add('active');
@@ -99,16 +98,21 @@ let router = (function () {
         makePageActive(pageName);
     }
 
-    function changePage(pageName, addStateToHistory) {
+    function changePage(pageName, addStateToHistory, url) {
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
         }
         if (typeof addStateToHistory === 'undefined') {
             addStateToHistory = true;
         }
-        let currentRoute = routes.get(pageName),
-            currentUrl = window.location.pathname,
-            params = getParamsFromUrl(currentUrl, currentRoute);
+        let currentRoute = routes.get(pageName);
+        let currentUrl;
+        if(typeof url !== 'undefined'){
+            currentUrl = url;
+        } else {
+            currentUrl = window.location.pathname;
+        }
+        let params = getParamsFromUrl(currentUrl, currentRoute);
         if (addStateToHistory) {
             pushToHistoryStack(routes.get(pageName), params);
         }
@@ -118,6 +122,7 @@ let router = (function () {
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
+        //ToDo: Trigerovati event sidebar-a da oznaci koji je podmeni aktivan
     }
 
 
@@ -281,7 +286,7 @@ let router = (function () {
         e.preventDefault();
         let url = e.target.getAttribute('href');
         let pageName = getPageNameFromUrl(url);
-        changePage(pageName);
+        changePage(pageName, true, url);
     }
 
 

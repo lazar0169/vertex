@@ -108,7 +108,6 @@ let template = (function () {
         let model = param.model;
         if (typeof param.callbackEvent !== 'undefined') {
             render(templateElementSelector, model, param.callbackEvent);
-            console.log('render return value', render(templateElementSelector, model, param.callbackEvent));
         }
         else {
             render(templateElementSelector, model);
