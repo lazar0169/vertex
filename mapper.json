@@ -5,7 +5,8 @@
             "session.js",
             "communication.js",
             "preloader.js",
-            "notifications.js"
+            "notifications.js",
+            "template-engine.js"
         ],
         "styles": [
             "modify-spectre.css",

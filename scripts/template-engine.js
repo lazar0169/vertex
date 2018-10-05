@@ -100,21 +100,24 @@ let template = (function () {
         if (typeof callbackEvent !== 'undefined') {
             trigger(callbackEvent, {model: model, element: newElement});
         }
+        console.log('new element', newElement);
         return newElement;
     }
 
     on('template/render', function (param) {
         let templateElementSelector = param.templateElementSelector;
         let model = param.model;
+        let newHtmlElement;
         if (typeof param.callbackEvent !== 'undefined') {
-            render(templateElementSelector, model, param.callbackEvent);
+            newHtmlElement = render(templateElementSelector, model, param.callbackEvent);
         }
         else {
-            render(templateElementSelector, model);
+            newHtmlElement = render(templateElementSelector, model);
         }
+        trigger('render/finished', {element: newHtmlElement});
     });
 
     //For testing:
-    render('#home-template', model);
+    // render('#home-template', model);
 
 })();
