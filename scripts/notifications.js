@@ -10,17 +10,17 @@ let notifications = function(){
     });
 
 
-    on('notifications/error', function(){
+    on('notifications/error', function(params){
 
     });
 
 
-    on('notifications/error/username-password', function(){
+    on('notifications/error/username-password', function(params){
 
     });
 
 
-    on('notifications/error/communication', function(){
+    on('notifications/error/communication', function(params){
 
     });
 

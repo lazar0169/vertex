@@ -4,11 +4,13 @@
             "login.js",
             "session.js",
             "communication.js",
-            "preloader.js"
+            "preloader.js",
+            "notifications.js"
         ],
         "styles": [
             "modify-spectre.css",
-            "login.css"
+            "login.css",
+            "notifications.css"
         ]
     },
     "main": {

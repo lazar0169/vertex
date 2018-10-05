@@ -33,9 +33,9 @@ let login = (function () {
         trigger('session/login/error', {message: e.message});
         let messageParse = JSON.parse(e.message);
         if (messageParse.MessageCode === '22') {
-            trigger('notifications/error/username-password');
+            trigger('notifications/error/username-password', e.message);
         } else {
-            trigger('notifications/error');
+            trigger('notifications/error', e.message);
         }
     });
 
