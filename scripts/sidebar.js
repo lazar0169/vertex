@@ -20,13 +20,13 @@ const sidebar = (function () {
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId;
-        let linkSelectedId;
-   // let categorySelectedId = Object.keys(menuData)[0];
-  //  let linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
+    let linkSelectedId;
+    // let categorySelectedId = Object.keys(menuData)[0];
+    //  let linkSelectedId = `link-${menuData[categorySelectedId]['value'][0]['id']}`;
     // variables for remembering last category and link which are picked, and they are used for marking category and link
     let previousCategorySelected;
     let previousLinkSelected;
-    //variables for search, searchCategory is used to check which category is active, 
+    //variables for search, searchCategory is used to check which category is active,
     //if you click on general search it will be set to undefined in other case it will be set like list
     //recent is an object, it take value from localStorage
     let searchCategory;
@@ -92,8 +92,8 @@ const sidebar = (function () {
 
     searchLink.addEventListener('keyup', function (event) {
         let results = searchCategory;
-        if (searchLink.value !== '') {
-            results = search(searchLink.value.toLowerCase(), searchCategory);
+        if (searchLink.Value !== '') {
+            results = search(searchLink.Value.toLowerCase(), searchCategory);
         } else if (results === undefined && recent) {
             results = recent;
         }
@@ -101,10 +101,7 @@ const sidebar = (function () {
     });
 
 
-
-
-
-    // generate menu lists from data, and set click listener  
+    // generate menu lists from data, and set click listener
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
@@ -139,6 +136,7 @@ const sidebar = (function () {
         }
         listWrapper.appendChild(fragment);
     }
+
     // generate links when you click on list from menu, and set click listener
     function generateLinks(category) {
         let fragment = document.createDocumentFragment();
@@ -152,7 +150,7 @@ const sidebar = (function () {
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
                     //elements in search mapped to coresponding path
-                    tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.id}`;
+                    tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.Id}`; //ToDo LINK
                     tempFragment.innerHTML = categoryValue.Name;
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
@@ -162,11 +160,12 @@ const sidebar = (function () {
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].List;
                         temp.category = searchCategory;
+                        // temp.List = tempData[searchCategory].List;
                         recentSearch(temp);
                     });
                     fragment.appendChild(tempFragment);
                 }
-            } else { //if searchCategory is undefined, function generates links based on object 
+            } else { //if searchCategory is undefined, function generates links based on object
                 for (let category in tempData) {
                     if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
@@ -184,19 +183,20 @@ const sidebar = (function () {
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
-                                tempValue.href = `/${value.List.toLowerCase()}/${value.id}`;
+                                tempValue.href = `/${value.categoryName.toLowerCase()}/${value.Id}`;
                             } else {
-                                tempValue.innerHTML = value.name;
+                                tempValue.innerHTML = value.Name;
                             }
                             tempValue.addEventListener('click', function () {
                                 searchCategory = categorySelectedId;
-                                linkSelectedId = `link-${value.id}`;
+                                linkSelectedId = `link-${value.Id}`;
                                 let entry = value;
                                 if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
-                                    categorySelectedId = value.List;
+                                    categorySelectedId = value.categoryName.charAt(0).toUpperCase() + value.categoryName.slice(1).toLowerCase();
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
                                     entry.categoryName = tempData[category].List;
+                                    // entry.List = tempData[category].List;
                                     categorySelectedId = category;
                                 }
                                 recentSearch(entry);
@@ -210,11 +210,13 @@ const sidebar = (function () {
                 }
             }
         }
+
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
-        trigger('router/bind-handlers/navigation-links');;
-        selectLink(linkSelectedId);
+        trigger('router/bind-handlers/navigation-links');
+        selectLink(linkSelectedId);//ToDO ovde dolazi najverovatnije do greske pri generisanju pravog linka
     }
+
     // highlight chosen link
     function selectLink(name) {
         if (previousLinkSelected) {
@@ -226,6 +228,7 @@ const sidebar = (function () {
             previousLinkSelected = linkSelected;
         }
     }
+
     // highlight chosen category
     function selectCategory(category) {
         if (category !== 'search') {
@@ -320,6 +323,7 @@ const sidebar = (function () {
                     i++;
                 }
             }
+            //newObject has to have same name nomenclature as API response as it represent same data used in same functions
             let newObject = {
                 'category': menuData[category].List,
                 'value': arrayResult
@@ -327,22 +331,24 @@ const sidebar = (function () {
             return newObject;
         }
     }
+
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.value : [];
-        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        let recentArray = recent ? recent.search.Value : [];
+        let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
         if (index !== -1) {
             recentArray.splice(index, 1);
         }
         recentArray.unshift(valueLink);
         let object = {};
         object['search'] = {
-            'category': 'Recent search',
-            'value': recentArray
+            'Category': 'Recent search',
+            'Value': recentArray
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
+
     //function for tooltip
     function showTooltip(category) {
         let rect = $$(`#${category}`).getBoundingClientRect();
@@ -384,7 +390,7 @@ const sidebar = (function () {
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
     //events
-    on('sidebar/menu/generate', function(e){
+    on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;
         generateMenu(e.menuData);
         initVariables();

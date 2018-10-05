@@ -1,10 +1,15 @@
 let application = (function () {
 
     function generateMenu() {
+        let menu = getMenu();
+        trigger('sidebar/menu/generate', {menuData: menu});
+    }
+
+    function getMenu() {
         let decodedToken = decodeToken(sessionStorage.token);
         let endpoint = decodedToken.endpoint;
         let menu = JSON.parse(endpoint);
-        trigger('sidebar/menu/generate', {menuData: menu});
+        return menu;
     }
 
     function checkCurrentUser() {
