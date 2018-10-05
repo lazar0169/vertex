@@ -34,7 +34,6 @@ let login = (function () {
         let messageParse = JSON.parse(e.message);
         let messageCode = messageParse.MessageCode;
         let messageType = messageParse.MessageType;
-        console.log('messageType', messageType)
         trigger('notifications/show', {message: messageCode, type: messageType});
     });
 

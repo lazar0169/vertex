@@ -15,10 +15,6 @@ let notifications = function () {
             newElement.classList.add('notification-info');
             newElement.classList.add('toast-warning');
         }
-        console.log('params model', params.model);
-        console.log(newElement);
-        let parent = $$('.notifications-container')[0];
-        console.log(parent);
         $$('.notifications-container')[0].appendChild(newElement);
     }
 
@@ -27,15 +23,16 @@ let notifications = function () {
         showNotification(params);
     });
 
-//todo u params prosledim koji je tip poruke notifikacije
-
-
     on('notifications/show', function (params) {
         let notificationModel = {
             message: params.message,
             type: params.type
         };
-        trigger('template/render', {templateElementSelector: '#notification-template', model: notificationModel, callbackEvent:'notifications/render/finished'});
+        trigger('template/render', {
+            templateElementSelector: '#notification-template',
+            model: notificationModel,
+            callbackEvent: 'notifications/render/finished'
+        });
     });
 
 }();

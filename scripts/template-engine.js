@@ -100,7 +100,6 @@ let template = (function () {
         if (typeof callbackEvent !== 'undefined') {
             trigger(callbackEvent, {model: model, element: newElement});
         }
-        console.log('new element', newElement);
         return newElement;
     }
 
