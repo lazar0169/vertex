@@ -104,17 +104,17 @@ let template = (function () {
         return newElement;
     }
 
-    on('template/render', function (param) {
-        let templateElementSelector = param.templateElementSelector;
-        let model = param.model;
+    on('template/render', function (params) {
+        let templateElementSelector = params.templateElementSelector;
+        let model = params.model;
         let newHtmlElement;
-        if (typeof param.callbackEvent !== 'undefined') {
-            newHtmlElement = render(templateElementSelector, model, param.callbackEvent);
+        if (typeof params.callbackEvent !== 'undefined') {
+            newHtmlElement = render(templateElementSelector, model, params.callbackEvent);
         }
         else {
             newHtmlElement = render(templateElementSelector, model);
         }
-        trigger('render/finished', {element: newHtmlElement});
+        trigger(params.callbackEvent, {element: newHtmlElement, params: params});
     });
 
     //For testing:

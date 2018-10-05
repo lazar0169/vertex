@@ -1,37 +1,46 @@
-let notifications = function(){
+let notifications = function () {
 
     function showNotification() {
 
     }
 
+    /*
+        on('notifications/success', function(params){
+
+        });
+
+
+        on('notifications/error', function(params){
+
+        });
+
+
+        on('notifications/error/username-password', function(params){
+
+        });*/
 /*
-    on('notifications/success', function(params){
+    info
+    error
+    success*/
 
-    });
-
-
-    on('notifications/error', function(params){
-
-    });
-
-
-    on('notifications/error/username-password', function(params){
-
-    });*/
-
-    on('render/finished', function(param){
-        let newElement = param.element;
+    on('notifications/render/finished', function (params) {
+        let newElement = params.element;
+        //TODO dodaj klasu notifikaciji na osnovu poruke
         console.log(newElement);
         let parent = $$('.notifications-container')[0];
         console.log(parent);
         $$('.notifications-container')[0].appendChild(newElement);
     });
 
+//todo u params prosledim koji je tip poruke notifikacije
 
-    on('notifications/error/communication', function(params){
-        let message = params.message;
-        trigger('template/render', {templateElementSelector: '#notification-template', model: message});
 
+    on('notifications/show', function (params) {
+        let notificationModel = {
+            message: params.message,
+            type: params.type
+        };
+        trigger('template/render', {templateElementSelector: '#notification-template', model: notificationModel, callbackEvent:'notifications/render/finished'});
     });
 
 }();
