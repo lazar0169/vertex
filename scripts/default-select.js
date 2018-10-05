@@ -2,7 +2,7 @@ let proba = $$('#aft-advance-table-filter-date-range');
 let nekiniz = ['-', 'selektuje', 'samo', 'jedan', 'element'];
 
 let proba2 = $$('#aft-advance-table-filter-finished');
-let nekiniz2 = ['-', 'proba2', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
+let nekiniz2 = ['-', 'proba2222222222222222222222222222222222222', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
 
 let proba3 = $$('#aft-advance-table-filter-jackpot');
 let nekiniz3 = ['-', 'proba3', 'proba2', 'proba3'];
@@ -16,20 +16,22 @@ let nekiniz5 = ['-', 'proba5', 'prsadf5', 'p5'];
 let proba6 = $$('#aft-advance-table-filter-column');
 let nekiniz6 = ['-', 'proba6', 'prsadf6', 'p6'];
 
+let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
+
 window.addEventListener('load', function () {
-    proba.appendChild(singleSelect(proba, nekiniz));
-    proba2.appendChild(multiselect(proba2, nekiniz2));
-    proba3.appendChild(multiselect(proba3, nekiniz3));
-    proba4.appendChild(multiselect(proba4, nekiniz4));
-    proba5.appendChild(multiselect(proba5, nekiniz5));
-    proba6.appendChild(multiselect(proba6, nekiniz6));
+    proba.appendChild(singleSelect(nekiniz));
+    proba2.appendChild(multiselect(nekiniz2));
+    proba3.appendChild(multiselect(nekiniz3));
+    proba4.appendChild(multiselect(nekiniz4));
+    proba5.appendChild(multiselect(nekiniz5));
+    proba6.appendChild(multiselect(nekiniz6));
 });
 
 // funkcija za visestruko selektovanje
-function multiselect(div, dataSelect) {
-    let clicked = false;
+function multiselect(dataSelect) {
     let noSelected = dataSelect.shift()
     let select = document.createElement('div');
+
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = noSelected;
@@ -38,22 +40,23 @@ function multiselect(div, dataSelect) {
     });
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
+    optionGroup.classList.add('multiple-group');
 
     for (let element of dataSelect) {
         let option = document.createElement('div');
+
         option.innerHTML = `<label class="form-checkbox" >
                                             <input type="checkbox">
                                             <i class="form-icon" ></i> <div>${element}</div>
                                         </label>`;
         optionGroup.appendChild(option);
         optionGroup.classList.add('overflow-y');
-
         option.addEventListener('click', function (e) {
             e.preventDefault();
             if (option.children[0].children[0].checked == false) {
-                if (!clicked) {
+                if (selected.innerHTML === '-') {
                     selected.innerHTML = option.children[0].children[2].innerHTML;
-                    clicked = true;
+
                 }
                 else {
                     selected.innerHTML += `,${option.children[0].children[2].innerHTML}`;
@@ -75,21 +78,17 @@ function multiselect(div, dataSelect) {
                 option.children[0].children[0].checked = false;
                 if (selected.innerHTML === '') {
                     selected.innerHTML = noSelected;
-                    clicked = false;
                 }
             }
         });
     }
     select.appendChild(selected);
     select.appendChild(optionGroup);
-    div.onmouseleave = function () {
-        div.children[1].children[1].classList.add('hidden');
-    }
     return select;
 }
 
 // funkcija za selektovanje jednog podatka
-function singleSelect(div, dataSelect) {
+function singleSelect(dataSelect) {
     let select = document.createElement('div');
     select.classList.add('default-select');
     let selected = document.createElement('div');
@@ -116,8 +115,17 @@ function singleSelect(div, dataSelect) {
     }
     select.appendChild(selected);
     select.appendChild(optionGroup);
-    div.onmouseleave = function () {
-        div.children[1].children[1].classList.add('hidden');
-    }
     return select;
+}
+
+function clearAllFilter(div) {
+    for (let element of div.getElementsByClassName('default-select')) {
+        element.children[0].innerHTML = '-';
+        if (element.children[1].classList.contains('multiple-group')) {
+            for (let check of element.children[1].children) {
+                check.children[0].children[0].checked = false;
+            }
+        }
+
+    }
 }
