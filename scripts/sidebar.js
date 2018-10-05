@@ -182,8 +182,8 @@ const sidebar = (function () {
                             tempValue.id = `link-${value.Id}`;
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
-                                tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
-                                tempValue.href = `/${value.categoryName.toLowerCase()}/${value.Id}`;
+                                tempValue.innerHTML = `${value.Name} (${value.category})`;
+                                tempValue.href = `/${value.category.toLowerCase()}/${value.Id}`;
                             } else {
                                 tempValue.innerHTML = value.Name;
                             }
@@ -192,7 +192,7 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.Id}`;
                                 let entry = value;
                                 if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
-                                    categorySelectedId = value.categoryName.charAt(0).toUpperCase() + value.categoryName.slice(1).toLowerCase();
+                                    categorySelectedId = value.category.charAt(0).toUpperCase() + value.category.slice(1).toLowerCase();
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
                                     entry.categoryName = tempData[category].List;
