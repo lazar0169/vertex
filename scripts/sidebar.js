@@ -92,8 +92,8 @@ const sidebar = (function () {
 
     searchLink.addEventListener('keyup', function (event) {
         let results = searchCategory;
-        if (searchLink.Value !== '') {
-            results = search(searchLink.Value.toLowerCase(), searchCategory);
+        if (searchLink.value !== '') {
+            results = search(searchLink.value.toLowerCase(), searchCategory);
         } else if (results === undefined && recent) {
             results = recent;
         }
@@ -255,9 +255,9 @@ const sidebar = (function () {
         function search(termin, category) {
             let i = 0;
             let arrayResult = [];
-            for (let value of menuData[category].value) {
-                let valueName = value.name.toLowerCase();
-                let valueCity = value.city.toLowerCase();
+            for (let value of menuData[category].Value) {
+                let valueName = value.Name.toLowerCase();
+                let valueCity = value.City.toLowerCase();
                 let index = valueName.indexOf(termin);
                 let index1 = valueName.indexOf(` ${termin}`);
                 let index2 = valueCity.indexOf(termin);
@@ -294,43 +294,43 @@ const sidebar = (function () {
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
     //data search
-    function search(termin, category) {
-        let newData = {};
-        if (category) {
-            newData[category] = search(termin, category);
-        } else {
-            for (let category in menuData) {
+    /*    function search(termin, category) {
+            let newData = {};
+            if (category) {
                 newData[category] = search(termin, category);
-            }
-        }
-        return newData;
-
-        function search(termin, category) {
-            let i = 0;
-            let arrayResult = [];
-            for (let value of menuData[category].value) {
-                let valueName = value.name.toLowerCase();
-                let valueCity = value.city.toLowerCase();
-                let index = valueName.indexOf(termin);
-                let index1 = valueName.indexOf(` ${termin}`);
-                let index2 = valueCity.indexOf(termin);
-                let index3 = valueCity.indexOf(` ${termin}`)
-                if (index === 0 ||
-                    index1 !== -1 ||
-                    index2 === 0 ||
-                    index3 !== -1) {
-                    arrayResult[i] = value;
-                    i++;
+            } else {
+                for (let category in menuData) {
+                    newData[category] = search(termin, category);
                 }
             }
-            //newObject has to have same name nomenclature as API response as it represent same data used in same functions
-            let newObject = {
-                'category': menuData[category].List,
-                'value': arrayResult
-            };
-            return newObject;
-        }
-    }
+            return newData;
+
+            function search(termin, category) {
+                let i = 0;
+                let arrayResult = [];
+                for (let value of menuData[category].value) {
+                    let valueName = value.name.toLowerCase();
+                    let valueCity = value.city.toLowerCase();
+                    let index = valueName.indexOf(termin);
+                    let index1 = valueName.indexOf(` ${termin}`);
+                    let index2 = valueCity.indexOf(termin);
+                    let index3 = valueCity.indexOf(` ${termin}`)
+                    if (index === 0 ||
+                        index1 !== -1 ||
+                        index2 === 0 ||
+                        index3 !== -1) {
+                        arrayResult[i] = value;
+                        i++;
+                    }
+                }
+                //newObject has to have same name nomenclature as API response as it represent same data used in same functions
+                let newObject = {
+                    'category': menuData[category].List,
+                    'value': arrayResult
+                };
+                return newObject;
+            }
+        }*/
 
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
