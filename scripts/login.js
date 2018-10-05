@@ -20,23 +20,22 @@ let login = (function () {
     //custom event handlers
     on('login/success', function (e) {
         trigger('session/login/success', {encodedToken: e.data});
-        trigger('notifications/success');
+        trigger('notifications/show', {message: 'success', type: ''});
         if (sessionStorage.token || sessionStorage.token !== undefined) {
             window.location.pathname = '/home';
         }
         else {
-            trigger('notifications/error');
+            trigger('notifications/show');
         }
     });
 
     on('login/error', function (e) {
         trigger('session/login/error', {message: e.message});
         let messageParse = JSON.parse(e.message);
-        if (messageParse.MessageCode === '22') {
-            trigger('notifications/error/username-password', e.message);
-        } else {
-            trigger('notifications/error', e.message);
-        }
+        let messageCode = messageParse.MessageCode;
+        let messageType = messageParse.MessageType;
+        console.log('messageType', messageType)
+        trigger('notifications/show', {message: messageCode, type: messageType});
     });
 
 })();

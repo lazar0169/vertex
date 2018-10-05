@@ -114,7 +114,7 @@ let template = (function () {
         else {
             newHtmlElement = render(templateElementSelector, model);
         }
-        trigger(params.callbackEvent, {element: newHtmlElement, params: params});
+        trigger(params.callbackEvent, {element: newHtmlElement, params: params, model: params.model});
     });
 
     //For testing:

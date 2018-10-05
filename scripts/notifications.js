@@ -1,35 +1,30 @@
 let notifications = function () {
 
-    function showNotification() {
-
-    }
-
-    /*
-        on('notifications/success', function(params){
-
-        });
-
-
-        on('notifications/error', function(params){
-
-        });
-
-
-        on('notifications/error/username-password', function(params){
-
-        });*/
-/*
-    info
-    error
-    success*/
-
-    on('notifications/render/finished', function (params) {
+    function showNotification(params) {
         let newElement = params.element;
-        //TODO dodaj klasu notifikaciji na osnovu poruke
+        let messageCode = params.model.message;
+        let messageType = params.model.type;
+        if (messageType === 0) {
+            newElement.classList.add('notification-success');
+            newElement.classList.add('toast-success');
+        } else if (messageCode === 1 || messageCode === 3) {
+            newElement.classList.add('notification-error');
+            newElement.classList.add('toast-error');
+        } else (messageCode === 2)
+        {
+            newElement.classList.add('notification-info');
+            newElement.classList.add('toast-warning');
+        }
+        console.log('params model', params.model);
         console.log(newElement);
         let parent = $$('.notifications-container')[0];
         console.log(parent);
         $$('.notifications-container')[0].appendChild(newElement);
+    }
+
+
+    on('notifications/render/finished', function (params) {
+        showNotification(params);
     });
 
 //todo u params prosledim koji je tip poruke notifikacije
