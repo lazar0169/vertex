@@ -1,0 +1,18 @@
+.notifications-container {
+    float: right;
+    z-index: 1000;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 1em;
+    right: 1em;
+    width: 20em;
+    min-height: 10px;
+    background-color: #f7a743;
+    border: 2px solid #f7a743 !important;
+    border-radius: 3px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.16), 0 0 10px rgba(0, 0, 0, 0.16) !important;
+    color: #fdedd7;
+    font-weight: normal;
+    text-align: center;
+}
