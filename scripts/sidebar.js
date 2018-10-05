@@ -271,67 +271,12 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'category': menuData[category].List,
-                'value': arrayResult
+                'Category': menuData[category].List,
+                'Value': arrayResult
             };
             return newObject;
         }
     }
-    // function to remember last search in localStorage
-    function recentSearch(valueLink) {
-        recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.value : [];
-        let index = recentArray.findIndex((item) => item.id === valueLink.id);
-        if (index !== -1) {
-            recentArray.splice(index, 1);
-        }
-        recentArray.unshift(valueLink);
-        let object = {};
-        object['search'] = {
-            'category': 'Recent search',
-            'value': recentArray
-        };
-        localStorage.setItem('recentSearch', JSON.stringify(object));
-    }
-    //data search
-    /*    function search(termin, category) {
-            let newData = {};
-            if (category) {
-                newData[category] = search(termin, category);
-            } else {
-                for (let category in menuData) {
-                    newData[category] = search(termin, category);
-                }
-            }
-            return newData;
-
-            function search(termin, category) {
-                let i = 0;
-                let arrayResult = [];
-                for (let value of menuData[category].value) {
-                    let valueName = value.name.toLowerCase();
-                    let valueCity = value.city.toLowerCase();
-                    let index = valueName.indexOf(termin);
-                    let index1 = valueName.indexOf(` ${termin}`);
-                    let index2 = valueCity.indexOf(termin);
-                    let index3 = valueCity.indexOf(` ${termin}`)
-                    if (index === 0 ||
-                        index1 !== -1 ||
-                        index2 === 0 ||
-                        index3 !== -1) {
-                        arrayResult[i] = value;
-                        i++;
-                    }
-                }
-                //newObject has to have same name nomenclature as API response as it represent same data used in same functions
-                let newObject = {
-                    'category': menuData[category].List,
-                    'value': arrayResult
-                };
-                return newObject;
-            }
-        }*/
-
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
