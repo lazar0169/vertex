@@ -59,6 +59,12 @@ const sidebar = (function () {
     }();
 
 
+    window.addEventListener('load', function () {
+
+        //generateMenu(menuData);
+
+    });
+
     collapseButton.addEventListener('click', function () {
         isExpanded ?
             sidemenu.collapse() :
@@ -136,9 +142,8 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
         generateLinksData(!category || menuData[category] ? menuData : category);
-
         function generateLinksData(tempData) {
-            if (searchCategory) {// if searchCategory is not undefined, this function generates links based on it
+            if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.Id = `link-${categoryValue.Id}`;
@@ -176,7 +181,7 @@ const sidebar = (function () {
                             tempValue.href = `/${category.toLowerCase()}/${value.Id}`;
                             tempValue.id = `link-${value.Id}`;
                             tempValue.innerHTML = `${value.Name} (${category})`;
-                            if (category === 'search') {// if category is 'search', link has name and category name in brakets
+                            if (category === 'search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
                                 tempValue.href = `/${value.categoryName.toLowerCase()}/${value.Id}`;
                             } else {
@@ -187,7 +192,7 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.Id}`;
                                 let entry = value;
                                 if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
-                                    categorySelectedId = value.List;
+                                    categorySelectedId = value.categoryName.charAt(0).toUpperCase() + value.categoryName.slice(1).toLowerCase();
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
                                     entry.categoryName = tempData[category].List;
@@ -235,7 +240,6 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
-
     //data search
     function search(termin, category) {
         let newData = {};
@@ -251,9 +255,62 @@ const sidebar = (function () {
         function search(termin, category) {
             let i = 0;
             let arrayResult = [];
-            for (let value of menuData[category].Value) {
-                let valueName = value.Name.toLowerCase();
-                let valueCity = value.City.toLowerCase();
+            for (let value of menuData[category].value) {
+                let valueName = value.name.toLowerCase();
+                let valueCity = value.city.toLowerCase();
+                let index = valueName.indexOf(termin);
+                let index1 = valueName.indexOf(` ${termin}`);
+                let index2 = valueCity.indexOf(termin);
+                let index3 = valueCity.indexOf(` ${termin}`)
+                if (index === 0 ||
+                    index1 !== -1 ||
+                    index2 === 0 ||
+                    index3 !== -1) {
+                    arrayResult[i] = value;
+                    i++;
+                }
+            }
+            let newObject = {
+                'category': menuData[category].List,
+                'value': arrayResult
+            };
+            return newObject;
+        }
+    }
+    // function to remember last search in localStorage
+    function recentSearch(valueLink) {
+        recent = JSON.parse(localStorage.getItem('recentSearch'));
+        let recentArray = recent ? recent.search.value : [];
+        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        if (index !== -1) {
+            recentArray.splice(index, 1);
+        }
+        recentArray.unshift(valueLink);
+        let object = {};
+        object['search'] = {
+            'category': 'Recent search',
+            'value': recentArray
+        };
+        localStorage.setItem('recentSearch', JSON.stringify(object));
+    }
+    //data search
+    function search(termin, category) {
+        let newData = {};
+        if (category) {
+            newData[category] = search(termin, category);
+        } else {
+            for (let category in menuData) {
+                newData[category] = search(termin, category);
+            }
+        }
+        return newData;
+
+        function search(termin, category) {
+            let i = 0;
+            let arrayResult = [];
+            for (let value of menuData[category].value) {
+                let valueName = value.name.toLowerCase();
+                let valueCity = value.city.toLowerCase();
                 let index = valueName.indexOf(termin);
                 let index1 = valueName.indexOf(` ${termin}`);
                 let index2 = valueCity.indexOf(termin);
@@ -268,8 +325,8 @@ const sidebar = (function () {
             }
             //newObject has to have same name nomenclature as API response as it represent same data used in same functions
             let newObject = {
-                'Category': menuData[category].List,
-                'Value': arrayResult
+                'category': menuData[category].List,
+                'value': arrayResult
             };
             return newObject;
         }
@@ -332,7 +389,6 @@ const sidebar = (function () {
         categorySelectedId = Object.keys(menuData)[0];
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
-
     //events
     on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;
