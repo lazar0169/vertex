@@ -1,8 +1,8 @@
 <div id="main-content">
 
-    <div id="demo">
+<!--    <div id="demo">
         Response data:
-    </div>
+    </div>-->
 
 
     <object data-object="top-bar"></object>
@@ -21,98 +21,34 @@
     -->
 
     <section class="element-page" id="page-home">
-        <h1>Home {{home.name}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
+        <h1 class="element-template" id="home-template">Home {{home.Name}}</h1>
+        <h1>HOME</h1>
     </section>
 
-    <section class="element-page" id="page-casino">
-        <h1>Cassino list</h1>
+    <section class="element-page" id="page-casinos">
+        <h1>CASINO LIST</h1>
         <div class="casino-list">
-            <div class="element-template" id="casino-template">
-                <h1>{{model.casino.name}}</h1>
-                <h1>{{casino.address}}</h1>
+            <div class="element-template" id="casinos-template">
+                <h1>{{model.casinos.Id}}</h1>
+                <h1>{{model.casinos.Name}}</h1>
+                <h1>{{casino.city}}</h1>
                 <button class="cloning-test">Test</button>
             </div>
         </div>
     </section>
 
-    <section class="element-page" id="page-casino-edit">
-        <h1 class="element-template">PAGE CASINO EDIT {{casino.edit}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
+    <section class="element-page" id="page-casinos-edit">
+        <h1>PAGE CASINO</h1>
     </section>
 
-    <section class="element-page" id="page-jackpot">
-        <h1>Jackpot {{jackpot.number}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
+    <section class="element-page" id="page-jackpots">
+        <h1 class="element-template" id="jackpots-template">Jackpot {{jackpots.Id}}</h1>
+        <h1>JACKPOTS</h1>
     </section>
 
     <section class="element-page" id="page-tickets">
-        <h1>Tickets {{tickets.number}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
+        <h1 class="element-template" id="tickets-template">Tickets {{tickets.Id}}</h1>
+        <h1>TICKETS</h1>
     </section>
 
-    <section class="element-page" id="page-aft">
-        <!-- <h1>aft {{aft.name}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p> -->
-        <!-- ovo treba da se proveri da li treba ovako -->
-
-    </section>
-
-    <section class="element-page" id="page-reports">
-        <h1>Reports for {{user.name}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
-    </section>
-
-    <section class="element-template" id="page-users">
-        <h1>Users name: {{user.name}}</h1>
-        <h1>User surname: {{user.surname}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
-
-
-    </section>
-
-    <section class="element-page" id="page-service">
-        <h1>Service {{service.number}}</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-            irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."</p>
-    </section>
 </div>

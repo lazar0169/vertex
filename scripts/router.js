@@ -3,67 +3,66 @@ let router = (function () {
     //Map object with routes
 
     let routes = new Map();
-    routes.set('casino/edit', {
-        page: 'casino/edit',
-        id: '#page-casino-edit',
-        path: '/casino/{casinoId:integer}'
+    routes.set('aft', {
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft'
     });
-    routes.set('casino/name', {
-        page: 'casino/name',
-        id: '#page-casino-add',
-        path: '/casino/{casinoName:string}/player/{playerId:integer}'
+    routes.set('aft', {
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft/{aftId:integer}'
     });
-    routes.set('casino/name/player', {
-        page: 'casino/name/player',
-        id: '#page-casino-add',
-        path: '/casino/{casinoId:integer}/player/{playerId:integer}'
+    routes.set('casinos', {
+        page: 'casinos',
+        id: '#page-casinos',
+        path: '/casinos'
     });
-    routes.set('home', {
-        page: 'home',
-        id: '#page-home',
-        path: '/home'
+    routes.set('casinos', {
+        page: 'casinos',
+        id: '#page-casinos',
+        path: '/casinos/{casinoId:integer}'
     });
-    routes.set('casino', {
-        page: 'casino',
-        id: '#page-casino',
-        path: '/casino'
+    routes.set('casinos/add', {
+        page: 'casinos/add',
+        id: '#page-casinos-add',
+        path: '/casinos/{casinoName:string}/player/{playerId:integer}'
     });
-    routes.set('jackpot', {
-        page: 'jackpot',
-        id: '#page-jackpot',
-        path: '/jackpot'
+    routes.set('jackpots', {
+        page: 'jackpots',
+        id: '#page-jackpots',
+        path: '/jackpots'
+    });
+    routes.set('jackpots', {
+        page: 'jackpots',
+        id: '#page-jackpots',
+        path: '/jackpots/{jackpotId:integer}'
     });
     routes.set('tickets', {
         page: 'tickets',
         id: '#page-tickets',
         path: '/tickets'
     });
-    routes.set('aft', {
-        page: 'aft',
-        id: '#page-aft',
-        path: '/aft'
+    routes.set('tickets', {
+        page: 'tickets',
+        id: '#page-tickets',
+        path: '/tickets/{ticketId:integer}'
+    });
+    routes.set('home', {
+        page: 'home',
+        id: '#page-home',
+        path: '/home'
     });
     routes.set('machines', {
         page: 'machines',
         id: '#page-machines',
         path: '/machines'
     });
-    routes.set('reports', {
-        page: 'reports',
-        id: '#page-reports',
-        path: '/reports'
+    routes.set('machines', {
+        page: 'machines',
+        id: '#page-machines',
+        path: '/machines/{machinesId:integer}'
     });
-    routes.set('users', {
-        page: 'users',
-        id: '#page-users',
-        path: '/users'
-    });
-    routes.set('service', {
-        page: 'service',
-        id: '#page-service',
-        path: '/service'
-    });
-
 
     //Functions for displaying page
 
@@ -80,7 +79,6 @@ let router = (function () {
     }
 
     function makePageActive(pageName) {
-
         let pageElement = getElementFromPageName(pageName);
         if (pageElement != null) {
             pageElement.classList.add('active');
@@ -97,38 +95,24 @@ let router = (function () {
     }
 
     function showPage(pageName) {
-/*        //local storage session fix
-        ((nm,tm) => {
-            const
-                l = localStorage,
-                s = sessionStorage,
-                tabid = s.getItem(tm) || (newid => s.setItem(tm, newid) || newid)((Math.random() * 1e8).toFixed()),
-                update = set => {
-                    let cur = JSON.parse(l.getItem(nm) || '{}');
-                    if (set && typeof cur[tabid] == 'undefined' && !Object.values(cur).reduce((a, b) => a + b, 0)) {
-                        l.clear();
-                        cur = {};
-                    }
-                    cur[tabid] = set;
-                    l.setItem(nm, JSON.stringify(cur));
-                };
-            update(1);
-            window.onbeforeunload = () => update(0);
-        })('tabs','tabid');*/
-
         makePageActive(pageName);
     }
 
-    function changePage(pageName, addStateToHistory) {
+    function changePage(pageName, addStateToHistory, url) {
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
         }
         if (typeof addStateToHistory === 'undefined') {
             addStateToHistory = true;
         }
-        let currentRoute = routes.get(pageName),
-            currentUrl = window.location.pathname,
-            params = getParamsFromUrl(currentUrl, currentRoute);
+        let currentRoute = routes.get(pageName);
+        let currentUrl;
+        if (typeof url !== 'undefined') {
+            currentUrl = url;
+        } else {
+            currentUrl = window.location.pathname;
+        }
+        let params = getParamsFromUrl(currentUrl, currentRoute);
         if (addStateToHistory) {
             pushToHistoryStack(routes.get(pageName), params);
         }
@@ -138,6 +122,7 @@ let router = (function () {
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
+        //ToDo: Trigerovati event sidebar-a da oznaci koji je podmeni aktivan
     }
 
 
@@ -301,7 +286,7 @@ let router = (function () {
         e.preventDefault();
         let url = e.target.getAttribute('href');
         let pageName = getPageNameFromUrl(url);
-        changePage(pageName);
+        changePage(pageName, true, url);
     }
 
 

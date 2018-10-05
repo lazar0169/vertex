@@ -1,7 +1,6 @@
 let machines = (function () {
 
     on('machines/display-machine-info/', function(e){
-        console.log('Response in handler: ', e);
         //data = e.data;
         //alert(data);
     });

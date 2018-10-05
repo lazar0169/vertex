@@ -19,6 +19,7 @@ let session = (function () {
 
     on('session/login/success', function (e) {
         trigger('session/token/save', {encodedToken: e.encodedToken});
+        //trigger('application/login');
     });
 
     on('session/logout/', function () {
@@ -31,7 +32,6 @@ let session = (function () {
         let errorMessage = e.message;
         alert('Invalid username / password. Please try again!');
     });
-
 
     // transfering sessionStorage from one tab to another
 
@@ -52,7 +52,7 @@ let session = (function () {
                 sessionStorage.setItem(key, data[key]);
             }
         }
-        isLoggedIn();
+        //trigger('application/login');
     }
 
     // Listening for changes to localStorage
@@ -68,18 +68,6 @@ let session = (function () {
         localStorage.removeItem('getSessionStorage', 'foobar');
     }
 
-    function isLoggedIn() {
-        if (window.location.pathname.indexOf("login") < 0) {
-            if (typeof sessionStorage.token != 'undefined' && sessionStorage.token != null) {
-                let decodedToken = decodeToken(sessionStorage.token);
-                let endpoint = decodedToken.endpoint;
-            }
-            else {
-                window.location.pathname = "/login";
-            }
-        }
-    }
-
-    setTimeout(isLoggedIn, 500);
+    // trigger('application/login');
 
 })();
