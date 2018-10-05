@@ -5,26 +5,23 @@ let notifications = function(){
     }
 
 
-    on('', function(){
+    on('notifications/success', function(params){
 
     });
 
 
-    on('', function(){
+    on('notifications/error', function(){
 
     });
 
 
-    on('', function(){
+    on('notifications/error/username-password', function(){
 
     });
 
 
-    on('', function(){
+    on('notifications/error/communication', function(){
 
     });
-
-
-
 
 }();
