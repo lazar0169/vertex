@@ -31,13 +31,10 @@ window.addEventListener('load', function () {
 function multiselect(dataSelect) {
     let noSelected = dataSelect.shift()
     let select = document.createElement('div');
-
+    select.dataset.selectId = Math.round(Math.random() * 1000);
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = noSelected;
-    selected.addEventListener('click', function () {
-        optionGroup.classList.toggle('hidden');
-    });
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
     optionGroup.classList.add('multiple-group');
@@ -84,6 +81,14 @@ function multiselect(dataSelect) {
     }
     select.appendChild(selected);
     select.appendChild(optionGroup);
+    window.addEventListener('click', function (e) {
+        if (e.target.parentNode.dataset.selectId === select.dataset.selectId || e.target.parentNode.parentNode.dataset.selectId === select.dataset.selectId) {
+            optionGroup.classList.remove('hidden');
+        }
+        else {
+            optionGroup.classList.add('hidden');
+        }
+    });
     return select;
 }
 
