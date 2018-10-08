@@ -5,7 +5,7 @@ let proba2 = $$('#aft-advance-table-filter-finished');
 let nekiniz2 = ['-', 'proba2222222222222222222222222222222222222', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
 
 let proba3 = $$('#aft-advance-table-filter-jackpot');
-let nekiniz3 = ['-', 'proba3', 'proba2', 'proba3'];
+let nekiniz3 = ['-', 'proba3', 'proba2', 'proba123'];
 
 let proba4 = $$('#aft-advance-table-filter-type');
 let nekiniz4 = ['-', 'proba4', 'prsadf', 'p'];
@@ -29,19 +29,20 @@ window.addEventListener('load', function () {
 
 // funkcija za visestruko selektovanje
 function multiselect(dataSelect) {
+    let array = [];
     let noSelected = dataSelect.shift()
     let select = document.createElement('div');
     select.dataset.selectId = Math.round(Math.random() * 1000);
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = noSelected;
-    selected.title = selected.innerHTML;
+    selected.title = JSON.stringify(selected.innerHTML);
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
     optionGroup.classList.add('multiple-group');
     for (let element of dataSelect) {
         let option = document.createElement('div');
-        option.title = element;
+        option.title = JSON.stringify(element);
         option.innerHTML = `<label class="form-checkbox" >
                                             <input type="checkbox">
                                             <i class="form-icon" ></i> <div>${element}</div>
@@ -56,33 +57,34 @@ function multiselect(dataSelect) {
 
                 }
                 else {
-                    selected.innerHTML += `,${option.children[0].children[2].innerHTML}`;
+                    selected.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
+
                 }
+                array.push(option.children[0].children[2].innerHTML);
                 option.children[0].children[0].checked = true;
             }
             else {
-                var array = selected.innerHTML.split(",");
-                let index = 0;
+                let i = 0;
                 for (let elem of array) {
-                    if (elem == option.children[0].children[2].innerHTML) {
-                        array.splice(index, 1);
+                    if (elem === option.children[0].children[2].innerHTML) {
+                        array.splice(i, 1);
                     }
-                    else {
-                        index++;
-                    }
+                    i++
                 }
-                selected.innerHTML = array.join(',')
+                selected.innerHTML = array;
 
                 option.children[0].children[0].checked = false;
                 if (selected.innerHTML === '') {
                     selected.innerHTML = noSelected;
                 }
             }
-            selected.title = selected.innerHTML;
+            selected.title = JSON.stringify(selected.innerHTML);
         });
     }
+
     select.appendChild(selected);
     select.appendChild(optionGroup);
+
     window.addEventListener('click', function (e) {
         e.stopPropagation();
         if (e.target.parentNode.dataset.selectId === select.dataset.selectId || e.target.parentNode.parentNode.dataset.selectId === select.dataset.selectId) {
@@ -102,19 +104,19 @@ function singleSelect(dataSelect) {
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = dataSelect[0];
-    selected.title = selected.innerHTML;
+    selected.title = JSON.stringify(selected.innerHTML);
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
     for (let element of dataSelect) {
         let option = document.createElement('div');
         option.innerHTML = element;
-        option.title = option.innerHTML;
+        option.title = JSON.stringify(option.innerHTML);
         optionGroup.appendChild(option);
         optionGroup.classList.add('overflow-y');
         option.addEventListener('click', function (e) {
             e.preventDefault();
             selected.innerHTML = option.innerHTML;
-            selected.title = selected.innerHTML;
+            selected.title = JSON.stringify(selected.innerHTML);
         });
     }
     select.appendChild(selected);
@@ -134,7 +136,7 @@ function singleSelect(dataSelect) {
 function clearAllFilter(div) {
     for (let element of div.getElementsByClassName('default-select')) {
         element.children[0].innerHTML = '-';
-        element.children[0].title = element.children[0].innerHTML;
+        element.children[0].title = JSON.stringify(element.children[0].innerHTML);
         if (element.children[1].classList.contains('multiple-group')) {
             for (let check of element.children[1].children) {
                 check.children[0].children[0].checked = false;
