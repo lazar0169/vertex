@@ -13,9 +13,9 @@
     top: 0.5rem;
     width: 0;
     height: 0;
-    border-top: 0.5rem solid rgb(30, 155, 227);
-    border-right: 0.2rem solid transparent;
-    border-left: 0.2rem solid transparent;
+    border-top: 0.4rem solid rgb(30, 155, 227);
+    border-right: 0.15rem solid transparent;
+    border-left: 0.15rem solid transparent;
 }
 
 .default-select>div:first-child {
@@ -23,7 +23,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 0 0.3rem;
+    padding: 0 0.5rem;
     position: relative;
 }
 
@@ -35,7 +35,15 @@
 }
 
 .default-select>div:not(:first-child)>div {
-    padding: 0 0.3rem;
+    padding: 0 0.5rem;
+    width: 125px;
+    overflow: hidden;
+}
+
+.default-select>div:not(:first-child)>div>label>div {
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .default-select label {

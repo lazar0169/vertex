@@ -35,13 +35,13 @@ function multiselect(dataSelect) {
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = noSelected;
+    selected.title = selected.innerHTML;
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
     optionGroup.classList.add('multiple-group');
-
     for (let element of dataSelect) {
         let option = document.createElement('div');
-
+        option.title = element;
         option.innerHTML = `<label class="form-checkbox" >
                                             <input type="checkbox">
                                             <i class="form-icon" ></i> <div>${element}</div>
@@ -72,16 +72,19 @@ function multiselect(dataSelect) {
                     }
                 }
                 selected.innerHTML = array.join(',')
+
                 option.children[0].children[0].checked = false;
                 if (selected.innerHTML === '') {
                     selected.innerHTML = noSelected;
                 }
             }
+            selected.title = selected.innerHTML;
         });
     }
     select.appendChild(selected);
     select.appendChild(optionGroup);
     window.addEventListener('click', function (e) {
+        e.stopPropagation();
         if (e.target.parentNode.dataset.selectId === select.dataset.selectId || e.target.parentNode.parentNode.dataset.selectId === select.dataset.selectId) {
             optionGroup.classList.remove('hidden');
         }
@@ -95,42 +98,47 @@ function multiselect(dataSelect) {
 // funkcija za selektovanje jednog podatka
 function singleSelect(dataSelect) {
     let select = document.createElement('div');
+    select.dataset.selectId = Math.round(Math.random() * 1000);
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = dataSelect[0];
-
-    selected.addEventListener('click', function () {
-        optionGroup.classList.toggle('hidden');
-    });
-
+    selected.title = selected.innerHTML;
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
-
     for (let element of dataSelect) {
         let option = document.createElement('div');
         option.innerHTML = element;
+        option.title = option.innerHTML;
         optionGroup.appendChild(option);
         optionGroup.classList.add('overflow-y');
-
         option.addEventListener('click', function (e) {
             e.preventDefault();
             selected.innerHTML = option.innerHTML;
-            optionGroup.classList.add('hidden');
+            selected.title = selected.innerHTML;
         });
     }
     select.appendChild(selected);
     select.appendChild(optionGroup);
+    window.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (e.target.parentNode.dataset.selectId === select.dataset.selectId || e.target.parentNode.parentNode.dataset.selectId === select.dataset.selectId) {
+            optionGroup.classList.toggle('hidden');
+        }
+        else {
+            optionGroup.classList.add('hidden');
+        }
+    });
     return select;
 }
 
 function clearAllFilter(div) {
     for (let element of div.getElementsByClassName('default-select')) {
         element.children[0].innerHTML = '-';
+        element.children[0].title = element.children[0].innerHTML;
         if (element.children[1].classList.contains('multiple-group')) {
             for (let check of element.children[1].children) {
                 check.children[0].children[0].checked = false;
             }
         }
-
     }
 }
