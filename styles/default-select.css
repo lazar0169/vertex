@@ -19,11 +19,11 @@
 }
 
 .default-select>div:first-child {
-    width: 125px;
+    width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 0 0.5rem;
+    padding: 0 1rem 0 0.5rem;
     position: relative;
 }
 
@@ -35,13 +35,12 @@
 }
 
 .default-select>div:not(:first-child)>div {
-    padding: 0 0.5rem;
-    width: 125px;
+    padding-left: 0.5rem;
+    width: 120px;
     overflow: hidden;
 }
 
 .default-select>div:not(:first-child)>div>label>div {
-    width: 90px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
