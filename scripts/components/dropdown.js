@@ -1,7 +1,7 @@
 const dropdown = (function () {
 
     let proba = $$('#aft-advance-table-filter-date-range');
-    let nekiniz = ['-', 'selektuje', 'samo', 'jedan', 'element'];
+    let nekiniz = ['-', 'Only', 'one', 'element', 'will', 'be', 'selected'];
 
     window.addEventListener('load', function () {
         proba.appendChild(singleSelect(nekiniz));

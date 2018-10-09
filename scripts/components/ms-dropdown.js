@@ -1,19 +1,19 @@
 const multiDropdown = (function () {
 
     let proba2 = $$('#aft-advance-table-filter-finished');
-    let nekiniz2 = ['-', 'proba2222222222222222222222222222222222222', 'as', 'afsaf', 'asdas', 'asdsad', 'fdfg'];
+    let nekiniz2 = ['-', 'Name1', 'Name2', 'Name3', 'Name4'];
 
     let proba3 = $$('#aft-advance-table-filter-jackpot');
-    let nekiniz3 = ['-', 'proba3', 'proba2', 'proba123'];
+    let nekiniz3 = ['-', 'Jackpot1', 'Jackpot2', 'Jackpot3'];
 
     let proba4 = $$('#aft-advance-table-filter-type');
-    let nekiniz4 = ['-', 'proba4', 'prsadf', 'p'];
+    let nekiniz4 = ['-', 'Type1', 'Type2', 'Type3', 'Type4', 'Type5'];
 
     let proba5 = $$('#aft-advance-table-filter-status');
-    let nekiniz5 = ['-', 'proba5', 'prsadf5', 'p5'];
+    let nekiniz5 = ['-', 'Status1', 'Status2', 'Status3'];
 
     let proba6 = $$('#aft-advance-table-filter-column');
-    let nekiniz6 = ['-', 'proba6', 'prsadf6', 'p6'];
+    let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
 
     window.addEventListener('load', function () {
         proba2.appendChild(multiselect(nekiniz2));
