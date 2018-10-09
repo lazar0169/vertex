@@ -2,34 +2,27 @@ let template = (function () {
 
     let model = {
         home: {
-            name: 'Home name'
+            Name: 'Home name'
         },
-        casino: {
-            name: 'Casino name',
-            address: 'Casino address',
-            edit: 'Casino edit'
+        casinos: {
+            Id: 5,
+            Name: 'Casino name',
+            City: 'Casino city'
         },
-        jackpot: {
-            number: 123
+        jackpots: {
+            Id: 5,
+            Name: 'Jackpot name',
+            City: 'Jackpot city'
         },
         tickets: {
-            number: 15
+            Id: 5,
+            Name: 'Ticket name',
+            City: 'Ticket city'
         },
         aft: {
-            name: 'AFT name'
-        },
-        machine: {
-            number: 24
-        },
-        user: {
-            name: 'Jovana',
-            surname: 'Mitic',
-            tickets: {
-                number: 18
-            }
-        },
-        service: {
-            number: 58
+            Id: 5,
+            Name: 'Aft name',
+            City: 'Aft city'
         }
     };
 
@@ -103,7 +96,7 @@ let template = (function () {
         let placeholders = getPlaceholders(newElementString);
         let placeholderValues = getPlaceholderValues(placeholders, model);
         let replacedString = replaceValueInTemplate(newElementString, placeholderValues);
-        newElement.innerHTML  = replacedString;
+        newElement.innerHTML = replacedString;
         if (typeof callbackEvent !== 'undefined') {
             trigger(callbackEvent, {model: model, element: newElement});
         }
@@ -122,6 +115,6 @@ let template = (function () {
     });
 
     //For testing:
-    render('#casino-template', model);
+    render('#home-template', model);
 
 })();

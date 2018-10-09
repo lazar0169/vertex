@@ -9,6 +9,30 @@ function $$(selector) {
     }
 }
 
+
+function validateEncodedToken(accessToken) {
+    let match = accessToken.match(/\./g);
+    if (match.length === 2) {
+        let accessTokenSplit = accessToken.split('.')[1];
+        if (atob(accessTokenSplit)) {
+            return true;
+        }
+        else return false;
+    }
+    console.error('Encoded token is not valid!');
+    return false;
+}
+
+function decodeToken(encodedToken) {
+    let encodedTokenJSON = JSON.parse(encodedToken);
+    let accessToken = encodedTokenJSON.access_token;
+    if (validateEncodedToken(accessToken)){
+        let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+        return decodedToken;
+    }
+    console.error('Could not decode token!');
+}
+
 //add and remove class
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;

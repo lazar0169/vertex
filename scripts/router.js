@@ -3,67 +3,66 @@ let router = (function () {
     //Map object with routes
 
     let routes = new Map();
-    routes.set('casino/edit', {
-        page: 'casino/edit',
-        id: '#page-casino-edit',
-        path: '/casino/edit/{casinoId:integer}'
+    routes.set('aft', {
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft'
     });
-    routes.set('casino/name', {
-        page: 'casino/name',
-        id: '#page-casino-add',
-        path: '/casino/{casinoName:string}/player/{playerId:integer}'
+    routes.set('aft', {
+        page: 'aft',
+        id: '#page-aft',
+        path: '/aft/{aftId:integer}'
     });
-    routes.set('casino/name/player', {
-        page: 'casino/name/player',
+    routes.set('casino/list', {
+        page: 'casino/list',
         id: '#page-casino-add',
         path: '/casino/{casinoId:integer}/player/{playerId:integer}'
     });
-    routes.set('home', {
-        page: 'home',
-        id: '#page-home',
-        path: '/'
+    routes.set('casinos', {
+        page: 'casinos',
+        id: '#page-casinos',
+        path: '/casinos/{casinoId:integer}'
     });
-    routes.set('casino', {
-        page: 'casino',
-        id: '#page-casino',
-        path: '/casino'
+    routes.set('casinos/add', {
+        page: 'casinos/add',
+        id: '#page-casinos-add',
+        path: '/casinos/{casinoName:string}/player/{playerId:integer}'
     });
-    routes.set('jackpot', {
-        page: 'jackpot',
-        id: '#page-jackpot',
-        path: '/jackpot'
+    routes.set('jackpots', {
+        page: 'jackpots',
+        id: '#page-jackpots',
+        path: '/jackpots'
+    });
+    routes.set('jackpots', {
+        page: 'jackpots',
+        id: '#page-jackpots',
+        path: '/jackpots/{jackpotId:integer}'
     });
     routes.set('tickets', {
         page: 'tickets',
         id: '#page-tickets',
         path: '/tickets'
     });
-    routes.set('aft', {
-        page: 'aft',
-        id: '#page-aft',
-        path: '/aft'
+    routes.set('tickets', {
+        page: 'tickets',
+        id: '#page-tickets',
+        path: '/tickets/{ticketId:integer}'
+    });
+    routes.set('home', {
+        page: 'home',
+        id: '#page-home',
+        path: '/home'
     });
     routes.set('machines', {
         page: 'machines',
         id: '#page-machines',
         path: '/machines'
     });
-    routes.set('reports', {
-        page: 'reports',
-        id: '#page-reports',
-        path: '/reports'
+    routes.set('machines', {
+        page: 'machines',
+        id: '#page-machines',
+        path: '/machines/{machinesId:integer}'
     });
-    routes.set('users', {
-        page: 'users',
-        id: '#page-users',
-        path: '/users'
-    });
-    routes.set('service', {
-        page: 'service',
-        id: '#page-service',
-        path: '/service'
-    });
-
 
     //Functions for displaying page
 
@@ -99,16 +98,21 @@ let router = (function () {
         makePageActive(pageName);
     }
 
-    function changePage(pageName, addStateToHistory) {
+    function changePage(pageName, addStateToHistory, url) {
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
         }
         if (typeof addStateToHistory === 'undefined') {
             addStateToHistory = true;
         }
-        let currentRoute = routes.get(pageName),
-            currentUrl = window.location.pathname,
-            params = getParamsFromUrl(currentUrl, currentRoute);
+        let currentRoute = routes.get(pageName);
+        let currentUrl;
+        if (typeof url !== 'undefined') {
+            currentUrl = url;
+        } else {
+            currentUrl = window.location.pathname;
+        }
+        let params = getParamsFromUrl(currentUrl, currentRoute);
         if (addStateToHistory) {
             pushToHistoryStack(routes.get(pageName), params);
         }
@@ -118,6 +122,7 @@ let router = (function () {
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
+        //ToDo: Trigerovati event sidebar-a da oznaci koji je podmeni aktivan
     }
 
 
@@ -281,15 +286,15 @@ let router = (function () {
         e.preventDefault();
         let url = e.target.getAttribute('href');
         let pageName = getPageNameFromUrl(url);
-        changePage(pageName);
+        changePage(pageName, true, url);
     }
 
 
     //Function for initialization
     function init() {
         addRegExpToPages();
-        let path = window.location.href,
-            pageName = getPageNameFromUrl(path);
+        let path = window.location.pathname;
+        let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
             changePage(pageName);
         }
