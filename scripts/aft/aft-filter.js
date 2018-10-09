@@ -7,7 +7,7 @@ const aftFilter = (function () {
         showAdvanceTableFilter()
     });
     clearAdvanceFilter.addEventListener('click', function () {
-        clearAllFilter(advanceTableFilterActive);
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive })
     });
 
     function showAdvanceTableFilter() {

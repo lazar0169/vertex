@@ -52,7 +52,7 @@
 }
 
 #aft-advance-table-filter-active>div:last-child {
-    padding-right: 0.5rem
+    margin: auto;
 }
 
 .aft-advance-active {
