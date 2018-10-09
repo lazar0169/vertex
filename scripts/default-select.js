@@ -85,12 +85,13 @@ function multiselect(dataSelect) {
     select.appendChild(selected);
     select.appendChild(optionGroup);
 
+    selected.addEventListener('click', function () {
+        optionGroup.classList.toggle('hidden');
+    });
+
     window.addEventListener('click', function (e) {
         e.stopPropagation();
-        if (e.target.parentNode.dataset.selectId === select.dataset.selectId || e.target.parentNode.parentNode.dataset.selectId === select.dataset.selectId) {
-            optionGroup.classList.remove('hidden');
-        }
-        else {
+        if (e.target.parentNode.dataset.selectId !== select.dataset.selectId && e.target.parentNode.parentNode.dataset.selectId !== select.dataset.selectId) {
             optionGroup.classList.add('hidden');
         }
     });
