@@ -28,6 +28,7 @@
 }
 
 .default-select>div:not(:first-child) {
+    width: 120px;
     max-height: 140px;
     background: rgb(38, 50, 56);
     position: absolute;

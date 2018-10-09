@@ -36,13 +36,13 @@ function multiselect(dataSelect) {
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = noSelected;
-    selected.title = JSON.stringify(selected.innerHTML);
+    selected.title = selected.innerHTML;
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
     optionGroup.classList.add('multiple-group');
     for (let element of dataSelect) {
         let option = document.createElement('div');
-        option.title = JSON.stringify(element);
+        option.title = element;
         option.innerHTML = `<label class="form-checkbox" >
                                             <input type="checkbox">
                                             <i class="form-icon" ></i> <div>${element}</div>
@@ -78,7 +78,7 @@ function multiselect(dataSelect) {
                     selected.innerHTML = noSelected;
                 }
             }
-            selected.title = JSON.stringify(selected.innerHTML);
+            selected.title = array;
         });
     }
 
@@ -104,19 +104,19 @@ function singleSelect(dataSelect) {
     select.classList.add('default-select');
     let selected = document.createElement('div');
     selected.innerHTML = dataSelect[0];
-    selected.title = JSON.stringify(selected.innerHTML);
+    selected.title = selected.innerHTML;
     let optionGroup = document.createElement('div');
     optionGroup.classList.add('hidden');
     for (let element of dataSelect) {
         let option = document.createElement('div');
         option.innerHTML = element;
-        option.title = JSON.stringify(option.innerHTML);
+        option.title = option.innerHTML;
         optionGroup.appendChild(option);
         optionGroup.classList.add('overflow-y');
         option.addEventListener('click', function (e) {
             e.preventDefault();
             selected.innerHTML = option.innerHTML;
-            selected.title = JSON.stringify(selected.innerHTML);
+            selected.title = selected.innerHTML;
         });
     }
     select.appendChild(selected);
@@ -136,7 +136,7 @@ function singleSelect(dataSelect) {
 function clearAllFilter(div) {
     for (let element of div.getElementsByClassName('default-select')) {
         element.children[0].innerHTML = '-';
-        element.children[0].title = JSON.stringify(element.children[0].innerHTML);
+        element.children[0].title = element.children[0].innerHTML;
         if (element.children[1].classList.contains('multiple-group')) {
             for (let check of element.children[1].children) {
                 check.children[0].children[0].checked = false;
