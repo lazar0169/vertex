@@ -142,6 +142,7 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
         generateLinksData(!category || menuData[category] ? menuData : category);
+
         function generateLinksData(tempData) {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
@@ -203,17 +204,14 @@ const sidebar = (function () {
                                 selectCategory(categorySelectedId);
                                 navigation.hide();
                             });
-                                tempCategory.appendChild(tempValue);
+                            tempCategory.appendChild(tempValue);
                         }
-                            fragment.appendChild(tempCategory);
+                        fragment.appendChild(tempCategory);
                     }
                 }
             }
         }
-
-        // if (fragment !== undefined) {
-            linkWrapper.appendChild(fragment);
-        // }
+        linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
         selectLink(linkSelectedId);//ToDO ovde dolazi najverovatnije do greske pri generisanju pravog linka
@@ -242,6 +240,7 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
+
     //data search
     function search(termin, category) {
         let newData = {};
@@ -279,6 +278,7 @@ const sidebar = (function () {
             return newObject;
         }
     }
+
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -336,6 +336,7 @@ const sidebar = (function () {
         categorySelectedId = Object.keys(menuData)[0];
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
+
     //events
     on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;
