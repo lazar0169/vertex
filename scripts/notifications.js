@@ -24,7 +24,7 @@ let notifications = function () {
         }
         $$('.notifications-container')[0].appendChild(newElement);
         newElement.querySelector('.btn-clear').addEventListener('click', function () {
-            newElement.classList.add('hidden');
+            newElement.remove();
         });
     }
 
