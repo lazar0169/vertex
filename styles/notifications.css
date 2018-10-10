@@ -16,16 +16,6 @@
     display: none;
 }
 
-/*
-.notification-info {
-    background-color: yellow;
-    color: black;
+.hidden {
+    display: none;
 }
-
-.notification-success {
-    background-color: green;
-}
-
-.notification-error {
-    background-color: red;
-}*/
