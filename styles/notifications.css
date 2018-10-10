@@ -23,3 +23,9 @@
 .hidden {
     display: none;
 }
+
+.toast.fade-out {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 3s, opacity 3s linear;
+}
