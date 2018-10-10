@@ -20,7 +20,6 @@ let login = (function () {
     //custom event handlers
     on('login/success', function (e) {
         trigger('session/login/success', {encodedToken: e.data});
-        trigger('notifications/show', {message: 'success', type: ''});
         if (sessionStorage.token || sessionStorage.token !== undefined) {
             window.location.pathname = '/home';
         }
