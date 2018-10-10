@@ -5,7 +5,7 @@ let session = (function () {
     }
 
     on('session/token/save', function (e) {
-        if (typeof(Storage) !== "undefined") {
+        if (typeof(Storage) !== typeof undefined) {
             sessionStorage.clear();
             let encodedToken = e.encodedToken;
             let encodedTokenJSON = JSON.stringify(encodedToken);

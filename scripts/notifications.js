@@ -26,7 +26,7 @@ let notifications = function () {
         newElement.querySelector('.btn-clear').addEventListener('click', function () {
             newElement.remove();
         });
-        setTimeout(function(){
+        setTimeout(function () {
             newElement.classList.add('fade-out');
             newElement.remove();
         }, 3000);
