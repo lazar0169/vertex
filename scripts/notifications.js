@@ -40,10 +40,12 @@ let notifications = function () {
         let messageCode = params.message;
         let paramsMessageCode = messageCodes[messageCode];
         let paramsMessageType = params.type;
+
         let notificationModel = {
             message: paramsMessageCode,
             type: paramsMessageType
         };
+
         trigger('template/render', {
             templateElementSelector: '#notification-template',
             model: notificationModel,
