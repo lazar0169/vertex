@@ -10,7 +10,6 @@ const aftFilter = (function () {
     let proba6 = $$('#aft-advance-table-filter-column');
     let proba = $$('#aft-advance-table-filter-date-range');
 
-    window.addEventListener('load', function () {
         aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
         proba.appendChild(dropdown.generate(nekiniz));
         proba2.appendChild(multiDropdown.generate(nekiniz2));
@@ -18,7 +17,6 @@ const aftFilter = (function () {
         proba4.appendChild(multiDropdown.generate(nekiniz4));
         proba5.appendChild(multiDropdown.generate(nekiniz5));
         proba6.appendChild(multiDropdown.generate(nekiniz6));
-    });
 
     advanceTableFilter.addEventListener('click', function () {
         showAdvanceTableFilter()

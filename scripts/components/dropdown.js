@@ -25,6 +25,7 @@ const dropdown = (function () {
             optionGroup.classList.add('overflow-y');
             option.addEventListener('click', function (e) {
                 e.preventDefault();
+
                 selected.innerHTML = option.innerHTML;
                 selected.title = selected.innerHTML;
                 selected.dataset.items = JSON.stringify(selected.innerHTML);
@@ -36,9 +37,11 @@ const dropdown = (function () {
             e.stopPropagation();
             if (e.target.parentNode.dataset.selectId === select.dataset.selectId || e.target.parentNode.parentNode.dataset.selectId === select.dataset.selectId) {
                 optionGroup.classList.toggle('hidden');
+                select.classList.toggle('active-select');
             }
             else {
                 optionGroup.classList.add('hidden');
+                select.classList.remove('active-select');
             }
         });
         indexSsId++;

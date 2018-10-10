@@ -9,6 +9,7 @@
     transform: translateX(0);
     display: flex;
     flex-flow: column;
+    color: rgb(120, 144, 156);
 }
 
 #machine-edit-mode.collapse {
@@ -25,6 +26,8 @@
 
 .machine-edit-info>div {
     margin-left: 1rem;
+    display: inline-flex;
+    align-items: center
 }
 
 #machine-edit-header>div:not(:first-child) {
@@ -41,18 +44,6 @@
 
 #machine-edit-id>input {
     text-align: center;
-}
-
-.machine-edit-info>#machine-edit-name, .machine-edit-info>#machine-edit-vendor, .machine-edit-info>#machine-edit-type {
-    width: 250px;
-}
-
-#machine-edit-serial {
-    width: 320px;
-}
-
-#machine-edit-serial-select {
-    width: 115px;
 }
 
 #machine-edit-remove {

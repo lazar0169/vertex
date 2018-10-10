@@ -26,6 +26,8 @@
             "casino.js",
             "communication.js",
             "machines.js",
+            "machines/machines-filters.js",
+            "machines/edit-page.js",
             "session.js",
             "preloader.js",
             "application.js"

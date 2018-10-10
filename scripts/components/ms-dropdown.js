@@ -69,6 +69,7 @@ const multiDropdown = (function () {
             if (selected.innerHTML === noSelected) {
                 array = [];
             }
+            select.classList.toggle('active-select');
             optionGroup.classList.toggle('hidden');
         });
 
@@ -76,9 +77,11 @@ const multiDropdown = (function () {
             e.stopPropagation();
             if (e.target.parentNode.dataset.selectId !== select.dataset.selectId && e.target.parentNode.parentNode.dataset.selectId !== select.dataset.selectId) {
                 optionGroup.classList.add('hidden');
+                select.classList.remove('active-select');
             }
         });
         indexMsId++;
+        dataSelect.unshift(noSelected);
         return select;
     }
     return {
