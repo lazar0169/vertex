@@ -170,7 +170,7 @@ const sidebar = (function () {
                     if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        if (category !== 'search') { //if category isn't 'search', lists have header
+                        if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
                             tempCategory.innerHTML = `<div>${tempData[category].List}</div>`;
                         }
                         for (let value of tempData[category].Value) {
@@ -203,15 +203,17 @@ const sidebar = (function () {
                                 selectCategory(categorySelectedId);
                                 navigation.hide();
                             });
-                            tempCategory.appendChild(tempValue);
+                                tempCategory.appendChild(tempValue);
                         }
-                        fragment.appendChild(tempCategory);
+                            fragment.appendChild(tempCategory);
                     }
                 }
             }
         }
 
-        linkWrapper.appendChild(fragment);
+        // if (fragment !== undefined) {
+            linkWrapper.appendChild(fragment);
+        // }
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
         selectLink(linkSelectedId);//ToDO ovde dolazi najverovatnije do greske pri generisanju pravog linka
