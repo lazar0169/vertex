@@ -1,25 +1,22 @@
 const dropdown = (function () {
-
-    let proba = $$('#aft-advance-table-filter-date-range');
-    let nekiniz = ['-', 'Only', 'one', 'element', 'will', 'be', 'selected'];
-
-    window.addEventListener('load', function () {
-        proba.appendChild(singleSelect(nekiniz));
-    });
-
-    // funkcija za selektovanje jednog podatka
+    //index of single select 
     let indexSsId = 0;
-    function singleSelect(dataSelect) {
+    //generate single dropdown
+    function generate(dataSelect) {
+        // wrapper select
         let select = document.createElement('div');
         select.dataset.selectId = `ss-${indexSsId}`;
         select.classList.add('default-select');
+        //selected option
         let selected = document.createElement('div');
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
         selected.dataset.items = JSON.stringify(selected.innerHTML);
+        //wrapper options group
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('hidden');
         for (let element of dataSelect) {
+            //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
             option.innerHTML = element;
@@ -47,4 +44,7 @@ const dropdown = (function () {
         indexSsId++;
         return select;
     }
+    return {
+        generate
+    };
 })();

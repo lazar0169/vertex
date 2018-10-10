@@ -1,45 +1,28 @@
 const multiDropdown = (function () {
-
-    let proba2 = $$('#aft-advance-table-filter-finished');
-    let nekiniz2 = ['-', 'Name1', 'Name2', 'Name3', 'Name4'];
-
-    let proba3 = $$('#aft-advance-table-filter-jackpot');
-    let nekiniz3 = ['-', 'Jackpot1', 'Jackpot2', 'Jackpot3'];
-
-    let proba4 = $$('#aft-advance-table-filter-type');
-    let nekiniz4 = ['-', 'Type1', 'Type2', 'Type3', 'Type4', 'Type5'];
-
-    let proba5 = $$('#aft-advance-table-filter-status');
-    let nekiniz5 = ['-', 'Status1', 'Status2', 'Status3'];
-
-    let proba6 = $$('#aft-advance-table-filter-column');
-    let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
-
-    window.addEventListener('load', function () {
-        proba2.appendChild(multiselect(nekiniz2));
-        proba3.appendChild(multiselect(nekiniz3));
-        proba4.appendChild(multiselect(nekiniz4));
-        proba5.appendChild(multiselect(nekiniz5));
-        proba6.appendChild(multiselect(nekiniz6));
-    });
-
-    // funkcija za visestruko selektovanje
+    //index of multiselect 
     let indexMsId = 0;
-    function multiselect(dataSelect) {
+    // generate multi dropdown
+    function generate(dataSelect) {
+        //array of chosen options
         let array;
-        let noSelected = dataSelect.shift()
+        //initial select form data
+        let noSelected = dataSelect.shift();
+        //wrapper select
         let select = document.createElement('div');
 
         select.dataset.selectId = `ms-${indexMsId}`;
         select.classList.add('default-select');
+        //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected;
         selected.dataset.items = JSON.stringify(selected.innerHTML);
         selected.title = selected.innerHTML;
+        //wrapper options group
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('hidden');
         optionGroup.classList.add('multiple-group');
         for (let element of dataSelect) {
+            //option with functionality
             let option = document.createElement('div');
             option.title = element;
             option.innerHTML = `<label class="form-checkbox" >
@@ -53,11 +36,9 @@ const multiDropdown = (function () {
                 if (option.children[0].children[0].checked == false) {
                     if (selected.innerHTML === '-') {
                         selected.innerHTML = option.children[0].children[2].innerHTML;
-
                     }
                     else {
                         selected.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
-
                     }
                     array.push(option.children[0].children[2].innerHTML);
                     option.children[0].children[0].checked = true;
@@ -81,7 +62,6 @@ const multiDropdown = (function () {
                 selected.dataset.items = JSON.stringify(selected.innerHTML)
             });
         }
-
         select.appendChild(selected);
         select.appendChild(optionGroup);
 
@@ -101,4 +81,7 @@ const multiDropdown = (function () {
         indexMsId++;
         return select;
     }
+    return {
+        generate
+    };
 })();
