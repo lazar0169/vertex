@@ -14,7 +14,7 @@ let application = (function () {
 
     function checkCurrentUser() {
         if (window.location.pathname.indexOf("login") < 0) {
-            if (typeof sessionStorage.token != 'undefined' && sessionStorage.token != null) {
+            if (typeof sessionStorage.token !== typeof undefined && sessionStorage.token != null) {
                 generateMenu();
             }
             else {

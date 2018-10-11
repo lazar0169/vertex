@@ -50,14 +50,14 @@ let communication = (function () {
 
     function success(xhr, callbackEvent) {
         let data = tryParseJSON(xhr.responseText);
-        if (typeof callbackEvent !== "undefined" && callbackEvent !== null) {
+        if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data});
         }
     }
 
     function error(xhr, errorEventCallback) {
         let errorData = {"message": xhr.responseText};
-        if (typeof errorEventCallback !== 'undefined') {
+        if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
     }
@@ -86,7 +86,7 @@ let communication = (function () {
     }
 
     function send(xhr) {
-        if (typeof  xhr.customData !== 'undefined') {
+        if (typeof  xhr.customData !== typeof undefined) {
 
             return xhr.send(JSON.stringify(xhr.customData));
         }
@@ -131,7 +131,7 @@ let communication = (function () {
         let successEvent = params.successEvent;
         let errorEvent = params.errorEvent;
         let route = apiRoutes.authorization.login;
-        let data = typeof params.data === 'undefined' ? null : params.data;
+        let data = typeof params.data === typeof undefined ? null : params.data;
         let xhr = createRequest(route, requestTypes.post, data, successEvent, errorEvent);
         xhr = setDefaultHeaders(xhr);
         //xhr = setAuthHeader(xhr);
@@ -146,7 +146,7 @@ let communication = (function () {
         //let route = 'todos/1';
         //let route = 'posts';
         let route = 'posts/1';
-        let data = typeof params.data === 'undefined' ? null : params.data;
+        let data = typeof params.data === typeof undefined ? null : params.data;
         //let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         // let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
         let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
@@ -173,7 +173,7 @@ let communication = (function () {
         let machineId = params.machineId;
         let callbackEventName = params.successEvent;
         let route = "machine/" + machineId;
-        let data = typeof params.data === "undefined" ? null : params.data;
+        let data = typeof params.data === typeof undefined ? null : params.data;
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);

@@ -24,12 +24,16 @@ let login = (function () {
             window.location.pathname = '/home';
         }
         else {
-            console.error('There was an error.');
+            trigger('notifications/show');
         }
     });
 
     on('login/error', function (e) {
         trigger('session/login/error', {message: e.message});
+        let messageParse = JSON.parse(e.message);
+        let messageCode = messageParse.MessageCode;
+        let messageType = messageParse.MessageType;
+        trigger('notifications/show', {message: messageCode, type: messageType});
     });
 
 })();
