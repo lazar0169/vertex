@@ -118,8 +118,8 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
-        //let eventName = 'page-' + pageName + '-activated';
-        let eventName = (pageName+"/activated");
+        let eventName = pageName + "/activated";
+        console.log('eventName' + eventName);
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
@@ -296,10 +296,7 @@ let router = (function () {
         addRegExpToPages();
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
-        if (!sessionStorage.token || sessionStorage.token === undefined) {
-            // $$('#preloader').classList.remove('hidden');
-        }
-        else if (pageName != null) {
+        if (pageName != null) {
             changePage(pageName);
         }
         else {

@@ -3,11 +3,11 @@ let preloader = (function () {
     let preloaderElement = $$('#preloader');
 
     function showPreloader() {
-        preloaderElement.classList.remove('hidden');
+        preloaderElement.classList.remove('hide');
     }
 
     function hidePreloader() {
-        preloaderElement.classList.add('hidden');
+        preloaderElement.classList.add('hide');
     }
 
     on('preloader/show', function () {
