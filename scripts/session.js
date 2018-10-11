@@ -51,7 +51,6 @@ let session = (function () {
                 sessionStorage.setItem(key, data[key]);
             }
         }
-        //trigger('application/login');
     }
 
     // Listening for changes to localStorage
@@ -66,7 +65,5 @@ let session = (function () {
         localStorage.setItem('getSessionStorage', 'foobar');
         localStorage.removeItem('getSessionStorage', 'foobar');
     }
-
-    // trigger('application/login');
 
 })();

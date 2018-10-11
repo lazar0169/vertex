@@ -11,7 +11,6 @@ let preloader = (function () {
     }
 
     on('preloader/show', function () {
-        alert('preloader show triggered');
         showPreloader();
     });
 
