@@ -26,7 +26,6 @@ let communication = (function () {
         delete: 'DELETE'
     };
 
-    // const apiUrl = 'https://jsonplaceholder.typicode.com/';
     const apiUrl = 'https://api.fazigaming.com/';
 
     function createGetRequest(route) {
@@ -143,12 +142,8 @@ let communication = (function () {
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         let callbackEventName = params.successEvent;
-        //let route = 'todos/1';
-        //let route = 'posts';
         let route = 'posts/1';
         let data = typeof params.data === typeof undefined ? null : params.data;
-        //let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
-        // let xhr = createRequest(route, requestTypes.post, data, callbackEventName);
         let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
         xhr = setDefaultHeaders(xhr);
         //xhr = setAuthHeader(xhr);

@@ -118,7 +118,8 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
-        let eventName = 'page-' + pageName + '-activated';
+        let eventName = pageName + "/activated";
+        console.log('eventName' + eventName);
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
@@ -331,7 +332,7 @@ let router = (function () {
             pageName = getPageNameFromUrl(param.url);
         }
         changePage(pageName);
-        if (typeof param.callbackEvent !== typeof undefined) {
+        if (typeof param.callbackEvent !== undefined) {
             trigger(param.callbackEvent, param);
         }
     });
