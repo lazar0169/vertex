@@ -67,8 +67,7 @@ const sidebar = (function () {
 
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 27) {
-            $$('#navigation-sidebar').classList.add('collapse');
-            $$('#black-area').classList.remove('show');
+            navigation.hide();
         }
     });
 
