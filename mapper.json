@@ -31,6 +31,7 @@
             "machines.js",
             "machines/machines-filters.js",
             "machines/edit-page.js",
+            "tickets/tickets-filters.js",
             "session.js",
             "preloader.js",
             "application.js"
@@ -46,6 +47,7 @@
             "machines/edit-page.css",
             "aft/aft-filter.css",
             "aft/aft-tabs.css",
+            "tickets/tickets-tabs.css",
             "components/dropdown.css",
             "main-content.css"
         ]
