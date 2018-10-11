@@ -92,8 +92,8 @@ const sidebar = (function () {
 
     searchLink.addEventListener('keyup', function (event) {
         let results = searchCategory;
-        if (searchLink.Value !== '') {
-            results = search(searchLink.Value.toLowerCase(), searchCategory);
+        if (searchLink.value !== '') {
+            results = search(searchLink.value.toLowerCase(), searchCategory);
         } else if (results === undefined && recent) {
             results = recent;
         }
@@ -142,6 +142,7 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
         generateLinksData(!category || menuData[category] ? menuData : category);
+
         function generateLinksData(tempData) {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
@@ -170,7 +171,7 @@ const sidebar = (function () {
                     if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        if (category !== 'search') { //if category isn't 'search', lists have header
+                        if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
                             tempCategory.innerHTML = `<div>${tempData[category].List}</div>`;
                         }
                         for (let value of tempData[category].Value) {
@@ -182,8 +183,8 @@ const sidebar = (function () {
                             tempValue.id = `link-${value.Id}`;
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
-                                tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
-                                tempValue.href = `/${value.categoryName.toLowerCase()}/${value.Id}`;
+                                tempValue.innerHTML = `${value.Name} (${value.category})`;
+                                tempValue.href = `/${value.category.toLowerCase()}/${value.Id}`;
                             } else {
                                 tempValue.innerHTML = value.Name;
                             }
@@ -192,7 +193,7 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.Id}`;
                                 let entry = value;
                                 if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
-                                    categorySelectedId = value.categoryName.charAt(0).toUpperCase() + value.categoryName.slice(1).toLowerCase();
+                                    categorySelectedId = value.category.charAt(0).toUpperCase() + value.category.slice(1).toLowerCase();
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
                                     entry.categoryName = tempData[category].List;
@@ -210,7 +211,6 @@ const sidebar = (function () {
                 }
             }
         }
-
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
@@ -240,6 +240,7 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
+
     //data search
     function search(termin, category) {
         let newData = {};
@@ -255,9 +256,9 @@ const sidebar = (function () {
         function search(termin, category) {
             let i = 0;
             let arrayResult = [];
-            for (let value of menuData[category].value) {
-                let valueName = value.name.toLowerCase();
-                let valueCity = value.city.toLowerCase();
+            for (let value of menuData[category].Value) {
+                let valueName = value.Name.toLowerCase();
+                let valueCity = value.City.toLowerCase();
                 let index = valueName.indexOf(termin);
                 let index1 = valueName.indexOf(` ${termin}`);
                 let index2 = valueCity.indexOf(termin);
@@ -271,62 +272,8 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'category': menuData[category].List,
-                'value': arrayResult
-            };
-            return newObject;
-        }
-    }
-    // function to remember last search in localStorage
-    function recentSearch(valueLink) {
-        recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.value : [];
-        let index = recentArray.findIndex((item) => item.id === valueLink.id);
-        if (index !== -1) {
-            recentArray.splice(index, 1);
-        }
-        recentArray.unshift(valueLink);
-        let object = {};
-        object['search'] = {
-            'category': 'Recent search',
-            'value': recentArray
-        };
-        localStorage.setItem('recentSearch', JSON.stringify(object));
-    }
-    //data search
-    function search(termin, category) {
-        let newData = {};
-        if (category) {
-            newData[category] = search(termin, category);
-        } else {
-            for (let category in menuData) {
-                newData[category] = search(termin, category);
-            }
-        }
-        return newData;
-
-        function search(termin, category) {
-            let i = 0;
-            let arrayResult = [];
-            for (let value of menuData[category].value) {
-                let valueName = value.name.toLowerCase();
-                let valueCity = value.city.toLowerCase();
-                let index = valueName.indexOf(termin);
-                let index1 = valueName.indexOf(` ${termin}`);
-                let index2 = valueCity.indexOf(termin);
-                let index3 = valueCity.indexOf(` ${termin}`)
-                if (index === 0 ||
-                    index1 !== -1 ||
-                    index2 === 0 ||
-                    index3 !== -1) {
-                    arrayResult[i] = value;
-                    i++;
-                }
-            }
-            //newObject has to have same name nomenclature as API response as it represent same data used in same functions
-            let newObject = {
-                'category': menuData[category].List,
-                'value': arrayResult
+                'Category': menuData[category].List,
+                'Value': arrayResult
             };
             return newObject;
         }
@@ -389,6 +336,7 @@ const sidebar = (function () {
         categorySelectedId = Object.keys(menuData)[0];
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
+
     //events
     on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;
