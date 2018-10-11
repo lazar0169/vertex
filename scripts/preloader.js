@@ -7,7 +7,10 @@ let preloader = (function () {
     }
 
     function hidePreloader() {
-        preloaderElement.classList.add('hide');
+        preloaderElement.classList.add('fade-out');
+        setTimeout(function(){
+            preloaderElement.classList.add('hide');
+        }, 1000);
     }
 
     on('preloader/show', function () {
