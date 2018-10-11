@@ -63,6 +63,11 @@ let router = (function () {
         id: '#page-machines',
         path: '/machines/{machinesId:integer}'
     });
+    routes.set('preloader', {
+        page: 'preloader',
+        id: '#page-preloader',
+        path: '/loading'
+    });
 
     //Functions for displaying page
 
@@ -295,7 +300,12 @@ let router = (function () {
         addRegExpToPages();
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
-        if (pageName != null) {
+        if (!sessionStorage.token || sessionStorage.token === undefined) {
+            alert('usli smo tu');
+            // changePage('preleoader');
+            trigger('preloader/show');
+        }
+        else if (pageName != null) {
             changePage(pageName);
         }
         else {
@@ -331,7 +341,7 @@ let router = (function () {
             pageName = getPageNameFromUrl(param.url);
         }
         changePage(pageName);
-        if (typeof param.callbackEvent !== typeof undefined) {
+        if (typeof param.callbackEvent !==   undefined) {
             trigger(param.callbackEvent, param);
         }
     });

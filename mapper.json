@@ -47,7 +47,8 @@
             "aft/aft-filter.css",
             "aft/aft-tabs.css",
             "components/dropdown.css",
-            "main-content.css"
+            "main-content.css",
+            "preloader.css"
         ]
     }
 }
