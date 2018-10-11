@@ -22,7 +22,9 @@
 }
 
 #machine-filters-content>div {
-    padding: 0.5rem;
+    padding: 0 0.5rem;
+    display: inline-flex;
+    align-items: center;
 }
 
 #machine-search {
@@ -42,11 +44,11 @@
 }
 
 .machine-filters-right>div {
-     border-left: 1px solid black;
+    border-left: 1px solid black;
     padding: 0.5rem;
 }
 
-.mdi-view-sequential, .mdi-view-headline  {
+.mdi-view-sequential, .mdi-view-headline {
     color: rgb(36, 82, 108);
     cursor: pointer;
 }

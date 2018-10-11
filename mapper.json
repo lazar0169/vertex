@@ -20,12 +20,17 @@
             "sidebar.js",
             "router.js",
             "template-engine.js",
+            "components/dropdown.js",
+            "components/clear-dropdown-filter.js",
+            "components/ms-dropdown.js",
             "machines/details-bar.js",
             "aft/aft-filter.js",
             "aft/aft-tab-content.js",
             "casino.js",
             "communication.js",
             "machines.js",
+            "machines/machines-filters.js",
+            "machines/edit-page.js",
             "session.js",
             "preloader.js",
             "application.js"
@@ -41,6 +46,7 @@
             "machines/edit-page.css",
             "aft/aft-filter.css",
             "aft/aft-tabs.css",
+            "components/dropdown.css",
             "main-content.css"
         ]
     }

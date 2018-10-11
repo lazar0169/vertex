@@ -1,4 +1,5 @@
 let machines = (function () {
+    
 
     on('machines/display-machine-info/', function(e){
         //data = e.data;

@@ -65,6 +65,12 @@ const sidebar = (function () {
 
     });
 
+    window.addEventListener('keyup', function (event) {
+        if (event.keyCode == 27) {
+            navigation.hide();
+        }
+    });
+
     collapseButton.addEventListener('click', function () {
         isExpanded ?
             sidemenu.collapse() :
@@ -240,7 +246,22 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
-
+    // function to remember last search in localStorage
+    function recentSearch(valueLink) {
+        recent = JSON.parse(localStorage.getItem('recentSearch'));
+        let recentArray = recent ? recent.search.value : [];
+        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        if (index !== -1) {
+            recentArray.splice(index, 1);
+        }
+        recentArray.unshift(valueLink);
+        let object = {};
+        object['search'] = {
+            'List': 'Recent search',
+            'Value': recentArray
+        };
+        localStorage.setItem('recentSearch', JSON.stringify(object));
+    }
     //data search
     function search(termin, category) {
         let newData = {};
@@ -272,7 +293,7 @@ const sidebar = (function () {
                 }
             }
             let newObject = {
-                'Category': menuData[category].List,
+                'List': menuData[category].List,
                 'Value': arrayResult
             };
             return newObject;
@@ -290,7 +311,7 @@ const sidebar = (function () {
         recentArray.unshift(valueLink);
         let object = {};
         object['search'] = {
-            'Category': 'Recent search',
+            'List': 'Recent search',
             'Value': recentArray
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
