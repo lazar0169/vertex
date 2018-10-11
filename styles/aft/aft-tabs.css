@@ -5,10 +5,11 @@
     height: 95%;
 }
 
-.aft-info-tab {
+.chosen-info-tab {
     flex: 1;
     padding: 0.5rem;
     background: rgb(38, 50, 56);
+    color: rgb(120, 144, 156);
 }
 
 #aft-enable-transaction-check, #aft-enable-notification-check {
