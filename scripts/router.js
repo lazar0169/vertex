@@ -63,11 +63,6 @@ let router = (function () {
         id: '#page-machines',
         path: '/machines/{machinesId:integer}'
     });
-    routes.set('preloader', {
-        page: 'preloader',
-        id: '#page-preloader',
-        path: '/loading'
-    });
 
     //Functions for displaying page
 
@@ -301,8 +296,7 @@ let router = (function () {
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
         if (!sessionStorage.token || sessionStorage.token === undefined) {
-            alert('usli smo tu');
-            // changePage('preleoader');
+            // $$('#preloader').classList.remove('hidden');
             trigger('preloader/show');
         }
         else if (pageName != null) {
