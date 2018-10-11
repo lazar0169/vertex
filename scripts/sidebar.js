@@ -142,6 +142,7 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         linkWrapper.innerHTML = '';
         generateLinksData(!category || menuData[category] ? menuData : category);
+
         function generateLinksData(tempData) {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
@@ -170,7 +171,7 @@ const sidebar = (function () {
                     if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        if (category !== 'search') { //if category isn't 'search', lists have header
+                        if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
                             tempCategory.innerHTML = `<div>${tempData[category].List}</div>`;
                         }
                         for (let value of tempData[category].Value) {
@@ -182,8 +183,8 @@ const sidebar = (function () {
                             tempValue.id = `link-${value.Id}`;
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'search') {// if category is 'search', link has name and category name in brakets 
-                                tempValue.innerHTML = `${value.Name} (${value.categoryName})`;
-                                tempValue.href = `/${value.categoryName.toLowerCase()}/${value.Id}`;
+                                tempValue.innerHTML = `${value.Name} (${value.category})`;
+                                tempValue.href = `/${value.category.toLowerCase()}/${value.Id}`;
                             } else {
                                 tempValue.innerHTML = value.Name;
                             }
@@ -192,7 +193,7 @@ const sidebar = (function () {
                                 linkSelectedId = `link-${value.Id}`;
                                 let entry = value;
                                 if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
-                                    categorySelectedId = value.categoryName.charAt(0).toUpperCase() + value.categoryName.slice(1).toLowerCase();
+                                    categorySelectedId = value.category.charAt(0).toUpperCase() + value.category.slice(1).toLowerCase();
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
                                     entry.categoryName = tempData[category].List;
@@ -210,7 +211,6 @@ const sidebar = (function () {
                 }
             }
         }
-
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
@@ -286,7 +286,6 @@ const sidebar = (function () {
                     i++;
                 }
             }
-            //newObject has to have same name nomenclature as API response as it represent same data used in same functions
             let newObject = {
                 'List': menuData[category].List,
                 'Value': arrayResult
@@ -352,6 +351,7 @@ const sidebar = (function () {
         categorySelectedId = Object.keys(menuData)[0];
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
+
     //events
     on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;

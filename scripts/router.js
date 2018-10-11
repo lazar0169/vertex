@@ -226,7 +226,7 @@ let router = (function () {
     }
 
     function getParamsFromUrl(url, route) {
-        if (typeof route === 'undefined') {
+        if (typeof route === typeof undefined) {
             let page = getPageNameFromUrl(url);
             route = routes.get(page);
         }
@@ -256,7 +256,7 @@ let router = (function () {
             currentUrl = createUrlFromRouteAndParams(route, params),
             previousUrl = false;
         if (currentState !== null) {
-            previousUrl = typeof currentState.activeUrl !== 'undefined' && currentState.activeUrl !== null ? currentState.activeUrl : false;
+            previousUrl = typeof currentState.activeUrl !== typeof undefined && currentState.activeUrl !== null ? currentState.activeUrl : false;
         }
         let pageChanged = !previousUrl || (previousUrl && previousUrl !== currentUrl);
         if (pageChanged) {
@@ -316,7 +316,7 @@ let router = (function () {
             history.back();
             return;
         }
-        if (typeof event.state.page !== 'undefined') {
+        if (typeof event.state.page !== typeof undefined) {
             let previousPage = event.state.page;
             changePage(previousPage, false);
         }
@@ -331,7 +331,7 @@ let router = (function () {
             pageName = getPageNameFromUrl(param.url);
         }
         changePage(pageName);
-        if (typeof param.callbackEvent !== 'undefined') {
+        if (typeof param.callbackEvent !== typeof undefined) {
             trigger(param.callbackEvent, param);
         }
     });

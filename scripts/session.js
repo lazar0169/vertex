@@ -5,7 +5,7 @@ let session = (function () {
     }
 
     on('session/token/save', function (e) {
-        if (typeof(Storage) !== "undefined") {
+        if (typeof(Storage) !== typeof undefined) {
             sessionStorage.clear();
             let encodedToken = e.encodedToken;
             let encodedTokenJSON = JSON.stringify(encodedToken);
@@ -30,7 +30,7 @@ let session = (function () {
     on('session/login/error', function (e) {
         sessionStorage.clear();
         let errorMessage = e.message;
-        alert('Invalid username / password. Please try again!');
+        // alert('Invalid username / password. Please try again!');
     });
 
     // transfering sessionStorage from one tab to another
