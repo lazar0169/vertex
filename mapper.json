@@ -6,7 +6,8 @@
       "communication.js",
       "preloader.js",
       "notifications.js",
-      "template-engine.js"
+      "template-engine.js",
+      "localization.js"
     ],
     "styles": [
       "modify-spectre.css",
@@ -34,6 +35,7 @@
       "preloader.js",
       "application.js",
       "home.js",
+      "localization.js",
       "router.js"
     ],
     "styles": [

@@ -1,23 +1,30 @@
 <div id="login">
+    <select name="language" class="lang-selector" id="lang-selector">
+        <option value="English">English</option>
+        <option value="Deutsch">Deutsch</option>
+        <option value="Francais">Francais</option>
+    </select>
     <section>
         <header>
-            <h1>Accounting</h1>
+            <h1 class="element-multilanguage" data-translation-key="login">[[login.accounting]]</h1>
         </header>
         <form>
-            <input type="text" required placeholder="Username" class="username-input">
-            <input type="password" required placeholder="Password" class="pass-input">
-            <button type="submit"  class="form-submit">NEXT</button>
+            <input type="text" required placeholder="[[login.username]]" class="username-input element-multilanguage" data-translation-key="login">
+            <input type="password" required placeholder="[[login.password]]" class="pass-input element-multilanguage" data-translation-key="login">
+            <button type="submit"  class="form-submit element-multilanguage" data-translation-key="login">[[login.submit]]</button>
         </form>
     </section>
     <aside class="login-validation">
-        <p><!{{ Translate::label("login.error_message") }}</p>
-        <p>There was an error in login! Try again.</p>
+        <p  class="element-multilanguage" data-translation-key="login">[[login.general-error]]</p>
+        <!--<p>There was an error in login! Try again.</p>-->
     </aside>
     <aside class="login-error">
-        <p>There was a communication eror. Check your internet connection
-            and weather the server is available or not.</p>
+        <p class="element-multilanguage" data-translation-key="login">[[login.communication-error]]</p>
+<!--        <p>There was a communication eror. Check your internet connection
+            and weather the server is available or not.</p>-->
     </aside>
     <aside class="login-incorrect">
-        <p>Incorrect username and / or password!</p>
+        <p class="element-multilanguage" data-translation-key="login">[[login.credentials-error]]</p>
+        <!--<p>Incorrect username and / or password!</p>-->
     </aside>
 </div>

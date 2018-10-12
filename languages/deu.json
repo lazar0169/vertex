@@ -1,0 +1,8 @@
+{
+  "login": {
+    "accounting":"Buchhaltung",
+    "general-error": "Beim Anmelden ist ein Fehler aufgetreten! Versuchen Sie es nochmal.",
+    "communication-error": "Es gab einen Kommunikationsfehler. Überprüfen Sie Ihre Internetverbindung und ob der Server verfügbar ist oder nicht.",
+    "credentials-error": "Falscher Benutzername und / oder falsches Passwort!"
+  }
+}

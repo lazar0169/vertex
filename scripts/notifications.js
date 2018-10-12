@@ -8,8 +8,8 @@ let notifications = function () {
     };
 
     const messageCodes = {
-        22: 'Invalid username and / or password!',
-        23: 'Logout error!'
+        22: '[[login.credentials-error]]',
+        23: '[[logout.error]]'
     };
 
     function showNotification(params) {

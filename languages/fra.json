@@ -1,0 +1,8 @@
+{
+  "login": {
+    "accounting":"Comptabilité",
+    "general-error": "Il y a eu une erreur de connexion! Réessayer.",
+    "communication-error": "Il y a eu une erreur de communication. Vérifiez votre connexion Internet et veillez à ce que le serveur soit disponible ou non.",
+    "credentials-error": "Nom d'utilisateur et / ou mot de passe incorrect!"
+  }
+}
