@@ -10,8 +10,8 @@ const ticketAppearance = (function () {
     let inputExpiringPromo = $$('#wrapper-tickets-appearance-promo').children[2].children[1];
     let inputValidation = $$('#tickets-advanced-settings-validation').children[1];
     let inputTicket = $$('#tickets-advanced-settings-ticket').children[1];
-    let inputDate = $$('#tickets-advanced-settings-date').children[1];
-    let inputTime = $$('#tickets-advanced-settings-time').children[1];
+    let dateWrapper = $$('#tickets-advanced-settings-date');
+    let timeWrapper = $$('#tickets-advanced-settings-time');
     let inputTicketVoid = $$('#tickets-advanced-settings-void').children[1];
     let inputTicketVoidDays = $$('#tickets-advanced-settings-days').children[1];
     let inputAsset = $$('#tickets-advanced-settings-asset').children[1];
@@ -23,18 +23,89 @@ const ticketAppearance = (function () {
     let codeTicket = '# 1';
     let codeValueTxt = 'ONE HUNDRED RSD 0/100';
     let codeCurrencyNumber = '100.00';
+    let codeDate;
+    let codeTime;
 
+    let dateFormatArray = ['dd.MM.yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
+    let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
+    dateWrapper.appendChild(dropdown.generate(dateFormatArray));
+    timeWrapper.appendChild(dropdown.generate(timeFormatArray));
+    let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
+    let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
+    let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
+    let setTimeFormat = $$('#tickets-advanced-settings-time').children[1];
 
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');
         chasableTicket.classList.add('tab-active');
         draw(ticketNameCoordinate, inputChasoutTicket.value);
+        if (isNaN(inputExpiringCashout.value)) {
+            draw(ticketVoidAfterNumber, inputExpiringCashout.value);
+            draw(ticketVoidAfterDays, '');
+        }
+        else {
+            draw(ticketVoidAfterNumber, inputExpiringCashout.value);
+            draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+        }
     });
+
     promoTicket.addEventListener('click', function () {
         chasableTicket.classList.remove('tab-active');
         promoTicket.classList.add('tab-active');
         draw(ticketNameCoordinate, inputPromoTicket.value);
+        if (isNaN(inputExpiringPromo.value)) {
+            draw(ticketVoidAfterNumber, inputExpiringPromo.value);
+            draw(ticketVoidAfterDays, '');
+        }
+        else {
+            draw(ticketVoidAfterNumber, inputExpiringPromo.value);
+            draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+        }
     });
+
+    function formatDate(format) {
+        switch (JSON.parse(format)) {
+
+            case dateFormatArray[1]:
+                codeDate = '16/10/2018';
+                break;
+
+            case dateFormatArray[2]:
+                codeDate = '2018-10-16';
+                break;
+
+            case dateFormatArray[3]:
+                codeDate = '16-10-2018'
+                break;
+
+            case dateFormatArray[4]:
+                codeDate = '10/16/2018';
+                break;
+
+            default:
+                codeDate = '16.10.2018';
+        }
+    }
+
+    function formatTime(format) {
+        switch (JSON.parse(format)) {
+
+            case timeFormatArray[1]:
+                codeTime = '11:02:23';
+                break;
+
+            case timeFormatArray[2]:
+                codeTime = '23:02';
+                break;
+
+            case timeFormatArray[3]:
+                codeTime = '23:02:23'
+                break;
+
+            default:
+                codeTime = '11:02';
+        }
+    }
 
     let casinoCoorinate = {
         x: 200,
@@ -145,25 +216,18 @@ const ticketAppearance = (function () {
         h: 20
     }
 
-
-
-
-
-
-
-
-
     window.addEventListener('load', function () {
-
         drawBarcode();
+        formatDate(selectedDateFormat.dataset.items);
+        formatTime(selectedTimeFormat.dataset.items);
         draw(casinoCoorinate, inputCasino.value);
         draw(addressCoordinate, inputAddress.value);
         draw(cityCoordinate, inputCity.value);
         draw(ticketNameCoordinate, inputChasoutTicket.value);
         draw(validationCoordinate, inputValidation.value);
         draw(validationNumberCoordinate, codeNumber);
-        draw(dateCoordinate, inputDate.value);
-        draw(timeCoordinate, inputTime.value);
+        draw(dateCoordinate, codeDate);
+        draw(timeCoordinate, codeTime);
         draw(ticketCoordinate, inputTicket.value)
         draw(ticketNumberCoordinate, codeTicket);
         draw(valueTxtCoordinate, codeValueTxt);
@@ -174,12 +238,13 @@ const ticketAppearance = (function () {
         if (!isNaN(inputExpiringCashout.value)) {
             draw(ticketVoidAfterDays, inputCurrency.value);
         }
+        else {
+            draw(ticketVoidAfterDays, '');
+        }
         draw(assetCoordinate, inputAsset.value);
-        draw(assetCoordinateNumber, inputAssetNumber.value);
+        draw(assetCoordinateNumber, `# ${inputAssetNumber.value}`);
+        drawProba();
     });
-
-
-
 
     ticketAppearanceAdvance.addEventListener('click', function () {
         ticketAppearanceAdvanceShow.classList.toggle('hidden');
@@ -188,31 +253,55 @@ const ticketAppearance = (function () {
     inputCasino.addEventListener('keyup', function (event) {
         draw(casinoCoorinate, inputCasino.value);
     });
+
     inputAddress.addEventListener('keyup', function (event) {
         draw(addressCoordinate, inputAddress.value);
     });
+
     inputCity.addEventListener('keyup', function (event) {
         draw(cityCoordinate, inputCity.value);
     });
+
     inputChasoutTicket.addEventListener('keyup', function (event) {
         if (chasableTicket.classList.contains('tab-active')) {
             draw(ticketNameCoordinate, inputChasoutTicket.value);
         }
     });
+
+    inputExpiringCashout.addEventListener('keyup', function (event) {
+        if (chasableTicket.classList.contains('tab-active')) {
+            draw(ticketVoidAfterNumber, inputExpiringCashout.value);
+            isNaN(inputExpiringCashout.value) ? draw(ticketVoidAfterDays, '') : draw(ticketVoidAfterDays, inputExpiringCashout.value);
+        }
+    });
+
     inputPromoTicket.addEventListener('keyup', function (event) {
         if (promoTicket.classList.contains('tab-active')) {
             draw(ticketNameCoordinate, inputPromoTicket.value);
         }
     });
+
+    inputExpiringPromo.addEventListener('keyup', function (event) {
+        if (promoTicket.classList.contains('tab-active')) {
+            draw(ticketVoidAfterNumber, inputExpiringPromo.value);
+            isNaN(inputExpiringPromo.value) ? draw(ticketVoidAfterDays, '') : draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+        }
+    });
+
     inputValidation.addEventListener('keyup', function (event) {
         draw(validationCoordinate, inputValidation.value);
     });
-    inputDate.addEventListener('keyup', function (event) {
+
+    setDateFormat.addEventListener('click', function () {
+        formatDate(selectedDateFormat.dataset.items);
         draw(dateCoordinate, codeDate);
     });
-    inputTime.addEventListener('keyup', function (event) {
+
+    setTimeFormat.addEventListener('click', function () {
+        formatTime(selectedTimeFormat.dataset.items);
         draw(timeCoordinate, codeTime);
     });
+
     inputTicket.addEventListener('keyup', function (event) {
         draw(ticketCoordinate, inputTicket.value)
     });
@@ -220,20 +309,27 @@ const ticketAppearance = (function () {
     inputCurrency.addEventListener('keyup', function (event) {
         draw(currencyCoordinate, inputCurrency.value);
     });
+
     inputTicketVoid.addEventListener('keyup', function (event) {
         draw(ticketVoidAfterCoordinate, inputTicketVoid.value);
     });
+
     inputTicketVoidDays.addEventListener('keyup', function (event) {
-        draw(ticketVoidAfterNumber, inputExpiringCashout.value);
+        if (chasableTicket.classList.contains('tab-active')) {
+            isNaN(inputExpiringCashout.value) ? draw(ticketVoidAfterDays, '') : draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+        }
+        if (promoTicket.classList.contains('tab-active')) {
+            isNaN(inputExpiringPromo.value) ? draw(ticketVoidAfterDays, '') : draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+        }
     });
+
     inputAsset.addEventListener('keyup', function (event) {
         draw(assetCoordinate, inputAsset.value);
     });
+
     inputAssetNumber.addEventListener('keyup', function (event) {
-        draw(assetCoordinateNumber, inputAssetNumber.value);
+        draw(assetCoordinateNumber, `# ${inputAssetNumber.value}`);
     });
-
-
 
     function draw(coordinate, value) {
         let canvas = $$('#wrapper-canvas').children[0];
@@ -248,6 +344,13 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         let img = document.getElementById("barcode");
         ctx.drawImage(img, 200, 120, 400, 80);
+    }
 
+    function drawProba() {
+        let canvas = $$('#wrapper-canvas').children[0];
+        let ctx = canvas.getContext("2d");
+        ctx.clearRect(20, 20, 100, 200);
+        let txt = 'proba';
+        ctx.fillText(txt, 20, 20, 100, 200);
     }
 })();

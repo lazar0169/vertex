@@ -3,6 +3,7 @@
     color: white;
     cursor: pointer;
     margin-left: 0.5rem;
+    position: relative;
 }
 
 .default-select>div:first-child:before {
@@ -28,24 +29,23 @@
 }
 
 .default-select>div:not(:first-child) {
-    width: 120px;
+    width: 100%;
     max-height: 140px;
     background: rgb(38, 50, 56);
     position: absolute;
     border: 1px solid rgb(55, 71, 79);
     border-top: none;
-    box-shadow: 0.2rem 0.2rem 0.4rem rgba(0,0,0, 0.5);
+    box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
 
 .active-select>div:first-child {
     border-bottom: none;
-    box-shadow: 0.2rem 0.2rem 0.4rem rgba(0,0,0, 0.5);
+    box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
 }
 
 .default-select>div:not(:first-child)>div {
     padding-left: 0.5rem;
-    width: 120px;
     overflow: hidden;
 }
 

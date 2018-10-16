@@ -2,6 +2,7 @@
     <object data-object="tickets-filter"></object>
     TICKETS TABLE
 </div>
+
 <div id="tickets-appearance-tab-info" class="chosen-info-tab overflow-content hidden">
     <div id="wrapper-ticket-appearance-settings">
         <div id="wrapper-tickets-appearance-general-settings">
@@ -30,8 +31,8 @@
                 <input class="form-input" type="text" placeholder="Cashout ticket" value="Cashout ticket">
             </div>
             <div>
-                <div>NEVER????</div>
-                <input class="form-input" type="text" placeholder="NEVER" value="NEVER">
+                <div>Expiring:</div>
+                <input class="form-input" type="text" placeholder="Days" value="NEVER">
             </div>
         </div>
         <div id="wrapper-tickets-appearance-promo">
@@ -41,23 +42,21 @@
                 <input class="form-input" type="text" placeholder="PLAYABLE ONLY" value="PLAYABLE ONLY">
             </div>
             <div>
-                <div>Days:</div>
+                <div>Expiring:</div>
                 <input class="form-input" type="text" placeholder="DAYS" value="7">
             </div>
         </div>
     </div>
+    
     <div id="wrapper-ticket-appearance-advanced">
-
         <div>ADVANCED SETTINGS</div>
         <div class="hidden">
             <div>
                 <div id="tickets-advanced-settings-date">
                     <div>Date format:</div>
-                    <input class="form-input" type="text" placeholder="ovde select", value="16.10.1988">
                 </div>
                 <div id="tickets-advanced-settings-time">
                     <div>Time format:</div>
-                    <input class="form-input" type="text" placeholder="ovde select" value="05:20:32">
                 </div>
             </div>
             <div>
@@ -87,7 +86,7 @@
                 </div>
                 <div id="tickets-advanced-settings-asset-number">
                     <div>Asset number:</div>
-                    <input class="form-input" type="text" placeholder="Asset number" value='# 1'>
+                    <input class="form-input" type="text" placeholder="Asset number" value='1'>
                 </div>
             </div>
         </div>
@@ -98,9 +97,11 @@
         <img id="barcode" class="hidden" width="220" height="277" src="images/barcode.jpg" alt="barcode">
     </div>
 </div>
+
 <div id="tickets-sms-settings-tab-info" class="chosen-info-tab overflow-content hidden">
     SMS SETTINGS
 </div>
+
 <div id="tickets-set-ticket-max-value-info" class="chosen-info-tab overflow-content hidden">
     SET TICKET MAX VALUE
 </div>
