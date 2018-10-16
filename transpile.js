@@ -83,7 +83,7 @@ try {
     copyDir('vendor', `${buildFolder}/vendor`);
     copyDir('languages', `${buildFolder}/languages`);
 } catch (error) {
-    console.log('Error: Copying failed! Please check resource (images, fonts, vendor)');
+    console.log('Error: Copying failed! Please check resource (images, fonts, vendor, languages)');
 }
 
 try {
