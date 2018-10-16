@@ -1,13 +1,16 @@
 let preloader = (function () {
 
-    let preloader = $$('.preloader')[0];
+    let preloaderElement = $$('#preloader');
 
     function showPreloader() {
-        preloader.classList.remove('hidden');
+        preloaderElement.classList.remove('hide');
     }
 
     function hidePreloader() {
-        preloader.classList.add('hidden');
+        preloaderElement.classList.add('fade-out');
+        setTimeout(function(){
+            preloaderElement.classList.add('hide');
+        }, 1000);
     }
 
     on('preloader/show', function () {

@@ -30,7 +30,6 @@ let session = (function () {
     on('session/login/error', function (e) {
         sessionStorage.clear();
         let errorMessage = e.message;
-        // alert('Invalid username / password. Please try again!');
     });
 
     // transfering sessionStorage from one tab to another
@@ -52,7 +51,6 @@ let session = (function () {
                 sessionStorage.setItem(key, data[key]);
             }
         }
-        //trigger('application/login');
     }
 
     // Listening for changes to localStorage
@@ -67,7 +65,5 @@ let session = (function () {
         localStorage.setItem('getSessionStorage', 'foobar');
         localStorage.removeItem('getSessionStorage', 'foobar');
     }
-
-    // trigger('application/login');
 
 })();
