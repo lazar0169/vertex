@@ -1,30 +1,42 @@
-var langInUse;
-
 let localization = (function(){
-    console.log('select', $$('#lang-selector'));
-    console.log('select option', $$('#lang-selector option'));
 
-    $$('#lang-selector option').addEventListener('change', function(){
-        alert($$('#lang-selector'));
+    let languages = {
+      'English': '/languages/eng.json',
+      'Deutsch': '/languages/deu.json',
+      'Francais': '/language/fra.json'
+    };
+
+    function replaceText(templateElementSelector, model, callbackEvent) {
+        trigger('template/render', {templateElementSelector: templateElementSelector, model: model, callbackEvent: callbackEvent});
+    }
+
+    function changeLanguage(multiLanguageElementClass, langInUse) {
+        console.log('Lang in use: ', langInUse);
+
+        let stringsToBeTranslated = $$(multiLanguageElementClass);
+        console.log('Strings to be translated: ', stringsToBeTranslated);
+
+        let model = ''; //ovaj model cemo izvuci iz .json-a
+
+        let languagePath = languages[langInUse];
+        console.log('LanguagePath: ', languagePath);
+
+        for (let i = 0; i < stringsToBeTranslated.length; i++) {
+            console.log('String to be translated', stringsToBeTranslated[i]);
+            replaceText(stringsToBeTranslated[i], model , 'localization/language/change');
+        }
+    }
+
+    on('localization/language/change', function(params){
+        let langInUse = params.langInUse;
+        let multiLanguageElementClass = '.element-multilanguage';
+        changeLanguage(multiLanguageElementClass, langInUse);
     });
 
-    let translationKey = 'login';
-
-    function changeLanguage(translationKey) {
-        let stringsToBeTranslated = document.querySelectorAll('[data-translation-key="stringAttribute"]');
-        console.log('strins to be translated', stringsToBeTranslated);
-        stringsToBeTranslated.forEach(stringToBeTranslated => {
-            let originalTextContent = stringToBeTranslated.textContent;
-            console.log('original text contet', originalTextContent);
-            let translatedTextContent = translateText(originalTextContent, mLstrings);
-            stringToBeTranslated.textContent = translatedTextContent;
-        });
-    }
-
-
-    function translateText(originalTextContent, m) {
-
-    }
-
+    $$('#lang-selector').addEventListener('change', function(){
+        let selectedLanguage = this.options[this.selectedIndex].value;
+        console.log('Selected language: ', selectedLanguage);
+        trigger('localization/language/change', {langInUse: selectedLanguage});
+    });
 
 })();
