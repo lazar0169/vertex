@@ -1,0 +1,7 @@
+{
+  "login": "s'identifier",
+  "username": "Nom d'utilisateur",
+  "loginScreen": {
+    "submit":"soumettre"
+  }
+}

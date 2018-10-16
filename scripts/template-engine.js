@@ -1,5 +1,7 @@
 let template = (function () {
 
+
+    //ToDo: Jovana - obrisi ove test podatke
     let model = {
         home: {
             Name: 'Home name'
@@ -54,6 +56,8 @@ let template = (function () {
         return placeholderValues;
     }
 
+    //ToDo: @Jovana iskoristi umesto ove identicnu funkciju koju cu da napisem u utils
+    //Vidi sa Lazarom da li da pravis novi request na ovom branchu zbog toga
     function getValueFromModel(placeholderValue, model) {
         let value = placeholderValue.split('.').reduce(function (prev, curr) {
             return prev ? prev[curr] : null

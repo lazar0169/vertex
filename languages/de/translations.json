@@ -1,0 +1,8 @@
+{
+  "login": "Anmeldung",
+  "username": "Nutzername",
+  "password": "Passwort",
+  "loginScreen": {
+    "submit":"einreichen",
+  }
+}
