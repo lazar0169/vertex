@@ -243,7 +243,6 @@ const ticketAppearance = (function () {
         }
         draw(assetCoordinate, inputAsset.value);
         draw(assetCoordinateNumber, `# ${inputAssetNumber.value}`);
-        drawProba();
     });
 
     ticketAppearanceAdvance.addEventListener('click', function () {
@@ -344,13 +343,5 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         let img = document.getElementById("barcode");
         ctx.drawImage(img, 200, 120, 400, 80);
-    }
-
-    function drawProba() {
-        let canvas = $$('#wrapper-canvas').children[0];
-        let ctx = canvas.getContext("2d");
-        ctx.clearRect(20, 20, 100, 200);
-        let txt = 'proba';
-        ctx.fillText(txt, 20, 20, 100, 200);
     }
 })();
