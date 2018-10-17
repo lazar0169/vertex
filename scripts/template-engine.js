@@ -1,33 +1,5 @@
 let template = (function () {
 
-
-    //ToDo: Jovana - obrisi ove test podatke
-    let model = {
-        home: {
-            Name: 'Home name'
-        },
-        casinos: {
-            Id: 5,
-            Name: 'Casino name',
-            City: 'Casino city'
-        },
-        jackpots: {
-            Id: 5,
-            Name: 'Jackpot name',
-            City: 'Jackpot city'
-        },
-        tickets: {
-            Id: 5,
-            Name: 'Ticket name',
-            City: 'Ticket city'
-        },
-        aft: {
-            Id: 5,
-            Name: 'Aft name',
-            City: 'Aft city'
-        }
-    };
-
     function getPlaceholders(elementString) {
         let paramPattern = /{{(.*?)}}/gi;
         return elementString.match(paramPattern);
@@ -56,12 +28,8 @@ let template = (function () {
         return placeholderValues;
     }
 
-    //ToDo: @Jovana iskoristi umesto ove identicnu funkciju koju cu da napisem u utils
-    //Vidi sa Lazarom da li da pravis novi request na ovom branchu zbog toga
     function getValueFromModel(placeholderValue, model) {
-        let value = placeholderValue.split('.').reduce(function (prev, curr) {
-            return prev ? prev[curr] : null
-        }, model || self);
+        let value = getProperty(placeholderValue, model);
         if (validateValue(value)) {
             return value;
         }
@@ -119,8 +87,5 @@ let template = (function () {
         }
         trigger(params.callbackEvent, {element: newHtmlElement, params: params, model: params.model});
     });
-
-    //For testing:
-    // render('#home-template', model);
 
 })();

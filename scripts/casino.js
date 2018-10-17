@@ -23,8 +23,7 @@ let casino = (function () {
     });
 
     on('casino/display-casino-info/', function (e) {
-        //data = e.data;
-        //alert(data);
+
     });
 
     on('casino/display-casino-info/error', function (e) {
@@ -32,19 +31,4 @@ let casino = (function () {
         alert('An error occured.');
     });
 
-    /*    //Testing cloned button
-        $$('.cloning-test')[0].onclick = function (event) {
-            alert('Test.');
-        };*/
-
 })();
-
-/*
-//We use this trigger to trigger adding casino models
-trigger('casino/add',{
-model: {
-casino: {
-name:"neiski",
-address:"drugi",
-}}});
- */

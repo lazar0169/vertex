@@ -58,13 +58,6 @@ const sidebar = (function () {
         };
     }();
 
-
-    window.addEventListener('load', function () {
-
-        //generateMenu(menuData);
-
-    });
-
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 27) {
             navigation.hide();
@@ -105,7 +98,6 @@ const sidebar = (function () {
         }
         generateLinks(results);
     });
-
 
     // generate menu lists from data, and set click listener
     function generateMenu(data) {

@@ -9,7 +9,6 @@ function $$(selector) {
     }
 }
 
-
 function validateEncodedToken(accessToken) {
     let match = accessToken.match(/\./g);
     if (match.length === 2) {
