@@ -195,7 +195,7 @@ const ticketAppearance = (function () {
         w: 325,
         h: 30
     }
-    let validationNumberLeftCoordinate = {
+    let validationNumberRightCoordinate = {
         x: 0,
         y: -735,
         w: 325,
@@ -206,7 +206,7 @@ const ticketAppearance = (function () {
         drawPicture();
         drawStatic(insertSideRightCoordinate, insertSide);
         drawStatic(insertSideLeftCoordinate, insertSide);
-        drawStatic(validationNumberLeftCoordinate, validationNumber);
+        drawStatic(validationNumberRightCoordinate, validationNumber);
         draw(casinoCoorinate, inputCasino.value);
         draw(addressCoordinate, inputAddress.value);
         draw(cityCoordinate, inputCity.value);
