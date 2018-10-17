@@ -26,6 +26,11 @@ const ticketAppearance = (function () {
     let HH = '23';
     let min = '43';
     let sec = '03';
+    let ticketNumberValue = '1';
+    let validationNumber = '00-0000-0000-0000';
+    let currencyValue = '138.00';
+    let currencyValueText = 'one hundred and thirty-eight';
+    let insertSide = 'INSERT THIS SIDE UP';
 
     let dateFormatArray = ['dd.MM.yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
     let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
@@ -82,6 +87,7 @@ const ticketAppearance = (function () {
         w: 200,
         h: 25
     }
+
     let ticketNameCoordinate = {
         x: 200,
         y: 60,
@@ -94,6 +100,14 @@ const ticketAppearance = (function () {
         w: 200,
         h: 25
     }
+
+    let validationNumberCoordinate = {
+        x: 400,
+        y: 167,
+        w: 200,
+        h: 25
+    }
+
     let dateCoordinate = {
         x: 200,
         y: 191,
@@ -112,10 +126,31 @@ const ticketAppearance = (function () {
         w: 100,
         h: 25
     }
+
+    let ticketNumberCoordinate = {
+        x: 570,
+        y: 191,
+        w: 10,
+        h: 25
+    }
+
+    let currencyValueTextCoordinate = {
+        x: 200,
+        y: 216,
+        w: 360,
+        h: 25
+    }
+
     let currencyCoordinate = {
         x: 200,
         y: 240,
         w: 200,
+        h: 40
+    }
+    let currencyValueCoordinate = {
+        x: 400,
+        y: 240,
+        w: 100,
         h: 40
     }
     let ticketVoidAfterCoordinate = {
@@ -139,27 +174,52 @@ const ticketAppearance = (function () {
     let assetCoordinate = {
         x: 490,
         y: 290,
-        w: 100,
+        w: 130,
         h: 30
     }
     let assetCoordinateNumberCoordinate = {
-        x: 590,
+        x: 620,
         y: 290,
         w: 50,
+        h: 30
+    }
+    let insertSideRightCoordinate = {
+        x: 0,
+        y: -765,
+        w: 325,
+        h: 30
+    }
+    let insertSideLeftCoordinate = {
+        x: -325,
+        y: 10,
+        w: 325,
+        h: 30
+    }
+    let validationNumberLeftCoordinate = {
+        x: 0,
+        y: -735,
+        w: 325,
         h: 30
     }
 
     window.addEventListener('load', function () {
         drawPicture();
+        drawStatic(insertSideRightCoordinate, insertSide);
+        drawStatic(insertSideLeftCoordinate, insertSide);
+        drawStatic(validationNumberLeftCoordinate, validationNumber);
         draw(casinoCoorinate, inputCasino.value);
         draw(addressCoordinate, inputAddress.value);
         draw(cityCoordinate, inputCity.value);
         draw(ticketNameCoordinate, inputChasoutTicket.value);
         draw(validationCoordinate, inputValidation.value);
+        drawStatic(validationNumberCoordinate, validationNumber);
         draw(dateCoordinate, JSON.parse(selectedDateFormat.dataset.items).replace('dd', dd).replace('MM', MM).replace('yyyy', yyyy));
         draw(timeCoordinate, JSON.parse(selectedTimeFormat.dataset.items).replace('hh', hh).replace('HH', HH).replace('mm', min).replace('ss', sec));
-        draw(ticketCoordinate, `${inputTicket.value} #`)
+        draw(ticketCoordinate, `${inputTicket.value} #`);
+        drawStatic(ticketNumberCoordinate, ticketNumberValue);
+        drawStatic(currencyValueTextCoordinate, currencyValueText);
         draw(currencyCoordinate, inputCurrency.value);
+        drawStatic(currencyValueCoordinate, currencyValue);
         draw(ticketVoidAfterCoordinate, inputTicketVoid.value);
         draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
         if (!isNaN(inputExpiringCashout.value)) {
@@ -170,6 +230,8 @@ const ticketAppearance = (function () {
         }
         draw(assetCoordinate, `${inputAsset.value} #`);
         draw(assetCoordinateNumberCoordinate, inputAssetNumber.value);
+
+
     });
 
     ticketAppearanceAdvance.addEventListener('click', function () {
@@ -197,7 +259,7 @@ const ticketAppearance = (function () {
     inputExpiringCashout.addEventListener('keyup', function (event) {
         if (chasableTicket.classList.contains('tab-active')) {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
-            isNaN(inputExpiringCashout.value) ? draw(ticketVoidAfterDaysCoordinate, '') : draw(ticketVoidAfterDaysCoordinate, inputExpiringCashout.value);
+            isNaN(inputExpiringCashout.value) ? draw(ticketVoidAfterDaysCoordinate, '') : draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
     });
 
@@ -227,7 +289,7 @@ const ticketAppearance = (function () {
     });
 
     inputTicket.addEventListener('keyup', function (event) {
-        draw(ticketCoordinate, inputTicket.value)
+        draw(ticketCoordinate, `${inputTicket.value} #`);
     });
 
     inputCurrency.addEventListener('keyup', function (event) {
@@ -248,11 +310,11 @@ const ticketAppearance = (function () {
     });
 
     inputAsset.addEventListener('keyup', function (event) {
-        draw(assetCoordinate, inputAsset.value);
+        draw(assetCoordinate, `${inputAsset.value} #`);
     });
 
     inputAssetNumber.addEventListener('keyup', function (event) {
-        draw(assetCoordinateNumberCoordinate, `# ${inputAssetNumber.value}`);
+        draw(assetCoordinateNumberCoordinate, inputAssetNumber.value);
     });
 
     function draw(coordinate, value) {
@@ -260,14 +322,39 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = `${value}`;
-        ctx.font = `${coordinate.h - 10}px Arial`;
+        ctx.font = `bold ${coordinate.h - 10}px Arial`;
+        ctx.globalAlpha = 1;
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
     }
-    
+
+    function drawStatic(coordinate, value) {
+        let canvas = $$('#wrapper-canvas').children[0];
+        let ctx = canvas.getContext("2d");
+        ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
+        let txt = `${value}`;
+        ctx.font = `bold ${coordinate.h - 10}px Arial`;
+        ctx.globalAlpha = 0.5;
+        ctx.save();
+        if (coordinate.x < 0) {
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
+            ctx.restore();
+        }
+        else if (coordinate.y < 0) {
+            ctx.rotate(Math.PI / 2);
+            ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
+            ctx.restore();
+        }
+        else {
+            ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
+        }
+    }
+
     function drawPicture() {
         let canvas = $$('#wrapper-canvas').children[0];
         let ctx = canvas.getContext("2d");
-        let img = document.getElementById("ticket");
-        ctx.drawImage(img, 0, 0, 775, 325);
+        let img = document.getElementById("barcode");
+        ctx.globalAlpha = 0.7;
+        ctx.drawImage(img, 200, 110, 400, 57);
     }
 })();
