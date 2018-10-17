@@ -3,6 +3,6 @@
   "username": "Nutzername",
   "password": "Passwort",
   "loginScreen": {
-    "submit":"einreichen",
+    "submit": "einreichen"
   }
 }
