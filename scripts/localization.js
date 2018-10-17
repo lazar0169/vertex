@@ -86,6 +86,8 @@ let localization = (function () {
 
         let translatableElements = $$(multiLanguageElementClass);
 
+        //ucitati dinamicke prevode za taj jezik u localstorage
+
         let translations = loadTranslations(selectedLanguage);
         if (translations !== null) {
             for (let i=0,length = translatableElements.length;i<length;i++) {
@@ -107,6 +109,13 @@ let localization = (function () {
              return languageModel;
          });*/
     }
+
+    on('localization/translate/message',function(params){
+        //u params moras da imas kljuc i jezik i callback
+       //uzmes promenljivu iz localstorage
+        //na osnovu kljuca uzmes prevod
+        //vratis ga kroz callback
+    });
 
     on('localization/language/change', function (params) {
         let langInUse = params.langInUse;
@@ -136,6 +145,10 @@ let localization = (function () {
             //select default language
             selector.value = selectedLanguage;
         }
+        //prvo provera da li postoji u localstorage
+        //ucitavanje fajla u localstorage na osnovu jeziku
+
+
         changeLanguage(multiLanguageElementClass, selectedLanguage);
     }
 
