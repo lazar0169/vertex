@@ -27,5 +27,6 @@ let application = (function  () {
         //ToDo: Fix timeout hotfix
         setTimeout(checkCurrentUser, 500);
     });
+    
 
 })();

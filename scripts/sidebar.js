@@ -1,7 +1,6 @@
 
 const sidebar = (function () {
 
-
     let menuData;
     let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
 

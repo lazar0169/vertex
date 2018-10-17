@@ -1,5 +1,7 @@
 let notifications = function () {
 
+
+
     const messageTypes = {
         ok: 0,
         warning: 1,
@@ -7,6 +9,7 @@ let notifications = function () {
         error: 3
     };
 
+    //ToDo: ovo nam sada nije potrebno
     const messageCodes = {
         22: '[[login.credentials-error]]',
         23: '[[logout.error]]'
@@ -37,8 +40,7 @@ let notifications = function () {
     });
 
     on('notifications/show', function (params) {
-        let messageCode = params.message;
-        let paramsMessageCode = messageCodes[messageCode];
+        let paramsMessageCode = params.message;
         let paramsMessageType = params.type;
 
         let notificationModel = {

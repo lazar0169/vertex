@@ -1,6 +1,7 @@
 let localization = (function () {
 
     //save language
+    console.log(window);
     let selectedLanguage = 'en';
 
     let languages = new Map();
@@ -70,11 +71,6 @@ let localization = (function () {
         }
     }
 
-    function translateMessage(key) {
-        let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
-        return translate(key, translations);
-    }
-
     function translate(key, object) {
         let translation = getProperty(key, object);
         if (translation !== undefined) {
@@ -97,6 +93,11 @@ let localization = (function () {
                 translateElement(translatableElements[i], translations);
             }
         }
+    }
+
+    function translateMessage (key) {
+        let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
+        return translate(key, translations);
     }
 
     on('localization/translate/message', function (params) {
@@ -133,5 +134,11 @@ let localization = (function () {
     }
 
     init();
+    console.log('r');
+
+    //@Jovana ToDo: ovo je kao da smo u klasicnoj klasi napisali public (static) function translateMessage
+    return {
+        translateMessage: translateMessage
+    }
 
 })();
