@@ -1,0 +1,8 @@
+{
+  "login": "Prijavljivanje",
+  "username": "Korisničko ime",
+  "password": "Šifra",
+  "loginScreen": {
+    "submit":"Potvrdi"
+  }
+}

@@ -1,7 +1,8 @@
 {
-  "login": "s'identifier",
+  "login": "S'identifier",
   "username": "Nom d'utilisateur",
+  "password": "Mot de passe",
   "loginScreen": {
-    "submit":"soumettre"
+    "submit":"Soumettre"
   }
 }

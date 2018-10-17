@@ -1,0 +1,8 @@
+{
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "loginScreen": {
+    "submit":"Submit"
+  }
+}

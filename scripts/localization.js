@@ -5,10 +5,12 @@ let localization = (function () {
     //kompletna lista je ovde ali necemo da koristimo dijalekte nego samo za jezike
 
     //save language
-    let selectedLanguage = "fr";
+    let selectedLanguage = "en";
 
     let languages = new Map();
-    languages.set('de', 'Deutch');
+    languages.set('en', 'English');
+    languages.set('sr', 'Srpski');
+    languages.set('de', 'Deutsch');
     languages.set('fr', 'Française');
 
     //Ovo pisemo kao konstantnu
