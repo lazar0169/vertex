@@ -240,10 +240,10 @@ const ticketAppearance = (function () {
 
     inputTicketVoidDays.addEventListener('keyup', function (event) {
         if (chasableTicket.classList.contains('tab-active')) {
-            isNaN(inputExpiringCashout.value) ? draw(ticketVoidAfterDays, '') : draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+            isNaN(inputExpiringCashout.value) ? draw(ticketVoidAfterDaysCoordinate, '') : draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
         if (promoTicket.classList.contains('tab-active')) {
-            isNaN(inputExpiringPromo.value) ? draw(ticketVoidAfterDays, '') : draw(ticketVoidAfterDays, inputTicketVoidDays.value);
+            isNaN(inputExpiringPromo.value) ? draw(ticketVoidAfterDaysCoordinate, '') : draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
     });
 
