@@ -9,14 +9,19 @@ let localization = (function () {
     languages.set('de', 'Deutsch');
     languages.set('fr', 'Française');
 
-    const lsTranslationsKey = 'vertex-translations';
+    const lsTranslationsKey = 'vertexTranslations';
     const multiLanguageElementSelector = '.element-multilanguage';
     const keyAttributeName = 'data-translation-key';
     const directory = 'languages';
     const file = 'translations.json';
+    const messagesFile = 'messages.json';
 
     function getFilePath(locale) {
         return directory + '/' + locale + '/' + file;
+    }
+
+    function getMessagesFilePath(locale) {
+        return directory + '/' + locale + '/' + messagesFile;
     }
 
     function loadJSONSync(filePath) {
@@ -41,11 +46,21 @@ let localization = (function () {
         return loadJSONSync(path);
     }
 
+    function loadMessages(language) {
+        let path = getMessagesFilePath(language);
+        return loadJSONSync(path);
+    }
+
+    function saveMessagesToLocalStorage() {
+        let messages = JSON.stringify(loadMessages(selectedLanguage));
+        window.localStorage.setItem(lsTranslationsKey, messages);
+    }
+
     function translateElement(element, translations) {
         //ToDo: This is work in progress and during the development some other property could be changed
         let key = element.getAttribute(keyAttributeName);
-        let translation = getProperty(key, translations);
-        if (translation !== undefined) {
+        let translation = translate(key, translations);
+        if (translation !== null) {
             if (element.placeholder !== undefined) {
                 element.placeholder = translation;
             }
@@ -53,18 +68,29 @@ let localization = (function () {
                 element.textContent = translation;
             }
         }
+    }
+
+    function translateMessage(key) {
+        let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
+        return translate(key, translations);
+    }
+
+    function translate(key, object) {
+        let translation = getProperty(key, object);
+        if (translation !== undefined) {
+            return translation;
+        }
         else {
-            //ToDo: check if we need this error in console
             console.error('translation for ' + key + 'was not found in translations file');
+            return key;
         }
     }
 
     function changeLanguage(multiLanguageClassSelector, langInUse) {
+        //load dynamic translations for language into localstorage
+        saveMessagesToLocalStorage();
         selectedLanguage = langInUse;
         let translatableElements = $$(multiLanguageClassSelector);
-
-        //TODO: load dynamic translations for language into localstorage
-
         let translations = loadTranslations(selectedLanguage);
         if (translations !== null) {
             for (let i = 0, length = translatableElements.length; i < length; i++) {
@@ -75,27 +101,19 @@ let localization = (function () {
 
     on('localization/translate/message', function (params) {
         let translationKey = params.translationKey;
-        let selectedLanguage = params.selectedLanguage;
-        let callback = params.callback;
-        let translations = JSON.stringify(loadTranslations(selectedLanguage));
-        let translatedElement = getProperty(translationKey, translations);
-        trigger(callback, {translatedElement: translatedElement});
     });
 
     on('localization/language/change', function (params) {
-        let langInUse = params.langInUse;
-        changeLanguage(multiLanguageElementSelector, langInUse);
+        selectedLanguage = params.langInUse;
+        changeLanguage(multiLanguageElementSelector, selectedLanguage);
     });
 
     let languageElementSelector = $$('#lang-selector');
     if (languageElementSelector !== null) {
         languageElementSelector.addEventListener('change', function () {
-            selectedLanguage = this.options[this.selectedIndex].value;
-            window.localStorage.setItem('selectedLanguage', selectedLanguage);
-            let translations = JSON.stringify(loadTranslations(selectedLanguage));
-            window.localStorage.setItem('translations', translations);
+            selectedLanguage = this.value;
             changeLanguage(multiLanguageElementSelector, selectedLanguage);
-            console.log('local storage on click', window.localStorage);
+
         });
     }
 
@@ -111,12 +129,6 @@ let localization = (function () {
             //select default language
             languageElementSelector.value = selectedLanguage;
         }
-        console.log('local storage u initu u localization modulu', window.localStorage);
-        if (window.localStorage.selectedLanguage !== null) {
-            let translations = JSON.stringify(loadTranslations(window.localStorage.selectedLanguage));
-            window.localStorage.setItem('translations', translations);
-        }
-
         changeLanguage(multiLanguageElementSelector, selectedLanguage);
     }
 

@@ -1,4 +1,4 @@
-let application = (function () {
+let application = (function  () {
 
     function generateMenu() {
         let menu = getMenu();

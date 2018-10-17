@@ -1,13 +1,13 @@
 {
   "index": {
     "scripts": [
+      "localization.js",
       "login.js",
       "session.js",
       "communication.js",
       "preloader.js",
       "notifications.js",
-      "template-engine.js",
-      "localization.js"
+      "template-engine.js"
     ],
     "styles": [
       "modify-spectre.css",
