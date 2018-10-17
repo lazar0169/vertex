@@ -113,24 +113,29 @@ let localization = (function () {
         changeLanguage(multiLanguageElementClass, langInUse);
     });
 
-    $$('#lang-selector').addEventListener('change', function () {
-        let selectedLanguage = this.options[this.selectedIndex].value;
-        //ToDo: @Jovana kada si u modulu ciju funkciju pozivas nema potrebe da trigerujes event vec da pozoves funkciju
-        //trigger('localization/language/change', {langInUse: selectedLanguage});
-        changeLanguage(multiLanguageElementClass, selectedLanguage);
-    });
+    let languageSelectorElement =  $$('#lang-selector');
+    if (languageSelectorElement !== null) {
+        languageSelectorElement.addEventListener('change', function () {
+            let selectedLanguage = this.options[this.selectedIndex].value;
+            //ToDo: @Jovana kada si u modulu ciju funkciju pozivas nema potrebe da trigerujes event vec da pozoves funkciju
+            //trigger('localization/language/change', {langInUse: selectedLanguage});
+            changeLanguage(multiLanguageElementClass, selectedLanguage);
+        });
+    }
 
     function init() {
         //inicijalizujemo jezike iz jsa
         let selector = $$('#lang-selector');
-        languages.forEach(function (value, key) {
-            let option = document.createElement('option');
-            option.text = value;
-            option.value = key;
-            selector.add(option);
-        });
-        //select default language
-        selector.value = selectedLanguage;
+        if (selector !== null) {
+            languages.forEach(function (value, key) {
+                let option = document.createElement('option');
+                option.text = value;
+                option.value = key;
+                selector.add(option);
+            });
+            //select default language
+            selector.value = selectedLanguage;
+        }
         changeLanguage(multiLanguageElementClass, selectedLanguage);
     }
 
