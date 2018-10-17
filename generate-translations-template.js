@@ -6,11 +6,11 @@ const {JSDOM} = require("jsdom");
 let objects = merge(getFiles('objects'), true);
 let views = fs.readdirSync('views');
 
+
 let translations = {};
 for (let view of views) {
     if (view.split('.')[1] !== 'html') continue;
     view = view.split('.')[0];
-
 
     let document = parseObjects(fs.readFileSync(`./views/${view}.html`, 'utf8'));
 
@@ -21,11 +21,7 @@ for (let view of views) {
             let splitted = key.split('.');
             let property = splitted.pop();
             let currentProp = null;
-            /*
-            if (translations[splitted[0]] === undefined) {
-                translations[splitted[0]] = {};
-            }
-            */
+
             currentProp = translations;
             for (let j = 0, length = splitted.length; j < length; j++) {
                 let prop = splitted[j];
@@ -34,8 +30,6 @@ for (let view of views) {
                     }
                     currentProp = currentProp[prop];
             }
-            //currentProp['e'] = 'e';
-
             currentProp[property] = 'placeholder';
         }
         else {
