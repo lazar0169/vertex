@@ -2,34 +2,27 @@ let template = (function () {
 
     let model = {
         home: {
-            name: 'Home name'
+            Name: 'Home name'
         },
-        casino: {
-            name: 'Casino name',
-            address: 'Casino address',
-            edit: 'Casino edit'
+        casinos: {
+            Id: 5,
+            Name: 'Casino name',
+            City: 'Casino city'
         },
-        jackpot: {
-            number: 123
+        jackpots: {
+            Id: 5,
+            Name: 'Jackpot name',
+            City: 'Jackpot city'
         },
         tickets: {
-            number: 15
+            Id: 5,
+            Name: 'Ticket name',
+            City: 'Ticket city'
         },
         aft: {
-            name: 'AFT name'
-        },
-        machine: {
-            number: 24
-        },
-        user: {
-            name: 'Jovana',
-            surname: 'Mitic',
-            tickets: {
-                number: 18
-            }
-        },
-        service: {
-            number: 58
+            Id: 5,
+            Name: 'Aft name',
+            City: 'Aft city'
         }
     };
 
@@ -103,25 +96,27 @@ let template = (function () {
         let placeholders = getPlaceholders(newElementString);
         let placeholderValues = getPlaceholderValues(placeholders, model);
         let replacedString = replaceValueInTemplate(newElementString, placeholderValues);
-        newElement.innerHTML  = replacedString;
-        if (typeof callbackEvent !== 'undefined') {
+        newElement.innerHTML = replacedString;
+        if (typeof callbackEvent !== typeof undefined) {
             trigger(callbackEvent, {model: model, element: newElement});
         }
         return newElement;
     }
 
-    on('template/render', function (param) {
-        let templateElementSelector = param.templateElementSelector;
-        let model = param.model;
-        if (typeof param.callbackEvent !== 'undefined') {
-            render(templateElementSelector, model, param.callbackEvent);
+    on('template/render', function (params) {
+        let templateElementSelector = params.templateElementSelector;
+        let model = params.model;
+        let newHtmlElement;
+        if (typeof params.callbackEvent !== typeof undefined) {
+            newHtmlElement = render(templateElementSelector, model, params.callbackEvent);
         }
         else {
-            render(templateElementSelector, model);
+            newHtmlElement = render(templateElementSelector, model);
         }
+        trigger(params.callbackEvent, {element: newHtmlElement, params: params, model: params.model});
     });
 
     //For testing:
-    render('#casino-template', model);
+    // render('#home-template', model);
 
 })();

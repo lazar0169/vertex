@@ -4,7 +4,8 @@
     position: relative;
     left: 0;
     top: 0;
-    width: 230;
+    width: 230px;
+    min-width: 230px;
     height: 100%;
     color: rgb(120, 144, 156);
     cursor: default;
@@ -19,6 +20,7 @@
 
 #sidebar.collapse {
     width: 50px;
+    min-width: 50px;
 }
 
 #sidebar-name {
@@ -260,12 +262,10 @@
 }
 
 .collapse .list-name, .collapse #global-search>div, .collapse .team-name, .collapse #sidebar-logo {
-    font-size: 0;
-    width: 0;
-    opacity: 0;
+    display: none;
 }
 
-.list-active, .link-active {
+.list-active, .link-active, .select-active {
     color: white !important;
     background: rgb(55, 71, 79) !important;
 }

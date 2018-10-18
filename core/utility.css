@@ -1,15 +1,70 @@
 .hidden {
-    visibility: hidden;
-    width: 0;
-    height: 0;
-    border: none;
-    padding: 0;
-    pointer-events: none;
-    font-size: 0;
+    display: none !important;
 }
 
 .center {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.tabs {
+    cursor: pointer;
+}
+
+.tabs-wrapper {
+    display: inline-flex;
+    width: 100%;
+    border-bottom: 1px solid rgb(38, 50, 56);
+    color: rgb(120, 144, 156);
+    margin: 1rem 0;
+}
+
+.tabs-wrapper>div {
+    padding: 0 0.5rem;
+}
+
+.custom-filter {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: rgba(38, 50, 56);
+    color: rgb(120, 144, 156);
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.custom-filter>div {
+    display: inline-flex;
+    padding: 0.5rem 0;
+}
+
+.custom-filter>div:not(:last-child) {
+    border-right: 1px solid black;
+}
+
+.advance-table-filter {
+    cursor: pointer;
+}
+
+.custom-right-filter {
+    display: inline-flex;
+    float: right;
+    border: none;
+}
+
+.custom-right-filter>div {
+    border-left: 1px solid black;
+}
+
+.advance-table-filter>div, .custom-right-filter>div, .wrapper-export-to>div {
+    padding: 0 0.5rem
+}
+
+.chosen-info-tab {
+    flex: 1;
+    padding: 0.5rem;
+    background: rgb(38, 50, 56);
+    color: rgb(120, 144, 156);
+    position: relative;
 }

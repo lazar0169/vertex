@@ -22,7 +22,9 @@
 }
 
 #machine-filters-content>div {
-    padding: 0.5rem;
+    padding: 0 0.5rem;
+    display: inline-flex;
+    align-items: center;
 }
 
 #machine-search {
@@ -42,7 +44,7 @@
 }
 
 .machine-filters-right>div {
-     border-left: 1px solid black;
+    border-left: 1px solid black;
     padding: 0.5rem;
 }
 
@@ -51,6 +53,6 @@
     cursor: pointer;
 }
 
-.machine-filters-show-space-active {
+.machine-filters-show-space-active, .show-space-active {
     color: rgb(30, 155, 227);
 }

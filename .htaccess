@@ -1,7 +1,10 @@
 RewriteEngine On
 RewriteBase /
 
+RewriteCond %{REQUEST_URI} login
+RewriteRule ^(.*)$ index.html [L,QSA] #redirect all traffic to index.html
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule ^(.*)$ index.html [L,QSA] #redirect all traffic to index.html
+RewriteRule ^(.*)$ main.html [L,QSA] #redirect all traffic to index.html
