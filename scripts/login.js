@@ -33,13 +33,8 @@ let login = (function () {
         let messageParse = JSON.parse(e.message);
         let messageCode = messageParse.MessageCode;
         let messageType = messageParse.MessageType;
-        //ToDo:@Jovana ovde je primer poziv localization module-a
-        //Mora to string
         let message = localization.translateMessage(messageCode.toString());
-
         trigger('notifications/show', {message: message, type: messageType});
-
-
     });
 
 })();

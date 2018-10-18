@@ -38,3 +38,9 @@
     float: left;
     width: 100%;
 }
+
+.lang-selector {
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+}

@@ -353,6 +353,9 @@ const sidebar = (function () {
 
     //events
     on('sidebar/menu/generate', function (e) {
+        console.log('menu data', e.menuData);
+        let string = JSON.stringify(e.menuData);
+        console.log('menu string', string);
         menuData = e.menuData;
         generateMenu(e.menuData);
         initVariables();

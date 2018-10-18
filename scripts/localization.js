@@ -1,7 +1,6 @@
 let localization = (function () {
 
     //save language
-    console.log(window);
     let selectedLanguage = 'en';
 
     let languages = new Map();
@@ -77,7 +76,7 @@ let localization = (function () {
             return translation;
         }
         else {
-            console.error('translation for ' + key + 'was not found in translations file');
+            console.error('Translation for ' + key + ' was not found in translations file!');
             return key;
         }
     }
@@ -134,9 +133,7 @@ let localization = (function () {
     }
 
     init();
-    console.log('r');
 
-    //@Jovana ToDo: ovo je kao da smo u klasicnoj klasi napisali public (static) function translateMessage
     return {
         translateMessage: translateMessage
     }

@@ -1,8 +1,58 @@
 {
-  "login": "Login",
-  "username": "Username",
-  "password": "Password",
-  "loginScreen": {
-    "submit":"Submit"
+  "Login": "Login",
+  "Username": "Username",
+  "Password": "Password",
+  "LoginScreen": {
+    "Submit":"Submit"
+  },
+  "Jackpots": {
+    "List": "Jackpots",
+    "Value": [
+      {
+        "Id": 5,
+        "Name": "JpSpinBolnica",
+        "City": "Nis"
+      },
+      {
+        "Id": 6,
+        "Name": "Globalni",
+        "City": "Beograd"
+      }
+    ]
+  },
+  "Tickets": {
+    "List":"Tickets",
+    "Value":[
+      {
+        "Id":1,
+        "Name":"KalcaTito",
+        "City":"Nis"
+      }
+    ]
+  },
+  "Aft": {
+    "List":"AFT",
+    "Value":[
+      {
+        "Id":2,
+        "Name":"AFTSpinBolnica",
+        "City":"Nis"
+      },
+      {
+        "Id":7,
+        "Name":"Marshal",
+        "City":"Nis"
+      }
+    ]
+  },
+  "Casinos": {
+    "List":"Casinos",
+    "Value":[
+      {
+        "Id":4,
+        "Name":"OlimpJNA",
+        "City":"Nis"
+      }
+    ]
   }
 }
