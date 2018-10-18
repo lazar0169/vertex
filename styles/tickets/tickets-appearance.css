@@ -78,3 +78,9 @@
 #tickets-advanced-settings-date .default-select>div:first-child, #tickets-advanced-settings-time .default-select>div:first-child {
     width: 100%;
 }
+
+#appearance-buttons-wrapper {
+    position: absolute;
+    right: 0.5rem;
+    margin: 0.5rem 0;
+}

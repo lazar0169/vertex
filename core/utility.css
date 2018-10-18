@@ -66,4 +66,5 @@
     padding: 0.5rem;
     background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
+    position: relative;
 }

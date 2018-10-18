@@ -19,6 +19,9 @@ const ticketAppearance = (function () {
     let chasableTicket = $$('#wrapper-tickets-appearance-cashable').children[0];
     let promoTicket = $$('#wrapper-tickets-appearance-promo').children[0];
     let inputPromoTicket = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
+    let cancelTicketAppearance = $$('#appearance-buttons-wrapper').children[0];
+    let saveTicketAppearance = $$('#appearance-buttons-wrapper').children[1];
+
     let dd = '16';
     let MM = '10';
     let yyyy = '2018';
@@ -29,7 +32,7 @@ const ticketAppearance = (function () {
     let ticketNumberValue = '1';
     let validationNumber = '00-0000-0000-0000';
     let currencyValue = '138.00';
-    let currencyValueText = 'one hundred and thirty-eight';
+    let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
     let dateFormatArray = ['dd.MM.yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
@@ -294,6 +297,8 @@ const ticketAppearance = (function () {
 
     inputCurrency.addEventListener('keyup', function (event) {
         draw(currencyCoordinate, inputCurrency.value);
+        currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
+        drawStatic(currencyValueTextCoordinate, currencyValueText);
     });
 
     inputTicketVoid.addEventListener('keyup', function (event) {
@@ -322,7 +327,7 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = `${value}`;
-        ctx.font = `bold ${coordinate.h - 10}px Arial`;
+        ctx.font = `bold ${coordinate.h - 10}px roboto`;
         ctx.globalAlpha = 1;
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
     }
@@ -332,8 +337,8 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = `${value}`;
-        ctx.font = `bold ${coordinate.h - 10}px Arial`;
-        ctx.globalAlpha = 0.5;
+        ctx.font = `bold ${coordinate.h - 10}px roboto`;
+        ctx.globalAlpha = 0.6;
         ctx.save();
         if (coordinate.x < 0) {
             ctx.rotate(-Math.PI / 2);
@@ -354,7 +359,15 @@ const ticketAppearance = (function () {
         let canvas = $$('#wrapper-canvas').children[0];
         let ctx = canvas.getContext("2d");
         let img = document.getElementById("barcode");
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = 0.6;
         ctx.drawImage(img, 200, 110, 400, 57);
     }
+
+    cancelTicketAppearance.addEventListener('click', function () {
+        alert('vrati defoltne podatke');
+    });
+
+    saveTicketAppearance.addEventListener('click', function () {
+        alert('sacuvaj podatke');
+    });
 })();
