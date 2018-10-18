@@ -1,0 +1,22 @@
+#top-bar {
+    background: transparent;
+    color: white;
+    height: 5%;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#top-bar>div {
+    display: inline-flex;
+}
+
+/* selektor * */
+#top-bar>div>* {
+    padding-right: 0.5rem;
+}
+
+#top-bar-logout {
+    position: absolute;
+    right: 0.5rem;
+}

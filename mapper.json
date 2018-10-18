@@ -2,6 +2,7 @@
     "index": {
         "scripts": [
             "data.js",
+            "top-bar.js",
             "sidebar.js",
             "router.js",
             "template-engine.js",
@@ -10,6 +11,7 @@
         ],
         "styles": [
             "index.css",
+            "top-bar.css",
             "sidebar.css",
             "modify-spectre.css",
             "machines/machines-page.css",
