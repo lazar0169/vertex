@@ -82,9 +82,8 @@ const sidebar = (function () {
     globalSearch.addEventListener('click', function () {
         editMode.classList.add('collapse');
         chosenLink.innerHTML = localization.translateMessage('Search');
-        /*chosenLink.classList.add('element-dynamic-translatable');
-        //chosenLink da das neku klasu element-dynamic-translatable
-        chosenLink.setAttribute('data-translation-key','Search');*/
+        chosenLink.classList.add('element-dynamic-translatable');
+        chosenLink.setAttribute('data-translation-key', 'Search');
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);
@@ -128,7 +127,7 @@ const sidebar = (function () {
                 categorySelectedId = category;
                 searchCategory = category;
                 generateLinks(category);
-                chosenLink.innerHTML = localization.translateMessage(data[category].List);
+                chosenLink.innerHTML = data[category].List;
                 editMode.classList.add('collapse');
                 searchLink.focus();
                 navigation.show();
@@ -233,7 +232,7 @@ const sidebar = (function () {
 
     // highlight chosen category
     function selectCategory(category) {
-        if (category !== 'Search') {
+        if (category !== 'search') {
             if (previousCategorySelected) {
                 previousCategorySelected.classList.remove('list-active');
             }
@@ -308,7 +307,7 @@ const sidebar = (function () {
         }
         recentArray.unshift(valueLink);
         let object = {};
-        object['Search'] = {
+        object['search'] = {
             'List': 'Recent search',
             'Value': recentArray
         };

@@ -40,13 +40,13 @@ let localization = (function () {
         }
     }
 
-    function setActiveLanguage(language){
-            window.localStorage.setItem('activeLanguage', language);
+    function setActiveLanguage(language) {
+        window.localStorage.setItem('activeLanguage', language);
     }
 
-    function getActiveLanguage(){
+    function getActiveLanguage() {
         let activeLanguage = window.localStorage.getItem('activeLanguage');
-        if( activeLanguage === null){
+        if (activeLanguage === null) {
             window.localStorage.setItem('activeLanguage', defaultLanguage);
             return defaultLanguage;
         }
@@ -108,7 +108,7 @@ let localization = (function () {
                 translateElement(translatableElements[i], translations);
             }
         }
-        //dinamicki
+        //dynamically
         translatableElements = $$('.element-dynamic-translatable');
         translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
         if (translations !== null) {
@@ -123,11 +123,13 @@ let localization = (function () {
     });
 
     on('localization/language/change', function (params) {
+        alert('trigger');
         let language = params.language;
+        alert('language'+ language);
         if (language === undefined) {
             language = getActiveLanguage();
         }
-        changeLanguage(multiLanguageElementSelector, language   );
+        changeLanguage(multiLanguageElementSelector, language);
     });
 
     let languageElementSelector = $$('#lang-selector');
