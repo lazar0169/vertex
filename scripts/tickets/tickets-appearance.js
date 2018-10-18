@@ -364,10 +364,10 @@ const ticketAppearance = (function () {
     }
 
     cancelTicketAppearance.addEventListener('click', function () {
-        alert('vrati defoltne podatke');
+        alert('Reset to default');
     });
 
     saveTicketAppearance.addEventListener('click', function () {
-        alert('sacuvaj podatke');
+        alert('Save data');
     });
 })();

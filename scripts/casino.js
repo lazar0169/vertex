@@ -1,5 +1,11 @@
 let casino = (function () {
 
+    on('casino/activated', function () {
+        setTimeout(function () {
+            trigger('preloader/hide');
+        }, 2000);
+    });
+
     on('casino/add', function (e) {
         let model = e.model;
         trigger('template/render', {

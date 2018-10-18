@@ -1,57 +1,59 @@
 {
-    "index": {
-        "scripts": [
-            "login.js",
-            "session.js",
-            "communication.js",
-            "preloader.js",
-            "notifications.js",
-            "template-engine.js"
-        ],
-        "styles": [
-            "modify-spectre.css",
-            "login.css",
-            "notifications.css"
-        ]
-    },
-    "main": {
-        "scripts": [
-            "data.js",
-            "sidebar.js",
-            "router.js",
-            "template-engine.js",
-            "components/dropdown.js",
-            "components/clear-dropdown-filter.js",
-            "components/ms-dropdown.js",
-            "machines/details-bar.js",
-            "aft/aft-filter.js",
-            "aft/aft-tab-content.js",
-            "casino.js",
-            "communication.js",
-            "machines.js",
-            "machines/machines-filters.js",
-            "machines/edit-page.js",
-            "tickets/tickets-filters.js",
-            "tickets/tickets-appearance.js",
-            "session.js",
-            "preloader.js",
-            "application.js"
-        ],
-        "styles": [
-            "index.css",
-            "sidebar.css",
-            "modify-spectre.css",
-            "machines/machines-page.css",
-            "machines/machines-filters.css",
-            "machines/machines-table.css",
-            "machines/details-bar.css",
-            "machines/edit-page.css",
-            "aft/aft-filter.css",
-            "aft/aft-tabs.css",
-            "tickets/tickets-tabs.css",
-            "tickets/tickets-appearance.css",
-            "components/dropdown.css",
-            "main-content.css"
-        ]
-    }
+  "index": {
+    "scripts": [
+      "login.js",
+      "session.js",
+      "communication.js",
+      "preloader.js",
+      "notifications.js",
+      "template-engine.js"
+    ],
+    "styles": [
+      "modify-spectre.css",
+      "login.css",
+      "notifications.css"
+    ]
+  },
+  "main": {
+    "scripts": [
+      "data.js",
+      "sidebar.js",
+      "template-engine.js",
+      "components/dropdown.js",
+      "components/clear-dropdown-filter.js",
+      "components/ms-dropdown.js",
+      "machines/details-bar.js",
+      "aft/aft-filter.js",
+      "aft/aft-tab-content.js",
+      "casino.js",
+      "communication.js",
+      "machines.js",
+      "machines/machines-filters.js",
+      "machines/edit-page.js",
+      "tickets/tickets-filters.js",
+      "tickets/tickets-appearance.js",
+      "session.js",
+      "preloader.js",
+      "application.js",
+      "home.js",
+      "router.js"
+    ],
+    "styles": [
+      "index.css",
+      "sidebar.css",
+      "modify-spectre.css",
+      "machines/machines-page.css",
+      "machines/machines-filters.css",
+      "machines/machines-table.css",
+      "machines/details-bar.css",
+      "machines/edit-page.css",
+      "aft/aft-filter.css",
+      "aft/aft-tabs.css",
+      "tickets/tickets-tabs.css",
+      "tickets/tickets-appearance.css",
+      "components/dropdown.css",
+      "main-content.css",
+      "preloader.css"
+    ]
+  }
 }
