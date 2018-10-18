@@ -1,27 +1,15 @@
-#aft-tabs-wrapper {
-    display: inline-flex;
-    width: 100%;
-    border-bottom: 1px solid rgb(38, 50, 56);
-    color: rgb(120, 144, 156);
-    margin: 1rem 0;
-}
-
-#aft-tabs-wrapper>div {
-    padding: 0 0.5rem;
-    cursor: pointer;
-}
-
-#page-aft>div {
+#aft#page-aft>div {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 95%;
 }
 
-.aft-info-tab {
+.chosen-info-tab {
     flex: 1;
     padding: 0.5rem;
     background: rgb(38, 50, 56);
+    color: rgb(120, 144, 156);
 }
 
 #aft-enable-transaction-check, #aft-enable-notification-check {

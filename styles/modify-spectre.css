@@ -109,14 +109,14 @@
 }
 
 .form-input {
-    border: 0;
-    line-height: 1.2rem;
-    padding: .25rem .4rem;
+    border: none;
     white-space: nowrap;
-    color: rgb(120, 144, 156);
     background: rgb(55, 71, 79);
-    border-bottom: 2px solid rgb(120, 144, 156);
+    border-bottom: 1px solid rgb(120, 144, 156);
     color: white;
+    padding: 0.2rem 1rem 0.2rem 0.5rem;
+    line-height: unset;
+    height: auto;
 }
 
 .form-input:focus {
