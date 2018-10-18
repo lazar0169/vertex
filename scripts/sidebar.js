@@ -1,4 +1,3 @@
-
 const sidebar = (function () {
 
     let menuData;
@@ -82,7 +81,10 @@ const sidebar = (function () {
 
     globalSearch.addEventListener('click', function () {
         editMode.classList.add('collapse');
-        chosenLink.innerHTML = 'Search';
+        chosenLink.innerHTML = localization.translateMessage('Search');
+        /*chosenLink.classList.add('element-dynamic-translatable');
+        //chosenLink da das neku klasu element-dynamic-translatable
+        chosenLink.setAttribute('data-translation-key','Search');*/
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);
@@ -108,7 +110,7 @@ const sidebar = (function () {
             tempFragment.innerHTML = `<div class='center'>
                                         <div id="${category}" class="list-management center">
                                             <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
-                                            <div class="list-name">${data[category].List}</div>
+                                            <div class="list-name">${localization.translateMessage(data[category].List)}</div>
                                         </div>
                                     </div>`;
             tempFragment.childNodes[0].addEventListener('mouseenter', function () {
@@ -126,7 +128,7 @@ const sidebar = (function () {
                 categorySelectedId = category;
                 searchCategory = category;
                 generateLinks(category);
-                chosenLink.innerHTML = data[category].List;
+                chosenLink.innerHTML = localization.translateMessage(data[category].List);
                 editMode.classList.add('collapse');
                 searchLink.focus();
                 navigation.show();
@@ -171,7 +173,7 @@ const sidebar = (function () {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
-                            tempCategory.innerHTML = `<div>${tempData[category].List}</div>`;
+                            tempCategory.innerHTML = `<div>${localization.translateMessage(tempData[category].List)}</div>`;
                         }
                         for (let value of tempData[category].Value) {
                             let tempValue = document.createElement('a');
@@ -210,6 +212,7 @@ const sidebar = (function () {
                 }
             }
         }
+
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
@@ -230,7 +233,7 @@ const sidebar = (function () {
 
     // highlight chosen category
     function selectCategory(category) {
-        if (category !== 'search') {
+        if (category !== 'Search') {
             if (previousCategorySelected) {
                 previousCategorySelected.classList.remove('list-active');
             }
@@ -239,6 +242,7 @@ const sidebar = (function () {
             previousCategorySelected = listSelected;
         }
     }
+
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -249,12 +253,13 @@ const sidebar = (function () {
         }
         recentArray.unshift(valueLink);
         let object = {};
-        object['search'] = {
+        object['Search'] = {
             'List': 'Recent search',
             'Value': recentArray
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
+
     //data search
     function search(termin, category) {
         let newData = {};
@@ -303,7 +308,7 @@ const sidebar = (function () {
         }
         recentArray.unshift(valueLink);
         let object = {};
-        object['search'] = {
+        object['Search'] = {
             'List': 'Recent search',
             'Value': recentArray
         };
@@ -353,11 +358,8 @@ const sidebar = (function () {
 
     //events
     on('sidebar/menu/generate', function (e) {
-        console.log('menu data', e.menuData);
-        let string = JSON.stringify(e.menuData);
-        console.log('menu string', string);
         menuData = e.menuData;
-        generateMenu(e.menuData);
+        generateMenu(menuData);
         initVariables();
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);

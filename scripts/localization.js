@@ -1,8 +1,5 @@
 let localization = (function () {
 
-    //save language
-    let selectedLanguage = 'en';
-
     let languages = new Map();
     languages.set('en', 'English');
     languages.set('sr', 'Srpski');
@@ -15,6 +12,8 @@ let localization = (function () {
     const directory = 'languages';
     const file = 'translations.json';
     const messagesFile = 'messages.json';
+    const defaultLanguage = 'en';
+    let activeLanguage;
 
     function getFilePath(locale) {
         return directory + '/' + locale + '/' + file;
@@ -36,9 +35,22 @@ let localization = (function () {
             return JSON.parse(request.responseText);
         }
         else {
-            console.error('unable to load translations');
+            console.error('Unable to load translations!');
             return null;
         }
+    }
+
+    function setActiveLanguage(language){
+            window.localStorage.setItem('activeLanguage', language);
+    }
+
+    function getActiveLanguage(){
+        let activeLanguage = window.localStorage.getItem('activeLanguage');
+        if( activeLanguage === null){
+            window.localStorage.setItem('activeLanguage', defaultLanguage);
+            return defaultLanguage;
+        }
+        return window.localStorage.getItem('activeLanguage');
     }
 
     function loadTranslations(language) {
@@ -52,8 +64,19 @@ let localization = (function () {
     }
 
     function saveMessagesToLocalStorage() {
-        let messages = JSON.stringify(loadMessages(selectedLanguage));
+        let messages = JSON.stringify(loadMessages(getActiveLanguage()));
         window.localStorage.setItem(lsTranslationsKey, messages);
+    }
+
+    function translate(key, object) {
+        let translation = getProperty(key, object);
+        if (translation !== undefined) {
+            return translation;
+        }
+        else {
+            console.error('Translation for ' + key + ' was not found in translations file!');
+            return key;
+        }
     }
 
     function translateElement(element, translations) {
@@ -70,23 +93,24 @@ let localization = (function () {
         }
     }
 
-    function translate(key, object) {
-        let translation = getProperty(key, object);
-        if (translation !== undefined) {
-            return translation;
-        }
-        else {
-            console.error('Translation for ' + key + ' was not found in translations file!');
-            return key;
-        }
+    function translateMessage(key) {
+        let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
+        return translate(key, translations);
     }
 
     function changeLanguage(multiLanguageClassSelector, langInUse) {
         //load dynamic translations for language into localstorage
         saveMessagesToLocalStorage();
-        selectedLanguage = langInUse;
         let translatableElements = $$(multiLanguageClassSelector);
-        let translations = loadTranslations(selectedLanguage);
+        let translations = loadTranslations(getActiveLanguage());
+        if (translations !== null) {
+            for (let i = 0, length = translatableElements.length; i < length; i++) {
+                translateElement(translatableElements[i], translations);
+            }
+        }
+        //dinamicki
+        translatableElements = $$('.element-dynamic-translatable');
+        translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
         if (translations !== null) {
             for (let i = 0, length = translatableElements.length; i < length; i++) {
                 translateElement(translatableElements[i], translations);
@@ -94,25 +118,23 @@ let localization = (function () {
         }
     }
 
-    function translateMessage (key) {
-        let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
-        return translate(key, translations);
-    }
-
     on('localization/translate/message', function (params) {
         let translationKey = params.translationKey;
     });
 
     on('localization/language/change', function (params) {
-        selectedLanguage = params.langInUse;
-        changeLanguage(multiLanguageElementSelector, selectedLanguage);
+        let language = params.language;
+        if (language === undefined) {
+            language = getActiveLanguage();
+        }
+        changeLanguage(multiLanguageElementSelector, language   );
     });
 
     let languageElementSelector = $$('#lang-selector');
     if (languageElementSelector !== null) {
         languageElementSelector.addEventListener('change', function () {
-            selectedLanguage = this.value;
-            changeLanguage(multiLanguageElementSelector, selectedLanguage);
+            setActiveLanguage(this.value);
+            changeLanguage(multiLanguageElementSelector, getActiveLanguage());
 
         });
     }
@@ -127,9 +149,9 @@ let localization = (function () {
                 languageElementSelector.add(option);
             });
             //select default language
-            languageElementSelector.value = selectedLanguage;
+            languageElementSelector.value = getActiveLanguage();
         }
-        changeLanguage(multiLanguageElementSelector, selectedLanguage);
+        changeLanguage(multiLanguageElementSelector, getActiveLanguage());
     }
 
     init();
