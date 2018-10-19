@@ -153,7 +153,7 @@ const sidebar = (function () {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.Id = `link-${categoryValue.Id}`;
+                    tempFragment.id = `link-${categoryValue.Id}`;
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
                     //elements in search mapped to coresponding path
