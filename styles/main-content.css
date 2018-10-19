@@ -38,10 +38,14 @@
     float: left;
     width: 100%;
 }
-/*
 
+/*
 .lang-selector {
     display: flex;
     flex-direction: row;
-    height: 50px;
-}*/
+    position: absolute;
+    z-index: 110000;
+    margin: 10px;
+    float: right;
+}
+*/

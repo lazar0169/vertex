@@ -41,13 +41,13 @@ let localization = (function () {
     }
 
     function setActiveLanguage(language) {
-        window.localStorage.setItem('activeLanguage', language);
+        localStorage.setItem('activeLanguage', language);
     }
 
     function getActiveLanguage() {
-        let activeLanguage = window.localStorage.getItem('activeLanguage');
+        let activeLanguage = localStorage.getItem('activeLanguage');
         if (activeLanguage === null) {
-            window.localStorage.setItem('activeLanguage', defaultLanguage);
+            localStorage.setItem('activeLanguage', defaultLanguage);
             return defaultLanguage;
         }
         return window.localStorage.getItem('activeLanguage');
@@ -93,12 +93,16 @@ let localization = (function () {
         }
     }
 
-    function translateMessage(key) {
+    function translateMessage(key, element) {
         let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
+        if(element !== undefined) {
+            element.classList.add('element-dynamic-translatable');
+            element.setAttribute('data-translation-key', key);
+        }
         return translate(key, translations);
     }
 
-    function changeLanguage(multiLanguageClassSelector, langInUse) {
+    function changeLanguage(multiLanguageClassSelector) {
         //load dynamic translations for language into localstorage
         saveMessagesToLocalStorage();
         let translatableElements = $$(multiLanguageClassSelector);
@@ -123,13 +127,11 @@ let localization = (function () {
     });
 
     on('localization/language/change', function (params) {
-        alert('trigger');
         let language = params.language;
-        alert('language'+ language);
-        if (language === undefined) {
-            language = getActiveLanguage();
+        if (language !== undefined) {
+            setActiveLanguage(language);
         }
-        changeLanguage(multiLanguageElementSelector, language);
+        changeLanguage(multiLanguageElementSelector);
     });
 
     let languageElementSelector = $$('#lang-selector');

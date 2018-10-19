@@ -81,9 +81,7 @@ const sidebar = (function () {
 
     globalSearch.addEventListener('click', function () {
         editMode.classList.add('collapse');
-        chosenLink.innerHTML = localization.translateMessage('Search');
-        chosenLink.classList.add('element-dynamic-translatable');
-        chosenLink.setAttribute('data-translation-key', 'Search');
+        chosenLink.innerHTML = localization.translateMessage('Search', chosenLink);
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);
@@ -106,12 +104,31 @@ const sidebar = (function () {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
             let tempFragment = document.createElement('div');
-            tempFragment.innerHTML = `<div class='center'>
-                                        <div id="${category}" class="list-management center">
-                                            <span class="mdi mdi-${icons[Object.keys(data).indexOf(category)]} custom-tooltip center"></span>
-                                            <div class="list-name">${localization.translateMessage(data[category].List)}</div>
-                                        </div>
-                                    </div>`;
+
+            let center = document.createElement('div');
+            center.classList.add('center');
+
+            let categoryEl = document.createElement('div');
+            categoryEl.setAttribute('id', category);
+            categoryEl.classList.add('list-management');
+            categoryEl.classList.add('center');
+
+            let span = document.createElement('span');
+            let mdiClassName = `mdi-${icons[Object.keys(data).indexOf(category)]}`;
+            span.classList.add('mdi');
+            span.classList.add(mdiClassName);
+            span.classList.add('custom-tooltip');
+            span.classList.add('center');
+
+            let listName = document.createElement('div');
+            listName.classList.add('list-name');
+            listName.innerText = localization.translateMessage(data[category].List, listName);
+
+            categoryEl.appendChild(span);
+            categoryEl.appendChild(listName);
+            center.appendChild(categoryEl);
+            tempFragment.appendChild(center);
+
             tempFragment.childNodes[0].addEventListener('mouseenter', function () {
                 if (sidebarMenu.classList.contains('collapse')) {
                     showTooltip(category);
@@ -172,7 +189,7 @@ const sidebar = (function () {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
-                            tempCategory.innerHTML = `<div>${localization.translateMessage(tempData[category].List)}</div>`;
+                            tempCategory.innerHTML = `<div>${localization.translateMessage(tempData[category].List, tempCategory)}</div>`;
                         }
                         for (let value of tempData[category].Value) {
                             let tempValue = document.createElement('a');
