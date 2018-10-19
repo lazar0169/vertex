@@ -249,8 +249,8 @@ const sidebar = (function () {
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.value : [];
-        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        let recentArray = recent ? recent.search.Value : [];
+        let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
         if (index !== -1) {
             recentArray.splice(index, 1);
         }
@@ -298,23 +298,6 @@ const sidebar = (function () {
             };
             return newObject;
         }
-    }
-
-    // function to remember last search in localStorage
-    function recentSearch(valueLink) {
-        recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.Value : [];
-        let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
-        if (index !== -1) {
-            recentArray.splice(index, 1);
-        }
-        recentArray.unshift(valueLink);
-        let object = {};
-        object['search'] = {
-            'List': 'Recent search',
-            'Value': recentArray
-        };
-        localStorage.setItem('recentSearch', JSON.stringify(object));
     }
 
     //function for tooltip
