@@ -42,6 +42,7 @@
     "styles": [
       "index.css",
       "top-bar.css",
+      "user-info-profile.css",
       "sidebar.css",
       "modify-spectre.css",
       "machines/machines-page.css",

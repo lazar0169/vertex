@@ -40,23 +40,18 @@ body {
     overflow: auto;
 }
 
-.overflow-x::-webkit-scrollbar,
-.overflow-y::-webkit-scrollbar,
-.overflow-content::-webkit-scrollbar {
+.overflow-x::-webkit-scrollbar, .overflow-y::-webkit-scrollbar, .overflow-content::-webkit-scrollbar {
     width: 7px;
     height: 7px;
 }
 
-.overflow-x::-webkit-scrollbar-track,
-.overflow-y::-webkit-scrollbar-track,
-.overflow-content::-webkit-scrollbar-track {
+.overflow-x::-webkit-scrollbar-track, .overflow-y::-webkit-scrollbar-track, .overflow-content::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px rgb(55, 71, 79);
     background-color: rgb(120, 144, 156);
 }
 
-.overflow-x::-webkit-scrollbar-thumb,
-.overflow-y::-webkit-scrollbar-thumb,
-.overflow-content::-webkit-scrollbar-thumb {
+.overflow-x::-webkit-scrollbar-thumb, .overflow-y::-webkit-scrollbar-thumb, .overflow-content::-webkit-scrollbar-thumb {
     background-color: rgb(55, 71, 79);
     border-radius: 50px;
 }
+
