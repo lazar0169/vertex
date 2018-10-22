@@ -10,7 +10,7 @@
 }
 
 .btn-cancel {
-    background: transparent;
+    background: transparent !important;
     border: none;
     color: rgb(120, 144, 156);
     text-decoration: underline;
@@ -24,8 +24,8 @@
 }
 
 .btn-cancel:hover {
-    color: white;
-    background: rgb(55, 71, 79);
+    color: white !important;
+    background: rgb(55, 71, 79) !important;
 }
 
 .btn-cancel:active {

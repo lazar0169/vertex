@@ -7,9 +7,10 @@
     color: rgb(120, 144, 156);
     transition: all 0.2s ease;
     z-index: 1;
-    font-size: 20px;
+    font-size: 2vh;
     display: flex;
     flex-direction: column;
+    pointer-events: all;
 }
 
 #user-info-profile.collapse {
@@ -17,7 +18,7 @@
 }
 
 #user-info-profile-header {
-    font-size: 50px;
+    font-size: 5vh;
 }
 
 #user-info-profile-buttons {
@@ -44,9 +45,9 @@
     flex-direction: column;
 }
 
-#user-profile-picture {
-    width: 150px;
-    height: 150px;
+.user-profile-picture {
+    width: 15vh;
+    height: 15vh;
     border-radius: 50%;
     background: rgb(120, 144, 156);
     color: white;

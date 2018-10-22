@@ -1,7 +1,7 @@
 let topBar = (function () {
     let topBarPath = $$("#top-bar").children[0];
     let openUserProfile = $$("#top-bar-logout-user");
-    let userProfile = $$('#user-info-profile');
+    let userProfile = $$('#user-profile');
     let previousTopBar;
 
     function showTopBar(value) {
@@ -15,23 +15,16 @@ let topBar = (function () {
     }
     function showProfile() {
         $$('#black-area').classList.add('show');
-        userProfile.classList.remove('collapse');
+        userProfile.classList.toggle('hidden');
     }
 
     openUserProfile.addEventListener('click', function () {
         showProfile();
     });
 
-
-
-
     on('show/app', function () {
-        userProfile.classList.add('collapse');
+        userProfile.classList.add('hidden');
     });
-
-
-
-
 
     on('topBar/category', function (data) {
         showTopBar(data);

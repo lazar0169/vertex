@@ -18,6 +18,7 @@
     "scripts": [
       "data.js",
       "top-bar.js",
+      "user-edit-profile.js",
       "sidebar.js",
       "template-engine.js",
       "components/dropdown.js",
@@ -42,7 +43,9 @@
     "styles": [
       "index.css",
       "top-bar.css",
-      "user-info-profile.css",
+      "user-profile/user-profile-page.css",
+      "user-profile/user-info-profile.css",
+      "user-profile/user-edit-profile.css",
       "sidebar.css",
       "modify-spectre.css",
       "machines/machines-page.css",

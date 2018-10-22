@@ -1,0 +1,42 @@
+#user-edit-profile {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(38, 50, 56);
+    color: rgb(120, 144, 156);
+    z-index: 1;
+    position: absolute;
+    pointer-events: all;
+}
+
+#user-edit-profile>div:first-child {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+}
+
+#user-edit-profile>div:not(:first-child) {
+    position: absolute;
+    right: 0;
+}
+
+#user-edit-profile>div:first-child>div:first-child>div {
+    flex-direction: column;
+}
+
+#user-edit-profile>div:first-child>div>div:first-child {
+    margin-top: 2rem;
+}
+
+#user-edit-profile>div:first-child>div>div:not(:first-child) {
+    margin-top: 0.7rem;
+}
+
+#user-edit-profile>div:first-child>div {
+    width: 33%;
+    min-width: 400px;
+    padding: 1rem;
+}
+
+#user-edit-profile-buttons {
+    padding: 1rem;
+}
