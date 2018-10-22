@@ -136,6 +136,7 @@ const sidebar = (function () {
                     showTooltip(category);
                 }
             });
+
             tempFragment.childNodes[0].addEventListener('mouseleave', function () {
                 if (sidebarMenu.classList.contains('collapse')) {
                     tooltipText.classList.add('hidden');
@@ -191,7 +192,9 @@ const sidebar = (function () {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
                         if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
-                            tempCategory.innerHTML = `<div>${localization.translateMessage(tempData[category].List, tempCategory)}</div>`;
+                            let categoryEl = document.createElement('div');
+                            categoryEl.innerHTML = localization.translateMessage(tempData[category].List, categoryEl);
+                            tempCategory.appendChild(categoryEl);
                         }
                         for (let value of tempData[category].Value) {
                             let tempValue = document.createElement('a');

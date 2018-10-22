@@ -6,7 +6,7 @@
         "LoginScreen": {
             "Submit": "Submit"
         },
-        "search": "search"
+        "search": "Search"
     },
     "messages": {
         "22": "Wrong credentials!",
