@@ -1,9 +1,19 @@
 {
-  "Login": "Prijavljivanje",
-  "Username": "Korisničko ime",
-  "Password": "Šifra",
-  "LoginScreen": {
-    "Submit":"Potvrdi"
-  },
-  "search": "Pretraga"
+    "labels": {
+        "Login": "Prijavljivanje",
+        "Username": "Korisničko ime",
+        "Password": "Šifra",
+        "LoginScreen": {
+            "Submit": "Potvrdi"
+        },
+        "search": "Pretraga"
+    },
+    "messages": {
+        "22": "Pogrešan username ili šifra!",
+        "AFT": "AFT",
+        "Casinos": "Kazinoi",
+        "Jackpots": "Džekpotovi",
+        "Tickets": "Tiketi",
+        "Search": "Pretraga"
+    }
 }

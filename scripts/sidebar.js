@@ -81,7 +81,9 @@ const sidebar = (function () {
 
     globalSearch.addEventListener('click', function () {
         editMode.classList.add('collapse');
+        //ToDo: proveriti ovo:
         chosenLink.innerHTML = localization.translateMessage('Search', chosenLink);
+
         searchCategory = undefined;
         recent = JSON.parse(localStorage.getItem('recentSearch'));
         generateLinks(recent || searchCategory);

@@ -1,9 +1,19 @@
 {
-  "Login": "Login",
-  "Username": "Username",
-  "Password": "Password",
-  "LoginScreen": {
-    "Submit":"Submit"
-  },
-  "search": "Search"
+    "labels": {
+        "Login": "Login",
+        "Username": "Username",
+        "Password": "Password",
+        "LoginScreen": {
+            "Submit": "Submit"
+        },
+        "search": "search"
+    },
+    "messages": {
+        "22": "Wrong credentials!",
+        "AFT": "AFT",
+        "Casinos": "Casinos",
+        "Jackpots": "Jackpots",
+        "Tickets": "Tickets",
+        "Search": "Search"
+    }
 }

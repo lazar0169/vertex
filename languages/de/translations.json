@@ -1,9 +1,19 @@
 {
-  "Login": "Anmeldung",
-  "Username": "Nutzername",
-  "Password": "Passwort",
-  "LoginScreen": {
-    "Submit": "Einreichen"
-  },
-  "search": "Suche"
+    "labels": {
+        "Login": "Anmeldung",
+        "Username": "Nutzername",
+        "Password": "Passwort",
+        "LoginScreen": {
+            "Submit": "Einreichen"
+        },
+        "search": "Suche"
+    },
+    "messages": {
+        "22": "Anmeldung!",
+        "AFT": "AFT_de",
+        "Casinos": "Kasinos",
+        "Jackpots": "Jackpots",
+        "Tickets": "Tickets",
+        "Search": "Suche"
+    }
 }

@@ -34,6 +34,8 @@ let login = (function () {
         let messageCode = messageParse.MessageCode;
         let messageType = messageParse.MessageType;
         let message = localization.translateMessage(messageCode.toString());
+        console.log('mmessage');
+        console.log(message);
         trigger('notifications/show', {message: message, type: messageType});
     });
 

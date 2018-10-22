@@ -6,21 +6,17 @@ let localization = (function () {
     languages.set('de', 'Deutsch');
     languages.set('fr', 'Française');
 
-    const lsTranslationsKey = 'vertexTranslations';
+    const lsLanguageKey=  'vertex-language';
+    const lsMessagesKey = 'vertex-translations';
     const multiLanguageElementSelector = '.element-multilanguage';
     const keyAttributeName = 'data-translation-key';
     const directory = 'languages';
     const file = 'translations.json';
-    const messagesFile = 'messages.json';
+
     const defaultLanguage = 'en';
-    let activeLanguage;
 
     function getFilePath(locale) {
         return directory + '/' + locale + '/' + file;
-    }
-
-    function getMessagesFilePath(locale) {
-        return directory + '/' + locale + '/' + messagesFile;
     }
 
     function loadJSONSync(filePath) {
@@ -58,19 +54,14 @@ let localization = (function () {
         return loadJSONSync(path);
     }
 
-    function loadMessages(language) {
-        let path = getMessagesFilePath(language);
-        return loadJSONSync(path);
-    }
-
-    function saveMessagesToLocalStorage() {
-        let messages = JSON.stringify(loadMessages(getActiveLanguage()));
-        window.localStorage.setItem(lsTranslationsKey, messages);
+    function saveMessagesToLocalStorage(messages) {
+        window.localStorage.setItem(lsMessagesKey, JSON.stringify(messages));
     }
 
     function translate(key, object) {
         let translation = getProperty(key, object);
-        if (translation !== undefined) {
+
+        if (translation !== undefined && translation !== '') {
             return translation;
         }
         else {
@@ -80,7 +71,7 @@ let localization = (function () {
     }
 
     function translateElement(element, translations) {
-        //ToDo: This is work in progress and during the development some other property could be changed
+        //ToDo: This is work in progress and during the development some other element property could be changed
         let key = element.getAttribute(keyAttributeName);
         let translation = translate(key, translations);
         if (translation !== null) {
@@ -94,7 +85,8 @@ let localization = (function () {
     }
 
     function translateMessage(key, element) {
-        let translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
+        let translations = JSON.parse(localStorage.getItem(lsMessagesKey));
+        //if translating html element that is added dynamically, add required properties
         if(element !== undefined) {
             element.classList.add('element-dynamic-translatable');
             element.setAttribute('data-translation-key', key);
@@ -104,17 +96,17 @@ let localization = (function () {
 
     function changeLanguage(multiLanguageClassSelector) {
         //load dynamic translations for language into localstorage
-        saveMessagesToLocalStorage();
         let translatableElements = $$(multiLanguageClassSelector);
         let translations = loadTranslations(getActiveLanguage());
+        saveMessagesToLocalStorage(translations.messages);
         if (translations !== null) {
             for (let i = 0, length = translatableElements.length; i < length; i++) {
-                translateElement(translatableElements[i], translations);
+                translateElement(translatableElements[i], translations.labels);
             }
         }
         //dynamically
         translatableElements = $$('.element-dynamic-translatable');
-        translations = JSON.parse(localStorage.getItem(lsTranslationsKey));
+        translations = translations.messages;
         if (translations !== null) {
             for (let i = 0, length = translatableElements.length; i < length; i++) {
                 translateElement(translatableElements[i], translations);
@@ -139,7 +131,6 @@ let localization = (function () {
         languageElementSelector.addEventListener('change', function () {
             setActiveLanguage(this.value);
             changeLanguage(multiLanguageElementSelector, getActiveLanguage());
-
         });
     }
 
@@ -161,7 +152,8 @@ let localization = (function () {
     init();
 
     return {
-        translateMessage: translateMessage
+        translateMessage: translateMessage,
+        getLanguage: getActiveLanguage
     }
 
 })();
