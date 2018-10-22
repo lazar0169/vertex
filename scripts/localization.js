@@ -114,9 +114,6 @@ let localization = (function () {
         }
     }
 
-    on('localization/translate/message', function (params) {
-        let translationKey = params.translationKey;
-    });
 
     on('localization/language/change', function (params) {
         let language = params.language;
