@@ -254,20 +254,23 @@ const sidebar = (function () {
 
     // highlight chosen category
     function selectCategory(category) {
-        if (category !== 'search') {
+        console.log(category);
+        if (category !== 'Search') {
             if (previousCategorySelected) {
                 previousCategorySelected.classList.remove('list-active');
             }
             let listSelected = $$(`#${category}`);
-            listSelected.classList.add('list-active');
-            previousCategorySelected = listSelected;
+            if (listSelected !== undefined) {
+                listSelected.classList.add('list-active');
+                previousCategorySelected = listSelected;
+            }
         }
     }
 
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.Value : [];
+        let recentArray = recent ? recent.Search.Value : [];
         let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
         if (index !== -1) {
             recentArray.splice(index, 1);
