@@ -167,7 +167,7 @@ const sidebar = (function () {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.Id = `link-${categoryValue.Id}`;
+                    tempFragment.id = `link-${categoryValue.Id}`;
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
                     //elements in search mapped to coresponding path
@@ -267,8 +267,8 @@ const sidebar = (function () {
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.value : [];
-        let index = recentArray.findIndex((item) => item.id === valueLink.id);
+        let recentArray = recent ? recent.search.Value : [];
+        let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
         if (index !== -1) {
             recentArray.splice(index, 1);
         }
@@ -317,23 +317,6 @@ const sidebar = (function () {
             };
             return newObject;
         }
-    }
-
-    // function to remember last search in localStorage
-    function recentSearch(valueLink) {
-        recent = JSON.parse(localStorage.getItem('recentSearch'));
-        let recentArray = recent ? recent.search.Value : [];
-        let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
-        if (index !== -1) {
-            recentArray.splice(index, 1);
-        }
-        recentArray.unshift(valueLink);
-        let object = {};
-        object['search'] = {
-            'List': 'Recent search',
-            'Value': recentArray
-        };
-        localStorage.setItem('recentSearch', JSON.stringify(object));
     }
 
     //function for tooltip
