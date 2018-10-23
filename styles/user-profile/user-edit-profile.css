@@ -3,7 +3,6 @@
     height: 100%;
     background-color: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
-    z-index: 1;
     position: absolute;
     pointer-events: all;
 }

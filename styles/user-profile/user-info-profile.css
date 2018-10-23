@@ -6,7 +6,6 @@
     background-color: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     transition: all 0.2s ease;
-    z-index: 1;
     font-size: 2vh;
     display: flex;
     flex-direction: column;
