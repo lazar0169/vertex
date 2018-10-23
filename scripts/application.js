@@ -1,4 +1,4 @@
-let application = (function () {
+let application = (function  () {
 
     function generateMenu() {
         let menu = getMenu();
@@ -27,5 +27,6 @@ let application = (function () {
         //ToDo: Fix timeout hotfix
         setTimeout(checkCurrentUser, 500);
     });
+    
 
 })();

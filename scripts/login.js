@@ -33,7 +33,10 @@ let login = (function () {
         let messageParse = JSON.parse(e.message);
         let messageCode = messageParse.MessageCode;
         let messageType = messageParse.MessageType;
-        trigger('notifications/show', {message: messageCode, type: messageType});
+        let message = localization.translateMessage(messageCode.toString());
+        console.log('mmessage');
+        console.log(message);
+        trigger('notifications/show', {message: message, type: messageType});
     });
 
 })();

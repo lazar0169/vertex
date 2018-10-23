@@ -9,7 +9,6 @@ function $$(selector) {
     }
 }
 
-
 function validateEncodedToken(accessToken) {
     let match = accessToken.match(/\./g);
     if (match.length === 2) {
@@ -33,6 +32,14 @@ function decodeToken(encodedToken) {
     console.error('Could not decode token!');
 }
 
+//ToDo:Lazar - Da li je ok da ovo bude ovde - koristim je vec u 2 modula za sad
+//returns value from an object base on select string -> path='account.createdAt' -> object = user:{account:{createdAt:10/10/2010}}
+//call getProperty("account.createdAt",user);
+function getProperty(path, object) {
+    return path.split('.').reduce(function (prev, curr) {
+        return prev ? prev[curr] : null
+    }, object || self);
+}
 //add and remove class
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
