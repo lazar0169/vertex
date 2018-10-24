@@ -75,6 +75,15 @@ let template = (function () {
         return newElement;
     }
 
+    function replaceText(templateString, arrayOfTranslationStrings) {
+        let regExpTranslation = /%s/gi;
+        let translatedText;
+        for (let i = 0; i < arrayOfTranslationStrings.length; i++) {
+            translatedText = templateString.replace(regExpTranslation, arrayOfTranslationStrings[i]);
+        }
+        return translatedText;
+    }
+
     on('template/render', function (params) {
         let templateElementSelector = params.templateElementSelector;
         let model = params.model;
@@ -87,5 +96,10 @@ let template = (function () {
         }
         trigger(params.callbackEvent, {element: newHtmlElement, params: params, model: params.model});
     });
+
+
+    return {
+        replaceText: replaceText
+    };
 
 })();

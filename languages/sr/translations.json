@@ -13,7 +13,7 @@
         "AFT": "AFT",
         "Casinos": "Kazinoi",
         "Jackpots": "Džekpotovi",
-        "Tickets": "Tiketi",
+        "Tickets": "%s Tiketi %sp",
         "Search": "Pretraga"
     }
 }

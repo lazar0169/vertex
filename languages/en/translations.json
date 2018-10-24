@@ -13,7 +13,7 @@
         "AFT": "AFT",
         "Casinos": "Casinos",
         "Jackpots": "Jackpots",
-        "Tickets": "Tickets",
+        "Tickets": "%s Tickets %s",
         "Search": "Search"
     }
 }

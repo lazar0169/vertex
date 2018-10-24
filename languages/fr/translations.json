@@ -13,7 +13,7 @@
         "AFT": "AFT_fra",
         "Casinos": "Les casinos",
         "Jackpots": "Jackpots",
-        "Tickets": "Des billets",
+        "Tickets": "%s Des billets %s",
         "Search": "Chercher"
     }
 }
