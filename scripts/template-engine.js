@@ -76,12 +76,11 @@ let template = (function () {
     }
 
     function replaceText(templateString, arrayOfTranslationStrings) {
-        let regExpTranslation = /%s/gi;
-        let translatedText;
+        let regExp = /%s/;
         for (let i = 0; i < arrayOfTranslationStrings.length; i++) {
-            translatedText = templateString.replace(regExpTranslation, arrayOfTranslationStrings[i]);
+            templateString = templateString.replace(regExp, arrayOfTranslationStrings[i]);
         }
-        return translatedText;
+        return templateString;
     }
 
     on('template/render', function (params) {
