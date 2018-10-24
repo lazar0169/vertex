@@ -116,8 +116,11 @@ let communication = (function () {
 
     function setAuthHeader(xhr) {
         //ToDo: take token from local storage
-        let token = "";
-        xhr.setRequestHeader("Authorization", "Bearer " + token);
+        let token = JSON.parse(sessionStorage['token']);
+        xhr.setRequestHeader('refresh', token.refresh_token);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token.access_token);
+        return xhr;
+
     }
 
     function setHeader(xhr, header, value) {
@@ -138,15 +141,20 @@ let communication = (function () {
     });
 
 
-    //events for casino
-    on('communicate/casino-info', function (params) {
+    //events for casino, get all machines from casino
+    on('communicate/casinos', function (params) {
         //let casinoId = params.casinoId;
-        let callbackEventName = params.successEvent;
-        let route = 'posts/1';
-        let data = typeof params.data === typeof undefined ? null : params.data;
-        let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
+        //let callbackEventName = params.successEvent;
+        // let data = typeof params.data === typeof undefined ? null : params.data;
+        // let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
+        let route = 'api/machines/';
+        let successEvent = 'communicate/test'
+        let data = {
+            'EndpointId': 4
+        };
+        let xhr = createRequest(route, requestTypes.post, data, successEvent);
         xhr = setDefaultHeaders(xhr);
-        //xhr = setAuthHeader(xhr);
+        xhr = setAuthHeader(xhr);
         send(xhr);
     });
 
@@ -157,22 +165,18 @@ let communication = (function () {
     //events for tickets
 
 
-    //events for AFT
+    //events for AFT, get all transactions
     on('communicate/aft', function (params) {
-        let route = 'api/transactions/'
-        let successEvent = 'komunikacija/proba'
-        let token = sessionStorage['token'];
-        let parsedToken = JSON.parse(token);
+        let route = 'api/transactions/';
+        let successEvent = 'communicate/test';
         let data = {
             'EndpointId': 2
         };
         let xhr = createRequest(route, requestTypes.post, data, successEvent);
         xhr = setDefaultHeaders(xhr);
-        xhr.setRequestHeader('refresh', parsedToken.refresh_token);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + parsedToken.access_token);
+        xhr = setAuthHeader(xhr);
         //xhr.setHeader("token", JSON.parse(token)["refresh_token"]);
-        //send(xhr);
-        xhr.send(JSON.stringify(xhr.customData));
+        send(xhr);
     });
 
 
@@ -199,13 +203,13 @@ let communication = (function () {
 
     //generate events
     on('communicate/category', function (data) {
-        trigger(`communicate/${data.category.toLowerCase()}`)
+        trigger(`communicate/${data.category.toLowerCase()}`);
     });
 
     //test, need to be deleted
-    on('komunikacija/proba', function (data) {
-        alert('radi komunikacija')
-        console.log(data.data)
+    on('communicate/test', function (data) {
+        alert('Successful communication');
+        console.log(data.data);
     });
 
 })();

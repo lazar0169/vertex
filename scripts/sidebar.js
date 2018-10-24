@@ -176,7 +176,7 @@ const sidebar = (function () {
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
-                        trigger('topBar/category', { category: searchCategory, casino: categoryValue.Name });
+                        trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
                         trigger('communicate/category', { category: category });
                         selectLink(linkSelectedId);
                         navigation.hide();
@@ -226,7 +226,7 @@ const sidebar = (function () {
                                 }
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
-                                trigger('topBar/category', { category: categorySelectedId, casino: value.Name });
+                                trigger('topBar/category', { category: value.categoryName, casino: value.Name });
                                 trigger('communicate/category', { category: categorySelectedId });
                                 navigation.hide();
                             });
