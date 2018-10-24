@@ -176,6 +176,7 @@ const sidebar = (function () {
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
+                        trigger('topBar/category', { category: searchCategory, casino: categoryValue.Name });
                         selectLink(linkSelectedId);
                         navigation.hide();
                         let temp = categoryValue;
@@ -224,6 +225,7 @@ const sidebar = (function () {
                                 }
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
+                                trigger('topBar/category', { category: categorySelectedId, casino: value.Name });
                                 navigation.hide();
                             });
                             tempCategory.appendChild(tempValue);
@@ -367,6 +369,7 @@ const sidebar = (function () {
         initVariables();
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
+        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name });
         chosenLink.innerHTML = menuData[categorySelectedId].List;
     });
 
