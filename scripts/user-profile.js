@@ -6,7 +6,7 @@ const userEditProfileModule = (function () {
     let saveUserEditProfile = $$('#user-edit-profile-buttons').children[1];
 
     editYourProfile.addEventListener('click', function () {
-        userEditProfile.classList.toggle('hidden');
+        userEditProfile.classList.remove('hidden');
     });
 
     logout.addEventListener('click', function () {

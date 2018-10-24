@@ -18,7 +18,7 @@
     "scripts": [
       "data.js",
       "top-bar.js",
-      "user-edit-profile.js",
+      "user-profile.js",
       "sidebar.js",
       "template-engine.js",
       "components/dropdown.js",
