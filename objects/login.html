@@ -1,22 +1,17 @@
 <div id="login">
+    <object data-object="language-selector"></object>
     <section>
         <header>
-            <h1>Accounting</h1>
+            <h1 class="element-multilanguage" data-translation-key="Login">Prijavljivanje</h1>
         </header>
         <form>
-            <input type="text" required placeholder="Username" class="username-input">
-            <input type="password" required placeholder="Password" class="pass-input">
-            <button type="submit"  class="form-submit">NEXT</button>
+            <input type="text" required placeholder="Korisničko ime" class="username-input element-multilanguage"
+                   data-translation-key="Username">
+            <input type="password" required placeholder="Šifra" class="pass-input element-multilanguage"
+                   data-translation-key="Password">
+            <button type="submit" class="form-submit element-multilanguage" data-translation-key="LoginScreen.Submit">
+                Potvrdi
+            </button>
         </form>
     </section>
-    <aside class="login-validation">
-        <p>There was an error in login! Try again.</p>
-    </aside>
-    <aside class="login-error">
-        <p>There was a communication eror. Check your internet connection
-            and weather the server is available or not.</p>
-    </aside>
-    <aside class="login-incorrect">
-        <p>Incorrect username and / or password!</p>
-    </aside>
 </div>

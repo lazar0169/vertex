@@ -1,6 +1,7 @@
 {
   "index": {
     "scripts": [
+      "localization.js",
       "login.js",
       "session.js",
       "communication.js",
@@ -38,6 +39,7 @@
       "preloader.js",
       "application.js",
       "home.js",
+      "localization.js",
       "router.js"
     ],
     "styles": [
