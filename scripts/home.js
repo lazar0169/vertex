@@ -1,6 +1,6 @@
 let home = (function () {
 
-    let testTable = [
+    let testTableHome = [
         {
             "period": "4/1/2018",
             "totalBet": 1,
@@ -173,15 +173,21 @@ let home = (function () {
         }
     ];
 
+
     on('home/activated', function () {
+
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
 
-        let tableVar = table.generate(testTable);
-        console.log(tableVar);
+        if (table.checkIfHasTable('page-home','table-home') === true) {
+            //update
+        }
+        else {
+            let tableHome = table.generateTable(testTableHome, 'table-home');
+            $$('#page-home').appendChild(tableHome);
+        }
 
-        $$('#page-home').appendChild(tableVar);
     });
 
 })();

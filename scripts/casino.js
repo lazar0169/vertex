@@ -1,15 +1,13 @@
 let casino = (function () {
 
-    let testTable = [
+    let testTableCasinos = [
         {
             "period": "4/1/2018",
             "totalBet": 1,
             "totalWin": 2,
             "rounds": 3,
             "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "result": 0
         },
         {
             "period": "4/2/2018",
@@ -18,8 +16,7 @@ let casino = (function () {
             "rounds": 3,
             "jackpotValue": 4,
             "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "payout": 5
         },
         {
             "period": "4/3/2018",
@@ -28,8 +25,7 @@ let casino = (function () {
             "rounds": 3,
             "jackpotValue": 4,
             "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "payout": 5
         },
         {
             "period": "4/4/2018",
@@ -37,9 +33,7 @@ let casino = (function () {
             "totalWin": 1.5,
             "rounds": 46,
             "jackpotValue": 4,
-            "result": 1018923.124451,
-            "payout": 12.93,
-            "currency": "eur"
+            "result": 1018923.124451
         },
         {
             "period": "4/5/2018",
@@ -47,19 +41,13 @@ let casino = (function () {
             "totalWin": 2,
             "rounds": 3,
             "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "result": 0
         },
         {
             "period": "4/6/2018",
             "totalBet": 1,
             "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "rounds": 3
         },
         {
             "period": "4/7/2018",
@@ -67,9 +55,7 @@ let casino = (function () {
             "totalWin": 2,
             "rounds": 3,
             "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "result": 0
         },
         {
             "period": "4/8/2018",
@@ -77,44 +63,27 @@ let casino = (function () {
             "totalWin": 2,
             "rounds": 3,
             "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
-        },
-        {
-            "period": "4/9/2018",
-            "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
-        },
-        {
-            "period": "4/10/2018",
-            "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0,
-            "payout": 5,
-            "currency": "eur"
+            "result": 0
         }
     ];
 
-    on('casino/activated', function () {
+    on('casinos/activated', function () {
+
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
 
-        let tableVar = table.generate(testTable);
-        console.log('casinos', tableVar);
+        if (table.checkIfHasTable('page-casinos', 'table-casinos') === true) {
+            //update
+        }
+        else {
+            let tableCasinos = table.generateTable(testTableCasinos, 'table-casinos');
+            $$('#page-casinos').appendChild(tableCasinos);
+        }
 
-        $$('#page-casinos').appendChild(tableVar);
     });
 
-    on('casino/add', function (e) {
+    on('casinos/add', function (e) {
         let model = e.model;
         trigger('template/render', {
             model: model,

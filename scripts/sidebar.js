@@ -254,7 +254,6 @@ const sidebar = (function () {
 
     // highlight chosen category
     function selectCategory(category) {
-        console.log(category);
         if (category !== 'Search') {
             if (previousCategorySelected) {
                 previousCategorySelected.classList.remove('list-active');
@@ -274,6 +273,7 @@ const sidebar = (function () {
         let index = recentArray.findIndex((item) => item.Id === valueLink.Id);
         if (index !== -1) {
             recentArray.splice(index, 1);
+            console.log('home already has table');
         }
         recentArray.unshift(valueLink);
         let object = {};

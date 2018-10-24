@@ -13,10 +13,10 @@ let router = (function () {
         id: '#page-aft',
         path: '/aft/{aftId:integer}'
     });
-    routes.set('casino/list', {
-        page: 'casino/list',
-        id: '#page-casino-add',
-        path: '/casino/{casinoId:integer}/player/{playerId:integer}'
+    routes.set('casinos/list', {
+        page: 'casinos/list',
+        id: '#page-casinos-add',
+        path: '/casinos/{casinoId:integer}/player/{playerId:integer}'
     });
     routes.set('casinos', {
         page: 'casinos',
