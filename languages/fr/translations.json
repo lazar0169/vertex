@@ -1,0 +1,19 @@
+{
+    "labels": {
+        "Login": "S'identifier",
+        "Username": "Nom d'utilisateur",
+        "Password": "Mot de passe",
+        "LoginScreen": {
+            "Submit": "Soumettre"
+        },
+        "search": "Chercher"
+    },
+    "messages": {
+        "22": "Inscription!",
+        "AFT": "AFT_fra",
+        "Casinos": "Les casinos",
+        "Jackpots": "Jackpots",
+        "Tickets": "Des billets",
+        "Search": "Chercher"
+    }
+}

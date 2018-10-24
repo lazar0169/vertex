@@ -7,11 +7,6 @@ let notifications = function () {
         error: 3
     };
 
-    const messageCodes = {
-        22: 'Invalid username and / or password!',
-        23: 'Logout error!'
-    };
-
     function showNotification(params) {
         let newElement = params.element;
         let messageType = params.model.type;
@@ -37,8 +32,7 @@ let notifications = function () {
     });
 
     on('notifications/show', function (params) {
-        let messageCode = params.message;
-        let paramsMessageCode = messageCodes[messageCode];
+        let paramsMessageCode = params.message;
         let paramsMessageType = params.type;
 
         let notificationModel = {

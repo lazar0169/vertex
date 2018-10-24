@@ -151,9 +151,6 @@ let communication = (function () {
     });
 
 
-    // trigger('communicate/casino-info', {data: {'testParam': 'test'}, successEvent: 'casino/display-casino-info/'});
-
-
     //events for jackpot
 
 
@@ -174,9 +171,6 @@ let communication = (function () {
         xhr = setAuthHeader(xhr);
         send(xhr);
     });
-
-
-    // trigger('communicate/machine-info', {machineId: 12, data: {'testParam': 'test'}, callbackEvent: 'machines/display-machine-info/'});
 
 
     //events for reports
