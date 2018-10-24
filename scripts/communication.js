@@ -50,12 +50,12 @@ let communication = (function () {
     function success(xhr, callbackEvent) {
         let data = tryParseJSON(xhr.responseText);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data});
+            trigger(callbackEvent, { data: data });
         }
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = {"message": xhr.responseText};
+        let errorData = { "message": xhr.responseText };
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
@@ -85,7 +85,7 @@ let communication = (function () {
     }
 
     function send(xhr) {
-        if (typeof  xhr.customData !== typeof undefined) {
+        if (typeof xhr.customData !== typeof undefined) {
 
             return xhr.send(JSON.stringify(xhr.customData));
         }
@@ -158,6 +158,22 @@ let communication = (function () {
 
 
     //events for AFT
+    on('communicate/aft', function (params) {
+        let route = 'api/transactions/'
+        let successEvent = 'komunikacija/proba'
+        let token = sessionStorage['token'];
+        let parsedToken = JSON.parse(token);
+        let data = {
+            'EndpointId': 2
+        };
+        let xhr = createRequest(route, requestTypes.post, data, successEvent);
+        xhr = setDefaultHeaders(xhr);
+        xhr.setRequestHeader('refresh', parsedToken.refresh_token);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + parsedToken.access_token);
+        //xhr.setHeader("token", JSON.parse(token)["refresh_token"]);
+        //send(xhr);
+        xhr.send(JSON.stringify(xhr.customData));
+    });
 
 
     //events for machines
@@ -180,5 +196,16 @@ let communication = (function () {
 
 
     //events for service
+
+    //generate events
+    on('communicate/category', function (data) {
+        trigger(`communicate/${data.category.toLowerCase()}`)
+    });
+
+    //test, need to be deleted
+    on('komunikacija/proba', function (data) {
+        alert('radi komunikacija')
+        console.log(data.data)
+    });
 
 })();
