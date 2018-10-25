@@ -96,12 +96,10 @@ let table = (function () {
             }
 
             tableContainerElement.className = sticky ? 'table sticky' : 'table';
-            console.log('tbody ako vec ima header-a', tbody);
             return tbody;
         }
 
     }
-
 
     /*
         function displayTable(pageId, tableToDisplay) {

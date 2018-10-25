@@ -176,9 +176,6 @@ let home = (function () {
         forseRemoveHeaders: true
     };
 
-    console.log(testDataTableHome.data);
-    console.log(testDataTableHome.forseRemoveHeaders);
-
     let newTestData = [
         {
             "period": "home",
@@ -370,11 +367,9 @@ let home = (function () {
 
 
         if (table.checkIfHasTable(pageId, tableContainerId) === true) {
-            console.log('has table');
             let tableContainerIdElement = $$('#'+tableContainerId);
             tableContainerIdElement.removeChild($$('.tbody')[0]);
             let tableHomeUpdated = table.generateTable(newTestData, tableContainerIdElement, false);
-            console.log('table home updated', tableHomeUpdated);
             $$('#'+tableContainerId).appendChild(tableHomeUpdated);
         }
         else {

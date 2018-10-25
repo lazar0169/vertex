@@ -67,7 +67,6 @@ let casino = (function () {
         }
     ];
 
-
     on('casinos/activated', function () {
 
         setTimeout(function () {
@@ -92,7 +91,7 @@ let casino = (function () {
             let tableCasinos = table.generateTable(testDataTableCasinos, tableContainerClassElement);
             $$('#' + tableContainerId).appendChild(tableCasinos);
         }
-
+        
     });
 
     on('casinos/add', function (e) {
