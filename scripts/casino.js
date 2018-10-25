@@ -73,12 +73,23 @@ let casino = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-        if (table.checkIfHasTable('page-casinos', 'table-casinos') === true) {
+        let pageId = 'page-casinos';
+        let tableContainerId = 'table-container-casinos';
+        let tableContainerClassSelector = '.table-container-casinos';
+        let tableContainerClassElement = $$(tableContainerClassSelector)[0];
+
+        let jsObject = new Object();
+        jsObject.tableContainerId = tableContainerId;
+
+        if (table.checkIfHasTable(pageId, tableContainerId) === true) {
             //update
         }
         else {
-            let tableCasinos = table.generateTable(testTableCasinos, 'table-casinos');
-            $$('#page-casinos').appendChild(tableCasinos);
+            tableContainerClassElement.setAttribute('id', tableContainerId);
+            let tableContainerIdElement = $$('#'+tableContainerId);
+            tableContainerIdElement.tableObject = jsObject;
+            let tableCasinos = table.generateTable(testTableCasinos, tableContainerClassElement);
+            $$('#'+tableContainerId).appendChild(tableCasinos);
         }
 
     });

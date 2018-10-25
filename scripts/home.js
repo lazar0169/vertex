@@ -180,12 +180,23 @@ let home = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-        if (table.checkIfHasTable('page-home','table-home') === true) {
+        let pageId = 'page-home';
+        let tableContainerId = 'table-container-home';
+        let tableContainerClassSelector = '.table-container-home';
+        let tableContainerClassElement = $$(tableContainerClassSelector)[0];
+
+        let jsObject = new Object();
+        jsObject.tableContainerId = tableContainerId;
+
+        if (table.checkIfHasTable(pageId, tableContainerId) === true) {
             //update
         }
         else {
-            let tableHome = table.generateTable(testTableHome, 'table-home');
-            $$('#page-home').appendChild(tableHome);
+            tableContainerClassElement.setAttribute('id', tableContainerId);
+            let tableContainerIdElement = $$('#'+tableContainerId);
+            tableContainerIdElement.tableObject = jsObject;
+            let tableHome = table.generateTable(testTableHome, tableContainerClassElement);
+            $$('#'+tableContainerId).appendChild(tableHome);
         }
 
     });
