@@ -1,6 +1,6 @@
 let home = (function () {
 
-    let testTableHome = [
+    let testDataTableHome = [
         {
             "period": "4/1/2018",
             "totalBet": 1,
@@ -193,10 +193,10 @@ let home = (function () {
         }
         else {
             tableContainerClassElement.setAttribute('id', tableContainerId);
-            let tableContainerIdElement = $$('#'+tableContainerId);
+            let tableContainerIdElement = $$('#' + tableContainerId);
             tableContainerIdElement.tableObject = jsObject;
-            let tableHome = table.generateTable(testTableHome, tableContainerClassElement);
-            $$('#'+tableContainerId).appendChild(tableHome);
+            let tableHome = table.generateTable(testDataTableHome, tableContainerClassElement);
+            $$('#' + tableContainerId).appendChild(tableHome);
         }
 
     });

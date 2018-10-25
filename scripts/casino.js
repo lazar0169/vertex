@@ -1,6 +1,6 @@
 let casino = (function () {
 
-    let testTableCasinos = [
+    let testDataTableCasinos = [
         {
             "period": "4/1/2018",
             "totalBet": 1,
@@ -86,10 +86,10 @@ let casino = (function () {
         }
         else {
             tableContainerClassElement.setAttribute('id', tableContainerId);
-            let tableContainerIdElement = $$('#'+tableContainerId);
+            let tableContainerIdElement = $$('#' + tableContainerId);
             tableContainerIdElement.tableObject = jsObject;
-            let tableCasinos = table.generateTable(testTableCasinos, tableContainerClassElement);
-            $$('#'+tableContainerId).appendChild(tableCasinos);
+            let tableCasinos = table.generateTable(testDataTableCasinos, tableContainerClassElement);
+            $$('#' + tableContainerId).appendChild(tableCasinos);
         }
 
     });

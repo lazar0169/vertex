@@ -2,11 +2,11 @@ let table = (function () {
 
     let rows = [];
 
-    function checkIfHasTable(pageId, tableId) {
+    function checkIfHasTable(pageId, tableContainerId) {
         let hasTable = false;
-        let listOfChildren = $$('#'+pageId).childNodes;
-        listOfChildren.forEach(function(node) {
-            if (node.id === tableId) {
+        let listOfChildren = $$('#' + pageId).childNodes;
+        listOfChildren.forEach(function (node) {
+            if (node.id === tableContainerId) {
                 hasTable = true;
             }
         });
@@ -60,19 +60,19 @@ let table = (function () {
     }
 
 
-/*
-    function displayTable(pageId, tableToDisplay) {
-        let listOfChildren = $$(pageId);
-        if (table.checkIfHasTable(listOfChildren) === true) {
-            //update
-            console.log('home already has table');
+    /*
+        function displayTable(pageId, tableToDisplay) {
+            let listOfChildren = $$(pageId);
+            if (table.checkIfHasTable(listOfChildren) === true) {
+                //update
+                console.log('home already has table');
+            }
+            else {
+                let tableHome = table.generateTable(testTable, 'table-home');
+                $$('#page-home').appendChild(tableHome);
+            }
         }
-        else {
-            let tableHome = table.generateTable(testTable, 'table-home');
-            $$('#page-home').appendChild(tableHome);
-        }
-    }
-*/
+    */
 
     return {
         generateTable: generateTable,
