@@ -13,11 +13,11 @@ let table = (function () {
         return hasTable;
     }
 
-    function generateTable(jsonData, tableContainerElement, forseRemoveHeaders, id = '', sticky = false) {
+    function generateTable(jsonData, tableContainerElement, forceRemoveHeaders, id = '', sticky = false) {
 
         let colsCount;
 
-        if (forseRemoveHeaders === false) {
+        if (forceRemoveHeaders === false) {
             colsCount = Object.keys(jsonData[0]).length;
             let tbody = document.createElement('div');
             tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;

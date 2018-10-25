@@ -173,7 +173,7 @@ let home = (function () {
                 "currency": "eur"
             }
         ],
-        forseRemoveHeaders: true
+        forceRemoveHeaders: true
     };
 
     let newTestData = [
