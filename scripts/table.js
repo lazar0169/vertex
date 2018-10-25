@@ -13,50 +13,93 @@ let table = (function () {
         return hasTable;
     }
 
-    function generateTable(json, tableContainerElement, id = '', sticky = false) {
+    function generateTable(jsonData, tableContainerElement, forseRemoveHeaders, id = '', sticky = false) {
 
-        let colsCount = Object.keys(json[0]).length;
-        let tbody = document.createElement('div');
-        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-        tbody.style.gridTemplateRows = `repeat(${json.length}, 1fr)`;
-        tbody.id = id;
-        tbody.className = 'tbody';
+        let colsCount;
 
-        for (let col = 0; col < colsCount; col++) {
-            let head = document.createElement('div');
-            head.innerHTML = Object.keys(json[0])[col];
-            head.className = 'head cell';
-            tbody.appendChild(head);
-        }
-        for (let row = 0; row < json.length; row++) {
-            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            while (rows.includes(rowId)) {
-                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            }
-            rows.push(rowId);
+        if (forseRemoveHeaders === false) {
+            colsCount = Object.keys(jsonData[0]).length;
+            let tbody = document.createElement('div');
+            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+            tbody.style.gridTemplateRows = `repeat(${jsonData.length}, 1fr)`;
+            tbody.className = 'tbody';
+
             for (let col = 0; col < colsCount; col++) {
-                let cell = document.createElement('div');
-                cell.innerHTML = json[row][Object.keys(json[row])[col]];
-                cell.className = col === 0 ? 'first cell' : 'cell';
-                cell.classList.add(`row-${rowId}`);
-                cell.addEventListener('mouseover', function () {
-                    hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
-                cell.addEventListener('mouseout', function () {
-                    hoverRow(`row-${rowId}`, false);
-                }, {passive: false});
-                tbody.appendChild(cell);
+                let head = document.createElement('div');
+                head.innerHTML = Object.keys(jsonData[0])[col];
+                head.className = 'head cell';
+                tbody.appendChild(head);
             }
+            for (let row = 0; row < jsonData.length; row++) {
+                let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+                while (rows.includes(rowId)) {
+                    rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+                }
+                rows.push(rowId);
+                for (let col = 0; col < colsCount; col++) {
+                    let cell = document.createElement('div');
+                    cell.innerHTML = jsonData[row][Object.keys(jsonData[row])[col]];
+                    cell.className = col === 0 ? 'first cell' : 'cell';
+                    cell.classList.add(`row-${rowId}`);
+                    cell.addEventListener('mouseover', function () {
+                        hoverRow(`row-${rowId}`, true);
+                    }, {passive: false});
+                    cell.addEventListener('mouseout', function () {
+                        hoverRow(`row-${rowId}`, false);
+                    }, {passive: false});
+                    tbody.appendChild(cell);
+                }
+            }
+
+            function hoverRow(elements, highlight = false) {
+                for (let element of document.getElementsByClassName(elements)) {
+                    element.classList[highlight ? "add" : "remove"]('hover');
+                }
+            }
+
+            tableContainerElement.className = sticky ? 'table sticky' : 'table';
+            return tbody;
         }
 
-        function hoverRow(elements, highlight = false) {
-            for (let element of document.getElementsByClassName(elements)) {
-                element.classList[highlight ? "add" : "remove"]('hover');
+        else {
+            colsCount = $$('.head').length;
+            let tbody = $$('.tbody')[0];
+
+            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+            tbody.style.gridTemplateRows = `repeat(${jsonData.length}, 1fr)`;
+
+            for (let row = 0; row < jsonData.length; row++) {
+                let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+                while (rows.includes(rowId)) {
+                    rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+                }
+                rows.push(rowId);
+                for (let col = 0; col < colsCount; col++) {
+                    let cell = document.createElement('div');
+                    cell.innerHTML = jsonData[row][Object.keys(jsonData[row])[col]];
+                    cell.className = col === 0 ? 'first cell' : 'cell';
+                    cell.classList.add(`row-${rowId}`);
+                    cell.addEventListener('mouseover', function () {
+                        hoverRow(`row-${rowId}`, true);
+                    }, {passive: false});
+                    cell.addEventListener('mouseout', function () {
+                        hoverRow(`row-${rowId}`, false);
+                    }, {passive: false});
+                    tbody.appendChild(cell);
+                }
             }
+
+            function hoverRow(elements, highlight = false) {
+                for (let element of document.getElementsByClassName(elements)) {
+                    element.classList[highlight ? "add" : "remove"]('hover');
+                }
+            }
+
+            tableContainerElement.className = sticky ? 'table sticky' : 'table';
+            console.log('tbody ako vec ima header-a', tbody);
+            return tbody;
         }
 
-        tableContainerElement.className = sticky ? 'table sticky' : 'table';
-        return tbody;
     }
 
 
