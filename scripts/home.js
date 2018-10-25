@@ -173,6 +173,179 @@ let home = (function () {
         }
     ];
 
+    let newTestData = [
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        },
+        {
+            "period": "home",
+            "totalBet": "home",
+            "totalWin": "home",
+            "rounds": "home",
+            "jackpotValue": "home",
+            "result": "home",
+            "payout": "home",
+            "currency": "home"
+        }
+    ];
+
 
     on('home/activated', function () {
 
@@ -189,7 +362,11 @@ let home = (function () {
         jsObject.tableContainerId = tableContainerId;
 
         if (table.checkIfHasTable(pageId, tableContainerId) === true) {
-            //update
+            let tableContainerIdElement = $$('#'+tableContainerId);
+            let tableBody = $$('.tbody')[0];
+            tableContainerIdElement.removeChild(tableBody);
+            let tableHomeUpdated = table.generateTable(newTestData, tableContainerIdElement);
+            $$('#'+tableContainerId).appendChild(tableHomeUpdated);
         }
         else {
             tableContainerClassElement.setAttribute('id', tableContainerId);

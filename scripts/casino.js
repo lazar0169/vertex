@@ -67,6 +67,7 @@ let casino = (function () {
         }
     ];
 
+
     on('casinos/activated', function () {
 
         setTimeout(function () {

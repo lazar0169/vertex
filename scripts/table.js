@@ -13,7 +13,7 @@ let table = (function () {
         return hasTable;
     }
 
-    function generateTable(json, tableContainerClassElement, id = '', sticky = false) {
+    function generateTable(json, tableContainerElement, id = '', sticky = false) {
 
         let colsCount = Object.keys(json[0]).length;
         let tbody = document.createElement('div');
@@ -55,7 +55,7 @@ let table = (function () {
             }
         }
 
-        tableContainerClassElement.className = sticky ? 'table sticky' : 'table';
+        tableContainerElement.className = sticky ? 'table sticky' : 'table';
         return tbody;
     }
 
