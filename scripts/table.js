@@ -27,9 +27,12 @@ let table = (function () {
         let tbody;
 
         let tableContainerElement = $$(tableSettings.tableContainerSelector);
+        console.log('table container element', tableContainerElement);
+        console.log('asldfkja lsdfjas ', tableContainerElement.tableSettings);
         if (tableContainerElement.tableSettings === undefined) { //nema objekat, ne postoji tabela
             tableContainerElement.tableSettings = tableSettings;
-            if (tableContainerElement.firstChild !== $$('.tbody')) { //ne postoje hederi u html-u
+            console.log('table container element first child', tableContainerElement.firstElementChild);
+            if (tableContainerElement.firstElementChild === null) { //ne postoje hederi u html-u
                 colsCount = Object.keys(tableSettings.tableData[0]).length;
                 tbody = document.createElement('div');
                 tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
@@ -64,6 +67,7 @@ let table = (function () {
                     tbody.appendChild(cell);
                 }
             }
+            console.log('tbody bljsa ', tbody);
         }
         else { //tabela vec postoji
             if (tableSettings.forceRemoveHeaders === true) { //da li treba da prepisemo hedere
@@ -76,6 +80,7 @@ let table = (function () {
 
         }
         tableSettings.tableContainerElement.className = tableSettings.sticky ? 'table sticky' : 'table';
+        console.log('table container element blah', tableContainerElement);
         tableContainerElement.appendChild(tbody);
     }
 

@@ -361,7 +361,7 @@ let home = (function () {
         tableSettings.sticky = false;
         tableSettings.id = '';
 
-        let tableHome = table.generateTable(tableSettings);
+        table.generateTable(tableSettings);
 
     });
 
