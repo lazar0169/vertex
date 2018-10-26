@@ -88,7 +88,7 @@ let casino = (function () {
             tableContainerClassElement.setAttribute('id', tableContainerId);
             let tableContainerIdElement = $$('#' + tableContainerId);
             tableContainerIdElement.tableObject = jsObject;
-            let tableCasinos = table.generateTable(testDataTableCasinos, tableContainerClassElement);
+            let tableCasinos = table.generateTable(testDataTableCasinos, tableContainerClassElement, false);
             $$('#' + tableContainerId).appendChild(tableCasinos);
         }
         

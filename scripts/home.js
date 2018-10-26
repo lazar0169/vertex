@@ -1,7 +1,6 @@
 let home = (function () {
 
-    let testDataTableHome = {
-        data: [
+    let testDataTableHome = [
             {
                 "period": "4/1/2018",
                 "totalBet": 1,
@@ -172,9 +171,7 @@ let home = (function () {
                 "payout": 5,
                 "currency": "eur"
             }
-        ],
-        forceRemoveHeaders: true
-    };
+        ];
 
     let newTestData = [
         {
@@ -356,14 +353,17 @@ let home = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-        let pageId = 'page-home';
-        let tableContainerId = 'table-container-home';
-        let tableContainerClassSelector = '.table-container-home';
-        let tableContainerClassElement = $$(tableContainerClassSelector)[0];
+        let tableSettings = new Object();
+        tableSettings.tableData = testDataTableHome;
+        tableSettings.forceRemoveHeaders = true;
+        tableSettings.pageId = 'page-home';
+        tableSettings.tableContainerId = 'table-container-home';
+        tableSettings.tableContainerClassSelector = '.table-container-home';
+        tableSettings.tableContainerClassElement = $$(tableSettings.tableContainerClassSelector)[0];
+        tableSettings.sticky = false;
+        tableSettings.id = '';
 
-        let jsObject = new Object();
-        jsObject.tableContainerId = tableContainerId;
-
+        table.generateTable(tableSettings);
 
 
         if (table.checkIfHasTable(pageId, tableContainerId) === true) {
