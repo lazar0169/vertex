@@ -176,173 +176,173 @@ let home = (function () {
     let newTestData = [
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         },
         {
             "period": "home",
-            "totalBet": "home",
-            "totalWin": "home",
-            "rounds": "home",
-            "jackpotValue": "home",
-            "result": "home",
-            "payout": "home",
-            "currency": "home"
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home",
+            "period": "home"
         }
     ];
 
@@ -355,6 +355,7 @@ let home = (function () {
 
         let tableSettings = {};
         tableSettings.tableData = testDataTableHome;
+        tableSettings.tableNewData = newTestData;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-home';
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);

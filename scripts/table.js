@@ -25,6 +25,7 @@ let table = (function () {
 
         let colsCount;
         let tbody;
+        let head;
 
         let tableContainerElement = $$(tableSettings.tableContainerSelector);
         if (tableContainerElement.tableSettings === undefined) { //nema objekat, ne postoji tabela
@@ -35,7 +36,7 @@ let table = (function () {
                 tbody.className = 'tbody';
 
                 for (let col = 0; col < colsCount; col++) {
-                    let head = document.createElement('div');
+                    head = document.createElement('div');
                     head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
                     head.className = 'head cell';
                     tbody.appendChild(head);
@@ -71,209 +72,46 @@ let table = (function () {
             }
         }
         else { //tabela vec postoji
+            tbody = $$('.tbody')[0];
+            colsCount = Object.keys(tableSettings.tableNewData[0]).length;
             if (tableSettings.forceRemoveHeaders === true) { //da li treba da prepisemo hedere
-                //nekako da prepisemo sve podatke u hederima ili da generisemo novo?
+                //prepisivanje podataka
                 for (let col = 0; col < colsCount; col++) {
-                    head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
+                    head = tbody.childNodes[col];
+                    alert(head);
+                    head.innerHTML = Object.keys(tableSettings.tableNewData[0])[col];
                 }
             }
-            //u svakom slucaju prepisujemo sve ostale podatke
+            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+            tbody.style.gridTemplateRows = `repeat(${tableSettings.tableNewData.length}, 1fr)`;
 
+            //u svakom slucaju prepisujemo sve ostale podatke
+          /*  for (let row = 0; row < tableSettings.tableNewData.length; row++) {
+                let rowId = 0/!*izvuces rowId*!/;
+                while (rows.includes(rowId)) {
+                    rowId = 0/!*izvuces row id*!/;
+                }
+                rows.push(rowId);
+                for (let col = 0; col < colsCount; col++) {
+                    alert($$('#' + rowId)[1]);
+                    let cell = $$('#' + rowId)[col+1];
+                    cell.innerHTML = tableSettings.tableNewData[row][Object.keys(tableSettings.tableNewData[row])[col]];
+                    cell.className = col === 0 ? 'first cell' : 'cell';
+                    cell.classList.add(`row-${rowId}`);
+                    cell.addEventListener('mouseover', function () {
+                        hoverRow(`row-${rowId}`, true);
+                    }, {passive: false});
+                    cell.addEventListener('mouseout', function () {
+                        hoverRow(`row-${rowId}`, false);
+                    }, {passive: false});
+                }
+            }*/
         }
         tableSettings.tableContainerElement.className = tableSettings.sticky ? 'table sticky' : 'table';
     }
 
-
-    /*
-    function checkIfHasTable(pageId, tableContainerId) {
-        let hasTable = false;
-        let listOfChildren = $$('#' + pageId).childNodes;
-        listOfChildren.forEach(function (node) {
-            if (node.id === tableContainerId) {
-                hasTable = true;
-            }
-        });
-        return hasTable;
-    }
-*/
-
-
-    /*
-        if (checkIfHasTable(tableSettings.pageId, tableSettings.tableContainerId) === false) {
-            tableSettings.tableContainerClassElement.setAttribute('id', tableSettings.tableContainerId);
-            colsCount = Object.keys(tableSettings.tableData[0]).length;
-            tbody = document.createElement('div');
-            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-            tbody.style.gridTemplateRows = `repeat(${jsonData.length}, 1fr)`;
-            tbody.className = 'tbody';
-
-            for (let col = 0; col < colsCount; col++) {
-                let head = document.createElement('div');
-                head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
-                head.className = 'head cell';
-                tbody.appendChild(head);
-            }
-        }
-        else if (tableSettings.forceRemoveHeaders === true) {
-            tableSettings.tableContainerIdElement.removeChild($$('.tbody')[0]);
-        }
-
-        let colsCount;
-        let tbody;
-
-        if (tableSettings.forceRemoveHeaders === false) {
-            colsCount = Object.keys(tableSettings.tableData[0]).length;
-            tbody = document.createElement('div');
-            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-            tbody.style.gridTemplateRows = `repeat(${jsonData.length}, 1fr)`;
-            tbody.className = 'tbody';
-
-            for (let col = 0; col < colsCount; col++) {
-                let head = document.createElement('div');
-                head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
-                head.className = 'head cell';
-                tbody.appendChild(head);
-            }
-
-        } else {
-            colsCount = $$('.head').length;
-            tbody = $$('.tbody')[0];
-
-            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-            tbody.style.gridTemplateRows = `repeat(${tableSettings.tableData.length}, 1fr)`;
-        }
-
-        for (let row = 0; row < tableSettings.tableData.length; row++) {
-            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            while (rows.includes(rowId)) {
-                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            }
-            rows.push(rowId);
-            for (let col = 0; col < colsCount; col++) {
-                let cell = document.createElement('div');
-                cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
-                cell.className = col === 0 ? 'first cell' : 'cell';
-                cell.classList.add(`row-${rowId}`);
-                cell.addEventListener('mouseover', function () {
-                    hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
-                cell.addEventListener('mouseout', function () {
-                    hoverRow(`row-${rowId}`, false);
-                }, {passive: false});
-                tbody.appendChild(cell);
-            }
-        }
-        tableSettings.tableContainerClassElement.className = tableSettings.sticky ? 'table sticky' : 'table';
-        return tbody;
-    }*/
-
-
-    /*  function generateTableee(jsonData, tableContainerElement, forceRemoveHeaders, id = '', sticky = false) {
-
-          let colsCount;
-
-          if (forceRemoveHeaders === false) {
-              colsCount = Object.keys(jsonData[0]).length;
-              let tbody = document.createElement('div');
-              tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-              tbody.style.gridTemplateRows = `repeat(${jsonData.length}, 1fr)`;
-              tbody.className = 'tbody';
-
-              for (let col = 0; col < colsCount; col++) {
-                  let head = document.createElement('div');
-                  head.innerHTML = Object.keys(jsonData[0])[col];
-                  head.className = 'head cell';
-                  tbody.appendChild(head);
-              }
-              for (let row = 0; row < jsonData.length; row++) {
-                  let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-                  while (rows.includes(rowId)) {
-                      rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-                  }
-                  rows.push(rowId);
-                  for (let col = 0; col < colsCount; col++) {
-                      let cell = document.createElement('div');
-                      cell.innerHTML = jsonData[row][Object.keys(jsonData[row])[col]];
-                      cell.className = col === 0 ? 'first cell' : 'cell';
-                      cell.classList.add(`row-${rowId}`);
-                      cell.addEventListener('mouseover', function () {
-                          hoverRow(`row-${rowId}`, true);
-                      }, {passive: false});
-                      cell.addEventListener('mouseout', function () {
-                          hoverRow(`row-${rowId}`, false);
-                      }, {passive: false});
-                      tbody.appendChild(cell);
-                  }
-              }
-
-              function hoverRow(elements, highlight = false) {
-                  for (let element of document.getElementsByClassName(elements)) {
-                      element.classList[highlight ? "add" : "remove"]('hover');
-                  }
-              }
-
-              tableContainerElement.className = sticky ? 'table sticky' : 'table';
-              return tbody;
-          }
-
-          else {
-              colsCount = $$('.head').length;
-              let tbody = $$('.tbody')[0];
-
-              tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-              tbody.style.gridTemplateRows = `repeat(${jsonData.length}, 1fr)`;
-
-              for (let row = 0; row < jsonData.length; row++) {
-                  let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-                  while (rows.includes(rowId)) {
-                      rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-                  }
-                  rows.push(rowId);
-                  for (let col = 0; col < colsCount; col++) {
-                      let cell = document.createElement('div');
-                      cell.innerHTML = jsonData[row][Object.keys(jsonData[row])[col]];
-                      cell.className = col === 0 ? 'first cell' : 'cell';
-                      cell.classList.add(`row-${rowId}`);
-                      cell.addEventListener('mouseover', function () {
-                          hoverRow(`row-${rowId}`, true);
-                      }, {passive: false});
-                      cell.addEventListener('mouseout', function () {
-                          hoverRow(`row-${rowId}`, false);
-                      }, {passive: false});
-                      tbody.appendChild(cell);
-                  }
-              }
-
-              function hoverRow(elements, highlight = false) {
-                  for (let element of document.getElementsByClassName(elements)) {
-                      element.classList[highlight ? "add" : "remove"]('hover');
-                  }
-              }
-
-              tableContainerElement.className = sticky ? 'table sticky' : 'table';
-              return tbody;
-          }
-
-      }*/
-
-    /*
-        function displayTable(pageId, tableToDisplay) {
-            let listOfChildren = $$(pageId);
-            if (table.checkIfHasTable(listOfChildren) === true) {
-                //update
-                console.log('home already has table');
-            }
-            else {
-                let tableHome = table.generateTable(testTable, 'table-home');
-                $$('#page-home').appendChild(tableHome);
-            }
-        }
-    */
-
     return {
-        generateTable: generateTable,
-        // checkIfHasTable: checkIfHasTable
-        // displayTable: displayTable
+        generateTable: generateTable
     };
 
 })();
