@@ -353,32 +353,15 @@ let home = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-        let tableSettings = new Object();
+        let tableSettings = {};
         tableSettings.tableData = testDataTableHome;
         tableSettings.forceRemoveHeaders = true;
-        tableSettings.pageId = 'page-home';
-        tableSettings.tableContainerId = 'table-container-home';
-        tableSettings.tableContainerClassSelector = '.table-container-home';
-        tableSettings.tableContainerClassElement = $$(tableSettings.tableContainerClassSelector)[0];
+        tableSettings.tableContainerSelector = '#table-container-home';
+        tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         tableSettings.sticky = false;
         tableSettings.id = '';
 
-        table.generateTable(tableSettings);
-
-
-        if (table.checkIfHasTable(pageId, tableContainerId) === true) {
-            let tableContainerIdElement = $$('#'+tableContainerId);
-            tableContainerIdElement.removeChild($$('.tbody')[0]);
-            let tableHomeUpdated = table.generateTable(newTestData, tableContainerIdElement, false);
-            $$('#'+tableContainerId).appendChild(tableHomeUpdated);
-        }
-        else {
-            tableContainerClassElement.setAttribute('id', tableContainerId);
-            let tableContainerIdElement = $$('#' + tableContainerId);
-            tableContainerIdElement.tableObject = jsObject;
-            let tableHome = table.generateTable(testDataTableHome.data, tableContainerClassElement, testDataTableHome.forseRemoveHeaders);
-            $$('#' + tableContainerId).appendChild(tableHome);
-        }
+        let tableHome = table.generateTable(tableSettings);
 
     });
 
