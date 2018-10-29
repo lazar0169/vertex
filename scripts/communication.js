@@ -120,8 +120,7 @@ let communication = (function () {
     }
 
     function setAuthHeader(xhr) {
-        //ToDo: take token from local storage
-        // take token from sesionStorage and set refresh and authorization 
+        // take token from sessionStorage and set refresh and authorization 
         let token = JSON.parse(sessionStorage['token']);
         xhr.setRequestHeader('refresh', token.refresh_token);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token.access_token);
