@@ -29,7 +29,8 @@
 }
 
 .default-select>div:not(:first-child) {
-    width: 100%;
+    min-width: 120px;
+    max-width: 250px;
     max-height: 140px;
     background: rgb(38, 50, 56);
     position: absolute;
@@ -40,18 +41,13 @@
 }
 
 .active-select>div:first-child {
-    border-bottom: none;
+    border-bottom: 1px solid rgb(38, 50, 56);
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
 }
 
 .default-select>div:not(:first-child)>div {
-    padding-left: 0.5rem;
+    padding: 0.2rem 0.5rem;
     overflow: hidden;
-}
-
-.default-select>div:not(:first-child)>div.single-option {
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
 }
 
 .default-select>div:not(:first-child)>div>label>div {

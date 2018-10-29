@@ -11,6 +11,7 @@
 
 #wrapper-ticket-appearance-settings>div>div:first-child {
     font-weight: bold;
+    border-bottom: 2px solid transparent;
 }
 
 #wrapper-ticket-appearance-advanced>div:first-child {
