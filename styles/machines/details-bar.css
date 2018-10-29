@@ -81,7 +81,7 @@
 }
 
 .tab-active {
-    border-bottom: 2px solid rgb(30, 155, 227);
+    border-bottom: 2px solid rgb(30, 155, 227)!important;
     color: white !important;
 }
 
