@@ -355,11 +355,9 @@ let home = (function () {
 
         let tableSettings = {};
         tableSettings.tableData = testDataTableHome;
-        tableSettings.tableNewData = newTestData;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-home';
-        tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
-        tableSettings.sticky = false;
+        tableSettings.sticky = true;
         tableSettings.id = '';
 
         table.generateTable(tableSettings);

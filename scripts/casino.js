@@ -77,7 +77,6 @@ let casino = (function () {
         tableSettings.tableData = testDataTableCasinos;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-casinos';
-        tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         tableSettings.sticky = false;
         tableSettings.id = '';
 
