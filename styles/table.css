@@ -1,5 +1,4 @@
 .table {
-    overflow: auto;
     position: relative;
     height: 400px;
     width: 100%;
@@ -44,16 +43,23 @@
     z-index: 1;
 }
 
+.sticky {
+    position: sticky;
+    position: -webkit-sticky;
+}
+
 .sticky .first.cell,
 .sticky .head.cell {
+    top: 0;
     position: sticky;
     position: -webkit-sticky;
 }
 
 .tbody {
+    overflow: auto;
     display: grid;
     position: absolute;
     /*z-index: 15000;*/
-    width: 50px;
-    height: 50px;
+    width: 80%;
+    height: 100%;
 }
