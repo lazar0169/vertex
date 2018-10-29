@@ -44,7 +44,7 @@ let table = (function () {
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
                 cell.innerHTML = tableData[row][Object.keys(tableData[row])[col]];
-                cell.className = col === 0 ? 'first cell' : 'cell';
+                cell.className = col === 0 ? 'first cell' : 'cell '+'cell-'+Object.keys(tableData[0])[row];
                 cell.classList.add(`row-${rowId}`);
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
@@ -69,7 +69,6 @@ let table = (function () {
         }
         return colsCount;
     }
-
 
     function generateTable(tableSettings) {
 
