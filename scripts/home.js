@@ -362,6 +362,7 @@ let home = (function () {
 
         table.generateTable(tableSettings);
 
+        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
     });
 
 })();
