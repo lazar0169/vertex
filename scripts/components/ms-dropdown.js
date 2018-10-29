@@ -9,7 +9,6 @@ const multiDropdown = (function () {
         let noSelected = dataSelect.shift();
         //wrapper select
         let select = document.createElement('div');
-
         select.dataset.selectId = `ms-${indexMsId}`;
         select.classList.add('default-select');
         //selected options

@@ -70,7 +70,6 @@ let communication = (function () {
     }
 
     function createRequest(route, requestType, data, successEvent, errorEvent) {
-
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
@@ -100,9 +99,7 @@ let communication = (function () {
         return xhr.send();
     }
 
-
     //helper functions
-
     function tryParseJSON(jsonString) {
         try {
             let o = JSON.parse(jsonString);
@@ -124,17 +121,16 @@ let communication = (function () {
 
     function setAuthHeader(xhr) {
         //ToDo: take token from local storage
+        // take token from sesionStorage and set refresh and authorization 
         let token = JSON.parse(sessionStorage['token']);
         xhr.setRequestHeader('refresh', token.refresh_token);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token.access_token);
         return xhr;
-
     }
 
     function setHeader(xhr, header, value) {
         xhr.setRequestHeader(header, value);
     }
-
 
     //events for login
     on('communicate/login', function (params) {
@@ -147,8 +143,6 @@ let communication = (function () {
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
-
-
     //events for casino, get all machines from casino
     on('communicate/casinos', function (params) {
         //let casinoId = params.casinoId;
@@ -174,12 +168,12 @@ let communication = (function () {
         // trigger('communicate/casinos/previewMachineEvents', {})
         // trigger('communicate/casinos/getAllMachinesMeters', {})
         // trigger('communicate/casinos/previewMachinesMeters', {})
-        //trigger('communicate/casinos/removeMeter', {}) greska sa serverom 500
+        //trigger('communicate/casinos/removeMeter', {}) server error 500
         // trigger('communicate/casinos/showMachinesMeters', {})
-        //trigger('communicate/casinos/saveMachinesMeters', {}) greska sa serverom 500
+        //trigger('communicate/casinos/saveMachinesMeters', {}) server error 500
         // trigger('communicate/casinos/editMachines', {})
-        //trigger('communicate/casinos/saveMachine', {})greska sa serverom 500
-        //trigger('communicate/casinos/removeMachineFromCasino', {})greska sa serverom 500
+        //trigger('communicate/casinos/saveMachine', {}) server error 500
+        //trigger('communicate/casinos/removeMachineFromCasino', {}) server errorm 500
     });
     //data with static values, need to be dynamic
     //machines preview transactions
@@ -412,7 +406,6 @@ let communication = (function () {
             'MeterStepValue': 99999999,
             'MachineCodeName': 'code',
             'MachineCode': 222222222
-
         };
         let request = requestTypes.post;
         let errorEvent = '';
@@ -472,169 +465,171 @@ let communication = (function () {
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft get notification settings
-on('communicate/aft/getNotificationSettings', function (params) {
-    let route = 'api/transactions/getnotificationsettings';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft get basic settings
-on('communicate/aft/getBasicSettings', function (params) {
-    let route = 'api/transactions/getbasicsettings/';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft save basic settings
-on('communicate/aft/saveBasicSettings', function (params) {
-    let route = 'api/transactions/savebasicsettings/';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2,
-        'EnableTransactions': true,
-        'CashableTransactionLimit': 123456789,
-        'CashableTransactionHandpayLimit': 987654321,
-        'PromoTransactionLimit': 123,
-        'PromoTransactionHandpayLimit': 321
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft save notification settings
-on('communicate/aft/saveNotificationSettings', function (params) {
-    let route = 'api/transactions/savenotificationsettings/';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2,
-        'EnableNotification': true,
-        'CashableTransactionCreatedLimitForNotification': 123456789,
-        'CashableTransactionPayedLimitForNotification ': 987654321,
-        'PromoTransactionCreatedLimitForNotification ': 123,
-        'PromoTransactionPayedLimitForNotification ': 321,
-        'EmailList': ['mailAddress@gaga.com'],
-        'PhoneNumberList': ['+381111111']
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft get filters
-on('communicate/aft/getFilters', function (params) {
-    let route = 'api/transactions/getfilters';
-    let successEvent = 'communicate/testFilter';
-    let data = {
-        'EndpointId': 2
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft add transaction
-on('communicate/aft/addTransaction', function (params) {
-    let route = 'api/transactions/addtransaction/';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2,
-        'EndpointName': '',
-        'Gmcid': 1565666846,
-        'MachineName': '',
-        'Type': 0,
-        'CashableAmount': 13800,
-        'PromoAmount': 13800,
-        'ExpirationInDays': 7
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft cancel transaction
-on('communicate/aft/cancelTransaction', function (params) {
-    let route = 'api/transactions/canceltransaction/';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2,
-        'EndpointName': '',
-        'Gmcid': 1565666846,
-        //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-        'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft cancel pending transaction
-on('communicate/aft/cancelPendingTransaction', function (params) {
-    let route = 'api/transactions/cancelpendingtransaction/';
-    let successEvent = 'communicate/test';
-    let data = {
-        'EndpointId': 2,
-        'EndpointName': '',
-        'Gmcid': 1565666846,
-        // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-        'JidtString': '33,32'
-    };
-    let request = requestTypes.post;
-    let errorEvent = '';
-    trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
-});
-//aft events for machines
-on('communicate/machine-info', function (params) {
-    let machineId = params.machineId;
-    let callbackEventName = params.successEvent;
-    let route = "machine/" + machineId;
-    let data = typeof params.data === typeof undefined ? null : params.data;
-    let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
-    xhr = setDefaultHeaders(xhr);
-    xhr = setAuthHeader(xhr);
-    send(xhr);
-});
+    });
+    //aft get notification settings
+    on('communicate/aft/getNotificationSettings', function (params) {
+        let route = 'api/transactions/getnotificationsettings';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft get basic settings
+    on('communicate/aft/getBasicSettings', function (params) {
+        let route = 'api/transactions/getbasicsettings/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft save basic settings
+    on('communicate/aft/saveBasicSettings', function (params) {
+        let route = 'api/transactions/savebasicsettings/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EnableTransactions': true,
+            'CashableTransactionLimit': 123456789,
+            'CashableTransactionHandpayLimit': 987654321,
+            'PromoTransactionLimit': 123,
+            'PromoTransactionHandpayLimit': 321
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft save notification settings
+    on('communicate/aft/saveNotificationSettings', function (params) {
+        let route = 'api/transactions/savenotificationsettings/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EnableNotification': true,
+            'CashableTransactionCreatedLimitForNotification': 123456789,
+            'CashableTransactionPayedLimitForNotification ': 987654321,
+            'PromoTransactionCreatedLimitForNotification ': 123,
+            'PromoTransactionPayedLimitForNotification ': 321,
+            'EmailList': ['mailAddress@gaga.com'],
+            'PhoneNumberList': ['+381111111']
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft get filters
+    on('communicate/aft/getFilters', function (params) {
+        let route = 'api/transactions/getfilters';
+        let successEvent = 'communicate/testFilter';
+        let data = {
+            'EndpointId': 2
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft add transaction
+    on('communicate/aft/addTransaction', function (params) {
+        let route = 'api/transactions/addtransaction/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EndpointName': '',
+            'Gmcid': 1565666846,
+            'MachineName': '',
+            'Type': 0,
+            'CashableAmount': 13800,
+            'PromoAmount': 13800,
+            'ExpirationInDays': 7
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft cancel transaction
+    on('communicate/aft/cancelTransaction', function (params) {
+        let route = 'api/transactions/canceltransaction/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EndpointName': '',
+            'Gmcid': 1565666846,
+            //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
+            'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft cancel pending transaction
+    on('communicate/aft/cancelPendingTransaction', function (params) {
+        let route = 'api/transactions/cancelpendingtransaction/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EndpointName': '',
+            'Gmcid': 1565666846,
+            // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
+            'JidtString': '33,32'
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+    });
+    //aft events for machines
+    on('communicate/machine-info', function (params) {
+        let machineId = params.machineId;
+        let callbackEventName = params.successEvent;
+        let route = "machine/" + machineId;
+        let data = typeof params.data === typeof undefined ? null : params.data;
+        let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
+        xhr = setDefaultHeaders(xhr);
+        xhr = setAuthHeader(xhr);
+        send(xhr);
+    });
 
 
-//events for reports
+    //events for reports
 
 
-//events for users
+    //events for users
 
 
-//events for service
+    //events for service
 
-// create and send xhr
-on('communicate/createAndSendXhr', function (params) {
-    let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent);
-    xhr = setDefaultHeaders(xhr);
-    xhr = setAuthHeader(xhr);
-    send(xhr);
-});
+    // create and send xhr
+    on('communicate/createAndSendXhr', function (params) {
+        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent);
+        xhr = setDefaultHeaders(xhr);
+        xhr = setAuthHeader(xhr);
+        send(xhr);
+    });
 
-//generate events
-on('communicate/category', function (params) {
-    trigger(`communicate/${params.category.toLowerCase()}`);
-});
+    //generate events
+    on('communicate/category', function (params) {
+        trigger(`communicate/${params.category.toLowerCase()}`);
+    });
 
-//test, need to be deleted
-on('communicate/test', function (params) {
-    //alert('Successful communication');
-    console.log(params.data);
-});
-on('communicate/testFilter', function (params) {
-    //alert('Successful communication');
-    console.log(params.data);
-    params.data.Data.MachineNameList.length === 0 ? alert('pogresni parametri') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
-    params.data.Data.JackpotNameList.length === 0 ? alert('pogresni parametri') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
-    params.data.Data.TypeList.length === 0 ? alert('pogresni parametri') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
-    params.data.Data.StatusList.length === 0 ? alert('pogresni parametri') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
-    params.data.Data.ColumnsList.length === 0 ? alert('pogresni parametri') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
-});
+    //test, need to be deleted
+    on('communicate/test', function (params) {
+        //alert('Successful communication');
+        console.log(params.data);
+    });
+    
+    //test, set filters for aft
+    on('communicate/testFilter', function (params) {
+        //alert('Successful communication');
+        console.log(params.data);
+        params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
+        params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
+        params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
+        params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
+        params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
+    });
 
-}) ();
+})();
