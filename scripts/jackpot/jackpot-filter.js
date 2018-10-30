@@ -9,6 +9,7 @@ const jackpotFilter = (function () {
     let jackpotAddMachineTypeList = $$('#jackpot-add-machines-filter-type').children[1];
     let jackpotAddButton = $$('#jackpot-add-machines-buttons').children[0];
     let jackpotBackButton = $$('#jackpot-add-machines-buttons').children[1];
+    let jackpotAddAllMachines = $$('#jackpot-add-machines-filter').children[0];
 
     jackpotMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
 
@@ -26,12 +27,14 @@ const jackpotFilter = (function () {
         jackpotAddMachineTypeList.classList.toggle('hidden');
     });
     jackpotAddButton.addEventListener('click', function () {
-        alert('Add jackpot')
+        alert('Add jackpot');
+    });
+    jackpotAddAllMachines.addEventListener('click', function () {
+        alert('Add all machines');
     });
     jackpotBackButton.addEventListener('click', function () {
         trigger('show/app');
     });
-
 
     on('show/app', function () {
         jackpotAddMachine.classList.add('hidden');
