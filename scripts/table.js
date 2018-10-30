@@ -2,15 +2,17 @@ let table = (function () {
 
     let rows = [];
 
-    function hoverRow(elements, highlight = false) {
-        for (let element of document.getElementsByClassName(elements)) {
-            element.classList[highlight ? "add" : "remove"]('hover');
+    function getColsCount(tableSettings) {
+        let colsCount;
+        let tbody = getTableBodyElement(tableSettings);
+        if (tbody === undefined || tableSettings.forceRemoveHeaders === true) {
+            colsCount = Object.keys(tableSettings.tableData[0]).length;
         }
-    }
-
-    function styleColsRows(tableSettingsData, colsCount, tbody) {
-        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-        tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
+        else {
+            let headElements = document.querySelectorAll('#' + tbody.id + ' .head');
+            colsCount = headElements.length;
+        }
+        return colsCount;
     }
 
     function generateHeaders(tableSettings, colsCount) {
@@ -34,6 +36,17 @@ let table = (function () {
         return tbody;
     }
 
+    function styleColsRows(tableSettingsData, colsCount, tbody) {
+        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+        tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
+    }
+
+    function hoverRow(elements, highlight = false) {
+        for (let element of document.getElementsByClassName(elements)) {
+            element.classList[highlight ? "add" : "remove"]('hover');
+        }
+    }
+
     function generateRows(tableData, colsCount, tbody) {
         for (let row = 0; row < tableData.length; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
@@ -44,7 +57,7 @@ let table = (function () {
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
                 cell.innerHTML = tableData[row][Object.keys(tableData[row])[col]];
-                cell.className = col === 0 ? 'first cell' : 'cell ' + 'cell-' + Object.keys(tableData[0])[row];
+                cell.className = col === 0 ? 'first cell' : 'cell ' + Object.keys(tableData[0])[row];
                 cell.classList.add(`row-${rowId}`);
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
@@ -55,19 +68,6 @@ let table = (function () {
                 tbody.appendChild(cell);
             }
         }
-    }
-
-    function getColsCount(tableSettings) {
-        let colsCount;
-        let tbody = getTableBodyElement(tableSettings);
-        if (tbody === undefined || tableSettings.forceRemoveHeaders === true) {
-            colsCount = Object.keys(tableSettings.tableData[0]).length;
-        }
-        else {
-            let headElements = document.querySelectorAll('#' + tbody.id + ' .head');
-            colsCount = headElements.length;
-        }
-        return colsCount;
     }
 
     function generateTable(tableSettings) {

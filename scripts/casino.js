@@ -4,66 +4,62 @@ let casino = (function () {
         {
             "period": "4/1/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0
+            "totalWin": 2
         },
         {
             "period": "4/2/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0,
-            "payout": 5
+            "totalWin": 2
         },
         {
             "period": "4/3/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0,
-            "payout": 5
+            "totalWin": 2
         },
         {
             "period": "4/4/2018",
             "totalBet": 11.6,
-            "totalWin": 1.5,
-            "rounds": 46,
-            "jackpotValue": 4,
-            "result": 1018923.124451
+            "totalWin": 1.5
         },
         {
             "period": "4/5/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0
+            "totalWin": 2
         },
         {
             "period": "4/6/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3
+            "totalWin": 2
         },
         {
             "period": "4/7/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0
+            "totalWin": 2
         },
         {
             "period": "4/8/2018",
             "totalBet": 1,
-            "totalWin": 2,
-            "rounds": 3,
-            "jackpotValue": 4,
-            "result": 0
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
         }
     ];
 
@@ -77,7 +73,7 @@ let casino = (function () {
         tableSettings.tableData = testDataTableCasinos;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-casinos';
-        tableSettings.sticky = false;
+        tableSettings.sticky = true;
         tableSettings.id = '';
 
         table.generateTable(tableSettings);

@@ -175,177 +175,194 @@ let home = (function () {
 
     let newTestData = [
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         },
         {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
-        },
-        {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
-        },
-        {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
-        },
-        {
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home",
-            "period": "home"
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home",
+            "period6": "home",
+            "period7": "home",
+            "period8": "home"
         }
     ];
 
+    let newTestData2 = [
+        {
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home"
+        },
+        {
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home"
+        },
+        {
+            "period1": "home",
+            "period2": "home",
+            "period3": "home",
+            "period4": "home",
+            "period5": "home"
+        }
+    ];
+
+    let newTestData3 = [
+        {
+            "period1 period": "home",
+            "period2 period": "home",
+            "period3 period": "home",
+            "period4 period": "home",
+            "period5 period": "home"
+        },
+        {
+            "period1 period": "home",
+            "period2 period": "home",
+            "period3 period": "home",
+            "period4 period": "home",
+            "period5 period": "home"
+        },
+        {
+            "period1 period": "home",
+            "period2 period": "home",
+            "period3 period": "home",
+            "period4 period": "home",
+            "period5 period": "home"
+        }
+    ];
 
     on('home/activated', function () {
 
@@ -363,6 +380,8 @@ let home = (function () {
         table.generateTable(tableSettings);
 
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
+        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData2});
+        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData3});
     });
 
 })();
