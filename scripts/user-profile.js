@@ -18,7 +18,6 @@ const userEditProfileModule = (function () {
     saveUserEditProfile.addEventListener('click', function(){
         alert('Save changes');
         trigger('show/app');
-
     });
 
     on('show/app', function () {

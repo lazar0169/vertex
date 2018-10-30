@@ -18,8 +18,8 @@ body {
     position: fixed;
     width: 0;
     height: 100%;
-    opacity: 0.5;
-    background-color: rgb(0, 0, 0);
+    opacity: 0.7;
+    background-color: rgb(10, 14, 16);
 }
 
 #black-area.show {

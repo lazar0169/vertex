@@ -35,6 +35,8 @@
       "machines/edit-page.js",
       "tickets/tickets-filters.js",
       "tickets/tickets-appearance.js",
+      "jackpot/jackpot-filter.js",
+      
       "session.js",
       "preloader.js",
       "application.js",
@@ -59,6 +61,8 @@
       "aft/aft-tabs.css",
       "tickets/tickets-tabs.css",
       "tickets/tickets-appearance.css",
+      "jackpot/jackpot-filter.css",
+      "jackpot/jackpot-add-machines.css",
       "components/dropdown.css",
       "main-content.css",
       "preloader.css"
