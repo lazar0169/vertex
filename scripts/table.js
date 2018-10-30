@@ -26,7 +26,7 @@ let table = (function () {
             let head = document.createElement('div');
             head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
             head.className = 'head cell';
-            if(stickyRow === true) {
+            if (stickyRow === true) {
                 head.classList.add('sticky-head-row');
             }
             tbody.appendChild(head);
@@ -51,7 +51,7 @@ let table = (function () {
     }
 
     function generateCellClassName(tableData, colNumber) {
-        let cellClassName = 'cell-'+Object.keys(tableData[0])[colNumber];
+        let cellClassName = 'cell-' + Object.keys(tableData[0])[colNumber];
         cellClassName = cellClassName.toLowerCase();
         cellClassName = cellClassName.replace(' ', '-');
         return cellClassName;
@@ -70,7 +70,7 @@ let table = (function () {
                 let cellClassName = generateCellClassName(tableData, col);
                 cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
                 cell.classList.add(`row-${rowId}`);
-                if(stickyColumn === true && col === 0) {
+                if (stickyColumn === true && col === 0) {
                     cell.classList.add('sticky-first-column');
                 }
                 cell.addEventListener('mouseover', function () {
@@ -84,17 +84,17 @@ let table = (function () {
         }
     }
 
-    function makeHeadRowSticky (tableContainerSelector) {
-        let firstRow = document.querySelectorAll(tableContainerSelector+' .tbody .head');
-        firstRow.forEach(function(element){
+    function makeHeadRowSticky(tableContainerSelector) {
+        let firstRow = document.querySelectorAll(tableContainerSelector + ' .tbody .head');
+        firstRow.forEach(function (element) {
             element.classList.add('sticky-head-row');
         });
     }
 
-    function makeFirstColumnSticky (tableContainerSelector) {
-        let firstColumn = document.querySelectorAll(tableContainerSelector+' .tbody .first');
-        firstColumn.forEach(function(element){
-           element.classList.add('sticky-first-column');
+    function makeFirstColumnSticky(tableContainerSelector) {
+        let firstColumn = document.querySelectorAll(tableContainerSelector + ' .tbody .first');
+        firstColumn.forEach(function (element) {
+            element.classList.add('sticky-first-column');
         });
     }
 
@@ -114,16 +114,20 @@ let table = (function () {
 
         tableSettings.tableContainerElement.className = tableSettings.stickyRow ? 'table sticky' : 'table';
 
-/*
-        if(tableSettings.stickyRow === true) {
-            makeHeadRowSticky(tableSettings.tableContainerSelector);
-        }
-        if(tableSettings.stickyColumn === true) {
-            makeFirstColumnSticky(tableSettings.tableContainerSelector);
-        }
-*/
+        /*
+                if(tableSettings.stickyRow === true) {
+                    makeHeadRowSticky(tableSettings.tableContainerSelector);
+                }
+                if(tableSettings.stickyColumn === true) {
+                    makeFirstColumnSticky(tableSettings.tableContainerSelector);
+                }
+        */
 
         tableContainerElement.tableSettings = tableSettings;
+    }
+
+    function displayTable(tableSettings) {
+       trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
     }
 
     on('table/generate/new-data', function (params) {
@@ -133,7 +137,8 @@ let table = (function () {
     });
 
     return {
-        generateTable: generateTable
+        // generateTable: generateTable
+        displayTable: displayTable
     };
 
 })();

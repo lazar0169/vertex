@@ -80,7 +80,7 @@ let communication = (function () {
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
-        }
+        };
         return xhr;
     }
 
@@ -135,6 +135,153 @@ let communication = (function () {
         xhr = setDefaultHeaders(xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
+    });
+
+
+    on('communicate/table/data', function (params) {
+        let newTableData = [
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            },
+            {
+                "period1": "home",
+                "period2": "home",
+                "period3": "home",
+                "period4": "home",
+                "period5": "home",
+                "period6": "home",
+                "period7": "home",
+                "period8": "home"
+            }
+        ];
+        trigger(params.callbackEvent, {tableSettings: params.tableSettings, newTableData: newTableData});
     });
 
 

@@ -378,7 +378,11 @@ let home = (function () {
         tableSettings.stickyColumn = true;
         tableSettings.id = '';
 
-        table.generateTable(tableSettings);
+        // table.generateTable(tableSettings);
+
+        table.displayTable(tableSettings);
+
+        // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
 
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData2});
