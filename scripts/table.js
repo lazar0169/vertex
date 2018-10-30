@@ -9,7 +9,7 @@ let table = (function () {
             colsCount = Object.keys(tableSettings.tableData[0]).length;
         }
         else {
-            let headElements = document.querySelectorAll('#'+tbody.id+' .head');
+            let headElements = document.querySelectorAll('#' + tbody.id + ' .head');
             colsCount = headElements.length;
         }
         return colsCount;
@@ -17,7 +17,7 @@ let table = (function () {
 
     function generateHeaders(tableSettings, colsCount) {
         let tbody = getTableBodyElement(tableSettings);
-        if(tbody !== null) {
+        if (tbody !== null) {
             tbody.parentNode.removeChild(tbody);
         }
         tbody = document.createElement('div');
@@ -31,8 +31,8 @@ let table = (function () {
         tableSettings.tableContainerElement.appendChild(tbody);
     }
 
-    function getTableBodyElement (tableSettings) {
-        let tbody = document.querySelector(tableSettings.tableContainerSelector+' .tbody');
+    function getTableBodyElement(tableSettings) {
+        let tbody = document.querySelector(tableSettings.tableContainerSelector + ' .tbody');
         return tbody;
     }
 
@@ -47,6 +47,13 @@ let table = (function () {
         }
     }
 
+    function generateCellClassName(tableData, colNumber) {
+        let cellClassName = 'cell-'+Object.keys(tableData[0])[colNumber];
+        cellClassName = cellClassName.toLowerCase();
+        cellClassName = cellClassName.replace(' ', '-');
+        return cellClassName;
+    }
+
     function generateRows(tableData, colsCount, tbody) {
         for (let row = 0; row < tableData.length; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
@@ -57,7 +64,8 @@ let table = (function () {
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
                 cell.innerHTML = tableData[row][Object.keys(tableData[row])[col]];
-                cell.className = col === 0 ? 'first cell' : 'cell '+'cell-'+Object.keys(tableData[0])[row];
+                let cellClassName = generateCellClassName(tableData, col);
+                cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
                 cell.classList.add(`row-${rowId}`);
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
@@ -88,7 +96,7 @@ let table = (function () {
         tableContainerElement.tableSettings = tableSettings;
     }
 
-    on('table/generate/new-data', function(params){
+    on('table/generate/new-data', function (params) {
         let newTableSettings = params.tableSettings;
         newTableSettings.tableData = params.newTableData;
         generateTable(newTableSettings);
