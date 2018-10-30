@@ -15,7 +15,7 @@ let table = (function () {
         return colsCount;
     }
 
-    function generateHeaders(tableSettings, colsCount) {
+    function generateHeaders(tableSettings, colsCount, stickyRow) {
         let tbody = getTableBodyElement(tableSettings);
         if (tbody !== null) {
             tbody.parentNode.removeChild(tbody);
@@ -26,6 +26,9 @@ let table = (function () {
             let head = document.createElement('div');
             head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
             head.className = 'head cell';
+            if(stickyRow === true) {
+                head.classList.add('sticky-head-row');
+            }
             tbody.appendChild(head);
         }
         tableSettings.tableContainerElement.appendChild(tbody);
@@ -54,7 +57,7 @@ let table = (function () {
         return cellClassName;
     }
 
-    function generateRows(tableData, colsCount, tbody) {
+    function generateRows(tableData, colsCount, tbody, stickyColumn) {
         for (let row = 0; row < tableData.length; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             while (rows.includes(rowId)) {
@@ -67,6 +70,9 @@ let table = (function () {
                 let cellClassName = generateCellClassName(tableData, col);
                 cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
                 cell.classList.add(`row-${rowId}`);
+                if(stickyColumn === true && col === 0) {
+                    cell.classList.add('sticky-first-column');
+                }
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
                 }, {passive: false});
@@ -78,6 +84,20 @@ let table = (function () {
         }
     }
 
+    function makeHeadRowSticky (tableContainerSelector) {
+        let firstRow = document.querySelectorAll(tableContainerSelector+' .tbody .head');
+        firstRow.forEach(function(element){
+            element.classList.add('sticky-head-row');
+        });
+    }
+
+    function makeFirstColumnSticky (tableContainerSelector) {
+        let firstColumn = document.querySelectorAll(tableContainerSelector+' .tbody .first');
+        firstColumn.forEach(function(element){
+           element.classList.add('sticky-first-column');
+        });
+    }
+
     function generateTable(tableSettings) {
 
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
@@ -85,14 +105,24 @@ let table = (function () {
         let colsCount = getColsCount(tableSettings);
 
         if (tableContainerElement.tableSettings === undefined || tableSettings.forceRemoveHeaders === true) {
-            generateHeaders(tableSettings, colsCount);
+            generateHeaders(tableSettings, colsCount, tableSettings.stickyRow);
         }
 
         let tbody = getTableBodyElement(tableSettings);
         styleColsRows(tableSettings.tableData, colsCount, tbody);
-        generateRows(tableSettings.tableData, colsCount, tbody);
+        generateRows(tableSettings.tableData, colsCount, tbody, tableSettings.stickyColumn);
 
-        tableSettings.tableContainerElement.className = tableSettings.sticky ? 'table sticky' : 'table';
+        tableSettings.tableContainerElement.className = tableSettings.stickyRow ? 'table sticky' : 'table';
+
+/*
+        if(tableSettings.stickyRow === true) {
+            makeHeadRowSticky(tableSettings.tableContainerSelector);
+        }
+        if(tableSettings.stickyColumn === true) {
+            makeFirstColumnSticky(tableSettings.tableContainerSelector);
+        }
+*/
+
         tableContainerElement.tableSettings = tableSettings;
     }
 

@@ -374,7 +374,8 @@ let home = (function () {
         tableSettings.tableData = testDataTableHome;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-home';
-        tableSettings.sticky = true;
+        tableSettings.stickyRow = true;
+        tableSettings.stickyColumn = true;
         tableSettings.id = '';
 
         table.generateTable(tableSettings);

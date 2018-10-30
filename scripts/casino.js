@@ -73,7 +73,8 @@ let casino = (function () {
         tableSettings.tableData = testDataTableCasinos;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-casinos';
-        tableSettings.sticky = true;
+        tableSettings.stickyRow = true;
+        tableSettings.stickyColumn = true;
         tableSettings.id = '';
 
         table.generateTable(tableSettings);

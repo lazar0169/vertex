@@ -9,6 +9,7 @@
 .first.cell {
     top: 0;
     left: 0;
+    /*position: sticky;*/
 }
 
 .cell {
@@ -48,8 +49,15 @@
     position: -webkit-sticky;
 }
 
-.sticky .first.cell,
+/*.sticky .first.cell,
 .sticky .head.cell {
+    top: 0;
+    position: sticky;
+    position: -webkit-sticky;
+}*/
+
+.sticky-first-column,
+.sticky-head-row {
     top: 0;
     position: sticky;
     position: -webkit-sticky;
@@ -59,7 +67,6 @@
     overflow: auto;
     display: grid;
     position: absolute;
-    /*z-index: 15000;*/
-    width: 800px;
+    width: 500px;
     height: 500px;
 }
