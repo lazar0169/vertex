@@ -84,19 +84,19 @@ let table = (function () {
         }
     }
 
-    function makeHeadRowSticky(tableContainerSelector) {
-        let firstRow = document.querySelectorAll(tableContainerSelector + ' .tbody .head');
-        firstRow.forEach(function (element) {
-            element.classList.add('sticky-head-row');
-        });
-    }
+    /*    function makeHeadRowSticky(tableContainerSelector) {
+            let firstRow = document.querySelectorAll(tableContainerSelector + ' .tbody .head');
+            firstRow.forEach(function (element) {
+                element.classList.add('sticky-head-row');
+            });
+        }
 
-    function makeFirstColumnSticky(tableContainerSelector) {
-        let firstColumn = document.querySelectorAll(tableContainerSelector + ' .tbody .first');
-        firstColumn.forEach(function (element) {
-            element.classList.add('sticky-first-column');
-        });
-    }
+        function makeFirstColumnSticky(tableContainerSelector) {
+            let firstColumn = document.querySelectorAll(tableContainerSelector + ' .tbody .first');
+            firstColumn.forEach(function (element) {
+                element.classList.add('sticky-first-column');
+            });
+        }*/
 
     function generateTable(tableSettings) {
 
@@ -127,7 +127,7 @@ let table = (function () {
     }
 
     function displayTable(tableSettings) {
-       trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
+        trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
     }
 
     on('table/generate/new-data', function (params) {

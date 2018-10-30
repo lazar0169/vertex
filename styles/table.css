@@ -49,13 +49,6 @@
     position: -webkit-sticky;
 }
 
-/*.sticky .first.cell,
-.sticky .head.cell {
-    top: 0;
-    position: sticky;
-    position: -webkit-sticky;
-}*/
-
 .sticky-first-column,
 .sticky-head-row {
     top: 0;

@@ -382,8 +382,8 @@ let home = (function () {
 
         table.displayTable(tableSettings);
 
+        /*TESTING*/
         // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
-
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData2});
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData3});
