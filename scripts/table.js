@@ -132,7 +132,7 @@ let table = (function () {
 
     on('table/generate/new-data', function (params) {
         let newTableSettings = params.tableSettings;
-        newTableSettings.tableData = params.newTableData;
+        newTableSettings.tableData = params.newTableData.data;
         generateTable(newTableSettings);
     });
 
