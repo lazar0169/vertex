@@ -5,11 +5,11 @@ let table = (function () {
     function getColsCount(tableSettings) {
         let colsCount;
         let tbody = getTableBodyElement(tableSettings);
-        if (tbody === undefined || tableSettings.forceRemoveHeaders === true) {
+        if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
             colsCount = Object.keys(tableSettings.tableData[0]).length;
         }
         else {
-            let headElements = document.querySelectorAll('#' + tbody.id + ' .head');
+            let headElements = tbody.getElementsByClassName('head');
             colsCount = headElements.length;
         }
         return colsCount;
@@ -17,7 +17,7 @@ let table = (function () {
 
     function generateHeaders(tableSettings, colsCount, stickyRow) {
         let tbody = getTableBodyElement(tableSettings);
-        if (tbody !== null) {
+        if (tbody !== null && tbody !== undefined) {
             tbody.parentNode.removeChild(tbody);
         }
         tbody = document.createElement('div');
@@ -35,7 +35,7 @@ let table = (function () {
     }
 
     function getTableBodyElement(tableSettings) {
-        let tbody = document.querySelector(tableSettings.tableContainerSelector + ' .tbody');
+        let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         return tbody;
     }
 
