@@ -139,6 +139,10 @@ let communication = (function () {
 
 
     on('communicate/table/data', function (params) {
+        let parameters = params.parameters;
+
+        //ajax
+
         let newTableData = {
             data: [
                 {
@@ -285,7 +289,7 @@ let communication = (function () {
             page:2,
             pageCount:5
     }
-        trigger(params.callbackEvent, {tableSettings: params.tableSettings, newTableData: newTableData});
+        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: newTableData});
     });
 
 

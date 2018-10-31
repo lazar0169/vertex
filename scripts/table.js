@@ -27,7 +27,7 @@ let table = (function () {
             head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
             head.className = 'head cell';
             if (stickyRow === true) {
-                head.classList.add('sticky-head-row');
+                head.classList.add('sticky');
             }
             tbody.appendChild(head);
         }
@@ -71,7 +71,7 @@ let table = (function () {
                 cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
                 cell.classList.add(`row-${rowId}`);
                 if (stickyColumn === true && col === 0) {
-                    cell.classList.add('sticky-first-column');
+                    cell.classList.add('sticky');
                 }
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
@@ -84,25 +84,23 @@ let table = (function () {
         }
     }
 
-    /*    function makeHeadRowSticky(tableContainerSelector) {
-            let firstRow = document.querySelectorAll(tableContainerSelector + ' .tbody .head');
-            firstRow.forEach(function (element) {
-                element.classList.add('sticky-head-row');
-            });
-        }
-
-        function makeFirstColumnSticky(tableContainerSelector) {
-            let firstColumn = document.querySelectorAll(tableContainerSelector + ' .tbody .first');
-            firstColumn.forEach(function (element) {
-                element.classList.add('sticky-first-column');
-            });
-        }*/
 
     function generateTableContent(tableSettings) {
 
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
+
         let tableContainerElement = tableSettings.tableContainerElement;
         let colsCount = getColsCount(tableSettings);
+
+        if (tableSettings.dataEvent === undefined) {
+           let htmlEvent = tableContainerElement.getAttribute('data-data-event');
+           if (htmlEvent === undefined) {
+               console.error('no data event provided');
+           }
+           else {
+               tableSettings.dataEvent = htmlEvent;
+           }
+        }
 
         if (tableContainerElement.tableSettings === undefined || tableSettings.forceRemoveHeaders === true) {
             generateHeaders(tableSettings, colsCount, tableSettings.stickyRow);
@@ -112,33 +110,54 @@ let table = (function () {
         styleColsRows(tableSettings.tableData, colsCount, tbody);
         generateRows(tableSettings.tableData, colsCount, tbody, tableSettings.stickyColumn);
 
-        tableSettings.tableContainerElement.className = tableSettings.stickyRow ? 'table sticky' : 'table';
-
-        /*
-                if(tableSettings.stickyRow === true) {
-                    makeHeadRowSticky(tableSettings.tableContainerSelector);
-                }
-                if(tableSettings.stickyColumn === true) {
-                    makeFirstColumnSticky(tableSettings.tableContainerSelector);
-                }
-        */
 
         tableContainerElement.tableSettings = tableSettings;
     }
 
     function generateTablePagination(tableSettings) {
-
+        let pageCount = tableSettings.pageCount;
+        let activePageNumber = tableSettings.activePageNumber;
     }
 
 
 
     function updateTable(tableSettings) {
-        trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
+        let event = tableSettings.dataEvent;
+        let params = {
+            page: 3,
+            pageSize: 10,
+            filters: {
+
+            }
+        };
+
+        trigger(event, {tableSettings: tableSettings,parameters:params, callbackEvent: 'table/update'});
     }
 
-    on('table/generate/new-data', function (params) {
-        let newTableSettings = params.tableSettings;
-        newTableSettings.tableData = params.newTableData.data;
+
+    //callback event when new data is passed to table
+    on('table/update', function (params) {
+        let tableSettings = params.tableSettings;
+        let data = params.data;
+
+        //update table settings
+        tableSettings.data = params.data;
+        //update paginacije
+        tableSettings.pagination = {
+            activePage: params.page,
+                pages: [],
+            lastPage: params.lastPage
+        };
+
+        generateRows(tableSettings);
+        updatePagination(tableSettings.pagination);
+        console.log(tableSettings.tableContainerElement.tableSettings);
+        //
+
+
+
+        generateRows();
+
         generateTableContent(newTableSettings);
         generateTablePagination(newTableSettings);
     });

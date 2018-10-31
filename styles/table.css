@@ -9,7 +9,6 @@
 .first.cell {
     top: 0;
     left: 0;
-    /*position: sticky;*/
 }
 
 .cell {
@@ -49,12 +48,7 @@
     position: -webkit-sticky;
 }
 
-.sticky-first-column,
-.sticky-head-row {
-    top: 0;
-    position: sticky;
-    position: -webkit-sticky;
-}
+
 
 .tbody {
     overflow: auto;
