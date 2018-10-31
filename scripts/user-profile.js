@@ -4,9 +4,11 @@ const userEditProfileModule = (function () {
     let userEditProfile = $$('#user-edit-profile');
     let backUserEditProfile = $$('#user-edit-profile-buttons').children[0];
     let saveUserEditProfile = $$('#user-edit-profile-buttons').children[1];
-    let usernameDiv = $$('#user-info-profile-username');
+    let  username = $$('#top-bar-logout-user').innerHTML
+   
 
-    usernameDiv.innerHTML = $$('#top-bar-logout-user').innerHTML;
+    $$('#user-info-profile-username').innerHTML = username;
+    $$('#user-edit-profile-username').children[1].innerHTML = username;
 
     editYourProfile.addEventListener('click', function () {
         userEditProfile.classList.remove('hidden');

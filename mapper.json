@@ -36,13 +36,14 @@
       "tickets/tickets-filters.js",
       "tickets/tickets-appearance.js",
       "jackpot/jackpot-filter.js",
-      
       "session.js",
       "preloader.js",
       "application.js",
       "home.js",
       "localization.js",
-      "router.js"
+      "router.js",
+      "components/datepicker.js"
+
     ],
     "styles": [
       "index.css",
@@ -65,7 +66,8 @@
       "jackpot/jackpot-add-machines.css",
       "components/dropdown.css",
       "main-content.css",
-      "preloader.css"
+      "preloader.css",
+      "components/datepicker.css"
     ]
   }
 }

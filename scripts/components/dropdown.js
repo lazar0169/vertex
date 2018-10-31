@@ -25,7 +25,6 @@ const dropdown = (function () {
             optionGroup.classList.add('overflow-y');
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-
                 selected.innerHTML = option.innerHTML;
                 selected.title = selected.innerHTML;
                 selected.dataset.items = JSON.stringify(selected.innerHTML);

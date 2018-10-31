@@ -30,3 +30,7 @@ function trigger(event, data) {
         delete events[event];
     }
 }
+
+window.addEventListener('load', function () {
+    trigger('load');
+});

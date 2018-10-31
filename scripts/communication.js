@@ -435,7 +435,7 @@ let communication = (function () {
         // trigger('communicate/aft/getBasicSettings', {})
         // trigger('communicate/aft/saveBasicSettings', {})
         // trigger('communicate/aft/saveNotificationSettings', {})
-        trigger('communicate/aft/getFilters', {})
+        //trigger('communicate/aft/getFilters', {})
         // trigger('communicate/aft/addTransaction', {})
         // trigger('communicate/aft/cancelTransaction', {}) greska sa serverom 409
         // trigger('communicate/aft/cancelPendingTransaction', {}) greska sa serverom 409
@@ -619,8 +619,11 @@ let communication = (function () {
         //alert('Successful communication');
         console.log(params.data);
     });
-    
+
     //test, set filters for aft
+    window.addEventListener('load', function () {
+        trigger('communicate/aft/getFilters', {})
+    });
     on('communicate/testFilter', function (params) {
         //alert('Successful communication');
         console.log(params.data);
