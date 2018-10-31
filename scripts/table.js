@@ -98,7 +98,7 @@ let table = (function () {
             });
         }*/
 
-    function generateTable(tableSettings) {
+    function generateTableContent(tableSettings) {
 
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         let tableContainerElement = tableSettings.tableContainerElement;
@@ -126,19 +126,26 @@ let table = (function () {
         tableContainerElement.tableSettings = tableSettings;
     }
 
-    function displayTable(tableSettings) {
+    function generateTablePagination(tableSettings) {
+
+    }
+
+
+
+    function updateTable(tableSettings) {
         trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
     }
 
     on('table/generate/new-data', function (params) {
         let newTableSettings = params.tableSettings;
         newTableSettings.tableData = params.newTableData.data;
-        generateTable(newTableSettings);
+        generateTableContent(newTableSettings);
+        generateTablePagination(newTableSettings);
     });
 
     return {
         // generateTable: generateTable
-        displayTable: displayTable
+        updateTable: updateTable
     };
 
 })();

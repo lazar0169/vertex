@@ -378,9 +378,9 @@ let home = (function () {
         tableSettings.stickyColumn = true;
         tableSettings.id = '';
 
-        // table.generateTable(tableSettings);
+        // table.generateTableContent(tableSettings);
 
-        table.displayTable(tableSettings);
+        table.updateTable(tableSettings);
 
         /*TESTING*/
         // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});

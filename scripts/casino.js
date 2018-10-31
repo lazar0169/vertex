@@ -77,7 +77,7 @@ let casino = (function () {
         tableSettings.stickyColumn = true;
         tableSettings.id = '';
 
-        table.displayTable(tableSettings);
+        table.updateTable(tableSettings);
         
     });
 
