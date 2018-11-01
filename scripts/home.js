@@ -379,11 +379,10 @@ let home = (function () {
         tableSettings.dataEvent = 'communicate/home/data';
         tableSettings.id = '';
 
-        // table.generateTableContent(tableSettings);
-
-        table.updateTable(tableSettings);
+        table.init(tableSettings);
 
         /*TESTING*/
+        // table.generateTableContent(tableSettings);
         // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
         // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData2});

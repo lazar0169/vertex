@@ -34,10 +34,7 @@ let table = (function () {
         tableSettings.tableContainerElement.appendChild(tbody);
     }
 
-    function getTableBodyElement(tableSettings) {
-        let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-        return tbody;
-    }
+
 
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
@@ -93,13 +90,13 @@ let table = (function () {
         let colsCount = getColsCount(tableSettings);
 
         if (tableSettings.dataEvent === undefined) {
-           let htmlEvent = tableContainerElement.getAttribute('data-data-event');
-           if (htmlEvent === undefined) {
-               console.error('no data event provided');
-           }
-           else {
-               tableSettings.dataEvent = htmlEvent;
-           }
+            let htmlEvent = tableContainerElement.getAttribute('data-data-event');
+            if (htmlEvent === undefined) {
+                console.error('no data event provided');
+            }
+            else {
+                tableSettings.dataEvent = htmlEvent;
+            }
         }
 
         if (tableContainerElement.tableSettings === undefined || tableSettings.forceRemoveHeaders === true) {
@@ -120,18 +117,15 @@ let table = (function () {
     }
 
 
-
     function updateTable(tableSettings) {
         let event = tableSettings.dataEvent;
         let params = {
             page: 3,
             pageSize: 10,
-            filters: {
-
-            }
+            filters: {}
         };
 
-        trigger(event, {tableSettings: tableSettings,parameters:params, callbackEvent: 'table/update'});
+        trigger(event, {tableSettings: tableSettings, parameters: params, callbackEvent: 'table/update'});
     }
 
 
@@ -145,7 +139,7 @@ let table = (function () {
         //update paginacije
         tableSettings.pagination = {
             activePage: params.page,
-                pages: [],
+            pages: [],
             lastPage: params.lastPage
         };
 
@@ -155,16 +149,98 @@ let table = (function () {
         //
 
 
-
         generateRows();
 
         generateTableContent(newTableSettings);
         generateTablePagination(newTableSettings);
     });
 
+
+
+
+
+
+
+    function getTableBodyElement(tableSettings) {
+        let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
+        return tbody;
+    }
+
+    function getEvent(tableSettings) {
+        let event;
+
+        if (tableSettings.event !== undefined) {
+            event = tableSettings.event;
+        }
+        else if (tableSettings.tableContainerElement.dataset.dataEvent !== undefined) {
+            event = tableSettings.tableContainerElement.dataset.dataEvent;
+        }
+        else {
+            console.error('No needed event!');
+        }
+        return event;
+    }
+
+    function generateTableHeaders(tableSettings) {
+        let tbody = getTableBodyElement(tableSettings);
+        if (tbody !== null && tbody !== undefined) {
+            tbody.parentNode.removeChild(tbody);
+        }
+        tbody = document.createElement('div');
+        tbody.className = 'tbody';
+        for (let col = 0; col < colsCount; col++) {
+            let head = document.createElement('div');
+            head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
+            head.className = 'head cell';
+            if (stickyRow === true) {
+                head.classList.add('sticky');
+            }
+            tbody.appendChild(head);
+        }
+        tableSettings.tableContainerElement.appendChild(tbody);
+    }
+
+    function generateTableRows(tableSettings) {
+
+    }
+
+    function generateTablePagination(tableSettings) {
+
+    }
+
+    function updateTablePagination() {
+    }
+
+    function updateTable(tableSettings) {
+        generateHeaders(tableSettings);
+        generateRows(tableSettings);
+        updateTablePagination(tableSettings);
+    }
+
+    on('table/update', function () {
+
+    });
+
+    function init(tableSettings) {
+
+        tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
+        let tableContainerElement = tableSettings.tableContainerElement;
+        tableContainerElement.tableSettings = tableSettings;
+
+        tableSettings.event = getEvent(tableSettings);
+
+        if (tableSettings.data !== undefined) {
+            updateTable();
+        }
+        else {
+            generateTableHeaders(tableSettings);
+            generateTablePagination(tableSettings);
+        }
+    }
+
+
     return {
-        // generateTable: generateTable
-        updateTable: updateTable
+        init: init
     };
 
 })();

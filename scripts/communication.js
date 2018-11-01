@@ -306,6 +306,12 @@ let communication = (function () {
     });
 
 
+    //events for home
+    on('communicate/home/data', function(params){
+
+    });
+
+
     //events for jackpot
 
 
