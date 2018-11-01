@@ -15,6 +15,7 @@ const dropdown = (function () {
         //wrapper options group
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('hidden');
+        optionGroup.classList.add('overflow-y');
         for (let element of dataSelect) {
             //option with functionality
             let option = document.createElement('div');
@@ -22,7 +23,7 @@ const dropdown = (function () {
             option.innerHTML = element;
             option.title = option.innerHTML;
             optionGroup.appendChild(option);
-            optionGroup.classList.add('overflow-y');
+
             option.addEventListener('click', function (e) {
                 e.preventDefault();
                 selected.innerHTML = option.innerHTML;

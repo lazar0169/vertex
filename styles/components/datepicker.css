@@ -10,7 +10,7 @@ table {
     color: white;
     background-position: right;
     background-size: auto 100%;
-    background-color: #dd9853;
+    background-color: rgb(55, 71, 79);
     padding-top: 0;
     padding-bottom: 0;
     padding-right: 3em;
@@ -27,14 +27,14 @@ table {
 }
 
 .datepicker:hover {
-    background-color: #ce853c;
+    background-color: rgb(120, 144, 156);
 }
 
 .pika-label {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: #434a5c;
+    background-color: rgb(55, 71, 79);;
     color: #ffffff;
     font-size: inherit;
     line-height: 2em;
@@ -42,34 +42,34 @@ table {
 
 .pika-single {
     transition: transform 0.2s;
-    background-color: #434a5c;
+    background-color: rgb(55, 71, 79);
     color: #ffffff;
-    border: 1px solid #434a5c;
-    border-bottom-color: #434a5c;
+    border: 1px solid rgb(55, 71, 79);
+    border-bottom-color: rgb(55, 71, 79);
     box-shadow: 0 0 0.5em 0.2em rgba(0, 0, 0, 0.15) !important;
 }
 
-.is-disabled .pika-button,
-.is-inrange .pika-button {
+.is-disabled .pika-button, .is-inrange .pika-button {
     background-color: #ffffff;
 }
 
 .is-disabled .pika-button {
     color: #cccccc;
-    background-color: #434a5c;
-    color: #757575;
+    background-color: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);;
     opacity: 1;
 }
 
 .pika-table th {
     color: #ffffff !important;
-    background-color: #f99d1c;
+    background-color: rgb(30, 155, 227);
     font-size: inherit;
     line-height: 2em;
 }
 
 .is-today .pika-button {
-    color: #d8a864;
+    color: rgb(30, 155, 227);
+    ;
 }
 
 .is-today .pika-button:hover {
@@ -77,27 +77,25 @@ table {
 }
 
 .is-selected .pika-button {
-    background-color: #f99d1c;
+    background-color: rgb(30, 155, 227);
     color: #fff;
 }
 
 .pika-button {
     border-radius: 0 !important;
     box-shadow: none !important;
-    background-color: #425269;
+    background-color: transparent;
     color: #ffffff;
     font-size: inherit;
     line-height: 2em;
     text-align: center;
 }
 
-.pika-prev,
-.pika-next {
+.pika-prev, .pika-next {
     filter: invert(1);
 }
 
-.pika-prev:hover,
-.pika-next:hover {
+.pika-prev:hover, .pika-next:hover {
     background-color: transparent;
 }
 
@@ -108,7 +106,7 @@ table {
 /* ================== MOBILE  ================== */
 
 .mobile .datepicker:hover {
-    background-color: #dd9853;
+    background-color: red;
 }
 
 .mobile .pika-single.is-bound {
@@ -131,8 +129,15 @@ table {
     width: 97% !important;
 }
 
-.mobile .selected,
-.mobile .option {
+.mobile .selected, .mobile .option {
     height: 2.5em;
     line-height: 2.5em;
+}
+
+.pika-button:hover, .pika-row.pick-whole-week:hover .pika-button {
+    background-color: rgb(30, 155, 227);
+}
+
+.is-outside-current-month .pika-button {
+    background-color: rgb(55, 71, 79);
 }

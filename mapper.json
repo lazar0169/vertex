@@ -25,6 +25,7 @@
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
+      "components/dropdown-date.js",
       "machines/details-bar.js",
       "aft/aft-filter.js",
       "aft/aft-tab-content.js",

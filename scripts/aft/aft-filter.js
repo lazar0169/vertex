@@ -9,7 +9,7 @@ const aftFilter = (function () {
     let proba = $$('#aft-advance-table-filter-date-range');
 
     aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
-    proba.appendChild(dropdown.generate(nekiniz));
+    proba.appendChild(dropdownDate.generate(nekiniz));
    // proba2.appendChild(multiDropdown.generate(nekiniz2));
     //proba3.appendChild(multiDropdown.generate(nekiniz3));
 
