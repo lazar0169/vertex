@@ -137,161 +137,16 @@ let communication = (function () {
         send(xhr);
     });
 
-
-    on('communicate/table/data', function (params) {
-        let parameters = params.parameters;
-
-        //ajax
-
-        let newTableData = {
-            data: [
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                },
-                {
-                    "period1": "home",
-                    "period2": "home",
-                    "period3": "home",
-                    "period4": "home",
-                    "period5": "home",
-                    "period6": "home",
-                    "period7": "home",
-                    "period8": "home"
-                }
-            ],
-            page:2,
-            pageCount:5
-    }
-        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: newTableData});
+    //events for home
+    on('communicate/home/data', function(params){
+        //FORWARD DATA TO API
+        //GET DATA FROM API
+        let dataFormAPI = {
+            activePage: 2,
+            lastPage: 6
+        };
+        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: dataFormAPI});
     });
-
 
     //events for casino
     on('communicate/casino-info', function (params) {
@@ -303,12 +158,6 @@ let communication = (function () {
         xhr = setDefaultHeaders(xhr);
         //xhr = setAuthHeader(xhr);
         send(xhr);
-    });
-
-
-    //events for home
-    on('communicate/home/data', function(params){
-
     });
 
 

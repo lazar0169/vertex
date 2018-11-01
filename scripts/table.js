@@ -2,18 +2,7 @@ let table = (function () {
 
     let rows = [];
 
-    function getColsCount(tableSettings) {
-        let colsCount;
-        let tbody = getTableBodyElement(tableSettings);
-        if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
-            colsCount = Object.keys(tableSettings.tableData[0]).length;
-        }
-        else {
-            let headElements = tbody.getElementsByClassName('head');
-            colsCount = headElements.length;
-        }
-        return colsCount;
-    }
+/*
 
     function generateHeaders(tableSettings, colsCount, stickyRow) {
         let tbody = getTableBodyElement(tableSettings);
@@ -33,7 +22,6 @@ let table = (function () {
         }
         tableSettings.tableContainerElement.appendChild(tbody);
     }
-
 
 
     function styleColsRows(tableSettingsData, colsCount, tbody) {
@@ -157,20 +145,14 @@ let table = (function () {
 
 
 
+*/
 
-
-
-
-    function getTableBodyElement(tableSettings) {
-        let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-        return tbody;
-    }
 
     function getEvent(tableSettings) {
         let event;
 
-        if (tableSettings.event !== undefined) {
-            event = tableSettings.event;
+        if (tableSettings.dataEvent !== undefined) {
+            event = tableSettings.dataEvent;
         }
         else if (tableSettings.tableContainerElement.dataset.dataEvent !== undefined) {
             event = tableSettings.tableContainerElement.dataset.dataEvent;
@@ -181,66 +163,193 @@ let table = (function () {
         return event;
     }
 
-    function generateTableHeaders(tableSettings) {
+    function getTableBodyElement(tableSettings) {
+        let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
+        return tbody;
+    }
+
+    function getColsCount(tableSettings) {
+        let colsCount;
         let tbody = getTableBodyElement(tableSettings);
-        if (tbody !== null && tbody !== undefined) {
-            tbody.parentNode.removeChild(tbody);
+        if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
+            //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
+            colsCount = Object.keys(tableSettings.tableData[0]).length;
         }
-        tbody = document.createElement('div');
+        else {
+            let headElements = tbody.getElementsByClassName('head');
+            colsCount = headElements.length;
+        }
+        return colsCount;
+    }
+
+    function hasHeaders(tableSettings) {
+        if (tableSettings.tableContainerElement.getElementsByClassName('head').length > 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function initTableContent(tableSettings){
+        let tbody = document.createElement('div');
         tbody.className = 'tbody';
-        for (let col = 0; col < colsCount; col++) {
-            let head = document.createElement('div');
-            head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
-            head.className = 'head cell';
-            if (stickyRow === true) {
-                head.classList.add('sticky');
-            }
-            tbody.appendChild(head);
-        }
         tableSettings.tableContainerElement.appendChild(tbody);
+    }
+
+    function generateTableHeaders(tableSettings) {
+
+        let colsCount = getColsCount(tableSettings);
+
+        let headers = hasHeaders(tableSettings);
+
+        if (!headers || tableSettings.forceRemoveHeaders === true) {
+            let tbody = getTableBodyElement(tableSettings);
+            if (tbody !== null && tbody !== undefined) {
+                tbody.parentNode.removeChild(tbody);
+            }
+            tbody = document.createElement('div');
+            tbody.className = 'tbody';
+            for (let col = 0; col < colsCount; col++) {
+                let head = document.createElement('div');
+                head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
+                head.className = 'head cell';
+                //head.classList.add();
+                if (tableSettings.stickyRow === true) {
+                    head.classList.add('sticky');
+                }
+                //ToDo: bind handlers to the head elements
+                tbody.appendChild(head);
+            }
+            tableSettings.tableContainerElement.appendChild(tbody);
+        }
+        else {
+            //
+        }
+    }
+
+    function generateCellClassName(tableData, colNumber) {
+        let cellClassName = 'cell-' + Object.keys(tableData[0])[colNumber];
+        cellClassName = cellClassName.toLowerCase();
+        cellClassName = cellClassName.replace(' ', '-');
+        return cellClassName;
+    }
+
+    function hoverRow(elements, highlight = false) {
+        for (let element of document.getElementsByClassName(elements)) {
+            element.classList[highlight ? "add" : "remove"]('hover');
+        }
+    }
+
+    function styleColsRows(tableSettingsData, colsCount, tbody) {
+        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+        tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
     function generateTableRows(tableSettings) {
 
+        let colsCount = getColsCount(tableSettings);
+        let tbody = getTableBodyElement(tableSettings);
+
+        for (let row = 0; row < tableSettings.data.length; row++) {
+            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+            while (rows.includes(rowId)) {
+                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+            }
+            rows.push(rowId);
+            for (let col = 0; col < colsCount; col++) {
+                let cell = document.createElement('div');
+                cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
+                let cellClassName = generateCellClassName(tableSettings.tableData, col);
+                cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
+                cell.classList.add(`row-${rowId}`);
+                if (tableSettings.stickyColumn === true && col === 0) {
+                    cell.classList.add('sticky');
+                }
+                cell.addEventListener('mouseover', function () {
+                    hoverRow(`row-${rowId}`, true);
+                }, {passive: false});
+                cell.addEventListener('mouseout', function () {
+                    hoverRow(`row-${rowId}`, false);
+                }, {passive: false});
+                tbody.appendChild(cell);
+            }
+        }
+
+        styleColsRows(tableSettings.tableData, colsCount, tbody);
     }
 
     function generateTablePagination(tableSettings) {
-
+        let callbackEvent = 'table/pagination/display';
+        let paginationTemplateElement = $$('#templates').getElementsByClassName('element-template pagination')[0];
+        trigger('template/render', {templateElement: paginationTemplateElement, callbackEvent: callbackEvent, tableSettings: tableSettings});
     }
 
+    on('table/pagination/display', function(params){
+        let paginationElement = params.element;
+        let tableContainerElement = params.params.tableSettings.tableContainerElement;
+        let tableContentElement = tableContainerElement.getElementsByClassName('tbody')[0];
+        tableContentElement.tableContainerElement.insertBefore(paginationElement, tableContentElement.nextSibling);
+    });
+
     function updateTablePagination() {
+        //
+
     }
 
     function updateTable(tableSettings) {
-        generateHeaders(tableSettings);
-        generateRows(tableSettings);
+        generateTableHeaders(tableSettings);
+        generateTableRows(tableSettings);
         updateTablePagination(tableSettings);
     }
 
-    on('table/update', function () {
+    function initUpdateTable(tableSettings) {
 
+        //get data from page
+        let data = {
+            activePage: 2,
+            filters: 0
+        };
+
+        trigger(tableSettings.dataEvent, {
+            data: data,
+            tableSettings: tableSettings,
+            callbackEvent: 'table/update'
+        });
+    }
+
+    on('table/update', function (params) {
+        updateTable(params.tableSettings);
     });
 
+    /* tableSettings: {
+    dataEvent:
+    tableContainerSelector:
+     }
+     */
     function init(tableSettings) {
 
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         let tableContainerElement = tableSettings.tableContainerElement;
         tableContainerElement.tableSettings = tableSettings;
 
-        tableSettings.event = getEvent(tableSettings);
+        tableSettings.dataEvent = getEvent(tableSettings);
 
-        if (tableSettings.data !== undefined) {
-            updateTable();
+        initTableContent(tableSettings);
+        generateTablePagination(tableSettings);
+
+        if (tableSettings.data === undefined) {
+            generateTableHeaders(tableSettings);
+            initUpdateTable();
         }
         else {
-            generateTableHeaders(tableSettings);
-            generateTablePagination(tableSettings);
+            updateTable(tableSettings);
         }
     }
 
-
     return {
         init: init
+
     };
 
 })();

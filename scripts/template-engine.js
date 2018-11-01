@@ -55,8 +55,14 @@ let template = (function () {
         return newElement;
     }
 
-    function render(templateElementSelector, model, callbackEvent) {
-        let templateElement = $$(templateElementSelector);
+    function render(templateElementSelector, model, callbackEvent, templElement) {
+        let templateElement;
+        if (typeof templElement !== typeof undefined) {
+            templateElement = templElement;
+        }
+        else {
+            templateElement = $$(templateElementSelector);
+        }
         if (templateElement === null || templateElement.length <= 0) {
             console.error('Template element does not exists!');
         }
@@ -64,6 +70,10 @@ let template = (function () {
             templateElement = templateElement[0];
         }
         let newElement = cloneTemplateElement(templateElement);
+        if (typeof model === typeof undefined) { //todo check if this works
+            // trigger(callbackEvent, {element: newElement});
+            return newElement;
+        }
         let newElementString = newElement.innerHTML;
         let placeholders = getPlaceholders(newElementString);
         let placeholderValues = getPlaceholderValues(placeholders, model);
@@ -77,10 +87,11 @@ let template = (function () {
 
     on('template/render', function (params) {
         let templateElementSelector = params.templateElementSelector;
+        let templateElement = params.templateElement;
         let model = params.model;
         let newHtmlElement;
         if (typeof params.callbackEvent !== typeof undefined) {
-            newHtmlElement = render(templateElementSelector, model, params.callbackEvent);
+            newHtmlElement = render(templateElementSelector, model, params.callbackEvent, templateElement);
         }
         else {
             newHtmlElement = render(templateElementSelector, model);
