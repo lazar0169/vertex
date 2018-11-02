@@ -3,3 +3,11 @@
     flex-direction: row;
     list-style-type: none;
 }
+
+.element-pagination-page-button.active {
+    background-color: red;
+}
+
+.element-pagination-page-button.hidden {
+    display: none;
+}

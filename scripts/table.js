@@ -2,152 +2,6 @@ let table = (function () {
 
     let rows = [];
 
-/*
-
-    function generateHeaders(tableSettings, colsCount, stickyRow) {
-        let tbody = getTableBodyElement(tableSettings);
-        if (tbody !== null && tbody !== undefined) {
-            tbody.parentNode.removeChild(tbody);
-        }
-        tbody = document.createElement('div');
-        tbody.className = 'tbody';
-        for (let col = 0; col < colsCount; col++) {
-            let head = document.createElement('div');
-            head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
-            head.className = 'head cell';
-            if (stickyRow === true) {
-                head.classList.add('sticky');
-            }
-            tbody.appendChild(head);
-        }
-        tableSettings.tableContainerElement.appendChild(tbody);
-    }
-
-
-    function styleColsRows(tableSettingsData, colsCount, tbody) {
-        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-        tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
-    }
-
-    function hoverRow(elements, highlight = false) {
-        for (let element of document.getElementsByClassName(elements)) {
-            element.classList[highlight ? "add" : "remove"]('hover');
-        }
-    }
-
-    function generateCellClassName(tableData, colNumber) {
-        let cellClassName = 'cell-' + Object.keys(tableData[0])[colNumber];
-        cellClassName = cellClassName.toLowerCase();
-        cellClassName = cellClassName.replace(' ', '-');
-        return cellClassName;
-    }
-
-    function generateRows(tableData, colsCount, tbody, stickyColumn) {
-        for (let row = 0; row < tableData.length; row++) {
-            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            while (rows.includes(rowId)) {
-                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            }
-            rows.push(rowId);
-            for (let col = 0; col < colsCount; col++) {
-                let cell = document.createElement('div');
-                cell.innerHTML = tableData[row][Object.keys(tableData[row])[col]];
-                let cellClassName = generateCellClassName(tableData, col);
-                cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
-                cell.classList.add(`row-${rowId}`);
-                if (stickyColumn === true && col === 0) {
-                    cell.classList.add('sticky');
-                }
-                cell.addEventListener('mouseover', function () {
-                    hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
-                cell.addEventListener('mouseout', function () {
-                    hoverRow(`row-${rowId}`, false);
-                }, {passive: false});
-                tbody.appendChild(cell);
-            }
-        }
-    }
-
-
-    function generateTableContent(tableSettings) {
-
-        tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
-
-        let tableContainerElement = tableSettings.tableContainerElement;
-        let colsCount = getColsCount(tableSettings);
-
-        if (tableSettings.dataEvent === undefined) {
-            let htmlEvent = tableContainerElement.getAttribute('data-data-event');
-            if (htmlEvent === undefined) {
-                console.error('no data event provided');
-            }
-            else {
-                tableSettings.dataEvent = htmlEvent;
-            }
-        }
-
-        if (tableContainerElement.tableSettings === undefined || tableSettings.forceRemoveHeaders === true) {
-            generateHeaders(tableSettings, colsCount, tableSettings.stickyRow);
-        }
-
-        let tbody = getTableBodyElement(tableSettings);
-        styleColsRows(tableSettings.tableData, colsCount, tbody);
-        generateRows(tableSettings.tableData, colsCount, tbody, tableSettings.stickyColumn);
-
-
-        tableContainerElement.tableSettings = tableSettings;
-    }
-
-    function generateTablePagination(tableSettings) {
-        let pageCount = tableSettings.pageCount;
-        let activePageNumber = tableSettings.activePageNumber;
-    }
-
-
-    function updateTable(tableSettings) {
-        let event = tableSettings.dataEvent;
-        let params = {
-            page: 3,
-            pageSize: 10,
-            filters: {}
-        };
-
-        trigger(event, {tableSettings: tableSettings, parameters: params, callbackEvent: 'table/update'});
-    }
-
-
-    //callback event when new data is passed to table
-    on('table/update', function (params) {
-        let tableSettings = params.tableSettings;
-        let data = params.data;
-
-        //update table settings
-        tableSettings.data = params.data;
-        //update paginacije
-        tableSettings.pagination = {
-            activePage: params.page,
-            pages: [],
-            lastPage: params.lastPage
-        };
-
-        generateRows(tableSettings);
-        updatePagination(tableSettings.pagination);
-        console.log(tableSettings.tableContainerElement.tableSettings);
-        //
-
-
-        generateRows();
-
-        generateTableContent(newTableSettings);
-        generateTablePagination(newTableSettings);
-    });
-
-
-
-*/
-
-
     function getEvent(tableSettings) {
         let event;
 
@@ -189,12 +43,6 @@ let table = (function () {
         else {
             return false;
         }
-    }
-
-    function initTableContent(tableSettings){
-        let tbody = document.createElement('div');
-        tbody.className = 'tbody';
-        tableSettings.tableContainerElement.appendChild(tbody);
     }
 
     function generateTableHeaders(tableSettings) {
@@ -280,18 +128,90 @@ let table = (function () {
     }
 
     function generateTablePagination(tableSettings) {
-        let callbackEvent = 'table/pagination/display';
-        trigger('template/render', {templateElementSelector: '#pagination', callbackEvent: callbackEvent, tableSettings: tableSettings});
+        let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
+        if (paginationElement === undefined) {
+            let callbackEvent = 'table/pagination/display';
+            trigger('template/render', {
+                templateElementSelector: '#pagination',
+                callbackEvent: callbackEvent,
+                tableSettings: tableSettings
+            });
+        }
+        else return;
     }
 
-    on('table/pagination/display', function(params){
+    on('table/pagination/display', function (params) {
         let paginationElement = params.element;
         let tableContainerElement = params.params.tableSettings.tableContainerElement;
         tableContainerElement.appendChild(paginationElement);
     });
 
-    function updateTablePagination() {
-        //
+    function updateTablePagination(tableSettings) {
+        let activePage = 6;
+        let lastPage = 6;
+
+        let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
+        let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
+        let paginationPage1 = tableSettings.tableContainerElement.getElementsByClassName('pagination-page-1')[0];
+        let paginationPage2 = tableSettings.tableContainerElement.getElementsByClassName('pagination-page-2')[0];
+        let paginationPage3 = tableSettings.tableContainerElement.getElementsByClassName('pagination-page-3')[0];
+        let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
+        let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
+
+        paginationFirstPage.dataset.page = '1';
+        if (activePage - 1 > 0) {
+            let previousPage = activePage - 1;
+            paginationPreviousPage.dataset.page = previousPage.toString();
+        }
+        else {
+            paginationPreviousPage.dataset.page = '1';
+        }
+
+        paginationPage1.dataset.page = '1';
+        paginationPage2.dataset.page = '2';
+        paginationPage3.dataset.page = '3';
+
+        if (activePage !== lastPage) {
+            let nextPage = activePage + 1;
+            paginationNextPage.dataset.page = nextPage.toString();
+        }
+        else {
+            paginationNextPage.dataset.page = lastPage.toString();
+        }
+
+        paginationLastPage.dataset.page = lastPage.toString();
+
+        let paginationArray = [];
+
+        if (lastPage >= 3) {
+            if (activePage === lastPage) {
+                paginationArray = [activePage - 2, activePage - 1, activePage];
+            }
+            else if (activePage === 1) {
+                paginationArray = [activePage, activePage + 1, activePage + 2];
+            }
+            else {
+                paginationArray = [activePage - 1, activePage, activePage + 1];
+            }
+        }
+        else if (lastPage === 2) {
+            paginationArray = ['1', '2'];
+        }
+        else {
+            paginationArray = ['1'];
+        }
+
+        let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
+
+        for (let i = 0; i < paginationButtons.length; i++) {
+            paginationButtons[i].innerHTML = paginationArray[i];
+            if (paginationButtons[i].innerHTML == activePage) {
+                paginationButtons[i].classList.add('active');
+            }
+            else if (paginationArray[i] === undefined) {
+                paginationButtons[i].classList.add('hidden');
+            }
+        }
     }
 
     function updateTable(tableSettings) {
@@ -346,12 +266,10 @@ let table = (function () {
         else {
             updateTable(tableSettings);
         }
-
     }
 
     return {
         init: init
-
     };
 
 })();

@@ -48,8 +48,6 @@
     position: -webkit-sticky;
 }
 
-
-
 .tbody {
     overflow: auto;
     display: grid;
