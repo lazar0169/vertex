@@ -221,7 +221,7 @@ let table = (function () {
                 //ToDo: bind handlers to the head elements
                 tbody.appendChild(head);
             }
-            tableSettings.tableContainerElement.appendChild(tbody);
+            tableSettings.tableContainerElement.prepend(tbody);
         }
         else {
             //
@@ -251,7 +251,7 @@ let table = (function () {
         let colsCount = getColsCount(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
-        for (let row = 0; row < tableSettings.data.length; row++) {
+        for (let row = 0; row < tableSettings.tableData.length; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             while (rows.includes(rowId)) {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
@@ -308,6 +308,8 @@ let table = (function () {
             filters: 0
         };
 
+        console.log(tableSettings.dataEvent);
+
         trigger(tableSettings.dataEvent, {
             data: data,
             tableSettings: tableSettings,
@@ -332,16 +334,19 @@ let table = (function () {
 
         tableSettings.dataEvent = getEvent(tableSettings);
 
-        initTableContent(tableSettings);
+        // initTableContent(tableSettings);
+
         generateTablePagination(tableSettings);
 
-        if (tableSettings.data === undefined) {
+        if (tableSettings.tableData === undefined) {
             generateTableHeaders(tableSettings);
-            initUpdateTable();
+            initUpdateTable(tableSettings);
         }
+
         else {
             updateTable(tableSettings);
         }
+
     }
 
     return {
