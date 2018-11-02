@@ -10,7 +10,7 @@ table {
     color: white;
     background-position: right;
     background-size: auto 100%;
-    background-color: rgb(55, 71, 79);
+    background-color: rgb(38, 50, 56);
     padding-top: 0;
     padding-bottom: 0;
     padding-right: 3em;
@@ -22,12 +22,14 @@ table {
     font-family: 'roboto' !important;
     font-size: inherit !important;
     height: 2em;
-    border: none;
+    border: 1px solid rgb(55, 71, 79);
     box-sizing: border-box;
+    width: 258px;
+    margin: 0 0.5rem;
 }
 
 .datepicker:hover {
-    background-color: rgb(120, 144, 156);
+    background-color: rgb(55, 71, 79);
 }
 
 .pika-label {

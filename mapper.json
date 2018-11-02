@@ -43,7 +43,8 @@
       "home.js",
       "localization.js",
       "router.js",
-      "components/datepicker.js"
+      "components/datepicker.js",
+      "components/timepicker.js"
 
     ],
     "styles": [
@@ -68,7 +69,8 @@
       "components/dropdown.css",
       "main-content.css",
       "preloader.css",
-      "components/datepicker.css"
+      "components/datepicker.css",
+      "components/timepicker.css"
     ]
   }
 }
