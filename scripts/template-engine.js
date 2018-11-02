@@ -55,14 +55,9 @@ let template = (function () {
         return newElement;
     }
 
-    function render(templateElementSelector, model, callbackEvent, templElement) {
-        let templateElement;
-        if (typeof templElement !== typeof undefined) {
-            templateElement = templElement;
-        }
-        else {
-            templateElement = $$(templateElementSelector);
-        }
+    function render(templateElementSelector, model, callbackEvent) {
+        let templateElement = $$(templateElementSelector);
+
         if (templateElement === null || templateElement.length <= 0) {
             console.error('Template element does not exists!');
         }
@@ -87,11 +82,10 @@ let template = (function () {
 
     on('template/render', function (params) {
         let templateElementSelector = params.templateElementSelector;
-        let templateElement = params.templateElement;
         let model = params.model;
         let newHtmlElement;
         if (typeof params.callbackEvent !== typeof undefined) {
-            newHtmlElement = render(templateElementSelector, model, params.callbackEvent, templateElement);
+            newHtmlElement = render(templateElementSelector, model, params.callbackEvent);
         }
         else {
             newHtmlElement = render(templateElementSelector, model);

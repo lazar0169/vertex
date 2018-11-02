@@ -281,20 +281,17 @@ let table = (function () {
 
     function generateTablePagination(tableSettings) {
         let callbackEvent = 'table/pagination/display';
-        let paginationTemplateElement = $$('#templates').getElementsByClassName('element-template pagination')[0];
-        trigger('template/render', {templateElement: paginationTemplateElement, callbackEvent: callbackEvent, tableSettings: tableSettings});
+        trigger('template/render', {templateElementSelector: '#pagination', callbackEvent: callbackEvent, tableSettings: tableSettings});
     }
 
     on('table/pagination/display', function(params){
         let paginationElement = params.element;
         let tableContainerElement = params.params.tableSettings.tableContainerElement;
-        let tableContentElement = tableContainerElement.getElementsByClassName('tbody')[0];
-        tableContentElement.tableContainerElement.insertBefore(paginationElement, tableContentElement.nextSibling);
+        tableContainerElement.appendChild(paginationElement);
     });
 
     function updateTablePagination() {
         //
-
     }
 
     function updateTable(tableSettings) {

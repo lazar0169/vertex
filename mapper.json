@@ -53,7 +53,8 @@
       "components/dropdown.css",
       "main-content.css",
       "preloader.css",
-      "table.css"
+      "table.css",
+      "pagination.css"
     ]
   }
 }
