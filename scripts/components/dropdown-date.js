@@ -37,6 +37,10 @@ const dropdownDate = (function () {
                                 <div>Time to:</div>
                                 <input type="text" class="datepicker" readonly>                                
                                 </div>
+                                <div class="custom-date-buttons-wrapper center">
+                                <button class="btn btn-success">Apply</button>
+                                <button class="btn btn-cancel">Cancel</button>
+                                </div>
                                 `
         customDate.classList.add('hidden');
         for (let element of dataSelect) {
