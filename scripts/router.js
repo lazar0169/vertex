@@ -269,17 +269,17 @@ let router = (function () {
 
     //Functions for handling links
 
+    function bindNavigationLinkHandler(element) {
+        element.removeEventListener('click', handleLinkClick);
+        element.addEventListener('click', handleLinkClick);
+    }
+
     function bindNavigationLinkHandlers() {
         let navigationElements = $$('.element-navigation-link');
         for (let i = 0; i < navigationElements.length; i++) {
             let navigationElement = navigationElements[i];
             bindNavigationLinkHandler(navigationElement);
         }
-    }
-
-    function bindNavigationLinkHandler(element) {
-        element.removeEventListener('click', handleLinkClick);
-        element.addEventListener('click', handleLinkClick);
     }
 
     function handleLinkClick(e) {

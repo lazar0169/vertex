@@ -137,6 +137,7 @@ let table = (function () {
                 tableSettings: tableSettings
             });
         }
+
         else return;
     }
 
@@ -144,17 +145,17 @@ let table = (function () {
         let paginationElement = params.element;
         let tableContainerElement = params.params.tableSettings.tableContainerElement;
         tableContainerElement.appendChild(paginationElement);
+        bindPaginationLinkHandlers();
+
     });
 
     function updateTablePagination(tableSettings) {
-        let activePage = 6;
+        //toDo: dummy data
+        let activePage = 3;
         let lastPage = 6;
 
         let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
         let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
-        let paginationPage1 = tableSettings.tableContainerElement.getElementsByClassName('pagination-page-1')[0];
-        let paginationPage2 = tableSettings.tableContainerElement.getElementsByClassName('pagination-page-2')[0];
-        let paginationPage3 = tableSettings.tableContainerElement.getElementsByClassName('pagination-page-3')[0];
         let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
         let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
 
@@ -167,9 +168,6 @@ let table = (function () {
             paginationPreviousPage.dataset.page = '1';
         }
 
-        paginationPage1.dataset.page = '1';
-        paginationPage2.dataset.page = '2';
-        paginationPage3.dataset.page = '3';
 
         if (activePage !== lastPage) {
             let nextPage = activePage + 1;
@@ -204,6 +202,7 @@ let table = (function () {
         let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
 
         for (let i = 0; i < paginationButtons.length; i++) {
+            paginationButtons[i].dataset.page = paginationArray[i];
             paginationButtons[i].innerHTML = paginationArray[i];
             if (paginationButtons[i].innerHTML == activePage) {
                 paginationButtons[i].classList.add('active');
@@ -241,6 +240,26 @@ let table = (function () {
         updateTable(params.tableSettings);
     });
 
+
+    function handleLinkClick(e) {
+        e.preventDefault();
+        let page = e.target.dataset.page;
+        alert(page);
+    }
+
+    function bindPaginationLinkHandler(element) {
+        element.removeEventListener('click', handleLinkClick);
+        element.addEventListener('click', handleLinkClick);
+    }
+
+    function bindPaginationLinkHandlers() {
+        let paginationElements = $$('.element-pagination-link');
+        for (let i = 0; i < paginationElements.length; i++) {
+            let paginationElement = paginationElements[i];
+            bindPaginationLinkHandler(paginationElement);
+        }
+    }
+
     /* tableSettings: {
     dataEvent:
     tableContainerSelector:
@@ -254,7 +273,6 @@ let table = (function () {
 
         tableSettings.dataEvent = getEvent(tableSettings);
 
-        // initTableContent(tableSettings);
 
         generateTablePagination(tableSettings);
 
