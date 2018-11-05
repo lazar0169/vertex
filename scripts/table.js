@@ -333,10 +333,10 @@ let table = (function () {
     function prepareData(tableSettings) {
         tableSettings.sort = {
             direction: '',
-            dataSortName: ''
+            sortName: ''
         };
         let activeHeader = getActiveColumn(tableSettings);
-        tableSettings.sort.dataSortName = activeHeader.dataset.sortName;
+        tableSettings.sort.sortName = activeHeader.dataset.sortName;
         if (activeHeader.dataset.direction === 'asc') {
             tableSettings.sort.direction = columnDirection.ascending;
         }
