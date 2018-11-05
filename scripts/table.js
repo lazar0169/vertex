@@ -385,7 +385,12 @@ let table = (function () {
 
         let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
         applyButton.addEventListener('click', function() {
-            sendDataToApi(tableSettings);
+            if (tableSettings.sort === undefined || tableSettings.sort === null) {
+                console.error('You didn\'t choose anything!');
+            }
+            else {
+                sendDataToApi(tableSettings);
+            }
         });
     }
 
