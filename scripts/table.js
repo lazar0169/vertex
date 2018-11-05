@@ -1,6 +1,13 @@
 let table = (function () {
 
     let rows = [];
+    const columnDirection = {
+        ascending: 1,
+        descending: -1
+    }
+
+
+    /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
     function getEvent(tableSettings) {
         let event;
@@ -12,7 +19,7 @@ let table = (function () {
             event = tableSettings.tableContainerElement.dataset.dataEvent;
         }
         else {
-            console.error('No needed event!');
+            console.error('Event doesn\'t exist!');
         }
         return event;
     }
@@ -62,12 +69,18 @@ let table = (function () {
                 let head = document.createElement('div');
                 head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
                 head.className = 'head cell';
+                let columnName = Object.keys(tableSettings.tableData[0])[col];
+                columnName = columnName.toLowerCase();
+                columnName = columnName.replace(/ /g, '-');
+                head.dataset.sortName = columnName;
                 //head.classList.add();
                 if (tableSettings.stickyRow === true) {
                     head.classList.add('sticky');
                 }
-                //ToDo: bind handlers to the head elements
                 tbody.appendChild(head);
+                head.addEventListener('click', function(){
+                    makeColumnActive(head, tableSettings);
+                });
             }
             tableSettings.tableContainerElement.prepend(tbody);
         }
@@ -126,6 +139,11 @@ let table = (function () {
 
         styleColsRows(tableSettings.tableData, colsCount, tbody);
     }
+    /*--------------------------------------------------------------------------------------*/
+
+
+
+    /*-------------------------------------- PAGINATION ---------------------------------------*/
 
     function generateTablePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
@@ -213,6 +231,12 @@ let table = (function () {
         }
     }
 
+    /*--------------------------------------------------------------------------------------*/
+
+
+
+    /*---------------------------------- UPDATING TABLE -----------------------------------*/
+
     function updateTable(tableSettings) {
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
@@ -227,8 +251,6 @@ let table = (function () {
             filters: 0
         };
 
-        console.log(tableSettings.dataEvent);
-
         trigger(tableSettings.dataEvent, {
             data: data,
             tableSettings: tableSettings,
@@ -240,6 +262,11 @@ let table = (function () {
         updateTable(params.tableSettings);
     });
 
+    /*--------------------------------------------------------------------------------------*/
+
+
+
+    /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
 
     function handleLinkClick(e) {
         e.preventDefault();
@@ -259,6 +286,77 @@ let table = (function () {
             bindPaginationLinkHandler(paginationElement);
         }
     }
+    /*--------------------------------------------------------------------------------------*/
+
+
+
+    /*-------------------------------------- SORTING --------------------------------------*/
+
+    function getHeaders(tableSettings) {
+        let headers = tableSettings.tableContainerElement.getElementsByClassName('head');
+        return headers;
+    }
+
+    function getActiveColumn(tableSettings) {
+        let activeHeader = tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
+        return activeHeader;
+    }
+
+    function makeColumnActive(header, tableSettings) {
+        let headers = getHeaders(tableSettings);
+        for (let i = 0; i < headers.length; i++) {
+            headers[i].classList.remove('sort-active');
+        }
+        header.classList.add('sort-active');
+        toggleDirection(header, tableSettings);
+    }
+
+    function toggleDirection(header) {
+        if (!header.classList.contains('sort-asc') && !header.classList.contains('sort-desc') && !header.dataset.direction) {
+            header.classList.add('sort-asc');
+            header.dataset.direction = 'asc';
+        }
+        else if (header.classList.contains('sort-desc')){
+            header.classList.remove('sort-desc');
+            header.classList.add('sort-asc');
+            delete header.dataset.direction;
+            header.dataset.direction = 'asc';
+        }
+        else {
+            header.classList.remove('sort-asc');
+            header.classList.add('sort-desc');
+            delete header.dataset.direction;
+            header.dataset.direction = 'desc';
+        }
+    }
+
+    function prepareData(tableSettings) {
+        tableSettings.sort = {
+            direction: '',
+            dataSortName: ''
+        };
+        let activeHeader = getActiveColumn(tableSettings);
+        tableSettings.sort.dataSortName = activeHeader.dataset.sortName;
+        if (activeHeader.dataset.direction === 'asc') {
+            tableSettings.sort.direction = columnDirection.ascending;
+        }
+        else if(activeHeader.dataset.direction === 'desc') {
+            tableSettings.sort.direction = columnDirection.descending;
+        }
+        return tableSettings;
+    }
+
+    function sendDataToApi(tableSettings) {
+        prepareData(tableSettings);
+        console.log('tableSettings after apply click: ', tableSettings);
+        // trigger(tableSettings.dataEvent, {tableSettings: tableSettings});
+    }
+
+    /*--------------------------------------------------------------------------------------*/
+
+
+
+    /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
     /* tableSettings: {
     dataEvent:
@@ -284,10 +382,17 @@ let table = (function () {
         else {
             updateTable(tableSettings);
         }
+
+        let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
+        applyButton.addEventListener('click', function() {
+            sendDataToApi(tableSettings);
+        });
     }
 
     return {
         init: init
     };
+
+    /*--------------------------------------------------------------------------------------*/
 
 })();

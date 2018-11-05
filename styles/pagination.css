@@ -1,3 +1,7 @@
+.pagination {
+    justify-content: flex-end;
+}
+
 .pagination ul{
     display: flex;
     flex-direction: row;
