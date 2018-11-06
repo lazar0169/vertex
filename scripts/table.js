@@ -169,8 +169,8 @@ let table = (function () {
 
     function updateTablePagination(tableSettings) {
         //toDo: dummy data
-        let activePage = 3;
-        let lastPage = 6;
+        let activePage = 1;
+        let lastPage = 2;
 
         let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
         let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
@@ -357,6 +357,13 @@ let table = (function () {
         // trigger(tableSettings.dataEvent, {tableSettings: tableSettings});
     }
 
+    function getActivePage(tableSettings){
+        let activePageButton = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button active')[0];
+        let activePageNumber = activePageButton.dataset.page;
+        alert(activePageNumber);
+        return activePageNumber;
+    }
+
     /*--------------------------------------------------------------------------------------*/
 
 
@@ -389,6 +396,7 @@ let table = (function () {
 
         let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
         applyButton.addEventListener('click', function () {
+            getActivePage(tableSettings);
             sendDataToApi(tableSettings);
         });
     }
