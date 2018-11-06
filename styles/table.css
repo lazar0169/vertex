@@ -67,3 +67,13 @@
 .head.cell.sort-desc {
     background-color: darkred;
 }
+
+.filter-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.filter-section section {
+    padding: 20px 0 0 20px;
+}
