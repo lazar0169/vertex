@@ -95,6 +95,7 @@ const dropdownDate = (function () {
                         $$(`.active-date-select`)[0].children[1].children[1].classList.add('hidden');
                         $$(`.active-date-select`)[0].children[1].classList.add('hidden');
                         $$('.active-date-select')[0].classList.toggle('active-date-select');
+                        pickCustom = false;
                     }
                     activeSelectId = selectId;
                     break;
@@ -119,6 +120,7 @@ const dropdownDate = (function () {
                 $$(`.active-date-select`)[0].children[1].classList.add('hidden');
                 $$('.active-date-select')[0].classList.toggle('active-date-select');
                 activeSelectId = false;
+                pickCustom = false;
             }
         }
     });
