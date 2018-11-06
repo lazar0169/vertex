@@ -10,6 +10,8 @@ const aftFilter = (function () {
 
     aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
     proba.appendChild(dropdownDate.generate(nekiniz));
+    let proba2 = $$('#aft-advance-table-filter-finished');
+    proba2.appendChild(dropdownDate.generate(nekiniz));
     
    // proba2.appendChild(multiDropdown.generate(nekiniz2));
     //proba3.appendChild(multiDropdown.generate(nekiniz3));

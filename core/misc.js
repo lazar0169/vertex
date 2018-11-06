@@ -51,5 +51,3 @@ function selectInfoContent(name) {
         previousInfoContSelected = infoContSelected;
     }
 }
-
-

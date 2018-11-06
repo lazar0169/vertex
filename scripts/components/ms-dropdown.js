@@ -1,6 +1,8 @@
 const multiDropdown = (function () {
     //index of multiselect 
     let indexMsId = 0;
+    //single select array
+    let multiSelectArray = [];
     // generate multi dropdown
     function generate(dataSelect) {
         //array of chosen options
@@ -11,6 +13,7 @@ const multiDropdown = (function () {
         let select = document.createElement('div');
         select.dataset.selectId = `ms-${indexMsId}`;
         select.classList.add('default-select');
+        select.id = `ms-${indexMsId}`;
         //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected.Name;
@@ -51,7 +54,6 @@ const multiDropdown = (function () {
                         i++
                     }
                     selected.innerHTML = array;
-
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
                         selected.innerHTML = noSelected.Name;
@@ -68,21 +70,32 @@ const multiDropdown = (function () {
             if (selected.innerHTML === noSelected.Name) {
                 array = [];
             }
-            select.classList.toggle('active-select');
-            optionGroup.classList.toggle('hidden');
-        });
-
-        window.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (e.target.parentNode.dataset.selectId !== select.dataset.selectId && e.target.parentNode.parentNode.dataset.selectId !== select.dataset.selectId) {
-                optionGroup.classList.add('hidden');
-                select.classList.remove('active-select');
-            }
         });
         indexMsId++;
         dataSelect.unshift(noSelected);
+        multiSelectArray.push(select.id);
         return select;
     }
+    window.addEventListener('click', function (e) {
+        e.stopPropagation();
+        for (let selectId of multiSelectArray) {
+            if (e.target.parentNode.id === selectId) {
+                $$(`#${selectId}`).classList.toggle('active-multi-select');
+                $$(`#${selectId}`).children[1].classList.toggle('hidden');
+            }
+            else {
+                if (e.target.parentNode.parentNode.id === selectId) {
+                    $$(`#${selectId}`).classList.add('active-multi-select');
+                    $$(`#${selectId}`).children[1].classList.remove('hidden');
+                }
+                else {
+                    $$(`#${selectId}`).classList.remove('active-multi-select');
+                    $$(`#${selectId}`).children[1].classList.add('hidden');
+                }
+            }
+        }
+    });
+    
     return {
         generate
     };

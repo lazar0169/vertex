@@ -40,7 +40,7 @@
     z-index: 1;
 }
 
-.active-select>div:first-child {
+.active-date-select>div:first-child, .active-single-select>div:first-child, .active-multi-select>div:first-child {
     border-bottom: 1px solid rgb(38, 50, 56);
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
 }

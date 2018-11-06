@@ -1,6 +1,10 @@
 const dropdownDate = (function () {
     //index of single select 
     let indexDsId = 0;
+    //date select array
+    let dateSelectArray = [];
+    // let global variable for select date
+    let activeSelectId;
     //indicate custom option
     let pickCustom = false;
     //generate single dropdown
@@ -9,6 +13,7 @@ const dropdownDate = (function () {
         let select = document.createElement('div');
         select.dataset.selectId = `ds-${indexDsId}`;
         select.classList.add('default-date-select');
+        select.id = `ds-${indexDsId}`;
         //selected option
         let selected = document.createElement('div');
         selected.innerHTML = dataSelect[0];
@@ -66,33 +71,57 @@ const dropdownDate = (function () {
                 }
             });
         }
-
-
-
         optionGroupWrapper.appendChild(optionGroup);
         optionGroupWrapper.appendChild(customDate);
         select.appendChild(selected);
         select.appendChild(optionGroupWrapper);
-        window.addEventListener('click', function (e) {
-            e.stopPropagation();
-            // proveriti ovo e.target.classList.contains('pika-select')
-            if (e.target.parentNode.dataset.selectId === select.dataset.selectId) {  
-                    optionGroupWrapper.classList.toggle('hidden');
-                    select.classList.toggle('active-select');
-            }
-            else if (!pickCustom) {
-                optionGroupWrapper.classList.add('hidden');
-                select.classList.remove('active-select');
-                customDate.classList.add('hidden');
-                pickCustom = false;
-            }
-            else {
-                console.log('aktivan je custom')
-            }
-        });
+
         indexDsId++;
+        dateSelectArray.push(select.id);
         return select;
     }
+    window.addEventListener('click', function (e) {
+        e.stopPropagation();
+        let found = false;
+        let current = e.target;
+        while (current) {
+            if (found) {
+                break;
+            }
+            for (let selectId of dateSelectArray) {
+                if (current.id === selectId) {
+                    found = true;
+                    if (current.id != activeSelectId && activeSelectId) {
+                        $$(`.active-date-select`)[0].children[1].children[1].classList.add('hidden');
+                        $$(`.active-date-select`)[0].children[1].classList.add('hidden');
+                        $$('.active-date-select')[0].classList.toggle('active-date-select');
+                    }
+                    activeSelectId = selectId;
+                    break;
+                }
+            }
+            current = current.parentNode;
+        }
+        if (found && !pickCustom && e.target.innerHTML != 'Custom') {
+            $$(`#${activeSelectId}`).classList.toggle('active-date-select');
+            $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
+            if (!$$(`#${activeSelectId}`).classList.contains('active-date-select')) {
+                activeSelectId = !activeSelectId;
+            }
+        }
+        else if (found && pickCustom || e.target.classList.contains('pika-select') || e.target.innerHTML === 'Custom') {
+            $$(`#${activeSelectId}`).classList.add('active-date-select');
+            $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
+        }
+        else {
+            if (activeSelectId) {
+                $$(`.active-date-select`)[0].children[1].children[1].classList.add('hidden');
+                $$(`.active-date-select`)[0].children[1].classList.add('hidden');
+                $$('.active-date-select')[0].classList.toggle('active-date-select');
+                activeSelectId = false;
+            }
+        }
+    });
     return {
         generate
     };
