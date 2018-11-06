@@ -170,7 +170,7 @@ let table = (function () {
     function updateTablePagination(tableSettings) {
         //toDo: dummy data
         let activePage = 1;
-        let lastPage = 2;
+        let lastPage = 220;
 
         let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
         let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
@@ -291,13 +291,11 @@ let table = (function () {
     /*-------------------------------------- SORTING --------------------------------------*/
 
     function getHeaders(tableSettings) {
-        let headers = tableSettings.tableContainerElement.getElementsByClassName('head');
-        return headers;
+        return tableSettings.tableContainerElement.getElementsByClassName('head');
     }
 
     function getActiveColumn(tableSettings) {
-        let activeHeader = tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
-        return activeHeader;
+        return tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
     }
 
     function makeColumnActive(header, tableSettings) {
@@ -322,18 +320,17 @@ let table = (function () {
         else if (header.classList.contains('sort-desc')) {
             header.classList.remove('sort-desc');
             header.classList.add('sort-asc');
-            delete header.dataset.direction;
             header.dataset.direction = 'asc';
         }
         else {
             header.classList.remove('sort-asc');
             header.classList.add('sort-desc');
-            delete header.dataset.direction;
             header.dataset.direction = 'desc';
         }
     }
 
     function prepareData(tableSettings) {
+        //todo dummy data
         tableSettings.sort = {
             direction: '',
             sortName: ''
@@ -348,6 +345,9 @@ let table = (function () {
                 tableSettings.sort.direction = columnDirection.descending;
             }
         }
+
+        // todo add active page
+
         return tableSettings;
     }
 
