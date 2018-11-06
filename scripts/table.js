@@ -78,7 +78,7 @@ let table = (function () {
                     head.classList.add('sticky');
                 }
                 tbody.appendChild(head);
-                head.addEventListener('click', function(){
+                head.addEventListener('click', function () {
                     makeColumnActive(head, tableSettings);
                 });
             }
@@ -139,8 +139,8 @@ let table = (function () {
 
         styleColsRows(tableSettings.tableData, colsCount, tbody);
     }
-    /*--------------------------------------------------------------------------------------*/
 
+    /*--------------------------------------------------------------------------------------*/
 
 
     /*-------------------------------------- PAGINATION ---------------------------------------*/
@@ -234,7 +234,6 @@ let table = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
-
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
@@ -265,7 +264,6 @@ let table = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
-
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
 
     function handleLinkClick(e) {
@@ -286,8 +284,8 @@ let table = (function () {
             bindPaginationLinkHandler(paginationElement);
         }
     }
-    /*--------------------------------------------------------------------------------------*/
 
+    /*--------------------------------------------------------------------------------------*/
 
 
     /*-------------------------------------- SORTING --------------------------------------*/
@@ -305,7 +303,12 @@ let table = (function () {
     function makeColumnActive(header, tableSettings) {
         let headers = getHeaders(tableSettings);
         for (let i = 0; i < headers.length; i++) {
-            headers[i].classList.remove('sort-active');
+            if (headers[i] !== header) {
+                headers[i].classList.remove('sort-active');
+                headers[i].classList.remove('sort-asc');
+                headers[i].classList.remove('sort-desc');
+                delete headers[i].dataset.direction;
+            }
         }
         header.classList.add('sort-active');
         toggleDirection(header, tableSettings);
@@ -316,7 +319,7 @@ let table = (function () {
             header.classList.add('sort-asc');
             header.dataset.direction = 'asc';
         }
-        else if (header.classList.contains('sort-desc')){
+        else if (header.classList.contains('sort-desc')) {
             header.classList.remove('sort-desc');
             header.classList.add('sort-asc');
             delete header.dataset.direction;
@@ -336,12 +339,14 @@ let table = (function () {
             sortName: ''
         };
         let activeHeader = getActiveColumn(tableSettings);
-        tableSettings.sort.sortName = activeHeader.dataset.sortName;
-        if (activeHeader.dataset.direction === 'asc') {
-            tableSettings.sort.direction = columnDirection.ascending;
-        }
-        else if(activeHeader.dataset.direction === 'desc') {
-            tableSettings.sort.direction = columnDirection.descending;
+        if (activeHeader !== undefined) {
+            tableSettings.sort.sortName = activeHeader.dataset.sortName;
+            if (activeHeader.dataset.direction === 'asc') {
+                tableSettings.sort.direction = columnDirection.ascending;
+            }
+            else if (activeHeader.dataset.direction === 'desc') {
+                tableSettings.sort.direction = columnDirection.descending;
+            }
         }
         return tableSettings;
     }
@@ -353,7 +358,6 @@ let table = (function () {
     }
 
     /*--------------------------------------------------------------------------------------*/
-
 
 
     /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
@@ -384,13 +388,8 @@ let table = (function () {
         }
 
         let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
-        applyButton.addEventListener('click', function() {
-            if (tableSettings.sort === undefined || tableSettings.sort === null) {
-                console.error('You didn\'t choose anything!');
-            }
-            else {
-                sendDataToApi(tableSettings);
-            }
+        applyButton.addEventListener('click', function () {
+            sendDataToApi(tableSettings);
         });
     }
 

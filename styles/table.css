@@ -59,3 +59,11 @@
 .apply {
     margin: 20px 0 0 0;
 }
+
+.head.cell.sort-asc {
+    background-color: darkgreen;
+}
+
+.head.cell.sort-desc {
+    background-color: darkred;
+}
