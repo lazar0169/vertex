@@ -27,6 +27,7 @@ const multiDropdown = (function () {
             //option with functionality
             let option = document.createElement('div');
             option.title = element.Name;
+            option.dataset.value = element;
             option.innerHTML = `<label class="form-checkbox" >
                                                 <input type="checkbox" dataset.elementId=${element.Id}>
                                                 <i class="form-icon" ></i> <div>${element.Name}</div>

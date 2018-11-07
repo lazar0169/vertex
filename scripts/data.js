@@ -9,8 +9,8 @@ let machinesVendors = ['-', 'Fazi', 'Admiral', 'Favorit'];
 let machinesStatus = ['-', 'Online', 'Offline', 'Disabled'];
 let machinesType = ['-', 'Slot machine', 'Rulet'];
 let machinesSerial = ['-', 'X00000', 'X11111', 'X22222', 'X33333'];
-let hour = ['-', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
-let minutes = ['-', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59'];
+let hour = ['-', '00 h', '01 h', '02 h', '03 h', '04 h', '05 h', '06 h', '07 h', '08 h', '09 h', '10 h', '11 h', '12 h', '13 h', '14 h', '15 h', '16 h', '17 h', '18 h', '19 h', '20 h', '21 h', '22 h', '23 h'];
+let minutes = ['-', '00 min', '01 min', '02 min', '03 min', '04 min', '05 min', '06 min', '07 min', '08 min', '09 min', '10 min', '11 min', '12 min', '13 min', '14 min', '15 min', '16 min', '17 min', '18 min', '19 min', '20 min', '21 min', '22 min', '23 min', '24 min', '25 min', '26 min', '27 min', '28 min', '29 min', '30 min', '31 min', '32 min', '33 min', '34 min', '35 min', '36 min', '37 min', '38 min', '39 min', '40 min', '41 min', '42 min', '43 min', '44 min', '45 min', '46 min', '47 min', '48 min', '49 min', '50 min', '51 min', '52 min', '53 min', '54 min', '55 min', '56 min', '57 min', '58 min', '59 min'];
 
 /*
 let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];

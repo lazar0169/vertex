@@ -259,6 +259,7 @@ let communication = (function () {
             'PageSize': 10,
             'Date': '2018-09-13T10:07:16'
         };
+        
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });

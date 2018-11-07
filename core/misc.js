@@ -51,3 +51,23 @@ function selectInfoContent(name) {
         previousInfoContSelected = infoContSelected;
     }
 }
+
+// custom date 
+on('apply-custom-date', function (data) {
+    let dateFrom = $$(`#datepicker-from-${data.data}`).dataset.value;
+    let dateTo = $$(`#datepicker-to-${data.data}`).dataset.value;
+
+    let timeFromHour = $$(`#time-from-${data.data}`).children[1].children[0].children[0].dataset.value.slice(0, 2);
+    let timeFromMinutes = $$(`#time-from-${data.data}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
+    let timeToHour = $$(`#time-to-${data.data}`).children[1].children[0].children[0].dataset.value.slice(0, 2);
+    let timeToMinutes = $$(`#time-to-${data.data}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
+
+    let jsonCustomDate = JSON.stringify(`${dateFrom}T${timeFromHour}:${timeFromMinutes}, ${dateTo}T${timeToHour}:${timeToMinutes}`)
+
+    console.log(jsonCustomDate)
+});
+
+on('set-date-datepicker', function (data) {
+    $$(`#${data.pickerId}`).dataset.value = data.date;
+    console.log($$(`#${data.pickerId}`).dataset.value)
+});

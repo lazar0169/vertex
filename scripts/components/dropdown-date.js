@@ -11,7 +11,7 @@ const dropdownDate = (function () {
     function generate(dataSelect) {
         // wrapper select
         let select = document.createElement('div');
-        select.dataset.selectId = `ds-${indexDsId}`;
+        select.dataset.selectId = indexDsId;
         select.classList.add('default-date-select');
         select.id = `ds-${indexDsId}`;
         //selected option
@@ -29,7 +29,7 @@ const dropdownDate = (function () {
 
         customDate.innerHTML = `<div id="date-from-${indexDsId}" class="choose-date-time">
                                 <div>Date from:</div>
-                                <input type="text" class="datepicker" readonly>                                
+                                <input id="datepicker-from-${indexDsId}" type="text" class="datepicker" readonly>                                
                                 </div>
                                 <div id="time-from-${indexDsId}" class="choose-date-time">
                                 <div>Time from:</div>
@@ -37,17 +37,42 @@ const dropdownDate = (function () {
                                 </div>
                                 <div id="date-to-${indexDsId}" class="choose-date-time">
                                 <div>Date to:</div>
-                                <input type="text" class="datepicker" readonly>                                
+                                <input id="datepicker-to-${indexDsId}" type="text" class="datepicker" readonly>                                
                                 </div>
                                 <div id="time-to-${indexDsId}" class="choose-date-time">
                                 <div>Time to:</div>
                                 <div class="timepicker"></div>                                
-                                </div>
-                                <div class="custom-date-buttons-wrapper center">
-                                <button class="btn btn-success">Apply</button>
-                                <button class="btn btn-cancel">Cancel</button>
-                                </div>
-                                `
+                                </div>`
+
+
+        let buttonsCustomDate = document.createElement('div');
+        buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
+        buttonsCustomDate.classList.add('center');
+
+        let applyCustom = document.createElement('button');
+        applyCustom.classList.add('btn');
+        applyCustom.classList.add('btn-success');
+        applyCustom.innerHTML = 'Apply';
+        applyCustom.addEventListener('click', function () {
+            trigger(`apply-custom-date`, { data: select.dataset.selectId });
+        });
+
+        let cancelCustom = document.createElement('button');
+        cancelCustom.classList.add('btn');
+        cancelCustom.classList.add('btn-cancel');
+        cancelCustom.innerHTML = 'Cancel';
+        cancelCustom.addEventListener('click', function () {
+            trigger(`cancel-custom-date`, { data: indexDsId });
+        });
+
+        buttonsCustomDate.appendChild(applyCustom);
+        buttonsCustomDate.appendChild(cancelCustom);
+        customDate.appendChild(buttonsCustomDate);
+        // <div id="" class="custom-date-buttons-wrapper center">
+        // <button class="btn btn-success">Apply</button>
+        // <button class="btn btn-cancel">Cancel</button>
+        // </div>
+
         customDate.classList.add('hidden');
         for (let element of dataSelect) {
             //option with functionality
@@ -55,10 +80,11 @@ const dropdownDate = (function () {
             option.classList.add('single-option');
             option.innerHTML = element;
             option.title = option.innerHTML;
+            option.dataset.value = element;
             optionGroup.appendChild(option);
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (option.innerHTML === 'Custom') {
+                if (option.dataset.value === 'Custom') {
                     customDate.classList.toggle('hidden');
                     pickCustom = !pickCustom;
                 }
@@ -103,9 +129,10 @@ const dropdownDate = (function () {
             }
             current = current.parentNode;
         }
-        if (found && !pickCustom && e.target.innerHTML != 'Custom') {
-            $$(`#${activeSelectId}`).classList.toggle('active-date-select');
+        if (found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId) {
+            $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
+            $$(`#${activeSelectId}`).classList.toggle('active-date-select');
             if (!$$(`#${activeSelectId}`).classList.contains('active-date-select')) {
                 activeSelectId = !activeSelectId;
             }

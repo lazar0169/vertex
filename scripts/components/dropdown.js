@@ -15,7 +15,7 @@ const dropdown = (function () {
         let selected = document.createElement('div');
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
-        selected.dataset.items = JSON.stringify(selected.innerHTML);
+        selected.dataset.value = dataSelect[0];
         selected.addEventListener('click', function () {
             optionGroup.classList.toggle('hidden');
             select.classList.toggle('active-single-select');
@@ -30,13 +30,14 @@ const dropdown = (function () {
             option.classList.add('single-option');
             option.innerHTML = element;
             option.title = option.innerHTML;
+            option.dataset.value = element;
             optionGroup.appendChild(option);
 
             option.addEventListener('click', function (e) {
                 e.preventDefault();
                 selected.innerHTML = option.innerHTML;
                 selected.title = selected.innerHTML;
-                selected.dataset.items = JSON.stringify(selected.innerHTML);
+                selected.dataset.value = option.dataset.value;
                 select.classList.remove('active-single-select');
                 optionGroup.classList.add('hidden');
             });
