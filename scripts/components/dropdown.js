@@ -9,7 +9,7 @@ const dropdown = (function () {
         // wrapper select
         let select = document.createElement('div');
         select.id = `ss-${indexSsId}`;
-        select.dataset.selectId = `ss-${indexSsId}`;
+        select.dataset.selectId = indexSsId;
         select.classList.add('default-select');
         //selected option
         let selected = document.createElement('div');

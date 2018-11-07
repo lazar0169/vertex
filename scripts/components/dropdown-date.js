@@ -18,7 +18,7 @@ const dropdownDate = (function () {
         let selected = document.createElement('div');
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
-        selected.dataset.items = JSON.stringify(selected.innerHTML);
+        selected.dataset.value = dataSelect[0];
         //wrapper options group
         let optionGroupWrapper = document.createElement('div');
         optionGroupWrapper.classList.add('hidden');
@@ -68,10 +68,7 @@ const dropdownDate = (function () {
         buttonsCustomDate.appendChild(applyCustom);
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
-        // <div id="" class="custom-date-buttons-wrapper center">
-        // <button class="btn btn-success">Apply</button>
-        // <button class="btn btn-cancel">Cancel</button>
-        // </div>
+        
 
         customDate.classList.add('hidden');
         for (let element of dataSelect) {
@@ -91,7 +88,7 @@ const dropdownDate = (function () {
                 else {
                     selected.innerHTML = option.innerHTML;
                     selected.title = selected.innerHTML;
-                    selected.dataset.items = JSON.stringify(selected.innerHTML);
+                    selected.dataset.value = selected.innerHTML;
                     customDate.classList.add('hidden');
                     pickCustom = false;
                 }
@@ -137,7 +134,7 @@ const dropdownDate = (function () {
                 activeSelectId = !activeSelectId;
             }
         }
-        else if (found && pickCustom || e.target.classList.contains('pika-select') || e.target.innerHTML === 'Custom') {
+        else if (found && pickCustom || e.target.classList.contains('pika-select') || e.target.dataset.value === 'Custom') {
             $$(`#${activeSelectId}`).classList.add('active-date-select');
             $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
         }

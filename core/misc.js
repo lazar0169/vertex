@@ -55,16 +55,30 @@ function selectInfoContent(name) {
 // custom date 
 on('apply-custom-date', function (data) {
     let dateFrom = $$(`#datepicker-from-${data.data}`).dataset.value;
-    let dateTo = $$(`#datepicker-to-${data.data}`).dataset.value;
 
     let timeFromHour = $$(`#time-from-${data.data}`).children[1].children[0].children[0].dataset.value.slice(0, 2);
     let timeFromMinutes = $$(`#time-from-${data.data}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
+
+    let dateTo = $$(`#datepicker-to-${data.data}`).dataset.value;
     let timeToHour = $$(`#time-to-${data.data}`).children[1].children[0].children[0].dataset.value.slice(0, 2);
     let timeToMinutes = $$(`#time-to-${data.data}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
 
-    let jsonCustomDate = JSON.stringify(`${dateFrom}T${timeFromHour}:${timeFromMinutes}, ${dateTo}T${timeToHour}:${timeToMinutes}`)
+    let tempArray = [dateFrom, `${timeFromHour}:${timeFromMinutes}`, dateTo, `${timeToHour}:${timeToMinutes}`];
+    if (dateFrom === undefined || timeFromHour === '-' || timeFromMinutes === '-' || dateTo === undefined || timeToHour === '-' || timeToMinutes === '-') {
+        alert('Wrong parameters, please check parameters.')
+    }
+    else {
+        $$(`#ds-${data.data}`).children[0].innerHTML = 'Custom';
+        $$(`#ds-${data.data}`).children[0].title = `Date from: ${tempArray[0]}, Time from: ${tempArray[1]}, Date to: ${tempArray[2]}, Time to: ${tempArray[3]}`;
+        $$(`#ds-${data.data}`).dataset.value = tempArray;
+        let jsonCustomDate = JSON.stringify($$(`#ds-${data.data}`).dataset.value);
+        console.log(jsonCustomDate);
+    }
 
-    console.log(jsonCustomDate)
+
+
+
+
 });
 
 on('set-date-datepicker', function (data) {

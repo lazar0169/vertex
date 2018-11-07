@@ -6,18 +6,18 @@ const multiDropdown = (function () {
     // generate multi dropdown
     function generate(dataSelect) {
         //array of chosen options
-        let array;
+        let array = [];
         //initial select form data
         let noSelected = dataSelect.shift();
         //wrapper select
         let select = document.createElement('div');
-        select.dataset.selectId = `ms-${indexMsId}`;
+        select.dataset.selectId = indexMsId;
         select.classList.add('default-select');
         select.id = `ms-${indexMsId}`;
         //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected.Name;
-        selected.dataset.items = JSON.stringify(selected.innerHTML);
+        selected.dataset.value = noSelected.Name;
         selected.title = selected.innerHTML;
         //wrapper options group
         let optionGroup = document.createElement('div');
@@ -27,7 +27,7 @@ const multiDropdown = (function () {
             //option with functionality
             let option = document.createElement('div');
             option.title = element.Name;
-            option.dataset.value = element;
+            option.dataset.value = element.Name;
             option.innerHTML = `<label class="form-checkbox" >
                                                 <input type="checkbox" dataset.elementId=${element.Id}>
                                                 <i class="form-icon" ></i> <div>${element.Name}</div>
@@ -38,12 +38,13 @@ const multiDropdown = (function () {
                 e.preventDefault();
                 if (option.children[0].children[0].checked == false) {
                     if (selected.innerHTML === '-') {
+                        array = [];
                         selected.innerHTML = option.children[0].children[2].innerHTML;
                     }
                     else {
                         selected.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
                     }
-                    array.push(option.children[0].children[2].innerHTML);
+                    array.push(option.dataset.value);
                     option.children[0].children[0].checked = true;
                 }
                 else {
@@ -58,20 +59,16 @@ const multiDropdown = (function () {
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
                         selected.innerHTML = noSelected.Name;
+                        array.push(noSelected.Name);
                     }
                 }
                 selected.title = selected.innerHTML;
-                selected.dataset.items = JSON.stringify(selected.innerHTML)
+                selected.dataset.value = array;
             });
         }
         select.appendChild(selected);
         select.appendChild(optionGroup);
 
-        selected.addEventListener('click', function () {
-            if (selected.innerHTML === noSelected.Name) {
-                array = [];
-            }
-        });
         indexMsId++;
         dataSelect.unshift(noSelected);
         multiSelectArray.push(select.id);
@@ -96,7 +93,7 @@ const multiDropdown = (function () {
             }
         }
     });
-    
+
     return {
         generate
     };
