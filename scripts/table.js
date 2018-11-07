@@ -5,7 +5,15 @@ let table = (function () {
             ascending: 1,
             descending: -1
         };
-        const tagNames = {
+        const directionClass = {
+            ascending: 'sort-asc',
+            descending: 'sort-desc'
+        };
+        const directionDataAtt = {
+            ascending: 'asc',
+            descending: 'desc'
+        };
+        const tagNames = { //caps letters
             input: 'INPUT',
             textarea: 'TEXTAREA',
             select: 'SELECT'
@@ -328,19 +336,19 @@ let table = (function () {
         }
 
         function toggleDirection(header) {
-            if (!header.classList.contains('sort-asc') && !header.classList.contains('sort-desc') && !header.dataset.direction) {
-                header.classList.add('sort-asc');
-                header.dataset.direction = 'asc';
+            if (!header.classList.contains(directionClass.ascending) && !header.classList.contains(directionClass.descending) && !header.dataset.direction) {
+                header.classList.add(directionClass.ascending);
+                header.dataset.direction = directionDataAtt.ascending;
             }
-            else if (header.classList.contains('sort-desc')) {
-                header.classList.remove('sort-desc');
-                header.classList.add('sort-asc');
-                header.dataset.direction = 'asc';
+            else if (header.classList.contains(directionClass.descending)) {
+                header.classList.remove(directionClass.descending);
+                header.classList.add(directionClass.ascending);
+                header.dataset.direction = directionDataAtt.ascending;
             }
             else {
-                header.classList.remove('sort-asc');
-                header.classList.add('sort-desc');
-                header.dataset.direction = 'desc';
+                header.classList.remove(directionClass.ascending);
+                header.classList.add(directionClass.descending);
+                header.dataset.direction = directionDataAtt.descending;
             }
         }
 
