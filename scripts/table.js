@@ -4,7 +4,17 @@ let table = (function () {
         const columnDirection = {
             ascending: 1,
             descending: -1
-        }
+        };
+        const tagNames = {
+            input: 'INPUT',
+            textarea: 'TEXTAREA',
+            select: 'SELECT'
+        };
+        const types = {
+            checkbox: 'checkbox',
+            radio: 'radio'
+        };
+
 
 
         /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
@@ -383,43 +393,60 @@ let table = (function () {
             let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
             let filterElements = collectAllFilterElements(tableSettings);
             for (let i = 0; i < filterElements.length; i++) {
-                if (filterElements[i].tagName === 'TEXTAREA' || filterElements[i].tagName === 'INPUT' || filterElements[i].tagName === 'SELECT') {
+                if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.select) {
                     filterName = filterElements[i].name;
-                } else {
-                    filterName = filterElements[i].dataset.name;
-                }
-                if (filterElements[i].tagName === 'TEXTAREA' || filterElements[i].tagName === 'INPUT') {
-                    if (filterElements[i].type === 'radio') { //radio
-                        if (filterElements[i].checked === true) {
+                    if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input) {
+                        if (filterElements[i].type === types.radio && filterElements[i].checked === true) { //radio
+                            filterValue = filterElements[i].value;
+                            tableSettings.filters[filterName] = filterValue;
+                        } else if (filterElements[i].type === types.checkbox && filterElements[i].checked === true) { //checkbox
+                            filterValueArrayCheckBox.push(filterElements[i].value);
+                            tableSettings.filters[filterName] = filterValueArrayCheckBox;
+                        } else if (filterElements[i].type !== types.checkbox && filterElements[i].type !== types.radio){ //text area & input
                             filterValue = filterElements[i].value;
                             tableSettings.filters[filterName] = filterValue;
                         }
-                    } else if (filterElements[i].type === 'checkbox') { //checkbox
-                        if (filterElements[i].checked === true) {
-                            filterValueArrayCheckBox.push(filterElements[i].value);
-                            tableSettings.filters[filterName] = filterValueArrayCheckBox;
+                    } else if (filterElements[i].tagName === tagNames.select) { //select
+                        if (filterElements[i].attributes['multiple']) { //select multiple
+                            let selectedOptions = filterElements[i].selectedOptions;
+                            for (let i = 0; i < selectedOptions.length; i++) {
+                                filterValueArraySelect.push(selectedOptions[i].value);
+                            }
+                            tableSettings.filters[filterName] = filterValueArraySelect;
+                        } else {
+                            filterValue = filterElements[i].options[filterElements[i].selectedIndex].value;
+                            tableSettings.filters[filterName] = filterValue;
                         }
-                    } else { //text area & input
-                        filterValue = filterElements[i].value;
-                        tableSettings.filters[filterName] = filterValue;
-                    }
-                } else if (filterElements[i].tagName === 'SELECT') { //select
-                    if (filterElements[i].attributes['multiple']) { //select multiple
-                        let selectedOptions = filterElements[i].selectedOptions;
-                        for(let i = 0; i< selectedOptions.length; i++) {
-                            filterValueArraySelect.push(selectedOptions[i].value);
-                        }
-                        tableSettings.filters[filterName] = filterValueArraySelect;
-                    } else {
-                        filterValue = filterElements[i].options[filterElements[i].selectedIndex].value;
-                        tableSettings.filters[filterName] = filterValue;
                     }
                 } else { //div
+                    filterName = filterElements[i].dataset.name;
                     filterValue = filterElements[i].dataset.value;
                     tableSettings.filters[filterName] = filterValue;
                 }
             }
+            getPageSize(tableSettings);
+            getQuerySearch(tableSettings);
             console.log('tableSettins.filters', tableSettings.filters);
+        }
+
+        function getPageSize(tableSettings){
+            if(tableSettings.filters.numberOfPages === undefined) {
+                let pagesNumberElement = tableSettings.tableContainerElement.getElementsByClassName('pages-number')[0];
+                let pagesNumberValue = pagesNumberElement.options[pagesNumberElement.selectedIndex].value;
+                tableSettings.filters.numberOfPages = pagesNumberValue;
+            }
+            console.log('page size', tableSettings.filters.numberOfPages);
+            return tableSettings.filters.numberOfPages;
+        }
+
+        function getQuerySearch(tableSettings){
+            if(tableSettings.filters.querySearch === undefined) {
+                let querySearchElement = tableSettings.tableContainerElement.getElementsByClassName('query-search')[0];
+                let querySearchValue = querySearchElement.value;
+                tableSettings.filters.querySearch = querySearchValue;
+            }
+            console.log('query search', tableSettings.filters.querySearch);
+            return tableSettings.filters.querySearch;
         }
 
         /*--------------------------------------------------------------------------------------*/
