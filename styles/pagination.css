@@ -15,3 +15,11 @@
 .element-pagination-page-button.hidden {
     display: none;
 }
+
+.pagination-last-page:hover {
+    background-color: gray;
+}
+
+.pagination-last-page-hover {
+    display: none;
+}

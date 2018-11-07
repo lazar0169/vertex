@@ -178,7 +178,6 @@ let table = (function () {
                     tableSettings: tableSettings
                 });
             }
-
             else return;
         }
 
@@ -189,6 +188,19 @@ let table = (function () {
             bindPaginationLinkHandlers();
 
         });
+
+        function hoverLastPageNumber(tableSettings){
+            let lastPagePaginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page element-pagination-link')[0];
+
+            lastPagePaginationElement.addEventListener('mouseover', function(){
+                lastPagePaginationElement.innerHTML = lastPagePaginationElement.dataset.page;
+            });
+
+            lastPagePaginationElement.addEventListener('mouseout', function(){
+                lastPagePaginationElement.innerHTML = '>>';
+            });
+        }
+
 
         function updateTablePagination(tableSettings) {
             //toDo: dummy data
@@ -252,6 +264,7 @@ let table = (function () {
                     paginationButtons[i].classList.add('hidden');
                 }
             }
+            hoverLastPageNumber(tableSettings);
         }
 
         /*--------------------------------------------------------------------------------------*/
