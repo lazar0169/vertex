@@ -15,7 +15,7 @@ const aftFilter = (function () {
         let aftJackpot = $$('#aft-advance-table-filter-jackpot').children[1].children[0].dataset.value;
         let aftType = $$('#aft-advance-table-filter-type').children[1].children[0].dataset.value;
         let aftStatus = $$('#aft-advance-table-filter-status').children[1].children[0].dataset.value;
-        let aftChoseColumn = $$('#aft-advance-table-filter-column').children[1].children[0].dataset.value;
+        let aftChooseColumn = $$('#aft-advance-table-filter-column').children[1].children[0].dataset.value;
         trigger('communicate/aft/previewTransactions', {});
 
 
@@ -36,8 +36,8 @@ const aftFilter = (function () {
             'aftStatus': {
                 'aftStatus': aftStatus
             },
-            'aftChoseColumn': {
-                'aftChoseColumn': aftChoseColumn
+            'aftChooseColumn': {
+                'aftChooseColumn': aftChooseColumn
             }
         })
 
