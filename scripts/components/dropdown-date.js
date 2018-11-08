@@ -44,7 +44,6 @@ const dropdownDate = (function () {
                                 <div class="timepicker"></div>                                
                                 </div>`
 
-
         let buttonsCustomDate = document.createElement('div');
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
         buttonsCustomDate.classList.add('center');
@@ -54,7 +53,7 @@ const dropdownDate = (function () {
         applyCustom.classList.add('btn-success');
         applyCustom.innerHTML = 'Apply';
         applyCustom.addEventListener('click', function () {
-            trigger(`apply-custom-date`, { data: select.dataset.selectId });
+            trigger(`apply-custom-date`, { selectId: select.dataset.selectId, target: applyCustom });
         });
 
         let cancelCustom = document.createElement('button');
@@ -62,13 +61,13 @@ const dropdownDate = (function () {
         cancelCustom.classList.add('btn-cancel');
         cancelCustom.innerHTML = 'Cancel';
         cancelCustom.addEventListener('click', function () {
-            trigger(`cancel-custom-date`, { data: indexDsId });
+            trigger(`cancel-custom-date`, { selectId: select.dataset.selectId, target: applyCustom });
         });
 
         buttonsCustomDate.appendChild(applyCustom);
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
-        
+
 
         customDate.classList.add('hidden');
         for (let element of dataSelect) {
@@ -84,6 +83,7 @@ const dropdownDate = (function () {
                 if (option.dataset.value === 'Custom') {
                     customDate.classList.toggle('hidden');
                     pickCustom = !pickCustom;
+                    delete applyCustom.dataset.value;
                 }
                 else {
                     selected.innerHTML = option.innerHTML;
@@ -126,15 +126,16 @@ const dropdownDate = (function () {
             }
             current = current.parentNode;
         }
-        if (found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId) {
+        if (found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
             if (!$$(`#${activeSelectId}`).classList.contains('active-date-select')) {
                 activeSelectId = !activeSelectId;
             }
+            pickCustom = false;
         }
-        else if (found && pickCustom || e.target.classList.contains('pika-select') || e.target.dataset.value === 'Custom') {
+        else if (found && pickCustom || e.target.classList.contains('pika-select') || found && e.target.dataset.value === 'Custom') {
             $$(`#${activeSelectId}`).classList.add('active-date-select');
             $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
         }
