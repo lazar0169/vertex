@@ -21,6 +21,7 @@
       "data.js",
       "sidebar.js",
       "template-engine.js",
+      "mock.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",

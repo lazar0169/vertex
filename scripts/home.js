@@ -376,7 +376,7 @@ let home = (function () {
         tableSettings.tableContainerSelector = '#table-container-home';
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = true;
-        tableSettings.dataEvent = 'communicate/home/data';
+        tableSettings.dataEvent = 'mock/data';
         tableSettings.id = '';
 
         table.init(tableSettings);

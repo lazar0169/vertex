@@ -219,7 +219,6 @@ let table = (function () {
                 paginationPreviousPage.dataset.page = '1';
             }
 
-
             if (activePage !== lastPage) {
                 let nextPage = activePage + 1;
                 paginationNextPage.dataset.page = nextPage.toString();
@@ -390,6 +389,28 @@ let table = (function () {
             return tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
         }
 
+        function isSingleCheckbox(element) {
+            return element.type === types.checkbox && document.getElementsByName(element.name).length === 1;
+        }
+
+        function getPageSize(tableSettings) {
+            if (tableSettings.filters.numberOfPages === undefined) {
+                let pagesNumberElement = tableSettings.tableContainerElement.getElementsByClassName('pages-number')[0];
+                let pagesNumberValue = pagesNumberElement.options[pagesNumberElement.selectedIndex].value;
+                tableSettings.filters.numberOfPages = pagesNumberValue;
+            }
+            return tableSettings.filters.numberOfPages;
+        }
+
+        function getQuerySearch(tableSettings) {
+            if (tableSettings.filters.querySearch === undefined) {
+                let querySearchElement = tableSettings.tableContainerElement.getElementsByClassName('query-search')[0];
+                let querySearchValue = querySearchElement.value;
+                tableSettings.filters.querySearch = querySearchValue;
+            }
+            return tableSettings.filters.querySearch;
+        }
+
         function getFilters(tableSettings) {
             tableSettings.filters = {};
             let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
@@ -399,6 +420,10 @@ let table = (function () {
                     filterName = filterElements[i].name;
                     if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input) {
                         if (filterElements[i].type === types.radio && filterElements[i].checked === true) { //radio
+                            filterValue = filterElements[i].value;
+                            tableSettings.filters[filterName] = filterValue;
+                        } else if (isSingleCheckbox(filterElements[i]) && filterElements[i].checked === true) {
+                            filterName = filterElements[i].name;
                             filterValue = filterElements[i].value;
                             tableSettings.filters[filterName] = filterValue;
                         } else if (filterElements[i].type === types.checkbox && filterElements[i].checked === true) { //checkbox
@@ -431,26 +456,26 @@ let table = (function () {
             return tableSettings.filters;
         }
 
-        function restartFilters(tableSettings) {
-
+        function setDefaultFilters(tableSettings) {
+            tableSettings.defaultFilters = getFilters(tableSettings);
         }
 
-        function getPageSize(tableSettings) {
-            if (tableSettings.filters.numberOfPages === undefined) {
-                let pagesNumberElement = tableSettings.tableContainerElement.getElementsByClassName('pages-number')[0];
-                let pagesNumberValue = pagesNumberElement.options[pagesNumberElement.selectedIndex].value;
-                tableSettings.filters.numberOfPages = pagesNumberValue;
-            }
-            return tableSettings.filters.numberOfPages;
-        }
+        function resetFilters(tableSettings) {
+            let defaultFilters = tableSettings.defaultFilters;
+            let filterElements = collectAllFilterElements(tableSettings);
 
-        function getQuerySearch(tableSettings) {
-            if (tableSettings.filters.querySearch === undefined) {
-                let querySearchElement = tableSettings.tableContainerElement.getElementsByClassName('query-search')[0];
-                let querySearchValue = querySearchElement.value;
-                tableSettings.filters.querySearch = querySearchValue;
+            for (let i = 0; i < filterElements.length; i++) {
+                filterElements[i].checked = false;
+                filterElements[i].value = null;
+                Object.keys(defaultFilters).forEach(function(key){
+                    if(filterElements[i].name === key){
+                        filterElements[i].value = defaultFilters[key];
+                        if(filterElements[i].type === types.radio && filterElements[i].value === defaultFilters[key]){
+                            filterElements[i].checked = true;
+                        }
+                    }
+                });
             }
-            return tableSettings.filters.querySearch;
         }
 
         /*--------------------------------------------------------------------------------------*/
@@ -476,25 +501,33 @@ let table = (function () {
             let activePage = tableSettings.activePage;
             let filters = tableSettings.filters;
 
-            for (let i = 0; i < Object.keys(sorting).length; i++) {
-                dataForApi[Object.keys(sorting)[i]] = Object.values(sorting)[i];
-            }
+            Object.keys(sorting).forEach(function (key) {
+                dataForApi[key] = sorting[key];
+            });
+
             dataForApi['activePage'] = activePage;
 
-            for (let i = 0; i < Object.keys(filters).length; i++) {
-                dataForApi[Object.keys(filters)[i]] = Object.values(filters)[i];
-            }
+            Object.keys(filters).forEach(function (key) {
+                dataForApi[key] = filters[key];
+            });
 
             dataForApi = JSON.stringify(dataForApi);
-            console.log(dataForApi);
-
             return dataForApi;
         }
 
-        function sendDataToApi(tableSettings) {
-            prepareData(tableSettings);
-            console.log('tableSettings after apply click: ', tableSettings);
-            // trigger(tableSettings.dataEvent, {tableSettings: tableSettings});
+        /*--------------------------------------------------------------------------------------*/
+
+
+        /*------------------------------- COMMUNICATION WITH API -------------------------------*/
+
+        function getApiResponse(tableSettings) {
+            let dataForApi = prepareData(tableSettings);
+            let callbackEvent = 'table/update';
+            trigger(tableSettings.dataEvent, {
+                tableSettings: tableSettings,
+                data: dataForApi,
+                callbackEvent: callbackEvent
+            });
         }
 
         /*--------------------------------------------------------------------------------------*/
@@ -515,6 +548,9 @@ let table = (function () {
 
             tableSettings.dataEvent = getEvent(tableSettings);
 
+            //setting default filters
+            setDefaultFilters(tableSettings);
+
             generateTablePagination(tableSettings);
 
             if (tableSettings.tableData === undefined) {
@@ -528,7 +564,14 @@ let table = (function () {
 
             let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
             applyButton.addEventListener('click', function () {
-                sendDataToApi(tableSettings);
+                getApiResponse(tableSettings);
+                console.log(tableSettings);
+            });
+
+            let resetButton = tableSettings.tableContainerElement.getElementsByClassName('reset')[0];
+            resetButton.addEventListener('click', function () {
+                resetFilters(tableSettings);
+                console.log(tableSettings);
             });
         }
 
@@ -539,5 +582,4 @@ let table = (function () {
         /*--------------------------------------------------------------------------------------*/
 
     }
-
 )();
