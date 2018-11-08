@@ -465,13 +465,18 @@ let table = (function () {
             let filterElements = collectAllFilterElements(tableSettings);
 
             for (let i = 0; i < filterElements.length; i++) {
-                filterElements[i].checked = false;
-                filterElements[i].value = null;
-                Object.keys(defaultFilters).forEach(function(key){
-                    if(filterElements[i].name === key){
-                        filterElements[i].value = defaultFilters[key];
-                        if(filterElements[i].type === types.radio && filterElements[i].value === defaultFilters[key]){
-                            filterElements[i].checked = true;
+                Object.keys(defaultFilters).forEach(function (key) {
+                    if (filterElements[i].name === key) {
+                        if (filterElements[i].type === types.radio) {
+                            if (filterElements[i].value === defaultFilters[key]) {
+                                filterElements[i].checked = true;
+                            }
+                            else {
+                                filterElements[i].checked = false;
+                            }
+                        }
+                        else {
+                            filterElements[i].value = defaultFilters[key];
                         }
                     }
                 });
