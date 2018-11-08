@@ -72,9 +72,9 @@ on('apply-custom-date', function (data) {
     else {
         $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
         $$(`#ds-${data.selectId}`).children[0].title = `Date from: ${tempArray[0]}, Time from: ${tempArray[1]}, Date to: ${tempArray[2]}, Time to: ${tempArray[3]}`;
-        $$(`#ds-${data.selectId}`).dataset.value = tempArray;
+        $$(`#ds-${data.selectId}`).children[0].dataset.value = tempArray;
         data.target.dataset.value = 'Apply custom date'
-        let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).dataset.value);
+        let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).children[0].dataset.value);
         console.log(jsonCustomDate);
     }
 });
@@ -96,7 +96,7 @@ on('cancel-custom-date', function (data) {
     delete $$(`#ds-${data.selectId}`).dataset.value;
     $$(`#ds-${data.selectId}`).children[0].innerHTML = nekiniz[0];
     $$(`#ds-${data.selectId}`).children[0].title = nekiniz[0];
-    delete target.dataset.value;
+    delete data.target.dataset.value;
 
 });
 
