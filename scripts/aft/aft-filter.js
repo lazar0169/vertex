@@ -21,10 +21,7 @@ const aftFilter = (function () {
 
         console.log({
             'aftDataRange': {
-                'Date From': aftDataRange[0],
-                'Time From': aftDataRange[1],
-                'Date To': aftDataRange[2],
-                'Time To': aftDataRange[3]
+                'aftDataRange': aftDataRange
             },
             'aftFinishedBy': {
                 'aftFinishedBy': aftFinishedBy
