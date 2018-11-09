@@ -22,6 +22,9 @@ let table = (function () {
             checkbox: 'checkbox',
             radio: 'radio'
         };
+        const attributes = {
+            multiple: 'multiple'
+        };
 
 
         /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
@@ -434,7 +437,7 @@ let table = (function () {
                             tableSettings.filters[filterName] = filterValue;
                         }
                     } else if (filterElements[i].tagName === tagNames.select) { //select
-                        if (filterElements[i].attributes['multiple']) { //select multiple
+                        if (filterElements[i].attributes[attributes.multiple]) { //select multiple
                             let selectedOptions = filterElements[i].selectedOptions;
                             for (let i = 0; i < selectedOptions.length; i++) {
                                 filterValueArraySelect.push(selectedOptions[i].value);
@@ -460,7 +463,7 @@ let table = (function () {
             let filters = tableSettings.filters;
             let filterElements = collectAllFilterElements(tableSettings);
 
-            for (let i = 0; i < filterElements.length; i++) { //todo filters[filterElements[i].name]
+            for (let i = 0; i < filterElements.length; i++) {
                 if (filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.textarea) { //input and textarea
                     if (filterElements[i].type !== types.radio && filterElements[i].type !== types.checkbox && filters.hasOwnProperty(filterElements[i].name)) { //single input and textarea
                         filterElements[i].value = filters[filterElements[i].name];
@@ -468,10 +471,10 @@ let table = (function () {
                         filterElements[i].checked = (filterElements[i].value === filters[filterElements[i].name]);
                     } else if (filterElements[i].type === types.checkbox) {
                         if (isSingleCheckbox(filterElements[i])) {
-                            filterElements[i].checked = (filters[filterElements[i].name] !== undefined);//single checkbox
+                            filterElements[i].checked = (filters[filterElements[i].name] !== undefined);//input single checkbox
                         } else {
                             if (filters[filterElements[i].name] !== undefined) {
-                                filterElements[i].checked = filters[filterElements[i].name].includes(filterElements[i].value); //multiple checkboxes
+                                filterElements[i].checked = filters[filterElements[i].name].includes(filterElements[i].value); //input multiple checkboxes
                             } else {
                                 filterElements[i].checked = false;
                             }
@@ -497,7 +500,7 @@ let table = (function () {
             let activePageButton = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button active')[0];
             let activePageNumber = activePageButton.dataset.page;
             tableSettings.activePage = activePageNumber;
-            alert(activePageNumber);
+            alert('Active page number is: '+ activePageNumber);
             return activePageNumber;
         }
 
@@ -572,13 +575,13 @@ let table = (function () {
             let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
             applyButton.addEventListener('click', function () {
                 getApiResponse(tableSettings);
-                console.log(tableSettings);
+                console.log('Table settings after clicking Apply button: ', tableSettings);
             });
 
             let resetButton = tableSettings.tableContainerElement.getElementsByClassName('reset')[0];
             resetButton.addEventListener('click', function () {
                 setFilters(tableSettings);
-                console.log(tableSettings);
+                console.log('Table settings after clicking Reset button: ', tableSettings);
             });
         }
 
