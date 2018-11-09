@@ -456,30 +456,55 @@ let table = (function () {
             return tableSettings.filters;
         }
 
-        function setDefaultFilters(tableSettings) {
-            tableSettings.defaultFilters = getFilters(tableSettings);
-        }
-
-        function resetFilters(tableSettings) {
-            let defaultFilters = tableSettings.defaultFilters;
+        function setFilters(tableSettings) {
+            let filters = tableSettings.filters;
             let filterElements = collectAllFilterElements(tableSettings);
 
             for (let i = 0; i < filterElements.length; i++) {
-                Object.keys(defaultFilters).forEach(function (key) {
-                    if (filterElements[i].name === key) {
-                        if (filterElements[i].type === types.radio) {
-                            if (filterElements[i].value === defaultFilters[key]) {
-                                filterElements[i].checked = true;
+                Object.keys(filters).forEach(function (key) { //todo filters[filterElements[i].name]
+                        if (filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.textarea) { //input and textarea
+                            if (filterElements[i].type !== types.radio && filterElements[i].type !== types.checkbox && filterElements[i].name === key) { //single input and textarea
+                                filterElements[i].value = filters[key];
+                            } else if (filterElements[i].type === types.radio && filterElements[i].name === key) { //input radio
+                                if (filterElements[i].value === filters[key]) {
+                                    filterElements[i].checked = true;
+                                } else {
+                                    filterElements[i].checked = false;
+                                }
+                            } else if (filterElements[i].type === types.checkbox) {
+                                if (isSingleCheckbox(filterElements[i])) {
+                                    if (filters[filterElements[i].name] !== undefined) { //single checkbox
+                                        filterElements[i].checked = true;
+                                    }
+                                    else {
+                                        filterElements[i].checked = false;
+                                    }
+                                } else {
+                                    if (filters[filterElements[i].name].length !== 0) {
+                                        if (filters[filterElements[i].name].includes(filterElements[i].value)) { //multiple checkboxes
+                                            filterElements[i].checked = true;
+                                        } else {
+                                            filterElements[i].checked = false;
+                                        }
+                                    } else {
+                                        filterElements[i].checked = false;
+                                    }
+                                }
                             }
-                            else {
-                                filterElements[i].checked = false;
+                        } else if (filterElements[i].tagName === tagNames.select) { //select & multiple select
+                            if (filterElements[i].name === key) {
+                                let options = filterElements[i].options; //options in select element
+                                for (let o = 0; o < options.length; o++) {
+                                    if (filters[key].includes(options[o].value)) {
+                                        filterElements[i].options[o].selected = true;
+                                    } else {
+                                        filterElements[i].options[o].selected = false;
+                                    }
+                                }
                             }
-                        }
-                        else {
-                            filterElements[i].value = defaultFilters[key];
                         }
                     }
-                });
+                );
             }
         }
 
@@ -553,9 +578,6 @@ let table = (function () {
 
             tableSettings.dataEvent = getEvent(tableSettings);
 
-            //setting default filters
-            setDefaultFilters(tableSettings);
-
             generateTablePagination(tableSettings);
 
             if (tableSettings.tableData === undefined) {
@@ -575,7 +597,7 @@ let table = (function () {
 
             let resetButton = tableSettings.tableContainerElement.getElementsByClassName('reset')[0];
             resetButton.addEventListener('click', function () {
-                resetFilters(tableSettings);
+                setFilters(tableSettings);
                 console.log(tableSettings);
             });
         }
