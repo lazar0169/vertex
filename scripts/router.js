@@ -99,6 +99,7 @@ let router = (function () {
     }
 
     function changePage(pageName, addStateToHistory, url) {
+        hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
         }

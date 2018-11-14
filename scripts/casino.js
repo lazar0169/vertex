@@ -69,16 +69,6 @@ let casino = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-        let tableSettings = {};
-        tableSettings.tableData = testDataTableCasinos;
-        tableSettings.forceRemoveHeaders = true;
-        tableSettings.tableContainerSelector = '#table-container-casinos';
-        tableSettings.stickyRow = true;
-        tableSettings.stickyColumn = true;
-        tableSettings.dataEvent = 'mock/data';
-        tableSettings.id = '';
-
-        table.init(tableSettings);
     });
 
     on('casinos/add', function (e) {
