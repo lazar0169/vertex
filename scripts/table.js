@@ -67,6 +67,13 @@ let table = (function () {
             return colsCount;
         }
 
+        function getCurrentColsCount(tableSettings) {
+            let colsCount;
+            let headers = getHeaders(tableSettings);
+            colsCount = headers.length;
+            return colsCount;
+        }
+
         function hasHeaders(tableSettings) {
             if (tableSettings.tableContainerElement.getElementsByClassName('head').length > 0) {
                 return true;
@@ -186,8 +193,8 @@ let table = (function () {
 
         on('table/pagination/display', function (params) {
             let paginationElement = params.element;
-            let tableContainerElement = params.params.tableSettings.tableContainerElement;
-            let tableBodyElement = tableContainerElement.getElementsByClassName('tbody')[0];
+            let tableSettings = params.params.tableSettings;
+            let tableBodyElement = getTableBodyElement(tableSettings);
             insertAfter(tableBodyElement, paginationElement);
             bindPaginationLinkHandlers();
 
@@ -386,13 +393,15 @@ let table = (function () {
         }
 
         function hideColumn(tableSettings, columnName) {
+            let colsCount = getCurrentColsCount(tableSettings);
+            console.log(colsCount);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
             for (let i = 0; i < columnElements.length; i++) {
-                columnElements[i].classList.add('hidden');
+                columnElements[i].classList.add('hidden-column');
+                columnElements[i].classList.remove('head');
             }
-            let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-            tbody.setAttribute('style', 'grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr');
-            console.log(columnElements);
+            let tbody = getTableBodyElement(tableSettings);
+            tbody.style.gridTemplateColumns = `repeat(${colsCount-1}, 1fr)`;
         }
 
         /*--------------------------------------------------------------------------------------*/
@@ -593,7 +602,9 @@ let table = (function () {
 
             let hideColumnButton = tableContainerElement.getElementsByClassName('hide-column-button')[0];
             hideColumnButton.addEventListener('click', function () {
-                hideColumn(tableSettings, 'rounds');
+                let columnInputElement = tableContainerElement.getElementsByClassName('hide-column-input')[0];
+                let columnName = columnInputElement.value;
+                hideColumn(tableSettings, columnName);
             });
         }
 

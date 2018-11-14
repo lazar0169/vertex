@@ -97,12 +97,15 @@
                 <button id="apply" class="apply">Apply filters and update table with new data!</button>
                 <button id="reset" class="reset">Reset filters to previous set of filters!</button>
             </div>
-            <button class="hide-column-button">Hide column!</button>
+            <section class="column-hide">
+                <input class="hide-column-input" value="Column to hide...">
+                <button class="hide-column-button">Hide column!</button>
+            </section>
         </div>
     </section>
 
 
-    <section class="element-page" id="page-casinos" >
+    <section class="element-page" id="page-casinos">
         <h1>CASINO LIST</h1>
         <div class="casino-list">
             <div class="element-template" id="casinos-template">
@@ -112,7 +115,7 @@
                 <button class="cloning-test">Test</button>
             </div>
         </div>
-        <div id="table-container-casinos"  class="table" data-data-event="communicate/table/data">
+        <div id="table-container-casinos" class="table" data-data-event="communicate/table/data">
         </div>
 
     </section>
