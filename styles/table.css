@@ -119,5 +119,5 @@ textarea {
 }
 
 .hide-column-button.hidden {
-    display: none;
+    visibility: hidden;
 }

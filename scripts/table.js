@@ -97,6 +97,7 @@ let table = (function () {
                     columnName = columnName.toLowerCase();
                     columnName = columnName.replace(/ /g, '-');
                     head.dataset.sortName = columnName;
+                    head.classList.add('cell-'+columnName);
                     //head.classList.add();
                     if (tableSettings.stickyRow === true) {
                         head.classList.add('sticky');
@@ -386,15 +387,11 @@ let table = (function () {
 
         function hideColumn(tableSettings, columnName) {
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
-            let headers = getHeaders(tableSettings);
             for (let i = 0; i < columnElements.length; i++) {
                 columnElements[i].classList.add('hidden');
             }
-            for (let j = 0; j < headers.length; j++) {
-                if (headers[j].getAttribute('data-sort-name') === columnName) {
-                    headers[j].classList.add('hidden');
-                }
-            }
+            let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
+            tbody.setAttribute('style', 'grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr');
             console.log(columnElements);
         }
 
