@@ -104,7 +104,7 @@ let table = (function () {
                     columnName = columnName.toLowerCase();
                     columnName = columnName.replace(/ /g, '-');
                     head.dataset.sortName = columnName;
-                    head.classList.add('cell-'+columnName);
+                    head.classList.add('cell-' + columnName);
                     //head.classList.add();
                     if (tableSettings.stickyRow === true) {
                         head.classList.add('sticky');
@@ -401,7 +401,7 @@ let table = (function () {
                 columnElements[i].classList.remove('head');
             }
             let tbody = getTableBodyElement(tableSettings);
-            tbody.style.gridTemplateColumns = `repeat(${colsCount-1}, 1fr)`;
+            tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
         }
 
         /*--------------------------------------------------------------------------------------*/
