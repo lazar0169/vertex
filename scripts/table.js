@@ -384,10 +384,16 @@ let table = (function () {
             return tableSettings.sort;
         }
 
-        function hideColumn(tableSettings, columnName){
-            let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-'+columnName);
-            for(let i = 0; i< columnElements.length; i++) {
+        function hideColumn(tableSettings, columnName) {
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
+            let headers = getHeaders(tableSettings);
+            for (let i = 0; i < columnElements.length; i++) {
                 columnElements[i].classList.add('hidden');
+            }
+            for (let j = 0; j < headers.length; j++) {
+                if (headers[j].getAttribute('data-sort-name') === columnName) {
+                    headers[j].classList.add('hidden');
+                }
             }
             console.log(columnElements);
         }
@@ -509,7 +515,7 @@ let table = (function () {
             let activePageButton = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button active')[0];
             let activePageNumber = activePageButton.dataset.page;
             tableSettings.activePage = activePageNumber;
-            alert('Active page number is: '+ activePageNumber);
+            alert('Active page number is: ' + activePageNumber);
             return activePageNumber;
         }
 
@@ -589,7 +595,7 @@ let table = (function () {
             });
 
             let hideColumnButton = tableContainerElement.getElementsByClassName('hide-column-button')[0];
-            hideColumnButton.addEventListener('click', function(){
+            hideColumnButton.addEventListener('click', function () {
                 hideColumn(tableSettings, 'rounds');
             });
         }
