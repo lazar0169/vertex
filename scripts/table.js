@@ -384,6 +384,9 @@ let table = (function () {
             return tableSettings.sort;
         }
 
+        function hideColumn(columnName){
+        }
+
         /*--------------------------------------------------------------------------------------*/
 
 
