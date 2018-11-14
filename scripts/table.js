@@ -106,8 +106,8 @@ let table = (function () {
                         makeColumnActive(head, tableSettings);
                     });
                 }
-                let filterElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
-                insertAfter(filterElement, tbody);
+                let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
+                insertAfter(filterContainerElement, tbody);
             }
             else {
                 //
@@ -384,7 +384,12 @@ let table = (function () {
             return tableSettings.sort;
         }
 
-        function hideColumn(columnName){
+        function hideColumn(tableSettings, columnName){
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-'+columnName);
+            for(let i = 0; i< columnElements.length; i++) {
+                columnElements[i].classList.add('hidden');
+            }
+            console.log(columnElements);
         }
 
         /*--------------------------------------------------------------------------------------*/
@@ -571,16 +576,21 @@ let table = (function () {
                 updateTable(tableSettings);
             }
 
-            let applyButton = tableSettings.tableContainerElement.getElementsByClassName('apply')[0];
+            let applyButton = tableContainerElement.getElementsByClassName('apply')[0];
             applyButton.addEventListener('click', function () {
                 getApiResponse(tableSettings);
                 console.log('Table settings after clicking Apply button: ', tableSettings);
             });
 
-            let resetButton = tableSettings.tableContainerElement.getElementsByClassName('reset')[0];
+            let resetButton = tableContainerElement.getElementsByClassName('reset')[0];
             resetButton.addEventListener('click', function () {
                 setFilters(tableSettings);
                 console.log('Table settings after clicking Reset button: ', tableSettings);
+            });
+
+            let hideColumnButton = tableContainerElement.getElementsByClassName('hide-column-button')[0];
+            hideColumnButton.addEventListener('click', function(){
+                hideColumn(tableSettings, 'rounds');
             });
         }
 
