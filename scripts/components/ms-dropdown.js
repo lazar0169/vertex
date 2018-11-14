@@ -1,7 +1,7 @@
 const multiDropdown = (function () {
     //index of multiselect 
     let indexMsId = 0;
-    //single select array
+    //multiselect array
     let multiSelectArray = [];
     // generate multi dropdown
     function generate(dataSelect) {
@@ -29,14 +29,14 @@ const multiDropdown = (function () {
             option.title = element.Name;
             option.dataset.value = element.Name;
             option.innerHTML = `<label class="form-checkbox" >
-                                                <input type="checkbox" dataset.elementId=${element.Id}>
-                                                <i class="form-icon" ></i> <div>${element.Name}</div>
+                                                <input type="checkbox">
+                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                             </label>`;
             optionGroup.appendChild(option);
             optionGroup.classList.add('overflow-y');
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (option.children[0].children[0].checked == false) {
+                if (option.children[0].children[0].checked === false) {
                     if (selected.innerHTML === '-') {
                         array = [];
                         selected.innerHTML = option.children[0].children[2].innerHTML;
@@ -50,11 +50,12 @@ const multiDropdown = (function () {
                 else {
                     let i = 0;
                     for (let elem of array) {
-                        if (elem === option.children[0].children[2].innerHTML) {
+                        if (elem === option.dataset.value) {
                             array.splice(i, 1);
                         }
                         i++
                     }
+                    //array sa elementima na eng jeziku
                     selected.innerHTML = array;
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {

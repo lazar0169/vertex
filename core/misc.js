@@ -88,8 +88,8 @@ on('cancel-custom-date', function (data) {
     timeFromMinutes.dataset.value = minutes[0];
     delete $$(`#datepicker-to-${data.selectId}`).dataset.value;
     let timeToHour = $$(`#time-to-${data.selectId}`).children[1].children[0].children[0];
-    timeToHour.innerHTML = hour[0];
-    timeToHour.dataset.value = hour[0];
+    timeToHour.innerHTML = hours[0];
+    timeToHour.dataset.value = hours[0];
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0];
     timeToMinutes.innerHTML = minutes[0];
     timeToMinutes.dataset.value = minutes[0];
