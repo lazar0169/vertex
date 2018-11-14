@@ -186,7 +186,8 @@ let table = (function () {
         on('table/pagination/display', function (params) {
             let paginationElement = params.element;
             let tableContainerElement = params.params.tableSettings.tableContainerElement;
-            tableContainerElement.appendChild(paginationElement);
+            let tableBodyElement = tableContainerElement.getElementsByClassName('tbody')[0];
+            insertAfter(tableBodyElement, paginationElement);
             bindPaginationLinkHandlers();
 
         });
@@ -278,6 +279,10 @@ let table = (function () {
             updateTablePagination(tableSettings);
         }
 
+        on('table/update', function (params) {
+            updateTable(params.tableSettings);
+        });
+
         function initUpdateTable(tableSettings) {
 
             //get data from page
@@ -292,10 +297,6 @@ let table = (function () {
                 callbackEvent: 'table/update'
             });
         }
-
-        on('table/update', function (params) {
-            updateTable(params.tableSettings);
-        });
 
         /*--------------------------------------------------------------------------------------*/
 
@@ -548,11 +549,6 @@ let table = (function () {
 
         /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
-        /* tableSettings: {
-        dataEvent:
-        tableContainerSelector:
-         }
-         */
         function init(tableSettings) {
 
             tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);

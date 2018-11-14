@@ -1,7 +1,7 @@
 .table {
     position: relative;
-    height: 400px;
-    width: 500px;
+    height: 300px;
+    width: 800px;
     box-sizing: border-box;
     margin: 0.1em 0;
 }
@@ -51,13 +51,9 @@
 .tbody {
     overflow: auto;
     display: grid;
-    /*position: absolute;*/
+    position: center;
     width: 500px;
-    height: 500px;
-}
-
-.apply {
-    margin: 20px 0 0 0;
+    height: 300px;
 }
 
 .head.cell.sort-asc {
@@ -68,16 +64,48 @@
     background-color: darkred;
 }
 
-.filter-section {
+.element-table-filters-container {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-evenly;
+    color: white;
+    flex-wrap: wrap;
+    width: 500px;
+    margin-bottom: 20px;
 }
 
-.filter-section section {
-    padding: 20px 0 0 20px;
+.element-table-filters-section {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+}
+
+.select {
+    margin: 10px;
+    height: 30px;
+}
+
+.multiple-select {
+    height: 80px;
+    margin: 10px;
 }
 
 textarea {
     height: 30px;
+}
+
+.table-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0;
+    width: 500px;
+}
+
+.apply {
+    margin: 20px 20px 0 0;
+}
+
+.reset {
+    margin: 20px 0 0 20px;
 }

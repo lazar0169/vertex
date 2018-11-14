@@ -1,5 +1,6 @@
 .pagination {
-    justify-content: flex-end;
+    justify-content: center;
+    width: 500px;
 }
 
 .pagination ul{
