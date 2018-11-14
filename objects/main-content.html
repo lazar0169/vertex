@@ -81,9 +81,8 @@
                     </select>
                 </section>
                 <br/>
-                <!--FILTERS ABOVE ARE ONLY TEST DATA-->
-
             </section>
+            <!--FILTERS ABOVE ARE ONLY TEST DATA-->
             <div class="tbody">
                 <div class="head cell" data-sort-name="period">Period</div>
                 <div class="head cell" data-sort-name="total-bet">Total bet</div>
@@ -101,7 +100,7 @@
         </div>
     </section>
 
-    <section class="element-page" id="page-casinos">
+    <section class="element-page" id="page-casinos" >
         <h1>CASINO LIST</h1>
         <div class="casino-list">
             <div class="element-template" id="casinos-template">
@@ -111,7 +110,10 @@
                 <button class="cloning-test">Test</button>
             </div>
         </div>
-        <div id="table-container-casinos"></div>
+        <div id="table-container-casinos"  class="table" data-data-event="communicate/table/data">
+            <section class="element-table-filters-container"></section>
+            <div class="tbody"></div>
+        </div>
 
     </section>
 

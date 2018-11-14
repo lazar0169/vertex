@@ -75,10 +75,10 @@ let casino = (function () {
         tableSettings.tableContainerSelector = '#table-container-casinos';
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = true;
+        tableSettings.dataEvent = 'mock/data';
         tableSettings.id = '';
 
         table.init(tableSettings);
-        
     });
 
     on('casinos/add', function (e) {
