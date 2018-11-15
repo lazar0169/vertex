@@ -155,7 +155,11 @@ let table = (function () {
                     let cell = document.createElement('div');
                     cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
                     let cellClassName = generateCellClassName(tableSettings.tableData, col);
-                    cell.className = col === 0 ? 'first cell' : 'cell ' + cellClassName;
+                    cell.className = 'cell ' + cellClassName;
+                    if(col === 0){
+                        cell.classList.add('first');
+                        cell.classList.add('cell');
+                    }
                     cell.classList.add(`row-${rowId}`);
                     if (tableSettings.stickyColumn === true && col === 0) {
                         cell.classList.add('sticky');
@@ -394,7 +398,6 @@ let table = (function () {
 
         function hideColumn(tableSettings, columnName) {
             let colsCount = getCurrentColsCount(tableSettings);
-            console.log(colsCount);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
             for (let i = 0; i < columnElements.length; i++) {
                 columnElements[i].classList.add('hidden-column');
