@@ -1,0 +1,204 @@
+#choose-machines-jackpot-wrapper {
+    position: fixed;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+#choose-machines-jackpot-wrapper>div {
+    width: 70%;
+    min-width: 800px;
+    height: 70%;
+    min-height: 570px;
+    background: rgb(38, 50, 56);
+    pointer-events: all;
+    border: 1px solid rgb(55, 71, 79);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+#choose-machines-jackpot-header {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem;
+    background: rgb(55, 71, 79);
+}
+
+#choose-machines-jackpot-header>div:not(:first-child) {
+    position: absolute;
+    right: 0;
+    padding: 0.5rem;
+}
+
+#choose-machines-jackpot-header>div:not(:first-child):hover {
+    color: rgb(30, 155, 227);
+    cursor: pointer;
+}
+
+#choose-machines-jackpot-chosen-filter {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+#choose-machines-jackpot-chosen-filter>div:last-child {
+    position: absolute;
+    right: 0;
+    background: rgb(38, 50, 56);
+    margin-right: 0.5rem
+}
+
+#choose-machines-jackpot-chosen-filter>div {
+    margin: 0 0 0 0.5rem;
+    background: rgb(55, 71, 79);
+}
+
+#choose-machines-jackpot-content {
+    flex: 1;
+    height: 100%;
+    display: flex;
+}
+
+#choose-machines-jackpot-content>div {
+    height: 100%;
+}
+
+#choose-machines-jackpot-content>div:first-child {
+    width: 10%;
+    padding-top: 2rem;
+    position: relative;
+}
+
+#choose-machines-jackpot-content-filters>div>div:not(:first-child) {
+    background: rgb(38, 50, 56);
+    z-index: 1;
+    max-height: 200px;
+    width: 100%;
+    padding: 0 0.5rem;
+    cursor: default;
+}
+
+#choose-machines-jackpot-content-filters>div>div:not(:first-child) label {
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#choose-machines-jackpot-content-filters-casinos>div:not(:first-child)>div:not(:first-child)>div:not(:first-child) {
+    padding: 0 0.5rem;
+}
+
+#choose-machines-jackpot-content>div:first-child>div {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+#choose-machines-jackpot-content>div:first-child>div>div:first-child {
+    position: relative;
+    padding: 0.2rem 1rem 0.2rem 0.5rem;
+    cursor: pointer;
+}
+
+#choose-machines-jackpot-content>div:first-child>div>div:first-child::before {
+    content: "";
+    position: absolute;
+    right: 3px;
+    top: 0.7rem;
+    width: 0;
+    height: 0;
+    border-top: 0.4rem solid rgb(30, 155, 227);
+    border-right: 0.15rem solid transparent;
+    border-left: 0.15rem solid transparent;
+}
+
+#choose-machines-jackpot-content>div:not(:first-child) {
+    width: 45%;
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#choose-machines-jackpot-content-unselected-machines>div:not(:first-child), #choose-machines-jackpot-content-selected-machines>div:not(:first-child) {
+    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
+    background: rgb(55, 71, 79);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#choose-machines-jackpot-content-unselected-machines>div:first-child, #choose-machines-jackpot-content-selected-machines>div:first-child, #choose-machines-jackpot-content-unselected-machines-list, #choose-machines-jackpot-content-selected-machines-list {
+    padding: 0.5rem;
+}
+
+#choose-machines-jackpot-content-unselected-machines>div:not(:first-child)>div:last-child>button {
+    float: right;
+}
+
+#choose-machines-jackpot-content-unselected-machines>div:not(:first-child)>div:first-child, #choose-machines-jackpot-content-selected-machines>div:not(:first-child)>div:first-child {
+    box-shadow: 0 0.1rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+#choose-machines-jackpot-content-unselected-machines-list, #choose-machines-jackpot-content-selected-machines-list {
+    flex: 1;
+}
+
+.choose-machines-jackpot-search>input {
+    margin: 0.5rem 0;
+    border: none;
+}
+
+#choose-machines-jackpot-buttons {
+    margin: 0.5rem;
+    height: 36px;
+    position: relative;
+}
+
+#choose-machines-jackpot-buttons>div {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+}
+
+.choose-machines-jackpot-search {
+    padding: 0 0.5rem;
+}
+
+.choose-machines-jackpot-confirm {
+    position: relative;
+    padding: 0.5rem;
+    background: rgb(38, 50, 56);
+}
+
+.city-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.city-option>div {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.city-option>div::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0.5rem;
+    width: 0;
+    height: 0;
+    border-top: 0.4rem solid rgb(30, 155, 227);
+    border-right: 0.15rem solid transparent;
+    border-left: 0.15rem solid transparent;
+}
+
+.is-checked-city>div {
+    color: white !important;
+}

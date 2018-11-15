@@ -1,12 +1,12 @@
-.default-select {
+.default-select, .default-date-select {
     background: rgb(38, 50, 56);
     color: white;
     cursor: pointer;
-    margin-left: 0.5rem;
+    margin: 0 0.5rem;
     position: relative;
 }
 
-.default-select>div:first-child:before {
+.default-select>div:first-child:before, .default-date-select>div:first-child:before {
     content: "";
     position: absolute;
     right: 3px;
@@ -18,7 +18,7 @@
     border-left: 0.15rem solid transparent;
 }
 
-.default-select>div:first-child {
+.default-select>div:first-child, .default-date-select>div:first-child {
     width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -28,10 +28,10 @@
     border: 1px solid rgb(55, 71, 79);
 }
 
-.default-select>div:not(:first-child) {
+.default-select>div:not(:first-child), .option-select-date {
     min-width: 120px;
-    max-width: 250px;
-    max-height: 140px;
+    max-width: 400px;
+    max-height: 300px;
     background: rgb(38, 50, 56);
     position: absolute;
     border: 1px solid rgb(55, 71, 79);
@@ -40,7 +40,7 @@
     z-index: 1;
 }
 
-.active-select>div:first-child {
+.active-date-select>div:first-child, .active-single-select>div:first-child, .active-multi-select>div:first-child {
     border-bottom: 1px solid rgb(38, 50, 56);
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
 }
@@ -60,10 +60,36 @@
     cursor: pointer;
 }
 
-.default-select>div:not(:first-child)>div:hover {
+.default-select>div:not(:first-child)>div:hover, .default-date-select>div:not(:first-child)>div:first-child>div:hover {
     background: rgb(55, 71, 79);
 }
 
 .multiple-group>div>label>div, .multiple-group>div>label>i, .multiple-group>div>label {
     pointer-events: none;
+}
+
+.option-select-date, .timepicker {
+    display: flex;
+    flex-direction: row;
+}
+
+.option-select-date>div {
+    width: 100%;
+}
+
+.option-select-date>div:first-child>div {
+    padding-left: 0.5rem;
+}
+
+.option-select-date>div:first-child {
+    min-width: 120px;
+}
+
+.option-select-date>div, .choose-date-time {
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-date-buttons-wrapper {
+    margin: 0.5rem 0;
 }

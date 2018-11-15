@@ -80,6 +80,8 @@
     outline: none;
     border-bottom: 2px solid rgb(30, 155, 227);
     color: white;
+    line-height: initial;
+    width: 100%;
 }
 
 #sidebar-list {

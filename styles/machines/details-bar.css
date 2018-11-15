@@ -108,7 +108,7 @@
     align-items: center;
 }
 
-#machine-general-info>div>div, .machine-category-info>div>div, #machine-tito-name, #machine-aft-name, #machine-service-info>div>div {
+#machine-general-info>div>div, .machine-category-info>div>div, #machine-tito-name, #machine-aft-name, #machine-service-info>div>div, #machine-jackpot-name {
     padding: 0 0.5rem;
     color: white;
 }

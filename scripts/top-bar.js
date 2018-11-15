@@ -1,6 +1,6 @@
 let topBar = (function () {
-    let topBarPath = $$("#top-bar").children[0];
-    let openUserProfile = $$("#top-bar-logout-user");
+    let topBarPath = $$('#top-bar').children[0];
+    let openUserProfile = $$('#top-bar-logout-user');
     let userProfile = $$('#user-profile');
     let previousTopBar;
 
@@ -17,7 +17,7 @@ let topBar = (function () {
         $$('#black-area').classList.add('show');
         userProfile.classList.toggle('hidden');
     }
-
+    openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
     openUserProfile.addEventListener('click', function () {
         showProfile();
     });

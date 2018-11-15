@@ -216,8 +216,8 @@ const ticketAppearance = (function () {
         draw(ticketNameCoordinate, inputChasoutTicket.value);
         draw(validationCoordinate, inputValidation.value);
         drawStatic(validationNumberCoordinate, validationNumber);
-        draw(dateCoordinate, JSON.parse(selectedDateFormat.dataset.items).replace('dd', dd).replace('MM', MM).replace('yyyy', yyyy));
-        draw(timeCoordinate, JSON.parse(selectedTimeFormat.dataset.items).replace('hh', hh).replace('HH', HH).replace('mm', min).replace('ss', sec));
+        draw(dateCoordinate, selectedDateFormat.dataset.value.replace('dd', dd).replace('MM', MM).replace('yyyy', yyyy));
+        draw(timeCoordinate, selectedTimeFormat.dataset.value.replace('hh', hh).replace('HH', HH).replace('mm', min).replace('ss', sec));
         draw(ticketCoordinate, `${inputTicket.value} #`);
         drawStatic(ticketNumberCoordinate, ticketNumberValue);
         drawStatic(currencyValueTextCoordinate, currencyValueText);
@@ -284,11 +284,11 @@ const ticketAppearance = (function () {
     });
 
     setDateFormat.addEventListener('click', function () {
-        draw(dateCoordinate, JSON.parse(selectedDateFormat.dataset.items).replace('dd', dd).replace('MM', MM).replace('yyyy', yyyy));
+        draw(dateCoordinate, selectedDateFormat.dataset.value.replace('dd', dd).replace('MM', MM).replace('yyyy', yyyy));
     });
 
     setTimeFormat.addEventListener('click', function () {
-        draw(timeCoordinate, JSON.parse(selectedTimeFormat.dataset.items).replace('hh', hh).replace('HH', HH).replace('mm', min).replace('ss', sec));
+        draw(timeCoordinate, selectedTimeFormat.dataset.value.replace('hh', hh).replace('HH', HH).replace('mm', min).replace('ss', sec));
     });
 
     inputTicket.addEventListener('keyup', function (event) {

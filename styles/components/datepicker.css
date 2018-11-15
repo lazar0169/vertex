@@ -1,0 +1,145 @@
+/* Date picker */
+
+table {
+    font-size: inherit;
+}
+
+.datepicker {
+    /* background-image: url("../images/dropdown-arrow.png"); */
+    background-repeat: no-repeat;
+    color: white;
+    background-position: right;
+    background-size: auto 100%;
+    background-color: rgb(38, 50, 56);
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 3em;
+    padding-left: 0.5em;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    border-radius: 0;
+    font-family: 'roboto' !important;
+    font-size: inherit !important;
+    height: 2em;
+    border: 1px solid rgb(55, 71, 79);
+    box-sizing: border-box;
+    width: 258px;
+    margin: 0 0.5rem;
+}
+
+.datepicker:hover {
+    background-color: rgb(55, 71, 79);
+}
+
+.pika-label {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(55, 71, 79);;
+    color: #ffffff;
+    font-size: inherit;
+    line-height: 2em;
+}
+
+.pika-single {
+    transition: transform 0.2s;
+    background-color: rgb(55, 71, 79);
+    color: #ffffff;
+    border: 1px solid rgb(55, 71, 79);
+    border-bottom-color: rgb(55, 71, 79);
+    box-shadow: 0 0 0.5em 0.2em rgba(0, 0, 0, 0.15) !important;
+}
+
+.is-disabled .pika-button, .is-inrange .pika-button {
+    background-color: #ffffff;
+}
+
+.is-disabled .pika-button {
+    color: #cccccc;
+    background-color: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);;
+    opacity: 1;
+}
+
+.pika-table th {
+    color: #ffffff !important;
+    background-color: rgb(30, 155, 227);
+    font-size: inherit;
+    line-height: 2em;
+}
+
+.is-today .pika-button {
+    color: rgb(30, 155, 227);
+    ;
+}
+
+.is-today .pika-button:hover {
+    color: #ffffff;
+}
+
+.is-selected .pika-button {
+    background-color: rgb(30, 155, 227);
+    color: #fff;
+}
+
+.pika-button {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background-color: transparent;
+    color: #ffffff;
+    font-size: inherit;
+    line-height: 2em;
+    text-align: center;
+}
+
+.pika-prev, .pika-next {
+    filter: invert(1);
+}
+
+.pika-prev:hover, .pika-next:hover {
+    background-color: transparent;
+}
+
+.pika-table abbr {
+    text-decoration: none;
+}
+
+/* ================== MOBILE  ================== */
+
+.mobile .datepicker:hover {
+    background-color: red;
+}
+
+.mobile .pika-single.is-bound {
+    width: auto;
+    left: 1em !important;
+    right: 1em !important;
+}
+
+.pika-single.is-hidden {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(0, -1.5em, 0);
+    height: 0;
+    position: absolute !important;
+    width: 0 !important;
+}
+
+.mobile .pika-lendar {
+    width: 97% !important;
+}
+
+.mobile .selected, .mobile .option {
+    height: 2.5em;
+    line-height: 2.5em;
+}
+
+.pika-button:hover, .pika-row.pick-whole-week:hover .pika-button {
+    background-color: rgb(30, 155, 227);
+}
+
+.is-outside-current-month .pika-button {
+    background-color: rgb(55, 71, 79);
+}

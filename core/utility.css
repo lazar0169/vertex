@@ -30,7 +30,7 @@
     width: 100%;
     background: rgba(38, 50, 56);
     color: rgb(120, 144, 156);
-    display: inline-block;
+    display: inline-flex;
     white-space: nowrap;
 }
 
@@ -49,7 +49,8 @@
 
 .custom-right-filter {
     display: inline-flex;
-    float: right;
+    position: absolute;
+    right: 0;
     border: none;
 }
 
@@ -57,7 +58,7 @@
     border-left: 1px solid black;
 }
 
-.advance-table-filter>div, .custom-right-filter>div, .wrapper-export-to>div {
+.custom-filter>div>div {
     padding: 0 0.5rem
 }
 

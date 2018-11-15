@@ -1,0 +1,8 @@
+.timepicker>div>div:first-child:hover {
+    background-color: rgb(55, 71, 79);
+}
+
+.timepicker>div>div>div, .timepicker>div>div:first-child {
+    display: flex;
+    justify-content: center;
+}
