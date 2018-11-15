@@ -161,6 +161,7 @@ let table = (function () {
                         cell.classList.add('cell');
                     }
                     cell.classList.add(`row-${rowId}`);
+                    cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
                     if (tableSettings.stickyColumn === true && col === 1) {
                         cell.classList.add('sticky');
                     }
