@@ -128,7 +128,7 @@ const jackpotFilter = (function () {
                 option.id = `city-${element.City}-option`
                 option.innerHTML = `<div class="city-option"> <label class="form-checkbox" >
                                     <input type="checkbox">
-                                    <i id='proba' class="form-icon" data-elementId = "${element.City}"></i>
+                                    <i class="form-icon" data-elementId = "${element.City}"></i>
                                     </label> <div>${element.City}</div>
                                     </div>`;
                 let newOptionWrapper = document.createElement('div');
@@ -205,13 +205,13 @@ const jackpotFilter = (function () {
         }
 
     }
+
     window.addEventListener('load', function () {
         for (let element of chooseMachinesFilterWrapper.children) {
             element.children[0].addEventListener('click', function () {
                 activeFilter(element);
             });
         }
-
         for (let city of $$('.city-option')) {
             city.children[1].addEventListener('click', function () {
                 city.parentNode.children[1].classList.toggle('hidden');
