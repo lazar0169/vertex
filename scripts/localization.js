@@ -6,8 +6,8 @@ let localization = (function () {
     languages.set('de', 'Deutsch');
     languages.set('fr', 'Française');
 
-    const lsLanguageKey=  'vertex-language';
-    const lsMessagesKey = 'vertex-translations';
+    const lsLanguageKey=  'vertexLanguage';
+    const lsMessagesKey = 'vertexTranslations';
     const multiLanguageElementSelector = '.element-multilanguage';
     const keyAttributeName = 'data-translation-key';
     const directory = 'languages';

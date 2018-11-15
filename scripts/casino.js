@@ -1,12 +1,77 @@
 let casino = (function () {
 
-    on('casino/activated', function () {
+    let testDataTableCasinos = [
+        {
+            "period": "4/1/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/2/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/3/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/4/2018",
+            "totalBet": 11.6,
+            "totalWin": 1.5
+        },
+        {
+            "period": "4/5/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/6/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/7/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        },
+        {
+            "period": "4/8/2018",
+            "totalBet": 1,
+            "totalWin": 2
+        }
+    ];
+
+    on('casinos/activated', function () {
+
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
+
     });
 
-    on('casino/add', function (e) {
+    on('casinos/add', function (e) {
         let model = e.model;
         trigger('template/render', {
             model: model,

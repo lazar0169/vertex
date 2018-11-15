@@ -57,6 +57,7 @@ let template = (function () {
 
     function render(templateElementSelector, model, callbackEvent) {
         let templateElement = $$(templateElementSelector);
+
         if (templateElement === null || templateElement.length <= 0) {
             console.error('Template element does not exists!');
         }
@@ -64,6 +65,10 @@ let template = (function () {
             templateElement = templateElement[0];
         }
         let newElement = cloneTemplateElement(templateElement);
+        if (typeof model === typeof undefined) { //todo check if this works
+            // trigger(callbackEvent, {element: newElement});
+            return newElement;
+        }
         let newElementString = newElement.innerHTML;
         let placeholders = getPlaceholders(newElementString);
         let placeholderValues = getPlaceholderValues(placeholders, model);

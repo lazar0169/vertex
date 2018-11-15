@@ -87,7 +87,7 @@ let communication = (function () {
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
-        }
+        };
         return xhr;
     }
 
@@ -142,8 +142,20 @@ let communication = (function () {
         //xhr = setAuthHeader(xhr);
         send(xhr);
     });
-    //events for casino, get all machines from casino
-    on('communicate/casinos', function (params) {
+
+    //events for home
+    on('communicate/home/data', function(params){
+        //FORWARD DATA TO API
+        //GET DATA FROM API
+        let dataFormAPI = {
+            activePage: 2,
+            lastPage: 6
+        };
+        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: dataFormAPI});
+    });
+
+    //events for casino
+    on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         //let callbackEventName = params.successEvent;
         // let data = typeof params.data === typeof undefined ? null : params.data;

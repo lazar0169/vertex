@@ -17,11 +17,13 @@
   },
   "main": {
     "scripts": [
+      "table.js",
       "data.js",
       "top-bar.js",
       "user-profile.js",
       "sidebar.js",
       "template-engine.js",
+      "mock.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
@@ -45,7 +47,6 @@
       "router.js",
       "components/datepicker.js",
       "components/timepicker.js"
-
     ],
     "styles": [
       "index.css",
@@ -69,8 +70,10 @@
       "components/dropdown.css",
       "main-content.css",
       "preloader.css",
+      "table.css",
       "components/datepicker.css",
-      "components/timepicker.css"
+      "components/timepicker.css",
+      "pagination.css"
     ]
   }
 }

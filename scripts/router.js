@@ -13,10 +13,10 @@ let router = (function () {
         id: '#page-aft',
         path: '/aft/{aftId:integer}'
     });
-    routes.set('casino/list', {
-        page: 'casino/list',
-        id: '#page-casino-add',
-        path: '/casino/{casinoId:integer}/player/{playerId:integer}'
+    routes.set('casinos/list', {
+        page: 'casinos/list',
+        id: '#page-casinos-add',
+        path: '/casinos/{casinoId:integer}/player/{playerId:integer}'
     });
     routes.set('casinos', {
         page: 'casinos',
@@ -99,6 +99,7 @@ let router = (function () {
     }
 
     function changePage(pageName, addStateToHistory, url) {
+        hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
         }
@@ -269,17 +270,17 @@ let router = (function () {
 
     //Functions for handling links
 
+    function bindNavigationLinkHandler(element) {
+        element.removeEventListener('click', handleLinkClick);
+        element.addEventListener('click', handleLinkClick);
+    }
+
     function bindNavigationLinkHandlers() {
         let navigationElements = $$('.element-navigation-link');
         for (let i = 0; i < navigationElements.length; i++) {
             let navigationElement = navigationElements[i];
             bindNavigationLinkHandler(navigationElement);
         }
-    }
-
-    function bindNavigationLinkHandler(element) {
-        element.removeEventListener('click', handleLinkClick);
-        element.addEventListener('click', handleLinkClick);
     }
 
     function handleLinkClick(e) {
