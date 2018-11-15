@@ -151,6 +151,9 @@ let table = (function () {
                     rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
                 }
                 rows.push(rowId);
+                /*                let flagCell = document.createElement('div');
+                                cell.className = 'flag';
+                                cell.classList.add('flag');*/
                 for (let col = 0; col < colsCount; col++) {
                     let cell = document.createElement('div');
                     cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
@@ -176,6 +179,11 @@ let table = (function () {
 
             styleColsRows(tableSettings.tableData, colsCount, tbody);
         }
+
+        function rowFlag(){
+
+        }
+
 
         /*--------------------------------------------------------------------------------------*/
 
