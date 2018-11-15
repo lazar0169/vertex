@@ -1,3 +1,24 @@
+.preloader {
+    position: fixed;
+    top: 200px;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    z-index: 1000;
+    background: white;
+    opacity: 1;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.preloader.hidden {
+    /*display: none;*/
+    opacity: 0;
+}
+
 #main-content {
     background-color: rgb(55, 71, 79);
     height: 100%;
@@ -7,12 +28,6 @@
     padding: 0 1%;
     transition: all 0.1s ease;
     overflow: scroll;
-}
-
-#top-bar {
-    background: transparent;
-    color: white;
-    height: 5%;
 }
 
 .element-template {

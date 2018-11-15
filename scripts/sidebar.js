@@ -176,6 +176,8 @@ const sidebar = (function () {
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
+                        trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
+                        trigger('communicate/category', { category: category });
                         selectLink(linkSelectedId);
                         navigation.hide();
                         let temp = categoryValue;
@@ -191,7 +193,7 @@ const sidebar = (function () {
                     if (tempData[category].Value.length !== 0) {
                         let tempCategory = document.createElement('div');
                         tempCategory.className = 'lists center';
-                        if (category !== 'search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
+                        if (category !== 'Search' && tempData[category].List !== undefined) { //if category isn't 'search', lists have header
                             let categoryEl = document.createElement('div');
                             categoryEl.innerHTML = localization.translateMessage(tempData[category].List, categoryEl);
                             tempCategory.appendChild(categoryEl);
@@ -204,7 +206,7 @@ const sidebar = (function () {
                             tempValue.href = `/${category.toLowerCase()}/${value.Id}`;
                             tempValue.id = `link-${value.Id}`;
                             tempValue.innerHTML = `${value.Name} (${category})`;
-                            if (category === 'search') {// if category is 'search', link has name and category name in brakets 
+                            if (category === 'Search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.Name} (${value.category})`;
                                 tempValue.href = `/${value.category.toLowerCase()}/${value.Id}`;
                             } else {
@@ -214,7 +216,7 @@ const sidebar = (function () {
                                 searchCategory = categorySelectedId;
                                 linkSelectedId = `link-${value.Id}`;
                                 let entry = value;
-                                if (category === 'search') {// if category is 'search' category, categorySelectedId take category value from object
+                                if (category === 'Search') {// if category is 'search' category, categorySelectedId take category value from object
                                     categorySelectedId = value.category.charAt(0).toUpperCase() + value.category.slice(1).toLowerCase();
                                 } else { //if category isn't 'search' category, variable entry will be populated with  category and categoryName
                                     entry.category = category;
@@ -224,6 +226,8 @@ const sidebar = (function () {
                                 }
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
+                                trigger('topBar/category', { category: value.categoryName, casino: value.Name });
+                                trigger('communicate/category', { category: categorySelectedId });
                                 navigation.hide();
                             });
                             tempCategory.appendChild(tempValue);
@@ -369,6 +373,7 @@ const sidebar = (function () {
         initVariables();
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
+        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name });
         chosenLink.innerHTML = menuData[categorySelectedId].List;
     });
 

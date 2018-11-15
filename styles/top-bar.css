@@ -1,0 +1,29 @@
+#top-bar {
+    background: transparent;
+    height: 5%;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#top-bar>div {
+    display: inline-flex;
+}
+
+/* selektor * */
+
+#top-bar>div>* {
+    padding-right: 0.5rem;
+}
+
+#top-bar-logout {
+    position: absolute;
+    right: 0.5rem;
+}
+
+#top-bar-logout-user {
+    cursor: pointer;
+}
+

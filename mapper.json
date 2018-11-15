@@ -19,6 +19,8 @@
     "scripts": [
       "table.js",
       "data.js",
+      "top-bar.js",
+      "user-profile.js",
       "sidebar.js",
       "template-engine.js",
       "mock.js",
@@ -42,6 +44,10 @@
     ],
     "styles": [
       "index.css",
+      "top-bar.css",
+      "user-profile/user-profile-page.css",
+      "user-profile/user-info-profile.css",
+      "user-profile/user-edit-profile.css",
       "sidebar.css",
       "modify-spectre.css",
       "machines/machines-page.css",

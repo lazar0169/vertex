@@ -9,12 +9,11 @@ const multiDropdown = (function () {
         let noSelected = dataSelect.shift();
         //wrapper select
         let select = document.createElement('div');
-
         select.dataset.selectId = `ms-${indexMsId}`;
         select.classList.add('default-select');
         //selected options
         let selected = document.createElement('div');
-        selected.innerHTML = noSelected;
+        selected.innerHTML = noSelected.Name;
         selected.dataset.items = JSON.stringify(selected.innerHTML);
         selected.title = selected.innerHTML;
         //wrapper options group
@@ -24,10 +23,10 @@ const multiDropdown = (function () {
         for (let element of dataSelect) {
             //option with functionality
             let option = document.createElement('div');
-            option.title = element;
+            option.title = element.Name;
             option.innerHTML = `<label class="form-checkbox" >
-                                                <input type="checkbox">
-                                                <i class="form-icon" ></i> <div>${element}</div>
+                                                <input type="checkbox" dataset.elementId=${element.Id}>
+                                                <i class="form-icon" ></i> <div>${element.Name}</div>
                                             </label>`;
             optionGroup.appendChild(option);
             optionGroup.classList.add('overflow-y');
@@ -55,7 +54,7 @@ const multiDropdown = (function () {
 
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
-                        selected.innerHTML = noSelected;
+                        selected.innerHTML = noSelected.Name;
                     }
                 }
                 selected.title = selected.innerHTML;
@@ -66,7 +65,7 @@ const multiDropdown = (function () {
         select.appendChild(optionGroup);
 
         selected.addEventListener('click', function () {
-            if (selected.innerHTML === noSelected) {
+            if (selected.innerHTML === noSelected.Name) {
                 array = [];
             }
             select.classList.toggle('active-select');
