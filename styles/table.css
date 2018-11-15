@@ -130,21 +130,21 @@ textarea {
 
 /** FLAGS **/
 .row-flag-3.first {
-    border-left: 7px solid #f7a743;
+    border-left: 7px solid red;
+}
+
+.row-flag-5.first {
+    border-left: 7px solid lawngreen;
 }
 
 .row-flag-6.first {
-    border-left: 7px solid navy;
+    border-left: 7px solid blue;
 }
 
-.row-flag-6.first {
-    border-left: 7px solid navy;
+.row-flag-8.first {
+    border-left: 7px solid yellow;
 }
 
-.row-flag-6.first {
-    border-left: 7px solid navy;
-}
-
-.row-flag-6.first {
-    border-left: 7px solid navy;
+.row-flag-11.first {
+    border-left: 7px solid orange;
 }
