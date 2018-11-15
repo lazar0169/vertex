@@ -5,8 +5,8 @@ const aftFilter = (function () {
     let aftMachinesNumbers = $$('#aft-machines-number');
     let aftAdvenceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
-    let proba3 = $$('#aft-advance-table-filter-jackpot');
-    proba3.appendChild(multiDropdown.generate(machinesVendors));
+    // let proba3 = $$('#aft-advance-table-filter-jackpot');
+    // proba3.appendChild(multiDropdown.generate(machinesVendors));
 
     aftAdvenceApplyFilters.addEventListener('click', function () {
 
@@ -49,8 +49,8 @@ const aftFilter = (function () {
 
     aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
     proba.appendChild(dropdownDate.generate(nekiniz));
-    let proba2 = $$('#aft-advance-table-filter-finished');
-    proba2.appendChild(dropdownDate.generate(nekiniz));
+    // let proba2 = $$('#aft-advance-table-filter-finished');
+    // proba2.appendChild(dropdownDate.generate(nekiniz));
 
     // proba2.appendChild(multiDropdown.generate(nekiniz2));
     //proba3.appendChild(multiDropdown.generate(nekiniz3));

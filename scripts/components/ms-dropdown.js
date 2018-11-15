@@ -7,6 +7,7 @@ const multiDropdown = (function () {
     function generate(dataSelect) {
         //array of chosen options
         let array = [];
+        let arrayInner = [];
         //initial select form data
         let noSelected = dataSelect.shift();
         //wrapper select
@@ -39,12 +40,14 @@ const multiDropdown = (function () {
                 if (option.children[0].children[0].checked === false) {
                     if (selected.innerHTML === '-') {
                         array = [];
+                        arrayInner = [];
                         selected.innerHTML = option.children[0].children[2].innerHTML;
                     }
                     else {
                         selected.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
                     }
                     array.push(option.dataset.value);
+                    arrayInner.push(option.children[0].children[2].innerHTML);
                     option.children[0].children[0].checked = true;
                 }
                 else {
@@ -52,15 +55,16 @@ const multiDropdown = (function () {
                     for (let elem of array) {
                         if (elem === option.dataset.value) {
                             array.splice(i, 1);
+                            arrayInner.splice(i, 1);
                         }
                         i++
                     }
-                    //array sa elementima na eng jeziku
-                    selected.innerHTML = array;
+                    selected.innerHTML = arrayInner;
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
                         selected.innerHTML = noSelected.Name;
                         array.push(noSelected.Name);
+                        arrayInner.push(noSelected.Name);
                     }
                 }
                 selected.title = selected.innerHTML;

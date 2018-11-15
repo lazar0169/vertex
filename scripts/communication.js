@@ -1,6 +1,6 @@
 let communication = (function () {
-    //let proba2 = $$('#aft-advance-table-filter-finished');
-    //let proba3 = $$('#aft-advance-table-filter-jackpot');
+    let proba2 = $$('#aft-advance-table-filter-finished');
+    let proba3 = $$('#aft-advance-table-filter-jackpot');
     let proba4 = $$('#aft-advance-table-filter-type');
     let proba5 = $$('#aft-advance-table-filter-status');
     let proba6 = $$('#aft-advance-table-filter-column');
@@ -628,8 +628,8 @@ let communication = (function () {
     on('communicate/testFilter', function (params) {
         //alert('Successful communication');
         console.log(params.data);
-        //params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
-        //params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
+        params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
+        params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
         params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
         params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
         params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
