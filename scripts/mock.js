@@ -469,7 +469,7 @@ let mock = (function () {
     }];
 
     let mockData3 = [{
-        "Flag": 1,
+        "Flag": 1544,
         "Period": "1/15/2018",
         "Total bet": 9,
         "Total win": 27,
@@ -651,7 +651,7 @@ let mock = (function () {
     }];
 
     let mockData4 = [{
-        "Flag": 1,
+        "Flag": 12584,
         "Period": "12/28/2017",
         "Total bet": 26,
         "Total win": 37,

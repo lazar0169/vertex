@@ -110,7 +110,7 @@ textarea {
     margin: 20px 0 0 20px;
 }
 
-.hide-column-section {
+.hide-column-section, .row-flag-section {
     display: flex;
     flex-direction: row;
     width: 500px;
@@ -119,10 +119,32 @@ textarea {
 
 }
 
-.hide-column-button {
+.hide-column-button, .row-flag-button {
     margin-left: 20px;
 }
 
 .hidden-column {
     display: none;
+}
+
+
+/** FLAGS **/
+.row-flag-3.first {
+    border-left: 7px solid #f7a743;
+}
+
+.row-flag-6.first {
+    border-left: 7px solid navy;
+}
+
+.row-flag-6.first {
+    border-left: 7px solid navy;
+}
+
+.row-flag-6.first {
+    border-left: 7px solid navy;
+}
+
+.row-flag-6.first {
+    border-left: 7px solid navy;
 }

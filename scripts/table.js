@@ -178,11 +178,6 @@ let table = (function () {
             styleColsRows(tableSettings.tableData, colsCount, tbody);
         }
 
-        function rowFlag() {
-
-        }
-
-
         /*--------------------------------------------------------------------------------------*/
 
 
