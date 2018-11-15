@@ -17,11 +17,13 @@
   },
   "main": {
     "scripts": [
+      "table.js",
       "data.js",
       "top-bar.js",
       "user-profile.js",
       "sidebar.js",
       "template-engine.js",
+      "mock.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
@@ -33,8 +35,6 @@
       "machines.js",
       "machines/machines-filters.js",
       "machines/edit-page.js",
-      "tickets/tickets-filters.js",
-      "tickets/tickets-appearance.js",
       "session.js",
       "preloader.js",
       "application.js",
@@ -57,11 +57,11 @@
       "machines/edit-page.css",
       "aft/aft-filter.css",
       "aft/aft-tabs.css",
-      "tickets/tickets-tabs.css",
-      "tickets/tickets-appearance.css",
       "components/dropdown.css",
       "main-content.css",
-      "preloader.css"
+      "preloader.css",
+      "table.css",
+      "pagination.css"
     ]
   }
 }

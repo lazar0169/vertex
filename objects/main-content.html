@@ -1,15 +1,14 @@
 <div id="main-content">
 
     <!--    <div id="demo">
-        Response data:
-    </div>-->
+            Response data:
+        </div>-->
 
     <object data-object="top-bar"></object>
     <object data-object="machines"></object>
     <object data-object="aft"></object>
-    <object data-object="tickets"></object>
-    
-    <!-- 
+
+    <!--
     <object data-object="home"></object>
     <object data-object="casino"></object>
     <object data-object="jackpot"></object>
@@ -17,13 +16,95 @@
     <object data-object="aft"></object>
     <object data-object="reports"></object>
     <object data-object="users"></object>
-    <object data-object="service"></object> 
+    <object data-object="service"></object>
     -->
 
     <section class="element-page" id="page-home">
         <h1 class="element-template" id="home-template">Home {{home.Name}}</h1>
         <h1>HOME</h1>
+        <div id="table-container-home" class="table" data-data-event="communicate/table/data">
+
+            <!--THESE FILTERS ARE ONLY TEST DATA-->
+            <section class="element-table-filters-container">
+                <section class="element-table-filters-section">
+                    Search: <input class="element-table-filters query-search" name="querySearch" value="Search">
+                    Text area: <textarea class="element-table-filters" name="Text area 1">Text area 1</textarea>
+                    Text area: <textarea class="element-table-filters" name="Text area 2">Text area 2</textarea>
+                    Input:<input class="element-table-filters" name="Input 1" value="Input 1"/>
+                    Input: <input class="element-table-filters" name="Input 2" value="Input 2"/><br/>
+                </section>
+                <section>
+                    <input class="element-table-filters" type="checkbox" name="Checkbox1" value="Checkbox1" checked/>
+                    Checkbox value 1<br/>
+                    <input class="element-table-filters" type="checkbox" name="Checkbox2" value="Checkbox2"/> Checkbox
+                    value 2<br/>
+                    <input class="element-table-filters" type="checkbox" name="Checkbox3" value="Checkbox3"/> Checkbox
+                    value 3<br/><br/>
+                    <input class="element-table-filters" type="checkbox" name="Checkbox4" value="Checkbox-option1"
+                           checked/> Checkbox option 1<br/>
+                    <input class="element-table-filters" type="checkbox" name="Checkbox4" value="Checkbox-option2"/>
+                    Checkbox option 1<br/>
+                    <input class="element-table-filters" type="checkbox" name="Checkbox4" value="Checkbox-option3"/>
+                    Checkbox option 1<br/><br/>
+                    <input class="element-table-filters" type="radio" name="Radio" value="Radio button 1" checked/>Radio
+                    button 1<br/>
+                    <input class="element-table-filters" type="radio" name="Radio" value="Radio button 2"/>Radio
+                    button 2<br/>
+                    <input class="element-table-filters" type="radio" name="Radio" value="Radio button 3"/>Radio
+                    button 3<br/><br/>
+                    <div class="element-table-filters element-table-filters-section" data-name="Custom filter"
+                         data-value="Custom filter">Custom filter
+                    </div>
+                </section>
+                <section class="element-table-filters-section">
+                    <select class="element-table-filters select" name="select1">
+                        <option value="Option1">Option1</option>
+                        <option value="Option2">Option2</option>
+                        <option value="Option3">Option3</option>
+                    </select>
+                    <select class="element-table-filters select" name="select2">
+                        <option value="Option1">Option1</option>
+                        <option value="Option2">Option2</option>
+                        <option value="Option3">Option3</option>
+                    </select>
+                    <select multiple class="element-table-filters multiple-select" name="select3">
+                        <option value="Option1">Option1</option>
+                        <option value="Option2">Option2</option>
+                        <option value="Option3">Option3</option>
+                    </select>
+                    <select class="element-table-filters pages-number element-table-filters-section select"
+                            name="numberOfPages">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                    </select>
+                </section>
+                <br/>
+            </section>
+            <!--FILTERS ABOVE ARE ONLY TEST DATA-->
+
+            <div class="tbody">
+                <div class="head cell" data-sort-name="period">Period</div>
+                <div class="head cell" data-sort-name="total-bet">Total bet</div>
+                <div class="head cell" data-sort-name="total-win">Total win</div>
+                <div class="head cell" data-sort-name="rounds">Rounds</div>
+                <div class="head cell" data-sort-name="jackpot-value">Jackpot value</div>
+                <div class="head cell" data-sort-name="results">Result</div>
+                <div class="head cell" data-sort-name="payout">Payout</div>
+                <div class="head cell" data-sort-name="currency">Currency</div>
+            </div>
+            <div class="table-buttons">
+                <button id="apply" class="apply">Apply filters and update table with new data!</button>
+                <button id="reset" class="reset">Reset filters to previous set of filters!</button>
+            </div>
+            <section class="hide-column-section">
+                <input class="hide-column-input" value="Column to hide...">
+                <button class="hide-column-button">Hide column!</button>
+            </section>
+        </div>
     </section>
+
 
     <section class="element-page" id="page-casinos">
         <h1>CASINO LIST</h1>
@@ -35,6 +116,9 @@
                 <button class="cloning-test">Test</button>
             </div>
         </div>
+        <div id="table-container-casinos" class="table" data-data-event="communicate/table/data">
+        </div>
+
     </section>
 
     <section class="element-page" id="page-casino-edit">
@@ -56,5 +140,8 @@
         <h1 class="element-template" id="tickets-template">Tickets {{tickets.Id}}</h1>
         <h1>TICKETS</h1>
     </section>
+
+
+    <object data-object="templates"></object>
 
 </div>

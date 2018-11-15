@@ -1,0 +1,26 @@
+.pagination {
+    justify-content: center;
+    width: 500px;
+}
+
+.pagination ul{
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+
+.element-pagination-page-button.active {
+    background-color: red;
+}
+
+.element-pagination-page-button.hidden {
+    display: none;
+}
+
+.pagination-last-page:hover {
+    background-color: gray;
+}
+
+.pagination-last-page-hover {
+    display: none;
+}
