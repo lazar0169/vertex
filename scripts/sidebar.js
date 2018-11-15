@@ -263,8 +263,10 @@ const sidebar = (function () {
                 previousCategorySelected.classList.remove('list-active');
             }
             let listSelected = $$(`#${category}`);
-            listSelected.classList.add('list-active');
-            previousCategorySelected = listSelected;
+            if (listSelected !== undefined) {
+                listSelected.classList.add('list-active');
+                previousCategorySelected = listSelected;
+            }
         }
     }
 

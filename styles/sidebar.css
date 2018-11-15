@@ -195,7 +195,7 @@
     background-color: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     transition: all 0.2s ease;
-    z-index: 1;
+    z-index: 30;
     font-size: 20px;
     display: flex;
     flex-direction: column;
