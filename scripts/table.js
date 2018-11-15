@@ -136,7 +136,7 @@ let table = (function () {
         }
 
         function styleColsRows(tableSettingsData, colsCount, tbody) {
-            tbody.style.gridTemplateColumns = `repeat(${colsCount-1}, 1fr)`;
+            tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
             tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
         }
 
@@ -400,12 +400,17 @@ let table = (function () {
         function hideColumn(tableSettings, columnName) {
             let colsCount = getCurrentColsCount(tableSettings);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
-            for (let i = 0; i < columnElements.length; i++) {
-                columnElements[i].classList.add('hidden-column');
-                columnElements[i].classList.remove('head');
+            console.log(columnElements);
+            if (columnElements.length !== 0) {
+                for (let i = 0; i < columnElements.length; i++) {
+                    columnElements[i].classList.add('hidden-column');
+                    columnElements[i].classList.remove('head');
+                }
+                let tbody = getTableBodyElement(tableSettings);
+                tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
+            } else {
+                alert('There is no such column!');
             }
-            let tbody = getTableBodyElement(tableSettings);
-            tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
         }
 
         /*--------------------------------------------------------------------------------------*/
