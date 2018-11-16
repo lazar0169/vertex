@@ -16,6 +16,16 @@ const aft = (function () {
 
         table.init(tableSettings);
 
+        //todo potential structural changes
+        /* aft module calls table.init
+        table.init triggers communicate/aft
+        communicate/aft triggers communicate/createAndSendXhr
+        communicate/createAndSendXhr triggers table/update
+        table/update updates table with data from API
+        */
+
+        //todo fix how to send tableSettings object through callbacks
+
         /*TESTING*/
         // table.generateTableContent(tableSettings);
         // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
