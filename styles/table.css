@@ -129,22 +129,42 @@ textarea {
 
 
 /** FLAGS **/
-.row-flag-3.first {
+.tbody > .row-flag-3 {
     border-left: 7px solid red;
 }
 
-.row-flag-5.first {
+.tbody > .row-flag-3 ~ .row-flag-3 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-5 {
     border-left: 7px solid lawngreen;
 }
 
-.row-flag-6.first {
+.tbody > .row-flag-5 ~ .row-flag-5 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-6 {
     border-left: 7px solid blue;
 }
 
-.row-flag-8.first {
+.tbody > .row-flag-6 ~ .row-flag-6 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-8 {
     border-left: 7px solid yellow;
 }
 
-.row-flag-11.first {
+.tbody > .row-flag-8 ~ .row-flag-8 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-11 {
     border-left: 7px solid orange;
+}
+
+.tbody > .row-flag-11 ~ .row-flag-11 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
 }

@@ -1,15 +1,16 @@
 let table = (function () {
 
         let rows = [];
-        const columnDirection = {
+        const sortingType = {
+            none: 0,
             ascending: 1,
-            descending: -1
+            descending: 2
         };
-        const directionClass = {
+        const sortingClass = {
             ascending: 'sort-asc',
             descending: 'sort-desc'
         };
-        const directionDataAtt = {
+        const sortingDataAtt = {
             ascending: 'asc',
             descending: 'desc'
         };
@@ -363,19 +364,19 @@ let table = (function () {
         }
 
         function toggleDirection(header) {
-            if (!header.classList.contains(directionClass.ascending) && !header.classList.contains(directionClass.descending) && !header.dataset.direction) {
-                header.classList.add(directionClass.ascending);
-                header.dataset.direction = directionDataAtt.ascending;
+            if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
+                header.classList.add(sortingClass.ascending);
+                header.dataset.direction = sortingDataAtt.ascending;
             }
-            else if (header.classList.contains(directionClass.descending)) {
-                header.classList.remove(directionClass.descending);
-                header.classList.add(directionClass.ascending);
-                header.dataset.direction = directionDataAtt.ascending;
+            else if (header.classList.contains(sortingClass.descending)) {
+                header.classList.remove(sortingClass.descending);
+                header.classList.add(sortingClass.ascending);
+                header.dataset.direction = sortingDataAtt.ascending;
             }
             else {
-                header.classList.remove(directionClass.ascending);
-                header.classList.add(directionClass.descending);
-                header.dataset.direction = directionDataAtt.descending;
+                header.classList.remove(sortingClass.ascending);
+                header.classList.add(sortingClass.descending);
+                header.dataset.direction = sortingDataAtt.descending;
             }
         }
 
@@ -387,14 +388,22 @@ let table = (function () {
             let activeHeader = getActiveColumn(tableSettings);
             if (activeHeader !== undefined) {
                 tableSettings.sort.sortName = activeHeader.dataset.sortName;
-                if (activeHeader.dataset.direction === directionDataAtt.ascending) {
-                    tableSettings.sort.direction = columnDirection.ascending;
+                if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
+                    tableSettings.sort.direction = sortingType.ascending;
                 }
-                else if (activeHeader.dataset.direction === directionDataAtt.descending) {
-                    tableSettings.sort.direction = columnDirection.descending;
+                else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
+                    tableSettings.sort.direction = sortingType.descending;
                 }
             }
             return tableSettings.sort;
+        }
+
+        function removeFlagClass(columnElement){
+            let flagClassRegExp = /(row-flag-\d+) ?/;
+            let columnElementClasses = columnElement.className;
+            let flagClass = flagClassRegExp.exec(columnElementClasses)[1];
+            columnElement.classList.remove(flagClass);
+
         }
 
         function hideColumn(tableSettings, columnName) {
@@ -403,6 +412,9 @@ let table = (function () {
             console.log(columnElements);
             if (columnElements.length !== 0) {
                 for (let i = 0; i < columnElements.length; i++) {
+                    if (i !== 0) {
+                        removeFlagClass(columnElements[i]);
+                    }
                     columnElements[i].classList.add('hidden-column');
                     columnElements[i].classList.remove('head');
                 }
