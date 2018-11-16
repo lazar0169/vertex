@@ -46,7 +46,8 @@
       "localization.js",
       "router.js",
       "components/datepicker.js",
-      "components/timepicker.js"
+      "components/timepicker.js",
+      "aft/aft.js"
     ],
     "styles": [
       "index.css",

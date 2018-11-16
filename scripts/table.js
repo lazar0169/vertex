@@ -50,6 +50,7 @@ let table = (function () {
         }
 
         function getTableBodyElement(tableSettings) {
+            console.log('table container element', tableSettings.tableContainerElement);
             let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
             return tbody;
         }
@@ -294,16 +295,33 @@ let table = (function () {
         }
 
         on('table/update', function (params) {
-            updateTable(params.tableSettings);
+
+            let tableSettings = params.tableSettings;
+
+            // updateTable(params.tableSettings);
+            console.log('table/update params.data', params.data);
+
+            let tableData = [];
+            let apiItems = params.data.Data.Items;
+            console.log('api Items', apiItems);
+            apiItems.forEach(function(item) {
+                tableData.push(item.EntryData);
+            });
+
+            tableSettings.tableData= tableData;
+
+
+            console.log('table/update tableData', tableData);
+
+            console.log('table settings', tableSettings);
+
+            updateTable(tableSettings);
         });
 
         function initUpdateTable(tableSettings) {
 
             //get data from page
-            let data = {
-                activePage: 2,
-                filters: 0
-            };
+            let data = {EndpointId: 2, tableSettings: tableSettings};
 
             trigger(tableSettings.dataEvent, {
                 data: data,
@@ -601,7 +619,7 @@ let table = (function () {
             generateTablePagination(tableSettings);
 
             if (tableSettings.tableData === undefined) {
-                generateTableHeaders(tableSettings);
+                // generateTableHeaders(tableSettings);
                 initUpdateTable(tableSettings);
             }
 

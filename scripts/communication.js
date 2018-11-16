@@ -58,12 +58,12 @@ let communication = (function () {
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
 
-            trigger(callbackEvent, { data: data });
+            trigger(callbackEvent, {data: data});
         }
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = { "message": xhr.responseText };
+        let errorData = {"message": xhr.responseText};
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
@@ -82,6 +82,7 @@ let communication = (function () {
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
+                console.log('communication module data', data);
                 success(xhr, successEvent);
             }
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
@@ -144,7 +145,7 @@ let communication = (function () {
     });
 
     //events for home
-    on('communicate/home/data', function(params){
+    on('communicate/home/data', function (params) {
         //FORWARD DATA TO API
         //GET DATA FROM API
         let dataFormAPI = {
@@ -167,7 +168,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
         //need to be delete
         // trigger('communicate/casinos/previewMachines', {})
         // trigger('communicate/casinos/getMachineDetails', {})
@@ -208,7 +215,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
 
     });
     // machines get service data
@@ -221,7 +234,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines get service data
     on('communicate/casinos/getMachineServiceData', function (params) {
@@ -233,7 +252,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //machines swich service mode
     on('communicate/casinos/swichServiceMode', function (params) {
@@ -246,7 +271,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines get history
     on('communicate/casinos/getMachinesHistory', function (params) {
@@ -258,7 +289,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines preview machine history
     on('communicate/casinos/previewMachinesHistory', function (params) {
@@ -271,10 +308,16 @@ let communication = (function () {
             'PageSize': 10,
             'Date': '2018-09-13T10:07:16'
         };
-        
+
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines get events
     on('communicate/casinos/getMachinesEvents', function (params) {
@@ -286,7 +329,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
@@ -301,7 +350,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines get all meters
     on('communicate/casinos/getAllMachinesMeters', function (params) {
@@ -313,7 +368,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines get preview meters
     on('communicate/casinos/previewMachinesMeters', function (params) {
@@ -328,7 +389,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines remove meter
     on('communicate/casinos/removeMeter', function (params) {
@@ -341,7 +408,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     // machines save meter
     on('communicate/casinos/saveMachinesMeters', function (params) {
@@ -355,7 +428,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //  machines show meters
     on('communicate/casinos/showMachinesMeters', function (params) {
@@ -368,7 +447,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //  machines edit
     on('communicate/casinos/editMachines', function (params) {
@@ -380,7 +465,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //machines remove machine from casino
     on('communicate/casinos/removeMachineFromCasino', function (params) {
@@ -392,7 +483,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //machines save machine from casino
     on('communicate/casinos/saveMachine', function (params) {
@@ -421,7 +518,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
 
     // machines get all machines
@@ -431,17 +534,32 @@ let communication = (function () {
 
     //events for tickets
 
+    on('jovana/test', function(params) {
+        // parse parameters for table
+        let tableData = [];
+        params.data.Data.Items.forEach(function(item) {
+            tableData.push(item.EntryData);
+        });
+    });
 
-    //events for AFT, get all transactions
+    /*------------------------------------ AFT EVENTS ------------------------------------*/
+
     on('communicate/aft', function (params) {
         let route = 'api/transactions/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
+        let successEvent = params.callbackEvent;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            tableSettings: tableSettings,
+            request: request,
+            errorEvent: errorEvent
+        });
+
         //need to be delete
         // trigger('communicate/aft/previewTransactions', {});
         // trigger('communicate/aft/getNotificationSettings', {})
@@ -476,7 +594,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
@@ -487,7 +611,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
@@ -498,7 +628,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft save basic settings
     on('communicate/aft/saveBasicSettings', function (params) {
@@ -514,7 +650,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
@@ -532,7 +674,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
@@ -543,7 +691,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
@@ -561,7 +715,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft cancel transaction
     on('communicate/aft/cancelTransaction', function (params) {
@@ -576,7 +736,13 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
     //aft cancel pending transaction
     on('communicate/aft/cancelPendingTransaction', function (params) {
@@ -591,8 +757,18 @@ let communication = (function () {
         };
         let request = requestTypes.post;
         let errorEvent = '';
-        trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
     });
+
+    /*--------------------------------------------------------------------------------------*/
+
+
     //aft events for machines
     on('communicate/machine-info', function (params) {
         let machineId = params.machineId;
@@ -630,7 +806,7 @@ let communication = (function () {
     //test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
-        console.log(params.data);
+        console.log('communicate/test params.data', params.data);
     });
 
     //test, set filters for aft
@@ -639,7 +815,7 @@ let communication = (function () {
     });
     on('communicate/testFilter', function (params) {
         //alert('Successful communication');
-        console.log(params.data);
+        console.log('communicate/testFilter params.data', params.data);
         params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
         params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
         params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
