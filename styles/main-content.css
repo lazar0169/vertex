@@ -27,7 +27,6 @@
     float: right;
     padding: 0 1%;
     transition: all 0.1s ease;
-    overflow: scroll;
 }
 
 .element-template {

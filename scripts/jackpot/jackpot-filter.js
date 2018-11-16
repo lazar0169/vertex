@@ -144,14 +144,19 @@ const jackpotFilter = (function () {
                     inputChecked = document.querySelectorAll(`input[name=is-casino-checked-${element.City}]:checked`);
                     if (newOptionWrapper.children.length === inputChecked.length) {
                         option.children[0].children[0].children[0].checked = true;
+                        checkForAllCasinos();
                     }
                     else {
                         if (inputChecked.length === 0) {
                             option.children[0].classList.remove('is-checked-city');
+
                         }
                         else {
                             option.children[0].classList.add('is-checked-city');
                         }
+
+                        wrapperOption.children[0].children[0].children[0].checked = false;
+
                         option.children[0].children[0].children[0].checked = false;
                     }
                 });
@@ -175,6 +180,8 @@ const jackpotFilter = (function () {
                             inputChecked = document.querySelectorAll(`input[name=is-casino-checked-${element.City}]:checked`);
                             if (city.children[1].children.length === inputChecked.length) {
                                 city.children[0].children[0].children[0].checked = true;
+
+                                checkForAllCasinos();
                             }
                             else {
                                 if (inputChecked.length === 0) {
@@ -183,6 +190,7 @@ const jackpotFilter = (function () {
                                 else {
                                     city.children[0].classList.add('is-checked-city');
                                 }
+                                wrapperOption.children[0].children[0].children[0].checked = false;
                                 city.children[0].children[0].children[0].checked = false;
                             }
                         });
@@ -192,6 +200,19 @@ const jackpotFilter = (function () {
             }
         }
         return wrapperOption
+    }
+
+    function checkForAllCasinos() {
+        // if checked all city check all
+        let count = 0
+        for (let checkedCity of chooseMachinesCasinos.children[1].children) {
+            if (checkedCity.dataset.value != 'All' && checkedCity.children[0].children[0].children[0].checked) {
+                count++
+            }
+        }
+        if (chooseMachinesCasinos.children[1].children.length - 1 === count) {
+            chooseMachinesCasinos.children[1].children[0].children[0].children[0].checked = true;
+        }
     }
 
     function activeFilter(div) {
@@ -215,18 +236,24 @@ const jackpotFilter = (function () {
         for (let city of $$('.city-option')) {
             city.children[1].addEventListener('click', function () {
                 city.parentNode.children[1].classList.toggle('hidden');
-
-
             });
             city.children[0].addEventListener('click', function (e) {
                 if (city.children[0].children[0].checked) {
                     city.classList.add('is-checked-city');
+
+                    checkForAllCasinos();
+
+                    //check all casinos in city
                     for (let check of city.parentNode.children[1].children) {
                         check.children[0].children[0].checked = true;
                     }
                 }
                 else {
                     city.classList.remove('is-checked-city');
+                    if (city.parentNode.parentNode.children.length - 1 !== $$('.is-checked-city').length) {
+                        city.parentNode.parentNode.children[0].children[0].children[0].checked = false;
+                    }
+
                     for (let check of city.parentNode.children[1].children) {
                         check.children[0].children[0].checked = false;
                     }
@@ -240,6 +267,12 @@ const jackpotFilter = (function () {
     });
     jackpotSaveButton.addEventListener('click', function () {
         alert('Save machines for jackpot')
+    });
+
+    window.addEventListener('keyup', function (event) {
+        if (event.keyCode == 27) {
+            jackpotChooseMachine.classList.add('hidden');
+        }
     });
 
 
