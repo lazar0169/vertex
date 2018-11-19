@@ -49,6 +49,7 @@ const aftFilter = (function () {
 
     aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
     proba.appendChild(dropdownDate.generate(nekiniz));
+
     // let proba2 = $$('#aft-advance-table-filter-finished');
     // proba2.appendChild(dropdownDate.generate(nekiniz));
 
@@ -56,7 +57,7 @@ const aftFilter = (function () {
     //proba3.appendChild(multiDropdown.generate(nekiniz3));
 
     advanceTableFilter.addEventListener('click', function () {
-        showAdvanceTableFilter()
+        showAdvanceTableFilter();
     });
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
