@@ -27,12 +27,13 @@ const multiDropdown = (function () {
         for (let element of dataSelect) {
             //option with functionality
             let option = document.createElement('div');
-            option.title = element.Name;
+
             option.dataset.value = element.Name;
             option.innerHTML = `<label class="form-checkbox" >
                                                 <input type="checkbox">
-                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div data-translation-key="${element.Name}">${element.Name}</div>
+                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div title="${element.Name}" class="for-translate" data-translation-key="${element.Name}">${element.Name}</div>
                                             </label>`;
+            option.title = option.children[0].children[2].innerHTML;
             optionGroup.appendChild(option);
             optionGroup.classList.add('overflow-y');
             option.addEventListener('click', function (e) {

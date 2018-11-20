@@ -28,19 +28,19 @@ const dropdownDate = (function () {
         let customDate = document.createElement('div');
 
         customDate.innerHTML = `<div id="date-from-${indexDsId}" class="choose-date-time">
-                                <div>Date from:</div>
+                                <div class="for-translate" data-translation-key="DateFrom">Date from:</div>
                                 <input id="datepicker-from-${indexDsId}" type="text" class="datepicker" readonly>                                
                                 </div>
                                 <div id="time-from-${indexDsId}" class="choose-date-time">
-                                <div>Time from:</div>
+                                <div class="for-translate" data-translation-key="TimeFrom">Time from:</div>
                                 <div class="timepicker"></div>                            
                                 </div>
                                 <div id="date-to-${indexDsId}" class="choose-date-time">
-                                <div>Date to:</div>
+                                <div class="for-translate" data-translation-key="DateTo">Date to:</div>
                                 <input id="datepicker-to-${indexDsId}" type="text" class="datepicker" readonly>                                
                                 </div>
                                 <div id="time-to-${indexDsId}" class="choose-date-time">
-                                <div>Time to:</div>
+                                <div class="for-translate" data-translation-key="TimeTo">Time to:</div>
                                 <div class="timepicker"></div>                                
                                 </div>`
 
@@ -74,13 +74,15 @@ const dropdownDate = (function () {
             //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
+            option.classList.add('for-translate');
             option.innerHTML = element;
             option.title = option.innerHTML;
             option.dataset.value = element;
+            option.dataset.translationKey = element;
             optionGroup.appendChild(option);
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (option.dataset.value === 'Custom') {
+                if (option.dataset.value === 'CustomDate') {
                     customDate.classList.toggle('hidden');
                     pickCustom = !pickCustom;
                     delete applyCustom.dataset.value;
@@ -126,7 +128,7 @@ const dropdownDate = (function () {
             }
             current = current.parentNode;
         }
-        if (found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
+        if (found && !pickCustom && e.target.dataset.value !== 'CustomDate' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
@@ -135,7 +137,7 @@ const dropdownDate = (function () {
             }
             pickCustom = false;
         }
-        else if (found && pickCustom || e.target.classList.contains('pika-select') || found && e.target.dataset.value === 'Custom') {
+        else if (found && pickCustom || e.target.classList.contains('pika-select') || found && e.target.dataset.value === 'CustomDate') {
             $$(`#${activeSelectId}`).classList.add('active-date-select');
             $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
         }
