@@ -167,7 +167,7 @@ let communication = (function () {
             tableSettings: tableSettings
         });
 
-        //need to be delete
+        //needs to be deleted
         // trigger('communicate/aft/previewTransactions', {});
         // trigger('communicate/aft/getNotificationSettings', {})
         // trigger('communicate/aft/getBasicSettings', {})
@@ -178,7 +178,8 @@ let communication = (function () {
         // trigger('communicate/aft/cancelTransaction', {}) greska sa serverom 409
         // trigger('communicate/aft/cancelPendingTransaction', {}) greska sa serverom 409
     });
-    //data with static values, need to be dynamic
+
+    //data with static values, needs to be dynamic
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
         let route = 'api/transactions/previewtransactions/';
@@ -209,6 +210,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
         let route = 'api/transactions/getnotificationsettings';
@@ -226,6 +228,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
         let route = 'api/transactions/getbasicsettings/';

@@ -10,7 +10,7 @@ const aft = (function () {
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-aft';
         tableSettings.stickyRow = true;
-        tableSettings.stickyColumn = true;
+        tableSettings.stickyColumn = false;
         tableSettings.dataEvent = 'communicate/aft';
         tableSettings.id = '';
 

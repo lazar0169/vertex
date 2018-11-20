@@ -166,6 +166,10 @@ let table = (function () {
                     cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
                     if (tableSettings.stickyColumn === true && col === 1) {
                         cell.classList.add('sticky');
+                    } else if (tableSettings.stickyColumn === false && col === 1) {
+                        cell.removeAttribute('left');
+                        cell.removeAttribute('z-index');
+                        console.log(cell.attributes);
                     }
                     cell.addEventListener('mouseover', function () {
                         hoverRow(`row-${rowId}`, true);
@@ -295,6 +299,7 @@ let table = (function () {
         }
 
         on('table/update', function (params) {
+
 
             let tableSettings = params.tableSettings;
             console.log('table settings', tableSettings);
