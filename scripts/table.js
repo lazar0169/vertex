@@ -453,7 +453,14 @@ let table = (function () {
         /*------------------------------------ FILTERING ------------------------------------*/
 
         function collectAllFilterElements(tableSettings) {
-            return tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
+            let filterElements;
+            if (tableSettings.filterContainerSelector !== undefined) {
+                filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
+            }
+            else {
+                filterElements = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
+            }
+            return filterElements;
         }
 
         function isSingleCheckbox(element) {
@@ -518,8 +525,9 @@ let table = (function () {
                     tableSettings.filters[filterName] = filterValue;
                 }
             }
-            getPageSize(tableSettings);
-            getQuerySearch(tableSettings);
+            //todo ajust to work with AFT
+/*            getPageSize(tableSettings);
+            getQuerySearch(tableSettings);*/
             return tableSettings.filters;
         }
 
@@ -597,7 +605,7 @@ let table = (function () {
 
         /*------------------------------- TRANSFORMING DATA FROM API -------------------------------*/
 
-        function transformApiData(data){
+        function transformApiData(data) {
             return data;
         }
 
@@ -615,6 +623,16 @@ let table = (function () {
                 callbackEvent: callbackEvent
             });
         }
+
+        /*--------------------------------------------------------------------------------------*/
+
+
+        /*--------------------------------- EVENT HANLDERS ---------------------------------*/
+
+        on('table/filters/apply', function(params){
+            alert('APPLY FILTERS');
+            getFilters(params.tableSettings);
+        });
 
         /*--------------------------------------------------------------------------------------*/
 

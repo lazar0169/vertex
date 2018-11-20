@@ -9,12 +9,27 @@ const aft = (function () {
         let tableSettings = {};
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-aft';
+        tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
         tableSettings.dataEvent = 'communicate/aft';
         tableSettings.id = '';
 
+
         table.init(tableSettings);
+
+
+        let filtersContainer = $$(tableSettings.filterContainerSelector);
+        console.log('apply filters button');
+        let applyButton = filtersContainer.getElementsByClassName('aft-filters-apply')[0];
+        console.log('apply filters button', applyButton);
+
+        if (applyButton !== undefined) {
+            applyButton.addEventListener('click', function () {
+                trigger('table/filters/apply', {tableSettings: tableSettings});
+                console.log('Table settings after clicking Apply button: ', tableSettings);
+            });
+        }
 
         //todo potential structural changes
         /* aft module calls table.init
