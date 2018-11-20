@@ -3,7 +3,7 @@ let nekiniz3 = ['-', 'Jackpot1', 'Jackpot2', 'Jackpot3'];
 let nekiniz4 = ['-', 'Type1', 'Type2', 'Type3', 'Type4', 'Type5'];
 let nekiniz5 = ['-', 'Status1', 'Status2', 'Status3'];
 let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
-let nekiniz = ['-', 'Today', 'Yesterday', 'Last7Days', 'Last14Days', 'ThisMonth', 'LastMonth', 'CustomDate'];
+let nekiniz = ['-', 'Today', 'Yesterday', 'Last 7 Days', 'Last 14 Days', 'This Month', 'Last Month', 'Custom'];
 let columnName = [{Name: '-'}, { Name: 'Column1' }, { Name: 'Column2' }, { Name: 'Column3' }]
 let machinesNumber = ['50', '25', '10', '5'];
 let machinesVendors = [{ Name: '-' }, { Name: 'Fazi' }, { Name: 'Admiral' }, { Name: 'Favorit' }];
@@ -56,14 +56,3 @@ let casinoData = {
 /*
 let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
 */
-//test
-$$('#aft-add-transaction').children[0].addEventListener('click', function () {
-    //test for translation
-    trigger('translate-language');
-})
-on('translate-language', function () {
-    for (let translate of $$('.for-translate')) {
-        translate.innerHTML = localization.translateMessage(translate.dataset.translationKey);
-        translate.title = translate.innerHTML;
-    }
-});
