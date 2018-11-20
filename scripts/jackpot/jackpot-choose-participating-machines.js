@@ -14,6 +14,7 @@ const jackpotChooseParticipatingMachines = (function () {
     let chooseMachineJackpotBackButton = $$('#choose-machines-jackpot-buttons').children[0].children[0];
     let chooseMachineJackpotSaveButton = $$('#choose-machines-jackpot-buttons').children[0].children[1];
 
+    // show/hide chose machine form
     let showHideChooseMachine = function () {
         return {
             hide: function () {
@@ -26,11 +27,12 @@ const jackpotChooseParticipatingMachines = (function () {
             }
         };
     }();
-
+    //add options for choosing, like a dropdown
     chooseMachinesVendor.appendChild(createJackpotFilter(machinesVendors));
     chooseMachinesType.appendChild(createJackpotFilter(machinesType));
     chooseMachinesCasinos.appendChild(createJackpotFilterCasinos(casinoData));
 
+    //create jackpot filter (by type and vendor)
     function createJackpotFilter(data) {
         let wrapperOption = document.createElement('div');
         wrapperOption.classList.add('hidden');
@@ -81,6 +83,7 @@ const jackpotChooseParticipatingMachines = (function () {
         filterCount++
         return wrapperOption;
     }
+    //create jackpot filter (by place)
     function createJackpotFilterCasinos(data) {
         let cityArray = [];
         let wrapperOption = document.createElement('div');
@@ -223,11 +226,13 @@ const jackpotChooseParticipatingMachines = (function () {
     }
 
     window.addEventListener('load', function () {
+        // click listener for all filters (by type, vendor, casino)
         for (let element of chooseMachinesFilterWrapper.children) {
             element.children[0].addEventListener('click', function () {
                 activeFilter(element);
             });
         }
+        //click listener for city
         for (let city of $$('.city-option')) {
             city.children[1].addEventListener('click', function () {
                 city.parentNode.children[1].classList.toggle('hidden');

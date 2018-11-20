@@ -144,14 +144,14 @@ let communication = (function () {
     });
 
     //events for home
-    on('communicate/home/data', function(params){
+    on('communicate/home/data', function (params) {
         //FORWARD DATA TO API
         //GET DATA FROM API
         let dataFormAPI = {
             activePage: 2,
             lastPage: 6
         };
-        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: dataFormAPI});
+        trigger(params.callbackEvent, { tableSettings: params.tableSettings, data: dataFormAPI });
     });
 
     //events for casino
@@ -271,7 +271,7 @@ let communication = (function () {
             'PageSize': 10,
             'Date': '2018-09-13T10:07:16'
         };
-        
+
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', { route: route, successEvent: successEvent, data: data, request: request, errorEvent: errorEvent });

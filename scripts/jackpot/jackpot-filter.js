@@ -5,18 +5,19 @@ const jackpotFilter = (function () {
     let addNewJackpot = $$('#add-new-jackpot-wrapper');
     let jackpotTab = $$('#jackpot-tab');
 
+    //number of machines, dropdown
     jackpotMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
 
     advanceTableFilter.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('jackpot-advance-active');
     });
 
+    //close add new jackpot form
     jackpotTab.addEventListener('click', function () {
         addNewJackpot.classList.add('hidden');
     });
+    //show add new jackop form
     addJackpot.addEventListener('click', function () {
         addNewJackpot.classList.remove('hidden');
     });
-
-
 })();

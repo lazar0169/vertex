@@ -358,7 +358,7 @@ const ticketAppearance = (function () {
     function drawPicture() {
         let canvas = $$('#wrapper-canvas').children[0];
         let ctx = canvas.getContext("2d");
-        let img = document.getElementById("barcode");
+        let img = $$('#barcode');
         ctx.globalAlpha = 0.6;
         ctx.drawImage(img, 200, 110, 400, 57);
     }

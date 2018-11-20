@@ -94,14 +94,16 @@ on('cancel-custom-date', function (data) {
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0];
     timeToMinutes.innerHTML = minutes[0];
     timeToMinutes.dataset.value = minutes[0];
-    trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString });
+    trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
     $$(`#ds-${data.selectId}`).children[0].innerHTML = nekiniz[0];
     $$(`#ds-${data.selectId}`).children[0].title = nekiniz[0];
+    delete data.target.dataset.value;
 });
 
 on('set-date-datepicker', function (data) {
+    if (data.isCancel) {
+        console.log('ukloni is-selected na td, i isti postavi na danasnji datum');
+    }
     $$(`#${data.pickerId}`).dataset.value = data.date;
     $$(`#${data.pickerId}`).value = data.date;
-    console.log($$('#' + data.pickerId));
-    console.log($$('#' + data.pickerId).dataset.value);
 });

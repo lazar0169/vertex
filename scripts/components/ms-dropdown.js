@@ -31,7 +31,7 @@ const multiDropdown = (function () {
             option.dataset.value = element.Name;
             option.innerHTML = `<label class="form-checkbox" >
                                                 <input type="checkbox">
-                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
+                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div data-translation-key="${element.Name}">${element.Name}</div>
                                             </label>`;
             optionGroup.appendChild(option);
             optionGroup.classList.add('overflow-y');
