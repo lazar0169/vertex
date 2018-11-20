@@ -297,6 +297,7 @@ let table = (function () {
         on('table/update', function (params) {
 
             let tableSettings = params.tableSettings;
+            console.log('table settings', tableSettings);
 
             // updateTable(params.tableSettings);
             console.log('table/update params.data', params.data);
@@ -304,14 +305,12 @@ let table = (function () {
             let tableData = [];
             let apiItems = params.data.Data.Items;
             console.log('api Items', apiItems);
-            apiItems.forEach(function(item) {
+            apiItems.forEach(function (item) {
                 tableData.push(item.EntryData);
             });
+            console.log('table data', tableData);
 
-            tableSettings.tableData= tableData;
-
-
-            console.log('table/update tableData', tableData);
+            tableSettings.tableData = transformApiData(tableData);
 
             console.log('table settings', tableSettings);
 
@@ -321,7 +320,7 @@ let table = (function () {
         function initUpdateTable(tableSettings) {
 
             //get data from page
-            let data = {EndpointId: 2, tableSettings: tableSettings};
+            let data = {EndpointId: 2};
 
             trigger(tableSettings.dataEvent, {
                 data: data,
@@ -416,7 +415,7 @@ let table = (function () {
             return tableSettings.sort;
         }
 
-        function removeFlagClass(columnElement){
+        function removeFlagClass(columnElement) {
             let flagClassRegExp = /(row-flag-\d+) ?/;
             let columnElementClasses = columnElement.className;
             let flagClass = flagClassRegExp.exec(columnElementClasses)[1];
@@ -591,6 +590,15 @@ let table = (function () {
         /*--------------------------------------------------------------------------------------*/
 
 
+        /*------------------------------- TRANSFORMING DATA FROM API -------------------------------*/
+
+        function transformApiData(data){
+            return data;
+        }
+
+        /*--------------------------------------------------------------------------------------*/
+
+
         /*------------------------------- COMMUNICATION WITH API -------------------------------*/
 
         function getApiResponse(tableSettings) {
@@ -628,23 +636,29 @@ let table = (function () {
             }
 
             let applyButton = tableContainerElement.getElementsByClassName('apply')[0];
-            applyButton.addEventListener('click', function () {
-                getApiResponse(tableSettings);
-                console.log('Table settings after clicking Apply button: ', tableSettings);
-            });
+            if (applyButton !== undefined) {
+                applyButton.addEventListener('click', function () {
+                    getApiResponse(tableSettings);
+                    console.log('Table settings after clicking Apply button: ', tableSettings);
+                });
+            }
 
             let resetButton = tableContainerElement.getElementsByClassName('reset')[0];
-            resetButton.addEventListener('click', function () {
-                setFilters(tableSettings);
-                console.log('Table settings after clicking Reset button: ', tableSettings);
-            });
+            if (resetButton !== undefined) {
+                resetButton.addEventListener('click', function () {
+                    setFilters(tableSettings);
+                    console.log('Table settings after clicking Reset button: ', tableSettings);
+                });
+            }
 
             let hideColumnButton = tableContainerElement.getElementsByClassName('hide-column-button')[0];
-            hideColumnButton.addEventListener('click', function () {
-                let columnInputElement = tableContainerElement.getElementsByClassName('hide-column-input')[0];
-                let columnName = columnInputElement.value;
-                hideColumn(tableSettings, columnName);
-            });
+            if (hideColumnButton !== undefined) {
+                hideColumnButton.addEventListener('click', function () {
+                    let columnInputElement = tableContainerElement.getElementsByClassName('hide-column-input')[0];
+                    let columnName = columnInputElement.value;
+                    hideColumn(tableSettings, columnName);
+                });
+            }
         }
 
         return {

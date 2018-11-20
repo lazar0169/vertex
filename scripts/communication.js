@@ -52,13 +52,13 @@ let communication = (function () {
         return xhr;
     }
 
-    function success(xhr, callbackEvent) {
+    function success(xhr, callbackEvent, tableSettings) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
 
-            trigger(callbackEvent, {data: data});
+            trigger(callbackEvent, {data: data, tableSettings: tableSettings});
         }
     }
 
@@ -69,7 +69,7 @@ let communication = (function () {
         }
     }
 
-    function createRequest(route, requestType, data, successEvent, errorEvent) {
+    function createRequest(route, requestType, data, successEvent, errorEvent, tableSettings) {
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
@@ -83,7 +83,7 @@ let communication = (function () {
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
                 console.log('communication module data', data);
-                success(xhr, successEvent);
+                success(xhr, successEvent, tableSettings);
             }
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
@@ -131,6 +131,250 @@ let communication = (function () {
     function setHeader(xhr, header, value) {
         xhr.setRequestHeader(header, value);
     }
+
+    // create and send xhr
+    on('communicate/createAndSendXhr', function (params) {
+        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.tableSettings);
+        xhr = setDefaultHeaders(xhr);
+        xhr = setAuthHeader(xhr);
+        send(xhr);
+    });
+
+    on('jovana/test', function(params) {
+        // parse parameters for table
+        let tableData = [];
+        params.data.Data.Items.forEach(function(item) {
+            tableData.push(item.EntryData);
+        });
+    });
+
+
+    /*------------------------------------ AFT EVENTS ------------------------------------*/
+
+    on('communicate/aft', function (params) {
+        let route = 'api/transactions/';
+        let request = requestTypes.post;
+        let data = params.data;
+        let successEvent = params.callbackEvent;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+
+        //need to be delete
+        // trigger('communicate/aft/previewTransactions', {});
+        // trigger('communicate/aft/getNotificationSettings', {})
+        // trigger('communicate/aft/getBasicSettings', {})
+        // trigger('communicate/aft/saveBasicSettings', {})
+        // trigger('communicate/aft/saveNotificationSettings', {})
+        //trigger('communicate/aft/getFilters', {})
+        // trigger('communicate/aft/addTransaction', {})
+        // trigger('communicate/aft/cancelTransaction', {}) greska sa serverom 409
+        // trigger('communicate/aft/cancelPendingTransaction', {}) greska sa serverom 409
+    });
+    //data with static values, need to be dynamic
+    //aft preview transactions
+    on('communicate/aft/previewTransactions', function (params) {
+        let route = 'api/transactions/previewtransactions/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'DateFrom': null,
+            'DateTo': null,
+            'MachineList': null,
+            'JackpotList': null,
+            'Status': null,
+            'Type': null,
+            'BasicData': {
+                'Page': 1,
+                'PageSize': 10,
+                'SortOrder': 0,
+                'SortName': 0
+            }
+
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft get notification settings
+    on('communicate/aft/getNotificationSettings', function (params) {
+        let route = 'api/transactions/getnotificationsettings';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft get basic settings
+    on('communicate/aft/getBasicSettings', function (params) {
+        let route = 'api/transactions/getbasicsettings/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft save basic settings
+    on('communicate/aft/saveBasicSettings', function (params) {
+        let route = 'api/transactions/savebasicsettings/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EnableTransactions': true,
+            'CashableTransactionLimit': 123456789,
+            'CashableTransactionHandpayLimit': 987654321,
+            'PromoTransactionLimit': 123,
+            'PromoTransactionHandpayLimit': 321
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft save notification settings
+    on('communicate/aft/saveNotificationSettings', function (params) {
+        let route = 'api/transactions/savenotificationsettings/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EnableNotification': true,
+            'CashableTransactionCreatedLimitForNotification': 123456789,
+            'CashableTransactionPayedLimitForNotification ': 987654321,
+            'PromoTransactionCreatedLimitForNotification ': 123,
+            'PromoTransactionPayedLimitForNotification ': 321,
+            'EmailList': ['mailAddress@gaga.com'],
+            'PhoneNumberList': ['+381111111']
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft get filters
+    on('communicate/aft/getFilters', function (params) {
+        let route = 'api/transactions/getfilters';
+        let successEvent = 'communicate/testFilter';
+        let data = {
+            'EndpointId': 2
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft add transaction
+    on('communicate/aft/addTransaction', function (params) {
+        let route = 'api/transactions/addtransaction/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EndpointName': '',
+            'Gmcid': 1565666846,
+            'MachineName': '',
+            'Type': 0,
+            'CashableAmount': 13800,
+            'PromoAmount': 13800,
+            'ExpirationInDays': 7
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft cancel transaction
+    on('communicate/aft/cancelTransaction', function (params) {
+        let route = 'api/transactions/canceltransaction/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EndpointName': '',
+            'Gmcid': 1565666846,
+            //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
+            'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+    //aft cancel pending transaction
+    on('communicate/aft/cancelPendingTransaction', function (params) {
+        let route = 'api/transactions/cancelpendingtransaction/';
+        let successEvent = 'communicate/test';
+        let data = {
+            'EndpointId': 2,
+            'EndpointName': '',
+            'Gmcid': 1565666846,
+            // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
+            'JidtString': '33,32'
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+
+    /*--------------------------------------------------------------------------------------*/
+
 
     //events for login
     on('communicate/login', function (params) {
@@ -534,239 +778,6 @@ let communication = (function () {
 
     //events for tickets
 
-    on('jovana/test', function(params) {
-        // parse parameters for table
-        let tableData = [];
-        params.data.Data.Items.forEach(function(item) {
-            tableData.push(item.EntryData);
-        });
-    });
-
-    /*------------------------------------ AFT EVENTS ------------------------------------*/
-
-    on('communicate/aft', function (params) {
-        let route = 'api/transactions/';
-        let successEvent = params.callbackEvent;
-        let data = params.data;
-        let tableSettings = params.tableSettings;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            tableSettings: tableSettings,
-            request: request,
-            errorEvent: errorEvent
-        });
-
-        //need to be delete
-        // trigger('communicate/aft/previewTransactions', {});
-        // trigger('communicate/aft/getNotificationSettings', {})
-        // trigger('communicate/aft/getBasicSettings', {})
-        // trigger('communicate/aft/saveBasicSettings', {})
-        // trigger('communicate/aft/saveNotificationSettings', {})
-        //trigger('communicate/aft/getFilters', {})
-        // trigger('communicate/aft/addTransaction', {})
-        // trigger('communicate/aft/cancelTransaction', {}) greska sa serverom 409
-        // trigger('communicate/aft/cancelPendingTransaction', {}) greska sa serverom 409
-    });
-    //data with static values, need to be dynamic
-    //aft preview transactions
-    on('communicate/aft/previewTransactions', function (params) {
-        let route = 'api/transactions/previewtransactions/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'DateFrom': null,
-            'DateTo': null,
-            'MachineList': null,
-            'JackpotList': null,
-            'Status': null,
-            'Type': null,
-            'BasicData': {
-                'Page': 1,
-                'PageSize': 10,
-                'SortOrder': 0,
-                'SortName': 0
-            }
-
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft get notification settings
-    on('communicate/aft/getNotificationSettings', function (params) {
-        let route = 'api/transactions/getnotificationsettings';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft get basic settings
-    on('communicate/aft/getBasicSettings', function (params) {
-        let route = 'api/transactions/getbasicsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft save basic settings
-    on('communicate/aft/saveBasicSettings', function (params) {
-        let route = 'api/transactions/savebasicsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EnableTransactions': true,
-            'CashableTransactionLimit': 123456789,
-            'CashableTransactionHandpayLimit': 987654321,
-            'PromoTransactionLimit': 123,
-            'PromoTransactionHandpayLimit': 321
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft save notification settings
-    on('communicate/aft/saveNotificationSettings', function (params) {
-        let route = 'api/transactions/savenotificationsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EnableNotification': true,
-            'CashableTransactionCreatedLimitForNotification': 123456789,
-            'CashableTransactionPayedLimitForNotification ': 987654321,
-            'PromoTransactionCreatedLimitForNotification ': 123,
-            'PromoTransactionPayedLimitForNotification ': 321,
-            'EmailList': ['mailAddress@gaga.com'],
-            'PhoneNumberList': ['+381111111']
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft get filters
-    on('communicate/aft/getFilters', function (params) {
-        let route = 'api/transactions/getfilters';
-        let successEvent = 'communicate/testFilter';
-        let data = {
-            'EndpointId': 2
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft add transaction
-    on('communicate/aft/addTransaction', function (params) {
-        let route = 'api/transactions/addtransaction/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            'MachineName': '',
-            'Type': 0,
-            'CashableAmount': 13800,
-            'PromoAmount': 13800,
-            'ExpirationInDays': 7
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft cancel transaction
-    on('communicate/aft/cancelTransaction', function (params) {
-        let route = 'api/transactions/canceltransaction/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-    //aft cancel pending transaction
-    on('communicate/aft/cancelPendingTransaction', function (params) {
-        let route = 'api/transactions/cancelpendingtransaction/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': '33,32'
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-
-    /*--------------------------------------------------------------------------------------*/
 
 
     //aft events for machines
@@ -790,13 +801,7 @@ let communication = (function () {
 
     //events for service
 
-    // create and send xhr
-    on('communicate/createAndSendXhr', function (params) {
-        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent);
-        xhr = setDefaultHeaders(xhr);
-        xhr = setAuthHeader(xhr);
-        send(xhr);
-    });
+
 
     //generate events
     on('communicate/category', function (params) {
@@ -809,6 +814,9 @@ let communication = (function () {
         console.log('communicate/test params.data', params.data);
     });
 
+
+    //todo HERE IS THE PART THAT STOPS NORMAL MODULE COMMUNICATION
+/*
     //test, set filters for aft
     window.addEventListener('load', function () {
         trigger('communicate/aft/getFilters', {})
@@ -822,5 +830,6 @@ let communication = (function () {
         params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
         params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
     });
+*/
 
 })();
