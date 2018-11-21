@@ -40,7 +40,6 @@ const aft = (function () {
         */
 
         //todo fix how to send tableSettings object through callbacks
-
         /*TESTING*/
         // table.generateTableContent(tableSettings);
         // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});

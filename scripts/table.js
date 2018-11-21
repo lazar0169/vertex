@@ -50,9 +50,7 @@ let table = (function () {
         }
 
         function getTableBodyElement(tableSettings) {
-            console.log('table container element', tableSettings.tableContainerElement);
-            let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-            return tbody;
+            return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         }
 
         function getColsCount(tableSettings) {
@@ -169,7 +167,6 @@ let table = (function () {
                     } else if (tableSettings.stickyColumn === false && col === 1) {
                         cell.removeAttribute('left');
                         cell.removeAttribute('z-index');
-                        console.log(cell.attributes);
                     }
                     cell.addEventListener('mouseover', function () {
                         hoverRow(`row-${rowId}`, true);
@@ -299,31 +296,19 @@ let table = (function () {
         }
 
         on('table/update', function (params) {
-
-
             let tableSettings = params.tableSettings;
-            console.log('table settings', tableSettings);
-
-            // updateTable(params.tableSettings);
-            console.log('table/update params.data', params.data);
-
             let tableData = [];
             let apiItems = params.data.Data.Items;
-            console.log('api Items', apiItems);
+
             apiItems.forEach(function (item) {
                 tableData.push(item.EntryData);
             });
-            console.log('table data', tableData);
 
             tableSettings.tableData = transformApiData(tableData);
-
-            console.log('table settings', tableSettings);
-
             updateTable(tableSettings);
         });
 
         function initUpdateTable(tableSettings) {
-
             //get data from page
             let data = {EndpointId: 2};
 
@@ -431,7 +416,6 @@ let table = (function () {
         function hideColumn(tableSettings, columnName) {
             let colsCount = getCurrentColsCount(tableSettings);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
-            console.log(columnElements);
             if (columnElements.length !== 0) {
                 for (let i = 0; i < columnElements.length; i++) {
                     if (i !== 0) {

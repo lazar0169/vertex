@@ -167,7 +167,7 @@ let communication = (function () {
             tableSettings: tableSettings
         });
 
-        //needs to be deleted
+        //todo needs to be deleted
         // trigger('communicate/aft/previewTransactions', {});
         // trigger('communicate/aft/getNotificationSettings', {})
         // trigger('communicate/aft/getBasicSettings', {})
@@ -246,6 +246,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft save basic settings
     on('communicate/aft/saveBasicSettings', function (params) {
         let route = 'api/transactions/savebasicsettings/';
@@ -268,6 +269,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
         let route = 'api/transactions/savenotificationsettings/';
@@ -292,6 +294,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
@@ -309,6 +312,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
         let route = 'api/transactions/addtransaction/';
@@ -333,6 +337,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft cancel transaction
     on('communicate/aft/cancelTransaction', function (params) {
         let route = 'api/transactions/canceltransaction/';
@@ -354,6 +359,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //aft cancel pending transaction
     on('communicate/aft/cancelPendingTransaction', function (params) {
         let route = 'api/transactions/cancelpendingtransaction/';
@@ -422,7 +428,8 @@ let communication = (function () {
             request: request,
             errorEvent: errorEvent
         });
-        //need to be delete
+
+        //todo needs to be deleted
         // trigger('communicate/casinos/previewMachines', {})
         // trigger('communicate/casinos/getMachineDetails', {})
         // trigger('communicate/casinos/getMachineServiceData', {})
@@ -440,6 +447,7 @@ let communication = (function () {
         //trigger('communicate/casinos/saveMachine', {}) server error 500
         //trigger('communicate/casinos/removeMachineFromCasino', {}) server errorm 500
     });
+
     //data with static values, need to be dynamic
     //machines preview transactions
     on('communicate/casinos/previewMachines', function (params) {
@@ -471,6 +479,10 @@ let communication = (function () {
         });
 
     });
+
+
+    /*------------------------------------ MACHINES EVENTS ------------------------------------*/
+
     // machines get service data
     on('communicate/casinos/getMachineDetails', function (params) {
         let route = 'api/machines/details/';
@@ -489,6 +501,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines get service data
     on('communicate/casinos/getMachineServiceData', function (params) {
         let route = 'api/machines/servicedata/';
@@ -507,6 +520,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //machines swich service mode
     on('communicate/casinos/swichServiceMode', function (params) {
         let route = 'api/machines/switchservicemode/';
@@ -526,6 +540,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines get history
     on('communicate/casinos/getMachinesHistory', function (params) {
         let route = 'api/machines/history/';
@@ -544,6 +559,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines preview machine history
     on('communicate/casinos/previewMachinesHistory', function (params) {
         let route = 'api/machines/previewhistory/';
@@ -566,6 +582,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines get events
     on('communicate/casinos/getMachinesEvents', function (params) {
         let route = 'api/machines/events/';
@@ -584,6 +601,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
         let route = 'api/machines/previewevents/';
@@ -605,6 +623,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines get all meters
     on('communicate/casinos/getAllMachinesMeters', function (params) {
         let route = 'api/machines/allmeters/';
@@ -623,6 +642,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines get preview meters
     on('communicate/casinos/previewMachinesMeters', function (params) {
         let route = 'api/machines/previewallmeters/';
@@ -644,6 +664,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines remove meter
     on('communicate/casinos/removeMeter', function (params) {
         let route = 'api/machines/removemeter';
@@ -663,6 +684,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     // machines save meter
     on('communicate/casinos/saveMachinesMeters', function (params) {
         let route = 'api/machines/savemeter';
@@ -683,6 +705,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //  machines show meters
     on('communicate/casinos/showMachinesMeters', function (params) {
         let route = 'api/machines/showmeters/';
@@ -702,6 +725,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //  machines edit
     on('communicate/casinos/editMachines', function (params) {
         let route = 'api/machines/edit/';
@@ -720,6 +744,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //machines remove machine from casino
     on('communicate/casinos/removeMachineFromCasino', function (params) {
         let route = 'api/machines/remove/';
@@ -738,6 +763,7 @@ let communication = (function () {
             errorEvent: errorEvent
         });
     });
+
     //machines save machine from casino
     on('communicate/casinos/saveMachine', function (params) {
         let route = 'api/machines/save/';
@@ -776,11 +802,13 @@ let communication = (function () {
 
     // machines get all machines
 
+    /*----------------------------------------------------------------------------------------*/
+
+
     //events for jackpot
 
 
     //events for tickets
-
 
 
     //aft events for machines
@@ -805,7 +833,6 @@ let communication = (function () {
     //events for service
 
 
-
     //generate events
     on('communicate/category', function (params) {
         trigger(`communicate/${params.category.toLowerCase()}`);
@@ -818,7 +845,7 @@ let communication = (function () {
     });
 
 
-    //todo HERE IS THE PART THAT STOPS NORMAL MODULE COMMUNICATION
+    //todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
 /*
     //test, set filters for aft
     window.addEventListener('load', function () {
