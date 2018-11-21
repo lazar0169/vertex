@@ -416,6 +416,7 @@ let table = (function () {
         function hideColumn(tableSettings, columnName) {
             let colsCount = getCurrentColsCount(tableSettings);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
+            console.log(columnElements);
             if (columnElements.length !== 0) {
                 for (let i = 0; i < columnElements.length; i++) {
                     if (i !== 0) {
