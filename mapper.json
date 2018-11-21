@@ -12,7 +12,9 @@
     "styles": [
       "modify-spectre.css",
       "login.css",
-      "notifications.css"
+      "notifications.css",
+      "reset.css",
+      "lang-selector.css"
     ]
   },
   "main": {
@@ -74,7 +76,8 @@
       "table.css",
       "components/datepicker.css",
       "components/timepicker.css",
-      "pagination.css"
+      "pagination.css",
+      "reset.css"
     ]
   }
 }
