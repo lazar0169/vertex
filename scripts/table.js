@@ -50,8 +50,7 @@ let table = (function () {
         }
 
         function getTableBodyElement(tableSettings) {
-            let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-            return tbody;
+            return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         }
 
         function getColsCount(tableSettings) {
@@ -165,6 +164,9 @@ let table = (function () {
                     cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
                     if (tableSettings.stickyColumn === true && col === 1) {
                         cell.classList.add('sticky');
+                    } else if (tableSettings.stickyColumn === false && col === 1) {
+                        cell.removeAttribute('left');
+                        cell.removeAttribute('z-index');
                     }
                     cell.addEventListener('mouseover', function () {
                         hoverRow(`row-${rowId}`, true);
@@ -294,16 +296,21 @@ let table = (function () {
         }
 
         on('table/update', function (params) {
-            updateTable(params.tableSettings);
+            let tableSettings = params.tableSettings;
+            let tableData = [];
+            let apiItems = params.data.Data.Items;
+
+            apiItems.forEach(function (item) {
+                tableData.push(item.EntryData);
+            });
+
+            tableSettings.tableData = transformApiData(tableData);
+            updateTable(tableSettings);
         });
 
         function initUpdateTable(tableSettings) {
-
             //get data from page
-            let data = {
-                activePage: 2,
-                filters: 0
-            };
+            let data = {EndpointId: 2};
 
             trigger(tableSettings.dataEvent, {
                 data: data,
@@ -398,7 +405,7 @@ let table = (function () {
             return tableSettings.sort;
         }
 
-        function removeFlagClass(columnElement){
+        function removeFlagClass(columnElement) {
             let flagClassRegExp = /(row-flag-\d+) ?/;
             let columnElementClasses = columnElement.className;
             let flagClass = flagClassRegExp.exec(columnElementClasses)[1];
@@ -431,7 +438,14 @@ let table = (function () {
         /*------------------------------------ FILTERING ------------------------------------*/
 
         function collectAllFilterElements(tableSettings) {
-            return tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
+            let filterElements;
+            if (tableSettings.filterContainerSelector !== undefined) {
+                filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
+            }
+            else {
+                filterElements = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
+            }
+            return filterElements;
         }
 
         function isSingleCheckbox(element) {
@@ -496,8 +510,9 @@ let table = (function () {
                     tableSettings.filters[filterName] = filterValue;
                 }
             }
-            getPageSize(tableSettings);
-            getQuerySearch(tableSettings);
+            //todo ajust to work with AFT
+/*            getPageSize(tableSettings);
+            getQuerySearch(tableSettings);*/
             return tableSettings.filters;
         }
 
@@ -573,6 +588,15 @@ let table = (function () {
         /*--------------------------------------------------------------------------------------*/
 
 
+        /*------------------------------- TRANSFORMING DATA FROM API -------------------------------*/
+
+        function transformApiData(data) {
+            return data;
+        }
+
+        /*--------------------------------------------------------------------------------------*/
+
+
         /*------------------------------- COMMUNICATION WITH API -------------------------------*/
 
         function getApiResponse(tableSettings) {
@@ -584,6 +608,16 @@ let table = (function () {
                 callbackEvent: callbackEvent
             });
         }
+
+        /*--------------------------------------------------------------------------------------*/
+
+
+        /*--------------------------------- EVENT HANLDERS ---------------------------------*/
+
+        on('table/filters/apply', function(params){
+            alert('APPLY FILTERS');
+            getFilters(params.tableSettings);
+        });
 
         /*--------------------------------------------------------------------------------------*/
 
@@ -601,7 +635,7 @@ let table = (function () {
             generateTablePagination(tableSettings);
 
             if (tableSettings.tableData === undefined) {
-                generateTableHeaders(tableSettings);
+                // generateTableHeaders(tableSettings);
                 initUpdateTable(tableSettings);
             }
 
@@ -610,23 +644,29 @@ let table = (function () {
             }
 
             let applyButton = tableContainerElement.getElementsByClassName('apply')[0];
-            applyButton.addEventListener('click', function () {
-                getApiResponse(tableSettings);
-                console.log('Table settings after clicking Apply button: ', tableSettings);
-            });
+            if (applyButton !== undefined) {
+                applyButton.addEventListener('click', function () {
+                    getApiResponse(tableSettings);
+                    console.log('Table settings after clicking Apply button: ', tableSettings);
+                });
+            }
 
             let resetButton = tableContainerElement.getElementsByClassName('reset')[0];
-            resetButton.addEventListener('click', function () {
-                setFilters(tableSettings);
-                console.log('Table settings after clicking Reset button: ', tableSettings);
-            });
+            if (resetButton !== undefined) {
+                resetButton.addEventListener('click', function () {
+                    setFilters(tableSettings);
+                    console.log('Table settings after clicking Reset button: ', tableSettings);
+                });
+            }
 
             let hideColumnButton = tableContainerElement.getElementsByClassName('hide-column-button')[0];
-            hideColumnButton.addEventListener('click', function () {
-                let columnInputElement = tableContainerElement.getElementsByClassName('hide-column-input')[0];
-                let columnName = columnInputElement.value;
-                hideColumn(tableSettings, columnName);
-            });
+            if (hideColumnButton !== undefined) {
+                hideColumnButton.addEventListener('click', function () {
+                    let columnInputElement = tableContainerElement.getElementsByClassName('hide-column-input')[0];
+                    let columnName = columnInputElement.value;
+                    hideColumn(tableSettings, columnName);
+                });
+            }
         }
 
         return {

@@ -177,7 +177,7 @@ const sidebar = (function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
                         trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
-                        trigger('communicate/category', { category: category });
+                        // trigger('communicate/category', { category: category }); //todo check if needed
                         selectLink(linkSelectedId);
                         navigation.hide();
                         let temp = categoryValue;
