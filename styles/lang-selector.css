@@ -3,6 +3,8 @@
     border-bottom: 0 !important;
 }
 
-.lang-selector option{
+select option:hover {
+}
 
+select:focus > option:checked {
 }

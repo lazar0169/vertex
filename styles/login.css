@@ -42,6 +42,11 @@
     color: rgb(120, 144, 156);
 }
 
+#login section header h1::selection {
+    color: #778F9A;
+    background-color: #3D4A51;
+}
+
 #login section header h1::before {
     margin-bottom: -10px;
     margin-right: 3px;
@@ -60,11 +65,7 @@
     background-color: #3A4950;
     border: 1px solid rgb(120, 144, 156);
     border-radius: 5px;
-    /*box-shadow: 0 0 5px 0 rgba(210, 213, 213, 0.7);*/
 }
-
-input {-webkit-appearance: none; box-shadow: none !important; }
-:-webkit-autofill { color: #fff !important; }
 
 #login section form input {
     -webkit-appearance: none;
@@ -73,35 +74,32 @@ input {-webkit-appearance: none; box-shadow: none !important; }
     height: 45px;
     margin: 0 auto 35px;
     padding: 20px;
-    padding-top: 20px;
-    border: 1px solid lightgray;
+    border: 1px solid #778F9A;
     border-radius: 5px !important;
     font-size: 15px;
     font-family: "OpenSans-Semibold";
     color: white;
-    background-color: #3A4950; !important;
+    background-color: #3A4950;
+!important;
     border-bottom: 1px solid rgb(120, 144, 156);
 }
 
 .username-input:focus, .pass-input:focus {
     padding-top: 7px;
-    /*background: white;*/
-    border: 2px solid #1e9be3;
+    border: 1px solid #778F9A;
     border-radius: 5px;
-    box-shadow: 0 0 20px rgba(30, 155, 227, 0.16), 0 0 20px rgba(30, 155, 227, 0.22) !important;
-
-    background-color: rgb(55, 71, 79); !important;
-    border-bottom: 1px solid rgb(120, 144, 156);
+    box-shadow: 0 0 10px rgba(120, 144, 156, 0.16);
+    background-color: rgb(55, 71, 79);
     outline: 0;
 }
 
 .form-submit {
     align-self: flex-end;
     min-width: 130px;
-    /*max-width: 40%;*/
+    max-width: 40%;
     margin: 0;
     padding: 0;
-    background-color: rgb(30, 155, 227);
+    background-color: #2999E0;
     border-color: #1e9be3;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.22);
     border-radius: 5px !important;
@@ -115,8 +113,9 @@ input {-webkit-appearance: none; box-shadow: none !important; }
 }
 
 .form-submit:focus {
-    border: 1px solid lightgray !important;
-    border-radius: 5px !important;
+    border: 1px solid #768E98;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.22);
+    border-radius: 5px;
     outline: 0;
 }
 
