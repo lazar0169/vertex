@@ -1,6 +1,6 @@
 #login {
     position: relative;
-    background-color: #fbfafc;
+    background-color: #2B353B;
     z-index: 1;
     height: 100%;
 }
@@ -15,9 +15,10 @@
     display: flex;
     flex-direction: column;
     align-self: center;
+    align-items: center;
     justify-content: center;
     margin: auto;
-    width: 360px;
+    width: 400px;
 }
 
 #login section header {
@@ -27,24 +28,29 @@
     justify-content: center;
     width: 100%;
     height: auto;
-    margin: 140px 0 30px 0;
-    background-color: #fbfafc;
+    margin: 140px 0 20px 0;
+    background-color: #2B353B;
 }
 
 #login section header h1 {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    color: black;
     font-family: "KayakSans-Bold";
-    font-size: 60px;
+    font-size: 80px;
     text-align: center;
+    color: rgb(120, 144, 156);
+}
+
+#login section header h1::selection {
+    color: #778F9A;
+    background-color: #3D4A51;
 }
 
 #login section header h1::before {
     margin-bottom: -10px;
     margin-right: 3px;
-    content: url("/assets/images/logo-login#png");
+    content: url("/images/logo-login.png");
 }
 
 #login section form {
@@ -54,36 +60,36 @@
     justify-content: space-around;
     width: 100%;
     height: 280px;
-    margin: auto;
-    margin-bottom: 0;
-    padding: 20px;
-    padding-top: 50px;
-    background-color: white;
-    border: 1px solid #efeff0;
+    margin: auto auto 0 auto;
+    padding: 50px 20px 20px 20px;
+    background-color: #3A4950;
+    border: 1px solid rgb(120, 144, 156);
     border-radius: 5px;
-    box-shadow: 0 0 5px 0 rgba(210, 213, 213, 0 #7);
 }
 
 #login section form input {
+    -webkit-appearance: none;
     align-self: center;
     width: 100%;
     height: 45px;
     margin: 0 auto 35px;
     padding: 20px;
-    padding-top: 20px;
-    border: 1px solid lightgray;
+    border: 1px solid #778F9A;
     border-radius: 5px !important;
     font-size: 15px;
     font-family: "OpenSans-Semibold";
-    color: #847774;
+    color: white;
+    background-color: #3A4950;
+!important;
+    border-bottom: 1px solid rgb(120, 144, 156);
 }
 
 .username-input:focus, .pass-input:focus {
     padding-top: 7px;
-    background: white;
-    border: 2px solid #1e9be3;
+    border: 1px solid #778F9A;
     border-radius: 5px;
-    box-shadow: 0 0 20px rgba(30, 155, 227, 0.16), 0 0 20px rgba(30, 155, 227, 0.22) !important;
+    box-shadow: 0 0 10px rgba(120, 144, 156, 0.16);
+    background-color: rgb(55, 71, 79);
     outline: 0;
 }
 
@@ -93,7 +99,7 @@
     max-width: 40%;
     margin: 0;
     padding: 0;
-    background-color: #1e9be3;
+    background-color: #2999E0;
     border-color: #1e9be3;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.22);
     border-radius: 5px !important;
@@ -107,8 +113,9 @@
 }
 
 .form-submit:focus {
-    border: 1px solid lightgray !important;
-    border-radius: 5px !important;
+    border: 1px solid #768E98;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.22);
+    border-radius: 5px;
     outline: 0;
 }
 

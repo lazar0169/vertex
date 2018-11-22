@@ -12,7 +12,8 @@
     "styles": [
       "modify-spectre.css",
       "login.css",
-      "notifications.css"
+      "notifications.css",
+      "lang-selector.css"
     ]
   },
   "main": {
