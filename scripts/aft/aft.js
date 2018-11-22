@@ -16,18 +16,9 @@ const aft = (function () {
         tableSettings.id = '';
 
 
+        aftFilter.initFilters(tableSettings);
         table.init(tableSettings);
 
-
-        let filtersContainer = $$(tableSettings.filterContainerSelector);
-        let applyButton = filtersContainer.getElementsByClassName('aft-filters-apply')[0];
-
-        if (applyButton !== undefined) {
-            applyButton.addEventListener('click', function () {
-                trigger('table/filters/apply', {tableSettings: tableSettings});
-                console.log('Table settings after clicking Apply button: ', tableSettings);
-            });
-        }
 
         //todo potential structural changes
         /* aft module calls table.init

@@ -298,7 +298,7 @@ let communication = (function () {
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
-        let successEvent = 'aft/displayFilters';
+        let successEvent = 'aft/filters/display';
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
