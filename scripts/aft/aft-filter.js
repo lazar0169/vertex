@@ -5,6 +5,13 @@ const aftFilter = (function () {
     let aftMachinesNumbers = $$('#aft-machines-number');
     let aftAdvenceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
+    let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+    let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
+    let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
+    let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
+    let aftAdvanceTableFilterStatus = $$('#aft-advance-table-filter-status');
+    let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
+
     // let proba3 = $$('#aft-advance-table-filter-jackpot');
     // proba3.appendChild(multiDropdown.generate(machinesVendors));
 
@@ -43,12 +50,17 @@ const aftFilter = (function () {
 
     });
 
-
-
-    let proba = $$('#aft-advance-table-filter-date-range');
+    // let proba = $$('#aft-advance-table-filter-date-range');
 
     aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
-    proba.appendChild(dropdownDate.generate(nekiniz));
+    aftAdvanceTableFilterDateRange.appendChild(dropdownDate.generate(nekiniz));
+    aftAdvanceTableFilterFinished.appendChild(dropdownDate.generate(nekiniz2));
+    aftAdvanceTableFilterJackpot.appendChild(dropdownDate.generate(nekiniz3));
+    aftAdvanceTableFilterType.appendChild(dropdownDate.generate(nekiniz4));
+    aftAdvanceTableFilterStatus.appendChild(dropdownDate.generate(nekiniz5));
+    aftAdvanceTableFilterColumn.appendChild(dropdownDate.generate(nekiniz6));
+
+
     // let proba2 = $$('#aft-advance-table-filter-finished');
     // proba2.appendChild(dropdownDate.generate(nekiniz));
 
