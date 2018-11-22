@@ -20,9 +20,7 @@ const aft = (function () {
 
 
         let filtersContainer = $$(tableSettings.filterContainerSelector);
-        console.log('apply filters button');
         let applyButton = filtersContainer.getElementsByClassName('aft-filters-apply')[0];
-        console.log('apply filters button', applyButton);
 
         if (applyButton !== undefined) {
             applyButton.addEventListener('click', function () {

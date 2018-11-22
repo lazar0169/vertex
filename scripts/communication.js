@@ -298,16 +298,13 @@ let communication = (function () {
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
-        let successEvent = 'communicate/testFilter';
-        let data = {
-            'EndpointId': 2
-        };
+        let successEvent = 'aft/displayFilters';
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
-            data: data,
+            data: params.data,
             request: request,
             errorEvent: errorEvent
         });
