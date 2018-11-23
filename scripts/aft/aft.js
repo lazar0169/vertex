@@ -16,8 +16,9 @@ const aft = (function () {
         tableSettings.id = '';
 
 
-        aftFilter.initFilters(tableSettings);
         table.init(tableSettings);
+        console.log('table settings after table init', tableSettings);
+        aftFilter.initFilters(tableSettings);
 
 
         //todo potential structural changes

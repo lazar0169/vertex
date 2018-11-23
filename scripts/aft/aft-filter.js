@@ -5,19 +5,20 @@ const aftFilter = (function () {
     let aftMachinesNumbers = $$('#aft-machines-number');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
-    //filter elements
-    let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
-    let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
-    let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
-    let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
-    let aftAdvanceTableFilterStatus = $$('#aft-advance-table-filter-status');
-    let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
 
-    function initFilters(tableSettings){
+    function initFilters(tableSettings) {
+        //filter elements
+        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+        let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
+        let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
+        let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
+        let aftAdvanceTableFilterStatus = $$('#aft-advance-table-filter-status');
+        let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
+
 
         //getting filters from API
-        function getFiltersFromAPI(endpointId){
+        function getFiltersFromAPI(endpointId) {
             let data = {
                 'EndpointId': endpointId
             };
@@ -27,24 +28,32 @@ const aftFilter = (function () {
         let endpointId = 2;
         getFiltersFromAPI(endpointId);
 
-        //display initial filters
-        function displayFilters(filters){
-            Object.keys(filters).forEach(function(key) {
-                console.log(key, filters[key]);
 
+        console.log('table settings pre nego da pozovem get cols count', tableSettings);
+        let colsCount = table.getColsCountOfDisplayedTable(tableSettings);
+        console.log('colsCOunt', colsCount);
+        let colsCountArray = [];
+        for (let i = 0; i < colsCount.length; i++) {
+            colsCountArray.push({
+                'Name': i+1
             });
+        }
+        console.log('colsCountArray', colsCountArray);
+
+        //display initial filters
+        function displayFilters(filters) {
 
             //generating dropdown menus
             aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
             aftAdvanceTableFilterDateRange.appendChild(dropdownDate.generate(nekiniz));
-            aftAdvanceTableFilterFinished.appendChild(dropdownDate.generate(nekiniz2));
-            aftAdvanceTableFilterJackpot.appendChild(dropdownDate.generate(nekiniz3));
-            aftAdvanceTableFilterType.appendChild(dropdownDate.generate(nekiniz4));
-            aftAdvanceTableFilterStatus.appendChild(dropdownDate.generate(nekiniz5));
-            aftAdvanceTableFilterColumn.appendChild(dropdownDate.generate(nekiniz6));
+            aftAdvanceTableFilterFinished.appendChild(multiDropdown.generate(nekiniz));
+            aftAdvanceTableFilterJackpot.appendChild(multiDropdown.generate(filters.JackpotNameList));
+            aftAdvanceTableFilterType.appendChild(multiDropdown.generate(filters.TypeList));
+            aftAdvanceTableFilterStatus.appendChild(multiDropdown.generate(filters.StatusList));
+            // aftAdvanceTableFilterColumn.appendChild(multiDropdown.generate(colsCountArray));
         }
 
-        on('aft/filters/display', function(params){
+        on('aft/filters/display', function (params) {
             let apiResponseData = params.data;
             let filters = apiResponseData.Data;
             displayFilters(filters);
@@ -73,7 +82,7 @@ const aftFilter = (function () {
     });
 
     clearAdvanceFilter.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 
     aftAdvanceApplyFilters.addEventListener('click', function () {

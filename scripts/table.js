@@ -53,11 +53,28 @@ let table = (function () {
             return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         }
 
+        function getColsCountOfDisplayedTable (tableSettings) {
+            let colsCount;
+            let tbody = getTableBodyElement(tableSettings);
+            console.log('tobody BRE', tbody);
+            let headElements = tbody.getElementsByClassName('head');
+            console.log('head elements bre', headElements);
+            colsCount = headElements.length;
+            return colsCount;
+        }
+
+
         function getColsCount(tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
+            console.log('tbody', tbody);
+            console.log('table settings', tableSettings);
+            console.log('table settings table data', tableSettings.tableData);
             if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
                 //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
+                console.log('table data od nula ..', tableSettings.tableData[0] );
+                console.log('object keys ..', Object.keys(tableSettings.tableData[0]));
+                console.log('length ..', Object.keys(tableSettings.tableData[0]).length);
                 colsCount = Object.keys(tableSettings.tableData[0]).length;
             }
             else {
@@ -670,7 +687,8 @@ let table = (function () {
         }
 
         return {
-            init: init
+            init: init,
+            getColsCountOfDisplayedTable: getColsCountOfDisplayedTable
         };
 
         /*--------------------------------------------------------------------------------------*/
