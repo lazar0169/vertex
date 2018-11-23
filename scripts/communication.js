@@ -82,7 +82,6 @@ let communication = (function () {
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                console.log('communication module data', data);
                 success(xhr, successEvent, tableSettings);
             }
             else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
@@ -298,15 +297,17 @@ let communication = (function () {
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
-        let successEvent = 'aft/filters/display';
+        let successEvent = params.successEvent;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings = params.tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: params.data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 

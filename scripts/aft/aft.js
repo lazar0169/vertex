@@ -5,7 +5,6 @@ const aft = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-
         let tableSettings = {};
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-aft';
@@ -15,9 +14,7 @@ const aft = (function () {
         tableSettings.dataEvent = 'communicate/aft';
         tableSettings.id = '';
 
-
         table.init(tableSettings);
-        console.log('table settings after table init', tableSettings);
         aftFilter.initFilters(tableSettings);
 
 

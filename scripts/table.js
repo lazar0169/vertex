@@ -53,12 +53,10 @@ let table = (function () {
             return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         }
 
-        function getColsCountOfDisplayedTable (tableSettings) {
+        function getColNamesOfDisplayedTable (tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
-            console.log('tobody BRE', tbody);
             let headElements = tbody.getElementsByClassName('head');
-            console.log('head elements bre', headElements);
             colsCount = headElements.length;
             return colsCount;
         }
@@ -67,14 +65,8 @@ let table = (function () {
         function getColsCount(tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
-            console.log('tbody', tbody);
-            console.log('table settings', tableSettings);
-            console.log('table settings table data', tableSettings.tableData);
             if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
                 //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
-                console.log('table data od nula ..', tableSettings.tableData[0] );
-                console.log('object keys ..', Object.keys(tableSettings.tableData[0]));
-                console.log('length ..', Object.keys(tableSettings.tableData[0]).length);
                 colsCount = Object.keys(tableSettings.tableData[0]).length;
             }
             else {
@@ -487,7 +479,7 @@ let table = (function () {
             return tableSettings.filters.querySearch;
         }
 
-        function getFilters(tableSettings) {
+        function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
             let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
             let filterElements = collectAllFilterElements(tableSettings);
@@ -533,7 +525,7 @@ let table = (function () {
             return tableSettings.filters;
         }
 
-        function setFilters(tableSettings) {
+        function setPageFilters(tableSettings) {
             let filters = tableSettings.filters;
             let filterElements = collectAllFilterElements(tableSettings);
 
@@ -581,7 +573,7 @@ let table = (function () {
         function prepareData(tableSettings) {
             getSorting(tableSettings);
             getActivePage(tableSettings);
-            getFilters(tableSettings);
+            collectFiltersFromPage(tableSettings);
 
             let dataForApi = {};
             let sorting = tableSettings.sort;
@@ -633,7 +625,7 @@ let table = (function () {
 
         on('table/filters/apply', function(params){
             alert('APPLY FILTERS');
-            getFilters(params.tableSettings);
+            collectFiltersFromPage(params.tableSettings);
         });
 
         /*--------------------------------------------------------------------------------------*/
@@ -671,7 +663,7 @@ let table = (function () {
             let resetButton = tableContainerElement.getElementsByClassName('reset')[0];
             if (resetButton !== undefined) {
                 resetButton.addEventListener('click', function () {
-                    setFilters(tableSettings);
+                    setPageFilters(tableSettings);
                     console.log('Table settings after clicking Reset button: ', tableSettings);
                 });
             }
@@ -688,7 +680,9 @@ let table = (function () {
 
         return {
             init: init,
-            getColsCountOfDisplayedTable: getColsCountOfDisplayedTable
+            getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
+            collectFiltersFromPage: collectFiltersFromPage,
+            setPageFilters: setPageFilters
         };
 
         /*--------------------------------------------------------------------------------------*/
