@@ -1,9 +1,14 @@
 const aft = (function () {
-    on('aft/activated', function () {
+    on('aft/activated', function (params) {
 
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
+
+
+        let aftId = params.params[0].value;
+        console.log(aftId);
+
 
         let tableSettings = {};
         tableSettings.forceRemoveHeaders = true;
@@ -11,11 +16,18 @@ const aft = (function () {
         tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
-        tableSettings.dataEvent = 'communicate/aft';
+        tableSettings.dataEvent = 'communicate/aft/getTransactions';
         tableSettings.id = '';
+        tableSettings.endpointId = aftId;
 
         table.init(tableSettings);
         aftFilter.initFilters(tableSettings);
+
+        let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
+
+        addTransactionButton.addEventListener('click', function(){
+           trigger('communicate/aft/addTransaction');
+        });
 
 
         //todo potential structural changes

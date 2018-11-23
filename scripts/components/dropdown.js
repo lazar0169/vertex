@@ -40,6 +40,7 @@ const dropdown = (function () {
                 selected.dataset.value = option.dataset.value;
                 select.classList.remove('active-single-select');
                 optionGroup.classList.add('hidden');
+                selected.classList.add('element-table-filters');
             });
         }
         select.appendChild(selected);

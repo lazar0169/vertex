@@ -19,6 +19,7 @@
   "main": {
     "scripts": [
       "table.js",
+      "aft/aft.js",
       "data.js",
       "top-bar.js",
       "user-profile.js",
@@ -47,8 +48,7 @@
       "localization.js",
       "router.js",
       "components/datepicker.js",
-      "components/timepicker.js",
-      "aft/aft.js"
+      "components/timepicker.js"
     ],
     "styles": [
       "index.css",

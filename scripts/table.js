@@ -27,7 +27,6 @@ let table = (function () {
             multiple: 'multiple'
         };
 
-
         /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
         function insertAfter(referenceNode, newNode) {
@@ -39,11 +38,9 @@ let table = (function () {
 
             if (tableSettings.dataEvent !== undefined) {
                 event = tableSettings.dataEvent;
-            }
-            else if (tableSettings.tableContainerElement.dataset.dataEvent !== undefined) {
+            } else if (tableSettings.tableContainerElement.dataset.dataEvent !== undefined) {
                 event = tableSettings.tableContainerElement.dataset.dataEvent;
-            }
-            else {
+            } else {
                 console.error('Event doesn\'t exist!');
             }
             return event;
@@ -53,7 +50,7 @@ let table = (function () {
             return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         }
 
-        function getColNamesOfDisplayedTable (tableSettings) {
+        function getColNamesOfDisplayedTable(tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
             let headElements = tbody.getElementsByClassName('head');
@@ -61,15 +58,13 @@ let table = (function () {
             return colsCount;
         }
 
-
         function getColsCount(tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
             if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
                 //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
                 colsCount = Object.keys(tableSettings.tableData[0]).length;
-            }
-            else {
+            } else {
                 let headElements = tbody.getElementsByClassName('head');
                 colsCount = headElements.length;
             }
@@ -86,8 +81,7 @@ let table = (function () {
         function hasHeaders(tableSettings) {
             if (tableSettings.tableContainerElement.getElementsByClassName('head').length > 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -117,6 +111,11 @@ let table = (function () {
                     //head.classList.add();
                     if (tableSettings.stickyRow === true) {
                         head.classList.add('sticky');
+                        if (tableSettings.stickyColumn === false) {
+                            head.classList.add('first-cell');
+                        } else{
+                            head.classList.remove('first-cell');
+                        }
                     }
                     tbody.appendChild(head);
                     head.addEventListener('click', function () {
@@ -125,8 +124,7 @@ let table = (function () {
                 }
                 let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
                 insertAfter(filterContainerElement, tbody);
-            }
-            else {
+            } else {
                 //
             }
         }
@@ -173,9 +171,6 @@ let table = (function () {
                     cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
                     if (tableSettings.stickyColumn === true && col === 1) {
                         cell.classList.add('sticky');
-                    } else if (tableSettings.stickyColumn === false && col === 1) {
-                        cell.removeAttribute('left');
-                        cell.removeAttribute('z-index');
                     }
                     cell.addEventListener('mouseover', function () {
                         hoverRow(`row-${rowId}`, true);
@@ -204,8 +199,7 @@ let table = (function () {
                     callbackEvent: callbackEvent,
                     tableSettings: tableSettings
                 });
-            }
-            else return;
+            } else return;
         }
 
         on('table/pagination/display', function (params) {
@@ -243,16 +237,14 @@ let table = (function () {
             if (activePage - 1 > 0) {
                 let previousPage = activePage - 1;
                 paginationPreviousPage.dataset.page = previousPage.toString();
-            }
-            else {
+            } else {
                 paginationPreviousPage.dataset.page = '1';
             }
 
             if (activePage !== lastPage) {
                 let nextPage = activePage + 1;
                 paginationNextPage.dataset.page = nextPage.toString();
-            }
-            else {
+            } else {
                 paginationNextPage.dataset.page = lastPage.toString();
             }
 
@@ -263,18 +255,14 @@ let table = (function () {
             if (lastPage >= 3) {
                 if (activePage === lastPage) {
                     paginationArray = [activePage - 2, activePage - 1, activePage];
-                }
-                else if (activePage === 1) {
+                } else if (activePage === 1) {
                     paginationArray = [activePage, activePage + 1, activePage + 2];
-                }
-                else {
+                } else {
                     paginationArray = [activePage - 1, activePage, activePage + 1];
                 }
-            }
-            else if (lastPage === 2) {
+            } else if (lastPage === 2) {
                 paginationArray = ['1', '2'];
-            }
-            else {
+            } else {
                 paginationArray = ['1'];
             }
 
@@ -285,8 +273,7 @@ let table = (function () {
                 paginationButtons[i].innerHTML = paginationArray[i];
                 if (paginationButtons[i].innerHTML == activePage) {
                     paginationButtons[i].classList.add('active');
-                }
-                else if (paginationArray[i] === undefined) {
+                } else if (paginationArray[i] === undefined) {
                     paginationButtons[i].classList.add('hidden');
                 }
             }
@@ -319,7 +306,7 @@ let table = (function () {
 
         function initUpdateTable(tableSettings) {
             //get data from page
-            let data = {EndpointId: 2};
+            let data = {EndpointId: tableSettings.endpointId};
 
             trigger(tableSettings.dataEvent, {
                 data: data,
@@ -383,13 +370,11 @@ let table = (function () {
             if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
                 header.classList.add(sortingClass.ascending);
                 header.dataset.direction = sortingDataAtt.ascending;
-            }
-            else if (header.classList.contains(sortingClass.descending)) {
+            } else if (header.classList.contains(sortingClass.descending)) {
                 header.classList.remove(sortingClass.descending);
                 header.classList.add(sortingClass.ascending);
                 header.dataset.direction = sortingDataAtt.ascending;
-            }
-            else {
+            } else {
                 header.classList.remove(sortingClass.ascending);
                 header.classList.add(sortingClass.descending);
                 header.dataset.direction = sortingDataAtt.descending;
@@ -406,8 +391,7 @@ let table = (function () {
                 tableSettings.sort.sortName = activeHeader.dataset.sortName;
                 if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
                     tableSettings.sort.direction = sortingType.ascending;
-                }
-                else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
+                } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
                     tableSettings.sort.direction = sortingType.descending;
                 }
             }
@@ -450,8 +434,7 @@ let table = (function () {
             let filterElements;
             if (tableSettings.filterContainerSelector !== undefined) {
                 filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
-            }
-            else {
+            } else {
                 filterElements = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
             }
             return filterElements;
@@ -481,49 +464,65 @@ let table = (function () {
 
         function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
-            let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
             let filterElements = collectAllFilterElements(tableSettings);
-            for (let i = 0; i < filterElements.length; i++) {
-                if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.select) {
-                    filterName = filterElements[i].name;
-                    if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input) {
-                        if (filterElements[i].type === types.radio && filterElements[i].checked === true) { //radio
-                            filterValue = filterElements[i].value;
-                            tableSettings.filters[filterName] = filterValue;
-                        } else if (isSingleCheckbox(filterElements[i]) && filterElements[i].checked === true) {
+            let processedElements = Array.prototype.slice.apply(filterElements).map(function (element) {
+                return element.dataset.value.split(',')
+            });
+            console.log('Processed elements', processedElements);
+            //todo ajust to work with AFT
+            /*            getPageSize(tableSettings);
+                        getQuerySearch(tableSettings);*/
+            return processedElements;
+        }
+
+        /*
+                function collectFiltersFromPage(tableSettings) {
+                    tableSettings.filters = {};
+                    let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
+                    let filterElements = collectAllFilterElements(tableSettings);
+                    console.log('colected filter elements', filterElements);
+                    for (let i = 0; i < filterElements.length; i++) {
+                        if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.select) {
                             filterName = filterElements[i].name;
-                            filterValue = filterElements[i].value;
-                            tableSettings.filters[filterName] = filterValue;
-                        } else if (filterElements[i].type === types.checkbox && filterElements[i].checked === true) { //checkbox
-                            filterValueArrayCheckBox.push(filterElements[i].value);
-                            tableSettings.filters[filterName] = filterValueArrayCheckBox;
-                        } else if (filterElements[i].type !== types.checkbox && filterElements[i].type !== types.radio) { //text area & input
-                            filterValue = filterElements[i].value;
-                            tableSettings.filters[filterName] = filterValue;
-                        }
-                    } else if (filterElements[i].tagName === tagNames.select) { //select
-                        if (filterElements[i].attributes[attributes.multiple]) { //select multiple
-                            let selectedOptions = filterElements[i].selectedOptions;
-                            for (let i = 0; i < selectedOptions.length; i++) {
-                                filterValueArraySelect.push(selectedOptions[i].value);
+                            if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input) {
+                                if (filterElements[i].type === types.radio && filterElements[i].checked === true) { //radio
+                                    filterValue = filterElements[i].value;
+                                    tableSettings.filters[filterName] = filterValue;
+                                } else if (isSingleCheckbox(filterElements[i]) && filterElements[i].checked === true) {
+                                    filterName = filterElements[i].name;
+                                    filterValue = filterElements[i].value;
+                                    tableSettings.filters[filterName] = filterValue;
+                                } else if (filterElements[i].type === types.checkbox && filterElements[i].checked === true) { //checkbox
+                                    filterValueArrayCheckBox.push(filterElements[i].value);
+                                    tableSettings.filters[filterName] = filterValueArrayCheckBox;
+                                } else if (filterElements[i].type !== types.checkbox && filterElements[i].type !== types.radio) { //text area & input
+                                    filterValue = filterElements[i].value;
+                                    tableSettings.filters[filterName] = filterValue;
+                                }
+                            } else if (filterElements[i].tagName === tagNames.select) { //select
+                                if (filterElements[i].attributes[attributes.multiple]) { //select multiple
+                                    let selectedOptions = filterElements[i].selectedOptions;
+                                    for (let i = 0; i < selectedOptions.length; i++) {
+                                        filterValueArraySelect.push(selectedOptions[i].value);
+                                    }
+                                    tableSettings.filters[filterName] = filterValueArraySelect;
+                                } else {
+                                    filterValue = filterElements[i].options[filterElements[i].selectedIndex].value;
+                                    tableSettings.filters[filterName] = filterValue;
+                                }
                             }
-                            tableSettings.filters[filterName] = filterValueArraySelect;
-                        } else {
-                            filterValue = filterElements[i].options[filterElements[i].selectedIndex].value;
+                        } else { //div
+                            filterName = filterElements[i].dataset.name;
+                            filterValue = filterElements[i].dataset.value;
                             tableSettings.filters[filterName] = filterValue;
                         }
                     }
-                } else { //div
-                    filterName = filterElements[i].dataset.name;
-                    filterValue = filterElements[i].dataset.value;
-                    tableSettings.filters[filterName] = filterValue;
+                    //todo ajust to work with AFT
+                    /!*            getPageSize(tableSettings);
+                                getQuerySearch(tableSettings);*!/
+                    return tableSettings.filters;
                 }
-            }
-            //todo ajust to work with AFT
-/*            getPageSize(tableSettings);
-            getQuerySearch(tableSettings);*/
-            return tableSettings.filters;
-        }
+        */
 
         function setPageFilters(tableSettings) {
             let filters = tableSettings.filters;
@@ -570,7 +569,7 @@ let table = (function () {
             return activePageNumber;
         }
 
-        function prepareData(tableSettings) {
+        function prepareDataForApi(tableSettings) {
             getSorting(tableSettings);
             getActivePage(tableSettings);
             collectFiltersFromPage(tableSettings);
@@ -609,7 +608,7 @@ let table = (function () {
         /*------------------------------- COMMUNICATION WITH API -------------------------------*/
 
         function getApiResponse(tableSettings) {
-            let dataForApi = prepareData(tableSettings);
+            let dataForApi = prepareDataForApi(tableSettings);
             let callbackEvent = 'table/update';
             trigger(tableSettings.dataEvent, {
                 tableSettings: tableSettings,
@@ -623,7 +622,7 @@ let table = (function () {
 
         /*--------------------------------- EVENT HANLDERS ---------------------------------*/
 
-        on('table/filters/apply', function(params){
+        on('table/filters/apply', function (params) {
             alert('APPLY FILTERS');
             collectFiltersFromPage(params.tableSettings);
         });
@@ -646,9 +645,7 @@ let table = (function () {
             if (tableSettings.tableData === undefined) {
                 // generateTableHeaders(tableSettings);
                 initUpdateTable(tableSettings);
-            }
-
-            else {
+            } else {
                 updateTable(tableSettings);
             }
 
@@ -682,7 +679,8 @@ let table = (function () {
             init: init,
             getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
             collectFiltersFromPage: collectFiltersFromPage,
-            setPageFilters: setPageFilters
+            setPageFilters: setPageFilters,
+            getPageSize: getPageSize
         };
 
         /*--------------------------------------------------------------------------------------*/

@@ -20,6 +20,7 @@ const multiDropdown = (function () {
         selected.innerHTML = noSelected.Name;
         selected.dataset.value = noSelected.Name;
         selected.title = selected.innerHTML;
+        selected.classList.add('element-table-filters');
         //wrapper options group
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('hidden');

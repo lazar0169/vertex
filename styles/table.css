@@ -1,7 +1,6 @@
 .table {
     position: relative;
-    height: 300px;
-    width: 800px;
+    width: 100%;
     box-sizing: border-box;
     margin: 0.1em 0;
 }
@@ -12,30 +11,27 @@
 }
 
 .cell {
-    background-color: #ffffff;
+    background-color: #2B353B;
     padding: 0.5em;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    border-right: 1px solid rgba(0, 0, 0, 0.12);
-    background-color: #ffffff;
-    color: black;
+    border-bottom: 1px solid #37454C;
+    color: white;
     white-space: nowrap;
     cursor: pointer;
 }
 
 .cell.hover {
-    background-color: #efefef;
+    background-color: #3A4950;
 }
 
 .head.cell {
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    background-color: #53a5dd;
-    color: #ffffff;
+    background-color: #2B353B;
+    color: #728894;
     top: 0;
     transition: 0.2s background-color;
 }
 
 .head.cell:hover {
-    background-color: #6cb7ea;
+    background-color: #3A4950;
 }
 
 .head.cell:nth-child(1) {
@@ -52,8 +48,8 @@
     overflow: auto;
     display: grid;
     position: center;
-    width: 500px;
-    height: 300px;
+    width: 100%;
+    height: 500px;
 }
 
 .head.cell.sort-asc {
@@ -78,6 +74,26 @@
     display: flex;
     flex-direction: column;
     margin-right: 10px;
+}
+
+.tbody::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #3A4950;
+}
+
+.tbody::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #3A4950;
+}
+
+.tbody::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #6F858F;
 }
 
 .select {
@@ -167,4 +183,10 @@ textarea {
 
 .tbody > .row-flag-11 ~ .row-flag-11 {
     border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
+.head.cell.first-cell {
+    left: auto;
+    z-index: 0;
 }

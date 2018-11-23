@@ -5,6 +5,13 @@ const aftFilter = (function () {
     let aftMachinesNumbers = $$('#aft-machines-number');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
+    let currentTableSettingsObject;
+    let endpointId;
+
+    function setTableSettings(tableSettings) {
+        currentTableSettingsObject = tableSettings;
+    }
+
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('aft-advance-active');
         advanceTableFilterActive.classList.toggle('hidden');
@@ -20,7 +27,11 @@ const aftFilter = (function () {
         };
         let tableSettingsObject = tableSettings;
         let successEvent = 'aft/filters/display';
-        trigger('communicate/aft/getFilters', {data: data, successEvent: successEvent, tableSettings: tableSettingsObject});
+        trigger('communicate/aft/getFilters', {
+            data: data,
+            successEvent: successEvent,
+            tableSettings: tableSettingsObject
+        });
     }
 
     function getColNamesOfTable(tableSettings) {
@@ -52,58 +63,68 @@ const aftFilter = (function () {
         aftAdvanceTableFilterJackpot.appendChild(multiDropdown.generate(filters.JackpotNameList));
         aftAdvanceTableFilterType.appendChild(multiDropdown.generate(filters.TypeList));
         aftAdvanceTableFilterStatus.appendChild(multiDropdown.generate(filters.StatusList));
-        aftAdvanceTableFilterColumn.appendChild(multiDropdown.generate(colNames));
-    }
-
-    function initFilters(tableSettings) {
-        let endpointId = 2;
-        getFiltersFromAPI(endpointId, tableSettings);
+        // aftAdvanceTableFilterColumn.appendChild(multiDropdown.generate(colNames));
     }
 
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
         console.log('api response data', apiResponseData);
-        let filters = apiResponseData.Data;
         let tableSettings = params.tableSettings;
+        let filters = apiResponseData.Data;
+        console.log('filters', filters);
+        console.log('table settings filters', tableSettings.filters);
         displayFilters(filters, tableSettings);
     });
+
+    function initFilters(tableSettings) {
+        setTableSettings(tableSettings);
+        endpointId = tableSettings.endpointId;
+        getFiltersFromAPI(endpointId, tableSettings);
+    }
 
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        /*
-                let aftDataRange = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value;
-                let aftFinishedBy = $$('#aft-advance-table-filter-finished').children[1].children[0].dataset.value;
-                let aftJackpot = $$('#aft-advance-table-filter-jackpot').children[1].children[0].dataset.value;
-                let aftType = $$('#aft-advance-table-filter-type').children[1].children[0].dataset.value;
-                let aftStatus = $$('#aft-advance-table-filter-status').children[1].children[0].dataset.value;
-                let aftChooseColumn = $$('#aft-advance-table-filter-column').children[1].children[0].dataset.value;
-                trigger('communicate/aft/previewTransactions', {});
+        console.log('aft table settings', currentTableSettingsObject);
+        let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+        console.log('page filters', pageFilters);
+        // let pageSize = table.getPageSize(currentTableSettingsObject);
+        let filtersForApi = {
+            "EndpointId": endpointId,
+            "DateFrom": pageFilters[0],
+            "DateTo": pageFilters[0],
+            "MachineList": pageFilters[1],
+            "JackpotList": pageFilters[2],
+            "Status": pageFilters[4],
+            "Type": pageFilters[3],
+            "BasicData": {
+                "Page": 1,
+                "PageSize": ''/*pageSize*/,
+                "SortOrder": '',
+                "SortName": ''
+            }
+        };
+        currentTableSettingsObject.filters = filtersForApi;
 
+        console.log(filtersForApi);
 
-                console.log({
-                    'aftDataRange': {
-                        'aftDataRange': aftDataRange
-                    },
-                    'aftFinishedBy': {
-                        'aftFinishedBy': aftFinishedBy
+        let successEvent = 'aft/table/update';
+        trigger('communicate/aft/previewTransactions', {data: filtersForApi, successEvent: successEvent});
 
-                    },
-                    'aftJackpot': {
-                        'aftJackpot': aftJackpot
-                    },
-                    'aftType': {
-                        'aftType': aftType
-                    },
-                    'aftStatus': {
-                        'aftStatus': aftStatus
-                    },
-                    'aftChooseColumn': {
-                        'aftChooseColumn': aftChooseColumn
-                    }
-                })*/
+    });
+
+    on('aft/table/update', function(params){
+        let apiData = params.data;
+        let tableSettings = params.tableSettings;
+        trigger('table/update', {data: apiData, tableSettings: tableSettings});
+
+    });
+
+    on('aft/filters/apply', function(params){
+        console.log('params', params);
+        alert('APPLIED');
     });
 
     return {

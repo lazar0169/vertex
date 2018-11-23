@@ -1,9 +1,4 @@
 let communication = (function () {
-    let proba2 = $$('#aft-advance-table-filter-finished');
-    let proba3 = $$('#aft-advance-table-filter-jackpot');
-    let proba4 = $$('#aft-advance-table-filter-type');
-    let proba5 = $$('#aft-advance-table-filter-status');
-    let proba6 = $$('#aft-advance-table-filter-column');
 
     const apiRoutes = {
         authorization: {
@@ -150,7 +145,8 @@ let communication = (function () {
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
 
-    on('communicate/aft', function (params) {
+    //aft get transactions
+    on('communicate/aft/getTransactions', function (params) {
         let route = 'api/transactions/';
         let request = requestTypes.post;
         let data = params.data;
@@ -165,40 +161,15 @@ let communication = (function () {
             errorEvent: errorEvent,
             tableSettings: tableSettings
         });
-
-        //todo needs to be deleted
-        // trigger('communicate/aft/previewTransactions', {});
-        // trigger('communicate/aft/getNotificationSettings', {})
-        // trigger('communicate/aft/getBasicSettings', {})
-        // trigger('communicate/aft/saveBasicSettings', {})
-        // trigger('communicate/aft/saveNotificationSettings', {})
-        //trigger('communicate/aft/getFilters', {})
-        // trigger('communicate/aft/addTransaction', {})
-        // trigger('communicate/aft/cancelTransaction', {}) greska sa serverom 409
-        // trigger('communicate/aft/cancelPendingTransaction', {}) greska sa serverom 409
     });
 
-    //data with static values, needs to be dynamic
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
+        alert('preview transactions')
         let route = 'api/transactions/previewtransactions/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'DateFrom': null,
-            'DateTo': null,
-            'MachineList': null,
-            'JackpotList': null,
-            'Status': null,
-            'Type': null,
-            'BasicData': {
-                'Page': 1,
-                'PageSize': 10,
-                'SortOrder': 0,
-                'SortName': 0
-            }
-
-        };
+        let successEvent = 'aft/filters/apply';
+        let data = params.data;
+        console.log('data in preview transactions', data);
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -313,6 +284,7 @@ let communication = (function () {
 
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
+        alert('add transaction');
         let route = 'api/transactions/addtransaction/';
         let successEvent = 'communicate/test';
         let data = {

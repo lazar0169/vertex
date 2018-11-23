@@ -19,6 +19,7 @@ const dropdownDate = (function () {
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
         selected.dataset.value = dataSelect[0];
+        selected.classList.add('element-table-filters');
         //wrapper options group
         let optionGroupWrapper = document.createElement('div');
         optionGroupWrapper.classList.add('hidden');
