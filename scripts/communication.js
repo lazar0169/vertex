@@ -355,6 +355,30 @@ let communication = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
+    /*------------------------------------ TICKETS EVENTS ------------------------------------*/
+    //aft get transactions
+    on('communicate/tickets/getTickets', function (params) {
+        alert('communicate tickets');
+        let route = 'api/tickets/';
+        let request = requestTypes.post;
+        let data = params.data;
+        let successEvent = params.callbackEvent;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+
+    /*--------------------------------------------------------------------------------------*/
+
+
     //events for login
     on('communicate/login', function (params) {
         let successEvent = params.successEvent;

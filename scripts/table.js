@@ -113,7 +113,7 @@ let table = (function () {
                         head.classList.add('sticky');
                         if (tableSettings.stickyColumn === false) {
                             head.classList.add('first-cell');
-                        } else{
+                        } else {
                             head.classList.remove('first-cell');
                         }
                     }
@@ -638,7 +638,10 @@ let table = (function () {
             let tableContainerElement = tableSettings.tableContainerElement;
             tableContainerElement.tableSettings = tableSettings;
 
-            tableSettings.dataEvent = getEvent(tableSettings);
+            if (tableSettings.dataEvent !== null) {
+                tableSettings.dataEvent = getEvent(tableSettings);
+            }
+
 
             generateTablePagination(tableSettings);
 
