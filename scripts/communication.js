@@ -858,7 +858,7 @@ let communication = (function () {
         timeout = setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, params.token.expires_in);
+        }, params.token.expires_in * 1000);
     }
 
     on('communication/token/refresh', function (params) {
