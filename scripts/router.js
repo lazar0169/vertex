@@ -100,9 +100,6 @@ let router = (function () {
 
     function changePage(pageName, addStateToHistory, url) {
         application.checkCurrentUser();
-        if(pageName === 'login'){
-            window.location.pathname = '/home';
-        }
         hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
