@@ -49,12 +49,13 @@ let communication = (function () {
 
     function success(xhr, callbackEvent, tableSettings) {
         let data = tryParseJSON(xhr.responseText);
+        console.log('Data from API in success: ', data);
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-
             trigger(callbackEvent, {data: data, tableSettings: tableSettings});
         }
+        trigger('communication/token/refresh', {token: data.TokenInfo});
     }
 
     function error(xhr, errorEventCallback) {
@@ -68,18 +69,15 @@ let communication = (function () {
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
-        }
-        else if (requestType === requestTypes.post) {
+        } else if (requestType === requestTypes.post) {
             xhr = createPostRequest(route, data);
-        }
-        else if (requestType === requestTypes.delete) {
+        } else if (requestType === requestTypes.delete) {
             xhr = createDeleteRequest(route);
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
                 success(xhr, successEvent, tableSettings);
-            }
-            else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
+            } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
         };
@@ -88,7 +86,6 @@ let communication = (function () {
 
     function send(xhr) {
         if (typeof xhr.customData !== typeof undefined) {
-
             return xhr.send(JSON.stringify(xhr.customData));
         }
         return xhr.send();
@@ -101,8 +98,7 @@ let communication = (function () {
             if (o && typeof o === "object") {
                 return o;
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.error('Forwarded variable is not of JSON type!');
         }
         return undefined;
@@ -134,10 +130,10 @@ let communication = (function () {
         send(xhr);
     });
 
-    on('jovana/test', function(params) {
+    on('jovana/test', function (params) {
         // parse parameters for table
         let tableData = [];
-        params.data.Data.Items.forEach(function(item) {
+        params.data.Data.Items.forEach(function (item) {
             tableData.push(item.EntryData);
         });
     });
@@ -165,11 +161,11 @@ let communication = (function () {
 
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
-        alert('preview transactions')
+        alert('preview transactions');
         let route = 'api/transactions/previewtransactions/';
         let successEvent = 'aft/filters/apply';
         let data = params.data;
-        console.log('data in preview transactions', data);
+        console.log('Data that preview transactions received: ', data);
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -840,20 +836,42 @@ let communication = (function () {
 
 
     //todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
-/*
-    //test, set filters for aft
-    window.addEventListener('load', function () {
-        trigger('communicate/aft/getFilters', {})
+    /*
+        //test, set filters for aft
+        window.addEventListener('load', function () {
+            trigger('communicate/aft/getFilters', {})
+        });
+        on('communicate/testFilter', function (params) {
+            //alert('Successful communication');
+            console.log('communicate/testFilter params.data', params.data);
+            params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
+            params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
+            params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
+            params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
+            params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
+        });
+    */
+
+    let timeout = null;
+
+    function timeoutSet(params) {
+        console.log("TRIGGEREED!!!!!!", params);
+        timeout = setTimeout(function () {
+            alert("Your token has expired");
+/*            sessionStorage.clear();
+            window.location.pathname = "/login";*/
+            // trigger('login/logout'); //todo make this trigger work
+            trigger('logout');
+        }, (params.token.expires_in - 890) * 1000);
+    }
+
+    on('communication/token/refresh', function (params) {
+        console.log('timeout', timeout);
+        if (timeout !== null) {
+            clearTimeout(timeout);
+        }
+        timeoutSet(params);
     });
-    on('communicate/testFilter', function (params) {
-        //alert('Successful communication');
-        console.log('communicate/testFilter params.data', params.data);
-        params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
-        params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
-        params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
-        params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
-        params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
-    });
-*/
+
 
 })();

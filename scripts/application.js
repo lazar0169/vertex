@@ -14,10 +14,12 @@ let application = (function  () {
 
     function checkCurrentUser() {
         if (window.location.pathname.indexOf("login") < 0) {
+            console.log(sessionStorage);
             if (typeof sessionStorage.token !== typeof undefined && sessionStorage.token != null) {
                 generateMenu();
             }
             else {
+                sessionStorage.clear();
                 window.location.pathname = "/login";
             }
         }
@@ -25,8 +27,13 @@ let application = (function  () {
 
     window.addEventListener('load', function () {
         //ToDo: Fix timeout hotfix
-        setTimeout(checkCurrentUser, 500);
+        checkCurrentUser();
+/*        setTimeout(checkCurrentUser, 500);*/
     });
+
+    return {
+        checkCurrentUser: checkCurrentUser
+    }
     
 
 })();

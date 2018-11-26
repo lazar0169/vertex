@@ -296,6 +296,8 @@ let table = (function () {
             let tableData = [];
             let apiItems = params.data.Data.Items;
 
+            console.log('Api items for table update: ', apiItems);
+
             apiItems.forEach(function (item) {
                 tableData.push(item.EntryData);
             });
@@ -306,6 +308,7 @@ let table = (function () {
 
         function initUpdateTable(tableSettings) {
             //get data from page
+
             let data = {EndpointId: tableSettings.endpointId};
 
             trigger(tableSettings.dataEvent, {
@@ -641,7 +644,6 @@ let table = (function () {
             if (tableSettings.dataEvent !== null) {
                 tableSettings.dataEvent = getEvent(tableSettings);
             }
-
 
             generateTablePagination(tableSettings);
 

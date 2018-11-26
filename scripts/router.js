@@ -99,6 +99,7 @@ let router = (function () {
     }
 
     function changePage(pageName, addStateToHistory, url) {
+        application.checkCurrentUser();
         hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
@@ -120,7 +121,7 @@ let router = (function () {
         hideActivePage();
         showPage(pageName);
         let eventName = pageName + "/activated";
-        console.log('change page event name', eventName);
+        console.log('Change page - name of the event to be triggered: ', eventName);
         //Trigger load event of selected page
         trigger(eventName, {'params': params});
         //Event name convention: page-PAGENAME-activated
@@ -250,7 +251,6 @@ let router = (function () {
         }
         return [];
     }
-
 
     //Function for manipulating history stack
     function pushToHistoryStack(route, params) {

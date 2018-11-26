@@ -15,21 +15,28 @@ function validateEncodedToken(accessToken) {
         let accessTokenSplit = accessToken.split('.')[1];
         if (atob(accessTokenSplit)) {
             return true;
-        }
-        else return false;
+        } else return false;
     }
     console.error('Encoded token is not valid!');
     return false;
 }
 
 function decodeToken(encodedToken) {
-    let encodedTokenJSON = JSON.parse(encodedToken);
-    let accessToken = encodedTokenJSON.access_token;
-    if (validateEncodedToken(accessToken)){
-        let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
-        return decodedToken;
+    console.log('encoded token', encodedToken);
+    if(encodedToken === undefined) {
+        console.error('Token does not exist!');
     }
-    console.error('Could not decode token!');
+    else if (encodedToken !== null || encodedToken !== undefined) {
+        let encodedTokenJSON = JSON.parse(encodedToken);
+        let accessToken = encodedTokenJSON.access_token;
+        if (validateEncodedToken(accessToken)) {
+            let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+            return decodedToken;
+        }
+        console.error('Could not decode token!');
+    } else {
+        console.error('Token does not exist!');
+    }
 }
 
 //ToDo:Lazar - Da li je ok da ovo bude ovde - koristim je vec u 2 modula za sad
@@ -43,7 +50,6 @@ function getProperty(path, object) {
 
 
 //add and remove class
-
 
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;

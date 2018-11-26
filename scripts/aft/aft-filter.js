@@ -45,8 +45,15 @@ const aftFilter = (function () {
         return colsCountArray;
     }
 
+    function removeChildren(element) {
+        while (element.childElementCount > 1) {
+            element.removeChild(element.lastChild);
+        }
+    }
+
     //display initial filters
     function displayFilters(filters, tableSettings) {
+
         //filter elements
         let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
@@ -56,6 +63,13 @@ const aftFilter = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
+
+        removeChildren(aftAdvanceTableFilterDateRange);
+        removeChildren(aftAdvanceTableFilterFinished);
+        removeChildren(aftAdvanceTableFilterJackpot);
+        removeChildren(aftAdvanceTableFilterType);
+        removeChildren(aftAdvanceTableFilterStatus);
+        removeChildren(aftAdvanceTableFilterColumn);
 
         aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
         aftAdvanceTableFilterDateRange.appendChild(dropdownDate.generate(nekiniz));
@@ -68,11 +82,11 @@ const aftFilter = (function () {
 
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
-        console.log('api response data', apiResponseData);
+        console.log('Api response data in aft/filters/display: ', apiResponseData);
         let tableSettings = params.tableSettings;
         let filters = apiResponseData.Data;
-        console.log('filters', filters);
-        console.log('table settings filters', tableSettings.filters);
+        console.log('Filters from API: ', filters);
+        console.log('Table settings filters in aft/filters/display: ', tableSettings.filters);
         displayFilters(filters, tableSettings);
     });
 
@@ -87,9 +101,9 @@ const aftFilter = (function () {
     });
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        console.log('aft table settings', currentTableSettingsObject);
+        console.log('Table settings object when clicking apply filters: ', currentTableSettingsObject);
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        console.log('page filters', pageFilters);
+        console.log('Collected filters from page when clicking apply: ', pageFilters);
         // let pageSize = table.getPageSize(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": endpointId,
@@ -108,21 +122,21 @@ const aftFilter = (function () {
         };
         currentTableSettingsObject.filters = filtersForApi;
 
-        console.log(filtersForApi);
+        console.log('Preapred filters for API: ', filtersForApi);
 
         let successEvent = 'aft/table/update';
         trigger('communicate/aft/previewTransactions', {data: filtersForApi, successEvent: successEvent});
 
     });
 
-    on('aft/table/update', function(params){
+    on('aft/table/update', function (params) {
         let apiData = params.data;
         let tableSettings = params.tableSettings;
         trigger('table/update', {data: apiData, tableSettings: tableSettings});
 
     });
 
-    on('aft/filters/apply', function(params){
+    on('aft/filters/apply', function (params) {
         console.log('params', params);
         alert('APPLIED');
     });

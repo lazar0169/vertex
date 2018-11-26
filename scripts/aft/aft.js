@@ -7,7 +7,7 @@ const aft = (function () {
 
 
         let aftId = params.params[0].value;
-        console.log(aftId);
+        console.log('Aft page ID (from params): ', aftId);
 
 
         let tableSettings = {};
