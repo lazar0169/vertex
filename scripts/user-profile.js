@@ -17,9 +17,6 @@ const userEditProfileModule = (function () {
     logout.addEventListener('click', function () {
         alert('Log out');
         application.checkCurrentUser();
-/*        sessionStorage.clear();
-        window.location.pathname = "/login";*/
-        // trigger('login/logout'); //todo make this trigger work
         trigger('logout');//todo make this trigger work
     });
     backUserEditProfile.addEventListener('click', function () {

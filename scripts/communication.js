@@ -855,12 +855,8 @@ let communication = (function () {
     let timeout = null;
 
     function timeoutSet(params) {
-        console.log("TRIGGEREED!!!!!!", params);
         timeout = setTimeout(function () {
-            alert("Your token has expired");
-/*            sessionStorage.clear();
-            window.location.pathname = "/login";*/
-            // trigger('login/logout'); //todo make this trigger work
+            alert("Your token has expired. Please Login to continue!");
             trigger('logout');
         }, (params.token.expires_in - 890) * 1000);
     }

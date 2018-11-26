@@ -100,6 +100,9 @@ let router = (function () {
 
     function changePage(pageName, addStateToHistory, url) {
         application.checkCurrentUser();
+        if(pageName === 'login'){
+            window.location.pathname = '/home';
+        }
         hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
@@ -297,6 +300,7 @@ let router = (function () {
         addRegExpToPages();
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
+        console.log('page name', pageName);
         if (pageName != null) {
             changePage(pageName);
         }
