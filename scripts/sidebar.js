@@ -105,6 +105,10 @@ const sidebar = (function () {
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
+            let sidebarList = document.getElementById("sidebar-list");
+            while (sidebarList.firstChild) {
+                sidebarList.firstChild.remove();
+            }
             let tempFragment = document.createElement('div');
 
             let center = document.createElement('div');

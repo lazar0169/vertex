@@ -51,11 +51,16 @@ let table = (function () {
         }
 
         function getColNamesOfDisplayedTable(tableSettings) {
-            let colNames;
+            let colNames = [];
             let tbody = getTableBodyElement(tableSettings);
-            let headElements = tbody.getElementsByClassName('head');
-            colsCount = headElements.length;
-            return colsCount;
+            // let headElements = tbody.getElementsByClassName('head');
+            let headElements = Array.from(tbody.getElementsByClassName('head'));
+            console.log('head elements', headElements);
+            headElements.forEach(function (element) {
+                colNames.push({Name: element.innerText})
+            });
+            colNames.unshift({Name: "-"});
+            return colNames;
         }
 
         function getColsCount(tableSettings) {
@@ -469,9 +474,10 @@ let table = (function () {
             tableSettings.filters = {};
             let filterElements = collectAllFilterElements(tableSettings);
             let processedElements = Array.prototype.slice.apply(filterElements).map(function (element) {
-                return element.dataset.value.split(',')
+                return element.dataset.value !== '-' ? element.dataset.value.split(',') : null
             });
             console.log('Processed elements', processedElements);
+            tableSettings.sort = {};
             //todo ajust to work with AFT
             /*            getPageSize(tableSettings);
                         getQuerySearch(tableSettings);*/

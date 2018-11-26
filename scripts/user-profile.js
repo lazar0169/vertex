@@ -15,7 +15,6 @@ const userEditProfileModule = (function () {
     });
 
     logout.addEventListener('click', function () {
-        alert('Log out');
         application.checkCurrentUser();
         trigger('logout');//todo make this trigger work
     });

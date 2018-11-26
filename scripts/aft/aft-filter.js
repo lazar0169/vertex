@@ -35,14 +35,9 @@ const aftFilter = (function () {
     }
 
     function getColNamesOfTable(tableSettings) {
-        let colsCount = table.getColNamesOfDisplayedTable(tableSettings);
-        let colsCountArray = [];
-        for (let i = 0; i < colsCount.length; i++) {
-            colsCountArray.push({
-                'Name': i + 1
-            });
-        }
-        return colsCountArray;
+        let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
+        console.log('colnames', colNamesArray);
+        return colNamesArray;
     }
 
     function removeChildren(element) {
@@ -63,7 +58,6 @@ const aftFilter = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
-        console.log(colNames);
 
         removeChildren(aftAdvanceTableFilterDateRange);
         removeChildren(aftAdvanceTableFilterFinished);
@@ -78,7 +72,7 @@ const aftFilter = (function () {
         aftAdvanceTableFilterJackpot.appendChild(multiDropdown.generate(filters.JackpotNameList));
         aftAdvanceTableFilterType.appendChild(multiDropdown.generate(filters.TypeList));
         aftAdvanceTableFilterStatus.appendChild(multiDropdown.generate(filters.StatusList));
-        // aftAdvanceTableFilterColumn.appendChild(multiDropdown.generate(colNames));
+        aftAdvanceTableFilterColumn.appendChild(multiDropdown.generate(colNames));
     }
 
     on('aft/filters/display', function (params) {

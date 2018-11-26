@@ -22,7 +22,6 @@ function validateEncodedToken(accessToken) {
 }
 
 function decodeToken(encodedToken) {
-    console.log('encoded token', encodedToken);
     if(encodedToken === undefined) {
         console.error('Token does not exist!');
     }
