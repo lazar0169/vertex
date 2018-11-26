@@ -161,10 +161,11 @@ let communication = (function () {
 
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
-        alert('preview transactions');
+        alert('Preview transactions / Apply filters');
         let route = 'api/transactions/previewtransactions/';
-        let successEvent = 'aft/filters/apply';
+        let successEvent = 'aft/table/update';
         let data = params.data;
+        let tableSettings = params.tableSettings;
         console.log('Data that preview transactions received: ', data);
         let request = requestTypes.post;
         let errorEvent = '';
@@ -173,7 +174,8 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 

@@ -391,17 +391,20 @@ let table = (function () {
 
         function getSorting(tableSettings) {
             tableSettings.sort = {
-                direction: '',
-                sortName: ''
+                SortOrder: '',
+                SortName: ''
             };
             let activeHeader = getActiveColumn(tableSettings);
             if (activeHeader !== undefined) {
-                tableSettings.sort.sortName = activeHeader.dataset.sortName;
+                tableSettings.sort.SortName = activeHeader.dataset.sortName;
                 if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
-                    tableSettings.sort.direction = sortingType.ascending;
+                    tableSettings.sort.SortOrder = sortingType.ascending;
                 } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
-                    tableSettings.sort.direction = sortingType.descending;
+                    tableSettings.sort.SortOrder = sortingType.descending;
                 }
+            } else {
+                tableSettings.sort.SortName = null;
+                tableSettings.sort.SortOrder = null;
             }
             return tableSettings.sort;
         }
@@ -440,11 +443,18 @@ let table = (function () {
 
         function collectAllFilterElements(tableSettings) {
             let filterElements;
-            if (tableSettings.filterContainerSelector !== undefined) {
+            if(tableSettings.pageSelectorId !== undefined) {
+                filterElements = $$(tableSettings.pageSelectorId).getElementsByClassName('element-table-filters');
+            } else if(tableSettings.filterContainerSelector !== undefined) {
                 filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
             } else {
-                filterElements = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters');
+                filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('element-table-filters'));
             }
+/*            if (tableSettings.filterContainerSelector !== undefined) {
+                filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
+            } else {
+                filterElements = tableSettings.pageSelectorId.getElementsByClassName('element-table-filters');
+            }*/
             return filterElements;
         }
 
@@ -473,11 +483,11 @@ let table = (function () {
         function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
             let filterElements = collectAllFilterElements(tableSettings);
+            console.log('all filter elements', filterElements);
             let processedElements = Array.prototype.slice.apply(filterElements).map(function (element) {
                 return element.dataset.value !== '-' ? element.dataset.value.split(',') : null
             });
             console.log('Processed elements', processedElements);
-            tableSettings.sort = {};
             //todo ajust to work with AFT
             /*            getPageSize(tableSettings);
                         getQuerySearch(tableSettings);*/
@@ -691,7 +701,8 @@ let table = (function () {
             getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
             collectFiltersFromPage: collectFiltersFromPage,
             setPageFilters: setPageFilters,
-            getPageSize: getPageSize
+            getPageSize: getPageSize,
+            getSorting: getSorting
         };
 
         /*--------------------------------------------------------------------------------------*/

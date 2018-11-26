@@ -13,6 +13,7 @@ const aft = (function () {
         selectInfoContent('aft-tabs-transaction');
 
         let tableSettings = {};
+        tableSettings.pageSelectorId = '#page-aft';
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-aft';
         tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';

@@ -58,6 +58,7 @@ const aftFilter = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
+        console.log('column names to generate', colNames);
 
         removeChildren(aftAdvanceTableFilterDateRange);
         removeChildren(aftAdvanceTableFilterFinished);
@@ -99,42 +100,46 @@ const aftFilter = (function () {
         console.log('Table settings object when clicking apply filters: ', currentTableSettingsObject);
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         console.log('Collected filters from page when clicking apply: ', pageFilters);
+        let sorting = table.getSorting(currentTableSettingsObject);
+        console.log('Sorting values: ', sorting);
         // let pageSize = table.getPageSize(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": endpointId,
-            "DateFrom": pageFilters[0],
-            "DateTo": pageFilters[0],
-            "MachineList": pageFilters[1],
-            "JackpotList": pageFilters[2],
-            "Status": pageFilters[4],
-            "Type": pageFilters[3],
+            "DateFrom": pageFilters[1],
+            "DateTo": pageFilters[1],
+            "MachineList": pageFilters[2],
+            "JackpotList": pageFilters[3],
+            "Status": pageFilters[5],
+            "Type": pageFilters[4],
             "BasicData": {
                 "Page": 1,
-                "PageSize": ''/*pageSize*/,
-                "SortOrder": '',
-                "SortName": ''
+                "PageSize": pageFilters[0],
+                "SortOrder": sorting.SortOrder,
+                "SortName": sorting.SortName
             }
         };
         currentTableSettingsObject.filters = filtersForApi;
 
-        console.log('Preapred filters for API: ', filtersForApi);
+        console.log('Prepared filters for API: ', filtersForApi);
 
         let successEvent = 'aft/table/update';
-        trigger('communicate/aft/previewTransactions', {data: filtersForApi, successEvent: successEvent});
+        trigger('communicate/aft/previewTransactions', {data: filtersForApi, successEvent: successEvent, tableSettings: currentTableSettingsObject});
 
     });
 
     on('aft/table/update', function (params) {
         let apiData = params.data;
         let tableSettings = params.tableSettings;
+        console.log('table settings object in aft/table/update', tableSettings);
         trigger('table/update', {data: apiData, tableSettings: tableSettings});
 
     });
 
-    on('aft/filters/apply', function (params) {
-        console.log('params', params);
-        alert('APPLIED');
-    });
+/*    on('aft/filters/apply', function (params) {
+        console.log('API response from Apply filters: ', params);
+        alert('Filters aplied!');
+        trigger('table/update', {data: params.data});
+    });*/
 
     return {
         initFilters: initFilters
