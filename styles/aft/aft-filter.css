@@ -8,6 +8,8 @@
     background: rgb(55, 71, 79);
     color: rgb(120, 144, 156);
     min-width: 100%;
+    height: 80px;
+    justify-content: space-evenly;
     position: relative;
 }
 
@@ -15,11 +17,12 @@
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    padding: 0.5rem 0 0.5rem 0.1rem;
+    padding: 0.3rem 0 0.3rem 0.3rem;
 }
 
 #aft-advance-table-filter-active>div:last-child {
     margin: auto;
+    padding: 0px;
 }
 
 .aft-advance-active {

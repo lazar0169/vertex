@@ -28,8 +28,8 @@ const aft = (function () {
 
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
-        addTransactionButton.addEventListener('click', function(){
-           trigger('communicate/aft/addTransaction');
+        addTransactionButton.addEventListener('click', function () {
+            trigger('communicate/aft/addTransaction');
         });
 
 

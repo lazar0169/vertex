@@ -670,7 +670,7 @@ let table = (function () {
                 updateTable(tableSettings);
             }
 
-            let applyButton = tableContainerElement.getElementsByClassName('apply')[0];
+/*            let applyButton = tableContainerElement.getElementsByClassName('apply')[0];
             if (applyButton !== undefined) {
                 applyButton.addEventListener('click', function () {
                     getApiResponse(tableSettings);
@@ -693,7 +693,7 @@ let table = (function () {
                     let columnName = columnInputElement.value;
                     hideColumn(tableSettings, columnName);
                 });
-            }
+            }*/
         }
 
         return {
