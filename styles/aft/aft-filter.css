@@ -8,8 +8,8 @@
     background: rgb(55, 71, 79);
     color: rgb(120, 144, 156);
     min-width: 100%;
-    height: 80px;
     justify-content: space-evenly;
+    align-items: center;
     position: relative;
 }
 
