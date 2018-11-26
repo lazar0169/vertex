@@ -63,6 +63,7 @@ const aftFilter = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
+        console.log(colNames);
 
         removeChildren(aftAdvanceTableFilterDateRange);
         removeChildren(aftAdvanceTableFilterFinished);

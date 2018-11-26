@@ -9,6 +9,8 @@ const aft = (function () {
         let aftId = params.params[0].value;
         console.log('Aft page ID (from params): ', aftId);
 
+        selectTab('aft-tabs-transaction');
+        selectInfoContent('aft-tabs-transaction');
 
         let tableSettings = {};
         tableSettings.forceRemoveHeaders = true;

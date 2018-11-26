@@ -20,7 +20,6 @@ function setTabListener() {
     }
 }
 
-
 // highlight chosen tab
 let previousTabSelected;
 

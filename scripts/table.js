@@ -51,7 +51,7 @@ let table = (function () {
         }
 
         function getColNamesOfDisplayedTable(tableSettings) {
-            let colsCount;
+            let colNames;
             let tbody = getTableBodyElement(tableSettings);
             let headElements = tbody.getElementsByClassName('head');
             colsCount = headElements.length;
