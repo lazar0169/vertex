@@ -179,13 +179,14 @@ let communication = (function () {
         });
     });
 
+    //TODO PREPAKUJ SVE OVO U JEDAN JEDINI HENDLER !!!
+
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
         let route = 'api/transactions/getnotificationsettings';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
+        let successEvent = 'aft/tab/transactions/init';
+        let tableSettings = params.tableSettings;
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -193,7 +194,8 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
@@ -242,16 +244,8 @@ let communication = (function () {
     on('communicate/aft/saveNotificationSettings', function (params) {
         let route = 'api/transactions/savenotificationsettings/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EnableNotification': true,
-            'CashableTransactionCreatedLimitForNotification': 123456789,
-            'CashableTransactionPayedLimitForNotification ': 987654321,
-            'PromoTransactionCreatedLimitForNotification ': 123,
-            'PromoTransactionPayedLimitForNotification ': 321,
-            'EmailList': ['mailAddress@gaga.com'],
-            'PhoneNumberList': ['+381111111']
-        };
+        let tableSettings = params.tableSettings;
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -259,7 +253,8 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 

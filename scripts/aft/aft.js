@@ -32,7 +32,6 @@ const aft = (function () {
             trigger('communicate/aft/addTransaction');
         });
 
-
         //todo potential structural changes
         /* aft module calls table.init
         table.init triggers communicate/aft
