@@ -167,6 +167,7 @@ let communication = (function () {
         let tableSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
+
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,

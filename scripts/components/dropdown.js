@@ -16,6 +16,7 @@ const dropdown = (function () {
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
         selected.dataset.value = dataSelect[0];
+        selected.classList.add('element-table-filters');
         selected.addEventListener('click', function () {
             optionGroup.classList.toggle('hidden');
             select.classList.toggle('active-single-select');
@@ -40,7 +41,6 @@ const dropdown = (function () {
                 selected.dataset.value = option.dataset.value;
                 select.classList.remove('active-single-select');
                 optionGroup.classList.add('hidden');
-                selected.classList.add('element-table-filters');
             });
         }
         select.appendChild(selected);

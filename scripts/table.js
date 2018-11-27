@@ -295,9 +295,9 @@ let table = (function () {
             updateTablePagination(tableSettings);
         }
 
-        function initFilters(tableSettings){
+        function initFilters(tableSettings) {
             let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-            trigger(moduleName+'/filters/init', {tableSettings: tableSettings});
+            trigger(moduleName + '/filters/init', {tableSettings: tableSettings});
         }
 
         on('table/update', function (params) {
@@ -442,56 +442,61 @@ let table = (function () {
         /*------------------------------------ FILTERING ------------------------------------*/
 
 
-        function collectAllFilterElements(tableSettings) {
+        function collectAllFilterContainers(tableSettings) {
             let filterElements;
-            if(tableSettings.pageSelectorId !== undefined) {
-                filterElements = $$(tableSettings.pageSelectorId).getElementsByClassName('element-table-filters');
-            } else if(tableSettings.filterContainerSelector !== undefined) {
-                filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
+            if (tableSettings.pageSelectorId !== undefined) {
+                filterElements = $$(tableSettings.pageSelectorId).getElementsByClassName('select-container');
+            } else if (tableSettings.filterContainerSelector !== undefined) {
+                filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('select-container');
             } else {
-                filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('element-table-filters'));
+                filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('select-container'));
             }
-/*           if (tableSettings.filterContainerSelector !== undefined) {
-                filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
-            } else {
-                filterElements = tableSettings.pageSelectorId.getElementsByClassName('element-table-filters');
-            }*/
+            /*           if (tableSettings.filterContainerSelector !== undefined) {
+                            filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
+                        } else {
+                            filterElements = tableSettings.pageSelectorId.getElementsByClassName('element-table-filters');
+                        }*/
             return filterElements;
         }
-/*
-        function isSingleCheckbox(element) {
-            return element.type === types.checkbox && document.getElementsByName(element.name).length === 1;
-        }
 
-        function getPageSize(tableSettings) {
-            if (tableSettings.filters.numberOfPages === undefined) {
-                let pagesNumberElement = tableSettings.tableContainerElement.getElementsByClassName('pages-number')[0];
-                let pagesNumberValue = pagesNumberElement.options[pagesNumberElement.selectedIndex].value;
-                tableSettings.filters.numberOfPages = pagesNumberValue;
-            }
-            return tableSettings.filters.numberOfPages;
-        }
+        /*
+                function isSingleCheckbox(element) {
+                    return element.type === types.checkbox && document.getElementsByName(element.name).length === 1;
+                }
 
-        function getQuerySearch(tableSettings) {
-            if (tableSettings.filters.querySearch === undefined) {
-                let querySearchElement = tableSettings.tableContainerElement.getElementsByClassName('query-search')[0];
-                let querySearchValue = querySearchElement.value;
-                tableSettings.filters.querySearch = querySearchValue;
-            }
-            return tableSettings.filters.querySearch;
-        }
-*/
+                function getPageSize(tableSettings) {
+                    if (tableSettings.filters.numberOfPages === undefined) {
+                        let pagesNumberElement = tableSettings.tableContainerElement.getElementsByClassName('pages-number')[0];
+                        let pagesNumberValue = pagesNumberElement.options[pagesNumberElement.selectedIndex].value;
+                        tableSettings.filters.numberOfPages = pagesNumberValue;
+                    }
+                    return tableSettings.filters.numberOfPages;
+                }
+
+                function getQuerySearch(tableSettings) {
+                    if (tableSettings.filters.querySearch === undefined) {
+                        let querySearchElement = tableSettings.tableContainerElement.getElementsByClassName('query-search')[0];
+                        let querySearchValue = querySearchElement.value;
+                        tableSettings.filters.querySearch = querySearchValue;
+                    }
+                    return tableSettings.filters.querySearch;
+                }
+        */
 
         function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
-            let filterElements = collectAllFilterElements(tableSettings);
-            let processedElements = Array.prototype.slice.apply(filterElements).map(function (element) {
-                return element.dataset.value !== '-' ? element.dataset.value.split(',') : null
-            });
-            //todo ajust to work with AFT
-            /*            getPageSize(tableSettings);
-                        getQuerySearch(tableSettings);*/
-            return processedElements;
+            let filterContainers = collectAllFilterContainers(tableSettings);
+            console.log('filter elements', filterContainers);
+
+            let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
+                let name = element.dataset.name;
+                let filterElement = element.getElementsByClassName('element-table-filters')[0];
+                let filterVal = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
+                accumulated[name] = filterVal;
+                return accumulated;
+            }, {});
+
+            return filters;
         }
 
         /*
@@ -545,7 +550,7 @@ let table = (function () {
 
         function setPageFilters(tableSettings) {
             let filters = tableSettings.filters;
-            let filterElements = collectAllFilterElements(tableSettings);
+            let filterElements = collectAllFilterContainers(tableSettings);
 
             for (let i = 0; i < filterElements.length; i++) {
                 if (filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.textarea) { //input and textarea
@@ -615,7 +620,6 @@ let table = (function () {
         /*--------------------------------------------------------------------------------------*/
 
 
-
         /*------------------------------- COMMUNICATION WITH API -------------------------------*/
 
         function getApiResponse(tableSettings) {
@@ -633,10 +637,10 @@ let table = (function () {
 
         /*--------------------------------- EVENT HANLDERS ---------------------------------*/
 
-/*        on('table/filters/apply', function (params) {
-            alert('APPLY FILTERS');
-            collectFiltersFromPage(params.tableSettings);
-        });*/
+        /*        on('table/filters/apply', function (params) {
+                    alert('APPLY FILTERS');
+                    collectFiltersFromPage(params.tableSettings);
+                });*/
 
         /*--------------------------------------------------------------------------------------*/
 

@@ -47,14 +47,17 @@ let aftTabEnableTransaction = (function () {
     });
 
     saveTransactionButton.addEventListener('click', function () {
+        alert('button click');
         let dataForApi = collectAndPrepareTransactionDataForApi();
         console.log('data for api', dataForApi);
-        trigger('saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
+        trigger('communicate/aft/saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
 
     on('aft/tab/transactions/update', function(params){
         alert('Transactions update!');
         console.log('transactions data', params);
+        //TODO da li ovde pozovem update table??
+        trigger('table/update', params);
     });
 
 })();

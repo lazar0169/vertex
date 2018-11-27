@@ -29,7 +29,7 @@ const aftFilters = (function () {
         });
     }
 
-    on('aft/filters/init', function(params){
+    on('aft/filters/init', function (params) {
         let tableSettings = params.tableSettings;
         currentTableSettingsObject = tableSettings;
         getFiltersFromAPI(tableSettings);
@@ -89,26 +89,34 @@ const aftFilters = (function () {
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+        console.log('page filters in collect filters from page', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
-            "DateFrom": pageFilters[1],
-            "DateTo": pageFilters[1],
-            "MachineList": pageFilters[2],
-            "JackpotList": pageFilters[3],
-            "Status": pageFilters[5],
-            "Type": pageFilters[4],
+            "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
+            "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
+            "MachineList": pageFilters.MachineList,
+            "JackpotList": pageFilters.JackpotList,
+            "Status": pageFilters.Status,
+            "Type": pageFilters.Type,
             "BasicData": {
                 "Page": 1,
-                "PageSize": pageFilters[0],
+                "PageSize": parseInt(pageFilters.PageSize, 10),
                 "SortOrder": sorting.SortOrder,
                 "SortName": sorting.SortName
-            }
+            },
+            "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.filters = filtersForApi;
 
+        console.log('Filters for API', filtersForApi);
+
         let successEvent = 'aft/table/update';
-        trigger('communicate/aft/previewTransactions', {data: filtersForApi, successEvent: successEvent, tableSettings: currentTableSettingsObject});
+        trigger('communicate/aft/previewTransactions', {
+            data: filtersForApi,
+            successEvent: successEvent,
+            tableSettings: currentTableSettingsObject
+        });
 
     });
 
