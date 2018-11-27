@@ -6,6 +6,7 @@ let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
 let nekiniz = ['-', 'Today', 'Yesterday', 'Last 7 Days', 'Last 14 Days', 'This Month', 'Last Month', 'Custom'];
 let columnName = [{Name: '-'}, { Name: 'Column1' }, { Name: 'Column2' }, { Name: 'Column3' }]
 let machinesNumber = ['50', '25', '10', '5'];
+let pictureName = ['Belgrade', 'New York', 'Surdulica', 'Nis'];
 let machinesVendors = [{ Name: '-' }, { Name: 'Fazi' }, { Name: 'Admiral' }, { Name: 'Favorit' }];
 let machinesStatus = [{ Name: '-' }, { Name: 'Online' }, { Name: 'Offline' }, { Name: 'Disabled' }];
 let machinesType = [{ Name: '-' }, { Name: 'Slot machine' }, { Name: 'Rulet' }];
