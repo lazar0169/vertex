@@ -21,12 +21,15 @@ const aft = (function () {
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
 
-        table.init(tableSettings);
+        table.init(tableSettings); //initializing table, filters and page size
 
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
         addTransactionButton.addEventListener('click', function () {
             trigger('communicate/aft/addTransaction');
         });
+
+        trigger('aft/tab/transactions/init', {tableSettings: tableSettings});
+
     });
 })();

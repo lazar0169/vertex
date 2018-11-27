@@ -26,14 +26,15 @@
       "template-engine.js",
       "mock.js",
       "aft/aft.js",
+      "aft/aft-filters.js",
+      "aft/aft-tab-content.js",
+      "aft/aft-tab-enable-transaction.js",
       "tickets/tickets.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
       "components/dropdown-date.js",
       "machines/details-bar.js",
-      "aft/aft-filters.js",
-      "aft/aft-tab-content.js",
       "casino.js",
       "communication.js",
       "machines.js",
@@ -50,8 +51,7 @@
       "router.js",
       "components/datepicker.js",
       "components/timepicker.js",
-      "logout.js",
-      "aft/aft-tab-enable-transaction.js"
+      "logout.js"
     ],
     "styles": [
       "index.css",

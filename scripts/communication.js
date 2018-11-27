@@ -181,8 +181,9 @@ let communication = (function () {
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
+        alert('communicate get notification settings triggered!');
         let route = 'api/transactions/getnotificationsettings';
-        let successEvent = 'aft/tab/transactions/init';
+        let successEvent = 'aft/tab/transactions/display';
         let tableSettings = params.tableSettings;
         let data = params.data;
         let request = requestTypes.post;

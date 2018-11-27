@@ -90,7 +90,6 @@ const aftFilters = (function () {
     aftAdvanceApplyFilters.addEventListener('click', function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         let sorting = table.getSorting(currentTableSettingsObject);
-        // let pageSize = table.getPageSize(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters[1],
