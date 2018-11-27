@@ -10,6 +10,7 @@ const aftTabContent = (function () {
     let promoTransactionLimit = $$('#promo-limit');
     let currentTableSettingsObject;
     let saveTransactionButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
+    let enableTransactionButton = $$('#aft-enable-transaction-check');
 
     function getTransactionData(currentTableSettingsObject) {
         trigger('communicate/aft/getBasicSettings', {
@@ -20,6 +21,7 @@ const aftTabContent = (function () {
 
     function displayTransactionData(transactionData) {
         console.log('Transaction data to display: ', transactionData);
+        enableTransactionButton.getElementsByTagName('input')[0].checked = transactionData.EnableTransactions;
         chashableHandlplayLimit.value = transactionData.CashableTransactionHandpayLimit;
         chashableTransactionLimit.value = transactionData.CashableTransactionLimit;
         promoHandplayTransactionLimit.value = transactionData.PromoTransactionHandpayLimit;
@@ -29,7 +31,7 @@ const aftTabContent = (function () {
     function collectAndPrepareTransactionDataForApi() {
         let transactionDataForApi = {
             EndpointId: currentTableSettingsObject.endpointId,
-            EnableTransactions: '',
+            EnableTransactions: enableTransactionButton.getElementsByTagName('input')[0].checked,
             CashableTransactionLimit: chashableTransactionLimit.value,
             CashableTransactionHandpayLimit: chashableHandlplayLimit.value,
             PromoTransactionLimit: promoHandplayTransactionLimit.value,
@@ -57,7 +59,7 @@ const aftTabContent = (function () {
         trigger('communicate/aft/saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
 
-    on('aft/tab/transactions/update', function(params){
+    on('aft/tab/transactions/update', function (params) {
         alert('Transactions update!');
         console.log('transactions data', params);
     });
@@ -76,6 +78,7 @@ const aftTabContent = (function () {
     let notificationMobileNumber = $$('#notification-mobile-phone-number');
     let notificationEmailAddress = $$('#notification-email-address');
     let notificationSaveButton = $$('#aft-notification-save').getElementsByClassName('btn-success')[0];
+    let notificationsEnableButton = $$('#aft-enable-notification-check');
 
 
     function getNotificationData(currentTableSettingsObject) {
@@ -87,6 +90,7 @@ const aftTabContent = (function () {
 
     function displayNotificationData(notificationData) {
         console.log('Notification data to display', notificationData);
+        notificationsEnableButton.getElementsByTagName('input')[0].checked = notificationData.EnableTransactions;
         notificationLimit.value = notificationData.CashableTransactionCreatedLimitForNotification;
         notificationMobileNumber.value = notificationData.PhoneNumberList[0];
         notificationEmailAddress.value = notificationData.EmailList[0];
@@ -95,11 +99,11 @@ const aftTabContent = (function () {
     function collectAndPrepareNotificationDataForApi() {
         let notificationDataForApi = {
             EndpointId: currentTableSettingsObject.endpointId,
-            EnableTransactions: '',
-            CashableTransactionCreatedLimitForNotification: '',
-            CashableTransactionPayedLimitForNotification: '',
-            PromoTransactionCreatedLimitForNotification: '',
-            PromoTransactionPayedLimitForNotification: '',
+            EnableTransactions: notificationsEnableButton.getElementsByTagName('input')[0].checked,
+            CashableTransactionCreatedLimitForNotification: 55, //todo insert real data
+            CashableTransactionPayedLimitForNotification: 55,
+            PromoTransactionCreatedLimitForNotification: 55,
+            PromoTransactionPayedLimitForNotification: 55,
             EmailList: '',
             PhoneNumberList: ''
         };
@@ -122,10 +126,13 @@ const aftTabContent = (function () {
         alert('Save notifications button click!');
         let dataForApi = collectAndPrepareNotificationDataForApi();
         console.log('Save notifications data for api', dataForApi);
-        trigger('communicate/aft/saveNotificationSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
+        trigger('communicate/aft/saveNotificationSettings', {
+            data: dataForApi,
+            tableSettings: currentTableSettingsObject
+        });
     });
 
-    on('aft/tab/notifications/update', function(params){
+    on('aft/tab/notifications/update', function (params) {
         alert('Notifications update!');
         console.log('Notifications data', params);
     });
