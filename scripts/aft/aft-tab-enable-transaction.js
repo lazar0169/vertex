@@ -6,10 +6,10 @@ let aftTabEnableTransaction = (function () {
     let chashableTransactionLimit = $$('#chashable-limit');
     let promoHandplayTransactionLimit = $$('#promo-handplay-limit');
     let promoTransactionLimit = $$('#promo-limit');
-
+    let aftId;
 
     $$('#aft-tabs-enable-transaction').addEventListener('click', function () {
-        trigger('communicate/aft/getNotificationSettings', {data: {EndpointId: 2}, tableSettings: null});
+        trigger('communicate/aft/getNotificationSettings', {data: {EndpointId: aftId}, tableSettings: null});
     });
 
     on('aft/tab/transactions/init', function (params) {

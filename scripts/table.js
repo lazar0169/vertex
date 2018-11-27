@@ -296,6 +296,12 @@ let table = (function () {
             updateTablePagination(tableSettings);
         }
 
+        function initFilters(tableSettings){
+            let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
+            console.log('module name in init filters', moduleName);
+            aftFilter.initFilters(tableSettings);
+        }
+
         on('table/update', function (params) {
             let tableSettings = params.tableSettings;
             let tableData = [];
@@ -308,6 +314,7 @@ let table = (function () {
             });
 
             tableSettings.tableData = transformApiData(tableData);
+            initFilters(tableSettings);
             updateTable(tableSettings);
         });
 
