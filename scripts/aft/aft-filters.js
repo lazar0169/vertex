@@ -111,20 +111,19 @@ const aftFilters = (function () {
 
         console.log('Filters for API', filtersForApi);
 
-        let successEvent = 'aft/table/update';
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,
-            successEvent: successEvent,
             tableSettings: currentTableSettingsObject
         });
 
     });
 
-    on('aft/table/update', function (params) {
+/*    on('aft/table/update', function (params) {
         let apiData = params.data;
         let tableSettings = params.tableSettings;
+        console.log('api response', params);
         trigger('table/update', {data: apiData, tableSettings: tableSettings});
 
-    });
+    });*/
 
 })();
