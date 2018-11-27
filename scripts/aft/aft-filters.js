@@ -37,7 +37,6 @@ const aftFilters = (function () {
 
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
-        console.log('colnames', colNamesArray);
         return colNamesArray;
     }
 
@@ -59,7 +58,6 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
-        console.log('column names to generate', colNames);
 
         removeChildren(aftAdvanceTableFilterDateRange);
         removeChildren(aftAdvanceTableFilterFinished);
@@ -79,12 +77,9 @@ const aftFilters = (function () {
 
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
-        console.log('Api response data in aft/filters/display: ', apiResponseData);
         let tableSettings = params.tableSettings;
         let filters = apiResponseData.Data;
         tableSettings.filters = filters;
-        console.log('Filters from API: ', filters);
-        console.log('Table settings filters in aft/filters/display: ', tableSettings.filters);
         displayFilters(filters, tableSettings);
     });
 
@@ -93,11 +88,8 @@ const aftFilters = (function () {
     });
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        console.log('Table settings object when clicking apply filters: ', currentTableSettingsObject);
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        console.log('Collected filters from page when clicking apply: ', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
-        console.log('Sorting values: ', sorting);
         // let pageSize = table.getPageSize(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
@@ -116,8 +108,6 @@ const aftFilters = (function () {
         };
         currentTableSettingsObject.filters = filtersForApi;
 
-        console.log('Prepared filters for API: ', filtersForApi);
-
         let successEvent = 'aft/table/update';
         trigger('communicate/aft/previewTransactions', {data: filtersForApi, successEvent: successEvent, tableSettings: currentTableSettingsObject});
 
@@ -126,7 +116,6 @@ const aftFilters = (function () {
     on('aft/table/update', function (params) {
         let apiData = params.data;
         let tableSettings = params.tableSettings;
-        console.log('table settings object in aft/table/update', tableSettings);
         trigger('table/update', {data: apiData, tableSettings: tableSettings});
 
     });

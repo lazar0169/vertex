@@ -55,7 +55,6 @@ let table = (function () {
             let tbody = getTableBodyElement(tableSettings);
             // let headElements = tbody.getElementsByClassName('head');
             let headElements = Array.from(tbody.getElementsByClassName('head'));
-            console.log('head elements', headElements);
             headElements.forEach(function (element) {
                 colNames.push({Name: element.innerText})
             });
@@ -305,7 +304,6 @@ let table = (function () {
             let tableSettings = params.tableSettings;
             let tableData = [];
             let apiItems = params.data.Data.Items;
-            console.log('Api items for table update: ', apiItems);
 
             apiItems.forEach(function (item) {
                 tableData.push(item.EntryData);
@@ -423,7 +421,6 @@ let table = (function () {
         function hideColumn(tableSettings, columnName) {
             let colsCount = getCurrentColsCount(tableSettings);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
-            console.log(columnElements);
             if (columnElements.length !== 0) {
                 for (let i = 0; i < columnElements.length; i++) {
                     if (i !== 0) {
@@ -443,7 +440,7 @@ let table = (function () {
 
 
         /*------------------------------------ FILTERING ------------------------------------*/
-/*
+
 
         function collectAllFilterElements(tableSettings) {
             let filterElements;
@@ -454,14 +451,14 @@ let table = (function () {
             } else {
                 filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('element-table-filters'));
             }
-/!*            if (tableSettings.filterContainerSelector !== undefined) {
+/*           if (tableSettings.filterContainerSelector !== undefined) {
                 filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
             } else {
                 filterElements = tableSettings.pageSelectorId.getElementsByClassName('element-table-filters');
-            }*!/
+            }*/
             return filterElements;
         }
-
+/*
         function isSingleCheckbox(element) {
             return element.type === types.checkbox && document.getElementsByName(element.name).length === 1;
         }
@@ -488,11 +485,9 @@ let table = (function () {
         function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
             let filterElements = collectAllFilterElements(tableSettings);
-            console.log('all filter elements', filterElements);
             let processedElements = Array.prototype.slice.apply(filterElements).map(function (element) {
                 return element.dataset.value !== '-' ? element.dataset.value.split(',') : null
             });
-            console.log('Processed elements', processedElements);
             //todo ajust to work with AFT
             /*            getPageSize(tableSettings);
                         getQuerySearch(tableSettings);*/

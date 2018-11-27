@@ -49,7 +49,6 @@ let communication = (function () {
 
     function success(xhr, callbackEvent, tableSettings) {
         let data = tryParseJSON(xhr.responseText);
-        console.log('Data from API in success: ', data);
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
@@ -166,7 +165,6 @@ let communication = (function () {
         let successEvent = 'aft/table/update';
         let data = params.data;
         let tableSettings = params.tableSettings;
-        console.log('Data that preview transactions received: ', data);
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -828,7 +826,6 @@ let communication = (function () {
     //test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
-        console.log('communicate/test params.data', params.data);
     });
 
 

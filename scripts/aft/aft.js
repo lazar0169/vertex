@@ -6,7 +6,6 @@ const aft = (function () {
         }, 2000);
 
         let aftId = params.params[0].value;
-        console.log('Aft page ID (from params): ', aftId);
 
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');

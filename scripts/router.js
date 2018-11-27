@@ -296,7 +296,6 @@ let router = (function () {
         addRegExpToPages();
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
-        console.log('page name', pageName);
         if (pageName != null) {
             changePage(pageName);
         }
