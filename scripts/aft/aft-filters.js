@@ -76,8 +76,14 @@ const aftFilters = (function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 
-    function chooseColumnsToShow(columns) {
+    function chooseColumnsToShow(columns, currentTableSettingsObject) {
         console.log('choose columns to show', columns);
+        columns.forEach(function(column){
+            column.toLowerCase();
+            console.log('column', column);
+            table.hideColumn(currentTableSettingsObject, column);
+        });
+
     }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
@@ -104,7 +110,7 @@ const aftFilters = (function () {
 
         console.log('Filters for API', filtersForApi);
 
-        chooseColumnsToShow(pageFilters.Column);
+        chooseColumnsToShow(pageFilters.Columns, currentTableSettingsObject);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,

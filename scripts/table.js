@@ -672,7 +672,8 @@ let table = (function () {
             init: init,
             getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
             collectFiltersFromPage: collectFiltersFromPage,
-            getSorting: getSorting
+            getSorting: getSorting,
+            hideColumn: hideColumn
         };
 
         /*--------------------------------------------------------------------------------------*/
