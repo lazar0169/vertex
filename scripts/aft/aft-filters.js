@@ -77,13 +77,16 @@ const aftFilters = (function () {
     });
 
     function chooseColumnsToShow(columns, currentTableSettingsObject) {
-        console.log('choose columns to show', columns);
-        columns.forEach(function(column){
-            column.toLowerCase();
-            console.log('column', column);
-            table.hideColumn(currentTableSettingsObject, column);
-        });
+        console.log('choose columns to show columns selected:', columns);
+        table.showColumns(currentTableSettingsObject, columns);
     }
+
+    //todo this is for testing
+    $$('#choose-columns').addEventListener('click', function(){
+        let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+        chooseColumnsToShow(pageFilters.Columns, currentTableSettingsObject);
+    });
+
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
@@ -108,8 +111,6 @@ const aftFilters = (function () {
         currentTableSettingsObject.filters = filtersForApi;
 
         console.log('Filters for API', filtersForApi);
-
-        // chooseColumnsToShow(pageFilters.Columns, currentTableSettingsObject);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,

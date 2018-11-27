@@ -414,14 +414,28 @@ let table = (function () {
         function removeFlagClass(columnElement) {
             let flagClassRegExp = /(row-flag-\d+) ?/;
             let columnElementClasses = columnElement.className;
-            let flagClass = flagClassRegExp.exec(columnElementClasses)[1];
-            columnElement.classList.remove(flagClass);
+            if (flagClassRegExp.exec(columnElementClasses) !== null) {
+                let flagClass = flagClassRegExp.exec(columnElementClasses)[1];
+                columnElement.classList.remove(flagClass);
+            }
+        }
 
+        function getColumnNameFromHeadElement(tableSettings, headElement){
+            let classList = headElement.classList;
+            let cellClassName;
+            console.log('class list of head element', classList);
+            for(let i = 0; i < classList.length; i++) {
+                if (classList[i].includes('cell-')) {
+                    cellClassName = classList[i];
+                }
+            }
+            console.log('cellClassName', cellClassName);
+            return cellClassName;
         }
 
         function hideColumn(tableSettings, columnName) {
             let colsCount = getCurrentColsCount(tableSettings);
-            let columnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + columnName);
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             if (columnElements.length !== 0) {
                 for (let i = 0; i < columnElements.length; i++) {
                     if (i !== 0) {
@@ -433,7 +447,24 @@ let table = (function () {
                 let tbody = getTableBodyElement(tableSettings);
                 tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
             } else {
-                alert('There is no such column!');
+                // alert('There is no such column!');
+                console.log('There is no such column!');
+            }
+        }
+
+        function showColumns(tableSettings, columnsToShow) {
+            console.log('We have entered show columns');
+            console.log('columnsToShow', columnsToShow);
+            let headers = getHeaders(tableSettings);
+            console.log('headers', headers);
+            for (let i = 0; i < headers.length; i++) {
+                for (let j = 0; j < columnsToShow.length; j++) {
+                    if (!headers[i].classList.contains(columnsToShow[j].toLowerCase())) {
+                        let columnName = getColumnNameFromHeadElement(tableSettings, headers[i]);
+                        console.log('column to be hidden, column name: ', columnName);
+                        hideColumn(tableSettings, columnName);
+                    }
+                }
             }
         }
 
@@ -673,7 +704,7 @@ let table = (function () {
             getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
             collectFiltersFromPage: collectFiltersFromPage,
             getSorting: getSorting,
-            hideColumn: hideColumn
+            showColumns: showColumns
         };
 
         /*--------------------------------------------------------------------------------------*/
