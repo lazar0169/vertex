@@ -7,33 +7,54 @@ let aftTabEnableTransaction = (function () {
     let promoHandplayTransactionLimit = $$('#promo-handplay-limit');
     let promoTransactionLimit = $$('#promo-limit');
     let currentTableSettingsObject;
+    let saveTransactionButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
 
-    function getTransactions(currentTableSettingsObject) {
+    function getTransactionData(currentTableSettingsObject) {
         trigger('communicate/aft/getNotificationSettings', {
             data: {EndpointId: currentTableSettingsObject.endpointId},
             tableSettings: currentTableSettingsObject
         });
     }
 
-    function displayTransactions(transactionData){
-        console.log('transaction data', transactionData);
-        console.log(transactionData[0]);
+    function displayTransactionData(transactionData) {
         chashableHandlplayLimit.value = transactionData.CashableTransactionCreatedLimitForNotification;
         chashableTransactionLimit.value = transactionData.CashableTransactionPayedLimitForNotification;
         promoHandplayTransactionLimit.value = transactionData.PromoTransactionCreatedLimitForNotification;
         promoTransactionLimit.value = transactionData.PromoTransactionPayedLimitForNotification;
     }
 
+    function collectAndPrepareTransactionDataForApi() {
+        let transactionDataForApi = {
+            EndpointId: currentTableSettingsObject.endpointId,
+            EnableTransactions: '',
+            CashableTransactionLimit: chashableTransactionLimit.value,
+            CashableTransactionHandpayLimit: chashableHandlplayLimit.value,
+            PromoTransactionLimit: promoHandplayTransactionLimit.value,
+            PromoTransactionHandpayLimit: promoTransactionLimit.value
+        };
+        return transactionDataForApi;
+    }
+
     on('aft/tab/transactions/init', function (params) {
         currentTableSettingsObject = params.tableSettings;
-        alert('Aft tab transaction init success!');
         console.log('Params in aft tab transactions init: ', params);
-        getTransactions(currentTableSettingsObject);
+        getTransactionData(currentTableSettingsObject);
     });
 
-    on('aft/tab/transactions/display', function(params){
+    on('aft/tab/transactions/display', function (params) {
         let transactionData = params.data.Data;
-        displayTransactions(transactionData);
+        displayTransactionData(transactionData);
+    });
+
+    saveTransactionButton.addEventListener('click', function () {
+        let dataForApi = collectAndPrepareTransactionDataForApi();
+        console.log('data for api', dataForApi);
+        trigger('saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
+    });
+
+    on('aft/tab/transactions/update', function(params){
+        alert('Transactions update!');
+        console.log('transactions data', params);
     });
 
 })();

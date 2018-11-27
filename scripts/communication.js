@@ -181,7 +181,6 @@ let communication = (function () {
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
-        alert('communicate get notification settings triggered!');
         let route = 'api/transactions/getnotificationsettings';
         let successEvent = 'aft/tab/transactions/display';
         let tableSettings = params.tableSettings;
@@ -219,15 +218,9 @@ let communication = (function () {
     //aft save basic settings
     on('communicate/aft/saveBasicSettings', function (params) {
         let route = 'api/transactions/savebasicsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EnableTransactions': true,
-            'CashableTransactionLimit': 123456789,
-            'CashableTransactionHandpayLimit': 987654321,
-            'PromoTransactionLimit': 123,
-            'PromoTransactionHandpayLimit': 321
-        };
+        let successEvent = 'aft/tab/transactions/update';
+        let data = params.data;
+        let tableSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -235,7 +228,8 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
