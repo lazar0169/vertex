@@ -455,6 +455,31 @@ let table = (function () {
         function showColumns(tableSettings, columnsToShow) {
             console.log('We have entered show columns');
             console.log('columnsToShow', columnsToShow);
+            columnsToShow.forEach(function(column){
+                let columnName = column.toLowerCase();
+                let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
+                if (columnElements.length !== 0) {
+                    for (let i = 0; i < columnElements.length; i++) {
+                        if (i !== 0) {
+                            removeFlagClass(columnElements[i]);
+                        }
+                        columnElements[i].classList.add('hidden-column');
+                        columnElements[i].classList.remove('head');
+                    }
+                    let tbody = getTableBodyElement(tableSettings);
+                    tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
+                } else {
+                    // alert('There is no such column!');
+                    console.log('There is no such column!');
+                }
+            });
+        } //TODO finish this first thing tomorrow
+
+
+/*
+        function showColumns(tableSettings, columnsToShow) {
+            console.log('We have entered show columns');
+            console.log('columnsToShow', columnsToShow);
             let headers = getHeaders(tableSettings);
             console.log('headers', headers);
             for (let i = 0; i < headers.length; i++) {
@@ -467,6 +492,7 @@ let table = (function () {
                 }
             }
         }
+*/
 
         /*--------------------------------------------------------------------------------------*/
 
