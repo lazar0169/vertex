@@ -20,7 +20,7 @@ const jackpotFilter = (function () {
     let jackpotSaveButton = $$('#choose-machines-jackpot-buttons').children[0].children[1];
     // let jackpotAddAllMachines = $$('#jackpot-add-machines-filter').children[0];
 
-    jackpotMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
+    // jackpotMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
 
     advanceTableFilter.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('jackpot-advance-active');

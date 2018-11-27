@@ -4,7 +4,10 @@ const multiDropdown = (function () {
     //multiselect array
     let multiSelectArray = [];
     // generate multi dropdown
-    function generate(dataSelect) {
+    function generate(dataSelect, element) {
+        if(element){
+            removeChildren(element);
+        }
         //array of chosen options
         let array = [];
         let arrayInner = [];
@@ -78,6 +81,10 @@ const multiDropdown = (function () {
         indexMsId++;
         dataSelect.unshift(noSelected);
         multiSelectArray.push(select.id);
+        if(element){
+            element.appendChild(select);
+            return element;
+        }
         return select;
     }
     window.addEventListener('click', function (e) {

@@ -8,7 +8,10 @@ const dropdownDate = (function () {
     //indicate custom option
     let pickCustom = false;
     //generate single dropdown
-    function generate(dataSelect) {
+    function generate(dataSelect, element) {
+        if(element){
+            removeChildren(element);
+        }
         // wrapper select
         let select = document.createElement('div');
         select.dataset.selectId = indexDsId;
@@ -102,6 +105,10 @@ const dropdownDate = (function () {
 
         indexDsId++;
         dateSelectArray.push(select.id);
+        if(element){
+            element.appendChild(select);
+            return element;
+        }
         return select;
     }
     window.addEventListener('click', function (e) {

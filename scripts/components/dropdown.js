@@ -4,8 +4,12 @@ const dropdown = (function () {
     //single select array
     let singleSelectArray = [];
 
+
     //generate single dropdown
-    function generate(dataSelect) {
+    function generate(dataSelect, element) {
+        if(element) {
+            removeChildren(element);
+        }
         // wrapper select
         let select = document.createElement('div');
         select.id = `ss-${indexSsId}`;
@@ -48,6 +52,11 @@ const dropdown = (function () {
 
         indexSsId++;
         singleSelectArray.push(select.id);
+
+        if(element){
+            element.appendChild(select);
+            return element;
+        }
         return select;
     }
 

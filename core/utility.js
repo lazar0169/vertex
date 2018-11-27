@@ -47,6 +47,14 @@ function getProperty(path, object) {
     }, object || self);
 }
 
+//removes all children except firs one
+function removeChildren(element) {
+    while (element.childElementCount > 1) {
+        element.removeChild(element.lastChild);
+    }
+}
+
+
 
 //add and remove class
 

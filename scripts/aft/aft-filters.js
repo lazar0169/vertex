@@ -40,12 +40,6 @@ const aftFilters = (function () {
         return colNamesArray;
     }
 
-    function removeChildren(element) {
-        while (element.childElementCount > 1) {
-            element.removeChild(element.lastChild);
-        }
-    }
-
     //display initial filters
     function displayFilters(filters, tableSettings) {
 
@@ -59,20 +53,15 @@ const aftFilters = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        removeChildren(aftAdvanceTableFilterDateRange);
-        removeChildren(aftAdvanceTableFilterFinished);
-        removeChildren(aftAdvanceTableFilterJackpot);
-        removeChildren(aftAdvanceTableFilterType);
-        removeChildren(aftAdvanceTableFilterStatus);
-        removeChildren(aftAdvanceTableFilterColumn);
+        console.log('machines number', machinesNumber);
 
-        aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
-        aftAdvanceTableFilterDateRange.appendChild(dropdownDate.generate(nekiniz));
-        aftAdvanceTableFilterFinished.appendChild(multiDropdown.generate(filters.MachineNameList));
-        aftAdvanceTableFilterJackpot.appendChild(multiDropdown.generate(filters.JackpotNameList));
-        aftAdvanceTableFilterType.appendChild(multiDropdown.generate(filters.TypeList));
-        aftAdvanceTableFilterStatus.appendChild(multiDropdown.generate(filters.StatusList));
-        aftAdvanceTableFilterColumn.appendChild(multiDropdown.generate(colNames));
+        dropdown.generate(machinesNumber, aftMachinesNumbers);
+        dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
+        multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
+        multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
+        multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);
+        multiDropdown.generate(filters.StatusList, aftAdvanceTableFilterStatus);
+        multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
     on('aft/filters/display', function (params) {
@@ -86,6 +75,10 @@ const aftFilters = (function () {
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
+
+    function chooseColumnsToShow(columns) {
+        console.log('choose columns to show', columns);
+    }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
@@ -111,6 +104,8 @@ const aftFilters = (function () {
 
         console.log('Filters for API', filtersForApi);
 
+        chooseColumnsToShow(pageFilters.Column);
+
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
@@ -118,12 +113,12 @@ const aftFilters = (function () {
 
     });
 
-/*    on('aft/table/update', function (params) {
-        let apiData = params.data;
-        let tableSettings = params.tableSettings;
-        console.log('api response', params);
-        trigger('table/update', {data: apiData, tableSettings: tableSettings});
+    /*    on('aft/table/update', function (params) {
+            let apiData = params.data;
+            let tableSettings = params.tableSettings;
+            console.log('api response', params);
+            trigger('table/update', {data: apiData, tableSettings: tableSettings});
 
-    });*/
+        });*/
 
 })();
