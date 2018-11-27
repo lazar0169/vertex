@@ -173,7 +173,7 @@ let table = (function () {
                         cell.classList.add('cell');
                     }
                     cell.classList.add(`row-${rowId}`);
-                    cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
+                    // cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
                     if (tableSettings.stickyColumn === true && col === 1) {
                         cell.classList.add('sticky');
                     }
@@ -298,29 +298,25 @@ let table = (function () {
 
         function initFilters(tableSettings){
             let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-            console.log('module name in init filters', moduleName);
-            aftFilter.initFilters(tableSettings);
+            trigger(moduleName+'/filters/init', {tableSettings: tableSettings});
         }
 
         on('table/update', function (params) {
             let tableSettings = params.tableSettings;
             let tableData = [];
             let apiItems = params.data.Data.Items;
-
             console.log('Api items for table update: ', apiItems);
 
             apiItems.forEach(function (item) {
                 tableData.push(item.EntryData);
             });
 
-            tableSettings.tableData = transformApiData(tableData);
+            tableSettings.tableData = tableData;
             initFilters(tableSettings);
             updateTable(tableSettings);
         });
 
-        function initUpdateTable(tableSettings) {
-            //get data from page
-
+        function initTable(tableSettings) {
             let data = {EndpointId: tableSettings.endpointId};
 
             trigger(tableSettings.dataEvent, {
@@ -447,6 +443,7 @@ let table = (function () {
 
 
         /*------------------------------------ FILTERING ------------------------------------*/
+/*
 
         function collectAllFilterElements(tableSettings) {
             let filterElements;
@@ -457,11 +454,11 @@ let table = (function () {
             } else {
                 filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('element-table-filters'));
             }
-/*            if (tableSettings.filterContainerSelector !== undefined) {
+/!*            if (tableSettings.filterContainerSelector !== undefined) {
                 filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
             } else {
                 filterElements = tableSettings.pageSelectorId.getElementsByClassName('element-table-filters');
-            }*/
+            }*!/
             return filterElements;
         }
 
@@ -486,6 +483,7 @@ let table = (function () {
             }
             return tableSettings.filters.querySearch;
         }
+*/
 
         function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
@@ -622,14 +620,6 @@ let table = (function () {
         /*--------------------------------------------------------------------------------------*/
 
 
-        /*------------------------------- TRANSFORMING DATA FROM API -------------------------------*/
-
-        function transformApiData(data) {
-            return data;
-        }
-
-        /*--------------------------------------------------------------------------------------*/
-
 
         /*------------------------------- COMMUNICATION WITH API -------------------------------*/
 
@@ -648,10 +638,10 @@ let table = (function () {
 
         /*--------------------------------- EVENT HANLDERS ---------------------------------*/
 
-        on('table/filters/apply', function (params) {
+/*        on('table/filters/apply', function (params) {
             alert('APPLY FILTERS');
             collectFiltersFromPage(params.tableSettings);
-        });
+        });*/
 
         /*--------------------------------------------------------------------------------------*/
 
@@ -672,43 +662,16 @@ let table = (function () {
 
             if (tableSettings.tableData === undefined) {
                 // generateTableHeaders(tableSettings);
-                initUpdateTable(tableSettings);
+                initTable(tableSettings);
             } else {
                 updateTable(tableSettings);
             }
-
-/*            let applyButton = tableContainerElement.getElementsByClassName('apply')[0];
-            if (applyButton !== undefined) {
-                applyButton.addEventListener('click', function () {
-                    getApiResponse(tableSettings);
-                    console.log('Table settings after clicking Apply button: ', tableSettings);
-                });
-            }
-
-            let resetButton = tableContainerElement.getElementsByClassName('reset')[0];
-            if (resetButton !== undefined) {
-                resetButton.addEventListener('click', function () {
-                    setPageFilters(tableSettings);
-                    console.log('Table settings after clicking Reset button: ', tableSettings);
-                });
-            }
-
-            let hideColumnButton = tableContainerElement.getElementsByClassName('hide-column-button')[0];
-            if (hideColumnButton !== undefined) {
-                hideColumnButton.addEventListener('click', function () {
-                    let columnInputElement = tableContainerElement.getElementsByClassName('hide-column-input')[0];
-                    let columnName = columnInputElement.value;
-                    hideColumn(tableSettings, columnName);
-                });
-            }*/
         }
 
         return {
             init: init,
             getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
             collectFiltersFromPage: collectFiltersFromPage,
-            setPageFilters: setPageFilters,
-            getPageSize: getPageSize,
             getSorting: getSorting
         };
 

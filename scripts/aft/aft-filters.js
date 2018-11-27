@@ -1,4 +1,4 @@
-const aftFilter = (function () {
+const aftFilters = (function () {
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
@@ -6,11 +6,6 @@ const aftFilter = (function () {
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
     let currentTableSettingsObject;
-    let endpointId;
-
-    function setTableSettings(tableSettings) {
-        currentTableSettingsObject = tableSettings;
-    }
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('aft-advance-active');
@@ -21,9 +16,9 @@ const aftFilter = (function () {
         showAdvanceTableFilter();
     });
 
-    function getFiltersFromAPI(endpointId, tableSettings) {
+    function getFiltersFromAPI(tableSettings) {
         let data = {
-            'EndpointId': endpointId
+            'EndpointId': tableSettings.endpointId
         };
         let tableSettingsObject = tableSettings;
         let successEvent = 'aft/filters/display';
@@ -33,6 +28,12 @@ const aftFilter = (function () {
             tableSettings: tableSettingsObject
         });
     }
+
+    on('aft/filters/init', function(params){
+        let tableSettings = params.tableSettings;
+        currentTableSettingsObject = tableSettings;
+        getFiltersFromAPI(tableSettings);
+    });
 
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
@@ -81,16 +82,11 @@ const aftFilter = (function () {
         console.log('Api response data in aft/filters/display: ', apiResponseData);
         let tableSettings = params.tableSettings;
         let filters = apiResponseData.Data;
+        tableSettings.filters = filters;
         console.log('Filters from API: ', filters);
         console.log('Table settings filters in aft/filters/display: ', tableSettings.filters);
         displayFilters(filters, tableSettings);
     });
-
-    function initFilters(tableSettings) {
-        setTableSettings(tableSettings);
-        endpointId = tableSettings.endpointId;
-        getFiltersFromAPI(endpointId, tableSettings);
-    }
 
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
@@ -104,7 +100,7 @@ const aftFilter = (function () {
         console.log('Sorting values: ', sorting);
         // let pageSize = table.getPageSize(currentTableSettingsObject);
         let filtersForApi = {
-            "EndpointId": endpointId,
+            "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters[1],
             "DateTo": pageFilters[1],
             "MachineList": pageFilters[2],
@@ -134,15 +130,5 @@ const aftFilter = (function () {
         trigger('table/update', {data: apiData, tableSettings: tableSettings});
 
     });
-
-/*    on('aft/filters/apply', function (params) {
-        console.log('API response from Apply filters: ', params);
-        alert('Filters aplied!');
-        trigger('table/update', {data: params.data});
-    });*/
-
-    return {
-        initFilters: initFilters
-    };
 
 })();
