@@ -51,9 +51,9 @@ const aftTabContent = (function () {
     });
 
     saveTransactionButton.addEventListener('click', function () {
-        alert('button click');
+        alert('Save transactions button click!');
         let dataForApi = collectAndPrepareTransactionDataForApi();
-        console.log('data for api', dataForApi);
+        console.log('Save transactions data for api', dataForApi);
         trigger('communicate/aft/saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
 
@@ -74,7 +74,7 @@ const aftTabContent = (function () {
     let mobileCounter = 0;
     let notificationLimit = $$('#notification-limit');
     let notificationMobileNumber = $$('#notification-mobile-phone-number');
-    let notificationEmailAddress = $$('notification-email-address');
+    let notificationEmailAddress = $$('#notification-email-address');
     let notificationSaveButton = $$('#aft-notification-save').getElementsByClassName('btn-success')[0];
 
 
@@ -87,6 +87,9 @@ const aftTabContent = (function () {
 
     function displayNotificationData(notificationData) {
         console.log('Notification data to display', notificationData);
+        notificationLimit.value = notificationData.CashableTransactionCreatedLimitForNotification;
+        notificationMobileNumber.value = notificationData.PhoneNumberList[0];
+        notificationEmailAddress.value = notificationData.EmailList[0];
     }
 
     function collectAndPrepareNotificationDataForApi() {
@@ -116,9 +119,9 @@ const aftTabContent = (function () {
     });
 
     notificationSaveButton.addEventListener('click', function () {
-        alert('button click');
+        alert('Save notifications button click!');
         let dataForApi = collectAndPrepareNotificationDataForApi();
-        console.log('data for api', dataForApi);
+        console.log('Save notifications data for api', dataForApi);
         trigger('communicate/aft/saveNotificationSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
 
