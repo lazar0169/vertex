@@ -60,7 +60,8 @@ const dropdown = (function () {
         return select;
     }
 
-    window.addEventListener('click', function (e) {
+    //TODO THIS PART GENERATES MULTIPLE ERRORS
+/*    window.addEventListener('click', function (e) {
         e.stopPropagation();
         for (let selectId of singleSelectArray) {
             if (e.target.parentNode.id != selectId) {
@@ -68,7 +69,7 @@ const dropdown = (function () {
                 $$(`#${selectId}`).children[1].classList.add('hidden');
             }
         }
-    });
+    });*/
 
     return {
         generate

@@ -54,7 +54,7 @@ let communication = (function () {
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data, tableSettings: tableSettings});
         }
-        trigger('communication/token/refresh', {token: data.TokenInfo});
+        trigger('communicate/token/refresh', {token: data.TokenInfo});
     }
 
     function error(xhr, errorEventCallback) {
@@ -183,7 +183,25 @@ let communication = (function () {
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
         let route = 'api/transactions/getnotificationsettings';
-        let successEvent = 'aft/tab/transactions/display';
+        let successEvent = 'aft/tab/notifications/display';
+        let tableSettings = params.tableSettings;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //aft save notification settings
+    on('communicate/aft/saveNotificationSettings', function (params) {
+        let route = 'api/transactions/savenotificationsettings/';
+        let successEvent = 'aft/tab/notifications/update';
         let tableSettings = params.tableSettings;
         let data = params.data;
         let request = requestTypes.post;
@@ -201,10 +219,9 @@ let communication = (function () {
     //aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
         let route = 'api/transactions/getbasicsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
+        let successEvent = 'aft/tab/transactions/display';
+        let data = params.data;
+        let tableSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -212,7 +229,8 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
@@ -234,23 +252,6 @@ let communication = (function () {
         });
     });
 
-    //aft save notification settings
-    on('communicate/aft/saveNotificationSettings', function (params) {
-        let route = 'api/transactions/savenotificationsettings/';
-        let successEvent = 'communicate/test';
-        let tableSettings = params.tableSettings;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent,
-            tableSettings: tableSettings
-        });
-    });
 
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
@@ -851,7 +852,7 @@ let communication = (function () {
         }, params.token.expires_in * 1000);
     }
 
-    on('communication/token/refresh', function (params) {
+    on('communicate/token/refresh', function (params) {
         console.log('timeout', timeout);
         if (timeout !== null) {
             clearTimeout(timeout);

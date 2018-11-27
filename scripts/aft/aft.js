@@ -30,6 +30,7 @@ const aft = (function () {
         });
 
         trigger('aft/tab/transactions/init', {tableSettings: tableSettings});
+        trigger('aft/tab/notifications/init', {tableSettings: tableSettings});
 
     });
 })();

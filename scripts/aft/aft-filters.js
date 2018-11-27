@@ -53,7 +53,7 @@ const aftFilters = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        console.log('machines number', machinesNumber);
+        console.log('List of page sizes: ', machinesNumber);
 
         dropdown.generate(machinesNumber, aftMachinesNumbers);
         dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
@@ -83,7 +83,6 @@ const aftFilters = (function () {
             console.log('column', column);
             table.hideColumn(currentTableSettingsObject, column);
         });
-
     }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
@@ -110,7 +109,7 @@ const aftFilters = (function () {
 
         console.log('Filters for API', filtersForApi);
 
-        chooseColumnsToShow(pageFilters.Columns, currentTableSettingsObject);
+        // chooseColumnsToShow(pageFilters.Columns, currentTableSettingsObject);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,
@@ -118,13 +117,5 @@ const aftFilters = (function () {
         });
 
     });
-
-    /*    on('aft/table/update', function (params) {
-            let apiData = params.data;
-            let tableSettings = params.tableSettings;
-            console.log('api response', params);
-            trigger('table/update', {data: apiData, tableSettings: tableSettings});
-
-        });*/
 
 })();

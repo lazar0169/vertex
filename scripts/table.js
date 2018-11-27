@@ -301,7 +301,7 @@ let table = (function () {
         }
 
         on('table/update', function (params) {
-            console.log('api response', params);
+            console.log('API response in table/update: ', params);
             let tableSettings = params.tableSettings;
             let tableData = [];
             let apiItems = params.data.Data.Items;

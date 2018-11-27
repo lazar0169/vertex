@@ -87,6 +87,7 @@ const multiDropdown = (function () {
         }
         return select;
     }
+
     window.addEventListener('click', function (e) {
         e.stopPropagation();
         for (let selectId of multiSelectArray) {
