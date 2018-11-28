@@ -103,7 +103,7 @@ let table = (function () {
                 }
                 tbody = document.createElement('div');
                 tbody.className = 'tbody';
-                for (let col = 1; col < colsCount; col++) {
+                for (let col = 0; col < colsCount; col++) {
                     let head = document.createElement('div');
                     head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
                     head.className = 'head cell';
@@ -147,7 +147,7 @@ let table = (function () {
         }
 
         function styleColsRows(tableSettingsData, colsCount, tbody) {
-            tbody.style.gridTemplateColumns = `repeat(${colsCount - 1}, 1fr)`;
+            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
             tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
         }
 
@@ -162,12 +162,12 @@ let table = (function () {
                     rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
                 }
                 rows.push(rowId);
-                for (let col = 1; col < colsCount; col++) {
+                for (let col = 0; col < colsCount; col++) {
                     let cell = document.createElement('div');
                     cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
                     let cellClassName = generateCellClassName(tableSettings.tableData, col);
                     cell.className = 'cell ' + cellClassName;
-                    if (col === 1) {
+                    if (col === 0) {
                         cell.classList.add('first');
                         cell.classList.add('cell');
                     }
