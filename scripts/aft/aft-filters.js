@@ -76,14 +76,6 @@ const aftFilters = (function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 
-    //todo this is for testing
-    $$('#choose-columns').addEventListener('click', function(){
-        let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        table.showColumns(currentTableSettingsObject, pageFilters.Columns);
-
-    });
-
-
     aftAdvanceApplyFilters.addEventListener('click', function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         console.log('page filters in collect filters from page', pageFilters);
