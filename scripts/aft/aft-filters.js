@@ -69,6 +69,7 @@ const aftFilters = (function () {
         let tableSettings = params.tableSettings;
         let filters = apiResponseData.Data;
         tableSettings.filters = filters;
+        tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
 

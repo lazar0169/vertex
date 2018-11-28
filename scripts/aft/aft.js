@@ -20,6 +20,7 @@ const aft = (function () {
         tableSettings.forceRemoveHeaders = true;
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
+        tableSettings.filtersInitialized = false;
 
         table.init(tableSettings); //initializing table, filters and page size
 

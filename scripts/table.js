@@ -61,18 +61,24 @@ let table = (function () {
             colNames.unshift({Name: "-"});
             return colNames;
         }
+
         function getCountOfAllColumns(tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
-            if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
-                //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
-                colsCount = Object.keys(tableSettings.tableData[0]).length;
+            if (tableSettings === undefined || tableSettings.tableData === undefined || tableSettings.tableData === null || tableSettings.tableData.length === 0) {
+                colsCount = 0;
             } else {
-                let headElements = tbody.getElementsByClassName('head');
-                colsCount = headElements.length;
+                if (tbody === undefined || tbody === null || tableSettings.tableData !== undefined || tableSettings.tableData.length !== 0 || tableSettings.forceRemoveHeaders === true) {
+                    //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
+                    colsCount = Object.keys(tableSettings.tableData[0]).length;
+                } else {
+                    let headElements = tbody.getElementsByClassName('head');
+                    colsCount = headElements.length;
+                }
             }
             return colsCount;
         }
+
         function getColsCount(tableSettings) {
             let colsCount;
             if (tableSettings.ColumnsToShow === undefined || tableSettings.ColumnsToShow === null || tableSettings.ColumnsToShow.length === 0) {
@@ -100,7 +106,10 @@ let table = (function () {
 
         function generateTableHeaders(tableSettings) {
 
-            let colsCount = getCountOfAllColumns(tableSettings);;
+            let colsCount = getCountOfAllColumns(tableSettings);
+            if (colsCount === 0) {
+                alert('No columns to show!');
+            }
 
             let headers = hasHeaders(tableSettings);
 
@@ -325,7 +334,9 @@ let table = (function () {
             });
 
             tableSettings.tableData = tableData;
-            initFilters(tableSettings);
+            if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
+                initFilters(tableSettings);
+            }
             updateTable(tableSettings);
         });
 
@@ -480,7 +491,7 @@ let table = (function () {
             let hasSelectedColumns = false;
             let colsCount = columns.length;
 
-            if (columnsToShow!==undefined && columnsToShow.length > 0) {
+            if (columnsToShow !== undefined && columnsToShow.length > 0) {
                 hasSelectedColumns = true;
                 colsCount = columnsToShow.length;
             }
