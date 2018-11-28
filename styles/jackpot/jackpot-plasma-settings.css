@@ -29,10 +29,10 @@
     padding: 1rem 0;
 }
 
-#jackpot-plasma-settings-animations>div {
+#jackpot-plasma-settings-animations-picture>div {
     height: 50%;
 }
-#jackpot-plasma-settings-animations>div>canvas{
+#jackpot-plasma-settings-animations-picture>div>canvas{
     width: 50%;
     height: 80%;
 }
