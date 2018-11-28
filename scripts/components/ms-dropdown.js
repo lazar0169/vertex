@@ -5,7 +5,7 @@ const multiDropdown = (function () {
     let multiSelectArray = [];
     // generate multi dropdown
     function generate(dataSelect, element) {
-        if(element){
+        if (element) {
             removeChildren(element);
         }
         //array of chosen options
@@ -46,15 +46,13 @@ const multiDropdown = (function () {
                         array = [];
                         arrayInner = [];
                         selected.innerHTML = option.children[0].children[2].innerHTML;
-                    }
-                    else {
+                    } else {
                         selected.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
                     }
                     array.push(option.dataset.value);
                     arrayInner.push(option.children[0].children[2].innerHTML);
                     option.children[0].children[0].checked = true;
-                }
-                else {
+                } else {
                     let i = 0;
                     for (let elem of array) {
                         if (elem === option.dataset.value) {
@@ -81,7 +79,7 @@ const multiDropdown = (function () {
         indexMsId++;
         dataSelect.unshift(noSelected);
         multiSelectArray.push(select.id);
-        if(element){
+        if (element) {
             element.appendChild(select);
             return element;
         }
@@ -91,18 +89,18 @@ const multiDropdown = (function () {
     window.addEventListener('click', function (e) {
         e.stopPropagation();
         for (let selectId of multiSelectArray) {
-            if (e.target.parentNode.id === selectId) {
-                $$(`#${selectId}`).classList.toggle('active-multi-select');
-                $$(`#${selectId}`).children[1].classList.toggle('hidden');
-            }
-            else {
-                if (e.target.parentNode.parentNode.id === selectId) {
-                    $$(`#${selectId}`).classList.add('active-multi-select');
-                    $$(`#${selectId}`).children[1].classList.remove('hidden');
-                }
-                else {
-                    $$(`#${selectId}`).classList.remove('active-multi-select');
-                    $$(`#${selectId}`).children[1].classList.add('hidden');
+            if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
+                if (e.target.parentNode.id === selectId) {
+                    $$(`#${selectId}`).classList.toggle('active-multi-select');
+                    $$(`#${selectId}`).children[1].classList.toggle('hidden');
+                } else {
+                    if (e.target.parentNode.parentNode.id === selectId) {
+                        $$(`#${selectId}`).classList.add('active-multi-select');
+                        $$(`#${selectId}`).children[1].classList.remove('hidden');
+                    } else {
+                        $$(`#${selectId}`).classList.remove('active-multi-select');
+                        $$(`#${selectId}`).children[1].classList.add('hidden');
+                    }
                 }
             }
         }
