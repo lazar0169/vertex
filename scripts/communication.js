@@ -346,10 +346,10 @@ let communication = (function () {
     //aft get transactions
     on('communicate/tickets/getTickets', function (params) {
         alert('communicate tickets');
-        let route = 'api/tickets/';
+        let route = '/api/tickets/';
+        let successEvent = 'table/update';
         let request = requestTypes.post;
         let data = params.data;
-        let successEvent = params.callbackEvent;
         let tableSettings = params.tableSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {

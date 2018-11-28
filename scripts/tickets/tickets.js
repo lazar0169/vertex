@@ -5,21 +5,34 @@ const tickets = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-
         let ticketId = params.params[0].value;
         console.log(ticketId);
 
+        selectTab('tickets-tab');
+        selectInfoContent('tickets-tab-info');
+
         let tableSettings = {};
-        tableSettings.forceRemoveHeaders = true;
+        tableSettings.pageSelectorId = '#page-tickets';
         tableSettings.tableContainerSelector = '#table-container-tickets';
         tableSettings.filterContainerSelector = '#tickets-advance-table-filter-active';
+        tableSettings.dataEvent = 'communicate/tickets/getTickets';
+        tableSettings.endpointId = ticketId;
+        tableSettings.id = '';
+        tableSettings.forceRemoveHeaders = true;
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
-        tableSettings.dataEvent = 'communicate/tickets/getTickets';
-        tableSettings.id = '';
-        tableSettings.endpointId = ticketId;
+        tableSettings.filtersInitialized = false;
 
-        table.init(tableSettings);
-        // ticketsFilter.initFilters(tableSettings);
+        table.init(tableSettings); //initializing table, filters and page size
+
+/*        let addTransactionButton = $$('#page-tickets').getElementsByClassName('tickets-add-transaction')[0];
+
+        addTransactionButton.addEventListener('click', function () {
+            trigger('communicate/tickets/getTickets');
+        });*/
+
+/*        trigger('tickets/tab/ticketAppearance/init', {tableSettings: tableSettings});
+        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});
+        trigger('tickets/tab/setTicketMaxValue/init', {tableSettings: tableSettings});*/
     });
 })();
