@@ -61,8 +61,7 @@ let table = (function () {
             colNames.unshift({Name: "-"});
             return colNames;
         }
-
-        function getColsCount(tableSettings) {
+        function getCountOfAllColumns(tableSettings) {
             let colsCount;
             let tbody = getTableBodyElement(tableSettings);
             if (tbody === undefined || tbody === null || tableSettings.forceRemoveHeaders === true) {
@@ -71,6 +70,15 @@ let table = (function () {
             } else {
                 let headElements = tbody.getElementsByClassName('head');
                 colsCount = headElements.length;
+            }
+            return colsCount;
+        }
+        function getColsCount(tableSettings) {
+            let colsCount;
+            if (tableSettings.ColumnsToShow === undefined || tableSettings.ColumnsToShow === null || tableSettings.ColumnsToShow.length === 0) {
+                getCountOfAllColumns(tableSettings);
+            } else {
+                colsCount = tableSettings.ColumnsToShow.length;
             }
             return colsCount;
         }
@@ -92,7 +100,7 @@ let table = (function () {
 
         function generateTableHeaders(tableSettings) {
 
-            let colsCount = getColsCount(tableSettings);
+            let colsCount = getCountOfAllColumns(tableSettings);;
 
             let headers = hasHeaders(tableSettings);
 
@@ -155,7 +163,7 @@ let table = (function () {
 
         function generateTableRows(tableSettings) {
 
-            let colsCount = getColsCount(tableSettings);
+            let colsCount = getCountOfAllColumns(tableSettings);
             let tbody = getTableBodyElement(tableSettings);
 
             for (let row = 0; row < tableSettings.tableData.length; row++) {
@@ -295,6 +303,9 @@ let table = (function () {
             generateTableHeaders(tableSettings);
             generateTableRows(tableSettings);
             updateTablePagination(tableSettings);
+            showColumns(tableSettings, tableSettings.ColumnsToShow);
+            console.log('tableSettings in update table', tableSettings)
+            // showColumns(tableSettings);
         }
 
         function initFilters(tableSettings) {
@@ -304,6 +315,7 @@ let table = (function () {
 
         on('table/update', function (params) {
             console.log('API response in table/update: ', params);
+            console.log('table settings object in table/update', params.tableSettings);
             let tableSettings = params.tableSettings;
             let tableData = [];
             let apiItems = params.data.Data.Items;
@@ -461,24 +473,35 @@ let table = (function () {
         }
 
         function showColumns(tableSettings, columnsToShow) {
-            let colsCount;
             let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
             let columns = getColumnNames(tableSettings);
+            console.log('columnsToShow in show columns', columnsToShow);
 
+            let hasSelectedColumns = false;
+            let colsCount = columns.length;
+
+            if (columnsToShow!==undefined && columnsToShow.length > 0) {
+                hasSelectedColumns = true;
+                colsCount = columnsToShow.length;
+            }
             columns.forEach(function (column) {
-                let match = false;
-                columnsToShow.forEach(function (columnToShow) {
-                    if ('cell-' + columnToShow.toLowerCase() === column.toLowerCase()) {
+                    let match = false;
+                    if (hasSelectedColumns) {
+                        columnsToShow.forEach(function (columnToShow) {
+                            if ('cell-' + columnToShow.toLowerCase() === column.toLowerCase()) {
+                                match = true;
+                            }
+                        });
+                    } else {
                         match = true;
                     }
-                });
-                if (match) {
-                    showColumn(tableSettings, column);
-                } else {
-                    hideColumn(tableSettings, column);
+                    if (match) {
+                        showColumn(tableSettings, column);
+                    } else {
+                        hideColumn(tableSettings, column);
+                    }
                 }
-            });
-            colsCount = columnsToShow.length;
+            );
             styleColsRows(tableSettings, colsCount, tbodyElement);
         }
 
@@ -538,11 +561,12 @@ let table = (function () {
             let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
                 let name = element.dataset.name;
                 let filterElement = element.getElementsByClassName('element-table-filters')[0];
-                let filterVal = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
-                accumulated[name] = filterVal;
+                accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
                 return accumulated;
             }, {});
-
+            if (filters.Columns === null) {
+                filters.Columns = [];
+            }
             return filters;
         }
 
@@ -725,4 +749,5 @@ let table = (function () {
         /*--------------------------------------------------------------------------------------*/
 
     }
-)();
+)
+();

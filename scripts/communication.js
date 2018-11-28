@@ -160,7 +160,6 @@ let communication = (function () {
 
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
-        alert('Preview transactions / Apply filters');
         let route = 'api/transactions/previewtransactions/';
         let successEvent = 'table/update';
         let data = params.data;

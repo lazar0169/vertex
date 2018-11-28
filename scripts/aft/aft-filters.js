@@ -76,15 +76,11 @@ const aftFilters = (function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 
-    function chooseColumnsToShow(columns, currentTableSettingsObject) {
-        console.log('choose columns to show columns selected:', columns);
-        table.showColumns(currentTableSettingsObject, columns);
-    }
-
     //todo this is for testing
     $$('#choose-columns').addEventListener('click', function(){
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        chooseColumnsToShow(pageFilters.Columns, currentTableSettingsObject);
+        table.showColumns(currentTableSettingsObject, pageFilters.Columns);
+
     });
 
 
@@ -108,6 +104,8 @@ const aftFilters = (function () {
             },
             "TokenInfo": sessionStorage.token
         };
+        currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
+
         currentTableSettingsObject.filters = filtersForApi;
 
         console.log('Filters for API', filtersForApi);
