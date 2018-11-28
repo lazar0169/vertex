@@ -251,7 +251,6 @@ let communication = (function () {
         });
     });
 
-
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
@@ -343,11 +342,73 @@ let communication = (function () {
 
 
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
-    //aft get transactions
+    //tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
-        alert('communicate tickets');
+        alert('Communicate tickets');
         let route = '/api/tickets/';
         let successEvent = 'table/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        console.log('data to send to api', data);
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+
+    //tickets preview ticket action
+    //pagination sroting and filtering
+    on('communicate/tickets/previewTickets', function (params) {
+        alert('Communicate preview ticket action');
+        let route = '/api/tickets/previewtickets/';
+        let successEvent = 'table/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+
+    //getting filter values
+    on('communicate/tickets/getFilters', function (params) {
+        alert('Communicate get ticket filters');
+        let route = 'api/tickets/getfilters/';
+        let successEvent = params.successEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+
+    //tgetting filter values
+    on('communicate/tickets/getFilters', function (params) {
+        alert('Communicate get ticket filters');
+        let route = 'api/tickets/getfilters/';
+        let successEvent = params.successEvent;
         let request = requestTypes.post;
         let data = params.data;
         let tableSettings = params.tableSettings;

@@ -2,7 +2,7 @@
     padding: 0 0.5rem;
 }
 
-#aft-advance-table-filter-active {
+#aft-advance-table-filter-active, #tickets-advance-table-filter-active{
     display: inline-flex;
     flex-flow: row wrap;
     background: rgb(55, 71, 79);
@@ -13,18 +13,18 @@
     position: relative;
 }
 
-#aft-advance-table-filter-active>div {
+#aft-advance-table-filter-active>div, #tickets-advance-table-filter-active>div {
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
     padding: 0.3rem 0 0.3rem 0.3rem;
 }
 
-#aft-advance-table-filter-active>div:last-child {
+#aft-advance-table-filter-active>div:last-child, #tickets-advance-table-filter-active>div:last-child {
     margin: auto;
     padding: 0px;
 }
 
-.aft-advance-active {
+.aft-advance-active, .tickets-advance-active {
     background: rgb(55, 71, 79);
 }

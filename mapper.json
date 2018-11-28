@@ -28,7 +28,6 @@
       "aft/aft.js",
       "aft/aft-filters.js",
       "aft/aft-tab-content.js",
-      "aft/aft-tab-enable-transaction.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
