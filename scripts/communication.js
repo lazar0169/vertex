@@ -404,11 +404,11 @@ let communication = (function () {
     });
 
 
-    //tgetting filter values
-    on('communicate/tickets/getFilters', function (params) {
-        alert('Communicate get ticket filters');
-        let route = 'api/tickets/getfilters/';
-        let successEvent = params.successEvent;
+    //getting values for show sms settings
+    on('communicate/tickets/showSmsSettings', function (params) {
+        alert('Communicate show tito sms settings');
+        let route = 'api/tickets/smssettings/';
+        let successEvent = 'tickets/tab/smsSettings/display';
         let request = requestTypes.post;
         let data = params.data;
         let tableSettings = params.tableSettings;
@@ -422,6 +422,66 @@ let communication = (function () {
             tableSettings: tableSettings
         });
     });
+
+
+    //ShowTitoMaxValueSettings
+    on('communicate/tickets/showMaxValueSettings', function (params) {
+        alert('Communicate show tito max value settings');
+        let route = 'api/tickets/maxvaluesettings/';
+        let successEvent = 'tickets/tab/maxValueSettings/display';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //SaveTitoSmsAction
+    on('communicate/tickets/saveSmsSettings', function (params) {
+        alert('Communicate save tito sms settings');
+        let route = 'api/tikets/savesmssettings/';
+        let successEvent = 'tickets/tab/smsSettings/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //TODO FINISH THIS
+    //SaveTitoMaxValuesAction
+    on('communicate/tickets/saveMaxValuesAction', function (params) {
+        alert('Communicate save tito sms settings');
+        let route = 'api/tikets/savemaxvalues/';
+        let successEvent = 'tickets/tab/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
 
 
     /*--------------------------------------------------------------------------------------*/
