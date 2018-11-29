@@ -1,5 +1,9 @@
 #aft-add-transaction {
-    padding: 0 0.5rem;
+    padding: 0 1.5rem;
+}
+#aft-add-transaction button {
+    font-weight: 600;
+    font-size: 0.7rem;
 }
 
 #aft-advance-table-filter-active {
@@ -11,13 +15,15 @@
     justify-content: space-evenly;
     align-items: center;
     position: relative;
+    padding-left: 0.6rem;
+    font-size: 0.7rem;
 }
 
 #aft-advance-table-filter-active>div {
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
-    padding: 0.3rem 0 0.3rem 0.3rem;
+    padding: 0.3rem 0.4rem 0.3rem 0.3rem;
 }
 
 #aft-advance-table-filter-active>div:last-child {
@@ -25,6 +31,33 @@
     padding: 0px;
 }
 
+#aft-advance-table-filter-active {
+    padding: 0.3rem 0 0.3rem 0.6rem
+}
+
+#aft-advance-table-filter-active .element-table-filters {
+    min-width: 100px;
+    padding: 0.1rem 0 0.2rem 0.5rem;
+    color:rgb(255,255,255) ;
+}
+
+#aft-advance-table-filter-active .default-select {
+    border-radius: 10%;
+}
+
+#aft-advance-table-filter-active .element-table-filters:before {
+    top: 0.5rem;
+}
+
+#aft-advance-table-filter-active button {
+    font-size: 0.7rem;
+}
+#aft-advance-table-filter-active>div:last-child {
+    margin: 0;
+}
+
 .aft-advance-active {
+    border-top : 1px solid rgb(54,69,77);
     background: rgb(55, 71, 79);
+    color: rgb(255,255,255);
 }
