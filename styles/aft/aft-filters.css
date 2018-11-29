@@ -17,6 +17,7 @@
     position: relative;
     padding-left: 0.6rem;
     font-size: 0.7rem;
+    border-left: 1px solid #2A353A;
 }
 
 #aft-advance-table-filter-active>div {
@@ -57,7 +58,8 @@
 }
 
 .aft-advance-active {
-    border-top : 1px solid rgb(54,69,77);
+    border-top : 1px solid #2A353A;
     background: rgb(55, 71, 79);
     color: rgb(255,255,255);
+    border-left: 1px solid #2A353A;
 }
