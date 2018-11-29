@@ -4,7 +4,7 @@ const aftTabContent = (function () {
 
     //elements
     // let enableTransaction = $$('#aft-enable-transaction-check');
-    let chashableHandlplayLimit = $$('#chashable-handplay-limit');
+    let chashableHandlpayLimit = $$('#chashable-handplay-limit');
     let chashableTransactionLimit = $$('#chashable-limit');
     let promoHandplayTransactionLimit = $$('#promo-handplay-limit');
     let promoTransactionLimit = $$('#promo-limit');
@@ -21,7 +21,7 @@ const aftTabContent = (function () {
 
     function displayTransactionData(transactionData) {
         enableTransactionButton.getElementsByTagName('input')[0].checked = transactionData.EnableTransactions;
-        chashableHandlplayLimit.value = transactionData.CashableTransactionHandpayLimit;
+        chashableHandlpayLimit.value = transactionData.CashableTransactionHandpayLimit;
         chashableTransactionLimit.value = transactionData.CashableTransactionLimit;
         promoHandplayTransactionLimit.value = transactionData.PromoTransactionHandpayLimit;
         promoTransactionLimit.value = transactionData.PromoTransactionLimit;
@@ -32,7 +32,7 @@ const aftTabContent = (function () {
             EndpointId: currentTableSettingsObject.endpointId,
             EnableTransactions: enableTransactionButton.getElementsByTagName('input')[0].checked,
             CashableTransactionLimit: chashableTransactionLimit.value,
-            CashableTransactionHandpayLimit: chashableHandlplayLimit.value,
+            CashableTransactionHandpayLimit: chashableHandlpayLimit.value,
             PromoTransactionLimit: promoHandplayTransactionLimit.value,
             PromoTransactionHandpayLimit: promoTransactionLimit.value
         };
@@ -66,6 +66,7 @@ const aftTabContent = (function () {
     let aftNotificationEmail = $$('#aft-notification-send-email');
     let aftAnotherEmail = $$('#aft-notification-another-email');
     let aftNotificationMobile = $$('#aft-notification-send-mobile');
+    let aftNotificationSendLimit = $$('#aft-notification-send-limit').children[1];
     let aftAnotherMobile = $$('#aft-notification-another-phone');
     let emailCounter = 0;
     let mobileCounter = 0;
@@ -94,12 +95,12 @@ const aftTabContent = (function () {
         let notificationDataForApi = {
             EndpointId: currentTableSettingsObject.endpointId,
             EnableTransactions: notificationsEnableButton.getElementsByTagName('input')[0].checked,
-            CashableTransactionCreatedLimitForNotification: 55, //todo insert real data
-            CashableTransactionPayedLimitForNotification: 55,
-            PromoTransactionCreatedLimitForNotification: 55,
-            PromoTransactionPayedLimitForNotification: 55,
-            EmailList: '',
-            PhoneNumberList: ''
+            CashableTransactionCreatedLimitForNotification: aftNotificationSendLimit.value, //todo insert real data !
+            CashableTransactionPayedLimitForNotification: aftNotificationSendLimit.value,
+            PromoTransactionCreatedLimitForNotification: aftNotificationSendLimit.value,
+            PromoTransactionPayedLimitForNotification: aftNotificationSendLimit.value,
+            EmailList: notificationEmailAddress.value,
+            PhoneNumberList: notificationMobileNumber.value
         };
         return notificationDataForApi;
     }

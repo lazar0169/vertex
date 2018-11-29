@@ -27,7 +27,22 @@ const aft = (function () {
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
         addTransactionButton.addEventListener('click', function () {
-            trigger('communicate/aft/addTransaction');
+            let data =
+                {
+                    'EndpointId': aftId,
+                    'EndpointName': '',
+                    'Gmcid': 1565666846,
+                    'MachineName': '',
+                    'Type': 0,
+                    'CashableAmount': 13800,
+                    'PromoAmount': 13800,
+                    'ExpirationInDays': 7
+                }
+            trigger('communicate/aft/addTransaction', {data: data, tableSettings: tableSettings});
+        });
+
+        on('aft/addTransaction', function () {
+            alert('Transaction added!');
         });
 
         trigger('aft/tab/transactions/init', {tableSettings: tableSettings});

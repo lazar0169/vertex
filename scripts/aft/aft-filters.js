@@ -1,4 +1,18 @@
 const aftFilters = (function () {
+
+    const aftSortName = {
+        amountcashable: 0,
+        amountpromo: 1,
+        amountnonrestrictive: 2,
+        eventtime: 3,
+        GMCID: 4,
+        JIDTP: 5,
+        status: 6,
+        machinename: 7,
+        jackpotname: 8,
+        transactiontype: 9
+    };
+
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
@@ -53,8 +67,6 @@ const aftFilters = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        console.log('List of page sizes: ', machinesNumber);
-
         dropdown.generate(machinesNumber, aftMachinesNumbers);
         dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
@@ -79,8 +91,8 @@ const aftFilters = (function () {
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        console.log('page filters in collect filters from page', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
+        let sortName = sorting.SortName;
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
@@ -93,7 +105,7 @@ const aftFilters = (function () {
                 "Page": 1,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
                 "SortOrder": sorting.SortOrder,
-                "SortName": sorting.SortName
+                "SortName": aftSortName[sortName] !== undefined ? aftSortName[sortName] : null
             },
             "TokenInfo": sessionStorage.token
         };
@@ -101,7 +113,7 @@ const aftFilters = (function () {
 
         currentTableSettingsObject.filters = filtersForApi;
 
-        console.log('Filters for API', filtersForApi);
+        console.log('AFT filters that we are sending to API: ', currentTableSettingsObject.filters);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,

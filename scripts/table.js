@@ -313,7 +313,7 @@ let table = (function () {
             generateTableRows(tableSettings);
             updateTablePagination(tableSettings);
             showColumns(tableSettings, tableSettings.ColumnsToShow);
-            console.log('tableSettings in update table', tableSettings)
+            console.log('TableSettings object in update table: ', tableSettings);
             // showColumns(tableSettings);
         }
 
@@ -324,7 +324,6 @@ let table = (function () {
 
         on('table/update', function (params) {
             console.log('API response in table/update: ', params);
-            console.log('table settings object in table/update', params.tableSettings);
             let tableSettings = params.tableSettings;
             let tableData = [];
             let apiItems = params.data.Data.Items;
@@ -499,7 +498,6 @@ let table = (function () {
         function showColumns(tableSettings, columnsToShow) {
             let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
             let columns = getColumnNames(tableSettings);
-            console.log('columnsToShow in show columns', columnsToShow);
 
             let hasSelectedColumns = false;
             let colsCount = columns.length;
@@ -580,7 +578,6 @@ let table = (function () {
         function collectFiltersFromPage(tableSettings) {
             tableSettings.filters = {};
             let filterContainers = collectAllFilterContainers(tableSettings);
-            console.log('filter elements', filterContainers);
 
             let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
                 let name = element.dataset.name;
@@ -636,7 +633,7 @@ let table = (function () {
                             tableSettings.filters[filterName] = filterValue;
                         }
                     }
-                    //todo ajust to work with AFT
+
                     /!*            getPageSize(tableSettings);
                                 getQuerySearch(tableSettings);*!/
                     return tableSettings.filters;

@@ -177,7 +177,7 @@ let communication = (function () {
         });
     });
 
-    //TODO PREPAKUJ SVE OVO U JEDAN JEDINI HENDLER !!!
+    //TODO PREPAKUJ SVE OVO U JEDAN HENDLER !!!
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
@@ -199,6 +199,7 @@ let communication = (function () {
 
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
+        console.log('Save notification settings params: ', params);
         let route = 'api/transactions/savenotificationsettings/';
         let successEvent = 'aft/tab/notifications/update';
         let tableSettings = params.tableSettings;
@@ -271,19 +272,10 @@ let communication = (function () {
 
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
-        alert('add transaction');
+        console.log('AFT add transaction');
         let route = 'api/transactions/addtransaction/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            'MachineName': '',
-            'Type': 0,
-            'CashableAmount': 13800,
-            'PromoAmount': 13800,
-            'ExpirationInDays': 7
-        };
+        let successEvent = 'aft/addTransaction';
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
