@@ -409,9 +409,7 @@ let table = (function () {
 
 
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
-            console.log('column name', columnName);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-            console.log('column element', columnElements);
             for (let j = 0; j < columnElements.length; j++) {
                 columnElements[j].classList.add('active-column');
             }
@@ -464,7 +462,6 @@ let table = (function () {
         function getColumnNameFromHeadElement(tableSettings, headElement) {
             let classList = headElement.classList;
             let cellClassName;
-            console.log('class list of head element', classList);
             for (let i = 0; i < classList.length; i++) {
                 if (classList[i].includes('cell-')) {
                     cellClassName = classList[i];

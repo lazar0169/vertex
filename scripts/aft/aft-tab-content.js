@@ -20,7 +20,6 @@ const aftTabContent = (function () {
     }
 
     function displayTransactionData(transactionData) {
-        console.log('Transaction data to display: ', transactionData);
         enableTransactionButton.getElementsByTagName('input')[0].checked = transactionData.EnableTransactions;
         chashableHandlplayLimit.value = transactionData.CashableTransactionHandpayLimit;
         chashableTransactionLimit.value = transactionData.CashableTransactionLimit;
@@ -42,12 +41,10 @@ const aftTabContent = (function () {
 
     on('aft/tab/transactions/init', function (params) {
         currentTableSettingsObject = params.tableSettings;
-        console.log('Params in aft tab transactions init: ', params);
         getTransactionData(currentTableSettingsObject);
     });
 
     on('aft/tab/transactions/display', function (params) {
-        console.log('Usli smo u transitions display');
         let transactionData = params.data.Data;
         displayTransactionData(transactionData);
     });
@@ -55,13 +52,11 @@ const aftTabContent = (function () {
     saveTransactionButton.addEventListener('click', function () {
         alert('Save transactions button click!');
         let dataForApi = collectAndPrepareTransactionDataForApi();
-        console.log('Save transactions data for api', dataForApi);
         trigger('communicate/aft/saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
 
     on('aft/tab/transactions/update', function (params) {
         alert('Transactions update!');
-        console.log('transactions data', params);
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -89,7 +84,6 @@ const aftTabContent = (function () {
     }
 
     function displayNotificationData(notificationData) {
-        console.log('Notification data to display', notificationData);
         notificationsEnableButton.getElementsByTagName('input')[0].checked = notificationData.EnableTransactions;
         notificationLimit.value = notificationData.CashableTransactionCreatedLimitForNotification;
         notificationMobileNumber.value = notificationData.PhoneNumberList[0];
@@ -112,12 +106,10 @@ const aftTabContent = (function () {
 
     on('aft/tab/notifications/init', function (params) {
         currentTableSettingsObject = params.tableSettings;
-        console.log('Params in aft tab notifications init: ', params);
         getNotificationData(currentTableSettingsObject);
     });
 
     on('aft/tab/notifications/display', function (params) {
-        console.log('Usli smo u notifications display');
         let notificationData = params.data.Data;
         displayNotificationData(notificationData);
     });
@@ -125,7 +117,6 @@ const aftTabContent = (function () {
     notificationSaveButton.addEventListener('click', function () {
         alert('Save notifications button click!');
         let dataForApi = collectAndPrepareNotificationDataForApi();
-        console.log('Save notifications data for api', dataForApi);
         trigger('communicate/aft/saveNotificationSettings', {
             data: dataForApi,
             tableSettings: currentTableSettingsObject
@@ -134,7 +125,6 @@ const aftTabContent = (function () {
 
     on('aft/tab/notifications/update', function (params) {
         alert('Notifications update!');
-        console.log('Notifications data', params);
     });
 
     aftAnotherMobile.addEventListener('click', function () {

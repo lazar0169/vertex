@@ -852,7 +852,6 @@ let communication = (function () {
     }
 
     on('communicate/token/refresh', function (params) {
-        console.log('timeout', timeout);
         if (timeout !== null) {
             clearTimeout(timeout);
         }
