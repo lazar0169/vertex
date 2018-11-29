@@ -48,16 +48,22 @@ const ticketsFilter = (function () {
         console.log('filters from API', filters);
 
         //filter elements
-        let ticketsAdvanceTableFiltersStates = $$('#tickets-advance-table-filter-states');
+        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
+        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
+        let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
-        let ticketsAdvanceTableFiltersPrintedRedeemed = $$('#tickets-advance-table-filter-printed-redeemed');
+        let ticketsAdvanceTableFiltersPrinted = $$('#tickets-advance-table-filter-printed');
+        let ticketsAdvanceTableFiltersRedeemed = $$('#tickets-advance-table-filter-redeemed');
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        multiDropdown.generate(filters.TicketStateList, ticketsAdvanceTableFiltersStates);
+        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersPrintDate);
+        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersRedeemDate);
+        multiDropdown.generate(filters.TicketStateList, ticketsAdvanceTableFiltersStatus);
         multiDropdown.generate(filters.TypesList, ticketsAdvanceTableFiltersTypes);
-        dropdownDate.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrintedRedeemed);
+        multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
+        multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
         multiDropdown.generate(colNames, ticketsAdvanceTableFilterColumn);
     }
 
@@ -78,14 +84,14 @@ const ticketsFilter = (function () {
         let sorting = table.getSorting(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
-            "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            "RedeemDateFrom": pageFilters.MachineList,
-            "RedeemDateTo": pageFilters.JackpotList,
-            "PrintedList": pageFilters.Status,
-            "RedeemList": pageFilters.Type,
+            "DateFrom": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
+            "DateTo": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
+            "RedeemDateFrom": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
+            "RedeemDateTo": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
+            "PrintedList": pageFilters.Printed,
+            "RedeemList": pageFilters.Redeemed,
             "Status": pageFilters.Status,
-            "Type": pageFilters.Type,
+            "Type": pageFilters.TypesList,
             "BasicData": {
                 "Page": 1,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
