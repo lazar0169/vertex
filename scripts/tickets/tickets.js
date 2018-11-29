@@ -31,8 +31,8 @@ const tickets = (function () {
             trigger('communicate/tickets/getTickets');
         });*/
 
-/*        trigger('tickets/tab/ticketAppearance/init', {tableSettings: tableSettings});
-        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});
-        trigger('tickets/tab/setTicketMaxValue/init', {tableSettings: tableSettings});*/
+        trigger('tickets/tab/appearance/init', {tableSettings: tableSettings});
+/*        trigger('communicate/tickets/smsSettings/init', {tableSettings: tableSettings});
+        trigger('communicate/tickets/showMaxValueSettings/init', {tableSettings: tableSettings});*/
     });
 })();

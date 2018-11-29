@@ -8,10 +8,13 @@ const ticketAppearance = (function () {
     let inputChasoutTicket = $$('#wrapper-tickets-appearance-cashable').children[1].children[1];
     let inputExpiringCashout = $$('#wrapper-tickets-appearance-cashable').children[2].children[1];
     let inputExpiringPromo = $$('#wrapper-tickets-appearance-promo').children[2].children[1];
+    let inputPayablePromo = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
     let inputValidation = $$('#tickets-advanced-settings-validation').children[1];
     let inputTicket = $$('#tickets-advanced-settings-ticket').children[1];
     let dateWrapper = $$('#tickets-advanced-settings-date');
+    // let dateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let timeWrapper = $$('#tickets-advanced-settings-time');
+    // let timeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let inputTicketVoid = $$('#tickets-advanced-settings-void').children[1];
     let inputTicketVoidDays = $$('#tickets-advanced-settings-days').children[1];
     let inputAsset = $$('#tickets-advanced-settings-asset').children[1];
@@ -51,8 +54,7 @@ const ticketAppearance = (function () {
         if (isNaN(inputExpiringCashout.value)) {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
             draw(ticketVoidAfterDaysCoordinate, '');
-        }
-        else {
+        } else {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
             draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
@@ -65,8 +67,7 @@ const ticketAppearance = (function () {
         if (isNaN(inputExpiringPromo.value)) {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringPromo.value);
             draw(ticketVoidAfterDaysCoordinate, '');
-        }
-        else {
+        } else {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringPromo.value);
             draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
@@ -227,8 +228,7 @@ const ticketAppearance = (function () {
         draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
         if (!isNaN(inputExpiringCashout.value)) {
             draw(ticketVoidAfterDaysCoordinate, inputCurrency.value);
-        }
-        else {
+        } else {
             draw(ticketVoidAfterDaysCoordinate, '');
         }
         draw(assetCoordinate, `${inputAsset.value} #`);
@@ -344,13 +344,11 @@ const ticketAppearance = (function () {
             ctx.rotate(-Math.PI / 2);
             ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
             ctx.restore();
-        }
-        else if (coordinate.y < 0) {
+        } else if (coordinate.y < 0) {
             ctx.rotate(Math.PI / 2);
             ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
             ctx.restore();
-        }
-        else {
+        } else {
             ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
         }
     }
@@ -370,4 +368,95 @@ const ticketAppearance = (function () {
     saveTicketAppearance.addEventListener('click', function () {
         alert('Save data');
     });
+
+
+    //elements
+    // let enableTransaction = $$('#aft-enable-transaction-check');
+    let chashableHandlplayLimit = $$('#chashable-handplay-limit');
+    let chashableTransactionLimit = $$('#chashable-limit');
+    let promoHandplayTransactionLimit = $$('#promo-handplay-limit');
+    let promoTransactionLimit = $$('#promo-limit');
+    let currentTableSettingsObject;
+    let saveTicketButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
+    let enableTransactionButton = $$('#aft-enable-transaction-check');
+
+    function getTicketAppearance(currentTableSettingsObject) {
+        trigger('communicate/tickets/ticketAppearance', {
+            data: {EndpointId: currentTableSettingsObject.endpointId},
+            tableSettings: currentTableSettingsObject
+        });
+    }
+
+    function displayTicketData(ticketData) {
+        console.log('Ticket data to display: ', ticketData);
+        inputCasino.value = ticketData.Name;
+        inputAddress.value = ticketData.Address1;
+        inputCity.value = ticketData.Address2;
+        inputChasoutTicket.value = ticketData.CashableTicketTitle;
+        inputPayablePromo.value = ticketData.RestrictedTicketTitle;
+        inputValidation.value = ticketData.Validation;
+        // dateFormat.value = ticketData.DateFormat;
+        // timeFormat.value = ticketData.TimeFormat;
+        inputTicket.value = ticketData.Ticket;
+        inputTicketVoid.value = ticketData.TicketVoid;
+        inputTicketVoidDays.value = ticketData.TicketVoidDays;
+        // .value = ticketData.TicketVoidValue;
+        inputAsset.value = ticketData.Asset;
+        inputAssetNumber.value = ticketData.AssetValue;
+        inputCurrency.value = ticketData.Valute;
+        inputExpiringCashout.value = ticketData.CashableTicketExpirationDays;
+        inputExpiringPromo.value = ticketData.RestrictedTicketExpirationDays;
+        // .value = ticketData.RestrictedTicketPoolId;
+    }
+
+    function collectAndPrepareTicketDataForApi() {
+        let ticketDataForApi = {
+            Name: '',
+            Address1: '',
+            Address2: '',
+            CashableTicketTitle: '',
+            RestrictedTicketTitle: '',
+            Validation: '',
+            DateFormat: '',
+            TimeFormat: '',
+            Ticket: '',
+            TicketVoid: '',
+            TicketVoidDays: '',
+            TicketVoidValue: '',
+            Asset: '',
+            AssetValue: '',
+            Valute: '',
+            CashableTicketExpirationDays: '',
+            RestrictedTicketExpirationDays: '',
+            RestrictedTicketPoolId: '',
+        };
+        return ticketDataForApi;
+    }
+
+    on('tickets/tab/appearance/init', function (params) {
+        currentTableSettingsObject = params.tableSettings;
+        console.log('Params in tickets tab appearance: ', params);
+        getTicketAppearance(currentTableSettingsObject);
+    });
+
+    on('tickets/tab/appearance/display', function (params) {
+        console.log('Usli smo u appearance display');
+        let ticketData = params.data.Data;
+        console.log('ticket data', ticketData);
+        displayTicketData(ticketData);
+    });
+
+    saveTicketButton.addEventListener('click', function () {
+        alert('Save ticket button click!');
+        let dataForApi = collectAndPrepareTicketDataForApi();
+        console.log('Save ticket data for api', dataForApi);
+        trigger('communicate/tickets/saveAppearance', {data: dataForApi, tableSettings: currentTableSettingsObject});
+    });
+
+    on('tickets/tab/appearance/update', function (params) {
+        alert('Ticket update!');
+        console.log('Ticket data', params);
+    });
+
+
 })();

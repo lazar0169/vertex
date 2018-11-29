@@ -448,7 +448,6 @@ let table = (function () {
     function getColumnNameFromHeadElement(tableSettings, headElement) {
         let classList = headElement.classList;
         let cellClassName;
-        console.log('class list of head element', classList);
         for (let i = 0; i < classList.length; i++) {
             if (classList[i].includes('cell-')) {
                 cellClassName = classList[i];

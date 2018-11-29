@@ -7,7 +7,7 @@ const dropdown = (function () {
 
     //generate single dropdown
     function generate(dataSelect, element) {
-        if(element) {
+        if (element) {
             removeChildren(element);
         }
         // wrapper select
@@ -53,7 +53,7 @@ const dropdown = (function () {
         indexSsId++;
         singleSelectArray.push(select.id);
 
-        if(element){
+        if (element) {
             element.appendChild(select);
             return element;
         }
@@ -61,15 +61,17 @@ const dropdown = (function () {
     }
 
     //TODO THIS PART GENERATES MULTIPLE ERRORS
-/*    window.addEventListener('click', function (e) {
+    window.addEventListener('click', function (e) {
         e.stopPropagation();
         for (let selectId of singleSelectArray) {
-            if (e.target.parentNode.id != selectId) {
-                $$(`#${selectId}`).classList.remove('active-single-select');
-                $$(`#${selectId}`).children[1].classList.add('hidden');
+            if (e.target.parentNode !== null && selectId !== null) {
+                if (e.target.parentNode.id !== selectId) {
+                    $$(`#${selectId}`).classList.remove('active-single-select');
+                    $$(`#${selectId}`).children[1].classList.add('hidden');
+                }
             }
         }
-    });*/
+    });
 
     return {
         generate

@@ -421,8 +421,9 @@ let communication = (function () {
     });
 
     //ShowTicketAppearanceSettings
-    on('communicate/tickets/showMaxValueSettings', function (params) {
-        let route = 'api/tickets/ticketapperance/';
+    on('communicate/tickets/ticketAppearance', function (params) {
+        alert('communicate ticket ticket appearance');
+        let route = 'api/tickets/ticketappearance/';
         let successEvent = 'tickets/tab/appearance/display';
         let request = requestTypes.post;
         let data = params.data;
