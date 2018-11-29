@@ -3,6 +3,7 @@ const jackpotPlasmaSettings = (function () {
     let jackpotPlasmaGeneralCheckbox = $$('.jackpot-plasma-general-checkbox');
     let jackpotPlasmaWinCheckbox = $$('.jackpot-plasma-win-checkbox');
     let jackpotPlasmaGeneralSettingsHousing = $$('#jackpot-plasma-general-settings-housing');
+    let infoLineText = $$('#jackpot-plasma-general-settings-infoline-text').children[0];
     let applyInfoLineText = $$('#jackpot-plasma-general-settings-infoline-text').children[1];
 
     jackpotPlasmaSettingsBackground.appendChild(dropdown.generate(pictureName));
@@ -148,9 +149,7 @@ const jackpotPlasmaSettings = (function () {
         let canvas = div;
         let ctx = canvas.getContext("2d");
         let img = imgId;
-
         ctx.drawImage(img, 0, 0, 1400, 800);
-
     }
 
 
@@ -179,6 +178,9 @@ const jackpotPlasmaSettings = (function () {
     function drawJackpotInfoLine(coordinate, text) {
         let canvas = $$('#jackpot-plasma-settings-animations-picture').children[0].children[0];
         let ctx = canvas.getContext("2d");
+        ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
+        ctx.fillStyle = 'black';
+        ctx.fillRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = text;
         ctx.fillStyle = 'white';
         ctx.font = `bold ${coordinate.h - 5}px roboto`;
@@ -315,7 +317,12 @@ const jackpotPlasmaSettings = (function () {
     }
 
     applyInfoLineText.addEventListener('click', function () {
-        drawJackpotInfoLine(infoLineCoordinate, 'ovo je neki info text');
+        if ($$('#jackpot-plasma-general-settings-infoline').children[0].children[0].checked) {
+            drawJackpotInfoLine(infoLineCoordinate, infoLineText.value);
+        }
+        else {
+            alert('Enable box "Info Line"')
+        }
     });
 
 
