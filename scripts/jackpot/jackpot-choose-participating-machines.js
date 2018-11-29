@@ -222,7 +222,6 @@ const jackpotChooseParticipatingMachines = (function () {
                 element.children[1].classList.toggle('hidden');
             }
         }
-
     }
 
     window.addEventListener('load', function () {

@@ -8,6 +8,8 @@ const jackpotanimationSettings = (function () {
     let infoLineCheckbox = $$('#jackpot-animation-general-settings-infoline');
     let applyInfoLineText = $$('#jackpot-animation-general-settings-infoline-text').children[1];
 
+
+
     jackpotanimationSettingsBackground.appendChild(dropdown.generate(pictureName));
     //first
     let topLabelCoordinate1 = {
@@ -147,13 +149,13 @@ const jackpotanimationSettings = (function () {
         w: 951,
         h: 192
     }
+
     function drawanimationPicture(div, imgId) {
         let canvas = div;
         let ctx = canvas.getContext("2d");
         let img = imgId;
         ctx.drawImage(img, 0, 0, 1400, 800);
     }
-
 
     function drawJackpotLabel(imgId, coordinate, text) {
         let canvas = $$('#jackpot-animation-settings-animations-picture').children[0].children[0];
@@ -177,6 +179,7 @@ const jackpotanimationSettings = (function () {
         ctx.drawImage(img, coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 7 / 8);
     }
+
     function drawJackpotInfoLine(coordinate, text) {
         let canvas = $$('#jackpot-animation-settings-animations-picture').children[0].children[0];
         let ctx = canvas.getContext("2d");
@@ -219,6 +222,7 @@ const jackpotanimationSettings = (function () {
             }
         }
     }
+
     function callDrawJackpotLabelOnGeneralCheck(checkedLabel) {
         switch (checkedLabel) {
             case 'top-label-animation-background':
@@ -323,7 +327,6 @@ const jackpotanimationSettings = (function () {
         drawJackpotInfoLine(infoLineCoordinate, infoLineText.value);
     });
 
-
     window.addEventListener('load', function () {
         drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], $$('#new-york-landscape-animation-background'));
         drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
@@ -332,7 +335,9 @@ const jackpotanimationSettings = (function () {
         drawWinningJackpotLabel('#housing-label-animation-background', housingCoordinateWin, '500.00');
         drawWinningJackpotLabel('#left-label-animation-background', leftLabelCoordinateWin, '1');
         drawWinningJackpotLabel('#bottom-label-animation-background', bottomLabelCoordinateWin, 'FAZI');
-        drawJackpotInfoLine(infoLineCoordinate, 'Text info line');
+        //ToDo: value treba biti text koji se dobije sa servera
+        infoLineWrapper.children[0].value = 'Text info line';
+        drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
 
         for (let check of jackpotanimationGeneralCheckbox) {
             check.addEventListener('click', function (e) {
@@ -386,6 +391,5 @@ const jackpotanimationSettings = (function () {
                 }
             });
         }
-
     });
 })();

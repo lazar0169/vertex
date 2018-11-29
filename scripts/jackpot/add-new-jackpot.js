@@ -1,5 +1,6 @@
 const addNewJackpot = (function () {
-    let addNewJackpotControlSettings = $$('.add-new-jackpot-control-settings-info');
+    let addNewJackpotControlSettings = $$('.add-new-jackpot-control-settings');
+    let addNewJackpotControlSettingsInfo = $$('.add-new-jackpot-control-settings-info');
     let removeAllMachines = $$('#add-new-jackpot-choose-machines-buttons').children[1];
     let saveNewJackpot = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[1];
     let clearAllFields = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[0];
@@ -13,13 +14,47 @@ const addNewJackpot = (function () {
     });
 
     window.addEventListener('load', function () {
-        for (let control of addNewJackpotControlSettings) {
+        for (let control of addNewJackpotControlSettingsInfo) {
             control.addEventListener('click', function () {
-                control.parentNode.parentNode.children[1].classList.toggle('hidden');
+                for (let element of addNewJackpotControlSettingsInfo) {
+                    if (control !== element) {
+                        element.parentNode.parentNode.children[1].classList.add('hidden');
+                    }
+                    else {
+                        element.parentNode.parentNode.children[1].classList.toggle('hidden');
+                    }
+                }
             });
         }
+        for (let checkSwitch of addNewJackpotControlSettings) {
+            checkSwitch.children[0].children[0].children[0].addEventListener('click', function (e) {
+                e.preventDefault();
+                if (checkSwitch.children[0].children[0].children[0].children[0].checked) {
+                    checkSwitch.children[0].children[0].children[0].children[0].checked = false;
+                    checkSwitch.children[0].children[1].children[1].innerHTML = 'Off';
+                    checkSwitch.children[1].classList.add('hidden');
+
+                }
+                else {
+                    checkSwitch.children[0].children[0].children[0].children[0].checked = true;
+                    checkSwitch.children[0].children[1].children[1].innerHTML = 'On';
+                    checkSwitch.children[1].classList.remove('hidden');
+
+                }
+                for (let currentCheck of addNewJackpotControlSettings) {
+                    if (checkSwitch.children[0].children[0].children[0] !== currentCheck.children[0].children[0].children[0]) {
+                        currentCheck.children[1].classList.add('hidden');
+                    }
+                }
+                checkSwitch.children[0].classList.toggle('checked-add-new-jackpot-settings');
+                checkSwitch.children[0].children[1].children[1].classList.toggle('active-add-new-jackpot-settings')
+            })
+        }
     });
+
     removeAllMachines.addEventListener('click', function () {
         alert('Remove all machines');
     })
+
+
 })();
