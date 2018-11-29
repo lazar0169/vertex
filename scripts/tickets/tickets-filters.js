@@ -16,7 +16,6 @@ const ticketsFilter = (function () {
     }
 
     ticketAdvanceFilter.addEventListener('click', function () {
-        alert('Show advance table filter...');
         showAdvanceTableFilter();
     });
 
@@ -105,7 +104,6 @@ const ticketsFilter = (function () {
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
-        alert('Clear filters tickets');
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 

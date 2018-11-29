@@ -288,21 +288,17 @@ let communication = (function () {
     on('communicate/aft/cancelTransaction', function (params) {
         let route = 'api/transactions/canceltransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-        };
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
@@ -310,21 +306,17 @@ let communication = (function () {
     on('communicate/aft/cancelPendingTransaction', function (params) {
         let route = 'api/transactions/cancelpendingtransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': '33,32'
-        };
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings = params.tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
@@ -334,7 +326,6 @@ let communication = (function () {
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
     //tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
-        alert('Communicate tickets');
         let route = 'api/tickets/';
         console.log('route', route);
         let successEvent = 'table/update';
@@ -354,11 +345,9 @@ let communication = (function () {
         });
     });
 
-
     //tickets preview ticket action
-    //pagination sroting and filtering
+    //pagination sorting and filtering
     on('communicate/tickets/previewTickets', function (params) {
-        alert('Communicate preview ticket action');
         let route = 'api/tickets/previewtickets/';
         let successEvent = 'table/update';
         let request = requestTypes.post;
@@ -375,10 +364,8 @@ let communication = (function () {
         });
     });
 
-
     //getting filter values
     on('communicate/tickets/getFilters', function (params) {
-        alert('Communicate get ticket filters');
         let route = 'api/tickets/getfilters/';
         let successEvent = params.successEvent;
         let request = requestTypes.post;
@@ -398,7 +385,6 @@ let communication = (function () {
 
     //getting values for show sms settings
     on('communicate/tickets/showSmsSettings', function (params) {
-        alert('Communicate show tito sms settings');
         let route = 'api/tickets/smssettings/';
         let successEvent = 'tickets/tab/smsSettings/display';
         let request = requestTypes.post;
@@ -418,9 +404,26 @@ let communication = (function () {
 
     //ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
-        alert('Communicate show tito max value settings');
         let route = 'api/tickets/maxvaluesettings/';
-        let successEvent = 'tickets/tab/maxValueSettings/display';
+        let successEvent = 'tickets/tab/maxValue/display';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //ShowTicketAppearanceSettings
+    on('communicate/tickets/showMaxValueSettings', function (params) {
+        let route = 'api/tickets/ticketapperance/';
+        let successEvent = 'tickets/tab/appearance/display';
         let request = requestTypes.post;
         let data = params.data;
         let tableSettings = params.tableSettings;
@@ -437,7 +440,6 @@ let communication = (function () {
 
     //SaveTitoSmsAction
     on('communicate/tickets/saveSmsSettings', function (params) {
-        alert('Communicate save tito sms settings');
         let route = 'api/tikets/savesmssettings/';
         let successEvent = 'tickets/tab/smsSettings/update';
         let request = requestTypes.post;
@@ -454,12 +456,10 @@ let communication = (function () {
         });
     });
 
-    //TODO FINISH THIS
     //SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
-        alert('Communicate save tito sms settings');
         let route = 'api/tikets/savemaxvalues/';
-        let successEvent = 'tickets/tab/update';
+        let successEvent = 'tickets/tab/maxValue/update';
         let request = requestTypes.post;
         let data = params.data;
         let tableSettings = params.tableSettings;
@@ -474,6 +474,23 @@ let communication = (function () {
         });
     });
 
+    //SaveTicketAppearanceAction
+    on('communicate/tickets/saveAppearance', function (params) {
+        let route = 'api/tikets/saveappearance/';
+        let successEvent = 'tickets/tab/appearance/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
 
 
     /*--------------------------------------------------------------------------------------*/
