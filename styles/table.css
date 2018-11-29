@@ -8,6 +8,7 @@
 .first.cell {
     top: 0;
     left: 0;
+    padding-left: 0.5rem;
 }
 
 .cell {
@@ -42,6 +43,7 @@
 .sticky {
     position: sticky;
     position: -webkit-sticky;
+    font-weight: 800;
 }
 
 .tbody {
@@ -53,11 +55,34 @@
 }
 
 .head.cell.sort-asc {
-    background-color: darkgreen;
+    position: relative;
+    /*background-color: darkgreen;*/
+}
+
+.head.cell.sort-asc:after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    background-image: url("/images/arrow-up-table-sorting.png");
+    height: 13px;
+    width: 8px;
+    top: 30%;
+    margin-left: 5px
 }
 
 .head.cell.sort-desc {
-    background-color: darkred;
+    position: relative;
+}
+
+.head.cell.sort-desc:after {
+    position: absolute;
+    display: inline-block;
+    content: '';
+    background-image: url("/images/arrow-down-table-sorting.png");
+    height: 13px;
+    width: 8px;
+    top: 40%;
+    margin-left: 5px
 }
 
 .element-table-filters-container {
@@ -67,7 +92,7 @@
     color: white;
     flex-wrap: wrap;
     width: 500px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 .element-table-filters-section {

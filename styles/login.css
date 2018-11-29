@@ -18,7 +18,7 @@
     align-items: center;
     justify-content: center;
     margin: auto;
-    width: 400px;
+    width: 100%;
 }
 
 #login section header {
@@ -28,7 +28,7 @@
     justify-content: center;
     width: 100%;
     height: auto;
-    margin: 140px 0 20px 0;
+    margin: 80px auto 0;
     background-color: #2B353B;
 }
 
@@ -58,7 +58,7 @@
     flex-direction: column;
     align-self: center;
     justify-content: space-around;
-    width: 100%;
+    width: 400px;
     height: 280px;
     margin: auto auto 0 auto;
     padding: 50px 20px 20px 20px;

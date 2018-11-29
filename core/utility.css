@@ -10,18 +10,23 @@
 
 .tabs {
     cursor: pointer;
+    font-weight: 600;
+    font-size: 0.7rem;
 }
 
 .tabs-wrapper {
     display: inline-flex;
-    width: 100%;
-    border-bottom: 1px solid rgb(38, 50, 56);
+    width: calc(102% + 0.3rem);
+    border-bottom: 2px solid #323C41;
     color: rgb(120, 144, 156);
-    margin: 1rem 0;
+    margin: 1rem 0 1rem -1rem;
 }
 
 .tabs-wrapper>div {
-    padding: 0 0.5rem;
+    padding: 0 0.2rem 0;
+    font-weight: 600;
+    font-size: 0.7rem;
+    margin-left: 1rem;
 }
 
 .custom-filter {
@@ -32,11 +37,12 @@
     color: rgb(120, 144, 156);
     display: inline-flex;
     white-space: nowrap;
+    font-size: 0.7rem;
 }
 
 .custom-filter>div {
     display: inline-flex;
-    padding: 0.5rem 0;
+    padding: 0;
 }
 
 .custom-filter>div:not(:last-child) {
@@ -59,12 +65,12 @@
 }
 
 .custom-filter>div>div {
-    padding: 0 0.5rem
+    padding: 0.5rem 1rem;
 }
 
 .chosen-info-tab {
     flex: 1;
-    padding: 0.5rem;
+    padding: 0 0.5rem 0.5rem 0 !important;
     background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     position: relative;

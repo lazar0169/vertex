@@ -81,8 +81,9 @@
 }
 
 .tab-active {
-    border-bottom: 2px solid rgb(30, 155, 227)!important;
+    border-bottom: 3px solid rgb(30, 155, 227)!important;
     color: white !important;
+    font-weight: 800;
 }
 
 #machine-info-content {
