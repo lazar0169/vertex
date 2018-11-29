@@ -9,7 +9,7 @@ const tickets = (function () {
         console.log(ticketId);
 
         selectTab('tickets-tab');
-        selectInfoContent('tickets-tab-info');
+        selectInfoContent('tickets-tab');
 
         let tableSettings = {};
         tableSettings.pageSelectorId = '#page-tickets';

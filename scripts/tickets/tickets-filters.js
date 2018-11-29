@@ -45,6 +45,7 @@ const ticketsFilter = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
+        console.log('filters from API', filters);
 
         //filter elements
         let ticketsAdvanceTableFiltersStates = $$('#tickets-advance-table-filter-states');
@@ -72,14 +73,17 @@ const ticketsFilter = (function () {
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
         alert('Apply filters tickets');
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+        console.log('page filters in tickets', pageFilters);
         console.log('page filters in collect filters from page', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            "MachineList": pageFilters.MachineList,
-            "JackpotList": pageFilters.JackpotList,
+            "RedeemDateFrom": pageFilters.MachineList,
+            "RedeemDateTo": pageFilters.JackpotList,
+            "PrintedList": pageFilters.Status,
+            "RedeemList": pageFilters.Type,
             "Status": pageFilters.Status,
             "Type": pageFilters.Type,
             "BasicData": {
@@ -96,7 +100,7 @@ const ticketsFilter = (function () {
 
         console.log('Filters for API', filtersForApi);
 
-        trigger('communicate/tickets/previewTransactions', {
+        trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
