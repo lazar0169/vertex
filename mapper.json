@@ -79,7 +79,8 @@
       "table.css",
       "components/datepicker.css",
       "components/timepicker.css",
-      "pagination.css"
+      "pagination.css",
+      "tickets/tickets-tab-content.css"
     ]
   }
 }
