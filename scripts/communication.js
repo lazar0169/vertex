@@ -404,6 +404,7 @@ let communication = (function () {
 
     //ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
+        console.log('Communicate show max value settings', params);
         let route = 'api/tickets/maxvaluesettings/';
         let successEvent = 'tickets/tab/maxValue/display';
         let request = requestTypes.post;
@@ -458,6 +459,7 @@ let communication = (function () {
 
     //SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
+        console.log('communicate tickets save max values action', params);
         let route = 'api/tikets/savemaxvalues/';
         let successEvent = 'tickets/tab/maxValue/update';
         let request = requestTypes.post;

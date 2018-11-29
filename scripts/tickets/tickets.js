@@ -32,7 +32,7 @@ const tickets = (function () {
         });*/
 
         trigger('tickets/tab/appearance/init', {tableSettings: tableSettings});
-/*        trigger('communicate/tickets/smsSettings/init', {tableSettings: tableSettings});
-        trigger('communicate/tickets/showMaxValueSettings/init', {tableSettings: tableSettings});*/
+        trigger('tickets/tab/maxValue/init', {tableSettings: tableSettings});
+        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});
     });
 })();
