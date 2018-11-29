@@ -1,0 +1,38 @@
+#jackpot-animation-settings-wrapper, #jackpot-animation-general-settings-infoline-text {
+    display: flex;
+    flex-direction: row;
+}
+
+#jackpot-animation-settings-wrapper>div {
+    display: flex;
+    flex-direction: column;
+}
+
+#jackpot-animation-settings-wrapper>div:first-child {
+    width: 30%;
+    min-width: 500px;
+}
+
+#jackpot-animation-settings-wrapper>div:not(:first-child) {
+    width: 70%;
+}
+
+#jackpot-animation-settings-wrapper>div:first-child>div {
+    padding: 0.5rem;
+}
+
+#jackpot-animation-settings-wrapper>div:first-child>div:not(:last-child) {
+    border-bottom: 1px solid rgb(120, 144, 156);
+}
+
+#jackpot-animation-settings-wrapper>div:first-child>div:not(:last-child)>div:first-child, #jackpot-animation-settings-wrapper>div:first-child>div:last-child {
+    padding: 1rem 0;
+}
+
+#jackpot-animation-settings-animations-picture>div {
+    height: 50%;
+}
+#jackpot-animation-settings-animations-picture>div>canvas{
+    width: 50%;
+    height: 80%;
+}
