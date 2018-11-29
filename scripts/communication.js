@@ -166,7 +166,6 @@ let communication = (function () {
         let tableSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
-
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
@@ -273,16 +272,7 @@ let communication = (function () {
         alert('add transaction');
         let route = 'api/transactions/addtransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            'MachineName': '',
-            'Type': 0,
-            'CashableAmount': 13800,
-            'PromoAmount': 13800,
-            'ExpirationInDays': 7
-        };
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -345,10 +335,12 @@ let communication = (function () {
     //tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
         alert('Communicate tickets');
-        let route = '/api/tickets/';
+        let route = 'api/tickets/';
+        console.log('route', route);
         let successEvent = 'table/update';
         let request = requestTypes.post;
         let data = params.data;
+        console.log('data', data);
         console.log('data to send to api', data);
         let tableSettings = params.tableSettings;
         let errorEvent = '';
@@ -367,7 +359,7 @@ let communication = (function () {
     //pagination sroting and filtering
     on('communicate/tickets/previewTickets', function (params) {
         alert('Communicate preview ticket action');
-        let route = '/api/tickets/previewtickets/';
+        let route = 'api/tickets/previewtickets/';
         let successEvent = 'table/update';
         let request = requestTypes.post;
         let data = params.data;
