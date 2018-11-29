@@ -3,7 +3,33 @@ const multiDropdown = (function () {
     let indexMsId = 0;
     //multiselect array
     let multiSelectArray = [];
+
     // generate multi dropdown
+
+    function select(element, selectedValues) {
+        if (!element || !selectedValues) {
+            return false;
+        }
+        let titles = [];
+        let values = [];
+        let options = element.getElementsByClassName("multiple-group")[0].getElementsByTagName("div");
+        Array.prototype.slice.call(options).forEach(function (option) {
+            let checkbox = option.getElementsByClassName("form-checkbox")[0].getElementsByTagName("input")[0];
+            checkbox.checked = false;
+            if (selectedValues.indexOf(option.dataset.value) > -1) {
+                checkbox.checked = true;
+                titles.push(option.title);
+                values.push(option.dataset.value);
+            }
+        });
+        let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
+        elementTableFilter.dataset.value = values.join(',');
+        elementTableFilter.title = titles.join(', ');
+        elementTableFilter.innerText = titles.join(', ');
+
+        return element;
+    }
+
     function generate(dataSelect, element) {
         if (element) {
             removeChildren(element);
@@ -107,6 +133,8 @@ const multiDropdown = (function () {
     });
 
     return {
-        generate
+        generate,
+        select
     };
-})();
+})
+();

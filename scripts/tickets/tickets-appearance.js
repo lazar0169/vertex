@@ -38,7 +38,7 @@ const ticketAppearance = (function () {
     let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
-    let dateFormatArray = ['dd.MM.yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
+    let dateFormatArray = ['dd.MM.yyyy.', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
     let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
     dateWrapper.appendChild(dropdown.generate(dateFormatArray));
     timeWrapper.appendChild(dropdown.generate(timeFormatArray));
@@ -388,15 +388,14 @@ const ticketAppearance = (function () {
     }
 
     function displayTicketData(ticketData) {
-        console.log('Ticket data to display: ', ticketData);
         inputCasino.value = ticketData.Name;
         inputAddress.value = ticketData.Address1;
         inputCity.value = ticketData.Address2;
         inputChasoutTicket.value = ticketData.CashableTicketTitle;
         inputPayablePromo.value = ticketData.RestrictedTicketTitle;
         inputValidation.value = ticketData.Validation;
-        // dateFormat.value = ticketData.DateFormat;
-        // timeFormat.value = ticketData.TimeFormat;
+        dropdown.select(dateWrapper.getElementsByClassName('default-select')[0], ticketData.DateFormat);
+        dropdown.select(timeWrapper.getElementsByClassName('default-select')[0], ticketData.TimeFormat);
         inputTicket.value = ticketData.Ticket;
         inputTicketVoid.value = ticketData.TicketVoid;
         inputTicketVoidDays.value = ticketData.TicketVoidDays;
