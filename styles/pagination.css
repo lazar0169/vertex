@@ -9,9 +9,9 @@
     list-style-type: none;
 }
 
-.element-pagination-page-button.active {
-    background-color: red;
-}
+/*.element-pagination-page-button.active {*/
+    /*background-color: red;*/
+/*}*/
 
 .element-pagination-page-button.hidden {
     display: none;
@@ -25,7 +25,7 @@
     display: none;
 }
 
-.element-pagination-page-button,.aft-pagination .page-item-subtitle {
+.element-pagination-page-button,.aft-pagination .element-pagination-link {
     color: rgb(111,134,144);
     background: rgb(38, 50, 56);
     border: none;
@@ -33,7 +33,7 @@
     border-radius: 10%;
 }
 
-.element-pagination-page-button:hover,.aft-pagination .page-item-subtitle:hover {
+.element-pagination-page-button:hover,.element-pagination-page-button.active,.element-pagination-link {
     color: rgb(255,255,255);
     background: rgb(58,73,80);
     border: none;

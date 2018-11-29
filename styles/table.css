@@ -12,7 +12,7 @@
 }
 
 .cell {
-    background-color: #2B353B;
+    background-color: rgb(38, 50, 56);
     padding: 0.5em;
     border-bottom: 1px solid #37454C;
     color: white;
@@ -25,7 +25,7 @@
 }
 
 .head.cell {
-    background-color: #2B353B;
+    background-color: rgb(38, 50, 56);
     color: #728894;
     top: 0;
     transition: 0.2s background-color;
@@ -52,6 +52,19 @@
     position: center;
     width: 100%;
     height: auto;
+    padding-left: 0.7rem;
+}
+
+/*active column*/
+
+.active-column {
+    background: rgba(58, 73, 80, 0.4);
+    color:white;
+}
+
+.head.active-column {
+    background: rgba(58, 73, 80, 0.4);
+    color:white;
 }
 
 .head.cell.sort-asc {

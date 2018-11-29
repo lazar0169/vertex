@@ -394,11 +394,27 @@ let table = (function () {
                     headers[i].classList.remove('sort-active');
                     headers[i].classList.remove('sort-asc');
                     headers[i].classList.remove('sort-desc');
+                    headers[i].classList.remove('active-column');
                     delete headers[i].dataset.direction;
                 }
             }
             header.classList.add('sort-active');
+            header.classList.add('active-column');
             toggleDirection(header, tableSettings);
+
+            let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+            Array.prototype.slice.call(tableCells).forEach(function (cell) {
+                cell.classList.remove('active-column')
+            });
+
+
+            let columnName = getColumnNameFromHeadElement(tableSettings, header);
+            console.log('column name', columnName);
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
+            console.log('column element', columnElements);
+            for (let j = 0; j < columnElements.length; j++) {
+                columnElements[j].classList.add('active-column');
+            }
         }
 
         function toggleDirection(header) {
