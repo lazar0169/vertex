@@ -134,3 +134,6 @@
 #tickets-advance-table-filter-active .element-table-filters {
     width: 100px;
 }
+#tickets-machines-number .element-table-filters .single-option {
+    width: 60px;
+}
