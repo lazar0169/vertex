@@ -134,6 +134,29 @@
 #tickets-advance-table-filter-active .element-table-filters {
     width: 100px;
 }
+
 #tickets-machines-number .element-table-filters .single-option {
     width: 60px;
 }
+
+#tickets-machines-number {
+    border-left: none;
+}
+
+#tickets-advance-table-filter-clear .btn-cancel {
+    color : #3088D7;
+}
+
+#tickets-tab-info {
+    padding-right: 0 !important;
+}
+
+/*aft and tickets active filters option size*/
+
+#tickets-advance-table-filter-status .default-select .multiple-group , #tickets-advance-table-filter-types .default-select .multiple-group ,
+#tickets-advance-table-filter-column .default-select .multiple-group , #aft-advance-table-filter-finished .default-select .multiple-group,
+#aft-advance-table-filter-jackpot .default-select .multiple-group,#aft-advance-table-filter-type .default-select .multiple-group,
+#aft-advance-table-filter-status .default-select .multiple-group,#aft-advance-table-filter-column .default-select .multiple-group {
+    width: 200px;
+}
+
