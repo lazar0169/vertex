@@ -29,6 +29,10 @@ let table = (function () {
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
+    function makeColumnTitle (columnName) {
+        return columnName.match(/[A-Z][a-z]+/g).join(' ');
+    }
+
     function insertAfter(referenceNode, newNode) {
         return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     }
@@ -122,7 +126,7 @@ let table = (function () {
             tbody.className = 'tbody';
             for (let col = 0; col < colsCount; col++) {
                 let head = document.createElement('div');
-                head.innerHTML = Object.keys(tableSettings.tableData[0])[col];
+                head.innerHTML = makeColumnTitle(Object.keys(tableSettings.tableData[0])[col]);
                 head.className = 'head cell';
                 let columnName = Object.keys(tableSettings.tableData[0])[col];
                 columnName = columnName.toLowerCase();

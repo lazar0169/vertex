@@ -42,7 +42,6 @@ const aft = (function () {
         });
 
         on('aft/addTransaction', function () {
-            alert('Transaction added!');
         });
 
         trigger('aft/tab/transactions/init', {tableSettings: tableSettings});
