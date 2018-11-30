@@ -166,7 +166,6 @@ let communication = (function () {
         let tableSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
-
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
@@ -252,7 +251,6 @@ let communication = (function () {
         });
     });
 
-
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
@@ -291,21 +289,17 @@ let communication = (function () {
     on('communicate/aft/cancelTransaction', function (params) {
         let route = 'api/transactions/canceltransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-        };
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
@@ -313,21 +307,17 @@ let communication = (function () {
     on('communicate/aft/cancelPendingTransaction', function (params) {
         let route = 'api/transactions/cancelpendingtransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': '33,32'
-        };
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings = params.tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
         });
     });
 
@@ -335,13 +325,164 @@ let communication = (function () {
 
 
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
-    //aft get transactions
+    //tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
-        alert('communicate tickets');
         let route = 'api/tickets/';
+        console.log('route', route);
+        let successEvent = 'table/update';
         let request = requestTypes.post;
         let data = params.data;
-        let successEvent = params.callbackEvent;
+        console.log('data', data);
+        console.log('data to send to api', data);
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //tickets preview ticket action
+    //pagination sorting and filtering
+    on('communicate/tickets/previewTickets', function (params) {
+        let route = 'api/tickets/previewtickets/';
+        let successEvent = 'table/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //getting filter values
+    on('communicate/tickets/getFilters', function (params) {
+        let route = 'api/tickets/getfilters/';
+        let successEvent = params.successEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+
+    //getting values for show sms settings
+    on('communicate/tickets/showSmsSettings', function (params) {
+        let route = 'api/tickets/smssettings/';
+        let successEvent = 'tickets/tab/smsSettings/display';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+
+    //ShowTitoMaxValueSettings
+    on('communicate/tickets/showMaxValueSettings', function (params) {
+        console.log('Communicate show max value settings', params);
+        let route = 'api/tickets/maxvaluesettings/';
+        let successEvent = 'tickets/tab/maxValue/display';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //ShowTicketAppearanceSettings
+    on('communicate/tickets/ticketAppearance', function (params) {
+        let route = 'api/tickets/ticketappearance/';
+        let successEvent = 'tickets/tab/appearance/display';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //SaveTitoSmsAction
+    on('communicate/tickets/saveSmsSettings', function (params) {
+        let route = 'api/tikets/savesmssettings/';
+        let successEvent = 'tickets/tab/smsSettings/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //SaveTitoMaxValuesAction
+    on('communicate/tickets/saveMaxValuesAction', function (params) {
+        console.log('communicate tickets save max values action', params);
+        let route = 'api/tikets/savemaxvalues/';
+        let successEvent = 'tickets/tab/maxValue/update';
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            tableSettings: tableSettings
+        });
+    });
+
+    //SaveTicketAppearanceAction
+    on('communicate/tickets/saveAppearance', function (params) {
+        let route = 'api/tikets/saveappearance/';
+        let successEvent = 'tickets/tab/appearance/update';
+        let request = requestTypes.post;
+        let data = params.data;
         let tableSettings = params.tableSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {

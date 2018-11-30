@@ -4,10 +4,28 @@ const dropdown = (function () {
     //single select array
     let singleSelectArray = [];
 
+    function select(element, selectedValue) {
+        if (!element || !selectedValue) {
+            return false;
+        }
+        let options = element.getElementsByClassName("single-option");
+        let hasOption = Array.prototype.slice.call(options).filter(function (option) {
+            return option.dataset.value === selectedValue;
+        });
+        if (hasOption.length === 0) {
+            return false;
+        } else {
+            let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
+            elementTableFilter.dataset.value = selectedValue;
+            elementTableFilter.title = selectedValue;
+            elementTableFilter.innerText = selectedValue;
+        }
+        return element;
+    }
 
     //generate single dropdown
     function generate(dataSelect, element) {
-        if(element) {
+        if (element) {
             removeChildren(element);
         }
         // wrapper select
@@ -53,7 +71,7 @@ const dropdown = (function () {
         indexSsId++;
         singleSelectArray.push(select.id);
 
-        if(element){
+        if (element) {
             element.appendChild(select);
             return element;
         }
@@ -61,17 +79,20 @@ const dropdown = (function () {
     }
 
     //TODO THIS PART GENERATES MULTIPLE ERRORS
-/*    window.addEventListener('click', function (e) {
+    window.addEventListener('click', function (e) {
         e.stopPropagation();
         for (let selectId of singleSelectArray) {
-            if (e.target.parentNode.id != selectId) {
-                $$(`#${selectId}`).classList.remove('active-single-select');
-                $$(`#${selectId}`).children[1].classList.add('hidden');
+            if (e.target.parentNode !== null && selectId !== null) {
+                if (e.target.parentNode.id !== selectId) {
+                    $$(`#${selectId}`).classList.remove('active-single-select');
+                    $$(`#${selectId}`).children[1].classList.add('hidden');
+                }
             }
         }
-    });*/
+    });
 
     return {
-        generate
+        generate,
+        select
     };
 })();

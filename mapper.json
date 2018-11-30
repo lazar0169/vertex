@@ -28,7 +28,6 @@
       "aft/aft.js",
       "aft/aft-filters.js",
       "aft/aft-tab-content.js",
-      "tickets/tickets.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
@@ -39,8 +38,11 @@
       "machines.js",
       "machines/machines-filters.js",
       "machines/edit-page.js",
+      "tickets/tickets.js",
       "tickets/tickets-filters.js",
       "tickets/tickets-appearance.js",
+      "tickets/tickets-sms-settings.js",
+      "tickets/tickets-max-value.js",
       "jackpot/jackpot-filter.js",
       "session.js",
       "preloader.js",
@@ -77,7 +79,8 @@
       "table.css",
       "components/datepicker.css",
       "components/timepicker.css",
-      "pagination.css"
+      "pagination.css",
+      "tickets/tickets-tab-content.css"
     ]
   }
 }

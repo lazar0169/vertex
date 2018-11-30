@@ -42,7 +42,7 @@
             <div>PROMO TICKET</div>
             <div>
                 <div>Payable:</div>
-                <input class="form-input" type="text" placeholder="PLAYABLE ONLY" value="PLAYABLE ONLY">
+                <input class="form-input" type="text" placeholder="PLAYABLE1 ONLY" value="PLAYABLE1 ONLY">
             </div>
             <div>
                 <div>Expiring:</div>
@@ -101,14 +101,34 @@
     </div>
     <div id="appearance-buttons-wrapper">
         <button class="btn btn-cancel">Cancel</button>
-        <button class="btn btn-success">Save</button>
+        <button class="btn btn-success">SAVE</button>
     </div>
 </div>
 
 <div id="tickets-sms-settings-tab-info" class="chosen-info-tab overflow-content hidden">
-    SMS SETTINGS
+    <div id="tickets-sms-settings-max-redemption">
+        <label>Max. redemption:</label>
+        <input class="form-input" type="text" placeholder="Max. redemption" value="100.000,00">
+    </div>
+    <div id="tickets-sms-settings-max-issuance">
+        <label>Max. issuance:</label>
+        <input class="form-input" type="text" placeholder="Max. issuance" value="100.000,00">
+    </div>
+    <div id="tickets-sms-settings-buttons-wrapper">
+        <button class="btn btn-success">SAVE</button>
+    </div>
 </div>
 
-<div id="tickets-set-ticket-max-value-info" class="chosen-info-tab overflow-content hidden">
-    SET TICKET MAX VALUE
+<div id="tickets-max-value-tab-info" class="chosen-info-tab overflow-content hidden">
+    <div id="tickets-sms-settings-max-value-max-redeemed">
+        <label>Max. redeemed amount for payed:</label>
+        <input class="form-input" type="text" placeholder="Max. redeemed amount" value="100.000,00"/>
+    </div>
+    <div id="tickets-sms-settings-max-value-max-sell">
+        <label>Max sell amount for payed:</label>
+        <input class="form-input" type="text" placeholder="Max. redeemed amount" value="100.000,00"/>
+    </div>
+    <div id="tickets-max-value-buttons-wrapper">
+        <button class="btn btn-success">SAVE</button>
+    </div>
 </div>
