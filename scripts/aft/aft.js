@@ -15,6 +15,7 @@ const aft = (function () {
         tableSettings.tableContainerSelector = '#table-container-aft';
         tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
         tableSettings.dataEvent = 'communicate/aft/getTransactions';
+        tableSettings.paginationEvent = 'communicate/aft/getTransactions';
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
         tableSettings.forceRemoveHeaders = true;

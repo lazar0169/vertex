@@ -80,8 +80,7 @@ const ticketsFilter = (function () {
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
         alert('Apply filters tickets');
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        console.log('page filters in tickets', pageFilters);
-        console.log('page filters in collect filters from page', pageFilters);
+        console.log('Page filters collected from page in tickets: ', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
@@ -105,7 +104,7 @@ const ticketsFilter = (function () {
 
         currentTableSettingsObject.filters = filtersForApi;
 
-        console.log('Filters for API', filtersForApi);
+        console.log('Filters prepared for API in tickets: ', filtersForApi);
 
         trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,

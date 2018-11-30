@@ -250,10 +250,14 @@ let table = (function () {
     }
 
     function updateTablePagination(tableSettings) {
-        // let activePage = tableSettings.activePage;
-        let activePage = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.Page? tableSettings.filters.BasicData.Page : 1;
-        let pageSize =  tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
+        console.log('Update table pagination table settings', tableSettings);
+        let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
+        activePage = parseInt(activePage);
+        // let activePage = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.Page ? tableSettings.filters.BasicData.Page : 1;
+        let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
+        pageSize = parseInt(pageSize);
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
+        numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
 
         let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
@@ -308,9 +312,9 @@ let table = (function () {
         displayLastPageNumber(tableSettings);
     }
 
-    function resetPagination(tableSettings){
+    function resetPagination(tableSettings) {
         let paginationButtons = Array.prototype.slice.call(tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button'));
-        paginationButtons.forEach(function(paginationButton){
+        paginationButtons.forEach(function (paginationButton) {
             paginationButton.classList.remove('active');
         });
 
@@ -324,12 +328,9 @@ let table = (function () {
     function updateTable(tableSettings) {
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
-        console.log(tableSettings);
         updateTablePagination(tableSettings);
-        console.log(tableSettings.ColumnsToShow);
         showColumns(tableSettings, tableSettings.ColumnsToShow);
         console.log('TableSettings object in update table: ', tableSettings);
-        // showColumns(tableSettings);
     }
 
     function initFilters(tableSettings) {
@@ -373,10 +374,9 @@ let table = (function () {
 
     function handleLinkClick(e, tableSettings) {
         e.preventDefault();
-        alert(e.target.dataset.page);
         resetPagination(tableSettings);
         e.target.classList.add('active');
-       tableSettings.activePage = e.target.dataset.page;
+        tableSettings.activePage = e.target.dataset.page;
         let filtersForApi = {
             "EndpointId": tableSettings.endpointId,
             "DateFrom": null,
@@ -393,16 +393,18 @@ let table = (function () {
             },
             "TokenInfo": sessionStorage.token
         };
-        trigger('communicate/aft/previewTransactions', {tableSettings: tableSettings, data: filtersForApi});
-        console.log('table settings in pagination ', tableSettings);
-        console.log('e ', e);
+        trigger(tableSettings.paginationEvent, {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
     }
 
     function bindPaginationLinkHandler(element, tableSettings) {
-        element.removeEventListener('click', function(e, tableSettings) {
+        element.removeEventListener('click', function (e, tableSettings) {
             handleLinkClick(e, tableSettings);
         });
-        element.addEventListener('click', function(e) {
+        element.addEventListener('click', function (e) {
             handleLinkClick(e, tableSettings);
         });
     }
@@ -414,10 +416,6 @@ let table = (function () {
             bindPaginationLinkHandler(paginationElement, tableSettings);
         }
     }
-
-    on('table/pagination/tableUpdate', function(params){
-
-    });
 
     /*--------------------------------------------------------------------------------------*/
 
@@ -786,7 +784,7 @@ let table = (function () {
     /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
     function init(tableSettings) {
-        console.log('table settings in init', tableSettings);
+        console.log('Table settings object in init: ', tableSettings);
 
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         let tableContainerElement = tableSettings.tableContainerElement;

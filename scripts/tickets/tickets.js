@@ -6,7 +6,6 @@ const tickets = (function () {
         }, 2000);
 
         let ticketId = params.params[0].value;
-        console.log(ticketId);
 
         selectTab('tickets-tab');
         selectInfoContent('tickets-tab');
@@ -16,6 +15,7 @@ const tickets = (function () {
         tableSettings.tableContainerSelector = '#table-container-tickets';
         tableSettings.filterContainerSelector = '#tickets-advance-table-filter-active';
         tableSettings.dataEvent = 'communicate/tickets/getTickets';
+        tableSettings.paginationEvent = 'communicate/tickets/getTickets';
         tableSettings.endpointId = ticketId;
         tableSettings.id = '';
         tableSettings.forceRemoveHeaders = true;
