@@ -29,7 +29,7 @@ let table = (function () {
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
-    function makeColumnTitle (columnName) {
+    function makeColumnTitle(columnName) {
         return columnName.match(/[A-Z][a-z]+/g).join(' ');
     }
 
@@ -60,7 +60,7 @@ let table = (function () {
         // let headElements = tbody.getElementsByClassName('head');
         let headElements = Array.from(tbody.getElementsByClassName('head'));
         headElements.forEach(function (element) {
-            colNames.push({Name: element.innerText})
+            colNames.push({Name: element.innerText.replace(' ', '')})
         });
         colNames.unshift({Name: "-"});
         return colNames;
@@ -234,7 +234,7 @@ let table = (function () {
         let tableSettings = params.params.tableSettings;
         let tableBodyElement = getTableBodyElement(tableSettings);
         insertAfter(tableBodyElement, paginationElement);
-        bindPaginationLinkHandlers();
+        bindPaginationLinkHandlers(tableSettings);
 
     });
 
@@ -251,9 +251,10 @@ let table = (function () {
     }
 
     function updateTablePagination(tableSettings) {
-        //toDo: dummy data
-        let activePage = 1;
-        let lastPage = 220;
+        let activePage = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.Page? tableSettings.filters.BasicData.Page : 1;
+        let pageSize =  tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
+        let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
+        let lastPage = Math.ceil(numOfItems / pageSize);
 
         let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
         let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
@@ -312,32 +313,36 @@ let table = (function () {
 
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
-        function updateTable(tableSettings) {
-            generateTableHeaders(tableSettings);
-            generateTableRows(tableSettings);
-            updateTablePagination(tableSettings);
-            showColumns(tableSettings, tableSettings.ColumnsToShow);
-            console.log('TableSettings object in update table: ', tableSettings);
-            // showColumns(tableSettings);
-        }
+    function updateTable(tableSettings) {
+        generateTableHeaders(tableSettings);
+        generateTableRows(tableSettings);
+        console.log(tableSettings);
+        updateTablePagination(tableSettings);
+        console.log(tableSettings.ColumnsToShow);
+        showColumns(tableSettings, tableSettings.ColumnsToShow);
+        console.log('TableSettings object in update table: ', tableSettings);
+        // showColumns(tableSettings);
+    }
 
     function initFilters(tableSettings) {
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         trigger(moduleName + '/filters/init', {tableSettings: tableSettings});
     }
 
-        on('table/update', function (params) {
-            console.log('API response in table/update: ', params);
-            let tableSettings = params.tableSettings;
-            let tableData = [];
-            let apiItems = params.data.Data.Items;
+    on('table/update', function (params) {
+        console.log('API response in table/update: ', params);
+        let tableSettings = params.tableSettings;
+        let tableData = [];
+        let apiItems = params.data.Data.Items;
 
         apiItems.forEach(function (item) {
             tableData.push(item.EntryData);
         });
 
         tableSettings.tableData = tableData;
+        tableSettings.NumOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
+            console.log('table settings in table update in if filters are initialized', tableSettings);
             initFilters(tableSettings);
         }
         updateTable(tableSettings);
@@ -358,22 +363,46 @@ let table = (function () {
 
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
 
-    function handleLinkClick(e) {
+    function handleLinkClick(tableSettings, e) {
         e.preventDefault();
-        let page = e.target.dataset.page;
-        alert(page);
+        let filtersForApi = {
+            "EndpointId": tableSettings.endpointId,
+            "DateFrom": null,
+            "DateTo": null,
+            "MachineList": null,
+            "JackpotList": null,
+            "Status": null,
+            "Type": null,
+            "BasicData": {
+                "Page": tableSettings.activePage,
+                "PageSize": tableSettings,
+                "SortOrder": null,
+                "SortName": null
+            },
+            "TokenInfo": sessionStorage.token
+        };
+
+        tableSettings.activePage = e.target.dataset.page;
+
+        trigger('communicate/aft/previewTransactions', {tableSettings: tableSettings, data: filtersForApi});
+        console.log('table settings in pagination ', tableSettings);
+        console.log('e ', e);
     }
 
-    function bindPaginationLinkHandler(element) {
-        element.removeEventListener('click', handleLinkClick);
-        element.addEventListener('click', handleLinkClick);
+    function bindPaginationLinkHandler(element ) {
+        element.removeEventListener('click', function(e) {
+            handleLinkClick(e);
+        });
+        element.addEventListener('click', function(e) {
+            handleLinkClick(e);
+        });
     }
 
-    function bindPaginationLinkHandlers() {
+    function bindPaginationLinkHandlers(tableSettings) {
         let paginationElements = $$('.element-pagination-link');
         for (let i = 0; i < paginationElements.length; i++) {
             let paginationElement = paginationElements[i];
-            bindPaginationLinkHandler(paginationElement);
+            bindPaginationLinkHandler(paginationElement, tableSettings);
         }
     }
 
@@ -390,33 +419,33 @@ let table = (function () {
         return tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
     }
 
-        function makeColumnActive(header, tableSettings) {
-            let headers = getHeaders(tableSettings);
-            for (let i = 0; i < headers.length; i++) {
-                if (headers[i] !== header) {
-                    headers[i].classList.remove('sort-active');
-                    headers[i].classList.remove('sort-asc');
-                    headers[i].classList.remove('sort-desc');
-                    headers[i].classList.remove('active-column');
-                    delete headers[i].dataset.direction;
-                }
-            }
-            header.classList.add('sort-active');
-            header.classList.add('active-column');
-            toggleDirection(header, tableSettings);
-
-            let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
-            Array.prototype.slice.call(tableCells).forEach(function (cell) {
-                cell.classList.remove('active-column')
-            });
-
-
-            let columnName = getColumnNameFromHeadElement(tableSettings, header);
-            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-            for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add('active-column');
+    function makeColumnActive(header, tableSettings) {
+        let headers = getHeaders(tableSettings);
+        for (let i = 0; i < headers.length; i++) {
+            if (headers[i] !== header) {
+                headers[i].classList.remove('sort-active');
+                headers[i].classList.remove('sort-asc');
+                headers[i].classList.remove('sort-desc');
+                headers[i].classList.remove('active-column');
+                delete headers[i].dataset.direction;
             }
         }
+        header.classList.add('sort-active');
+        header.classList.add('active-column');
+        toggleDirection(header, tableSettings);
+
+        let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+        Array.prototype.slice.call(tableCells).forEach(function (cell) {
+            cell.classList.remove('active-column')
+        });
+
+
+        let columnName = getColumnNameFromHeadElement(tableSettings, header);
+        let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
+        for (let j = 0; j < columnElements.length; j++) {
+            columnElements[j].classList.add('active-column');
+        }
+    }
 
     function toggleDirection(header) {
         if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
@@ -462,16 +491,16 @@ let table = (function () {
         }
     }
 
-        function getColumnNameFromHeadElement(tableSettings, headElement) {
-            let classList = headElement.classList;
-            let cellClassName;
-            for (let i = 0; i < classList.length; i++) {
-                if (classList[i].includes('cell-')) {
-                    cellClassName = classList[i];
-                }
+    function getColumnNameFromHeadElement(tableSettings, headElement) {
+        let classList = headElement.classList;
+        let cellClassName;
+        for (let i = 0; i < classList.length; i++) {
+            if (classList[i].includes('cell-')) {
+                cellClassName = classList[i];
             }
-            return cellClassName;
         }
+        return cellClassName;
+    }
 
     function getColumnNames(tableSettings) {
         let headers = getHeaders(tableSettings);
@@ -499,9 +528,9 @@ let table = (function () {
         });
     }
 
-        function showColumns(tableSettings, columnsToShow) {
-            let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-            let columns = getColumnNames(tableSettings);
+    function showColumns(tableSettings, columnsToShow) {
+        let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
+        let columns = getColumnNames(tableSettings);
 
         let hasSelectedColumns = false;
         let colsCount = columns.length;
@@ -579,9 +608,9 @@ let table = (function () {
             }
     */
 
-        function collectFiltersFromPage(tableSettings) {
-            tableSettings.filters = {};
-            let filterContainers = collectAllFilterContainers(tableSettings);
+    function collectFiltersFromPage(tableSettings) {
+        tableSettings.filters = {};
+        let filterContainers = collectAllFilterContainers(tableSettings);
 
         let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
             let name = element.dataset.name;
@@ -595,54 +624,54 @@ let table = (function () {
         return filters;
     }
 
-        /*
-                function collectFiltersFromPage(tableSettings) {
-                    tableSettings.filters = {};
-                    let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
-                    let filterElements = collectAllFilterElements(tableSettings);
-                    console.log('colected filter elements', filterElements);
-                    for (let i = 0; i < filterElements.length; i++) {
-                        if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.select) {
-                            filterName = filterElements[i].name;
-                            if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input) {
-                                if (filterElements[i].type === types.radio && filterElements[i].checked === true) { //radio
-                                    filterValue = filterElements[i].value;
-                                    tableSettings.filters[filterName] = filterValue;
-                                } else if (isSingleCheckbox(filterElements[i]) && filterElements[i].checked === true) {
-                                    filterName = filterElements[i].name;
-                                    filterValue = filterElements[i].value;
-                                    tableSettings.filters[filterName] = filterValue;
-                                } else if (filterElements[i].type === types.checkbox && filterElements[i].checked === true) { //checkbox
-                                    filterValueArrayCheckBox.push(filterElements[i].value);
-                                    tableSettings.filters[filterName] = filterValueArrayCheckBox;
-                                } else if (filterElements[i].type !== types.checkbox && filterElements[i].type !== types.radio) { //text area & input
-                                    filterValue = filterElements[i].value;
-                                    tableSettings.filters[filterName] = filterValue;
-                                }
-                            } else if (filterElements[i].tagName === tagNames.select) { //select
-                                if (filterElements[i].attributes[attributes.multiple]) { //select multiple
-                                    let selectedOptions = filterElements[i].selectedOptions;
-                                    for (let i = 0; i < selectedOptions.length; i++) {
-                                        filterValueArraySelect.push(selectedOptions[i].value);
-                                    }
-                                    tableSettings.filters[filterName] = filterValueArraySelect;
-                                } else {
-                                    filterValue = filterElements[i].options[filterElements[i].selectedIndex].value;
-                                    tableSettings.filters[filterName] = filterValue;
-                                }
+    /*
+            function collectFiltersFromPage(tableSettings) {
+                tableSettings.filters = {};
+                let filterName, filterValue, filterValueArrayCheckBox = [], filterValueArraySelect = [];
+                let filterElements = collectAllFilterElements(tableSettings);
+                console.log('colected filter elements', filterElements);
+                for (let i = 0; i < filterElements.length; i++) {
+                    if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.select) {
+                        filterName = filterElements[i].name;
+                        if (filterElements[i].tagName === tagNames.textarea || filterElements[i].tagName === tagNames.input) {
+                            if (filterElements[i].type === types.radio && filterElements[i].checked === true) { //radio
+                                filterValue = filterElements[i].value;
+                                tableSettings.filters[filterName] = filterValue;
+                            } else if (isSingleCheckbox(filterElements[i]) && filterElements[i].checked === true) {
+                                filterName = filterElements[i].name;
+                                filterValue = filterElements[i].value;
+                                tableSettings.filters[filterName] = filterValue;
+                            } else if (filterElements[i].type === types.checkbox && filterElements[i].checked === true) { //checkbox
+                                filterValueArrayCheckBox.push(filterElements[i].value);
+                                tableSettings.filters[filterName] = filterValueArrayCheckBox;
+                            } else if (filterElements[i].type !== types.checkbox && filterElements[i].type !== types.radio) { //text area & input
+                                filterValue = filterElements[i].value;
+                                tableSettings.filters[filterName] = filterValue;
                             }
-                        } else { //div
-                            filterName = filterElements[i].dataset.name;
-                            filterValue = filterElements[i].dataset.value;
-                            tableSettings.filters[filterName] = filterValue;
+                        } else if (filterElements[i].tagName === tagNames.select) { //select
+                            if (filterElements[i].attributes[attributes.multiple]) { //select multiple
+                                let selectedOptions = filterElements[i].selectedOptions;
+                                for (let i = 0; i < selectedOptions.length; i++) {
+                                    filterValueArraySelect.push(selectedOptions[i].value);
+                                }
+                                tableSettings.filters[filterName] = filterValueArraySelect;
+                            } else {
+                                filterValue = filterElements[i].options[filterElements[i].selectedIndex].value;
+                                tableSettings.filters[filterName] = filterValue;
+                            }
                         }
+                    } else { //div
+                        filterName = filterElements[i].dataset.name;
+                        filterValue = filterElements[i].dataset.value;
+                        tableSettings.filters[filterName] = filterValue;
                     }
-
-                    /!*            getPageSize(tableSettings);
-                                getQuerySearch(tableSettings);*!/
-                    return tableSettings.filters;
                 }
-        */
+
+                /!*            getPageSize(tableSettings);
+                            getQuerySearch(tableSettings);*!/
+                return tableSettings.filters;
+            }
+    */
 
     function setPageFilters(tableSettings) {
         let filters = tableSettings.filters;

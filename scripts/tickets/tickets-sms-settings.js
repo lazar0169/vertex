@@ -49,7 +49,6 @@ let ticketsSmsSettings = (function(){
     });
 
     ticketsSmsSettingsSaveButton.addEventListener('click', function () {
-        alert('Save tickets max sms settings button click!');
         let dataForApi = collectAndPrepareTicketsSmsSettingsDataForApi();
         console.log('Save tickets sms settings data for api', dataForApi);
         trigger('communicate/tickets/saveSmsSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});

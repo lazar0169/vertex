@@ -45,7 +45,6 @@ let ticketsMaxValue = (function () {
     });
 
     ticketsMaxValueSaveButton.addEventListener('click', function () {
-        alert('Save tickets max value button click!');
         let dataForApi = collectAndPrepareTicketsMaxValueDataForApi();
         console.log('Save tickets max value data for api', dataForApi);
         trigger('communicate/tickets/saveMaxValuesAction', {data: dataForApi, tableSettings: currentTableSettingsObject});

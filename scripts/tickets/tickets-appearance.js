@@ -446,7 +446,6 @@ const ticketAppearance = (function () {
     });
 
     saveTicketButton.addEventListener('click', function () {
-        alert('Save ticket button click!');
         let dataForApi = collectAndPrepareTicketDataForApi();
         console.log('Save ticket data for api', dataForApi);
         trigger('communicate/tickets/saveAppearance', {data: dataForApi, tableSettings: currentTableSettingsObject});

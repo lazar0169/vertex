@@ -50,7 +50,6 @@ const aftTabContent = (function () {
     });
 
     saveTransactionButton.addEventListener('click', function () {
-        alert('Save transactions button click!');
         let dataForApi = collectAndPrepareTransactionDataForApi();
         trigger('communicate/aft/saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
@@ -117,7 +116,6 @@ const aftTabContent = (function () {
     });
 
     notificationSaveButton.addEventListener('click', function () {
-        alert('Save notifications button click!');
         let dataForApi = collectAndPrepareNotificationDataForApi();
         trigger('communicate/aft/saveNotificationSettings', {
             data: dataForApi,
