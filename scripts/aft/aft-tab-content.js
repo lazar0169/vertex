@@ -85,10 +85,11 @@ const aftTabContent = (function () {
     }
 
     function displayNotificationData(notificationData) {
+        console.log('notification data from api', notificationData);
         notificationsEnableButton.getElementsByTagName('input')[0].checked = notificationData.EnableTransactions;
         notificationLimit.value = notificationData.CashableTransactionCreatedLimitForNotification;
-        notificationMobileNumber.value = notificationData.PhoneNumberList[0];
-        notificationEmailAddress.value = notificationData.EmailList[0];
+        notificationMobileNumber.value = notificationData.PhoneNumberList[0] !== undefined ? notificationData.PhoneNumberList[0] : null;
+        notificationEmailAddress.value = notificationData.EmailList[0] !== undefined ? notificationData.EmailList[0] : null;;
     }
 
     function collectAndPrepareNotificationDataForApi() {
