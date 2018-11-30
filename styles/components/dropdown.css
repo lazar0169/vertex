@@ -126,3 +126,11 @@
 #aft-advance-table-filter-date-range .option-select-date .single-option {
     width: 100px;
 }
+
+#tickets-advance-table-filter-active .option-select-date .single-option {
+    width: 100px;
+}
+
+#tickets-advance-table-filter-active .element-table-filters {
+    width: 100px;
+}
