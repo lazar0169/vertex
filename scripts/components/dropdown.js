@@ -31,6 +31,7 @@ const dropdown = (function () {
             option.innerHTML = element;
             option.title = option.innerHTML;
             option.dataset.value = element;
+            option.dataset.translationKey = element;
             optionGroup.appendChild(option);
 
             option.addEventListener('click', function (e) {

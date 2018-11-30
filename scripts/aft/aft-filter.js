@@ -44,11 +44,14 @@ const aftFilter = (function () {
     });
 
 
-
-    let proba = $$('#aft-advance-table-filter-date-range');
-
     aftMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
+    //test
+    let proba = $$('#aft-advance-table-filter-date-range');
     proba.appendChild(dropdownDate.generate(nekiniz));
+
+    let proba6 = $$('#aft-advance-table-filter-column');
+    proba6.appendChild(multiDropdown.generate(columnName));
+
     // let proba2 = $$('#aft-advance-table-filter-finished');
     // proba2.appendChild(dropdownDate.generate(nekiniz));
 
@@ -62,7 +65,7 @@ const aftFilter = (function () {
     }
 
     advanceTableFilter.addEventListener('click', function () {
-        showAdvanceTableFilter()
+        showAdvanceTableFilter();
     });
 
     clearAdvanceFilter.addEventListener('click', function () {

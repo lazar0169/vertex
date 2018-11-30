@@ -26,21 +26,21 @@ const dropdownDate = (function () {
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('overflow-y');
         let customDate = document.createElement('div');
-
+        
         customDate.innerHTML = `<div id="date-from-${indexDsId}" class="choose-date-time">
-                                <div>Date from:</div>
+                                <div data-translation-key="DateFrom">Date from:</div>
                                 <input id="datepicker-from-${indexDsId}" type="text" class="datepicker" readonly>                                
                                 </div>
                                 <div id="time-from-${indexDsId}" class="choose-date-time">
-                                <div>Time from:</div>
+                                <div data-translation-key="TimeFrom">Time from:</div>
                                 <div class="timepicker"></div>                            
                                 </div>
                                 <div id="date-to-${indexDsId}" class="choose-date-time">
-                                <div>Date to:</div>
+                                <div data-translation-key="DateTo">Date to:</div>
                                 <input id="datepicker-to-${indexDsId}" type="text" class="datepicker" readonly>                                
                                 </div>
                                 <div id="time-to-${indexDsId}" class="choose-date-time">
-                                <div>Time to:</div>
+                                <div data-translation-key="TimeTo">Time to:</div>
                                 <div class="timepicker"></div>                                
                                 </div>`
 
@@ -77,6 +77,7 @@ const dropdownDate = (function () {
             option.innerHTML = element;
             option.title = option.innerHTML;
             option.dataset.value = element;
+            option.dataset.translationKey = element;
             optionGroup.appendChild(option);
             option.addEventListener('click', function (e) {
                 e.preventDefault();

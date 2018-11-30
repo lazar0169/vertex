@@ -1,6 +1,7 @@
 <div id="aft-tabs-transaction-info" class="chosen-info-tab overflow-content hidden">
     <object data-object="aft-filter"></object>
-    <div id="table-container-aft" class="table"><!--data-data-event="communicate/table/data"-->
+    <div id="table-container-aft" class="table">
+        <!--data-data-event="communicate/table/data"-->
         <div class="element-table-filters-container"></div>
         <div class="tbody"></div>
     </div>
@@ -8,7 +9,7 @@
 
 <div id="aft-tabs-enable-transaction-info" class="chosen-info-tab overflow-content  hidden">
     <div id="aft-enable-transaction-check">
-        <div>Enable transaction:</div>
+        <div data-translation-key="EnableTransaction">Enable transaction:</div>
         <div id="Enable-transaction-mode">Yes</div>
         <label class="form-switch">
             <input type="checkbox" checked>
@@ -17,34 +18,38 @@
     </div>
     <div id="aft-chasable-transaction" class="aft-enable-transaction">
         <div id="chasable-handplay-transaction-limit">
-            <label class="form-label" for="chashable-handplay-limit">Chasable handplay transaction limit:</label>
+            <label class="form-label" for="chashable-handplay-limit" data-translation-key="ChasableHandplayTransactionLimit">Chasable
+                handplay transaction limit:</label>
             <input class="form-input" type="text" id="chashable-handplay-limit" placeholder="700.000,00">
         </div>
         <div id="chasable-transaction-limit">
-            <label class="form-label" for="chashable-limit">Chasable transaction limit:</label>
+            <label class="form-label" for="chashable-limit" data-translation-key="ChasableTransactionLimit">Chasable
+                transaction limit:</label>
             <input class="form-input" type="text" id="chashable-limit" placeholder="999.999,00">
         </div>
     </div>
 
     <div id="aft-promo-transaction" class="aft-enable-transaction">
         <div id="promo-handplay-transaction-limit">
-            <label class="form-label" for="promo-handplay-limit">Promo handplay transaction limit:</label>
+            <label class="form-label" for="promo-handplay-limit" data-translation-key="PromoHandplayTransactionLimit">Promo
+                handplay transaction limit:</label>
             <input class="form-input" type="text" id="promo-handplay-limit" placeholder="700.000,00">
         </div>
         <div id="promo-transaction-limit">
-            <label class="form-label" for="promo-limit">Promo transaction limit:</label>
+            <label class="form-label" for="promo-limit" data-translation-key="PromoTransactionLimit">Promo transaction
+                limit:</label>
             <input class="form-input" type="text" id="promo-limit" placeholder="999.999,00">
         </div>
     </div>
     <div id="aft-transaction-save">
-        <button class="btn btn-success">SAVE</button>
+        <button class="btn btn-success" data-translation-key="Save">SAVE</button>
     </div>
 </div>
 <div id="aft-tabs-notification-settings-info" class="chosen-info-tab overflow-content hidden">
 
     <div id="aft-enable-notification-check">
-        <div>Enable notification:</div>
-        <div id="Enable-notification-mode">Yes</div>
+        <div data-translation-key="EnableNotification">Enable notification:</div>
+        <div id="enable-notification-mode">Yes</div>
         <label class="form-switch">
             <input type="checkbox" checked>
             <i class="form-icon"></i>
@@ -52,30 +57,33 @@
     </div>
     <div id="aft-notification-send" class="aft-notification-settings">
         <div id="aft-notification-send-limit">
-            <label class="form-label" for="notification-limit">Send notification when the chasable value of the recived
+            <label class="form-label" for="notification-limit" data-translation-key="SendNotificationWhenTheChasableValueOfTheRecivedTransactionIsHigerThan">Send
+                notification when the chasable value of the recived
                 transaction is higer than:</label>
             <input class="form-input" type="text" id="notification-limit" placeholder="700.000,00">
         </div>
     </div>
     <div id="aft-notification-send-mobile" class="aft-notification-settings">
         <div>
-            <label class="form-label" for="notification-mobile-phone-number">Mobile phone number:</label>
+            <label class="form-label" for="notification-mobile-phone-number" data-translation-key="MobilePhoneNumber">Mobile
+                phone number:</label>
             <input class="form-input" type="text" id="notification-mobile-phone-number" placeholder="xxx-xxx-xxxx">
         </div>
         <div id="aft-notification-another-phone">
-            <button class="btn btn-cancel">ADD another phone number</button>
+            <button class="btn btn-cancel" data-translation-key="AddAnotherPhoneNumber">ADD another phone number</button>
         </div>
     </div>
     <div id="aft-notification-send-email" class="aft-notification-settings">
         <div>
-            <label class="form-label" for="notification-email-address">Email address:</label>
+            <label class="form-label" for="notification-email-address" data-translation-key="EmailAddress">Email
+                address:</label>
             <input class="form-input" type="text" id="notification-email-address" placeholder="Your email">
         </div>
         <div id="aft-notification-another-email">
-            <button class="btn btn-cancel">ADD another email address</button>
+            <button class="btn btn-cancel" data-translation-key="AddAnotherEmailAddress">ADD another email address</button>
         </div>
     </div>
     <div id="aft-notification-save">
-        <button class="btn btn-success">SAVE</button>
+        <button class="btn btn-success" data-translation-key="Save">SAVE</button>
     </div>
 </div>
