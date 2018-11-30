@@ -387,7 +387,7 @@ let table = (function () {
             "Type": null,
             "BasicData": {
                 "Page": tableSettings.activePage,
-                "PageSize": 50,
+                "PageSize": tableSettings.PageSize,
                 "SortOrder": null,
                 "SortName": null
             },
@@ -632,6 +632,8 @@ let table = (function () {
         if (filters.Columns === null) {
             filters.Columns = [];
         }
+        console.log('filters', filters);
+        tableSettings.PageSize = parseInt(filters.PageSize, 10)
         return filters;
     }
 
@@ -789,6 +791,8 @@ let table = (function () {
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         let tableContainerElement = tableSettings.tableContainerElement;
         tableContainerElement.tableSettings = tableSettings;
+
+        tableSettings.PageSize = 50;
 
         if (tableSettings.dataEvent !== null) {
             tableSettings.dataEvent = getEvent(tableSettings);
