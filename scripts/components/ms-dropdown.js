@@ -12,20 +12,25 @@ const multiDropdown = (function () {
         }
         let titles = [];
         let values = [];
-        let options = element.getElementsByClassName("multiple-group")[0].getElementsByTagName("div");
+        let multipleGroup = element.getElementsByClassName("multiple-group")[0];
+        console.log(multipleGroup);
+        let options = multipleGroup.children;
         Array.prototype.slice.call(options).forEach(function (option) {
-            let checkbox = option.getElementsByClassName("form-checkbox")[0].getElementsByTagName("input")[0];
+            console.log(option);
+            option.click();
+            /*let checkboxContainer = option.getElementsByClassName("form-checkbox")[0];
+            let checkbox = checkboxContainer.getElementsByTagName("input")[0];
             checkbox.checked = false;
             if (selectedValues.indexOf(option.dataset.value) > -1) {
                 checkbox.checked = true;
                 titles.push(option.title);
                 values.push(option.dataset.value);
-            }
+            }*/
         });
-        let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
+        /*let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
         elementTableFilter.dataset.value = values.join(',');
         elementTableFilter.title = titles.join(', ');
-        elementTableFilter.innerText = titles.join(', ');
+        elementTableFilter.innerHTML = titles.join(', ');*/
 
         return element;
     }
@@ -121,6 +126,15 @@ const multiDropdown = (function () {
                     $$(`#${selectId}`).children[1].classList.toggle('hidden');
                 } else {
                     if (e.target.parentNode.parentNode.id === selectId) {
+                        $$(`#${selectId}`).classList.add('active-multi-select');
+                        $$(`#${selectId}`).children[1].classList.remove('hidden');
+                    } else if (e.target.parentNode.parentNode.id === selectId) {
+                        $$(`#${selectId}`).classList.add('active-multi-select');
+                        $$(`#${selectId}`).children[1].classList.remove('hidden');
+                    } else if (e.target.parentNode.parentNode.parentNode.id === selectId) {
+                        $$(`#${selectId}`).classList.add('active-multi-select');
+                        $$(`#${selectId}`).children[1].classList.remove('hidden');
+                    } else if (e.target.parentNode.parentNode.parentNode.parentNode.id === selectId) {
                         $$(`#${selectId}`).classList.add('active-multi-select');
                         $$(`#${selectId}`).children[1].classList.remove('hidden');
                     } else {

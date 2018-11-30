@@ -82,7 +82,7 @@ const dropdown = (function () {
     window.addEventListener('click', function (e) {
         e.stopPropagation();
         for (let selectId of singleSelectArray) {
-            if (e.target.parentNode !== null && selectId !== null) {
+            if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
                 if (e.target.parentNode.id !== selectId) {
                     $$(`#${selectId}`).classList.remove('active-single-select');
                     $$(`#${selectId}`).children[1].classList.add('hidden');
