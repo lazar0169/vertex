@@ -90,5 +90,9 @@
 }
 
 .active-add-new-jackpot-settings {
-    color: green !important;
+    color: lime !important;
+}
+
+.add-new-jackpot-control-settings-info>div:not(:first-child) {
+    color: red;
 }

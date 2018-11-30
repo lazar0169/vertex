@@ -358,6 +358,9 @@ const jackpotanimationSettings = (function () {
                         callDrawJackpotLabelOnGeneralCheck(isChecked.dataset.name);
                     }
                 }
+                if (infoLineCheckbox.children[0].children[0].checked) {
+                    drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
+                }
             });
         }
         infoLineCheckbox.addEventListener('click', function (e) {
