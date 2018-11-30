@@ -250,10 +250,8 @@ let table = (function () {
     }
 
     function updateTablePagination(tableSettings) {
-        console.log('Update table pagination table settings', tableSettings);
         let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
         activePage = parseInt(activePage);
-        // let activePage = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.Page ? tableSettings.filters.BasicData.Page : 1;
         let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
         pageSize = parseInt(pageSize);
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
@@ -351,7 +349,6 @@ let table = (function () {
         tableSettings.tableData = tableData;
         tableSettings.NumOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
-            console.log('table settings in table update in if filters are initialized', tableSettings);
             initFilters(tableSettings);
         }
         updateTable(tableSettings);
@@ -377,7 +374,7 @@ let table = (function () {
         resetPagination(tableSettings);
         e.target.classList.add('active');
         tableSettings.activePage = e.target.dataset.page;
-        let filtersForApi = {
+        let filtersForApi = { //todo fix this
             "EndpointId": tableSettings.endpointId,
             "DateFrom": null,
             "DateTo": null,
@@ -632,7 +629,6 @@ let table = (function () {
         if (filters.Columns === null) {
             filters.Columns = [];
         }
-        console.log('filters', filters);
         tableSettings.PageSize = parseInt(filters.PageSize, 10)
         return filters;
     }

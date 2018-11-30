@@ -38,7 +38,7 @@ const aft = (function () {
                     'CashableAmount': 13800,
                     'PromoAmount': 13800,
                     'ExpirationInDays': 7
-                }
+                };
             trigger('communicate/aft/addTransaction', {data: data, tableSettings: tableSettings});
         });
 
