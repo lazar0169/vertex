@@ -1,0 +1,10 @@
+.lang-selector {
+    width: 200px;
+    border-bottom: 0 !important;
+}
+
+select option:hover {
+}
+
+select:focus > option:checked {
+}

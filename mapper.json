@@ -12,7 +12,8 @@
     "styles": [
       "modify-spectre.css",
       "login.css",
-      "notifications.css"
+      "notifications.css",
+      "lang-selector.css"
     ]
   },
   "main": {
@@ -49,7 +50,8 @@
       "localization.js",
       "router.js",
       "components/datepicker.js",
-      "components/timepicker.js"
+      "components/timepicker.js",
+      "aft/aft.js"
     ],
     "styles": [
       "index.css",

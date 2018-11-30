@@ -9,7 +9,7 @@ const aftFilter = (function () {
     // proba3.appendChild(multiDropdown.generate(machinesVendors));
 
     aftAdvenceApplyFilters.addEventListener('click', function () {
-
+/*
         let aftDataRange = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value;
         let aftFinishedBy = $$('#aft-advance-table-filter-finished').children[1].children[0].dataset.value;
         let aftJackpot = $$('#aft-advance-table-filter-jackpot').children[1].children[0].dataset.value;
@@ -39,7 +39,7 @@ const aftFilter = (function () {
             'aftChooseColumn': {
                 'aftChooseColumn': aftChooseColumn
             }
-        })
+        })*/
 
     });
 
@@ -58,15 +58,18 @@ const aftFilter = (function () {
     // proba2.appendChild(multiDropdown.generate(nekiniz2));
     //proba3.appendChild(multiDropdown.generate(nekiniz3));
 
-    advanceTableFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
-    });
-    clearAdvanceFilter.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-    });
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('aft-advance-active');
         advanceTableFilterActive.classList.toggle('hidden');
     }
+
+    advanceTableFilter.addEventListener('click', function () {
+        showAdvanceTableFilter();
+    });
+
+    clearAdvanceFilter.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+    });
+
 })();

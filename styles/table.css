@@ -110,7 +110,7 @@ textarea {
     margin: 20px 0 0 20px;
 }
 
-.hide-column-section {
+.hide-column-section, .row-flag-section {
     display: flex;
     flex-direction: row;
     width: 500px;
@@ -119,10 +119,52 @@ textarea {
 
 }
 
-.hide-column-button {
+.hide-column-button, .row-flag-button {
     margin-left: 20px;
 }
 
 .hidden-column {
     display: none;
+}
+
+
+/** FLAGS **/
+.tbody > .row-flag-3 {
+    border-left: 7px solid red;
+}
+
+.tbody > .row-flag-3 ~ .row-flag-3 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-5 {
+    border-left: 7px solid lawngreen;
+}
+
+.tbody > .row-flag-5 ~ .row-flag-5 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-6 {
+    border-left: 7px solid blue;
+}
+
+.tbody > .row-flag-6 ~ .row-flag-6 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-8 {
+    border-left: 7px solid yellow;
+}
+
+.tbody > .row-flag-8 ~ .row-flag-8 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-11 {
+    border-left: 7px solid orange;
+}
+
+.tbody > .row-flag-11 ~ .row-flag-11 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
 }

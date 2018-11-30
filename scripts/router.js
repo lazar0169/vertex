@@ -3,11 +3,11 @@ let router = (function () {
     //Map object with routes
 
     let routes = new Map();
-    routes.set('aft', {
+/*    routes.set('aft', {
         page: 'aft',
         id: '#page-aft',
         path: '/aft'
-    });
+    });*/
     routes.set('aft', {
         page: 'aft',
         id: '#page-aft',
