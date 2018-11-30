@@ -110,7 +110,7 @@
 .custom-date-buttons-wrapper {
     margin: 0.5rem 0;
 }
-
+/*select options size*/
 #tickets-advance-table-filter-print-date .option-select-date {
     width: 100px;
 }
@@ -160,3 +160,6 @@
     width: 200px;
 }
 
+.tbody::-webkit-scrollbar {
+    height: 0.4rem;
+}
