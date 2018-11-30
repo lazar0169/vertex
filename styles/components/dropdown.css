@@ -110,3 +110,27 @@
 .custom-date-buttons-wrapper {
     margin: 0.5rem 0;
 }
+
+#tickets-advance-table-filter-print-date .option-select-date {
+    width: 100px;
+}
+
+#tickets-advance-table-filter-print-date .element-table-filters {
+    width: 100px;
+}
+
+#tickets-advance-table-filter-print-date .option-select-date .single-option {
+    width: 100px;
+}
+
+#aft-advance-table-filter-date-range .option-select-date .single-option {
+    width: 100px;
+}
+
+#tickets-advance-table-filter-active .option-select-date .single-option {
+    width: 100px;
+}
+
+#tickets-advance-table-filter-active .element-table-filters {
+    width: 100px;
+}

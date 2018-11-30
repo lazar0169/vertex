@@ -19,6 +19,17 @@
     font-size: 0.7rem;
     border-left: 1px solid #2A353A;
 }
+/*tickets page - advance filter active*/
+.tickets-advance-active {
+    background: rgb(55, 71, 79);
+    border-top: 1px solid #2A353A;
+    border-left: 1px solid #2A353A;
+}
+/*tickets page - icons*/
+#tickets-show-space {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
 
 #aft-advance-table-filter-active>div, #tickets-advance-table-filter-active>div {
     white-space: nowrap;
@@ -29,11 +40,11 @@
 
 #aft-advance-table-filter-active>div:last-child, #tickets-advance-table-filter-active>div:last-child {
     margin: auto;
-    padding: 0px;
+    padding: 0;
 }
 
-#aft-advance-table-filter-active {
-    padding: 0.3rem 0 0.3rem 0.6rem
+#aft-advance-table-filter-active , #tickets-advance-table-filter-active{
+    padding: 0.5rem 0 0.5rem 0.6rem
 }
 
 #aft-advance-table-filter-active .element-table-filters {
@@ -62,4 +73,21 @@
     background: rgb(55, 71, 79);
     color: rgb(255,255,255);
     border-left: 1px solid #2A353A;
+}
+
+#aft-advance-table-filter-clear .btn-cancel {
+    color: #3088D7 ;
+}
+
+#aft-enable-transaction-check .form-switch .form-icon {
+    border:rgb(55, 71, 79);
+}
+
+#aft-enable-transaction-check .form-switch .form-icon:before {
+    height:1rem ;
+    width: 1rem;
+ }
+
+#Enable-transaction-mode {
+    color:white;
 }
