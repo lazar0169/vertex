@@ -235,7 +235,6 @@ let table = (function () {
         let tableBodyElement = getTableBodyElement(tableSettings);
         insertAfter(tableBodyElement, paginationElement);
         bindPaginationLinkHandlers(tableSettings);
-
     });
 
     function displayLastPageNumber(tableSettings) {
@@ -251,6 +250,7 @@ let table = (function () {
     }
 
     function updateTablePagination(tableSettings) {
+        // let activePage = tableSettings.activePage;
         let activePage = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.Page? tableSettings.filters.BasicData.Page : 1;
         let pageSize =  tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
@@ -308,6 +308,14 @@ let table = (function () {
         displayLastPageNumber(tableSettings);
     }
 
+    function resetPagination(tableSettings){
+        let paginationButtons = Array.prototype.slice.call(tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button'));
+        paginationButtons.forEach(function(paginationButton){
+            paginationButton.classList.remove('active');
+        });
+
+    }
+
     /*--------------------------------------------------------------------------------------*/
 
 
@@ -363,8 +371,12 @@ let table = (function () {
 
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
 
-    function handleLinkClick(tableSettings, e) {
+    function handleLinkClick(e, tableSettings) {
         e.preventDefault();
+        alert(e.target.dataset.page);
+        resetPagination(tableSettings);
+        e.target.classList.add('active');
+       tableSettings.activePage = e.target.dataset.page;
         let filtersForApi = {
             "EndpointId": tableSettings.endpointId,
             "DateFrom": null,
@@ -375,26 +387,23 @@ let table = (function () {
             "Type": null,
             "BasicData": {
                 "Page": tableSettings.activePage,
-                "PageSize": tableSettings,
+                "PageSize": 50,
                 "SortOrder": null,
                 "SortName": null
             },
             "TokenInfo": sessionStorage.token
         };
-
-        tableSettings.activePage = e.target.dataset.page;
-
         trigger('communicate/aft/previewTransactions', {tableSettings: tableSettings, data: filtersForApi});
         console.log('table settings in pagination ', tableSettings);
         console.log('e ', e);
     }
 
-    function bindPaginationLinkHandler(element ) {
-        element.removeEventListener('click', function(e) {
-            handleLinkClick(e);
+    function bindPaginationLinkHandler(element, tableSettings) {
+        element.removeEventListener('click', function(e, tableSettings) {
+            handleLinkClick(e, tableSettings);
         });
         element.addEventListener('click', function(e) {
-            handleLinkClick(e);
+            handleLinkClick(e, tableSettings);
         });
     }
 
@@ -405,6 +414,10 @@ let table = (function () {
             bindPaginationLinkHandler(paginationElement, tableSettings);
         }
     }
+
+    on('table/pagination/tableUpdate', function(params){
+
+    });
 
     /*--------------------------------------------------------------------------------------*/
 

@@ -138,6 +138,14 @@ let communication = (function () {
     });
 
 
+    //pagination event
+    on('communicate/pagination', function(params){
+        let event = params.event;
+        let dataForApi = params.data;
+        trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
+    });
+
+
     /*------------------------------------ AFT EVENTS ------------------------------------*/
 
     //aft get transactions
