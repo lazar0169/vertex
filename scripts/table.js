@@ -140,9 +140,9 @@ let table = (function () {
                     }
                 }
                 tbody.appendChild(head);
-                head.addEventListener('click', function () {
-                    makeColumnActive(head, tableSettings);
-                });
+                /*                head.addEventListener('click', function () {
+                                    makeColumnActive(head, tableSettings);
+                                });*/
             }
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
@@ -218,7 +218,6 @@ let table = (function () {
     function hidePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
         paginationElement.classList.add('hidden');
-        // paginationElement.style.display = 'none';
     }
 
     function generateTablePagination(tableSettings) {
@@ -259,6 +258,7 @@ let table = (function () {
         let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
         activePage = parseInt(activePage);
         let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
+        console.log('page size in update table pagination', pageSize);
         pageSize = parseInt(pageSize);
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
         numOfItems = parseInt(numOfItems);
@@ -346,6 +346,9 @@ let table = (function () {
             tbody.appendChild(noDataElement);
             alert('No columns to show!');
         }
+        bindSortingLinkHandlers(tableSettings);
+        console.log('table settings object before binding page size link handlers', tableSettings);
+        // bindPageSizeLinkHandlers(tableSettings);
         console.log('TableSettings object in update table: ', tableSettings);
     }
 
@@ -382,38 +385,53 @@ let table = (function () {
         });
     }
 
+    function generatePageSizeDropdown(tableSettings){
+        let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
+        dropdown.generate(machinesNumber, pageSizeElement);
+    }
+
     /*--------------------------------------------------------------------------------------*/
 
+/*    function handlePageSizeLinkClick(e, tableSettings) {
+        alert('click!' + e);
+        e.preventDefault();
+        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
+        trigger(moduleName + '/filters/pageSize', {tableSettings: tableSettings});
+    }
+
+    function bindPageSizeLinkHandler(element, tableSettings) {
+        element.removeEventListener('click', function (e, tableSettings) {
+            handlePageSizeLinkClick(e, tableSettings);
+        });
+        element.addEventListener('click', function (e) {
+            handlePageSizeLinkClick(e, tableSettings);
+        });
+    }
+
+    function bindPageSizeLinkHandlers(tableSettings) {
+        let pageSizeButton = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
+        if (pageSizeButton !== undefined && pageSizeButton !== null) {
+            let pageSizeOptions = pageSizeButton.getElementsByClassName('single-option');
+            console.log('page size button', pageSizeButton);
+            console.log('page size options', pageSizeOptions);
+            console.log('page size options length', pageSizeOptions.length);
+            for (let i = 0; i < pageSizeOptions.length; i++) {
+                console.log('page size option', pageSizeOptions[i]);
+                bindPageSizeLinkHandler(pageSizeOptions[i], tableSettings);
+            }
+        }
+    }*/
 
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
-
 
     function handleLinkClick(e, tableSettings) {
         e.preventDefault();
         resetPagination(tableSettings);
         e.target.classList.add('active');
         tableSettings.activePage = e.target.dataset.page;
-        let filtersForApi = { //todo fix this
-            "EndpointId": tableSettings.endpointId,
-            "DateFrom": null,
-            "DateTo": null,
-            "MachineList": null,
-            "JackpotList": null,
-            "Status": null,
-            "Type": null,
-            "BasicData": {
-                "Page": tableSettings.activePage,
-                "PageSize": tableSettings.PageSize,
-                "SortOrder": null,
-                "SortName": null
-            },
-            "TokenInfo": sessionStorage.token
-        };
-        trigger(tableSettings.paginationEvent, {
-            tableSettings: tableSettings,
-            data: filtersForApi,
-            callbackEvent: 'table/update'
-        });
+
+        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
+        trigger(moduleName + '/filters/pagination', {tableSettings: tableSettings});
     }
 
     function bindPaginationLinkHandler(element, tableSettings) {
@@ -435,6 +453,36 @@ let table = (function () {
 
     /*--------------------------------------------------------------------------------------*/
 
+    /*-------------------------- SORTING LINK CLICK HANDLERS ---------------------------*/
+
+
+    function handleSortingLinkClick(e, tableSettings) {
+        e.preventDefault();
+        console.log('head bi trebalo da bude', e.target);
+        makeColumnActive(e.target, tableSettings);
+        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
+        let sorting = getSorting(tableSettings);
+        trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
+    }
+
+    function bindSortingLinkHandler(element, tableSettings) {
+        element.removeEventListener('click', function (e, tableSettings) {
+            handleSortingLinkClick(e, tableSettings);
+        });
+        element.addEventListener('click', function (e) {
+            handleSortingLinkClick(e, tableSettings);
+        });
+    }
+
+    function bindSortingLinkHandlers(tableSettings) {
+        let headElements = getHeaders(tableSettings);
+        for (let i = 0; i < headElements.length; i++) {
+            let headElement = headElements[i];
+            bindSortingLinkHandler(headElement, tableSettings);
+        }
+    }
+
+    /*--------------------------------------------------------------------------------------*/
 
     /*-------------------------------------- SORTING --------------------------------------*/
 
@@ -465,7 +513,6 @@ let table = (function () {
         Array.prototype.slice.call(tableCells).forEach(function (cell) {
             cell.classList.remove('active-column')
         });
-
 
         let columnName = getColumnNameFromHeadElement(tableSettings, header);
         let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
@@ -517,6 +564,11 @@ let table = (function () {
             columnElement.classList.remove(flagClass);
         }
     }
+
+    /*--------------------------------------------------------------------------------------*/
+
+
+    /*------------------------------- SHOWING/HIDING COLUMNS -------------------------------*/
 
     function getColumnNameFromHeadElement(tableSettings, headElement) {
         let classList = headElement.classList;
@@ -648,9 +700,26 @@ let table = (function () {
         if (filters.Columns === null) {
             filters.Columns = [];
         }
-        tableSettings.PageSize = parseInt(filters.PageSize, 10)
+/*        if (tableSettings.PageSize !== null && tableSettings.PageSize !== undefined) {
+            tableSettings.PageSize = parseInt(filters.PageSize, 10);
+            console.log('table settings page size', tableSettings.PageSize);
+        }*/
         return filters;
     }
+
+    function getPageSize(tableSettings) {
+        let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
+        if (pageSizeElement !== undefined && pageSizeElement !== null) {
+            let choosenOption = pageSizeElement.getElementsByClassName('element-table-filters')[0];
+            console.log(choosenOption);
+            let pageSizeValue = choosenOption.dataset.value;
+            pageSizeValue = parseInt(pageSizeValue, 10);
+            console.log('get page size page size value', pageSizeValue);
+            tableSettings.PageSize = pageSizeValue;
+            return pageSizeValue;
+        }
+    }
+
 
     /*
             function collectFiltersFromPage(tableSettings) {
@@ -701,37 +770,37 @@ let table = (function () {
             }
     */
 
-    function setPageFilters(tableSettings) {
-        let filters = tableSettings.filters;
-        let filterElements = collectAllFilterContainers(tableSettings);
+    /* function setPageFilters(tableSettings) {
+         let filters = tableSettings.filters;
+         let filterElements = collectAllFilterContainers(tableSettings);
 
-        for (let i = 0; i < filterElements.length; i++) {
-            if (filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.textarea) { //input and textarea
-                if (filterElements[i].type !== types.radio && filterElements[i].type !== types.checkbox && filters.hasOwnProperty(filterElements[i].name)) { //single input and textarea
-                    filterElements[i].value = filters[filterElements[i].name];
-                } else if (filterElements[i].type === types.radio && filters.hasOwnProperty(filterElements[i].name)) { //input radio
-                    filterElements[i].checked = (filterElements[i].value === filters[filterElements[i].name]);
-                } else if (filterElements[i].type === types.checkbox) {
-                    if (isSingleCheckbox(filterElements[i])) {
-                        filterElements[i].checked = (filters[filterElements[i].name] !== undefined);//input single checkbox
-                    } else {
-                        if (filters[filterElements[i].name] !== undefined) {
-                            filterElements[i].checked = filters[filterElements[i].name].includes(filterElements[i].value); //input multiple checkboxes
-                        } else {
-                            filterElements[i].checked = false;
-                        }
-                    }
-                }
-            } else if (filterElements[i].tagName === tagNames.select) { //select & multiple select
-                if (filters.hasOwnProperty(filterElements[i].name)) {
-                    let options = filterElements[i].options; //options in select element
-                    for (let o = 0; o < options.length; o++) {
-                        filterElements[i].options[o].selected = filters[filterElements[i].name].includes(options[o].value);
-                    }
-                }
-            }
-        }
-    }
+         for (let i = 0; i < filterElements.length; i++) {
+             if (filterElements[i].tagName === tagNames.input || filterElements[i].tagName === tagNames.textarea) { //input and textarea
+                 if (filterElements[i].type !== types.radio && filterElements[i].type !== types.checkbox && filters.hasOwnProperty(filterElements[i].name)) { //single input and textarea
+                     filterElements[i].value = filters[filterElements[i].name];
+                 } else if (filterElements[i].type === types.radio && filters.hasOwnProperty(filterElements[i].name)) { //input radio
+                     filterElements[i].checked = (filterElements[i].value === filters[filterElements[i].name]);
+                 } else if (filterElements[i].type === types.checkbox) {
+                     if (isSingleCheckbox(filterElements[i])) {
+                         filterElements[i].checked = (filters[filterElements[i].name] !== undefined);//input single checkbox
+                     } else {
+                         if (filters[filterElements[i].name] !== undefined) {
+                             filterElements[i].checked = filters[filterElements[i].name].includes(filterElements[i].value); //input multiple checkboxes
+                         } else {
+                             filterElements[i].checked = false;
+                         }
+                     }
+                 }
+             } else if (filterElements[i].tagName === tagNames.select) { //select & multiple select
+                 if (filters.hasOwnProperty(filterElements[i].name)) {
+                     let options = filterElements[i].options; //options in select element
+                     for (let o = 0; o < options.length; o++) {
+                         filterElements[i].options[o].selected = filters[filterElements[i].name].includes(options[o].value);
+                     }
+                 }
+             }
+         }
+     }*/
 
     /*--------------------------------------------------------------------------------------*/
 
@@ -746,29 +815,29 @@ let table = (function () {
         return activePageNumber;
     }
 
-    function prepareDataForApi(tableSettings) {
-        getSorting(tableSettings);
-        getActivePage(tableSettings);
-        collectFiltersFromPage(tableSettings);
+    /*    function prepareDataForApi(tableSettings) {
+            getSorting(tableSettings);
+            getActivePage(tableSettings);
+            collectFiltersFromPage(tableSettings);
 
-        let dataForApi = {};
-        let sorting = tableSettings.sort;
-        let activePage = tableSettings.activePage;
-        let filters = tableSettings.filters;
+            let dataForApi = {};
+            let sorting = tableSettings.sort;
+            let activePage = tableSettings.activePage;
+            let filters = tableSettings.filters;
 
-        Object.keys(sorting).forEach(function (key) {
-            dataForApi[key] = sorting[key];
-        });
+            Object.keys(sorting).forEach(function (key) {
+                dataForApi[key] = sorting[key];
+            });
 
-        dataForApi['activePage'] = activePage;
+            dataForApi['activePage'] = activePage;
 
-        Object.keys(filters).forEach(function (key) {
-            dataForApi[key] = filters[key];
-        });
+            Object.keys(filters).forEach(function (key) {
+                dataForApi[key] = filters[key];
+            });
 
-        dataForApi = JSON.stringify(dataForApi);
-        return dataForApi;
-    }
+            dataForApi = JSON.stringify(dataForApi);
+            return dataForApi;
+        }*/
 
     /*--------------------------------------------------------------------------------------*/
 
@@ -814,6 +883,7 @@ let table = (function () {
         }
 
         generateTablePagination(tableSettings);
+        generatePageSizeDropdown(tableSettings);
 
         if (tableSettings.tableData === undefined) {
             // generateTableHeaders(tableSettings);
@@ -828,7 +898,10 @@ let table = (function () {
         getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
-        showColumns: showColumns
+        showColumns: showColumns,
+        makeColumnActive: makeColumnActive,
+        getPageSize: getPageSize
+        // bindPageSizeLinkHandlers: bindPageSizeLinkHandlers
     };
 
     /*--------------------------------------------------------------------------------------*/
