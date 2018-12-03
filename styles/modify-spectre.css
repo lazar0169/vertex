@@ -173,3 +173,7 @@ a:active, a:focus, a:visited {
 body {
     background-color: #2B353B;
 }
+
+.form-group {
+    height: auto;
+}
