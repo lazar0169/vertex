@@ -223,12 +223,22 @@ textarea {
     border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-
 .head.cell.first-cell {
     left: auto;
     z-index: 0;
 }
 
+.table-normal .tbody .cell {
+    padding: 0.5rem;
+}
+
+.table-condensed .tbody .cell {
+    padding: 0.25rem;
+}
+
+.table-thick .tbody .cell {
+    padding: 0.75rem;
+}
 .empty-table {
     padding: 25px;
     font-size: 30px;
