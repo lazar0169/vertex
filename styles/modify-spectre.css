@@ -169,3 +169,7 @@ a:active, a:focus, a:visited {
     box-shadow: unset;
     text-decoration: none;
 }
+
+body {
+    background-color: #2B353B;
+}
