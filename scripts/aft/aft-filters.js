@@ -92,7 +92,7 @@ const aftFilters = (function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
 
-    function prepareFiltersForApi(currentTableSettingsObject) {
+    function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
@@ -105,7 +105,7 @@ const aftFilters = (function () {
             "Status": pageFilters.Status,
             "Type": pageFilters.Type,
             "BasicData": {
-                "Page": 1,
+                "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
                 "SortOrder": sorting.SortOrder,
                 "SortName": aftSortName[sortName] !== undefined ? aftSortName[sortName] : null
@@ -115,12 +115,13 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
+        console.log('current table settings object filters in prepare filters for api', currentTableSettingsObject.filters);
         return filtersForApi;
     }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
 
-        let filtersForApi = prepareFiltersForApi(currentTableSettingsObject);
+        let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
         console.log('AFT filters that we are sending to API: ', currentTableSettingsObject.filters);
 
         trigger('communicate/aft/previewTransactions', {
@@ -132,7 +133,7 @@ const aftFilters = (function () {
 
     on('aft/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
-        let filtersForApi = prepareFiltersForApi(tableSettings);
+        let filtersForApi = prepareAftFiltersForApi(tableSettings);
         console.log('filters for api pagination', filtersForApi);
         trigger('communicate/aft/previewTransactions', {
             tableSettings: tableSettings,
@@ -145,7 +146,7 @@ const aftFilters = (function () {
         let tableSettings = params.tableSettings;
         activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            let filtersForApi = prepareFiltersForApi(tableSettings);
+            let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
             filtersForApi.BasicData.SortName = params.sorting.SortName;
             console.log('prepared filters for api in api/filters/sorting', filtersForApi);
@@ -159,7 +160,7 @@ const aftFilters = (function () {
 
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
-        let filtersForApi = prepareFiltersForApi(tableSettings);
+        let filtersForApi = prepareAftFiltersForApi(tableSettings);
         console.log('prepared filters for api in api/filters/pageSize', filtersForApi);
         trigger('communicate/aft/previewTransactions', {
             tableSettings: tableSettings,

@@ -388,11 +388,12 @@ let table = (function () {
     function generatePageSizeDropdown(tableSettings){
         let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
         dropdown.generate(machinesNumber, pageSizeElement);
+        bindPageSizeLinkHandlers(tableSettings);
     }
 
     /*--------------------------------------------------------------------------------------*/
 
-/*    function handlePageSizeLinkClick(e, tableSettings) {
+    function handlePageSizeLinkClick(e, tableSettings) {
         alert('click!' + e);
         e.preventDefault();
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
@@ -420,7 +421,7 @@ let table = (function () {
                 bindPageSizeLinkHandler(pageSizeOptions[i], tableSettings);
             }
         }
-    }*/
+    }
 
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
 
