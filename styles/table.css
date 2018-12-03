@@ -228,3 +228,8 @@ textarea {
     left: auto;
     z-index: 0;
 }
+
+.empty-table {
+    padding: 25px;
+    font-size: 30px;
+}

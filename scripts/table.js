@@ -111,9 +111,6 @@ let table = (function () {
     function generateTableHeaders(tableSettings) {
 
         let colsCount = getCountOfAllColumns(tableSettings);
-        if (colsCount === 0) {
-            alert('No columns to show!');
-        }
 
         let headers = hasHeaders(tableSettings);
 
@@ -217,6 +214,13 @@ let table = (function () {
 
     /*-------------------------------------- PAGINATION ---------------------------------------*/
 
+
+    function hidePagination(tableSettings) {
+        let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
+        paginationElement.classList.add('hidden');
+        // paginationElement.style.display = 'none';
+    }
+
     function generateTablePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
         if (paginationElement === undefined) {
@@ -250,6 +254,8 @@ let table = (function () {
     }
 
     function updateTablePagination(tableSettings) {
+        let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
+        paginationElement.classList.remove('hidden');
         let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
         activePage = parseInt(activePage);
         let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
@@ -324,10 +330,22 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
+        let colsCount = getCountOfAllColumns(tableSettings);
+
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
-        updateTablePagination(tableSettings);
         showColumns(tableSettings, tableSettings.ColumnsToShow);
+        if (colsCount !== 0 && colsCount !== undefined) {
+            updateTablePagination(tableSettings);
+        } else {
+            hidePagination(tableSettings);
+            let noDataElement = document.createElement('div');
+            noDataElement.classList.add('empty-table');
+            noDataElement.innerText = 'No data to display...';
+            let tbody = getTableBodyElement(tableSettings);
+            tbody.appendChild(noDataElement);
+            alert('No columns to show!');
+        }
         console.log('TableSettings object in update table: ', tableSettings);
     }
 
@@ -368,6 +386,7 @@ let table = (function () {
 
 
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
+
 
     function handleLinkClick(e, tableSettings) {
         e.preventDefault();
