@@ -330,6 +330,34 @@ let table = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
+    function resetTableView(tableSettings){
+        tableSettings.tableContainerElement.classList.remove('table-condensed');
+        tableSettings.tableContainerElement.classList.remove('table-thick');
+        tableSettings.tableContainerElement.classList.remove('table-normal');
+    }
+
+    function showNormalTable(tableSettings){
+        tableSettings.tableContainerElement.classList.remove('table-condensed');
+        tableSettings.tableContainerElement.classList.remove('table-thick');
+        tableSettings.tableContainerElement.classList.add('table-normal');
+    }
+
+    function bindTableViewLinkHandlers(tableSettings) {
+        let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
+        console.log('table con', tableCondensedButton);
+        let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-thick')[0];
+        console.log('tableThickButton', tableThickButton);
+
+        tableCondensedButton.addEventListener('click', function(){
+            resetTableView(tableSettings);
+            tableSettings.tableContainerElement.classList.add('table-condensed');
+        });
+        tableThickButton.addEventListener('click', function(){
+            resetTableView(tableSettings);
+            tableSettings.tableContainerElement.classList.add('table-thick');
+        });
+    }
+
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
@@ -351,6 +379,7 @@ let table = (function () {
             alert('No columns to show!');
         }
         bindSortingLinkHandlers(tableSettings);
+        bindTableViewLinkHandlers(tableSettings);
         console.log('TableSettings object in update table: ', tableSettings);
     }
 
@@ -374,6 +403,7 @@ let table = (function () {
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
             initFilters(tableSettings);
         }
+        showNormalTable(tableSettings);
         updateTable(tableSettings);
     });
 
