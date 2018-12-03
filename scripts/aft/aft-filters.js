@@ -115,7 +115,7 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
-        console.log('current table settings object filters in prepare filters for api', currentTableSettingsObject.filters);
+        console.log('Filters prepared for API:', currentTableSettingsObject.filters);
         return filtersForApi;
     }
 
@@ -149,7 +149,7 @@ const aftFilters = (function () {
             let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
             filtersForApi.BasicData.SortName = params.sorting.SortName;
-            console.log('prepared filters for api in api/filters/sorting', filtersForApi);
+            console.log('Filters for API in api/filters/sorting', filtersForApi);
             trigger('communicate/aft/previewTransactions', {
                 tableSettings: tableSettings,
                 data: filtersForApi,
@@ -161,7 +161,7 @@ const aftFilters = (function () {
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        console.log('prepared filters for api in api/filters/pageSize', filtersForApi);
+        console.log('Filters for API in api/filters/pageSize', filtersForApi);
         trigger('communicate/aft/previewTransactions', {
             tableSettings: tableSettings,
             data: filtersForApi,

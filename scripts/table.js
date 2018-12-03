@@ -1,6 +1,12 @@
 let table = (function () {
 
     let rows = [];
+
+    const sortOrderEnum = {
+        0: 'none',
+        1: 'asc',
+        2: 'desc'
+    };
     const sortingType = {
         none: 0,
         ascending: 1,
@@ -140,9 +146,6 @@ let table = (function () {
                     }
                 }
                 tbody.appendChild(head);
-                /*                head.addEventListener('click', function () {
-                                    makeColumnActive(head, tableSettings);
-                                });*/
             }
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
@@ -258,7 +261,7 @@ let table = (function () {
         let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
         activePage = parseInt(activePage);
         let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
-        console.log('page size in update table pagination', pageSize);
+        console.log('Page size in update table pagination', pageSize);
         pageSize = parseInt(pageSize);
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
         numOfItems = parseInt(numOfItems);
@@ -334,6 +337,7 @@ let table = (function () {
 
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
+        setSortingHeader(tableSettings);
         showColumns(tableSettings, tableSettings.ColumnsToShow);
         if (colsCount !== 0 && colsCount !== undefined) {
             updateTablePagination(tableSettings);
@@ -347,8 +351,6 @@ let table = (function () {
             alert('No columns to show!');
         }
         bindSortingLinkHandlers(tableSettings);
-        console.log('table settings object before binding page size link handlers', tableSettings);
-        // bindPageSizeLinkHandlers(tableSettings);
         console.log('TableSettings object in update table: ', tableSettings);
     }
 
@@ -385,7 +387,7 @@ let table = (function () {
         });
     }
 
-    function generatePageSizeDropdown(tableSettings){
+    function generatePageSizeDropdown(tableSettings) {
         let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
         dropdown.generate(machinesNumber, pageSizeElement);
         bindPageSizeLinkHandlers(tableSettings);
@@ -394,7 +396,6 @@ let table = (function () {
     /*--------------------------------------------------------------------------------------*/
 
     function handlePageSizeLinkClick(e, tableSettings) {
-        alert('click!' + e);
         e.preventDefault();
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         trigger(moduleName + '/filters/pageSize', {tableSettings: tableSettings});
@@ -413,11 +414,7 @@ let table = (function () {
         let pageSizeButton = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
         if (pageSizeButton !== undefined && pageSizeButton !== null) {
             let pageSizeOptions = pageSizeButton.getElementsByClassName('single-option');
-            console.log('page size button', pageSizeButton);
-            console.log('page size options', pageSizeOptions);
-            console.log('page size options length', pageSizeOptions.length);
             for (let i = 0; i < pageSizeOptions.length; i++) {
-                console.log('page size option', pageSizeOptions[i]);
                 bindPageSizeLinkHandler(pageSizeOptions[i], tableSettings);
             }
         }
@@ -459,7 +456,6 @@ let table = (function () {
 
     function handleSortingLinkClick(e, tableSettings) {
         e.preventDefault();
-        console.log('head bi trebalo da bude', e.target);
         makeColumnActive(e.target, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
@@ -555,6 +551,23 @@ let table = (function () {
             tableSettings.sort.SortOrder = null;
         }
         return tableSettings.sort;
+    }
+
+    function getHeadElementBySortName(tableSettings, sortName) {
+        let cellName = 'cell-'+sortName;
+        return tableSettings.tableContainerElement.getElementsByClassName(cellName)[0];
+    }
+
+    function setSortingHeader(tableSettings) {
+        if (tableSettings.sort) {
+            let sortName = tableSettings.sort.SortName;
+            let sortOrder = tableSettings.sort.SortOrder;
+            if (sortName !== null && sortName !== undefined) {
+                let activeHeadElement = getHeadElementBySortName(tableSettings, sortName);
+                makeColumnActive(activeHeadElement, tableSettings);
+                activeHeadElement.classList.add('sort-'+sortOrderEnum[sortOrder]);
+            }
+        }
     }
 
     function removeFlagClass(columnElement) {
@@ -701,10 +714,10 @@ let table = (function () {
         if (filters.Columns === null) {
             filters.Columns = [];
         }
-/*        if (tableSettings.PageSize !== null && tableSettings.PageSize !== undefined) {
-            tableSettings.PageSize = parseInt(filters.PageSize, 10);
-            console.log('table settings page size', tableSettings.PageSize);
-        }*/
+        /*        if (tableSettings.PageSize !== null && tableSettings.PageSize !== undefined) {
+                    tableSettings.PageSize = parseInt(filters.PageSize, 10);
+                    console.log('table settings page size', tableSettings.PageSize);
+                }*/
         return filters;
     }
 
@@ -712,10 +725,8 @@ let table = (function () {
         let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
         if (pageSizeElement !== undefined && pageSizeElement !== null) {
             let choosenOption = pageSizeElement.getElementsByClassName('element-table-filters')[0];
-            console.log(choosenOption);
             let pageSizeValue = choosenOption.dataset.value;
             pageSizeValue = parseInt(pageSizeValue, 10);
-            console.log('get page size page size value', pageSizeValue);
             tableSettings.PageSize = pageSizeValue;
             return pageSizeValue;
         }
