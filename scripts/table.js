@@ -332,20 +332,20 @@ let table = (function () {
 
     function resetTableView(tableSettings){
         tableSettings.tableContainerElement.classList.remove('table-condensed');
-        tableSettings.tableContainerElement.classList.remove('table-thick');
+        tableSettings.tableContainerElement.classList.remove('table-expanded');
         tableSettings.tableContainerElement.classList.remove('table-normal');
     }
 
     function showNormalTable(tableSettings){
         tableSettings.tableContainerElement.classList.remove('table-condensed');
-        tableSettings.tableContainerElement.classList.remove('table-thick');
+        tableSettings.tableContainerElement.classList.remove('table-expanded');
         tableSettings.tableContainerElement.classList.add('table-normal');
     }
 
     function bindTableViewLinkHandlers(tableSettings) {
         let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
         console.log('table con', tableCondensedButton);
-        let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-thick')[0];
+        let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0];
         console.log('tableThickButton', tableThickButton);
 
         tableCondensedButton.addEventListener('click', function(){
@@ -354,7 +354,7 @@ let table = (function () {
         });
         tableThickButton.addEventListener('click', function(){
             resetTableView(tableSettings);
-            tableSettings.tableContainerElement.classList.add('table-thick');
+            tableSettings.tableContainerElement.classList.add('table-expanded');
         });
     }
 

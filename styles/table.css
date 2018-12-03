@@ -236,7 +236,7 @@ textarea {
     padding: 0.25rem;
 }
 
-.table-thick .cell {
+.table-expanded .cell {
     padding: 0.75rem;
 }
 .empty-table {
