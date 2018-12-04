@@ -123,14 +123,26 @@ let communication = (function () {
 
 
     function prepareAftTableData(tableSettings, data) {
-        console.log('data in prepare data', data);
         let tableData = data.Data.Items;
-        console.log('table data', tableData);
         tableData.forEach(function (entry) {
-            entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime+ '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>' ;
+            entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
             entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
+        });
+    }
+
+    function prepareTicketsTableData(tableSettings, data) {
+        console.log('data in prepare data tickets', data);
+        let tableData = data.Data.Items;
+        console.log('table data', tableData);
+        tableData.forEach(function (entry) {
+            entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
+            entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
+            delete entry.EntryData.CashoutedTime;
+            delete entry.EntryData.RedeemedTime;
+            entry.EntryData.Code = entry.EntryData.FullTicketValIdationNumber;
+            delete entry.EntryData.FullTicketValIdationNumber;
         });
     }
 
@@ -187,8 +199,6 @@ let communication = (function () {
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.prepareDataEvent;
         let data = params.data;
-        console.log('table settings in communicate preview transactions', tableSettings);
-        console.log('data in communicate preview transactions', data);
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -344,7 +354,7 @@ let communication = (function () {
         });
     });
 
-    //prepare data for tickets  page
+    //prepare data for aft  page
     on('communicate/aft/data/prepare', function (params) {
         let tableSettings = params.tableSettings;
         let data = params.data;
@@ -378,10 +388,10 @@ let communication = (function () {
     //pagination sorting and filtering
     on('communicate/tickets/previewTickets', function (params) {
         let route = 'api/tickets/previewtickets/';
-        let successEvent = 'table/update';
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -525,11 +535,11 @@ let communication = (function () {
     on('communicate/tickets/data/prepare', function (params) {
         let tableSettings = params.tableSettings;
         let data = params.data;
-        console.log('tableSettings in communicate aft data prepare', tableSettings);
-        console.log('data in communicate aft data prepare', data);
-        trigger('table/update', {data: data, tableSettings: tableSettings});
+        console.log('tableSettings in communicate tickets data prepare', tableSettings);
+        console.log('data in communicate tickets data prepare', data);
+        prepareTicketsTableData(tableSettings, data);
+        trigger(tableSettings.updateEvent, {data: data, tableSettings: tableSettings});
     });
-
 
     /*--------------------------------------------------------------------------------------*/
 

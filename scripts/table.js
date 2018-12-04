@@ -37,7 +37,8 @@ let table = (function () {
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
     function makeColumnTitle(columnName) {
-        return columnName.match(/[A-Z][a-z]+/g).join(' ');
+        let columnTitle = columnName.match(/[A-Z][a-z]+/g).join(' ').toUpperCase();
+        return columnTitle;
     }
 
     function insertAfter(referenceNode, newNode) {
@@ -399,7 +400,6 @@ let table = (function () {
         if (tableSettings.defaultSortColumnSet === false) {
             setDefaultActiveColumn(tableSettings);
         }
-        console.log('TableSettings object in update table: ', tableSettings);
     }
 
     function initFilters(tableSettings) {
@@ -408,7 +408,6 @@ let table = (function () {
     }
 
     on('table/update', function (params) {
-        console.log('API response in table/update: ', params);
         let tableSettings = params.tableSettings;
         let tableData = [];
         let apiItems = params.data.Data.Items;
@@ -943,7 +942,6 @@ let table = (function () {
     /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
     function init(tableSettings) {
-        console.log('Table settings object in init: ', tableSettings);
 
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         let tableContainerElement = tableSettings.tableContainerElement;

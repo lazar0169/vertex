@@ -33,8 +33,10 @@ const tickets = (function () {
                     trigger('communicate/tickets/getTickets');
                 });*/
 
+        //TODO: odkomentarisi ovo
+/*
         trigger('tickets/tab/appearance/init', {tableSettings: tableSettings});
         trigger('tickets/tab/maxValue/init', {tableSettings: tableSettings});
-        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});
+        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});*/
     });
 })();

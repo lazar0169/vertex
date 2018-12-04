@@ -6,7 +6,6 @@ const ticketsFilter = (function () {
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').getElementsByClassName('btn-cancel')[0];
 
     dropdown.generate(machinesNumber, ticketsMachinesNumbers);
-    console.log('List of page sizes: ', machinesNumber);
 
     let currentTableSettingsObject;
 
@@ -45,7 +44,6 @@ const ticketsFilter = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
-        console.log('filters from API', filters);
 
         //filter elements
         let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
@@ -72,7 +70,6 @@ const ticketsFilter = (function () {
         let tableSettings = params.tableSettings;
         let filters = apiResponseData.Data;
         tableSettings.filters = filters;
-        console.log( "tickets/filters/display", tableSettings);
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
@@ -80,7 +77,6 @@ const ticketsFilter = (function () {
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
         alert('Apply filters tickets');
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        console.log('Page filters collected from page in tickets: ', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
@@ -103,8 +99,6 @@ const ticketsFilter = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
-
-        console.log('Filters prepared for API in tickets: ', filtersForApi);
 
         trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,
