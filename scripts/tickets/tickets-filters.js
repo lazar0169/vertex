@@ -8,6 +8,7 @@ const ticketsFilter = (function () {
     dropdown.generate(machinesNumber, ticketsMachinesNumbers);
 
     let currentTableSettingsObject;
+    let activeHeadElement;
 
     function showAdvanceTableFilter() {
         ticketAdvanceFilter.classList.toggle('tickets-advance-active');
@@ -74,8 +75,8 @@ const ticketsFilter = (function () {
         displayFilters(filters, tableSettings);
     });
 
-    ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
-        alert('Apply filters tickets');
+
+    function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         let sorting = table.getSorting(currentTableSettingsObject);
         let filtersForApi = {
@@ -99,7 +100,12 @@ const ticketsFilter = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
+        return filtersForApi;
+    }
 
+    ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
+        alert('Apply filters tickets');
+        let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
         trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
@@ -110,6 +116,45 @@ const ticketsFilter = (function () {
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
         trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     });
+
+    on('tickets/filters/pagination', function (params) {
+        console.log('tickets filters pagination');
+        let tableSettings = params.tableSettings;
+        let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
+        trigger('communicate/tickets/previewTickets', {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
+    });
+
+    on('tickets/filters/sorting', function (params) {
+        console.log('tickets filters sorting');
+        let tableSettings = params.tableSettings;
+        activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
+        if (activeHeadElement !== null && activeHeadElement !== undefined) {
+            let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
+            filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
+            filtersForApi.BasicData.SortName = params.sorting.SortName;
+            trigger('communicate/tickets/previewTickets', {
+                tableSettings: tableSettings,
+                data: filtersForApi,
+                callbackEvent: 'table/update'
+            });
+        }
+    });
+
+    on('tickets/filters/pageSize', function (params) {
+        console.log('tickets filters page size');
+        let tableSettings = params.tableSettings;
+        let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
+        trigger('communicate/tickets/previewTickets', {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
+    })
+
 
 })();
 

@@ -387,6 +387,7 @@ let communication = (function () {
     //tickets preview ticket action
     //pagination sorting and filtering
     on('communicate/tickets/previewTickets', function (params) {
+        console.log('preview tickets params data', params.data);
         let route = 'api/tickets/previewtickets/';
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.prepareDataEvent;
