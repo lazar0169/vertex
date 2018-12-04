@@ -11,6 +11,12 @@
     padding-left: 0.5rem;
 }
 
+.table .cell.last-cell {
+    text-align: right;
+    padding-right: 1.5rem;
+}
+
+
 .cell {
     background-color: rgb(38, 50, 56);
     padding: 0.5em;
@@ -243,4 +249,8 @@ textarea {
 .empty-table {
     padding: 25px;
     font-size: 30px;
+}
+
+.cell-amountcashable {
+    text-align: right;
 }

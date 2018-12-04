@@ -121,6 +121,20 @@ let communication = (function () {
         xhr.setRequestHeader(header, value);
     }
 
+
+    function prepareAftTableData(tableSettings, data) {
+        console.log('data in prepare data', data);
+        let tableData = data.Data.Items;
+        console.log('table data', tableData);
+        tableData.forEach(function (entry) {
+            entry.EntryData.CreatedBy = '<time>' + entry.EntryData.CreatedTime+ '</time>' + '<h6>' + entry.EntryData.CreatedBy + '</h6>' ;
+            entry.EntryData.FinishedBy = '<time>' + entry.EntryData.FinishedTime + '</time>' + '<h6>' + entry.EntryData.FinishedBy + '</h6>';
+            delete entry.EntryData.CreatedTime;
+            delete entry.EntryData.FinishedTime;
+        });
+    }
+
+
     // create and send xhr
     on('communicate/createAndSendXhr', function (params) {
         let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.tableSettings);
@@ -139,7 +153,7 @@ let communication = (function () {
 
 
     //pagination event
-    on('communicate/pagination', function(params){
+    on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
         trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
@@ -151,10 +165,10 @@ let communication = (function () {
     //aft get transactions
     on('communicate/aft/getTransactions', function (params) {
         let route = 'api/transactions/';
-        let request = requestTypes.post;
-        let data = params.data;
-        let successEvent = params.callbackEvent;
         let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
+        let data = params.data;
+        let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -166,12 +180,15 @@ let communication = (function () {
         });
     });
 
+    //aft pagination filtering sorting
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
         let route = 'api/transactions/previewtransactions/';
-        let successEvent = 'table/update';
-        let data = params.data;
         let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
+        let data = params.data;
+        console.log('table settings in communicate preview transactions', tableSettings);
+        console.log('data in communicate preview transactions', data);
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -206,7 +223,6 @@ let communication = (function () {
 
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
-        console.log('Save notification settings params: ', params);
         let route = 'api/transactions/savenotificationsettings/';
         let successEvent = 'aft/tab/notifications/update';
         let tableSettings = params.tableSettings;
@@ -278,7 +294,6 @@ let communication = (function () {
 
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
-        console.log('AFT add transaction');
         let route = 'api/transactions/addtransaction/';
         let successEvent = 'aft/addTransaction';
         let data = params.data;
@@ -329,6 +344,14 @@ let communication = (function () {
         });
     });
 
+    //prepare data for tickets  page
+    on('communicate/aft/data/prepare', function (params) {
+        let tableSettings = params.tableSettings;
+        let data = params.data;
+        prepareAftTableData(tableSettings, data);
+        trigger(tableSettings.updateTableEvent, {data: data, tableSettings: tableSettings});
+    });
+
     /*--------------------------------------------------------------------------------------*/
 
 
@@ -336,13 +359,10 @@ let communication = (function () {
     //tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
         let route = 'api/tickets/';
-        console.log('route', route);
-        let successEvent = 'table/update';
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
         let request = requestTypes.post;
         let data = params.data;
-        console.log('data', data);
-        console.log('data to send to api', data);
-        let tableSettings = params.tableSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -413,7 +433,6 @@ let communication = (function () {
 
     //ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
-        console.log('Communicate show max value settings', params);
         let route = 'api/tickets/maxvaluesettings/';
         let successEvent = 'tickets/tab/maxValue/display';
         let request = requestTypes.post;
@@ -468,7 +487,6 @@ let communication = (function () {
 
     //SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
-        console.log('communicate tickets save max values action', params);
         let route = 'api/tikets/savemaxvalues/';
         let successEvent = 'tickets/tab/maxValue/update';
         let request = requestTypes.post;
@@ -501,6 +519,15 @@ let communication = (function () {
             errorEvent: errorEvent,
             tableSettings: tableSettings
         });
+    });
+
+    //prepare data for tickets  page
+    on('communicate/tickets/data/prepare', function (params) {
+        let tableSettings = params.tableSettings;
+        let data = params.data;
+        console.log('tableSettings in communicate aft data prepare', tableSettings);
+        console.log('data in communicate aft data prepare', data);
+        trigger('table/update', {data: data, tableSettings: tableSettings});
     });
 
 

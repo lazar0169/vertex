@@ -145,6 +145,9 @@ let table = (function () {
                         head.classList.remove('first-cell');
                     }
                 }
+                if(col === colsCount-1){
+                    head.classList.add('last-cell');
+                }
                 tbody.appendChild(head);
             }
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
@@ -205,6 +208,9 @@ let table = (function () {
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
+                if(col===colsCount-1) {
+                    cell.classList.add('last-cell')
+                }
                 tbody.appendChild(cell);
             }
         }
@@ -261,7 +267,6 @@ let table = (function () {
         let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
         activePage = parseInt(activePage);
         let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
-        console.log('Page size in update table pagination', pageSize);
         pageSize = parseInt(pageSize);
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
         numOfItems = parseInt(numOfItems);
@@ -413,8 +418,7 @@ let table = (function () {
 
         trigger(tableSettings.dataEvent, {
             data: data,
-            tableSettings: tableSettings,
-            callbackEvent: 'table/update'
+            tableSettings: tableSettings
         });
     }
 
