@@ -334,27 +334,28 @@ let table = (function () {
         tableSettings.tableContainerElement.classList.remove('table-condensed');
         tableSettings.tableContainerElement.classList.remove('table-expanded');
         tableSettings.tableContainerElement.classList.remove('table-normal');
+        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0].classList.remove('show-space-active');
+        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.remove('show-space-active');
     }
 
     function showNormalTable(tableSettings){
-        tableSettings.tableContainerElement.classList.remove('table-condensed');
-        tableSettings.tableContainerElement.classList.remove('table-expanded');
+        resetTableView(tableSettings);
         tableSettings.tableContainerElement.classList.add('table-normal');
     }
 
     function bindTableViewLinkHandlers(tableSettings) {
         let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
-        console.log('table con', tableCondensedButton);
         let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0];
-        console.log('tableThickButton', tableThickButton);
 
         tableCondensedButton.addEventListener('click', function(){
             resetTableView(tableSettings);
             tableSettings.tableContainerElement.classList.add('table-condensed');
+            tableCondensedButton.classList.add('show-space-active');
         });
         tableThickButton.addEventListener('click', function(){
             resetTableView(tableSettings);
             tableSettings.tableContainerElement.classList.add('table-expanded');
+            tableThickButton.classList.add('show-space-active');
         });
     }
 
