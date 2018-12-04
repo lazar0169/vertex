@@ -33,7 +33,6 @@ let table = (function () {
         multiple: 'multiple'
     };
 
-    let defaultActiveColumnSet = false;
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -397,7 +396,7 @@ let table = (function () {
         }
         bindSortingLinkHandlers(tableSettings);
         bindTableViewLinkHandlers(tableSettings);
-        if (defaultActiveColumnSet === false) {
+        if (tableSettings.defaultSortColumnSet === false) {
             setDefaultActiveColumn(tableSettings);
         }
         console.log('TableSettings object in update table: ', tableSettings);
@@ -429,6 +428,7 @@ let table = (function () {
 
     function initTable(tableSettings) {
         let data = {EndpointId: tableSettings.endpointId};
+        tableSettings.defaultSortColumnSet = false;
 
         trigger(tableSettings.dataEvent, {
             data: data,
@@ -541,7 +541,7 @@ let table = (function () {
     }
 
     function setDefaultActiveColumn(tableSettings) {
-        defaultActiveColumnSet = true;
+        tableSettings.defaultSortColumnSet = true;
         let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + tableSettings.sortActiveColumn);
         for (let i = 0; i < sortActiveColumnElements.length; i++) {
             if (sortActiveColumnElements[i].classList.contains('head')) {
