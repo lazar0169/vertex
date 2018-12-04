@@ -33,6 +33,8 @@ let table = (function () {
         multiple: 'multiple'
     };
 
+    let defaultActiveColumnSet = false;
+
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
     function makeColumnTitle(columnName) {
@@ -395,7 +397,9 @@ let table = (function () {
         }
         bindSortingLinkHandlers(tableSettings);
         bindTableViewLinkHandlers(tableSettings);
-        setDefaultActiveColumn(tableSettings);
+        if (defaultActiveColumnSet === false) {
+            setDefaultActiveColumn(tableSettings);
+        }
         console.log('TableSettings object in update table: ', tableSettings);
     }
 
@@ -537,11 +541,14 @@ let table = (function () {
     }
 
     function setDefaultActiveColumn(tableSettings) {
-        let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-'+tableSettings.sortActiveColumn);
+        defaultActiveColumnSet = true;
+        let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + tableSettings.sortActiveColumn);
         for (let i = 0; i < sortActiveColumnElements.length; i++) {
+            if (sortActiveColumnElements[i].classList.contains('head')) {
+                sortActiveColumnElements[i].classList.add('sort-active');
+                sortActiveColumnElements[i].classList.add('sort-asc');
+            }
             sortActiveColumnElements[i].classList.add('active-column');
-            sortActiveColumnElements[i].classList.add('sort-active');
-            sortActiveColumnElements[i].classList.add('sort-asc');
         }
     }
 
