@@ -145,7 +145,7 @@ let table = (function () {
                         head.classList.remove('first-cell');
                     }
                 }
-                if(col === colsCount-1){
+                if (col === colsCount - 1) {
                     head.classList.add('last-cell');
                 }
                 tbody.appendChild(head);
@@ -208,7 +208,7 @@ let table = (function () {
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
-                if(col===colsCount-1) {
+                if (col === colsCount - 1) {
                     cell.classList.add('last-cell')
                 }
                 tbody.appendChild(cell);
@@ -335,7 +335,7 @@ let table = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
-    function resetTableView(tableSettings){
+    function resetTableView(tableSettings) {
         tableSettings.tableContainerElement.classList.remove('table-condensed');
         tableSettings.tableContainerElement.classList.remove('table-expanded');
         tableSettings.tableContainerElement.classList.remove('table-normal');
@@ -343,7 +343,7 @@ let table = (function () {
         $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.remove('show-space-active');
     }
 
-    function showNormalTable(tableSettings){
+    function showNormalTable(tableSettings) {
         resetTableView(tableSettings);
         tableSettings.tableContainerElement.classList.add('table-normal');
     }
@@ -352,16 +352,25 @@ let table = (function () {
         let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
         let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0];
 
-        tableCondensedButton.addEventListener('click', function(){
+        tableCondensedButton.addEventListener('click', function () {
             resetTableView(tableSettings);
             tableSettings.tableContainerElement.classList.add('table-condensed');
             tableCondensedButton.classList.add('show-space-active');
         });
-        tableThickButton.addEventListener('click', function(){
+        tableThickButton.addEventListener('click', function () {
             resetTableView(tableSettings);
             tableSettings.tableContainerElement.classList.add('table-expanded');
             tableThickButton.classList.add('show-space-active');
         });
+    }
+
+    function setSortActiveColumn(tableSettings) {
+        let headers = getHeaders(tableSettings);
+        for (let header of headers) {
+            if (header.classList.contains('cell-' + tableSettings.sortActiveColumn)) {
+                makeColumnActiveFromHeader(header);
+            }
+        }
     }
 
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
@@ -386,6 +395,7 @@ let table = (function () {
         }
         bindSortingLinkHandlers(tableSettings);
         bindTableViewLinkHandlers(tableSettings);
+        setDefaultActiveColumn(tableSettings);
         console.log('TableSettings object in update table: ', tableSettings);
     }
 
@@ -491,7 +501,7 @@ let table = (function () {
 
     function handleSortingLinkClick(e, tableSettings) {
         e.preventDefault();
-        makeColumnActive(e.target, tableSettings);
+        makeColumnActiveFromHeader(e.target, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
         trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
@@ -526,7 +536,16 @@ let table = (function () {
         return tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
     }
 
-    function makeColumnActive(header, tableSettings) {
+    function setDefaultActiveColumn(tableSettings) {
+        let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-'+tableSettings.sortActiveColumn);
+        for (let i = 0; i < sortActiveColumnElements.length; i++) {
+            sortActiveColumnElements[i].classList.add('active-column');
+            sortActiveColumnElements[i].classList.add('sort-active');
+            sortActiveColumnElements[i].classList.add('sort-asc');
+        }
+    }
+
+    function makeColumnActiveFromHeader(header, tableSettings) {
         let headers = getHeaders(tableSettings);
         for (let i = 0; i < headers.length; i++) {
             if (headers[i] !== header) {
@@ -589,7 +608,7 @@ let table = (function () {
     }
 
     function getHeadElementBySortName(tableSettings, sortName) {
-        let cellName = 'cell-'+sortName;
+        let cellName = 'cell-' + sortName;
         return tableSettings.tableContainerElement.getElementsByClassName(cellName)[0];
     }
 
@@ -599,8 +618,8 @@ let table = (function () {
             let sortOrder = tableSettings.sort.SortOrder;
             if (sortName !== null && sortName !== undefined) {
                 let activeHeadElement = getHeadElementBySortName(tableSettings, sortName);
-                makeColumnActive(activeHeadElement, tableSettings);
-                activeHeadElement.classList.add('sort-'+sortOrderEnum[sortOrder]);
+                makeColumnActiveFromHeader(activeHeadElement, tableSettings);
+                activeHeadElement.classList.add('sort-' + sortOrderEnum[sortOrder]);
             }
         }
     }
@@ -946,7 +965,7 @@ let table = (function () {
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
         showColumns: showColumns,
-        makeColumnActive: makeColumnActive,
+        makeColumnActive: makeColumnActiveFromHeader,
         getPageSize: getPageSize
         // bindPageSizeLinkHandlers: bindPageSizeLinkHandlers
     };

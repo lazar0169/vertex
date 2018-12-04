@@ -19,6 +19,7 @@ const tickets = (function () {
         tableSettings.prepareDataEvent = 'communicate/tickets/data/prepare';
         tableSettings.paginationEvent = 'communicate/tickets/PreviewTicketAction';
         tableSettings.endpointId = ticketId;
+        tableSettings.sortActiveColumn = 'status';
         tableSettings.id = '';
         tableSettings.forceRemoveHeaders = true;
         tableSettings.stickyRow = true;

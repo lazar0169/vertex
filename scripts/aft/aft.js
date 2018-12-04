@@ -17,6 +17,7 @@ const aft = (function () {
         tableSettings.dataEvent = 'communicate/aft/getTransactions';
         tableSettings.updateTableEvent = 'table/update';
         tableSettings.prepareDataEvent = 'communicate/aft/data/prepare';
+        tableSettings.sortActiveColumn = 'createdby';
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
         tableSettings.forceRemoveHeaders = true;

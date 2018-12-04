@@ -127,8 +127,8 @@ let communication = (function () {
         let tableData = data.Data.Items;
         console.log('table data', tableData);
         tableData.forEach(function (entry) {
-            entry.EntryData.CreatedBy = '<time>' + entry.EntryData.CreatedTime+ '</time>' + '<h6>' + entry.EntryData.CreatedBy + '</h6>' ;
-            entry.EntryData.FinishedBy = '<time>' + entry.EntryData.FinishedTime + '</time>' + '<h6>' + entry.EntryData.FinishedBy + '</h6>';
+            entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime+ '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>' ;
+            entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
         });

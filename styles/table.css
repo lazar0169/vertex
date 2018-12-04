@@ -254,3 +254,7 @@ textarea {
 .cell-amountcashable {
     text-align: right;
 }
+
+.table-time {
+    color: #6D818C;
+}
