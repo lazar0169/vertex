@@ -129,13 +129,15 @@ let communication = (function () {
             entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
+            entry.EntryData.AmountCashable = entry.EntryData.AmountCashable.toFixed(2);
+            entry.EntryData.AmountPromo = entry.EntryData.AmountPromo.toFixed(2);
         });
+        console.log('prepared data aft', tableData);
+        return data;
     }
 
     function prepareTicketsTableData(tableSettings, data) {
-        console.log('data in prepare data tickets', data);
         let tableData = data.Data.Items;
-        console.log('table data', tableData);
         tableData.forEach(function (entry) {
             entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
             entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
@@ -143,7 +145,10 @@ let communication = (function () {
             delete entry.EntryData.RedeemedTime;
             entry.EntryData.Code = entry.EntryData.FullTicketValIdationNumber;
             delete entry.EntryData.FullTicketValIdationNumber;
+            entry.EntryData.Amount = entry.EntryData.Amount.toFixed(2);
         });
+        console.log('prepared data tickets', tableData);
+        return data;
     }
 
 
@@ -536,8 +541,6 @@ let communication = (function () {
     on('communicate/tickets/data/prepare', function (params) {
         let tableSettings = params.tableSettings;
         let data = params.data;
-        console.log('tableSettings in communicate tickets data prepare', tableSettings);
-        console.log('data in communicate tickets data prepare', data);
         prepareTicketsTableData(tableSettings, data);
         trigger(tableSettings.updateEvent, {data: data, tableSettings: tableSettings});
     });

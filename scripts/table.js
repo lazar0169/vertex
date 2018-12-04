@@ -408,6 +408,8 @@ let table = (function () {
     }
 
     on('table/update', function (params) {
+        console.log('params in table/update', params);
+
         let tableSettings = params.tableSettings;
         let tableData = [];
         let apiItems = params.data.Data.Items;
@@ -420,8 +422,8 @@ let table = (function () {
         tableSettings.NumOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
             initFilters(tableSettings);
+            showNormalTable(tableSettings);
         }
-        showNormalTable(tableSettings);
         updateTable(tableSettings);
     });
 
