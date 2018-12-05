@@ -58,6 +58,7 @@ const aftTabContent = (function () {
 
     saveTransactionButton.addEventListener('click', function () {
         let dataForApi = collectAndPrepareTransactionDataForApi();
+        console.log('Data that we are sending to API in save transactions: ', dataForApi);
         trigger('communicate/aft/saveBasicSettings', {data: dataForApi, tableSettings: currentTableSettingsObject});
     });
 
@@ -66,8 +67,6 @@ const aftTabContent = (function () {
     });
 
     transactionEnableSwitch.addEventListener('click', function(){
-        // enableTransactionSwitch.toggle();
-        console.log('enable transaction switch', transactionEnableSwitch.checked);
         if(transactionEnableSwitch.checked === false) {
             transactionEnableSwitch.checked = false;
             transactionEnableMode.innerHTML = 'No';
@@ -172,8 +171,6 @@ const aftTabContent = (function () {
     });
 
     notificationsEnableFormSwitch.addEventListener('click', function(){
-        // enableTransactionSwitch.toggle();
-        console.log('enable transaction switch', notificationsEnableFormSwitch.checked);
         if(notificationsEnableFormSwitch.checked === false) {
             notificationsEnableFormSwitch.checked = false;
             notificationsEnableMode.innerHTML = 'No';
