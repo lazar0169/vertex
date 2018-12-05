@@ -236,12 +236,15 @@ textarea {
 }
 
 .table-condensed .cell {
-    padding: 0.25rem;
+    height: 47px;
+    /*padding: 0.25rem;*/
 }
 
 .table-expanded .cell {
-    padding: 0.49rem;
+    /*padding: 0.49rem;*/
+    height: 49px;
 }
+
 .empty-table {
     padding: 25px;
     font-size: 30px;
