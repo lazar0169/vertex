@@ -976,10 +976,10 @@ let table = (function () {
         getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
-        showColumns: showColumns,
-        makeColumnActive: makeColumnActiveFromHeader,
         getPageSize: getPageSize
-        // bindPageSizeLinkHandlers: bindPageSizeLinkHandlers
+        // showColumns: showColumns, //todo check if unnecessary
+        // makeColumnActive: makeColumnActiveFromHeader, //todo check if unnecessary
+        // bindPageSizeLinkHandlers: bindPageSizeLinkHandlers //todo check if unnecessary
     };
 
     /*--------------------------------------------------------------------------------------*/

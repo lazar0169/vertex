@@ -6,6 +6,46 @@
     </div>
 </div>
 
+<!--FORM MODULE-->
+<div id="aft-tab-enable-transaction" class="chosen-info-tab overflow-content hidden">
+    <form class="element-async-form">
+        <div>
+            <div>Enable transaction:</div>
+            <div>Yes</div>
+            <label class="form-switch">
+                <input data-name="EnableTransactions" type="checkbox" checked>
+                <i class="form-icon"></i>
+            </label>
+        </div>
+        <div class="aft-enable-transaction">
+            <div>
+                <label class="form-label" for="aft-limit">Chasable handpay transaction limit:</label>
+                <input data-name="CashableTransactionHandpayLimit" class="form-input" id="aft-limit" type="text"
+                       placeholder="700.000,00">
+            </div>
+            <div>
+                <label class="form-label" for="chashable-limit">Chasable transaction limit:</label>
+                <input data-name="CashableTransactionLimit" class="form-input" type="text" placeholder="999.999,00">
+            </div>
+        </div>
+
+        <div class="aft-enable-transaction">
+            <div>
+                <label class="form-label" for="promo-handplay-limit">Promo handplay transaction limit:</label>
+                <input data-name="PromoTransactionHandpayLimit" class="form-input" type="text" placeholder="700.000,00">
+            </div>
+            <div>
+                <label class="form-label" for="promo-limit">Promo transaction limit:</label>
+                <input data-name="PromoTransactionLimit" class="form-input" type="text" placeholder="999.999,00">
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-success">SAVE</button>
+        </div>
+    </form>
+</div>
+
+
 <div id="aft-tabs-enable-transaction-info" class="chosen-info-tab overflow-content  hidden">
     <div id="aft-enable-transaction-check">
         <div>Enable transaction:</div>
@@ -40,6 +80,67 @@
         <button class="btn btn-success">SAVE</button>
     </div>
 </div>
+
+
+<!--FORM MODULE-->
+<div id="aft-tab-notification-settings" class="chosen-info-tab overflow-content hidden">
+    <form>
+        <div>
+            <div>Enable notification:</div>
+            <div>Yes</div>
+            <label class="form-switch">
+                <input data-name="EnableTransactions" type="checkbox" checked>
+                <i class="form-icon"></i>
+            </label>
+        </div>
+        <div class="aft-notification-settings">
+            <div>
+                <label class="form-label" for="notification-cashable-received-transaction-limit">Send notification when the chasable value of the
+                    recived transaction is higer than:</label>
+                <input data-name="CashableTransactionCreatedLimitForNotification" class="form-input" type="text" id="notification-cashable-received-transaction-limit" placeholder="700.000,00">
+            </div>
+            <div>
+                <label class="form-label" for="notification-cashable-paid-transaction-limit">Send notification when the cashable value of the paid
+                    transaction is higher than:</label>
+                <input data-name="CashableTransactionPayedLimitForNotification" class="form-input" type="text" id="notification-cashable-paid-transaction-limit" placeholder="700.000,00">
+            </div>
+            <div>
+                <label class="form-label" for="notification-promo-received-transaction-limit">Send notification when the chasable value of the
+                    recived transaction is higer than:</label>
+                <input data-name="PromoTransactionCreatedLimitForNotification" class="form-input" type="text" id="notification-promo-received-transaction-limit" placeholder="700.000,00">
+            </div>
+            <div>
+                <label class="form-label" for="notification-promo-paid-transaction-limit">Send notification when the chasable value of the
+                    recived transaction is higer than:</label>
+                <input data-name="PromoTransactionPayedLimitForNotification" class="form-input" type="text" id="notification-promo-paid-transaction-limit" placeholder="700.000,00">
+            </div>
+        </div>
+        <div class="aft-notification-settings">
+            <div>
+                <label class="form-label" for="notif-mobile-phone-number">Mobile phone number:</label>
+                <input data-name="PhoneNumberList" class="form-input" type="text" id="notif-mobile-phone-number"
+                       placeholder="xxx-xxx-xxxx">
+            </div>
+            <div>
+                <button class="btn btn-cancel">ADD another phone number</button>
+            </div>
+        </div>
+        <div class="aft-notification-settings">
+            <div>
+                <label class="form-label" for="notif-email-address">Email address:</label>
+                <input data-name="EmailList" class="form-input" type="text" id="notif-email-address" placeholder="Your email">
+            </div>
+            <div>
+                <button class="btn btn-cancel">ADD another email address</button>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-success">SAVE</button>
+        </div>
+    </form>
+</div>
+
+
 <div id="aft-tabs-notification-settings-info" class="chosen-info-tab overflow-content hidden">
 
     <div id="aft-enable-notification-check">

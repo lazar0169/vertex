@@ -45,12 +45,49 @@ const aft = (function () {
         });
 
         on('aft/addTransaction', function () {
+
         });
-
-
 
         trigger('aft/tab/transactions/init', {tableSettings: tableSettings});
         trigger('aft/tab/notifications/init', {tableSettings: tableSettings});
+
+
+        //todo -----------------------------------------------------------------------------------------------
+
+        //todo FILTER module
+        //TRANSACTIONS TAB
+        let formSettingsTransaction = {};
+        formSettingsTransaction.formContainerSelector = '#aft-tab-enable-transaction';
+        formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
+        formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
+        formSettingsTransaction.validateEvent = '';
+        formSettingsTransaction.successEvent = '';
+        formSettingsTransaction.errorEvent = '';
+        formSettingsTransaction.prepareDataEvent = '';
+        formSettingsTransaction.customFillDataEvent = '';
+        formSettingsTransaction.endpointId = aftId;
+
+
+        //todo FILTER MODULE
+        trigger('form/init', {formSettings: formSettingsTransaction, tableSettings: tableSettings});
+
+
+        //todo FILTER module
+        //NOTIFICATION TAB
+        let formSettingsNotification = {};
+        formSettingsNotification.formContainerSelector = '#aft-tab-enable-transaction';
+        formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
+        formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
+        formSettingsNotification.validateEvent = '';
+        formSettingsNotification.successEvent = '';
+        formSettingsNotification.errorEvent = '';
+        formSettingsNotification.prepareDataEvent = '';
+        formSettingsNotification.customFillDataEvent = '';
+        formSettingsNotification.endpointId = aftId;
+
+
+        //todo FILTER MODULE
+        trigger('form/init', {formSettings: formSettingsNotification, tableSettings: tableSettings});
 
     });
 })();

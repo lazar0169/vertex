@@ -241,7 +241,6 @@ let communication = (function () {
         });
     });
 
-    //TODO PREPAKUJ SVE OVO U JEDAN HENDLER !!!
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
