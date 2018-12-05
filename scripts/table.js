@@ -317,7 +317,7 @@ let table = (function () {
         for (let i = 0; i < paginationButtons.length; i++) {
             paginationButtons[i].dataset.page = paginationArray[i];
             paginationButtons[i].innerHTML = paginationArray[i];
-            if (paginationButtons[i].innerHTML == activePage) {
+            if (paginationButtons[i].innerHTML === activePage.toString()) {
                 paginationButtons[i].classList.add('active');
             } else if (paginationArray[i] === undefined) {
                 paginationButtons[i].classList.add('hidden');
@@ -326,7 +326,7 @@ let table = (function () {
         displayLastPageNumber(tableSettings);
     }
 
-    function resetPagination(tableSettings) {
+    function resetPaginationActiveButtons(tableSettings) {
         let paginationButtons = Array.prototype.slice.call(tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button'));
         paginationButtons.forEach(function (paginationButton) {
             paginationButton.classList.remove('active');
@@ -473,7 +473,7 @@ let table = (function () {
 
     function handleLinkClick(e, tableSettings) {
         e.preventDefault();
-        resetPagination(tableSettings);
+        resetPaginationActiveButtons(tableSettings);
         e.target.classList.add('active');
         tableSettings.activePage = e.target.dataset.page;
 
