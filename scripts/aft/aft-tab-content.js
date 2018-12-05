@@ -11,6 +11,7 @@ const aftTabContent = (function () {
     let currentTableSettingsObject;
     let saveTransactionButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
     let enableTransactionButton = $$('#aft-enable-transaction-check');
+    let enableTransactionMode = $$('#aft-enable-transaction-mode');
 
     function getTransactionData(currentTableSettingsObject) {
         trigger('communicate/aft/getBasicSettings', {
@@ -21,6 +22,11 @@ const aftTabContent = (function () {
 
     function displayTransactionData(transactionData) {
         enableTransactionButton.getElementsByTagName('input')[0].checked = transactionData.EnableTransactions;
+        if(transactionData.EnableTransactions === true) {
+            enableTransactionMode.innerHTML = 'Yes';
+        } else {
+            enableTransactionMode.innerHTML = 'No';
+        }
         chashableHandlpayLimit.value = transactionData.CashableTransactionHandpayLimit;
         chashableTransactionLimit.value = transactionData.CashableTransactionLimit;
         promoHandplayTransactionLimit.value = transactionData.PromoTransactionHandpayLimit;
@@ -74,6 +80,7 @@ const aftTabContent = (function () {
     let notificationEmailAddress = $$('#notification-email-address');
     let notificationSaveButton = $$('#aft-notification-save').getElementsByClassName('btn-success')[0];
     let notificationsEnableButton = $$('#aft-enable-notification-check');
+    let notificationsEnableMode = $$('#aft-enable-notification-mode');
 
 
     function getNotificationData(currentTableSettingsObject) {
@@ -85,6 +92,11 @@ const aftTabContent = (function () {
 
     function displayNotificationData(notificationData) {
         notificationsEnableButton.getElementsByTagName('input')[0].checked = notificationData.EnableTransactions;
+        if(notificationData.EnableTransactions === true) {
+            enableTransactionMode.innerHTML = 'Yes';
+        } else {
+            notificationsEnableMode.innerHTML = 'No';
+        }
         notificationLimit.value = notificationData.CashableTransactionCreatedLimitForNotification;
         notificationMobileNumber.value = notificationData.PhoneNumberList[0] !== undefined ? notificationData.PhoneNumberList[0] : null;
         notificationEmailAddress.value = notificationData.EmailList[0] !== undefined ? notificationData.EmailList[0] : null;;
