@@ -10,8 +10,9 @@ const aftTabContent = (function () {
     let promoTransactionLimit = $$('#promo-limit');
     let currentTableSettingsObject;
     let saveTransactionButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
-    let enableTransactionButton = $$('#aft-enable-transaction-check');
-    let enableTransactionMode = $$('#aft-enable-transaction-mode');
+    let transactionEnableButton = $$('#aft-enable-transaction-check');
+    let transactionEnableMode = $$('#aft-enable-transaction-mode');
+    let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
 
     function getTransactionData(currentTableSettingsObject) {
         trigger('communicate/aft/getBasicSettings', {
@@ -21,11 +22,11 @@ const aftTabContent = (function () {
     }
 
     function displayTransactionData(transactionData) {
-        enableTransactionButton.getElementsByTagName('input')[0].checked = transactionData.EnableTransactions;
+        transactionEnableSwitch.checked = transactionData.EnableTransactions;
         if(transactionData.EnableTransactions === true) {
-            enableTransactionMode.innerHTML = 'Yes';
+            transactionEnableMode.innerHTML = 'Yes';
         } else {
-            enableTransactionMode.innerHTML = 'No';
+            transactionEnableMode.innerHTML = 'No';
         }
         chashableHandlpayLimit.value = transactionData.CashableTransactionHandpayLimit;
         chashableTransactionLimit.value = transactionData.CashableTransactionLimit;
@@ -36,7 +37,7 @@ const aftTabContent = (function () {
     function collectAndPrepareTransactionDataForApi() {
         let transactionDataForApi = {
             EndpointId: currentTableSettingsObject.endpointId,
-            EnableTransactions: enableTransactionButton.getElementsByTagName('input')[0].checked,
+            EnableTransactions: transactionEnableButton.getElementsByTagName('input')[0].checked,
             CashableTransactionLimit: chashableTransactionLimit.value,
             CashableTransactionHandpayLimit: chashableHandlpayLimit.value,
             PromoTransactionLimit: promoHandplayTransactionLimit.value,
@@ -64,6 +65,19 @@ const aftTabContent = (function () {
         alert('Transactions update!');
     });
 
+    transactionEnableSwitch.addEventListener('click', function(){
+        // enableTransactionSwitch.toggle();
+        console.log('enable transaction switch', transactionEnableSwitch.checked);
+        if(transactionEnableSwitch.checked === false) {
+            transactionEnableSwitch.checked = false;
+            transactionEnableMode.innerHTML = 'No';
+        } else {
+            transactionEnableSwitch.checked = true;
+            transactionEnableMode.innerHTML = 'Yes';
+        }
+
+    });
+
     /*--------------------------------------------------------------------------------------*/
 
 
@@ -81,6 +95,7 @@ const aftTabContent = (function () {
     let notificationSaveButton = $$('#aft-notification-save').getElementsByClassName('btn-success')[0];
     let notificationsEnableButton = $$('#aft-enable-notification-check');
     let notificationsEnableMode = $$('#aft-enable-notification-mode');
+    let notificationsEnableFormSwitch = notificationsEnableButton.getElementsByTagName('input')[0];
 
 
     function getNotificationData(currentTableSettingsObject) {
@@ -91,9 +106,9 @@ const aftTabContent = (function () {
     }
 
     function displayNotificationData(notificationData) {
-        notificationsEnableButton.getElementsByTagName('input')[0].checked = notificationData.EnableTransactions;
+        notificationsEnableFormSwitch.checked = notificationData.EnableTransactions;
         if(notificationData.EnableTransactions === true) {
-            enableTransactionMode.innerHTML = 'Yes';
+            transactionEnableMode.innerHTML = 'Yes';
         } else {
             notificationsEnableMode.innerHTML = 'No';
         }
@@ -154,6 +169,19 @@ const aftTabContent = (function () {
         temp.id = `notification-email-address-${emailCounter}`
         aftNotificationEmail.children[0].appendChild(temp);
         emailCounter++;
+    });
+
+    notificationsEnableFormSwitch.addEventListener('click', function(){
+        // enableTransactionSwitch.toggle();
+        console.log('enable transaction switch', notificationsEnableFormSwitch.checked);
+        if(notificationsEnableFormSwitch.checked === false) {
+            notificationsEnableFormSwitch.checked = false;
+            notificationsEnableMode.innerHTML = 'No';
+        } else {
+            notificationsEnableFormSwitch.checked = true;
+            notificationsEnableMode.innerHTML = 'Yes';
+        }
+
     });
 
 
