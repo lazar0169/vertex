@@ -547,6 +547,7 @@ let table = (function () {
             if (sortActiveColumnElements[i].classList.contains('head')) {
                 sortActiveColumnElements[i].classList.add('sort-active');
                 sortActiveColumnElements[i].classList.add('sort-desc');
+                sortActiveColumnElements[i].dataset.direction = sortingDataAtt.descending;
             }
             sortActiveColumnElements[i].classList.add('active-column');
         }
