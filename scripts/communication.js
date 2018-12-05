@@ -125,8 +125,20 @@ let communication = (function () {
     function prepareAftTableData(tableSettings, data) {
         let tableData = data.Data.Items;
         tableData.forEach(function (entry) {
-            entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
-            entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
+            if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
+                entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>' + entry.EntryData.CreatedBy + '</h6>';
+
+            } else {
+                entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
+
+            }
+            if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
+                entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>' + entry.EntryData.FinishedBy + '</h6>';
+
+            } else {
+                entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
+
+            }
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
             entry.EntryData.AmountCashable = entry.EntryData.AmountCashable.toFixed(2);
@@ -139,8 +151,21 @@ let communication = (function () {
     function prepareTicketsTableData(tableSettings, data) {
         let tableData = data.Data.Items;
         tableData.forEach(function (entry) {
-            entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
-            entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
+            console.log('cashoutedBy', entry.EntryData.CashoutedBy);
+            if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
+
+            } else {
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
+
+            }
+            if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>' + entry.EntryData.RedeemedBy + '</h6>';
+
+            } else {
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
+
+            }
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
             entry.EntryData.Code = entry.EntryData.FullTicketValIdationNumber;

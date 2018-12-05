@@ -340,14 +340,14 @@ let table = (function () {
     function resetTableView(tableSettings) {
         tableSettings.tableContainerElement.classList.remove('table-condensed');
         tableSettings.tableContainerElement.classList.remove('table-expanded');
-        tableSettings.tableContainerElement.classList.remove('table-normal');
         $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0].classList.remove('show-space-active');
         $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.remove('show-space-active');
     }
 
     function showNormalTable(tableSettings) {
         resetTableView(tableSettings);
-        tableSettings.tableContainerElement.classList.add('table-normal');
+        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0].classList.add('show-space-active');
+        tableSettings.tableContainerElement.classList.add('table-condensed');
     }
 
     function bindTableViewLinkHandlers(tableSettings) {
@@ -386,6 +386,11 @@ let table = (function () {
         showColumns(tableSettings, tableSettings.ColumnsToShow);
         if (colsCount !== 0 && colsCount !== undefined) {
             updateTablePagination(tableSettings);
+            bindSortingLinkHandlers(tableSettings);
+            bindTableViewLinkHandlers(tableSettings);
+            if (tableSettings.defaultSortColumnSet === false) {
+                setDefaultActiveColumn(tableSettings);
+            }
         } else {
             hidePagination(tableSettings);
             let noDataElement = document.createElement('div');
@@ -393,12 +398,6 @@ let table = (function () {
             noDataElement.innerText = 'No data to display...';
             let tbody = getTableBodyElement(tableSettings);
             tbody.appendChild(noDataElement);
-            alert('No columns to show!');
-        }
-        bindSortingLinkHandlers(tableSettings);
-        bindTableViewLinkHandlers(tableSettings);
-        if (tableSettings.defaultSortColumnSet === false) {
-            setDefaultActiveColumn(tableSettings);
         }
     }
 
@@ -547,7 +546,7 @@ let table = (function () {
         for (let i = 0; i < sortActiveColumnElements.length; i++) {
             if (sortActiveColumnElements[i].classList.contains('head')) {
                 sortActiveColumnElements[i].classList.add('sort-active');
-                sortActiveColumnElements[i].classList.add('sort-asc');
+                sortActiveColumnElements[i].classList.add('sort-desc');
             }
             sortActiveColumnElements[i].classList.add('active-column');
         }
@@ -564,20 +563,23 @@ let table = (function () {
                 delete headers[i].dataset.direction;
             }
         }
-        header.classList.add('sort-active');
-        header.classList.add('active-column');
-        toggleDirection(header, tableSettings);
+        if(header !== undefined) {
+            header.classList.add('sort-active');
+            header.classList.add('active-column');
+            toggleDirection(header, tableSettings);
 
-        let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
-        Array.prototype.slice.call(tableCells).forEach(function (cell) {
-            cell.classList.remove('active-column')
-        });
+            let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+            Array.prototype.slice.call(tableCells).forEach(function (cell) {
+                cell.classList.remove('active-column')
+            });
 
-        let columnName = getColumnNameFromHeadElement(tableSettings, header);
-        let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-        for (let j = 0; j < columnElements.length; j++) {
-            columnElements[j].classList.add('active-column');
+            let columnName = getColumnNameFromHeadElement(tableSettings, header);
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
+            for (let j = 0; j < columnElements.length; j++) {
+                columnElements[j].classList.add('active-column');
+            }
         }
+
     }
 
     function toggleDirection(header) {
@@ -626,8 +628,10 @@ let table = (function () {
             let sortOrder = tableSettings.sort.SortOrder;
             if (sortName !== null && sortName !== undefined) {
                 let activeHeadElement = getHeadElementBySortName(tableSettings, sortName);
-                makeColumnActiveFromHeader(activeHeadElement, tableSettings);
-                activeHeadElement.classList.add('sort-' + sortOrderEnum[sortOrder]);
+                if(activeHeadElement !== undefined) {
+                    makeColumnActiveFromHeader(activeHeadElement, tableSettings);
+                    activeHeadElement.classList.add('sort-' + sortOrderEnum[sortOrder]);
+                }
             }
         }
     }

@@ -235,16 +235,12 @@ textarea {
     z-index: 0;
 }
 
-.table-normal .cell {
-    padding: 0.5rem;
-}
-
 .table-condensed .cell {
     padding: 0.25rem;
 }
 
 .table-expanded .cell {
-    padding: 0.75rem;
+    padding: 0.49rem;
 }
 .empty-table {
     padding: 25px;
