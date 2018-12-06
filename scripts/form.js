@@ -112,4 +112,8 @@ let form = (function () {
         fillData(formSettings, data);
     });
 
+    on('from/submit', function(params){
+
+    });
+
 })();
