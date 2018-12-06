@@ -1,5 +1,41 @@
 let ticketsSmsSettings = (function(){
-    let ticketsSmsSettingsTab = $$('#tickets-sms-settings-tab');
+
+    let formSettingsSmsSettings = {};
+    formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
+    formSettingsSmsSettings.fillEvent = 'communicate/tickets/showSmsSettings';
+    formSettingsSmsSettings.submitEvent = 'communicate/tickets/saveSmsSettings';
+    formSettingsSmsSettings.validateEvent = '';
+    formSettingsSmsSettings.successEvent = 'form/update';
+    formSettingsSmsSettings.errorEvent = '';
+    formSettingsSmsSettings.prepareDataEvent = '';
+    formSettingsSmsSettings.customFillDataEvent = '';
+
+
+    on('tickets/tab/smsSettings', function(params){
+        formSettingsSmsSettings.endpointId = params.tableSettings.endpointId;
+        trigger('form/init', {formSettings: formSettingsSmsSettings});
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* let ticketsSmsSettingsTab = $$('#tickets-sms-settings-tab');
     let currentTableSettingsObject;
     let ticketsSmsSettingsMaxRedemption = $$('#tickets-sms-settings-max-redemption').children[1];
     let ticketsSmsSettingsMaxIssuance = $$('#tickets-sms-settings-max-issuance').children[1];
@@ -58,5 +94,5 @@ let ticketsSmsSettings = (function(){
         alert('Tickets sms settings update!');
         console.log('Tickets sms settings', params);
     });
-
+*/
 })();

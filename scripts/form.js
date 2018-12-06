@@ -69,7 +69,7 @@ let form = (function () {
         if (formSettings.formData === null || formSettings.formData === undefined) {
             initForm(formSettings);
         } else {
-            fillData(formSettings);
+            // fillData(formSettings);
         }
     }
 
@@ -103,6 +103,7 @@ let form = (function () {
 
     on('form/update', function (params) {
         alert('form/update');
+        console.log('params in form/update', params);
         let formSettings = params.settingsObject;
         let data = params.data;
         fillData(formSettings, data);

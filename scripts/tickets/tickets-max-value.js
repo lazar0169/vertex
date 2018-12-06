@@ -1,5 +1,36 @@
 let ticketsMaxValue = (function () {
-    let currentTableSettingsObject;
+
+    let formSettingsMaxValue = {};
+    formSettingsMaxValue.formContainerSelector = '#tickets-max-value-tab-info';
+    formSettingsMaxValue.fillEvent = 'communicate/tickets/showMaxValueSettings';
+    formSettingsMaxValue.submitEvent = 'communicate/tickets/saveMaxValuesAction';
+    formSettingsMaxValue.validateEvent = '';
+    formSettingsMaxValue.successEvent = 'form/update';
+    formSettingsMaxValue.errorEvent = '';
+    formSettingsMaxValue.prepareDataEvent = '';
+    formSettingsMaxValue.customFillDataEvent = '';
+
+
+    on('tickets/tab/maxValue', function(params){
+        formSettingsMaxValue.endpointId = params.tableSettings.endpointId;
+        trigger('form/init', {formSettings: formSettingsMaxValue});
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*    let currentTableSettingsObject;
     let ticketsMaxValueTab = $$('#tickets-max-value-tab');
     let ticketsMaxValueMaxRedeemed = $$('#tickets-sms-settings-max-value-max-redeemed').children[1];
     let ticketsMaxValueMaxSell = $$('#tickets-sms-settings-max-value-max-sell').children[1];
@@ -53,5 +84,5 @@ let ticketsMaxValue = (function () {
     on('tickets/tab/maxValue/update', function (params) {
         alert('Tickets max value update!');
         console.log('Tickets max value', params);
-    });
+    });*/
 })();

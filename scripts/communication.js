@@ -462,10 +462,11 @@ let communication = (function () {
     on('communicate/tickets/showSmsSettings', function (params) {
         console.log('show sms settings');
         let route = 'api/tickets/smssettings/';
-        let successEvent = 'tickets/tab/smsSettings/display';
+        // let successEvent = 'tickets/tab/smsSettings/display';
+        let successEvent = params.formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -473,7 +474,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            settingsObject: formSettings
         });
     });
 
@@ -482,10 +483,11 @@ let communication = (function () {
     on('communicate/tickets/showMaxValueSettings', function (params) {
         console.log('show max value settings');
         let route = 'api/tickets/maxvaluesettings/';
-        let successEvent = 'tickets/tab/maxValue/display';
+        // let successEvent = 'tickets/tab/maxValue/display';
+        let successEvent = params.formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -493,7 +495,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            settingsObject: formSettings
         });
     });
 
@@ -501,10 +503,11 @@ let communication = (function () {
     on('communicate/tickets/ticketAppearance', function (params) {
         console.log('ticket appearance event');
         let route = 'api/tickets/ticketappearance/';
-        let successEvent = 'tickets/tab/appearance/display';
+        // let successEvent = 'tickets/tab/appearance/display';
+        let successEvent = params.formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -512,17 +515,18 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            settingsObject: formSettings
         });
     });
 
     //SaveTitoSmsAction
     on('communicate/tickets/saveSmsSettings', function (params) {
         let route = 'api/tikets/savesmssettings/';
-        let successEvent = 'tickets/tab/smsSettings/update';
+        // let successEvent = 'tickets/tab/smsSettings/update';
+        let successEvent = params.formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -530,17 +534,18 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            settingsObject: formSettings
         });
     });
 
     //SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
         let route = 'api/tikets/savemaxvalues/';
-        let successEvent = 'tickets/tab/maxValue/update';
+        // let successEvent = 'tickets/tab/maxValue/update';
+        let successEvent = params.formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -548,17 +553,18 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            settingsObject: formSettings
         });
     });
 
     //SaveTicketAppearanceAction
     on('communicate/tickets/saveAppearance', function (params) {
         let route = 'api/tikets/saveappearance/';
-        let successEvent = 'tickets/tab/appearance/update';
+        // let successEvent = 'tickets/tab/appearance/update';
+        let successEvent = params.formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -566,7 +572,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            settingsObject: formSettings
         });
     });
 

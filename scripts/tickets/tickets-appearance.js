@@ -1,4 +1,32 @@
 const ticketAppearance = (function () {
+
+    let formSettingsAppearance = {};
+    formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
+    formSettingsAppearance.fillEvent = 'communicate/tickets/showMaxValueSettings';
+    formSettingsAppearance.submitEvent = 'communicate/tickets/saveAppearance';
+    formSettingsAppearance.validateEvent = '';
+    formSettingsAppearance.successEvent = 'form/update';
+    formSettingsAppearance.errorEvent = '';
+    formSettingsAppearance.prepareDataEvent = '';
+    formSettingsAppearance.customFillDataEvent = '';
+
+
+    on('tickets/tab/appearance', function(params){
+        formSettingsAppearance.endpointId = params.tableSettings.endpointId;
+        trigger('form/init', {formSettings: formSettingsAppearance});
+    });
+
+
+
+
+
+
+
+
+
+
+
+
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
     let inputCasino = $$('#wrapper-tickets-appearance-general-settings').children[1].children[1];
@@ -370,7 +398,10 @@ const ticketAppearance = (function () {
     });
 
 
-    //elements
+
+
+
+   /* //elements
     // let enableTransaction = $$('#aft-enable-transaction-check');
     let chashableHandlplayLimit = $$('#chashable-handplay-limit');
     let chashableTransactionLimit = $$('#chashable-limit');
@@ -455,6 +486,6 @@ const ticketAppearance = (function () {
         alert('Ticket update!');
         console.log('Ticket data', params);
     });
-
+*/
 
 })();

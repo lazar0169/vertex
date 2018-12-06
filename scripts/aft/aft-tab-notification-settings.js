@@ -1,7 +1,5 @@
 let aftTabNotificationSettings = (function(){
 
-    //todo FILTER module
-    //NOTIFICATION TAB
     let formSettingsNotification = {};
     formSettingsNotification.formContainerSelector = '#aft-tabs-notification-settings-info';
     formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
