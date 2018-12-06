@@ -1,7 +1,5 @@
 let form = (function(){
 
-
-
     function getEvent(formSettings, eventToCheck) {
         let event;
 
@@ -16,25 +14,28 @@ let form = (function(){
     }
 
     function initForm(formSettings) {
-        formSettings.formContainerElement = $$(formSettings.formContainerSelector);
-        let formContainerElement = formSettings.formContainerElement;
-        formContainerElement.tableSettings = formSettings;
+        let formContainerElement =  $$(formSettings.formContainerSelector);
+        formSettings.formContainerElement = formContainerElement;
+        formContainerElement.formSettings = formSettings;
         if (formSettings.fillEvent !== null) {
             formSettings.fillEvent = getEvent(formSettings, 'fillEvent');
         }
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
-        trigger(formSettings.fillEvent, {formSettings: formSettings});
+        // trigger(formSettings.fillEvent, {formSettings: formSettings});
+        trigger('form/update', {formSettings: formSettings});
     }
 
     function getAllFormInputElements(formSettings){
-        return formSettings.formContainerElement.getElementsByTagName('input');
+        return formSettings.formContainerElement.getElementsByClassName('element-async-form');
     }
 
 
     function updateForm(formSettings) {
         let formInputElements = getAllFormInputElements(formSettings);
+        let formInputElementsArray = Array.prototype.slice.call(formInputElements);
+        console.log('form input elements array', formInputElementsArray);
 
     }
 
@@ -69,11 +70,13 @@ let form = (function(){
     }
 
     on('form/init', function(params){
+        alert('form/init');
         let formSettings = params.formSettings;
         initForm(formSettings);
     });
 
     on('form/update', function(params){
+        alert('form/update');
         let formSettings = params.formSettings;
         updateForm(formSettings);
     });
