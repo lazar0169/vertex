@@ -34,9 +34,8 @@ const tickets = (function () {
                 });*/
 
         //TODO: odkomentarisi ovo
-/*
         trigger('tickets/tab/appearance/init', {tableSettings: tableSettings});
         trigger('tickets/tab/maxValue/init', {tableSettings: tableSettings});
-        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});*/
+        trigger('tickets/tab/smsSettings/init', {tableSettings: tableSettings});
     });
 })();
