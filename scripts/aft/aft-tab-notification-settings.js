@@ -17,7 +17,20 @@ let aftTabNotificationSettings = (function(){
     });
 
 
+    let notificationsEnableButton = $$('#aft-enable-notification-check');
+    let notificationsEnableMode = $$('#aft-enable-notification-mode');
+    let notificationsEnableFormSwitch = notificationsEnableButton.getElementsByTagName('input')[0];
 
+
+    notificationsEnableFormSwitch.addEventListener('click', function(){
+        if(notificationsEnableFormSwitch.checked === false) {
+            notificationsEnableFormSwitch.checked = false;
+            notificationsEnableMode.innerHTML = 'No';
+        } else {
+            notificationsEnableFormSwitch.checked = true;
+            notificationsEnableMode.innerHTML = 'Yes';
+        }
+    });
 
 
    /*

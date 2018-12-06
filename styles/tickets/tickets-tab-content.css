@@ -4,8 +4,19 @@
 }
 
 #tickets-max-value-tab-info * , #tickets-sms-settings-tab-info * {
-    width: 30%;
+    /*width: 50%;*/
     margin: 0.15rem 0 0.20rem 0.05rem;
+}
+
+#tickets-enable-sms-check, #tickets-enable-email-check {
+    display: inline-flex;
+}
+
+#tickets-enable-sms-check>div, #tickets-enable-email-check>div {
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    color: rgb(120, 144, 156);
 }
 
 #tickets-max-value-tab-info * input, #tickets-sms-settings-tab-info * input {
@@ -17,7 +28,7 @@
     width: 30%;
 }
 
-#tickets-max-value-tab-info>div:not(:last-child), #tickets-sms-settings-tab-info>div:not(:last-child) {
+#tickets-max-value-tab-info>div>div:not(:last-child), #tickets-sms-settings-tab-info>div>div:not(:last-child) {
     padding: 0.5rem;
     color: rgb(120, 144, 156);
     width: 650px;

@@ -1,4 +1,4 @@
-let aftTabEnableTransaction = (function(){
+let aftTabEnableTransaction = (function () {
 
     let formSettingsTransaction = {};
     formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction-info';
@@ -11,9 +11,24 @@ let aftTabEnableTransaction = (function(){
     formSettingsTransaction.customFillDataEvent = '';
 
 
-    on('aft/tab/transaction', function(params){
+    on('aft/tab/transaction', function (params) {
         formSettingsTransaction.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsTransaction});
+    });
+
+
+    let transactionEnableButton = $$('#aft-enable-transaction-check');
+    let transactionEnableMode = $$('#aft-enable-transaction-mode');
+    let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
+
+    transactionEnableSwitch.addEventListener('click', function () {
+        if (transactionEnableSwitch.checked === false) {
+            transactionEnableSwitch.checked = false;
+            transactionEnableMode.innerHTML = 'No';
+        } else {
+            transactionEnableSwitch.checked = true;
+            transactionEnableMode.innerHTML = 'Yes';
+        }
     });
 
 

@@ -47,7 +47,12 @@ let form = (function () {
         formInputElementsArray.forEach(function (inputElement) {
             if (dataToDisplay[inputElement.dataset.name]) {
                 if (inputElement.type === 'checkbox') {
-
+                    inputElement.checked = dataToDisplay.EnableTransactions;
+/*                    if(dataToDisplay.EnableTransactions === true) {
+                        transactionEnableMode.innerHTML = 'Yes';
+                    } else {
+                        transactionEnableMode.innerHTML = 'No';
+                    }*/
                 } else {
                     inputElement.value = dataToDisplay[inputElement.dataset.name];
                     console.log('value', inputElement.value);
@@ -95,14 +100,12 @@ let form = (function () {
     }
 
     on('form/init', function (params) {
-        alert('form/init');
         let formSettings = params.formSettings;
         setEndpointId(formSettings);
         init(formSettings);
     });
 
     on('form/update', function (params) {
-        alert('form/update');
         console.log('params in form/update', params);
         let formSettings = params.settingsObject;
         let data = params.data;
