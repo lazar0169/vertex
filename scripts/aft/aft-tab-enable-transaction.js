@@ -1,4 +1,24 @@
 let aftTabEnableTransaction = (function(){
+
+    //todo FILTER module
+    //TRANSACTIONS TAB
+    let formSettingsTransaction = {};
+    formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction-info';
+    formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
+    formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
+    formSettingsTransaction.validateEvent = '';
+    formSettingsTransaction.successEvent = '';
+    formSettingsTransaction.errorEvent = '';
+    formSettingsTransaction.prepareDataEvent = '';
+    formSettingsTransaction.customFillDataEvent = '';
+
+
+    //todo FILTER MODULE
+    trigger('form/init', {formSettings: formSettingsTransaction});
+    trigger('form/update', {formSettings: formSettingsTransaction});
+
+
+    /*
     //elements
     // let enableTransaction = $$('#aft-enable-transaction-check');
     let chashableHandlpayLimit = $$('#chashable-handplay-limit');
@@ -72,6 +92,6 @@ let aftTabEnableTransaction = (function(){
             transactionEnableMode.innerHTML = 'Yes';
         }
 
-    });
+    });*/
 
 })();

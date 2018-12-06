@@ -7,6 +7,7 @@ const aft = (function () {
 
         let aftId = params.params[0].value;
 
+
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
 
@@ -24,6 +25,21 @@ const aft = (function () {
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
+
+
+        function setEndpointId(tableSettings){
+            let endpointIdInputElements = $$(tableSettings.pageSelectorId).getElementsByClassName('endpointId');
+            console.log('endpoint id input elements', endpointIdInputElements);
+            let endpointIdInputElementsArray = Array.prototype.slice.call(endpointIdInputElements);
+            console.log('endpoint id input elements array', endpointIdInputElementsArray);
+            endpointIdInputElementsArray.forEach(function(endpointIdElement){
+                console.log('endpoint id input elements element', endpointIdElement);
+                endpointIdElement.dataset.value = aftId;
+                console.log('endpoint elem dataset value', endpointIdElement.dataset.value);
+            });
+        }
+
+        setEndpointId(tableSettings);
 
         table.init(tableSettings); //initializing table, filters and page size
 
@@ -47,49 +63,11 @@ const aft = (function () {
         on('aft/addTransaction', function () {
 
         });
+
+
 /*
         trigger('aft/tab/transactions/init', {tableSettings: tableSettings});
         trigger('aft/tab/notifications/init', {tableSettings: tableSettings});*/
-
-
-        //todo -----------------------------------------------------------------------------------------------
-
-        //todo FILTER module
-        //TRANSACTIONS TAB
-        let formSettingsTransaction = {};
-        formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction';
-        formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
-        formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
-        formSettingsTransaction.validateEvent = '';
-        formSettingsTransaction.successEvent = '';
-        formSettingsTransaction.errorEvent = '';
-        formSettingsTransaction.prepareDataEvent = '';
-        formSettingsTransaction.customFillDataEvent = '';
-        formSettingsTransaction.endpointId = aftId;
-
-
-        //todo FILTER MODULE
-        trigger('form/init', {formSettings: formSettingsTransaction, tableSettings: tableSettings});
-        // trigger('form/update', {formSettings: formSettingsTransaction, tableSettings: tableSettings});
-
-
-        //todo FILTER module
-        //NOTIFICATION TAB
-        let formSettingsNotification = {};
-        formSettingsNotification.formContainerSelector = '#aft-tabs-enable-transaction-info';
-        formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
-        formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
-        formSettingsNotification.validateEvent = '';
-        formSettingsNotification.successEvent = '';
-        formSettingsNotification.errorEvent = '';
-        formSettingsNotification.prepareDataEvent = '';
-        formSettingsNotification.customFillDataEvent = '';
-        formSettingsNotification.endpointId = aftId;
-
-
-        //todo FILTER MODULE
-        trigger('form/init', {formSettings: formSettingsNotification, tableSettings: tableSettings});
-        // trigger('form/update', {formSettings: formSettingsNotification, tableSettings: tableSettings});
 
     });
 })();

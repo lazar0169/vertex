@@ -1,5 +1,13 @@
 let form = (function(){
 
+    let currentEndpointId;
+
+    function setEndpointId(formSettings, enpointId){
+        formSettings.endpointId = enpointId;
+        currentEndpointId = enpointId;
+        console.log('current endpoint id', currentEndpointId);
+    }
+
     function getEvent(formSettings, eventToCheck) {
         let event;
 
@@ -28,7 +36,9 @@ let form = (function(){
     }
 
     function getAllFormInputElements(formSettings){
-        return formSettings.formContainerElement.getElementsByClassName('element-async-form');
+        let formElement = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
+        let inputElements = formElement.getElementsByTagName('input');
+        return inputElements;
     }
 
 
@@ -36,6 +46,11 @@ let form = (function(){
         let formInputElements = getAllFormInputElements(formSettings);
         let formInputElementsArray = Array.prototype.slice.call(formInputElements);
         console.log('form input elements array', formInputElementsArray);
+        formInputElementsArray.forEach(function(inputElement){
+            if(inputElement.dataset.name === 'endpointId') {
+                setEndpointId(formSettings, inputElement.dataset.value);
+            }
+        });
 
     }
 

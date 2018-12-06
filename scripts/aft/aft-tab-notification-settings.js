@@ -1,4 +1,27 @@
 let aftTabNotificationSettings = (function(){
+
+    //todo FILTER module
+    //NOTIFICATION TAB
+    let formSettingsNotification = {};
+    formSettingsNotification.formContainerSelector = '#aft-tabs-enable-transaction-info';
+    formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
+    formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
+    formSettingsNotification.validateEvent = '';
+    formSettingsNotification.successEvent = '';
+    formSettingsNotification.errorEvent = '';
+    formSettingsNotification.prepareDataEvent = '';
+    formSettingsNotification.customFillDataEvent = '';
+
+
+    //todo FILTER MODULE
+    trigger('form/init', {formSettings: formSettingsNotification});
+    trigger('form/update', {formSettings: formSettingsNotification});
+
+
+
+
+
+   /*
     let aftNotificationEmail = $$('#aft-notification-send-email');
     let aftAnotherEmail = $$('#aft-notification-another-email');
     let aftNotificationMobile = $$('#aft-notification-send-mobile');
@@ -96,5 +119,6 @@ let aftTabNotificationSettings = (function(){
             notificationsEnableFormSwitch.checked = true;
             notificationsEnableMode.innerHTML = 'Yes';
         }
-    });
+    });*/
+
 })();
