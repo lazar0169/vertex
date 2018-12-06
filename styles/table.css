@@ -260,3 +260,12 @@ textarea {
 .table-time {
     color: #6D818C;
 }
+
+@media only screen and (min-width: 2000px) {
+    .head.cell {
+        width: 330px;
+    }
+    .cell {
+        width: 330px;
+    }
+}
