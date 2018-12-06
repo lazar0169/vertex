@@ -27,7 +27,9 @@ const aft = (function () {
         tableSettings.filtersInitialized = false;
 
 
-        function setEndpointId(tableSettings){
+//todo see best way to forward endpoint id
+
+        /*function setEndpointId(tableSettings){
             let endpointIdInputElements = $$(tableSettings.pageSelectorId).getElementsByClassName('endpointId');
             console.log('endpoint id input elements', endpointIdInputElements);
             let endpointIdInputElementsArray = Array.prototype.slice.call(endpointIdInputElements);
@@ -39,7 +41,7 @@ const aft = (function () {
             });
         }
 
-        setEndpointId(tableSettings);
+        setEndpointId(tableSettings);*/
 
         table.init(tableSettings); //initializing table, filters and page size
 
@@ -64,10 +66,8 @@ const aft = (function () {
 
         });
 
-
-/*
-        trigger('aft/tab/transactions/init', {tableSettings: tableSettings});
-        trigger('aft/tab/notifications/init', {tableSettings: tableSettings});*/
+        trigger('aft/tab/transaction', {tableSettings: tableSettings});
+        trigger('aft/tab/notification', {tableSettings: tableSettings});
 
     });
 })();

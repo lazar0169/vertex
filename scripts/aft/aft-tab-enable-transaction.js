@@ -1,21 +1,21 @@
 let aftTabEnableTransaction = (function(){
 
-    //todo FILTER module
     //TRANSACTIONS TAB
     let formSettingsTransaction = {};
     formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction-info';
     formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
     formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
     formSettingsTransaction.validateEvent = '';
-    formSettingsTransaction.successEvent = '';
+    formSettingsTransaction.successEvent = 'form/update';
     formSettingsTransaction.errorEvent = '';
     formSettingsTransaction.prepareDataEvent = '';
     formSettingsTransaction.customFillDataEvent = '';
 
 
-    //todo FILTER MODULE
-    trigger('form/init', {formSettings: formSettingsTransaction});
-    trigger('form/update', {formSettings: formSettingsTransaction});
+    on('aft/tab/transaction', function(params){
+        formSettingsTransaction.endpointId = params.tableSettings.endpointId;
+        trigger('form/init', {formSettings: formSettingsTransaction});
+    });
 
 
     /*

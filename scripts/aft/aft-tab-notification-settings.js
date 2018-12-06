@@ -7,15 +7,16 @@ let aftTabNotificationSettings = (function(){
     formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
     formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
     formSettingsNotification.validateEvent = '';
-    formSettingsNotification.successEvent = '';
+    formSettingsNotification.successEvent = 'form/update';
     formSettingsNotification.errorEvent = '';
     formSettingsNotification.prepareDataEvent = '';
     formSettingsNotification.customFillDataEvent = '';
 
 
-    //todo FILTER MODULE
-    trigger('form/init', {formSettings: formSettingsNotification});
-    trigger('form/update', {formSettings: formSettingsNotification});
+    on('aft/tab/notification', function(params){
+        formSettingsNotification.endpointId = params.tableSettings.endpointId;
+        trigger('form/init', {formSettings: formSettingsNotification});
+    });
 
 
 

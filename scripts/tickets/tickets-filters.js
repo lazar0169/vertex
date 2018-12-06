@@ -68,7 +68,7 @@ const ticketsFilter = (function () {
 
     on('tickets/filters/display', function (params) {
         let apiResponseData = params.data;
-        let tableSettings = params.tableSettings;
+        let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
         tableSettings.filters = filters;
         tableSettings.filtersInitialized = true;

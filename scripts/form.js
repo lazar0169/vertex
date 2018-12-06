@@ -2,9 +2,8 @@ let form = (function(){
 
     let currentEndpointId;
 
-    function setEndpointId(formSettings, enpointId){
-        formSettings.endpointId = enpointId;
-        currentEndpointId = enpointId;
+    function setEndpointId(formSettings){
+        currentEndpointId = formSettings.endpointId;
         console.log('current endpoint id', currentEndpointId);
     }
 
@@ -21,7 +20,15 @@ let form = (function(){
         return event;
     }
 
-    function initForm(formSettings) {
+    function initForm(formSettings){
+        console.log('init form');
+        let data = {
+            EndpointId: formSettings.endpointId
+        };
+        trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
+    }
+
+    function init(formSettings) {
         let formContainerElement =  $$(formSettings.formContainerSelector);
         formSettings.formContainerElement = formContainerElement;
         formContainerElement.formSettings = formSettings;
@@ -31,8 +38,11 @@ let form = (function(){
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
-        // trigger(formSettings.fillEvent, {formSettings: formSettings});
-        trigger('form/update', {formSettings: formSettings});
+        if(formSettings.formData === null || formSettings.formData === undefined) {
+            initForm(formSettings);
+        } else {
+            updateForm(formSettings);
+        }
     }
 
     function getAllFormInputElements(formSettings){
@@ -46,11 +56,6 @@ let form = (function(){
         let formInputElements = getAllFormInputElements(formSettings);
         let formInputElementsArray = Array.prototype.slice.call(formInputElements);
         console.log('form input elements array', formInputElementsArray);
-        formInputElementsArray.forEach(function(inputElement){
-            if(inputElement.dataset.name === 'endpointId') {
-                setEndpointId(formSettings, inputElement.dataset.value);
-            }
-        });
 
     }
 
@@ -87,12 +92,13 @@ let form = (function(){
     on('form/init', function(params){
         alert('form/init');
         let formSettings = params.formSettings;
-        initForm(formSettings);
+        setEndpointId(formSettings);
+        init(formSettings);
     });
 
     on('form/update', function(params){
         alert('form/update');
-        let formSettings = params.formSettings;
+        let formSettings = params.settingsObject;
         updateForm(formSettings);
     });
 

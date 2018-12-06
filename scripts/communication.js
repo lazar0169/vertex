@@ -47,12 +47,12 @@ let communication = (function () {
         return xhr;
     }
 
-    function success(xhr, callbackEvent, tableSettings) {
+    function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data, tableSettings: tableSettings});
+            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
         trigger('communicate/token/refresh', {token: data.TokenInfo});
     }
@@ -64,7 +64,7 @@ let communication = (function () {
         }
     }
 
-    function createRequest(route, requestType, data, successEvent, errorEvent, tableSettings) {
+    function createRequest(route, requestType, data, successEvent, errorEvent, settingsObject) {
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
@@ -75,7 +75,7 @@ let communication = (function () {
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                success(xhr, successEvent, tableSettings);
+                success(xhr, successEvent, settingsObject);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
@@ -179,7 +179,7 @@ let communication = (function () {
 
     // create and send xhr
     on('communicate/createAndSendXhr', function (params) {
-        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.tableSettings);
+        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.settingsObject);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
@@ -218,7 +218,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -237,16 +237,18 @@ let communication = (function () {
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
+        console.log('aft get notification settings');
         let route = 'api/transactions/getnotificationsettings';
-        let successEvent = 'aft/tab/notifications/display';
-        let tableSettings = params.tableSettings;
+        // let successEvent = 'aft/tab/notifications/display';
+        let successEvent = params.formSettings.successEvent;
+        let formSettings = params.formSettings;
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -256,15 +258,16 @@ let communication = (function () {
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: formSettings
         });
     });
 
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
         let route = 'api/transactions/savenotificationsettings/';
-        let successEvent = 'aft/tab/notifications/update';
-        let tableSettings = params.tableSettings;
+        let successEvent = params.formSettings.successEvent;
+        // let successEvent = 'aft/tab/notifications/update';
+        let formSettings = params.formSettings;
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -274,16 +277,18 @@ let communication = (function () {
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: formSettings
         });
     });
 
     //aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
+        console.log('aft get basic settings');
         let route = 'api/transactions/getbasicsettings/';
-        let successEvent = 'aft/tab/transactions/display';
+        // let successEvent = 'aft/tab/transactions/display';
+        let successEvent = params.formSettings.successEvent;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -292,16 +297,17 @@ let communication = (function () {
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: formSettings
         });
     });
 
     //aft save basic settings
     on('communicate/aft/saveBasicSettings', function (params) {
         let route = 'api/transactions/savebasicsettings/';
-        let successEvent = 'aft/tab/transactions/update';
+        // let successEvent = 'aft/tab/transactions/update';
+        let successEvent = params.formSettings.successEvent;
         let data = params.data;
-        let tableSettings = params.tableSettings;
+        let formSettings = params.tableSettings;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -310,7 +316,7 @@ let communication = (function () {
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: formSettings
         });
     });
 
@@ -327,7 +333,7 @@ let communication = (function () {
             data: params.data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -353,15 +359,15 @@ let communication = (function () {
         let successEvent = 'communicate/test';
         let data = params.data;
         let request = requestTypes.post;
+        let tableSettings = params.tableSettings;
         let errorEvent = '';
-        let tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -379,16 +385,16 @@ let communication = (function () {
             data: data,
             request: request,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
     //prepare data for aft  page
     on('communicate/aft/data/prepare', function (params) {
-        let tableSettings = params.tableSettings;
+        let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, {data: data, tableSettings: tableSettings});
+        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -409,7 +415,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -429,7 +435,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -447,13 +453,14 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
 
     //getting values for show sms settings
     on('communicate/tickets/showSmsSettings', function (params) {
+        console.log('show sms settings');
         let route = 'api/tickets/smssettings/';
         let successEvent = 'tickets/tab/smsSettings/display';
         let request = requestTypes.post;
@@ -466,13 +473,14 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
 
     //ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
+        console.log('show max value settings');
         let route = 'api/tickets/maxvaluesettings/';
         let successEvent = 'tickets/tab/maxValue/display';
         let request = requestTypes.post;
@@ -485,12 +493,13 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
     //ShowTicketAppearanceSettings
     on('communicate/tickets/ticketAppearance', function (params) {
+        console.log('ticket appearance event');
         let route = 'api/tickets/ticketappearance/';
         let successEvent = 'tickets/tab/appearance/display';
         let request = requestTypes.post;
@@ -503,7 +512,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -521,7 +530,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -539,7 +548,7 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
@@ -557,16 +566,16 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
     });
 
     //prepare data for tickets  page
     on('communicate/tickets/data/prepare', function (params) {
-        let tableSettings = params.tableSettings;
+        let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, {data: data, tableSettings: tableSettings});
+        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
     });
 
     /*--------------------------------------------------------------------------------------*/

@@ -409,7 +409,7 @@ let table = (function () {
     on('table/update', function (params) {
         console.log('params in table/update', params);
 
-        let tableSettings = params.tableSettings;
+        let tableSettings = params.settingsObject;
         let tableData = [];
         let apiItems = params.data.Data.Items;
 

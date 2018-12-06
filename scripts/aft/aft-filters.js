@@ -80,7 +80,7 @@ const aftFilters = (function () {
 
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
-        let tableSettings = params.tableSettings;
+        let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
         tableSettings.filters = filters;
 
