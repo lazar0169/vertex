@@ -126,14 +126,14 @@ let communication = (function () {
         let tableData = data.Data.Items;
         tableData.forEach(function (entry) {
             if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>' + entry.EntryData.CreatedBy + '</h6>';
+                entry.EntryData.CreatedBy = '';
 
             } else {
                 entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
 
             }
             if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>' + entry.EntryData.FinishedBy + '</h6>';
+                entry.EntryData.FinishedBy = '';
 
             } else {
                 entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
