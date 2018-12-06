@@ -439,7 +439,7 @@ const ticketAppearance = (function () {
     });
 
     on('tickets/tab/appearance/display', function (params) {
-        console.log('Usli smo u appearance display');
+        console.log('Usli smo u appearance display', params);
         let ticketData = params.data.Data;
         console.log('ticket data', ticketData);
         displayTicketData(ticketData);

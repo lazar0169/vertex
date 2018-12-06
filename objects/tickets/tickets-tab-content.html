@@ -109,13 +109,49 @@
 
 <!--AFT TAB SMS SETTINGS-->
 <div id="tickets-sms-settings-tab-info" class="chosen-info-tab overflow-content hidden">
+    <div id="tickets-enable-sms-check">
+        <div>Enable sms:</div>
+        <div id="tickets-enable-sms-mode">Yes</div>
+        <label class="form-switch">
+            <input data-name="EnableSms" type="checkbox" checked>
+            <i class="form-icon"></i>
+        </label>
+    </div>
     <div id="tickets-sms-settings-max-redemption">
-        <label>Max. redemption:</label>
-        <input class="form-input" type="text" placeholder="Max. redemption" value="100.000,00">
+        <label>Send notification when the value of the redeemed ticket is higher than:</label>
+        <input data-name="RedeemedTicketLimitForNotification" class="form-input" type="text" placeholder="Max. redemption" value="100.000,00">
     </div>
     <div id="tickets-sms-settings-max-issuance">
-        <label>Max. issuance:</label>
-        <input class="form-input" type="text" placeholder="Max. issuance" value="100.000,00">
+        <label>Send notification when the value of the printed ticket is higher than:</label>
+        <input data-name="SoldTicketLimitForNotification" class="form-input" type="text" placeholder="Max. issuance" value="100.000,00">
+    </div>
+    <div id="tickets-sms-settings-send-mobile" class="tickets-sms-settings">
+        <div>
+            <label class="form-label" for="notification-mobile-phone-number">Mobile phone number:</label>
+            <input data-name="PhoneNumbers" class="form-input" type="text" id="notification-mobile-phone-number"
+                   placeholder="xxx-xxx-xxxx">
+        </div>
+        <div id="tickets-sms-settings-another-phone">
+            <button class="btn btn-cancel">ADD another phone number</button>
+        </div>
+    </div>
+    <div id="tickets-enable-email-check">
+        <div>Enable e-mail:</div>
+        <div id="tickets-enable-email-mode">Yes</div>
+        <label class="form-switch">
+            <input data-name="EnableEmail" type="checkbox" checked>
+            <i class="form-icon"></i>
+        </label>
+    </div>
+    <div id="tickets-sms-settings-send-email" class="tickets-sms-settings">
+        <div>
+            <label class="form-label" for="notification-email-address">Email address:</label>
+            <input data-name="Emails" class="form-input" type="text" id="notification-email-address"
+                   placeholder="Your email">
+        </div>
+        <div id="tickets-sms-settings-another-email">
+            <button class="btn btn-cancel">ADD another email address</button>
+        </div>
     </div>
     <div id="tickets-sms-settings-buttons-wrapper">
         <button class="btn btn-success">SAVE</button>
