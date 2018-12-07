@@ -27,11 +27,11 @@
                 </div>
                 <div>
                     <div>Currency:</div>
-                    <input data-name="Valute" class="form-input" data-type="float" type="text" placeholder="Currency" value="EUR">
+                    <input data-name="Valute" class="form-input" data-type="string" type="text" placeholder="Currency" value="EUR">
                 </div>
             </div>
             <div id="wrapper-tickets-appearance-cashable">
-                <div class="tab-active">CHASHABLE TICKET</div>
+                <div class="tab-active">CASHABLE TICKET</div>
                 <div>
                     <div>Cashout ticket:</div>
                     <input data-name="CashableTicketTitle" data-type="string" class="form-input" type="text" placeholder="Cashout ticket"
@@ -40,6 +40,11 @@
                 <div>
                     <div>Expiring:</div>
                     <input data-name="CashableTicketExpirationDays" data-type="int" class="form-input" type="text" placeholder="Days"
+                           value="NEVER">
+                </div>
+                <div>
+                    <div>Ticket void value:</div>
+                    <input data-name="TicketVoidValue" data-type="string" class="form-input" type="text" placeholder="Days"
                            value="NEVER">
                 </div>
             </div>
@@ -53,6 +58,11 @@
                 <div>
                     <div>Expiring:</div>
                     <input data-name="RestrictedTicketExpirationDays" data-type="int" class="form-input" type="text" placeholder="DAYS"
+                           value="7">
+                </div>
+                <div>
+                    <div>Restricted Ticket Pool Id:</div>
+                    <input data-name="RestrictedTicketPoolId" data-type="int" class="form-input" type="text" placeholder="Pool id"
                            value="7">
                 </div>
             </div>

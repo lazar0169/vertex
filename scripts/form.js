@@ -17,7 +17,6 @@ let form = (function () {
 
     function setEndpointId(formSettings) {
         currentEndpointId = formSettings.endpointId;
-        console.log('current endpoint id', currentEndpointId);
         let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
         endpointIdInputElements.forEach(function (element) {
             element.dataset.value = currentEndpointId;
@@ -25,7 +24,6 @@ let form = (function () {
     }
 
     function getFormData(formSettings) {
-        console.log('init form');
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
@@ -41,15 +39,14 @@ let form = (function () {
 
     function fillData(formSettings, data) {
         let formInputElementsArray = getAllFormInputElements(formSettings);
-        console.log('form input elements array', formInputElementsArray);
+        console.log('Form input elements array', formInputElementsArray);
         let dataToDisplay = data.Data;
-        console.log('data to display array', dataToDisplay);
+        console.log('Data to display array', dataToDisplay);
         formInputElementsArray.forEach(function (inputElement) {
             if (dataToDisplay[inputElement.dataset.name]) {
                 if (inputElement.type === 'checkbox') {
                     inputElement.checked = dataToDisplay[inputElement.dataset.name];
                     let modeDivElement = inputElement.parentNode.previousSibling;
-                    console.log('mode div element', modeDivElement);
                     if (inputElement.checked === true) {
                         modeDivElement.innerHTML = 'Yes';
                     } else {
@@ -63,7 +60,6 @@ let form = (function () {
                             });
                         } else {
                             inputElement.value = parseFloat(dataToDisplay[inputElement.dataset.name]);
-                            console.log('value', inputElement.value);
                         }
                     }
                 }
@@ -109,9 +105,7 @@ let form = (function () {
                             dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
                             break;
                     }
-
                 }
-
             }
         });
         console.log('data for API', dataForApi);
