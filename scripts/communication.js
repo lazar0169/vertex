@@ -166,11 +166,16 @@ let communication = (function () {
                 entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
 
             }
+            entry.EntryData.Amount = entry.EntryData.Amount.toFixed(2);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-            entry.EntryData.Code = entry.EntryData.FullTicketValIdationNumber;
+            let entryData = {};
+            entryData.Code = entry.EntryData.FullTicketValIdationNumber;
             delete entry.EntryData.FullTicketValIdationNumber;
-            entry.EntryData.Amount = entry.EntryData.Amount.toFixed(2);
+            Object.keys(entry.EntryData).forEach(function(key) {
+                entryData[key] = entry.EntryData[key];
+            });
+            entry.EntryData = entryData;
         });
         console.log('prepared data tickets', tableData);
         return data;
