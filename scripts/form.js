@@ -40,7 +40,6 @@ let form = (function () {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByTagName('input');
         let inputElementsArray = Array.prototype.slice.call(formInputElements);
-        ;
         return inputElementsArray;
     }
 
@@ -53,11 +52,13 @@ let form = (function () {
             if (dataToDisplay[inputElement.dataset.name]) {
                 if (inputElement.type === 'checkbox') {
                     inputElement.checked = dataToDisplay.EnableTransactions;
-                    /*                    if(dataToDisplay.EnableTransactions === true) {
-                                            transactionEnableMode.innerHTML = 'Yes';
-                                        } else {
-                                            transactionEnableMode.innerHTML = 'No';
-                                        }*/
+                    let modeDivElement = inputElement.parentNode.previousSibling;
+                    console.log('mode div element', modeDivElement);
+                    if (dataToDisplay.EnableTransactions === true) {
+                        modeDivElement.innerHTML = 'Yes';
+                    } else {
+                        modeDivElement.innerHTML = 'No';
+                    }
                 } else {
                     inputElement.value = dataToDisplay[inputElement.dataset.name];
                     console.log('value', inputElement.value);
@@ -126,13 +127,6 @@ let form = (function () {
         getFormData(formSettings);
     });
 
-    on('form/update', function (params) {
-        console.log('params in form/update', params);
-        let formSettings = params.settingsObject;
-        let data = params.data;
-        fillData(formSettings, data);
-    });
-
     on('from/validate', function (params) {
         let formSettings = params.formSettings;
         validate(formSettings);
@@ -142,6 +136,13 @@ let form = (function () {
         alert('form submit');
         let formSettings = params.formSettings;
         submit(formSettings);
+    });
+
+    on('form/update', function (params) {
+        console.log('params in form/update', params);
+        let formSettings = params.settingsObject;
+        let data = params.data;
+        fillData(formSettings, data);
     });
 
     on('form/success', function (params) {
