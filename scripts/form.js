@@ -47,10 +47,10 @@ let form = (function () {
         formInputElementsArray.forEach(function (inputElement) {
             if (dataToDisplay[inputElement.dataset.name]) {
                 if (inputElement.type === 'checkbox') {
-                    inputElement.checked = dataToDisplay.EnableTransactions;
+                    inputElement.checked = dataToDisplay[inputElement.dataset.name];
                     let modeDivElement = inputElement.parentNode.previousSibling;
                     console.log('mode div element', modeDivElement);
-                    if (dataToDisplay.EnableTransactions === true) {
+                    if (inputElement.checked === true) {
                         modeDivElement.innerHTML = 'Yes';
                     } else {
                         modeDivElement.innerHTML = 'No';
@@ -85,7 +85,7 @@ let form = (function () {
     }
 
     function collectAndPrepareFormData(formSettings) {
-        let arrayForApi = [];
+        let arrayForApi = []; //todo handle this
         let formInputElementsArray = getAllFormInputElements(formSettings);
         let dataForApi = {};
         formInputElementsArray.forEach(function (formInputElement) {
@@ -93,11 +93,11 @@ let form = (function () {
                 dataForApi[formInputElement.dataset.name] = formInputElement.checked;
             } else {
                 if (formInputElement.dataset.name === 'EndpointId') {
-                dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.dataset.value);
-            } else{
-                    let inputType = formInputElement.dataset.type;
-                    console.log('inputType', inputType);
+                    dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.dataset.value);
+                } else {
                     switch (formInputElement.dataset.type) {
+                        case 'int':
+                            dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.value);
                         case 'float':
                             dataForApi[formInputElement.dataset.name] = parseFloat(formInputElement.value);
                             break;
@@ -109,17 +109,9 @@ let form = (function () {
                             dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
                             break;
                     }
+
                 }
-                /*if (formInputElement.dataset.name === 'EmailList' || formInputElement.dataset.name === 'PhoneNumberList' || formInputElement.dataset.name === 'Emails' || formInputElement.dataset.name === 'PhoneNumbers') {
-                    arrayForApi.push(formInputElement.value);
-                    dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
-                } else {
-                    if (formInputElement.dataset.name === 'EndpointId') {
-                        dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.dataset.value);
-                    } else {
-                        dataForApi[formInputElement.dataset.name] = parseFloat(formInputElement.value);
-                    }
-                }*/
+
             }
         });
         console.log('data for API', dataForApi);
@@ -164,7 +156,6 @@ let form = (function () {
     });
 
     on('form/submit', function (params) {
-        alert('form submit');
         let formSettings = params.formSettings;
         submit(formSettings);
     });
