@@ -24,6 +24,7 @@
     color: #cfd8dc;
     white-space: nowrap;
     cursor: pointer;
+    width: 225px;
 }
 
 .cell.hover {
@@ -36,6 +37,7 @@
     color: #728894;
     top: 0;
     transition: 0.2s background-color;
+    width: 225px;
 }
 
 .head.cell:hover {
@@ -48,13 +50,13 @@
 }
 
 .sticky {
-    position: sticky;
+    position: sticky !important;
     position: -webkit-sticky;
     font-weight: 800;
+
 }
 
 .tbody {
-    overflow: auto;
     display: grid;
     position: center;
     width: 100%;
@@ -70,7 +72,7 @@
 }
 
 .head.active-column {
-    background: rgba(58, 73, 80, 0.4);
+    background: rgba(58, 73, 80, 1);
     color: white;
 }
 
@@ -252,8 +254,17 @@ textarea {
 
 .cell-amountcashable {
     text-align: right;
+    padding-right: 20px;
 }
 
 .table-time {
     color: #6D818C;
+}
+
+    .head.cell {
+        width: 300px;
+    }
+    .cell {
+        width: 300px;
+    }
 }
