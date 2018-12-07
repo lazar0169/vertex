@@ -112,6 +112,10 @@ let form = (function () {
         return dataForApi;
     }
 
+    function submit(formSettings) {
+        let dataForApi = collectAndPrepareFormData(formSettings);
+        trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
+    }
 
     function validate(formSettings) {
 
@@ -127,11 +131,6 @@ let form = (function () {
 
     function serialize(formSettings) {
 
-    }
-
-    function submit(formSettings) {
-        let dataForApi = collectAndPrepareFormData(formSettings);
-        trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
 
     on('form/init', function (params) {
