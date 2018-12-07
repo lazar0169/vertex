@@ -57,8 +57,8 @@ let form = (function () {
                     }
                 } else {
                     if (inputElement.dataset.name !== 'EndpointId') {
-                        if(dataToDisplay[inputElement.dataset.name].constructor === Array) {
-                            dataToDisplay[inputElement.dataset.name].forEach(function(){
+                        if (dataToDisplay[inputElement.dataset.name].constructor === Array) {
+                            dataToDisplay[inputElement.dataset.name].forEach(function () {
                                 inputElement.value = dataToDisplay[inputElement.dataset.name][0]; //todo change to work with multiple emails/phone numbers
                             });
                         } else {
@@ -92,7 +92,25 @@ let form = (function () {
             if (formInputElement.type === 'checkbox') {
                 dataForApi[formInputElement.dataset.name] = formInputElement.checked;
             } else {
-                if (formInputElement.dataset.name === 'EmailList' || formInputElement.dataset.name === 'PhoneNumberList' || formInputElement.dataset.name === 'Emails' || formInputElement.dataset.name === 'PhoneNumbers') {
+                if (formInputElement.dataset.name === 'EndpointId') {
+                dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.dataset.value);
+            } else{
+                    let inputType = formInputElement.dataset.type;
+                    console.log('inputType', inputType);
+                    switch (formInputElement.dataset.type) {
+                        case 'float':
+                            dataForApi[formInputElement.dataset.name] = parseFloat(formInputElement.value);
+                            break;
+                        case 'string':
+                            dataForApi[formInputElement.dataset.name] = formInputElement.value;
+                            break;
+                        case 'array':
+                            arrayForApi.push(formInputElement.value);
+                            dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
+                            break;
+                    }
+                }
+                /*if (formInputElement.dataset.name === 'EmailList' || formInputElement.dataset.name === 'PhoneNumberList' || formInputElement.dataset.name === 'Emails' || formInputElement.dataset.name === 'PhoneNumbers') {
                     arrayForApi.push(formInputElement.value);
                     dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
                 } else {
@@ -101,7 +119,7 @@ let form = (function () {
                     } else {
                         dataForApi[formInputElement.dataset.name] = parseFloat(formInputElement.value);
                     }
-                }
+                }*/
             }
         });
         console.log('data for API', dataForApi);

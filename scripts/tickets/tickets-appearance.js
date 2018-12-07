@@ -21,6 +21,7 @@ const ticketAppearance = (function () {
     let appearanceSubmitButton = $$(formSettingsAppearance.formContainerSelector).getElementsByClassName('btn-success')[0];
 
     appearanceSubmitButton.addEventListener('click', function(){
+        alert('appearance submit button');
         trigger('form/submit', {formSettings: formSettingsAppearance});
     });
 
@@ -399,10 +400,6 @@ const ticketAppearance = (function () {
 
     cancelTicketAppearance.addEventListener('click', function () {
         alert('Reset to default');
-    });
-
-    saveTicketAppearance.addEventListener('click', function () {
-        alert('Save data');
     });
 
 
