@@ -4,9 +4,10 @@ let aftTabEnableTransaction = (function () {
     formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction-info';
     formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
     formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
+    formSettingsTransaction.fillFormEvent = 'form/fillFormData';
+    formSettingsTransaction.submitSuccessEvent = 'form/submit/success';
+    formSettingsTransaction.submitErrorEvent = 'form/submit/error';
     formSettingsTransaction.validateEvent = 'form/validate';
-    formSettingsTransaction.successEvent = 'form/update';
-    formSettingsTransaction.errorEvent = 'form/error';
     formSettingsTransaction.prepareDataEvent = '';
     formSettingsTransaction.customFillDataEvent = '';
 

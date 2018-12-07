@@ -4,9 +4,10 @@ let aftTabNotificationSettings = (function(){
     formSettingsNotification.formContainerSelector = '#aft-tabs-notification-settings-info';
     formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
     formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
+    formSettingsNotification.fillFormEvent = 'form/fillFormData';
+    formSettingsNotification.submitSuccessEvent = 'form/submit/success';
+    formSettingsNotification.submitErrorEvent = 'form/submit/error';
     formSettingsNotification.validateEvent = 'form/validate';
-    formSettingsNotification.successEvent = 'form/update';
-    formSettingsNotification.errorEvent = 'form/error';
     formSettingsNotification.prepareDataEvent = '';
     formSettingsNotification.customFillDataEvent = '';
 

@@ -4,9 +4,10 @@ let ticketsMaxValue = (function () {
     formSettingsMaxValue.formContainerSelector = '#tickets-max-value-tab-info';
     formSettingsMaxValue.fillEvent = 'communicate/tickets/showMaxValueSettings';
     formSettingsMaxValue.submitEvent = 'communicate/tickets/saveMaxValuesAction';
+    formSettingsMaxValue.fillFormEvent = 'form/fillFormData';
+    formSettingsMaxValue.submitSuccessEvent = 'form/submit/success';
+    formSettingsMaxValue.submitErrorEvent = 'form/submit/error';
     formSettingsMaxValue.validateEvent = 'form/validate';
-    formSettingsMaxValue.successEvent = 'form/update';
-    formSettingsMaxValue.errorEvent = 'form/error';
     formSettingsMaxValue.prepareDataEvent = '';
     formSettingsMaxValue.customFillDataEvent = '';
 

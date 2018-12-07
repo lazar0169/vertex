@@ -20,18 +20,14 @@ let form = (function () {
         console.log('current endpoint id', currentEndpointId);
         let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
         endpointIdInputElements.forEach(function (element) {
-            element.value = currentEndpointId;
-        });
-        let endpointIdInputs = formSettings.formContainerElement.getElementsByClassName('endpointId');
-        Array.prototype.slice.call(endpointIdInputs).forEach(function (endpointIdInput) {
-            endpointIdInput.dataset.value = currentEndpointId;
+            element.dataset.value = currentEndpointId;
         });
     }
 
     function getFormData(formSettings) {
         console.log('init form');
         let data = {
-            EndpointId: formSettings.endpointId
+            EndpointId: parseInt(formSettings.endpointId)
         };
         trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
     }
@@ -60,8 +56,16 @@ let form = (function () {
                         modeDivElement.innerHTML = 'No';
                     }
                 } else {
-                    inputElement.value = dataToDisplay[inputElement.dataset.name];
-                    console.log('value', inputElement.value);
+                    if (inputElement.dataset.name !== 'EndpointId') {
+                        if(dataToDisplay[inputElement.dataset.name].constructor === Array) {
+                            dataToDisplay[inputElement.dataset.name].forEach(function(){
+                                inputElement.value = dataToDisplay[inputElement.dataset.name][0]; //todo change to work with multiple emails/phone numbers
+                            });
+                        } else {
+                            inputElement.value = parseFloat(dataToDisplay[inputElement.dataset.name]);
+                            console.log('value', inputElement.value);
+                        }
+                    }
                 }
             }
         });
@@ -81,13 +85,23 @@ let form = (function () {
     }
 
     function collectAndPrepareFormData(formSettings) {
+        let arrayForApi = [];
         let formInputElementsArray = getAllFormInputElements(formSettings);
         let dataForApi = {};
         formInputElementsArray.forEach(function (formInputElement) {
             if (formInputElement.type === 'checkbox') {
                 dataForApi[formInputElement.dataset.name] = formInputElement.checked;
             } else {
-                dataForApi[formInputElement.dataset.name] = formInputElement.value;
+                if (formInputElement.dataset.name === 'EmailList' || formInputElement.dataset.name === 'PhoneNumberList' || formInputElement.dataset.name === 'Emails' || formInputElement.dataset.name === 'PhoneNumbers') {
+                    arrayForApi.push(formInputElement.value);
+                    dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
+                } else {
+                    if (formInputElement.dataset.name === 'EndpointId') {
+                        dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.dataset.value);
+                    } else {
+                        dataForApi[formInputElement.dataset.name] = parseFloat(formInputElement.value);
+                    }
+                }
             }
         });
         console.log('data for API', dataForApi);
@@ -112,7 +126,6 @@ let form = (function () {
     }
 
     function submit(formSettings) {
-        alert('Data has been saved!');
         let dataForApi = collectAndPrepareFormData(formSettings);
         trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
@@ -138,17 +151,24 @@ let form = (function () {
         submit(formSettings);
     });
 
-    on('form/update', function (params) {
+    on('form/fillFormData', function (params) {
         console.log('params in form/update', params);
         let formSettings = params.settingsObject;
         let data = params.data;
         fillData(formSettings, data);
     });
 
-    on('form/success', function (params) {
-        alert('form success');
+    on('form/submit/success', function (params) {
+        alert('Form submit success!');
         let apiResponse = params;
         console.log('api response', apiResponse);
     });
+
+    on('form/submit/error', function (params) {
+        alert('Form submit error!');
+        let apiResponse = params;
+        console.log('api response', apiResponse);
+    });
+
 
 })();

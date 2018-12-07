@@ -4,9 +4,10 @@ let ticketsSmsSettings = (function(){
     formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
     formSettingsSmsSettings.fillEvent = 'communicate/tickets/showSmsSettings';
     formSettingsSmsSettings.submitEvent = 'communicate/tickets/saveSmsSettings';
+    formSettingsSmsSettings.fillFormEvent = 'form/fillFormData';
+    formSettingsSmsSettings.submitSuccessEvent = 'form/submit/success';
+    formSettingsSmsSettings.submitErrorEvent = 'form/submit/error';
     formSettingsSmsSettings.validateEvent = 'form/validate';
-    formSettingsSmsSettings.successEvent = 'form/update';
-    formSettingsSmsSettings.errorEvent = 'form/error';
     formSettingsSmsSettings.prepareDataEvent = '';
     formSettingsSmsSettings.customFillDataEvent = '';
 

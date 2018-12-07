@@ -4,9 +4,10 @@ const ticketAppearance = (function () {
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
     formSettingsAppearance.fillEvent = 'communicate/tickets/showMaxValueSettings';
     formSettingsAppearance.submitEvent = 'communicate/tickets/saveAppearance';
+    formSettingsAppearance.fillFormEvent = 'form/fillFormData';
+    formSettingsAppearance.submitSuccessEvent = 'form/submit/success';
+    formSettingsAppearance.submitErrorEvent = 'form/submit/error';
     formSettingsAppearance.validateEvent = 'form/validate';
-    formSettingsAppearance.successEvent = 'form/update';
-    formSettingsAppearance.errorEvent = 'form/error';
     formSettingsAppearance.prepareDataEvent = '';
     formSettingsAppearance.customFillDataEvent = '';
 
