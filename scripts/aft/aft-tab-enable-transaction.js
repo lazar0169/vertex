@@ -4,9 +4,9 @@ let aftTabEnableTransaction = (function () {
     formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction-info';
     formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
     formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
-    formSettingsTransaction.validateEvent = '';
+    formSettingsTransaction.validateEvent = 'form/validate';
     formSettingsTransaction.successEvent = 'form/update';
-    formSettingsTransaction.errorEvent = '';
+    formSettingsTransaction.errorEvent = 'form/error';
     formSettingsTransaction.prepareDataEvent = '';
     formSettingsTransaction.customFillDataEvent = '';
 
@@ -14,6 +14,7 @@ let aftTabEnableTransaction = (function () {
     on('aft/tab/transaction', function (params) {
         formSettingsTransaction.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsTransaction});
+        trigger('form/getData', {formSettings: formSettingsTransaction});
     });
 
 
@@ -29,6 +30,13 @@ let aftTabEnableTransaction = (function () {
             transactionEnableSwitch.checked = true;
             transactionEnableMode.innerHTML = 'Yes';
         }
+    });
+
+
+    let transactionSubmitButton = $$(formSettingsTransaction.formContainerSelector).getElementsByClassName('btn-success')[0];
+
+    transactionSubmitButton.addEventListener('click', function(){
+        trigger('form/submit', {formSettings: formSettingsTransaction});
     });
 
 

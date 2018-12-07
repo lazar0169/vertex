@@ -4,9 +4,9 @@ let aftTabNotificationSettings = (function(){
     formSettingsNotification.formContainerSelector = '#aft-tabs-notification-settings-info';
     formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
     formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
-    formSettingsNotification.validateEvent = '';
+    formSettingsNotification.validateEvent = 'form/validate';
     formSettingsNotification.successEvent = 'form/update';
-    formSettingsNotification.errorEvent = '';
+    formSettingsNotification.errorEvent = 'form/error';
     formSettingsNotification.prepareDataEvent = '';
     formSettingsNotification.customFillDataEvent = '';
 
@@ -14,6 +14,7 @@ let aftTabNotificationSettings = (function(){
     on('aft/tab/notification', function(params){
         formSettingsNotification.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsNotification});
+        trigger('form/getData', {formSettings: formSettingsNotification});
     });
 
 
@@ -30,6 +31,12 @@ let aftTabNotificationSettings = (function(){
             notificationsEnableFormSwitch.checked = true;
             notificationsEnableMode.innerHTML = 'Yes';
         }
+    });
+
+    let notificationSubmitButton = $$(formSettingsNotification.formContainerSelector).getElementsByClassName('btn-success')[0];
+
+    notificationSubmitButton.addEventListener('click', function(){
+        trigger('form/submit', {formSettings: formSettingsNotification});
     });
 
 

@@ -2,15 +2,6 @@ let form = (function () {
 
     let currentEndpointId;
 
-    function setEndpointId(formSettings) {
-        currentEndpointId = formSettings.endpointId;
-        console.log('current endpoint id', currentEndpointId);
-        let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
-        endpointIdInputElements.forEach(function (element) {
-            element.value = currentEndpointId;
-        });
-    }
-
     function getEvent(formSettings, eventToCheck) {
         let event;
 
@@ -24,7 +15,20 @@ let form = (function () {
         return event;
     }
 
-    function initForm(formSettings) {
+    function setEndpointId(formSettings) {
+        currentEndpointId = formSettings.endpointId;
+        console.log('current endpoint id', currentEndpointId);
+        let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
+        endpointIdInputElements.forEach(function (element) {
+            element.value = currentEndpointId;
+        });
+        let endpointIdInputs = formSettings.formContainerElement.getElementsByClassName('endpointId');
+        Array.prototype.slice.call(endpointIdInputs).forEach(function (endpointIdInput) {
+            endpointIdInput.dataset.value = currentEndpointId;
+        });
+    }
+
+    function getFormData(formSettings) {
         console.log('init form');
         let data = {
             EndpointId: formSettings.endpointId
@@ -33,14 +37,15 @@ let form = (function () {
     }
 
     function getAllFormInputElements(formSettings) {
-        let formElement = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
-        let inputElements = formElement.getElementsByTagName('input');
-        return inputElements;
+        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        let formInputElements = formElement.getElementsByTagName('input');
+        let inputElementsArray = Array.prototype.slice.call(formInputElements);
+        ;
+        return inputElementsArray;
     }
 
     function fillData(formSettings, data) {
-        let formInputElements = getAllFormInputElements(formSettings);
-        let formInputElementsArray = Array.prototype.slice.call(formInputElements);
+        let formInputElementsArray = getAllFormInputElements(formSettings);
         console.log('form input elements array', formInputElementsArray);
         let dataToDisplay = data.Data;
         console.log('data to display array', dataToDisplay);
@@ -48,11 +53,11 @@ let form = (function () {
             if (dataToDisplay[inputElement.dataset.name]) {
                 if (inputElement.type === 'checkbox') {
                     inputElement.checked = dataToDisplay.EnableTransactions;
-/*                    if(dataToDisplay.EnableTransactions === true) {
-                        transactionEnableMode.innerHTML = 'Yes';
-                    } else {
-                        transactionEnableMode.innerHTML = 'No';
-                    }*/
+                    /*                    if(dataToDisplay.EnableTransactions === true) {
+                                            transactionEnableMode.innerHTML = 'Yes';
+                                        } else {
+                                            transactionEnableMode.innerHTML = 'No';
+                                        }*/
                 } else {
                     inputElement.value = dataToDisplay[inputElement.dataset.name];
                     console.log('value', inputElement.value);
@@ -71,11 +76,21 @@ let form = (function () {
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
-        if (formSettings.formData === null || formSettings.formData === undefined) {
-            initForm(formSettings);
-        } else {
-            // fillData(formSettings);
-        }
+        setEndpointId(formSettings);
+    }
+
+    function collectAndPrepareFormData(formSettings) {
+        let formInputElementsArray = getAllFormInputElements(formSettings);
+        let dataForApi = {};
+        formInputElementsArray.forEach(function (formInputElement) {
+            if (formInputElement.type === 'checkbox') {
+                dataForApi[formInputElement.dataset.name] = formInputElement.checked;
+            } else {
+                dataForApi[formInputElement.dataset.name] = formInputElement.value;
+            }
+        });
+        console.log('data for API', dataForApi);
+        return dataForApi;
     }
 
 
@@ -96,13 +111,19 @@ let form = (function () {
     }
 
     function submit(formSettings) {
-
+        alert('Data has been saved!');
+        let dataForApi = collectAndPrepareFormData(formSettings);
+        trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
 
     on('form/init', function (params) {
         let formSettings = params.formSettings;
-        setEndpointId(formSettings);
         init(formSettings);
+    });
+
+    on('form/getData', function (params) {
+        let formSettings = params.formSettings;
+        getFormData(formSettings);
     });
 
     on('form/update', function (params) {
@@ -112,8 +133,21 @@ let form = (function () {
         fillData(formSettings, data);
     });
 
-    on('from/submit', function(params){
+    on('from/validate', function (params) {
+        let formSettings = params.formSettings;
+        validate(formSettings);
+    });
 
+    on('form/submit', function (params) {
+        alert('form submit');
+        let formSettings = params.formSettings;
+        submit(formSettings);
+    });
+
+    on('form/success', function (params) {
+        alert('form success');
+        let apiResponse = params;
+        console.log('api response', apiResponse);
     });
 
 })();

@@ -4,9 +4,9 @@ let ticketsSmsSettings = (function(){
     formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
     formSettingsSmsSettings.fillEvent = 'communicate/tickets/showSmsSettings';
     formSettingsSmsSettings.submitEvent = 'communicate/tickets/saveSmsSettings';
-    formSettingsSmsSettings.validateEvent = '';
+    formSettingsSmsSettings.validateEvent = 'form/validate';
     formSettingsSmsSettings.successEvent = 'form/update';
-    formSettingsSmsSettings.errorEvent = '';
+    formSettingsSmsSettings.errorEvent = 'form/error';
     formSettingsSmsSettings.prepareDataEvent = '';
     formSettingsSmsSettings.customFillDataEvent = '';
 
@@ -14,6 +14,13 @@ let ticketsSmsSettings = (function(){
     on('tickets/tab/smsSettings', function(params){
         formSettingsSmsSettings.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsSmsSettings});
+        trigger('form/getData', {formSettings: formSettingsSmsSettings});
+    });
+
+    let smsSettingsSubmitButton = $$(formSettingsSmsSettings.formContainerSelector).getElementsByClassName('btn-success')[0];
+
+    smsSettingsSubmitButton.addEventListener('click', function(){
+        trigger('form/submit', {formSettings: formSettingsSmsSettings});
     });
 
 

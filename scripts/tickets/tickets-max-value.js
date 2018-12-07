@@ -4,9 +4,9 @@ let ticketsMaxValue = (function () {
     formSettingsMaxValue.formContainerSelector = '#tickets-max-value-tab-info';
     formSettingsMaxValue.fillEvent = 'communicate/tickets/showMaxValueSettings';
     formSettingsMaxValue.submitEvent = 'communicate/tickets/saveMaxValuesAction';
-    formSettingsMaxValue.validateEvent = '';
+    formSettingsMaxValue.validateEvent = 'form/validate';
     formSettingsMaxValue.successEvent = 'form/update';
-    formSettingsMaxValue.errorEvent = '';
+    formSettingsMaxValue.errorEvent = 'form/error';
     formSettingsMaxValue.prepareDataEvent = '';
     formSettingsMaxValue.customFillDataEvent = '';
 
@@ -14,6 +14,7 @@ let ticketsMaxValue = (function () {
     on('tickets/tab/maxValue', function (params) {
         formSettingsMaxValue.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsMaxValue});
+        trigger('form/getData', {formSettings: formSettingsMaxValue});
     });
 
     let smsEnableButton = $$('#tickets-enable-sms-check');
@@ -41,6 +42,12 @@ let ticketsMaxValue = (function () {
             emailEnableSwitch.checked = true;
             emailEnableMode.innerHTML = 'Yes';
         }
+    });
+
+    let maxValueSubmitButton = $$(formSettingsMaxValue.formContainerSelector).getElementsByClassName('btn-success')[0];
+
+    maxValueSubmitButton.addEventListener('click', function(){
+        trigger('form/submit', {formSettings: formSettingsMaxValue});
     });
 
 

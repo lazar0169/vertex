@@ -265,7 +265,7 @@ let communication = (function () {
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
         let route = 'api/transactions/savenotificationsettings/';
-        let successEvent = params.formSettings.successEvent;
+        let successEvent = 'form/success';
         // let successEvent = 'aft/tab/notifications/update';
         let formSettings = params.formSettings;
         let data = params.data;
@@ -287,8 +287,8 @@ let communication = (function () {
         let route = 'api/transactions/getbasicsettings/';
         // let successEvent = 'aft/tab/transactions/display';
         let successEvent = params.formSettings.successEvent;
-        let data = params.data;
         let formSettings = params.formSettings;
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -305,9 +305,9 @@ let communication = (function () {
     on('communicate/aft/saveBasicSettings', function (params) {
         let route = 'api/transactions/savebasicsettings/';
         // let successEvent = 'aft/tab/transactions/update';
-        let successEvent = params.formSettings.successEvent;
+        let successEvent = 'form/success';
         let data = params.data;
-        let formSettings = params.tableSettings;
+        let formSettings = params.formSettings;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -504,10 +504,10 @@ let communication = (function () {
         console.log('ticket appearance event');
         let route = 'api/tickets/ticketappearance/';
         // let successEvent = 'tickets/tab/appearance/display';
-        let successEvent = params.formSettings.successEvent;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.successEvent;
         let request = requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -518,15 +518,16 @@ let communication = (function () {
             settingsObject: formSettings
         });
     });
+
 
     //SaveTitoSmsAction
     on('communicate/tickets/saveSmsSettings', function (params) {
         let route = 'api/tikets/savesmssettings/';
         // let successEvent = 'tickets/tab/smsSettings/update';
-        let successEvent = params.formSettings.successEvent;
+        let formSettings = params.formSettings;
+        let successEvent = 'form/success';
         let request = requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -537,15 +538,16 @@ let communication = (function () {
             settingsObject: formSettings
         });
     });
+
 
     //SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
         let route = 'api/tikets/savemaxvalues/';
         // let successEvent = 'tickets/tab/maxValue/update';
-        let successEvent = params.formSettings.successEvent;
+        let formSettings = params.formSettings;
+        let successEvent = 'form/success';
         let request = requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -557,14 +559,15 @@ let communication = (function () {
         });
     });
 
+
     //SaveTicketAppearanceAction
     on('communicate/tickets/saveAppearance', function (params) {
         let route = 'api/tikets/saveappearance/';
         // let successEvent = 'tickets/tab/appearance/update';
-        let successEvent = params.formSettings.successEvent;
+        let formSettings = params.formSettings;
+        let successEvent = 'form/success';
         let request = requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -575,6 +578,7 @@ let communication = (function () {
             settingsObject: formSettings
         });
     });
+
 
     //prepare data for tickets  page
     on('communicate/tickets/data/prepare', function (params) {

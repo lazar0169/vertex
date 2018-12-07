@@ -4,9 +4,9 @@ const ticketAppearance = (function () {
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
     formSettingsAppearance.fillEvent = 'communicate/tickets/showMaxValueSettings';
     formSettingsAppearance.submitEvent = 'communicate/tickets/saveAppearance';
-    formSettingsAppearance.validateEvent = '';
+    formSettingsAppearance.validateEvent = 'form/validate';
     formSettingsAppearance.successEvent = 'form/update';
-    formSettingsAppearance.errorEvent = '';
+    formSettingsAppearance.errorEvent = 'form/error';
     formSettingsAppearance.prepareDataEvent = '';
     formSettingsAppearance.customFillDataEvent = '';
 
@@ -14,6 +14,13 @@ const ticketAppearance = (function () {
     on('tickets/tab/appearance', function(params){
         formSettingsAppearance.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsAppearance});
+        trigger('form/getData', {formSettings: formSettingsAppearance});
+    });
+
+    let appearanceSubmitButton = $$(formSettingsAppearance.formContainerSelector).getElementsByClassName('btn-success')[0];
+
+    appearanceSubmitButton.addEventListener('click', function(){
+        trigger('form/submit', {formSettings: formSettingsAppearance});
     });
 
 
