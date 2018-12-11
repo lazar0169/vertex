@@ -46,8 +46,8 @@ let form = (function () {
 
     function bindSubmitButtonClickHandlers(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
-        submitButtonsArray.forEach(function(submitButton){
-            submitButton.addEventListener('click', function(){
+        submitButtonsArray.forEach(function (submitButton) {
+            submitButton.addEventListener('click', function () {
                 submit(formSettings, submitButton);
             });
         });
@@ -68,15 +68,15 @@ let form = (function () {
         }
     });
 
-    function collectEnableButtons(formSettings){
+    function collectEnableButtons(formSettings) {
         let enableButtons = $$(formSettings.formContainerSelector).getElementsByClassName('element-form-check');
         let enableButtonsArray = Array.prototype.slice.call(enableButtons);
         return enableButtonsArray;
     }
 
-    function bindEnableButtonClickHandlers(formSettings){
+    function bindEnableButtonClickHandlers(formSettings) {
         let enableButtonsArray = collectEnableButtons(formSettings);
-        enableButtonsArray.forEach(function(enableButton){
+        enableButtonsArray.forEach(function (enableButton) {
             let enableMode = enableButton.getElementsByClassName('element-form-mode')[0];
             let enableSwitch = enableButton.getElementsByTagName('input')[0];
             enableSwitch.addEventListener('click', function () {
@@ -114,7 +114,24 @@ let form = (function () {
                                 inputElement.value = dataToDisplay[inputElement.name][0]; //todo change to work with multiple emails/phone numbers
                             });
                         } else {
-                            inputElement.value = parseFloat(dataToDisplay[inputElement.name]);
+                            switch (inputElement.dataset.type) {
+                                case 'single-select':
+                                    inputElement.dataset.value = dataToDisplay[inputElement.dataset.name];
+                                case 'int':
+                                    inputElement.value = dataToDisplay[inputElement.name];
+                                case 'float':
+                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    break;
+                                case 'string':
+                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    break;
+                                case 'array':
+                                    if (dataToDisplay[inputElement.name].length === 1) {
+                                        inputElement.value = dataToDisplay[inputElement.name][0];
+                                    }
+                                    break;
+                            }
+                            inputElement.value = dataToDisplay[inputElement.name];
                         }
                     }
                 }
@@ -170,17 +187,20 @@ let form = (function () {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
-                        case 'multiple-select':/*
-                            if (dataForApi[formInputElement.name] === undefined) {
-                                dataForApi[formInputElement.name] = [];
-                            }
-                            dataForApi[formInputElement.name].push(formInputElement.value);*/
+                        /*                        case 'multiple-select':/!*
+                                                    if (dataForApi[formInputElement.name] === undefined) {
+                                                        dataForApi[formInputElement.name] = [];
+                                                    }
+                                                    dataForApi[formInputElement.name].push(formInputElement.value);*!/*/
                         case 'single-select':
-                            //toDo: izvuces vrednost iz data-value
-                            dataForApi[formInputElement.name] = parseInt(formInputElement.value);
+                            dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
 
                         case 'int':
-                            dataForApi[formInputElement.name] = parseInt(formInputElement.value);
+                            if (parseInt(formInputElement.value) !== undefined) {
+                                dataForApi[formInputElement.name] = parseInt(formInputElement.value);
+                            } else {
+                                dataForApi[formInputElement.name] = 5; //todo validation
+                            }
                         case 'float':
                             dataForApi[formInputElement.name] = parseFloat(formInputElement.value);
                             break;
@@ -192,7 +212,6 @@ let form = (function () {
                                 dataForApi[formInputElement.name] = [];
                             }
                             dataForApi[formInputElement.name].push(formInputElement.value);
-                            //dataForApi[formInputElement.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
                             break;
                     }
                 }
@@ -204,6 +223,7 @@ let form = (function () {
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
+        console.log('data for api', dataForApi);
         submitButton.disabled = true;
         trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
@@ -225,9 +245,9 @@ let form = (function () {
     }
 
     function complete(formSettings) {
-        //enable submit dugmeta
+
         let submitButtonsArray = collectSubmitButtons(formSettings);
-        submitButtonsArray.forEach(function(submitButton){
+        submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = false;
         });
     }
@@ -243,46 +263,6 @@ let form = (function () {
         }        //foreach kroz apiResponse.messages ako bude bilo potrebno
     }
 
-    //dodati listener na dugme koje ima klasu add-another-field
-    function addAnotherField(e, formSettings) {
-        // let target = null// poslednji element koji hvatas na selector
-
-        if(e.currentTarget.dataset.maxNumber !== undefined) {
-            let targetSelector = e.currentTarget.dataset.targetSelector;
-            console.log('target', targetSelector);
-            let targetElements = $$(formSettings.formContainerSelector).getElementsByClassName(targetSelector);
-            console.log('target elements', targetElements);
-            if (targetElements.length <= e.currentTarget.dataset.maxNumber) {
-                let lastElement = targetElements[targetElements.length-1];
-                console.log('last element', lastElement);
-                let newField = lastElement.cloneNode(true);
-                newField.getElementsByTagName('input')[0].removeAttribute('id');
-                newField.getElementsByTagName('input')[0].value = '';
-                newField.getElementsByTagName('button')[0].classList.remove('hidden');
-                console.log('new field', newField);
-                console.log('last element parent node', lastElement.parentNode);
-                lastElement.parentNode.appendChild(newField);
-                if(targetElements.length > 1) {
-                    targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
-                }
-                let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
-                deleteButtonFirstElement.addEventListener('click', function(){
-                    deleteFormElement(deleteButtonFirstElement);
-                });
-                let deleteButton = newField.getElementsByTagName('button')[0];
-                deleteButton.addEventListener('click', function(){
-                    deleteFormElement(deleteButton);
-                });
-            }
-        }
-        //proveris da li postoji data-max number
-        //proveris da li je broj postojecih <= max number
-        //kloniras ga
-        //sklonis mu value
-        //stavis ga nakon poslednjeg
-        //prikazi delete dugme kod svih polja ukoliko je broj elemenata > 1
-    }
-
     function deleteFormElement(deleteButton) {
         console.log('delete form element');
         let deleteFormElementButton = deleteButton;
@@ -291,8 +271,39 @@ let form = (function () {
         let childElementCount = parentNode.childElementCount;
         console.log('child element count', childElementCount);
         deleteButtonParentNode.remove();
-        if(childElementCount <= 3) {
+        if (childElementCount <= 3) {
             parentNode.children[1].getElementsByTagName('button')[0].classList.add('hidden');
+        }
+    }
+
+    function addAnotherField(e, formSettings) {
+        if (e.currentTarget.dataset.maxNumber !== undefined) {
+            let targetSelector = e.currentTarget.dataset.targetSelector;
+            console.log('target', targetSelector);
+            let targetElements = $$(formSettings.formContainerSelector).getElementsByClassName(targetSelector);
+            console.log('target elements', targetElements);
+            if (targetElements.length <= e.currentTarget.dataset.maxNumber) {
+                let lastElement = targetElements[targetElements.length - 1];
+                console.log('last element', lastElement);
+                let newField = lastElement.cloneNode(true);
+                newField.getElementsByTagName('input')[0].removeAttribute('id');
+                newField.getElementsByTagName('input')[0].value = '';
+                newField.getElementsByTagName('button')[0].classList.remove('hidden');
+                console.log('new field', newField);
+                console.log('last element parent node', lastElement.parentNode);
+                lastElement.parentNode.appendChild(newField);
+                if (targetElements.length > 1) {
+                    targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
+                }
+                let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
+                deleteButtonFirstElement.addEventListener('click', function () {
+                    deleteFormElement(deleteButtonFirstElement);
+                });
+                let deleteButton = newField.getElementsByTagName('button')[0];
+                deleteButton.addEventListener('click', function () {
+                    deleteFormElement(deleteButton);
+                });
+            }
         }
     }
 
@@ -303,28 +314,15 @@ let form = (function () {
         return addAnotherFieldButtonsArray;
     }
 
-    function collectDeleteFieldButtons(formSettings) {
-        let deleteFieldButtons = $$(formSettings.formContainerSelector).getElementsByClassName('action-delete-form-element');
-        let deleteFieldButtonsArray = Array.prototype.slice.call(deleteFieldButtons);
-        console.log('add another field buttons array', deleteFieldButtonsArray);
-        return deleteFieldButtonsArray;
-    }
-
-
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
-        addAnotherFieldButtonsArray.forEach(function(addAnotherFieldButton){
-            addAnotherFieldButton.addEventListener('click', function(e){
+        addAnotherFieldButtonsArray.forEach(function (addAnotherFieldButton) {
+            addAnotherFieldButton.addEventListener('click', function (e) {
                 console.log('form settings in bind add', formSettings);
                 addAnotherField(e, formSettings);
             });
         });
-
-        //vezi hanlder za addAnotherField
-        //vezi hanlder za deleteFormElement
-
     }
-
 
 
     function initFormHandlers(formSettings) {
@@ -348,12 +346,11 @@ let form = (function () {
         validate(formSettings);
     });
 
-/*    on('form/submit', function (params) {
-
+    on('form/submit', function (params) {
         //disable-ujes dugme
         let formSettings = params.formSettings;
         submit(formSettings);
-    });*/
+    });
 
     on('form/complete', function (params) {
 
@@ -367,7 +364,6 @@ let form = (function () {
     });
 
     on('form/submit/success', function (params) {
-        alert('Form submit success!');
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         console.log('api response', apiResponseData);

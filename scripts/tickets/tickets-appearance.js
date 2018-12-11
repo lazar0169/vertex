@@ -2,24 +2,22 @@ const ticketAppearance = (function () {
 
     let formSettingsAppearance = {};
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
-    formSettingsAppearance.fillEvent = 'communicate/tickets/showMaxValueSettings';
+    formSettingsAppearance.fillEvent = 'communicate/tickets/ticketAppearance';
     formSettingsAppearance.submitEvent = 'communicate/tickets/saveAppearance';
 
 
-    on('tickets/tab/appearance', function(params){
+    on('tickets/tab/appearance', function (params) {
         formSettingsAppearance.endpointId = params.tableSettings.endpointId;
         trigger('form/init', {formSettings: formSettingsAppearance});
         trigger('form/getData', {formSettings: formSettingsAppearance});
     });
 
-/*    let appearanceSubmitButton = $$(formSettingsAppearance.formContainerSelector).getElementsByClassName('btn-success')[0];
+    /*    let appearanceSubmitButton = $$(formSettingsAppearance.formContainerSelector).getElementsByClassName('btn-success')[0];
 
-    appearanceSubmitButton.addEventListener('click', function(){
-        alert('appearance submit button');
-        trigger('form/submit', {formSettings: formSettingsAppearance});
-    });*/
-
-
+        appearanceSubmitButton.addEventListener('click', function(){
+            alert('appearance submit button');
+            trigger('form/submit', {formSettings: formSettingsAppearance});
+        });*/
 
 
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
@@ -48,6 +46,7 @@ const ticketAppearance = (function () {
     let cancelTicketAppearance = $$('#appearance-buttons-wrapper').children[0];
     let saveTicketAppearance = $$('#appearance-buttons-wrapper').children[1];
 
+
     let dd = '16';
     let MM = '10';
     let yyyy = '2018';
@@ -69,6 +68,13 @@ const ticketAppearance = (function () {
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
     let setTimeFormat = $$('#tickets-advanced-settings-time').children[1];
+
+    selectedDateFormat.setAttribute('data-name', 'DateFormat');
+    selectedDateFormat.setAttribute('data-type', 'single-select');
+    selectedDateFormat.classList.add('element-form-data');
+    selectedTimeFormat.setAttribute('data-name', 'TimeFormat');
+    selectedTimeFormat.setAttribute('data-type', 'single-select');
+    selectedTimeFormat.classList.add('element-form-data');
 
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');
@@ -386,97 +392,95 @@ const ticketAppearance = (function () {
 
     cancelTicketAppearance.addEventListener('click', function () {
         alert('Reset to default');
+        trigger('form/getData', {formSettings: formSettingsAppearance});
     });
 
 
+    /* //elements
+     // let enableTransaction = $$('#aft-enable-transaction-check');
+     let chashableHandlplayLimit = $$('#chashable-handplay-limit');
+     let chashableTransactionLimit = $$('#chashable-limit');
+     let promoHandplayTransactionLimit = $$('#promo-handplay-limit');
+     let promoTransactionLimit = $$('#promo-limit');
+     let currentTableSettingsObject;
+     let saveTicketButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
+     let enableTransactionButton = $$('#aft-enable-transaction-check');
 
+     function getTicketAppearance(currentTableSettingsObject) {
+         trigger('communicate/tickets/ticketAppearance', {
+             data: {EndpointId: currentTableSettingsObject.endpointId},
+             tableSettings: currentTableSettingsObject
+         });
+     }
 
+     function displayTicketData(ticketData) {
+         inputCasino.value = ticketData.Name;
+         inputAddress.value = ticketData.Address1;
+         inputCity.value = ticketData.Address2;
+         inputChasoutTicket.value = ticketData.CashableTicketTitle;
+         inputPayablePromo.value = ticketData.RestrictedTicketTitle;
+         inputValidation.value = ticketData.Validation;
+         dropdown.select(dateWrapper.getElementsByClassName('default-select')[0], ticketData.DateFormat);
+         dropdown.select(timeWrapper.getElementsByClassName('default-select')[0], ticketData.TimeFormat);
+         inputTicket.value = ticketData.Ticket;
+         inputTicketVoid.value = ticketData.TicketVoid;
+         inputTicketVoidDays.value = ticketData.TicketVoidDays;
+         // .value = ticketData.TicketVoidValue;
+         inputAsset.value = ticketData.Asset;
+         inputAssetNumber.value = ticketData.AssetValue;
+         inputCurrency.value = ticketData.Valute;
+         inputExpiringCashout.value = ticketData.CashableTicketExpirationDays;
+         inputExpiringPromo.value = ticketData.RestrictedTicketExpirationDays;
+         // .value = ticketData.RestrictedTicketPoolId;
+     }
 
-   /* //elements
-    // let enableTransaction = $$('#aft-enable-transaction-check');
-    let chashableHandlplayLimit = $$('#chashable-handplay-limit');
-    let chashableTransactionLimit = $$('#chashable-limit');
-    let promoHandplayTransactionLimit = $$('#promo-handplay-limit');
-    let promoTransactionLimit = $$('#promo-limit');
-    let currentTableSettingsObject;
-    let saveTicketButton = $$('#aft-transaction-save').getElementsByClassName('btn-success')[0];
-    let enableTransactionButton = $$('#aft-enable-transaction-check');
+     function collectAndPrepareTicketDataForApi() {
+         let ticketDataForApi = {
+             Name: '',
+             Address1: '',
+             Address2: '',
+             CashableTicketTitle: '',
+             RestrictedTicketTitle: '',
+             Validation: '',
+             DateFormat: '',
+             TimeFormat: '',
+             Ticket: '',
+             TicketVoid: '',
+             TicketVoidDays: '',
+             TicketVoidValue: '',
+             Asset: '',
+             AssetValue: '',
+             Valute: '',
+             CashableTicketExpirationDays: '',
+             RestrictedTicketExpirationDays: '',
+             RestrictedTicketPoolId: '',
+         };
+         return ticketDataForApi;
+     }
 
-    function getTicketAppearance(currentTableSettingsObject) {
-        trigger('communicate/tickets/ticketAppearance', {
-            data: {EndpointId: currentTableSettingsObject.endpointId},
-            tableSettings: currentTableSettingsObject
-        });
-    }
+     on('tickets/tab/appearance/init', function (params) {
+         currentTableSettingsObject = params.tableSettings;
+         console.log('Params in tickets tab appearance: ', params);
+         getTicketAppearance(currentTableSettingsObject);
+     });
 
-    function displayTicketData(ticketData) {
-        inputCasino.value = ticketData.Name;
-        inputAddress.value = ticketData.Address1;
-        inputCity.value = ticketData.Address2;
-        inputChasoutTicket.value = ticketData.CashableTicketTitle;
-        inputPayablePromo.value = ticketData.RestrictedTicketTitle;
-        inputValidation.value = ticketData.Validation;
-        dropdown.select(dateWrapper.getElementsByClassName('default-select')[0], ticketData.DateFormat);
-        dropdown.select(timeWrapper.getElementsByClassName('default-select')[0], ticketData.TimeFormat);
-        inputTicket.value = ticketData.Ticket;
-        inputTicketVoid.value = ticketData.TicketVoid;
-        inputTicketVoidDays.value = ticketData.TicketVoidDays;
-        // .value = ticketData.TicketVoidValue;
-        inputAsset.value = ticketData.Asset;
-        inputAssetNumber.value = ticketData.AssetValue;
-        inputCurrency.value = ticketData.Valute;
-        inputExpiringCashout.value = ticketData.CashableTicketExpirationDays;
-        inputExpiringPromo.value = ticketData.RestrictedTicketExpirationDays;
-        // .value = ticketData.RestrictedTicketPoolId;
-    }
+     on('tickets/tab/appearance/display', function (params) {
+         console.log('Usli smo u appearance display', params);
+         let ticketData = params.data.Data;
+         console.log('ticket data', ticketData);
+         displayTicketData(ticketData);
+     });
 
-    function collectAndPrepareTicketDataForApi() {
-        let ticketDataForApi = {
-            Name: '',
-            Address1: '',
-            Address2: '',
-            CashableTicketTitle: '',
-            RestrictedTicketTitle: '',
-            Validation: '',
-            DateFormat: '',
-            TimeFormat: '',
-            Ticket: '',
-            TicketVoid: '',
-            TicketVoidDays: '',
-            TicketVoidValue: '',
-            Asset: '',
-            AssetValue: '',
-            Valute: '',
-            CashableTicketExpirationDays: '',
-            RestrictedTicketExpirationDays: '',
-            RestrictedTicketPoolId: '',
-        };
-        return ticketDataForApi;
-    }
+     saveTicketButton.addEventListener('click', function () {
+         let dataForApi = collectAndPrepareTicketDataForApi();
+         console.log('Save ticket data for api', dataForApi);
+         trigger('communicate/tickets/saveAppearance', {data: dataForApi, tableSettings: currentTableSettingsObject});
+     });
 
-    on('tickets/tab/appearance/init', function (params) {
-        currentTableSettingsObject = params.tableSettings;
-        console.log('Params in tickets tab appearance: ', params);
-        getTicketAppearance(currentTableSettingsObject);
-    });
-
-    on('tickets/tab/appearance/display', function (params) {
-        console.log('Usli smo u appearance display', params);
-        let ticketData = params.data.Data;
-        console.log('ticket data', ticketData);
-        displayTicketData(ticketData);
-    });
-
-    saveTicketButton.addEventListener('click', function () {
-        let dataForApi = collectAndPrepareTicketDataForApi();
-        console.log('Save ticket data for api', dataForApi);
-        trigger('communicate/tickets/saveAppearance', {data: dataForApi, tableSettings: currentTableSettingsObject});
-    });
-
-    on('tickets/tab/appearance/update', function (params) {
-        alert('Ticket update!');
-        console.log('Ticket data', params);
-    });
-*/
+     on('tickets/tab/appearance/update', function (params) {
+         alert('Ticket update!');
+         console.log('Ticket data', params);
+     });
+ */
 
 })();
