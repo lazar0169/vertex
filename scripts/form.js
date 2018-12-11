@@ -256,12 +256,13 @@ let form = (function () {
                 let lastElement = targetElements[targetElements.length-1];
                 console.log('last element', lastElement);
                 let newField = lastElement.cloneNode(true);
-                newField.removeAttribute('id');
+                newField.getElementsByTagName('input')[0].removeAttribute('id');
+                newField.getElementsByTagName('button')[0].classList.remove('hidden');
                 console.log('new field', newField);
                 console.log('last element parent node', lastElement.parentNode);
                 lastElement.parentNode.appendChild(newField);
                 if(targetElements.length > 1) {
-
+                    targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
                 }
             }
         }
