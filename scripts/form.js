@@ -257,6 +257,7 @@ let form = (function () {
                 console.log('last element', lastElement);
                 let newField = lastElement.cloneNode(true);
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
+                newField.getElementsByTagName('input')[0].value = '';
                 newField.getElementsByTagName('button')[0].classList.remove('hidden');
                 console.log('new field', newField);
                 console.log('last element parent node', lastElement.parentNode);
@@ -293,10 +294,6 @@ let form = (function () {
         if(childElementCount <= 3) {
             parentNode.children[1].getElementsByTagName('button')[0].classList.add('hidden');
         }
-
-
-        //brises parent element dugmeta koji ima klasu form-control
-        //ukoliko nakon brisanja ostane samo jedan sakrij delete dugme
     }
 
     function collectAddAnotherFieldButtons(formSettings) {
