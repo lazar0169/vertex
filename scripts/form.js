@@ -32,6 +32,7 @@ let form = (function () {
 
     function getAllFormInputElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        //class name  element-form-data-container
         let formInputElements = formElement.getElementsByTagName('input');
         let inputElementsArray = Array.prototype.slice.call(formInputElements);
         return inputElementsArray;
@@ -67,6 +68,13 @@ let form = (function () {
         });
     }
 
+    //ToDo: documentovanti form settings
+    /*formSettings {
+        :formContainerElement: required | element that contains form
+
+
+    } */
+
     function init(formSettings) {
         let formContainerElement = $$(formSettings.formContainerSelector);
         formSettings.formContainerElement = formContainerElement;
@@ -77,11 +85,27 @@ let form = (function () {
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
-        setEndpointId(formSettings);
+
+        if (formSettings.fillFormEvent === undefined) {
+            formSettings.fillFormEvent = 'form/fillFormData';
+        }
+        if (formSettings.submitSuccessEvent === undefined) {
+            formSettings.submitSuccessEvent = 'form/submit/success';
+        }
+        if (formSettings.submitErrorEvent === undefined) {
+            formSettings.submitErrorEvent = 'form/submit/error';
+        }
+        if (formSettings.validateEvent === undefined) {
+            formSettings.validateEvent = 'form/validate';
+        }
+
+        if (formSettings.endpointId !== undefined) {
+            setEndpointId(formSettings);
+        }
+        initFormHandlers();
     }
 
     function collectAndPrepareFormData(formSettings) {
-        let arrayForApi = []; //todo handle this
         let formInputElementsArray = getAllFormInputElements(formSettings);
         let dataForApi = {};
         formInputElementsArray.forEach(function (formInputElement) {
@@ -92,6 +116,15 @@ let form = (function () {
                     dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
+                        case 'multiple-select':/*
+                            if (dataForApi[formInputElement.dataset.name] === undefined) {
+                                dataForApi[formInputElement.dataset.name] = [];
+                            }
+                            dataForApi[formInputElement.dataset.name].push(formInputElement.value);*/
+                        case 'single-select':
+                            //toDo: izvuces vrednost iz data-value
+                            dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.value);
+
                         case 'int':
                             dataForApi[formInputElement.dataset.name] = parseInt(formInputElement.value);
                         case 'float':
@@ -101,8 +134,11 @@ let form = (function () {
                             dataForApi[formInputElement.dataset.name] = formInputElement.value;
                             break;
                         case 'array':
-                            arrayForApi.push(formInputElement.value);
-                            dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
+                            if (dataForApi[formInputElement.dataset.name] === undefined) {
+                                dataForApi[formInputElement.dataset.name] = [];
+                            }
+                            dataForApi[formInputElement.dataset.name].push(formInputElement.value);
+                            //dataForApi[formInputElement.dataset.name] = arrayForApi; //todo finish this when we have multiple emails/phone numbers
                             break;
                     }
                 }
@@ -133,6 +169,46 @@ let form = (function () {
 
     }
 
+    function complete(params) {
+        //enable submit dugmeta
+    }
+
+    function handleStandardReponseMessages(apiResponse) {
+        if (apiResponse.MessageCode === null || apiResponse.MessageType === null) {
+            console.error('api response is not standardized');
+        }
+        else {
+            trigger('notifications/show/', {
+                message: translateMessage(apiResponse.MessageCode),
+                type: apiResponse.MessageType
+            });
+        }        //foreach kroz apiResponse.messages
+    }
+
+    //dodati listener na dugme koje ima klasu add-another-field
+    function addAnotherField (){
+        let target = null// poslednji element koji hvatas na selector
+        //proveris da li postoji data-max number
+        //proveris da li je broj postojecih <= max number
+        //kloniras ga
+        //sklonis mu value
+        //stavis ga nakon poslednjeg
+        //prikazi delete dugme kod svih polja ukoliko je broj elemenata > 1
+
+
+    }
+
+    function deleteFormElement() {
+        //brises parent element dugmeta koji ima klasu form-control
+        //ukoliko nakon brisanja ostane samo jedan sakrij delete dugme
+    }
+
+
+    function initFormHandlers() {
+        //vezi hanlder za addAnotherField
+        //vezi hanlder za deleteFormElement
+    }
+
     on('form/init', function (params) {
         let formSettings = params.formSettings;
         init(formSettings);
@@ -149,8 +225,13 @@ let form = (function () {
     });
 
     on('form/submit', function (params) {
+        //disable-ujes dugme
         let formSettings = params.formSettings;
         submit(formSettings);
+    });
+
+    on ('form/complete',function(params) {
+
     });
 
     on('form/fillFormData', function (params) {
@@ -163,13 +244,18 @@ let form = (function () {
     on('form/submit/success', function (params) {
         alert('Form submit success!');
         let apiResponse = params;
+        //trigger('notifications/show/success',{message:localization.translateMessage(apiResponse.Message)});
+        handleStandardReponseMessages();
         console.log('api response', apiResponse);
+        complete();
     });
 
     on('form/submit/error', function (params) {
         alert('Form submit error!');
         let apiResponse = params;
+        handleStandardReponseMessages();
         console.log('api response', apiResponse);
+        complete();
     });
 
 

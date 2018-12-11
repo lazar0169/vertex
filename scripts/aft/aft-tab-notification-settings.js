@@ -4,13 +4,15 @@ let aftTabNotificationSettings = (function(){
     formSettingsNotification.formContainerSelector = '#aft-tabs-notification-settings-info';
     formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
     formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
-    formSettingsNotification.fillFormEvent = 'form/fillFormData';
-    formSettingsNotification.submitSuccessEvent = 'form/submit/success';
-    formSettingsNotification.submitErrorEvent = 'form/submit/error';
-    formSettingsNotification.validateEvent = 'form/validate';
-    formSettingsNotification.prepareDataEvent = '';
-    formSettingsNotification.customFillDataEvent = '';
 
+    //formSettingsNotification.errorEvent = 'aft/tab/notification/form-error/';
+
+
+    /*
+    on ('aft/tab/notification/form-error/',function(params){
+        trigger('notifcation/show/error',{message:translateMessage(params.Message)});
+    });
+    */
 
     on('aft/tab/notification', function(params){
         formSettingsNotification.endpointId = params.tableSettings.endpointId;
