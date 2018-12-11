@@ -264,24 +264,37 @@ let form = (function () {
                 if(targetElements.length > 1) {
                     targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
                 }
+                let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
+                deleteButtonFirstElement.addEventListener('click', function(){
+                    deleteFormElement(deleteButtonFirstElement);
+                });
+                let deleteButton = newField.getElementsByTagName('button')[0];
+                deleteButton.addEventListener('click', function(){
+                    deleteFormElement(deleteButton);
+                });
             }
         }
-
-
-
-
-
         //proveris da li postoji data-max number
         //proveris da li je broj postojecih <= max number
         //kloniras ga
         //sklonis mu value
         //stavis ga nakon poslednjeg
         //prikazi delete dugme kod svih polja ukoliko je broj elemenata > 1
-
-
     }
 
-    function deleteFormElement() {
+    function deleteFormElement(deleteButton) {
+        console.log('delete form element');
+        let deleteFormElementButton = deleteButton;
+        let deleteButtonParentNode = deleteFormElementButton.parentNode;
+        let parentNode = deleteButtonParentNode.parentNode;
+        let childElementCount = parentNode.childElementCount;
+        console.log('child element count', childElementCount);
+        deleteButtonParentNode.remove();
+        if(childElementCount <= 3) {
+            parentNode.children[1].getElementsByTagName('button')[0].classList.add('hidden');
+        }
+
+
         //brises parent element dugmeta koji ima klasu form-control
         //ukoliko nakon brisanja ostane samo jedan sakrij delete dugme
     }
@@ -300,18 +313,13 @@ let form = (function () {
         return deleteFieldButtonsArray;
     }
 
+
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
         addAnotherFieldButtonsArray.forEach(function(addAnotherFieldButton){
             addAnotherFieldButton.addEventListener('click', function(e){
                 console.log('form settings in bind add', formSettings);
                 addAnotherField(e, formSettings);
-            });
-        });
-        let deleteFieldButtonsArray = collectDeleteFieldButtons(formSettings);
-        deleteFieldButtonsArray.forEach(function(deleteFieldButton){
-            deleteFieldButton.addEventListener('click', function(e){
-                deleteFormElement(e, formSettings);
             });
         });
 

@@ -42,3 +42,8 @@
 .aft-notification-settings input, .aft-enable-transaction input {
     width: 320px;
 }
+
+.element-form-email, .element-form-phone-number {
+    display: flex;
+    flex-direction: row;
+}
