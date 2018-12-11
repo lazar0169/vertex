@@ -9,42 +9,49 @@
 <!--TICKETS TAB TICKETS APPEARANCE-->
 <div id="tickets-appearance-tab-info" class="chosen-info-tab overflow-content hidden">
     <div class=" element-async-form">
-        <input data-name="EndpointId" style="display:none" class="endpointId">
+        <input name="EndpointId" style="display:none" class="endpointId element-form-data">
         <div id="wrapper-ticket-appearance-settings">
             <div id="wrapper-tickets-appearance-general-settings">
-                <div>GENERAL SETTINGS</div>
+                <div class="text-uppercase">General settings</div>
                 <div>
                     <div>Casino:</div>
-                    <input data-name="Name" class="form-input" data-type="string" type="text" placeholder="Casino" value="Casino">
+                    <input name="Name" class="form-input element-form-data" data-type="string" type="text"
+                           placeholder="Casino" value="Casino">
                 </div>
                 <div>
                     <div>Address:</div>
-                    <input data-name="Address1" class="form-input" data-type="string" type="text" placeholder="Address" value="Address">
+                    <input name="Address1" class="form-input element-form-data" data-type="string" type="text"
+                           placeholder="Address" value="Address">
                 </div>
                 <div>
                     <div>City:</div>
-                    <input data-name="Address2" class="form-input" data-type="string" type="text" placeholder="City" value="City">
+                    <input name="Address2" class="form-input element-form-data" data-type="string" type="text"
+                           placeholder="City" value="City">
                 </div>
                 <div>
                     <div>Currency:</div>
-                    <input data-name="Valute" class="form-input" data-type="string" type="text" placeholder="Currency" value="EUR">
+                    <input name="Valute" class="form-input element-form-data" data-type="string" type="text"
+                           placeholder="Currency" value="EUR">
                 </div>
             </div>
             <div id="wrapper-tickets-appearance-cashable">
-                <div class="tab-active">CASHABLE TICKET</div>
+                <div class="tab-active text-uppercase">Cashable ticket</div>
                 <div>
                     <div>Cashout ticket:</div>
-                    <input data-name="CashableTicketTitle" data-type="string" class="form-input" type="text" placeholder="Cashout ticket"
+                    <input name="CashableTicketTitle" data-type="string" class="form-input element-form-data"
+                           type="text" placeholder="Cashout ticket"
                            value="Cashout ticket">
                 </div>
                 <div>
                     <div>Expiring:</div>
-                    <input data-name="CashableTicketExpirationDays" data-type="int" class="form-input" type="text" placeholder="Days"
+                    <input name="CashableTicketExpirationDays" data-type="int" class="form-input element-form-data"
+                           type="text" placeholder="Days"
                            value="NEVER">
                 </div>
                 <div>
                     <div>Ticket void value:</div>
-                    <input data-name="TicketVoidValue" data-type="string" class="form-input" type="text" placeholder="Days"
+                    <input name="TicketVoidValue" data-type="string" class="form-input element-form-data" type="text"
+                           placeholder="Days"
                            value="NEVER">
                 </div>
             </div>
@@ -52,17 +59,20 @@
                 <div>PROMO TICKET</div>
                 <div>
                     <div>Payable:</div>
-                    <input data-name="RestrictedTicketTitle" data-type="string" class="form-input" type="text" placeholder="PLAYABLE1 ONLY"
+                    <input name="RestrictedTicketTitle" data-type="string" class="form-input element-form-data"
+                           type="text" placeholder="PLAYABLE1 ONLY"
                            value="PLAYABLE1 ONLY">
                 </div>
                 <div>
                     <div>Expiring:</div>
-                    <input data-name="RestrictedTicketExpirationDays" data-type="int" class="form-input" type="text" placeholder="DAYS"
+                    <input name="RestrictedTicketExpirationDays" data-type="int" class="form-input element-form-data"
+                           type="text" placeholder="DAYS"
                            value="7">
                 </div>
                 <div>
                     <div>Restricted Ticket Pool Id:</div>
-                    <input data-name="RestrictedTicketPoolId" data-type="int" class="form-input" type="text" placeholder="Pool id"
+                    <input name="RestrictedTicketPoolId" data-type="int" class="form-input element-form-data"
+                           type="text" placeholder="Pool id"
                            value="7">
                 </div>
             </div>
@@ -82,34 +92,40 @@
                 <div>
                     <div id="tickets-advanced-settings-void">
                         <div>Ticket void after:</div>
-                        <input data-name="TicketVoid" class="form-input" data-type="string" type="text" placeholder="Ticket void after"
+                        <input name="TicketVoid" class="form-input element-form-data" data-type="string" type="text"
+                               placeholder="Ticket void after"
                                value="Ticket void after:">
                     </div>
                     <div id="tickets-advanced-settings-days">
                         <div>Days:</div>
-                        <input data-name="TicketVoidDays" class="form-input" data-type="string" type="text" placeholder="Days"
+                        <input name="TicketVoidDays" class="form-input" data-type="string" type="text"
+                               placeholder="Days"
                                value="days">
                     </div>
                 </div>
                 <div>
                     <div id="tickets-advanced-settings-validation">
                         <div>Validation:</div>
-                        <input data-name="Validation" class="form-input" data-type="string" type="text" placeholder="Validation"
+                        <input name="Validation" class="form-input element-form-data" data-type="string" type="text"
+                               placeholder="Validation"
                                value="Validation">
                     </div>
                     <div id="tickets-advanced-settings-ticket">
                         <div>Ticket:</div>
-                        <input data-name="Ticket" class="form-input" data-type="string" type="text" placeholder="Ticket" value="TICKET">
+                        <input name="Ticket" class="form-input element-form-data" data-type="string" type="text"
+                               placeholder="Ticket" value="TICKET">
                     </div>
                 </div>
                 <div>
                     <div id="tickets-advanced-settings-asset">
                         <div>Asset:</div>
-                        <input data-name="Asset" class="form-input" data-type="string" type="text" placeholder="Asset" value="Asset">
+                        <input name="Asset" class="form-input element-form-data" data-type="string" type="text"
+                               placeholder="Asset" value="Asset">
                     </div>
                     <div id="tickets-advanced-settings-asset-number">
                         <div>Asset number:</div>
-                        <input data-name="AssetValue" class="form-input" data-type="string" type="text" placeholder="Asset number"
+                        <input name="AssetValue" class="form-input element-form-data" data-type="string" type="text"
+                               placeholder="Asset number"
                                value='1'>
                     </div>
                 </div>
@@ -121,8 +137,8 @@
             <img id="barcode" class="hidden" src="images/barcode.png" alt="barcode">
         </div>
         <div id="appearance-buttons-wrapper">
-            <button class="btn btn-cancel">Cancel</button>
-            <button class="btn btn-success">SAVE</button>
+            <button class="btn btn-cancel element-from-cancel">Cancel</button>
+            <button class="btn btn-success element-form-submit text-uppercase">Save</button>
         </div>
     </div>
 </div>
@@ -131,55 +147,69 @@
 <!--AFT TAB SMS SETTINGS-->
 <div id="tickets-sms-settings-tab-info" class="chosen-info-tab overflow-content hidden">
     <div class=" element-async-form">
-        <input data-name="EndpointId" style="display:none" class="endpointId">
-        <div id="tickets-enable-sms-check">
+        <input name="EndpointId" style="display:none" class="endpointId element-form-data">
+        <div id="tickets-enable-sms-check" class="element-form-check">
             <div>Enable sms:</div>
-            <div id="tickets-enable-sms-mode">Yes</div>
+            <div id="tickets-enable-sms-mode" class="element-form-mode">Yes</div>
             <label class="form-switch">
-                <input data-name="EnableSms" type="checkbox" checked>
+                <input name="EnableSms" class="element-form-data" type="checkbox" checked>
                 <i class="form-icon"></i>
             </label>
         </div>
         <div id="tickets-sms-settings-max-redemption">
             <label>Send notification when the value of the redeemed ticket is higher than:</label>
-            <input data-name="RedeemedTicketLimitForNotification" data-type="float" class="form-input" type="text"
+            <input name="RedeemedTicketLimitForNotification" data-type="float" class="form-input element-form-data"
+                   type="text"
                    placeholder="Max. redemption" value="100.000,00">
         </div>
         <div id="tickets-sms-settings-max-issuance">
             <label>Send notification when the value of the printed ticket is higher than:</label>
-            <input data-name="SoldTicketLimitForNotification" class="form-input" data-type="float" type="text" placeholder="Max. issuance"
+            <input name="SoldTicketLimitForNotification" class="form-input element-form-data" data-type="float"
+                   type="text" placeholder="Max. issuance"
                    value="100.000,00">
         </div>
         <div id="tickets-sms-settings-send-mobile" class="tickets-sms-settings">
             <div>
                 <label class="form-label" for="notification-mobile-phone-number">Mobile phone number:</label>
-                <input data-name="PhoneNumbers" class="form-input" data-type="array" type="text" id="notification-mobile-phone-number"
-                       placeholder="xxx-xxx-xxxx">
+                <div class="form-control">
+                    <input name="PhoneNumbers" class="form-input element-form-data element-form-phone-number"
+                           data-type="array" type="text" id="notification-mobile-phone-number"
+                           placeholder="xxx-xxx-xxxx">
+                    <button class="action-delete-form-element hidden">Delete</button>
+                </div>
             </div>
             <div id="tickets-sms-settings-another-phone">
-                <button class="btn btn-cancel">ADD another phone number</button>
+                <button class="btn btn-cancel action-add-another-field" data-target-selector="element-form-phone-number"
+                        data-max-number="5">ADD another phone number
+                </button>
             </div>
         </div>
-        <div id="tickets-enable-email-check">
+        <div id="tickets-enable-email-check" class="element-form-check">
             <div>Enable e-mail:</div>
-            <div id="tickets-enable-email-mode">Yes</div>
+            <div id="tickets-enable-email-mode" class="element-form-mode">Yes</div>
             <label class="form-switch">
-                <input data-name="EnableEmail" type="checkbox" checked>
+                <input name="EnableEmail" class="element-form-data" type="checkbox" checked>
                 <i class="form-icon"></i>
             </label>
         </div>
         <div id="tickets-sms-settings-send-email" class="tickets-sms-settings">
             <div>
                 <label class="form-label" for="notification-email-address">Email address:</label>
-                <input data-name="Emails" class="form-input" data-type="array" type="text" id="notification-email-address"
-                       placeholder="Your email">
+                <div class="form-control">
+                    <input name="Emails" class="form-input element-form-data element-form-email" data-type="array"
+                           type="text" id="notification-email-address"
+                           placeholder="Your email">
+                    <button class="action-delete-form-element hidden">Delete</button>
+                </div>
             </div>
             <div id="tickets-sms-settings-another-email">
-                <button class="btn btn-cancel">ADD another email address</button>
+                <button class="btn btn-cancel action-add-another-field" data-target-selector="element-form-email"
+                        data-max-number="5">ADD another email address
+                </button>
             </div>
         </div>
         <div id="tickets-sms-settings-buttons-wrapper">
-            <button class="btn btn-success">SAVE</button>
+            <button class="btn btn-success element-form-submit text-uppercase">Save</button>
         </div>
     </div>
 </div>
@@ -188,19 +218,19 @@
 <!--AFT TAB SET TICKET MAX VALUE-->
 <div id="tickets-max-value-tab-info" class="chosen-info-tab overflow-content hidden">
     <div class="element-async-form">
-        <input data-name="EndpointId" style="display:none" class="endpointId">
+        <input name="EndpointId" style="display:none" class="endpointId">
         <div id="tickets-sms-settings-max-value-max-redeemed">
             <label>Maximum value of the redeemed ticket:</label>
-            <input data-name="MaxRedeemAmountForPayed" class="form-input"  data-type="float" type="text"
+            <input name="MaxRedeemAmountForPayed" class="form-input element-form-data" data-type="float" type="text"
                    placeholder="Max. value of the redeemed ticket" value="100.000,00"/>
         </div>
         <div id="tickets-sms-settings-max-value-max-sell">
             <label>Maximum value of the issued ticket:</label>
-            <input data-name="MaxSellAmountForPayed" class="form-input" data-type="float" type="text"
+            <input name="MaxSellAmountForPayed" class="form-input element-form-data" data-type="float" type="text"
                    placeholder="Max. value of the issued ticket" value="100.000,00"/>
         </div>
         <div id="tickets-max-value-buttons-wrapper">
-            <button class="btn btn-success">SAVE</button>
+            <button class="btn btn-success element-form-submit text-uppercase">Save</button>
         </div>
     </div>
 </div>

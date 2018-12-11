@@ -5,11 +5,6 @@ let aftTabEnableTransaction = (function () {
     formSettingsTransaction.fillEvent = 'communicate/aft/getBasicSettings';
     formSettingsTransaction.submitEvent = 'communicate/aft/saveBasicSettings';
     formSettingsTransaction.fillFormEvent = 'form/fillFormData';
-    formSettingsTransaction.submitSuccessEvent = 'form/submit/success';
-    formSettingsTransaction.submitErrorEvent = 'form/submit/error';
-    formSettingsTransaction.validateEvent = 'form/validate';
-    formSettingsTransaction.prepareDataEvent = '';
-    formSettingsTransaction.customFillDataEvent = '';
 
 
     on('aft/tab/transaction', function (params) {
@@ -19,7 +14,7 @@ let aftTabEnableTransaction = (function () {
     });
 
 
-    let transactionEnableButton = $$('#aft-enable-transaction-check');
+/*    let transactionEnableButton = $$('#aft-enable-transaction-check');
     let transactionEnableMode = $$('#aft-enable-transaction-mode');
     let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
 
@@ -31,14 +26,14 @@ let aftTabEnableTransaction = (function () {
             transactionEnableSwitch.checked = true;
             transactionEnableMode.innerHTML = 'Yes';
         }
-    });
+    });*/
 
-
+/*
     let transactionSubmitButton = $$(formSettingsTransaction.formContainerSelector).getElementsByClassName('btn-success')[0];
 
     transactionSubmitButton.addEventListener('click', function(){
         trigger('form/submit', {formSettings: formSettingsTransaction});
-    });
+    });*/
 
 
     /*

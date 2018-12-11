@@ -4,12 +4,6 @@ let ticketsMaxValue = (function () {
     formSettingsMaxValue.formContainerSelector = '#tickets-max-value-tab-info';
     formSettingsMaxValue.fillEvent = 'communicate/tickets/showMaxValueSettings';
     formSettingsMaxValue.submitEvent = 'communicate/tickets/saveMaxValuesAction';
-    formSettingsMaxValue.fillFormEvent = 'form/fillFormData';
-    formSettingsMaxValue.submitSuccessEvent = 'form/submit/success';
-    formSettingsMaxValue.submitErrorEvent = 'form/submit/error';
-    formSettingsMaxValue.validateEvent = 'form/validate';
-    formSettingsMaxValue.prepareDataEvent = '';
-    formSettingsMaxValue.customFillDataEvent = '';
 
 
     on('tickets/tab/maxValue', function (params) {
@@ -24,6 +18,7 @@ let ticketsMaxValue = (function () {
     let emailEnableButton = $$('#tickets-enable-email-check');
     let emailEnableMode = $$('#tickets-enable-email-mode');
     let emailEnableSwitch = emailEnableButton.getElementsByTagName('input')[0];
+/*
 
     smsEnableSwitch.addEventListener('click', function () {
         if (smsEnableSwitch.checked === false) {
@@ -44,12 +39,13 @@ let ticketsMaxValue = (function () {
             emailEnableMode.innerHTML = 'Yes';
         }
     });
+*/
 
-    let maxValueSubmitButton = $$(formSettingsMaxValue.formContainerSelector).getElementsByClassName('btn-success')[0];
+/*    let maxValueSubmitButton = $$(formSettingsMaxValue.formContainerSelector).getElementsByClassName('btn-success')[0];
 
     maxValueSubmitButton.addEventListener('click', function(){
         trigger('form/submit', {formSettings: formSettingsMaxValue});
-    });
+    });*/
 
 
     /*    let currentTableSettingsObject;

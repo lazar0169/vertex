@@ -38,6 +38,7 @@ function decodeToken(encodedToken) {
     }
 }
 
+
 //ToDo:Lazar - Da li je ok da ovo bude ovde - koristim je vec u 2 modula za sad
 //returns value from an object base on select string -> path='account.createdAt' -> object = user:{account:{createdAt:10/10/2010}}
 //call getProperty("account.createdAt",user);

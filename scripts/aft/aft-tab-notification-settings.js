@@ -21,10 +21,9 @@ let aftTabNotificationSettings = (function(){
     });
 
 
-    let notificationsEnableButton = $$('#aft-enable-notification-check');
+/*    let notificationsEnableButton = $$('#aft-enable-notification-check');
     let notificationsEnableMode = $$('#aft-enable-notification-mode');
     let notificationsEnableFormSwitch = notificationsEnableButton.getElementsByTagName('input')[0];
-
 
     notificationsEnableFormSwitch.addEventListener('click', function(){
         if(notificationsEnableFormSwitch.checked === false) {
@@ -34,13 +33,14 @@ let aftTabNotificationSettings = (function(){
             notificationsEnableFormSwitch.checked = true;
             notificationsEnableMode.innerHTML = 'Yes';
         }
-    });
+    });*/
 
-    let notificationSubmitButton = $$(formSettingsNotification.formContainerSelector).getElementsByClassName('btn-success')[0];
+
+/*    let notificationSubmitButton = $$(formSettingsNotification.formContainerSelector).getElementsByClassName('btn-success')[0];
 
     notificationSubmitButton.addEventListener('click', function(){
         trigger('form/submit', {formSettings: formSettingsNotification});
-    });
+    });*/
 
 
    /*

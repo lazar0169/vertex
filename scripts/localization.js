@@ -58,8 +58,8 @@ let localization = (function () {
         window.localStorage.setItem(lsMessagesKey, JSON.stringify(messages));
     }
 
-    function translate(key, object) {
-        let translation = getProperty(key, object);
+    function translate(key, translations) {
+        let translation = getProperty(key, translations);
 
         if (translation !== undefined && translation !== '') {
             return translation;
