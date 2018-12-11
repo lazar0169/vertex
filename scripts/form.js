@@ -30,7 +30,7 @@ let form = (function () {
         trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
     }
 
-    function collectAllFormInputElements(formSettings) {
+    function collectAllFormElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
         let inputElementsArray = Array.prototype.slice.call(formInputElements);
@@ -52,7 +52,6 @@ let form = (function () {
             });
         });
     }
-
 
     let transactionEnableButton = $$('#aft-enable-transaction-check');
     let transactionEnableMode = $$('#aft-enable-transaction-mode');
@@ -93,7 +92,7 @@ let form = (function () {
     }
 
     function fillData(formSettings, data) {
-        let formInputElementsArray = collectAllFormInputElements(formSettings);
+        let formInputElementsArray = collectAllFormElements(formSettings);
         console.log('Form input elements array', formInputElementsArray);
         let dataToDisplay = data.Data;
         console.log('Data to display array', dataToDisplay);
@@ -139,7 +138,7 @@ let form = (function () {
         });
     }
 
-    //ToDo: documentovanti form settings
+    //ToDo: dokumentovati form settings
     /*formSettings {
         :formContainerElement: required | element that contains form
 
@@ -170,14 +169,13 @@ let form = (function () {
             formSettings.validateEvent = 'form/validate';
         }
 
-        if (formSettings.endpointId !== undefined) {
-            setEndpointId(formSettings);
-        }
+        setEndpointId(formSettings);
+
         initFormHandlers(formSettings);
     }
 
     function collectAndPrepareFormData(formSettings) {
-        let formInputElementsArray = collectAllFormInputElements(formSettings);
+        let formInputElementsArray = collectAllFormElements(formSettings);
         let dataForApi = {};
         formInputElementsArray.forEach(function (formInputElement) {
             if (formInputElement.type === 'checkbox') {
@@ -380,6 +378,5 @@ let form = (function () {
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
     });
-
 
 })();

@@ -391,7 +391,6 @@ const ticketAppearance = (function () {
     }
 
     cancelTicketAppearance.addEventListener('click', function () {
-        alert('Reset to default');
         trigger('form/getData', {formSettings: formSettingsAppearance});
     });
 
