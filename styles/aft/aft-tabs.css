@@ -17,7 +17,7 @@
     display: inline-flex;
 }
 
-#aft-enable-transaction-check>div>div, #aft-enable-notification-check>div>div {
+#aft-enable-transaction-check>div, #aft-enable-notification-check>div {
     padding: 0 0.5rem;
     display: flex;
     align-items: center;
@@ -31,7 +31,7 @@
     border-bottom: 1px solid rgb(120, 144, 156);
 }
 
-#aft-tabs-enable-transaction-info>div>div:last-child, #aft-tabs-notification-settings-info>div>div:last-child {
+#aft-tabs-enable-transaction-info>div>div:last-child, aft-tabs-notification-settings-info>div>div:last-child {
     padding: 1rem 0.5rem;
 }
 
@@ -46,4 +46,7 @@
 .element-form-email, .element-form-phone-number {
     display: flex;
     flex-direction: row;
+}
+#aft-notification-save {
+    padding: 20px 10px;
 }

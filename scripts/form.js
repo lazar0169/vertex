@@ -119,7 +119,10 @@ let form = (function () {
                                 case 'int':
                                     inputElement.value = dataToDisplay[inputElement.name];
                                 case 'float':
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    let floatVal =  parseFloat(dataToDisplay[inputElement.name]).toFixed(2);
+                                    inputElement.value = floatVal;
+                                    // inputElement.type = 'number';
+                                    inputElement.step = 0.01; //todo FLOAT VALUE INSIDE INPUT ELEMENT IS A PROBLEM
                                     break;
                                 case 'string':
                                     inputElement.value = dataToDisplay[inputElement.name];
