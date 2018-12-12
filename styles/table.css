@@ -10,7 +10,7 @@
     position: center;
     width: 100%;
     height: auto;
-    padding-left: 0.7rem;
+    padding-left: 0.2rem;
 }
 
 .cell {
@@ -315,3 +315,7 @@ textarea {
     color: #6D818C;
 }
 
+
+.cell-createdby.head.hidden-column, .cell-finishedby.head.hidden-column, .cell-cashoutedby.head.hidden-column, .cell-redeemedby.head.hidden-column {
+    display: none;
+}
