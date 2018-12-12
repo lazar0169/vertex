@@ -24,6 +24,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
 }
 
 .cell.hover {
@@ -81,8 +82,8 @@
 }
 
 .head.cell.sort-asc:after {
-    position: absolute;
-    display: inline-block;
+/*    position: absolute;
+    display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
@@ -96,8 +97,8 @@
 }
 
 .head.cell.sort-desc:after {
-    position: absolute;
-    display: inline-block;
+/*    position: absolute;
+    display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-down-table-sorting.png");
     height: 13px;
@@ -250,6 +251,15 @@ textarea {
     justify-content: flex-end;
     text-align: right;
     padding-right: 20px;
+}
+
+.cell-createdby, .cell-finishedby, .cell-cashoutedby {
+    display: block;
+}
+
+.cell-createdby.head, .cell-finishedby.head, .cell-cashoutedby.head {
+    display: flex;
+    flex-direction: row;
 }
 
 .table-time {
