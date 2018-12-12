@@ -846,7 +846,7 @@ let communication = (function () {
 
 
     //todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
-/*
+
     //test, set filters for aft
     window.addEventListener('load', function () {
         trigger('communicate/aft/getFilters', {})
@@ -860,6 +860,5 @@ let communication = (function () {
         params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
         // params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
     });
-*/
 
 })();

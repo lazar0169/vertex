@@ -2,24 +2,62 @@
     padding: 0 0.5rem;
 }
 
-#aft-advance-table-filter-active {
+#aft-advance-table-filter-active-infobar {
     display: inline-flex;
     flex-flow: row wrap;
+    align-items: center;
     background: rgb(55, 71, 79);
     color: rgb(120, 144, 156);
     min-width: 100%;
     position: relative;
+    font-size: 10px;
+    visibility: hidden;
+}
+
+#aft-advance-table-filter-active-infobar>div:first-child {
+    padding: 0 0.5rem;
+}
+
+.infobar-wrapper-info {
+    display: inline-flex;
+}
+
+.infobar-wrapper-info>div:not(:first-child) {
+    color: white;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 0.5rem;
+}
+
+#aft-advance-table-filter-active {
+    display: grid;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    position: absolute;
+    min-width: 250px;
+    max-width: 500px;
+    z-index: 100;
+    box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
 #aft-advance-table-filter-active>div {
-    white-space: nowrap;
     display: inline-flex;
-    align-items: center;
-    padding: 0.5rem 0 0.5rem 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
 }
 
 #aft-advance-table-filter-active>div:last-child {
-    margin: auto;
+    background: rgb(38, 50, 56);
+}
+
+#aft-advance-table-filter-active>div>div:first-child {
+    min-width: 100px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    white-space: nowrap;
 }
 
 .aft-advance-active {
