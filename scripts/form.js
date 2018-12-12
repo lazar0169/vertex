@@ -334,7 +334,6 @@ let form = (function () {
         this.value = formatFloatValue(float);
     }
 
-
     function bindSubmitButtonClickHandlers(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
@@ -378,6 +377,9 @@ let form = (function () {
             let type = input.dataset.type;
             switch (type) {
                 case 'float':
+                    if (input.value === '') {
+                        input.value = '0.00';
+                    }
                     input.addEventListener('keyup', formatFloatInputHandler);
                     break;
                 default:
@@ -385,7 +387,6 @@ let form = (function () {
             }
         }
     }
-
 
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
