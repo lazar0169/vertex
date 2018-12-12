@@ -1,6 +1,14 @@
 let form = (function () {
 
+    //all float value are divided / multiplied by 100 because they are in cents
+    let valueMultiplier = 100;
+
     let currentEndpointId;
+
+    function prepareFloatValue(value) {
+        value = value.replace(',','');
+        return parseFloat(value);
+    }
 
     function getEvent(formSettings, eventToCheck) {
         let event;
@@ -30,6 +38,8 @@ let form = (function () {
         trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
     }
 
+    //helper functions
+
     function collectAllFormElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
@@ -43,14 +53,7 @@ let form = (function () {
         return submitButtonsArray;
     }
 
-    function bindSubmitButtonClickHandlers(formSettings) {
-        let submitButtonsArray = collectSubmitButtons(formSettings);
-        submitButtonsArray.forEach(function (submitButton) {
-            submitButton.addEventListener('click', function () {
-                submit(formSettings, submitButton);
-            });
-        });
-    }
+
 
     let transactionEnableButton = $$('#aft-enable-transaction-check');
     let transactionEnableMode = $$('#aft-enable-transaction-mode');
@@ -72,23 +75,7 @@ let form = (function () {
         return enableButtonsArray;
     }
 
-    function bindEnableButtonClickHandlers(formSettings) {
-        let enableButtonsArray = collectEnableButtons(formSettings);
-        enableButtonsArray.forEach(function (enableButton) {
-            let enableMode = enableButton.getElementsByClassName('element-form-mode')[0];
-            let enableSwitch = enableButton.getElementsByTagName('input')[0];
-            enableSwitch.addEventListener('click', function () {
-                if (enableSwitch.checked === false) {
-                    enableSwitch.checked = false;
-                    enableMode.innerHTML = 'No';
-                } else {
-                    enableSwitch.checked = true;
-                    enableMode.innerHTML = 'Yes';
-                }
-            });
 
-        });
-    }
 
     function fillData(formSettings, data) {
         let formInputElementsArray = collectAllFormElements(formSettings);
@@ -135,10 +122,12 @@ let form = (function () {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
                                     inputElement.dataset.value = dataToDisplay[inputElement.dataset.name];
+                                    break;
                                 case 'int':
                                     inputElement.value = dataToDisplay[inputElement.name];
+                                    break;
                                 case 'float':
-                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name]);
+                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name]/valueMultiplier);
                                     break;
                                 case 'string':
                                     inputElement.value = dataToDisplay[inputElement.name];
@@ -204,6 +193,7 @@ let form = (function () {
                 if (formInputElement.name === 'EndpointId') {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
+
                     switch (formInputElement.dataset.type) {
                         /*                        case 'multiple-select':/!*
                                                     if (dataForApi[formInputElement.name] === undefined) {
@@ -212,15 +202,19 @@ let form = (function () {
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*!/*/
                         case 'single-select':
                             dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
-
+                            break;
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {
                                 dataForApi[formInputElement.name] = parseInt(formInputElement.value);
                             } else {
                                 dataForApi[formInputElement.name] = 5; //todo validation
                             }
+                            break;
                         case 'float':
-                            dataForApi[formInputElement.name] = parseFloat(formInputElement.value);
+                            //dataForApi[formInputElement.name] = parseFloat(formInputElement.value*valueMultiplier);
+                            let value = prepareFloatValue(formInputElement.value);
+                            console.log('float value',value);
+                            dataForApi[formInputElement.name] = value * valueMultiplier;
                             break;
                         case 'string':
                             dataForApi[formInputElement.name] = formInputElement.value;
@@ -320,6 +314,33 @@ let form = (function () {
         return Array.prototype.slice.call(addAnotherFieldButtons);
     }
 
+    //elements event handlers
+
+
+    function formatFloatInputHandler() {
+        let value = this.value;
+        value = value.replace(',','').replace('.','');
+        let number = value.slice(0,value.length-2);
+        let decimal = value.slice(value.length-2,value.length);
+        let float = parseFloat(number+"."+decimal).toFixed(2);
+        console.log('number',number);
+        console.log('decimal',decimal);
+        console.log('float',float);
+        let formatted = formatFloatValue(float);
+        console.log('formatted',formatted);
+        this.value = formatted;
+    }
+
+
+    function bindSubmitButtonClickHandlers(formSettings) {
+        let submitButtonsArray = collectSubmitButtons(formSettings);
+        submitButtonsArray.forEach(function (submitButton) {
+            submitButton.addEventListener('click', function () {
+                submit(formSettings, submitButton);
+            });
+        });
+    }
+
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
         addAnotherFieldButtonsArray.forEach(function (addAnotherFieldButton) {
@@ -328,12 +349,47 @@ let form = (function () {
             });
         });
     }
+    function bindEnableButtonClickHandlers(formSettings) {
+        let enableButtonsArray = collectEnableButtons(formSettings);
+        enableButtonsArray.forEach(function (enableButton) {
+            let enableMode = enableButton.getElementsByClassName('element-form-mode')[0];
+            let enableSwitch = enableButton.getElementsByTagName('input')[0];
+            enableSwitch.addEventListener('click', function () {
+                if (enableSwitch.checked === false) {
+                    enableSwitch.checked = false;
+                    enableMode.innerHTML = 'No';
+                } else {
+                    enableSwitch.checked = true;
+                    enableMode.innerHTML = 'Yes';
+                }
+            });
+
+        });
+    }
+
+    function bindFormatInputHandlers(formSettings) {
+        let inputElements = collectAllFormElements(formSettings);
+        console.log(inputElements);
+        for (let i =0;i<inputElements.length;i++) {
+            let input = inputElements[i];
+            let type = input.dataset.type;
+            switch (type){
+                case 'float':
+                    console.log('input',input);
+                    input.addEventListener('keyup',formatFloatInputHandler);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
 
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
+        bindFormatInputHandlers(formSettings);
     }
 
     on('form/init', function (params) {

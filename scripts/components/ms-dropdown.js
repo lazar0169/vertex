@@ -134,7 +134,7 @@ const multiDropdown = (function () {
                     } else if (e.target.parentNode.parentNode.parentNode.id === selectId) {
                         $$(`#${selectId}`).classList.add('active-multi-select');
                         $$(`#${selectId}`).children[1].classList.remove('hidden');
-                    } else if (e.target.parentNode.parentNode.parentNode.parentNode.id === selectId) {
+                    } else if (e.target.parentNode.parentNode.parentNode.parentNode != null && e.target.parentNode.parentNode.parentNode.parentNode.id === selectId) {
                         $$(`#${selectId}`).classList.add('active-multi-select');
                         $$(`#${selectId}`).children[1].classList.remove('hidden');
                     } else {
