@@ -329,11 +329,13 @@ let form = (function () {
 
     function formatFloatInputHandler() {
         let value = this.value;
+        var position = this.selectionStart;
         value = value.replace(',', '').replace('.', '');
         let number = value.slice(0, value.length - 2);
         let decimal = value.slice(value.length - 2, value.length);
         let float = parseFloat(number + "." + decimal).toFixed(2);
         this.value = formatFloatValue(float);
+        this.selectionEnd = position;
     }
 
     function bindSubmitButtonClickHandlers(formSettings) {
