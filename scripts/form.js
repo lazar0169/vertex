@@ -111,6 +111,7 @@ let form = (function () {
                             let values = dataToDisplay[inputElement.name];
                             if (values.length > 0) {
                                 inputElement.value = values[0]; //todo change to work with multiple emails/phone numbers
+                                //ToDO: obrisati prethodne elemente
                                 for (let i = 1; i < values.length; i++) {
                                     let newField = inputElement.parentNode.cloneNode(true);
                                     let newInputElement = newField.getElementsByTagName('input')[0];
