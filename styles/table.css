@@ -240,11 +240,11 @@ textarea {
 }
 
 .table-condensed .cell {
-    height: 47px;
+    height: 49px;
 }
 
 .table-expanded .cell {
-    height: 49px;
+    height: 60px;
 }
 
 .empty-table {

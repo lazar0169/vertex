@@ -92,3 +92,15 @@
 #Enable-transaction-mode {
     color:white;
 }
+
+#aft-export-pdf {
+    height: 35px;
+    background-image: url("/images/pdf-export.png");
+    background-repeat: no-repeat;
+}
+
+#aft-export-xls {
+    height: 35px;
+    background-image: url("/images/xls-export.png");
+    background-repeat: no-repeat;
+}
