@@ -43,14 +43,12 @@ let form = (function () {
     function collectAllFormElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
-        let inputElementsArray = Array.prototype.slice.call(formInputElements);
-        return inputElementsArray;
+        return Array.prototype.slice.call(formInputElements);
     }
 
     function collectSubmitButtons(formSettings) {
         let submitButtons = $$(formSettings.formContainerSelector).getElementsByClassName('element-form-submit');
-        let submitButtonsArray = Array.prototype.slice.call(submitButtons);
-        return submitButtonsArray;
+        return Array.prototype.slice.call(submitButtons);
     }
 
 
@@ -87,9 +85,12 @@ let form = (function () {
         let formInputElementsArray = collectAllFormElements(formSettings);
 
         formInputElementsArray.forEach(function (inputElement) {
-            if (dataToDisplay[inputElement.name]) {
+
+             let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
+            if (inputName !== undefined && dataToDisplay[inputName]) {
+
                 if (inputElement.type === 'checkbox') {
-                    inputElement.checked = dataToDisplay[inputElement.name];
+                    inputElement.checked = dataToDisplay[inputName];
                     let modeDivElement = inputElement.parentNode.previousSibling;
                     if (inputElement.checked === true) {
                         modeDivElement.innerHTML = 'Yes';
@@ -97,9 +98,9 @@ let form = (function () {
                         modeDivElement.innerHTML = 'No';
                     }
                 } else {
-                    if (inputElement.name !== 'EndpointId') {
-                        if (dataToDisplay[inputElement.name].constructor === Array) {
-                            let values = dataToDisplay[inputElement.name];
+                    if (inputName !== 'EndpointId') {
+                        if (dataToDisplay[inputName].constructor === Array) {
+                            let values = dataToDisplay[inputName];
                             if (values.length > 0) {
                                 inputElement.value = values[0];
                                 let inputsContainer = inputElement.parentNode.parentNode;
@@ -123,28 +124,29 @@ let form = (function () {
                                 firstDeleteButton.classList.remove('hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
-
                         } else {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
-                                    inputElement.dataset.value = dataToDisplay[inputElement.dataset.name];
+                                    //inputElement.dataset.value = dataToDisplay[inputName];
+                                    dropdown.select(inputElement.parentNode,dataToDisplay[inputName]);
                                     break;
                                 case 'int':
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'float':
-                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name] / valueMultiplier);
+
+                                    inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
                                 case 'string':
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'array':
-                                    if (dataToDisplay[inputElement.name].length === 1) {
-                                        inputElement.value = dataToDisplay[inputElement.name][0];
+                                    if (dataToDisplay[inputName].length === 1) {
+                                        inputElement.value = dataToDisplay[inputName][0];
                                     }
                                     break;
                                 default:
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    inputElement.value = dataToDisplay[inputName];
                             }
                         }
                     }
@@ -378,7 +380,7 @@ let form = (function () {
             switch (type) {
                 case 'float':
                     if (input.value === '') {
-                        input.value = '0.00';
+                     //   input.value = '0.00';
                     }
                     input.addEventListener('keyup', formatFloatInputHandler);
                     break;

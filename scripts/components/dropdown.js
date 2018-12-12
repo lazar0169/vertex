@@ -5,12 +5,17 @@ const dropdown = (function () {
     let singleSelectArray = [];
 
     function select(element, selectedValue) {
+        console.log(element);
+        console.log(selectedValue);
         if (!element || !selectedValue) {
             return false;
         }
         let options = element.getElementsByClassName("single-option");
+        console.log(options);
         let hasOption = Array.prototype.slice.call(options).filter(function (option) {
-            return option.dataset.value === selectedValue;
+            let a = option.dataset.value === selectedValue;
+            console.log(a);
+            return a;
         });
         if (hasOption.length === 0) {
             return false;
