@@ -93,13 +93,13 @@
     color:white;
 }
 
-#aft-export-pdf {
+#aft-export-pdf, #tickets-export-pdf {
     height: 35px;
     background-image: url("/images/pdf-export.png");
     background-repeat: no-repeat;
 }
 
-#aft-export-xls {
+#aft-export-xls, #tickets-export-xls {
     height: 35px;
     background-image: url("/images/xls-export.png");
     background-repeat: no-repeat;
