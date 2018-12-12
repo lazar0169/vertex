@@ -103,7 +103,7 @@
     background-image: url("/images/arrow-down-table-sorting.png");
     height: 13px;
     width: 8px;
-    top: 40%;
+    top: 30%;
     margin-left: 5px
 }
 
@@ -123,23 +123,20 @@
     margin-right: 10px;
 }
 
-.tbody::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+.tbody::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     background-color: #3A4950;
 }
 
-.tbody::-webkit-scrollbar
-{
+.tbody::-webkit-scrollbar {
     width: 5px;
     background-color: #3A4950;
 }
 
-.tbody::-webkit-scrollbar-thumb
-{
+.tbody::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
     background-color: #6F858F;
 }
 
@@ -261,10 +258,11 @@ textarea {
     color: #6D818C;
 }
 
-    .head.cell {
-        width: 300px;
-    }
-    .cell {
-        width: 300px;
-    }
+.head.cell {
+    width: 300px;
 }
+
+.cell {
+    width: 300px;
+}
+
