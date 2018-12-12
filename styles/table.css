@@ -25,6 +25,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+/*    font-size: 14px;
+    line-height: 108px;
+    color: #ffffff;
+    font-family: "Open Sans";
+    font-weight: bold;*/
 }
 
 .cell.hover {

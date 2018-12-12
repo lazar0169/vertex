@@ -1,4 +1,18 @@
 const ticketsFilter = (function () {
+
+
+    let ticketSortName = {
+        tickettype:  1,
+        amount: 2,
+        code: 3,
+        cashoutedby: 4, //todo check if this is it
+        redeemedby: 5, //todo check if this is it
+        status: 9
+    };
+
+
+
+
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketsMachinesNumbers = $$('#tickets-machines-number');
@@ -93,13 +107,15 @@ const ticketsFilter = (function () {
                 "Page": 1,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
                 "SortOrder": sorting.SortOrder,
-                "SortName": sorting.SortName
+                "SortName": ticketSortName[sorting.SortName] !== undefined ? ticketSortName[sorting.SortName] : null
             },
             "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
+
+        console.log('filters that we send to api in tickets', filtersForApi);
         return filtersForApi;
     }
 
@@ -135,7 +151,7 @@ const ticketsFilter = (function () {
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
             let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
-            filtersForApi.BasicData.SortName = params.sorting.SortName;
+            filtersForApi.BasicData.SortName = ticketSortName[params.sorting.SortName] !== undefined ? ticketSortName[params.sorting.SortName] : null;
             trigger('communicate/tickets/previewTickets', {
                 tableSettings: tableSettings,
                 data: filtersForApi,
