@@ -194,6 +194,50 @@ textarea {
 
 
 /** FLAGS **/
+
+.first.row-flag-1 {
+    border-left: 7px solid lawngreen;
+}
+
+.first.row-flag-2 {
+    border-left: 7px solid #F3413A;
+}
+
+.first.row-flag-3 {
+    border-left: 7px solid orange;
+}
+
+/*
+
+.tbody > .row-flag-1 {
+    border-left: 7px solid lawngreen;
+}
+
+.tbody > .row-flag-1 ~ .row-flag-1 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-2 {
+    border-left: 7px solid red;
+}
+
+.tbody > .row-flag-2 ~ .row-flag-2 {
+
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.tbody > .row-flag-3 {
+    border-left: 7px solid orange;
+}
+
+.tbody > .row-flag-3 ~ .row-flag-3 {
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+*/
+
+
+/*
+
 .tbody > .row-flag-3 {
     border-left: 7px solid red;
 }
@@ -237,7 +281,7 @@ textarea {
 .head.cell.first-cell {
     left: auto;
     z-index: 0;
-}
+}*/
 
 .table-condensed .cell {
     height: 49px;

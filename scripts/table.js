@@ -206,7 +206,7 @@ let table = (function () {
                     cell.classList.add('cell');
                 }
                 cell.classList.add(`row-${rowId}`);
-                // cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
+                cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
@@ -417,13 +417,16 @@ let table = (function () {
 
         let tableSettings = params.settingsObject;
         let tableData = [];
+        let tableDataItems = [];
         let apiItems = params.data.Data.Items;
 
         apiItems.forEach(function (item) {
             tableData.push(item.EntryData);
+            tableDataItems.push(item);
         });
 
         tableSettings.tableData = tableData;
+        tableSettings.tableDataItems = tableDataItems;
         tableSettings.NumOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
             initFilters(tableSettings);
