@@ -7,28 +7,34 @@ let table = (function () {
         1: 'asc',
         2: 'desc'
     };
+
     const sortingType = {
         none: 0,
         ascending: 1,
         descending: 2
     };
+
     const sortingClass = {
         ascending: 'sort-asc',
         descending: 'sort-desc'
     };
+
     const sortingDataAtt = {
         ascending: 'asc',
         descending: 'desc'
     };
+
     const tagNames = { //caps letters
         input: 'INPUT',
         textarea: 'TEXTAREA',
         select: 'SELECT'
     };
+
     const types = {
         checkbox: 'checkbox',
         radio: 'radio'
     };
+
     const attributes = {
         multiple: 'multiple'
     };

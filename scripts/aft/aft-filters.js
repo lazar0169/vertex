@@ -5,12 +5,12 @@ const aftFilters = (function () {
         amountpromo: 1,
         amountnonrestrictive: 2,
         eventtime: 3,
-        GMCID: 4,
-        JIDTP: 5,
+        gmcid: 4,
+        jidtp: 5,
         status: 6,
         machinename: 7,
         jackpotname: 8,
-        transactiontype: 9
+        type: 9
     };
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
@@ -96,6 +96,8 @@ const aftFilters = (function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
+        console.log('sort name', sortName);
+        console.log(aftSortName[sortName]);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
@@ -148,7 +150,7 @@ const aftFilters = (function () {
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
             let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
-            filtersForApi.BasicData.SortName = params.sorting.SortName;
+            filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
             console.log('Filters for API in api/filters/sorting', filtersForApi);
             trigger('communicate/aft/previewTransactions', {
                 tableSettings: tableSettings,

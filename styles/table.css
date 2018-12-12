@@ -5,17 +5,13 @@
     margin: 0.1em 0;
 }
 
-.first.cell {
-    top: 0;
-    left: 0;
-    padding-left: 0.5rem;
+.tbody {
+    display: grid;
+    position: center;
+    width: 100%;
+    height: auto;
+    padding-left: 0.7rem;
 }
-
-.table .cell.last-cell {
-    text-align: right;
-    padding-right: 1.5rem;
-}
-
 
 .cell {
     background-color: rgb(38, 50, 56);
@@ -24,7 +20,7 @@
     color: #cfd8dc;
     white-space: nowrap;
     cursor: pointer;
-    width: 225px;
+    width: 100%;
 }
 
 .cell.hover {
@@ -32,12 +28,18 @@
     color: white;
 }
 
+.first.cell {
+    top: 0;
+    left: 0;
+    padding-left: 0.5rem;
+}
+
 .head.cell {
     background-color: rgb(38, 50, 56);
     color: #728894;
     top: 0;
     transition: 0.2s background-color;
-    width: 225px;
+    width: 100%;
 }
 
 .head.cell:hover {
@@ -49,28 +51,6 @@
     z-index: 1;
 }
 
-.sticky {
-    position: sticky !important;
-    position: -webkit-sticky;
-    font-weight: 800;
-
-}
-
-.tbody {
-    display: grid;
-    position: center;
-    width: 100%;
-    height: auto;
-    padding-left: 0.7rem;
-}
-
-/*active column*/
-
-.active-column {
-    background: rgba(58, 73, 80, 0.4);
-    color: white;
-}
-
 .head.active-column {
     background: rgba(58, 73, 80, 1);
     color: white;
@@ -78,7 +58,22 @@
 
 .head.cell.sort-asc {
     position: relative;
-    /*background-color: darkgreen;*/
+}
+
+.table .cell.last-cell {
+    text-align: right;
+    padding-right: 1.5rem;
+}
+
+.sticky {
+    position: sticky !important;
+    position: -webkit-sticky;
+    font-weight: 800;
+}
+
+.active-column {
+    background: rgba(58, 73, 80, 0.4);
+    color: white;
 }
 
 .head.cell.sort-asc:after {
@@ -257,6 +252,7 @@ textarea {
 .table-time {
     color: #6D818C;
 }
+/*
 
 .head.cell {
     width: 300px;
@@ -265,4 +261,5 @@ textarea {
 .cell {
     width: 300px;
 }
+*/
 
