@@ -15,7 +15,7 @@
 
 .cell {
     background-color: rgb(38, 50, 56);
-    padding: 0.5em;
+    padding-left: 0.5em;
     border-bottom: 1px solid #37454C;
     color: #cfd8dc;
     white-space: nowrap;
@@ -231,11 +231,9 @@ textarea {
 
 .table-condensed .cell {
     height: 47px;
-    /*padding: 0.25rem;*/
 }
 
 .table-expanded .cell {
-    /*padding: 0.49rem;*/
     height: 49px;
 }
 
