@@ -6,7 +6,7 @@ let form = (function () {
     let currentEndpointId;
 
     function prepareFloatValue(value) {
-        value = value.replace(',','');
+        value = value.replace(',', '');
         return parseFloat(value);
     }
 
@@ -54,7 +54,6 @@ let form = (function () {
     }
 
 
-
     let transactionEnableButton = $$('#aft-enable-transaction-check');
     let transactionEnableMode = $$('#aft-enable-transaction-mode');
     let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
@@ -76,10 +75,17 @@ let form = (function () {
     }
 
 
-
     function fillData(formSettings, data) {
-        let formInputElementsArray = collectAllFormElements(formSettings);
         let dataToDisplay = data.Data;
+        //remove elements which were created previously beacuse API value was array
+
+        let multipleValueInputContainers = Array.prototype.slice.call(formSettings.formContainerElement.getElementsByClassName('element-input-additional-array-value'));
+
+        for (let counter = 0; counter < multipleValueInputContainers.length; counter++) {
+            multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
+        }
+        let formInputElementsArray = collectAllFormElements(formSettings);
+
         formInputElementsArray.forEach(function (inputElement) {
             if (dataToDisplay[inputElement.name]) {
                 if (inputElement.type === 'checkbox') {
@@ -93,22 +99,22 @@ let form = (function () {
                 } else {
                     if (inputElement.name !== 'EndpointId') {
                         if (dataToDisplay[inputElement.name].constructor === Array) {
-                            console.log(inputElement);
-                            console.log(dataToDisplay[inputElement.name]);
                             let values = dataToDisplay[inputElement.name];
                             if (values.length > 0) {
-                                inputElement.value = values[0]; //todo change to work with multiple emails/phone numbers
-                                //ToDO: obrisati prethodne elemente
+                                inputElement.value = values[0];
+                                let inputsContainer = inputElement.parentNode.parentNode;
+                                //add fields if there are more then one value
                                 for (let i = 1; i < values.length; i++) {
                                     let newField = inputElement.parentNode.cloneNode(true);
                                     let newInputElement = newField.getElementsByTagName('input')[0];
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
+                                    newField.classList.add('element-input-additional-array-value');
+                                    inputsContainer.appendChild(newField);
 
-                                    inputElement.parentNode.parentNode.appendChild(newField);
                                     let deleteButtonElement = newField.getElementsByTagName('button')[0];
                                     deleteButtonElement.classList.remove('hidden');
-                                    deleteButtonElement.addEventListener('click',deleteFormElement);
+                                    deleteButtonElement.addEventListener('click', deleteFormElement);
                                 }
                             }
                             //display delete button for first field
@@ -127,7 +133,7 @@ let form = (function () {
                                     inputElement.value = dataToDisplay[inputElement.name];
                                     break;
                                 case 'float':
-                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name]/valueMultiplier);
+                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name] / valueMultiplier);
                                     break;
                                 case 'string':
                                     inputElement.value = dataToDisplay[inputElement.name];
@@ -157,7 +163,6 @@ let form = (function () {
     function init(formSettings) {
         let formContainerElement = $$(formSettings.formContainerSelector);
         formSettings.formContainerElement = formContainerElement;
-        formContainerElement.formSettings = formSettings;
         if (formSettings.fillEvent !== null) {
             formSettings.fillEvent = getEvent(formSettings, 'fillEvent');
         }
@@ -179,8 +184,11 @@ let form = (function () {
         }
 
         setEndpointId(formSettings);
+        if (formContainerElement.formSettings === undefined) {
+            initFormHandlers(formSettings);
+        }
+        formContainerElement.formSettings = formSettings;
 
-        initFormHandlers(formSettings);
     }
 
     function collectAndPrepareFormData(formSettings) {
@@ -193,7 +201,6 @@ let form = (function () {
                 if (formInputElement.name === 'EndpointId') {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
-
                     switch (formInputElement.dataset.type) {
                         /*                        case 'multiple-select':/!*
                                                     if (dataForApi[formInputElement.name] === undefined) {
@@ -213,7 +220,6 @@ let form = (function () {
                         case 'float':
                             //dataForApi[formInputElement.name] = parseFloat(formInputElement.value*valueMultiplier);
                             let value = prepareFloatValue(formInputElement.value);
-                            console.log('float value',value);
                             dataForApi[formInputElement.name] = value * valueMultiplier;
                             break;
                         case 'string':
@@ -287,12 +293,14 @@ let form = (function () {
         if (e.currentTarget.dataset.maxNumber !== undefined) {
             let targetSelector = e.currentTarget.dataset.targetSelector;
             let targetElements = $$(formSettings.formContainerSelector).getElementsByClassName(targetSelector);
-            if (targetElements.length <= e.currentTarget.dataset.maxNumber) {
+            if (targetElements.length < e.currentTarget.dataset.maxNumber) {
                 let lastElement = targetElements[targetElements.length - 1];
                 let newField = lastElement.cloneNode(true);
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
                 newField.getElementsByTagName('button')[0].classList.remove('hidden');
+                newField.classList.add('element-input-additional-array-value');
+
                 lastElement.parentNode.appendChild(newField);
                 if (targetElements.length > 1) {
                     //ToDo: getElementsByClass .action-delele
@@ -303,7 +311,7 @@ let form = (function () {
                 deleteButtonFirstElement.addEventListener('click', deleteFormElement);
 
                 let deleteButton = newField.getElementsByTagName('button')[0];
-                deleteButton.addEventListener('click',deleteFormElement);
+                deleteButton.addEventListener('click', deleteFormElement);
 
             }
         }
@@ -319,16 +327,11 @@ let form = (function () {
 
     function formatFloatInputHandler() {
         let value = this.value;
-        value = value.replace(',','').replace('.','');
-        let number = value.slice(0,value.length-2);
-        let decimal = value.slice(value.length-2,value.length);
-        let float = parseFloat(number+"."+decimal).toFixed(2);
-        console.log('number',number);
-        console.log('decimal',decimal);
-        console.log('float',float);
-        let formatted = formatFloatValue(float);
-        console.log('formatted',formatted);
-        this.value = formatted;
+        value = value.replace(',', '').replace('.', '');
+        let number = value.slice(0, value.length - 2);
+        let decimal = value.slice(value.length - 2, value.length);
+        let float = parseFloat(number + "." + decimal).toFixed(2);
+        this.value = formatFloatValue(float);
     }
 
 
@@ -349,6 +352,7 @@ let form = (function () {
             });
         });
     }
+
     function bindEnableButtonClickHandlers(formSettings) {
         let enableButtonsArray = collectEnableButtons(formSettings);
         enableButtonsArray.forEach(function (enableButton) {
@@ -369,14 +373,12 @@ let form = (function () {
 
     function bindFormatInputHandlers(formSettings) {
         let inputElements = collectAllFormElements(formSettings);
-        console.log(inputElements);
-        for (let i =0;i<inputElements.length;i++) {
+        for (let i = 0; i < inputElements.length; i++) {
             let input = inputElements[i];
             let type = input.dataset.type;
-            switch (type){
+            switch (type) {
                 case 'float':
-                    console.log('input',input);
-                    input.addEventListener('keyup',formatFloatInputHandler);
+                    input.addEventListener('keyup', formatFloatInputHandler);
                     break;
                 default:
                     break;

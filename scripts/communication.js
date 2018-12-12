@@ -144,14 +144,12 @@ let communication = (function () {
             entry.EntryData.AmountCashable = entry.EntryData.AmountCashable.toFixed(2);
             entry.EntryData.AmountPromo = entry.EntryData.AmountPromo.toFixed(2);
         });
-        console.log('prepared data aft', tableData);
         return data;
     }
 
     function prepareTicketsTableData(tableSettings, data) {
         let tableData = data.Data.Items;
         tableData.forEach(function (entry) {
-            console.log('cashoutedBy', entry.EntryData.CashoutedBy);
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
                 entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
 
@@ -177,7 +175,6 @@ let communication = (function () {
             });
             entry.EntryData = entryData;
         });
-        console.log('prepared data tickets', tableData);
         return data;
     }
 
@@ -249,7 +246,6 @@ let communication = (function () {
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
-        console.log('aft get notification settings');
         let route = 'api/transactions/getnotificationsettings';
         // let successEvent = 'aft/tab/notifications/display';
         let formSettings = params.formSettings;
@@ -288,7 +284,6 @@ let communication = (function () {
 
     //aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
-        console.log('aft get basic settings');
         let route = 'api/transactions/getbasicsettings/';
         // let successEvent = 'aft/tab/transactions/display';
         let formSettings = params.formSettings;
@@ -427,7 +422,6 @@ let communication = (function () {
     //tickets preview ticket action
     //pagination sorting and filtering
     on('communicate/tickets/previewTickets', function (params) {
-        console.log('preview tickets params data', params.data);
         let route = 'api/tickets/previewtickets/';
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.prepareDataEvent;
@@ -465,7 +459,6 @@ let communication = (function () {
 
     //getting values for show sms settings
     on('communicate/tickets/showSmsSettings', function (params) {
-        console.log('show sms settings');
         let route = 'api/tickets/smssettings/';
         // let successEvent = 'tickets/tab/smsSettings/display';
         let formSettings = params.formSettings;
@@ -486,7 +479,6 @@ let communication = (function () {
 
     //ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
-        console.log('show max value settings');
         let route = 'api/tickets/maxvaluesettings/';
         // let successEvent = 'tickets/tab/maxValue/display';
         let formSettings = params.formSettings;
@@ -506,7 +498,6 @@ let communication = (function () {
 
     //ShowTicketAppearanceSettings
     on('communicate/tickets/ticketAppearance', function (params) {
-        console.log('ticket appearance event');
         let route = 'api/tickets/ticketappearance/';
         // let successEvent = 'tickets/tab/appearance/display';
         let formSettings = params.formSettings;
