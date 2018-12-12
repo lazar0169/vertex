@@ -253,11 +253,11 @@ textarea {
     padding-right: 20px;
 }
 
-.cell-createdby, .cell-finishedby, .cell-cashoutedby {
+.cell-createdby, .cell-finishedby, .cell-cashoutedby, .cell-redeemedby {
     display: block;
 }
 
-.cell-createdby.head, .cell-finishedby.head, .cell-cashoutedby.head {
+.cell-createdby.head, .cell-finishedby.head, .cell-cashoutedby.head, .cell-redeemedby.head {
     display: flex;
     flex-direction: row;
 }
@@ -265,14 +265,4 @@ textarea {
 .table-time {
     color: #6D818C;
 }
-/*
-
-.head.cell {
-    width: 300px;
-}
-
-.cell {
-    width: 300px;
-}
-*/
 
