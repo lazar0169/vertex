@@ -84,7 +84,8 @@
       "components/timepicker.css",
       "pagination.css",
       "tickets/tickets-tab-content.css",
-      "notifications.css"
+      "notifications.css",
+      "form.css"
     ]
   }
 }

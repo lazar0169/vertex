@@ -34,7 +34,6 @@ let form = (function () {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
         let inputElementsArray = Array.prototype.slice.call(formInputElements);
-        console.log('input element array', inputElementsArray);
         return inputElementsArray;
     }
 
@@ -93,9 +92,7 @@ let form = (function () {
 
     function fillData(formSettings, data) {
         let formInputElementsArray = collectAllFormElements(formSettings);
-        console.log('Form input elements array', formInputElementsArray);
         let dataToDisplay = data.Data;
-        console.log('Data to display array', dataToDisplay);
         formInputElementsArray.forEach(function (inputElement) {
             if (dataToDisplay[inputElement.name]) {
                 if (inputElement.type === 'checkbox') {
@@ -109,9 +106,30 @@ let form = (function () {
                 } else {
                     if (inputElement.name !== 'EndpointId') {
                         if (dataToDisplay[inputElement.name].constructor === Array) {
-                            dataToDisplay[inputElement.name].forEach(function () {
-                                inputElement.value = dataToDisplay[inputElement.name][0]; //todo change to work with multiple emails/phone numbers
-                            });
+                            console.log(inputElement);
+                            console.log(dataToDisplay[inputElement.name]);
+                            let values = dataToDisplay[inputElement.name];
+                            if (values.length > 0) {
+                                inputElement.value = values[0]; //todo change to work with multiple emails/phone numbers
+                                for (let i = 1; i < values.length; i++) {
+                                    let newField = inputElement.parentNode.cloneNode(true);
+                                    let newInputElement = newField.getElementsByTagName('input')[0];
+                                    newInputElement.removeAttribute('id');
+                                    newInputElement.value = values[i];
+
+                                    inputElement.parentNode.parentNode.appendChild(newField);
+                                    let deleteButtonElement = newField.getElementsByTagName('button')[0];
+                                    deleteButtonElement.classList.remove('hidden');
+                                    deleteButtonElement.addEventListener('click',deleteFormElement);
+                                }
+                            }
+                            //display delete button for first field
+                            if (values.length > 1) {
+                                let firstDeleteButton = inputElement.parentNode.getElementsByTagName('button')[0];
+                                firstDeleteButton.classList.remove('hidden');
+                                firstDeleteButton.addEventListener('click', deleteFormElement);
+                            }
+
                         } else {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
@@ -119,10 +137,7 @@ let form = (function () {
                                 case 'int':
                                     inputElement.value = dataToDisplay[inputElement.name];
                                 case 'float':
-                                    let floatVal =  parseFloat(dataToDisplay[inputElement.name]).toFixed(2);
-                                    inputElement.value = floatVal;
-                                    // inputElement.type = 'number';
-                                    inputElement.step = 0.01; //todo FLOAT VALUE INSIDE INPUT ELEMENT IS A PROBLEM
+                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name]);
                                     break;
                                 case 'string':
                                     inputElement.value = dataToDisplay[inputElement.name];
@@ -132,8 +147,9 @@ let form = (function () {
                                         inputElement.value = dataToDisplay[inputElement.name][0];
                                     }
                                     break;
+                                default:
+                                    inputElement.value = dataToDisplay[inputElement.name];
                             }
-                            inputElement.value = dataToDisplay[inputElement.name];
                         }
                     }
                 }
@@ -218,13 +234,11 @@ let form = (function () {
                 }
             }
         });
-        console.log('data for API', dataForApi);
         return dataForApi;
     }
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
-        console.log('data for api', dataForApi);
         submitButton.disabled = true;
         trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
@@ -264,13 +278,10 @@ let form = (function () {
         }        //foreach kroz apiResponse.messages ako bude bilo potrebno
     }
 
-    function deleteFormElement(deleteButton) {
-        console.log('delete form element');
-        let deleteFormElementButton = deleteButton;
-        let deleteButtonParentNode = deleteFormElementButton.parentNode;
+    function deleteFormElement() {
+        let deleteButtonParentNode = this.parentNode;
         let parentNode = deleteButtonParentNode.parentNode;
         let childElementCount = parentNode.childElementCount;
-        console.log('child element count', childElementCount);
         deleteButtonParentNode.remove();
         if (childElementCount <= 3) {
             parentNode.children[1].getElementsByTagName('button')[0].classList.add('hidden');
@@ -280,46 +291,38 @@ let form = (function () {
     function addAnotherField(e, formSettings) {
         if (e.currentTarget.dataset.maxNumber !== undefined) {
             let targetSelector = e.currentTarget.dataset.targetSelector;
-            console.log('target', targetSelector);
             let targetElements = $$(formSettings.formContainerSelector).getElementsByClassName(targetSelector);
-            console.log('target elements', targetElements);
             if (targetElements.length <= e.currentTarget.dataset.maxNumber) {
                 let lastElement = targetElements[targetElements.length - 1];
-                console.log('last element', lastElement);
                 let newField = lastElement.cloneNode(true);
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
                 newField.getElementsByTagName('button')[0].classList.remove('hidden');
-                console.log('new field', newField);
-                console.log('last element parent node', lastElement.parentNode);
                 lastElement.parentNode.appendChild(newField);
                 if (targetElements.length > 1) {
+                    //ToDo: getElementsByClass .action-delele
                     targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
                 }
                 let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
-                deleteButtonFirstElement.addEventListener('click', function () {
-                    deleteFormElement(deleteButtonFirstElement);
-                });
+                deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
+                deleteButtonFirstElement.addEventListener('click', deleteFormElement);
+
                 let deleteButton = newField.getElementsByTagName('button')[0];
-                deleteButton.addEventListener('click', function () {
-                    deleteFormElement(deleteButton);
-                });
+                deleteButton.addEventListener('click',deleteFormElement);
+
             }
         }
     }
 
     function collectAddAnotherFieldButtons(formSettings) {
         let addAnotherFieldButtons = $$(formSettings.formContainerSelector).getElementsByClassName('action-add-another-field');
-        let addAnotherFieldButtonsArray = Array.prototype.slice.call(addAnotherFieldButtons);
-        console.log('add another field buttons array', addAnotherFieldButtonsArray);
-        return addAnotherFieldButtonsArray;
+        return Array.prototype.slice.call(addAnotherFieldButtons);
     }
 
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
         addAnotherFieldButtonsArray.forEach(function (addAnotherFieldButton) {
             addAnotherFieldButton.addEventListener('click', function (e) {
-                console.log('form settings in bind add', formSettings);
                 addAnotherField(e, formSettings);
             });
         });
@@ -353,12 +356,12 @@ let form = (function () {
         submit(formSettings);
     });
 
+    //ToDo: check if this event is necessary
     on('form/complete', function (params) {
-
+        complete(params.formSettings);
     });
 
     on('form/fillFormData', function (params) {
-        console.log('params in form/update', params);
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         fillData(formSettings, apiResponseData);
@@ -367,7 +370,6 @@ let form = (function () {
     on('form/submit/success', function (params) {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
-        console.log('api response', apiResponseData);
         //trigger('notifications/show/success',{message:localization.translateMessage(apiResponse.Message)});
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
@@ -377,7 +379,6 @@ let form = (function () {
         alert('Form submit error!');
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
-        console.log('api response', apiResponseData);
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
     });
