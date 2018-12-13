@@ -12,7 +12,7 @@
     <div class=" element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
         <div id="aft-enable-transaction-check" class="element-form-check">
-            <div>Enable transaction:</div>
+            <div><span class="element-multilanguage" data-translation-key="Aft.Transactions.Enable">Enable transaction</span>:</div>
             <div id="aft-enable-transaction-mode" class="element-form-mode">Yes</div>
             <label class="form-switch">
                 <input name="EnableTransactions" data-type="int" type="checkbox" class="element-form-data" checked>
@@ -76,33 +76,33 @@
         </div>
         <div id="aft-notification-send" class="aft-notification-settings">
             <div id="aft-notification-send-limit">
-                <label class="form-label" for="notification-limit">Send notification when the chasable value of the
-                    recived
-                    transaction is higer than:</label>
+                <label class="form-label" for="notification-limit">
+                    <span class="element-multilanguage" data-translation-key="Aft.Transactions.PromoLimit.Handpay">Send notification when the chasable value of the received transaction is higher than</span>:
+                </label>
                 <input name="CashableTransactionCreatedLimitForNotification" data-type="float"
                        class="form-input element-form-data" type="text"
                        id="notification-limit" placeholder="700.000,00">
             </div>
             <div id="aft-notification-cashable-paid-limit">
-                <label class="form-label" for="notification-cashable-paid-transaction-limit">Send notification when the
-                    cashable value of the paid
-                    transaction is higher than:</label>
+                <label class="form-label" for="notification-cashable-paid-transaction-limit">
+                    <span class="element-multilanguage" data-translation-key="Aft.Transactions.PromoLimit.Handpay">Send notification when the cashable value of the received transaction is higher than</span>:
+                </label>
                 <input name="CashableTransactionPayedLimitForNotification" class="form-input element-form-data"
                        data-type="float" type="text"
                        id="notification-cashable-paid-transaction-limit" placeholder="700.000,00">
             </div>
             <div id="aft-notification-promo-received-limit">
-                <label class="form-label" for="notification-promo-received-transaction-limit">Send notification when the
-                    chasable value of the
-                    recived transaction is higer than:</label>
+                <label class="form-label" for="notification-promo-received-transaction-limit">
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Send.Cashable.">Send notification when the promo value of the received transaction is higher than</span>:
+                </label>
                 <input name="PromoTransactionCreatedLimitForNotification" class="form-input element-form-data"
                        data-type="float" type="text"
                        id="notification-promo-received-transaction-limit" placeholder="700.000,00">
             </div>
             <div id="aft-notifictaion-promo-paid-limit">
-                <label class="form-label" for="notification-promo-paid-transaction-limit">Send notification when the
-                    chasable value of the
-                    recived transaction is higer than:</label>
+                <label class="form-label" for="notification-promo-paid-transaction-limit">
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.PromoLimit.Handpay">Send notification when the promo value of the received transaction is higher than</span>:
+                </label>
                 <input name="PromoTransactionPayedLimitForNotification" class="form-input element-form-data"
                        data-type="float" type="text"
                        id="notification-promo-paid-transaction-limit" placeholder="700.000,00">

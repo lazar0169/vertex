@@ -1,7 +1,6 @@
 const aft = (function () {
     on('aft/activated', function (params) {
 
-        trigger('localization/language/change');
 
         setTimeout(function () {
             trigger('preloader/hide');
