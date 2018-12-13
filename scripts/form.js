@@ -86,7 +86,7 @@ let form = (function () {
 
         formInputElementsArray.forEach(function (inputElement) {
 
-             let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
+            let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
             if (inputName !== undefined && dataToDisplay[inputName]) {
 
                 if (inputElement.type === 'checkbox') {
@@ -128,7 +128,7 @@ let form = (function () {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
                                     //inputElement.dataset.value = dataToDisplay[inputName];
-                                    dropdown.select(inputElement.parentNode,dataToDisplay[inputName]);
+                                    dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
                                     break;
                                 case 'int':
                                     inputElement.value = dataToDisplay[inputName];
@@ -374,29 +374,11 @@ let form = (function () {
         });
     }
 
-    function bindFormatInputHandlers(formSettings) {
-        let inputElements = collectAllFormElements(formSettings);
-        for (let i = 0; i < inputElements.length; i++) {
-            let input = inputElements[i];
-            let type = input.dataset.type;
-            switch (type) {
-                case 'float':
-                    if (input.value === '') {
-                     //   input.value = '0.00';
-                    }
-                    input.addEventListener('keyup', formatFloatInputHandler);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        bindFormatInputHandlers(formSettings);
     }
 
     on('form/init', function (params) {
