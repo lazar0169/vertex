@@ -149,12 +149,12 @@
     <div class=" element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
         <div id="tickets-enable-sms-check" class="element-form-check">
-            <div>
-                <span class="element-multilanguage"
-                      data-translation-key="Tickets.SmsSettings.Enable.Sms">Enable sms</span>:
+            <div class="element-multilanguage"
+            data-translation-key="Tickets.SmsSettings.Enable.Sms">
+                Enable sms:
             </div>
-            <div id="tickets-enable-sms-mode" class="element-form-mode">
-                <span class="element-multilanguage" data-translation-key="Yes">Yes</span>
+            <div id="tickets-enable-sms-mode element-multilanguage" data-translation-key="Yes" class="element-form-mode">
+                Yes
             </div>
             <label class="form-switch">
                 <input name="EnableSms" class="element-form-data" type="checkbox" checked>
@@ -162,49 +162,49 @@
             </label>
         </div>
         <div id="tickets-sms-settings-max-redemption">
-            <label>
-                <span class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">Send notification when the value of the printed ticket is higher than</span>:
+            <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">
+                Send notification when the value of the printed ticket is higher than:
             </label>
             <input name="RedeemedTicketLimitForNotification" data-type="float" class="form-input element-form-data"
                    type="text"
                    placeholder="Max. redemption" value="100.000,00">
         </div>
         <div id="tickets-sms-settings-max-issuance">
-            <label>
-                <span class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Printed">Send notification when the value of the printed ticket is higher than</span>:
-                :</label>
+            <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Printed">
+                Send notification when the value of the printed ticket is higher than:
+            </label>
             <input name="SoldTicketLimitForNotification" class="form-input element-form-data" data-type="float"
                    type="text" placeholder="Max. issuance"
                    value="100.000,00">
         </div>
         <div id="tickets-sms-settings-send-mobile" class="tickets-sms-settings">
             <div>
-                <label class="form-label">
-                    <span class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Mobile">Mobile phone number</span>:
+                <label class="form-label element-multilanguage" data-translation-key="Tickets.SmsSettings.Mobile">
+                    >Mobile phone number:
                 </label>
                 <div class="element-form-phone-number form-control">
                     <input name="PhoneNumbers" class="form-input element-form-data"
                            data-type="array" type="text"
                            placeholder="xxx-xxx-xxxx">
-                    <button class="btn action-delete-form-element btn-cancel hidden">
-                        <span class="element-multilanguage" data-translation-key="Delete">Delete</span>
+                    <button class="btn action-delete-form-element btn-cancel hidden element-multilanguage" data-translation-key="Delete">
+                        Delete
                     </button>
                 </div>
             </div>
             <div id="tickets-sms-settings-another-phone">
-                <button class="btn btn-cancel action-add-another-field" data-target-selector="element-form-phone-number"
+                <button class="btn btn-cancel action-add-another-field element-multilanguage" data-translation-key="Tickets.SmsSettings.Add.Mobile" data-target-selector="element-form-phone-number"
                         data-max-number="5">
-                    <span class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Add.Mobile">Add another phone number</span>
+                    Add another phone number
                 </button>
             </div>
         </div>
         <div id="tickets-enable-email-check" class="element-form-check">
-            <div>
-                <span class="element-multilanguage"
-                      data-translation-key="Tickets.SmsSettings.Enable.Email">Enable email</span>:
+            <div class="element-multilanguage"
+                 data-translation-key="Tickets.SmsSettings.Enable.Email">
+                Enable email:
             </div>
-            <div id="tickets-enable-email-mode" class="element-form-mode">
-                <span class="element-multilanguage" data-translation-key="Yes">Yes</span>
+            <div id="tickets-enable-email-mode" class="element-form-mode element-multilanguage" data-translation-key="Yes">
+                Yes
             </div>
             <label class="form-switch">
                 <input name="EnableEmail" class="element-form-data" type="checkbox" checked>
@@ -213,29 +213,28 @@
         </div>
         <div id="tickets-sms-settings-send-email" class="tickets-sms-settings">
             <div>
-                <label class="form-label" for="notification-email-address">
-                    <span class="element-multilanguage"
-                          data-translation-key="Tickets.SmsSettings.Email">Email address</span>:
+                <label class="form-label element-multilanguage" data-translation-key="Tickets.SmsSettings.Email" for="notification-email-address">
+                    class=">Email address:
                 </label>
                 <div class="element-form-email form-control">
                     <input name="Emails" class="form-input element-form-data" data-type="array"
                            type="text" id="notification-email-address"
                            placeholder="Your email">
-                    <button class="btn action-delete-form-element btn-cancel hidden">
-                        <span class="element-multilanguage" data-translation-key="Delete">Delete</span>
+                    <button class="btn action-delete-form-element btn-cancel hidden element-multilanguage" data-translation-key="Delete">
+                        Delete
                     </button>
                 </div>
             </div>
             <div id="tickets-sms-settings-another-email">
-                <button class="btn btn-cancel action-add-another-field" data-target-selector="element-form-email"
+                <button class="btn btn-cancel action-add-another-field element-multilanguage" data-translation-key="Tickets.SmsSettings.Add.Email" data-target-selector="element-form-email"
                         data-max-number="5">
-                    <span class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Add.Email">Add another email address</span>
+                    Add another email address
                 </button>
             </div>
         </div>
         <div id="tickets-sms-settings-buttons-wrapper">
-            <button class="btn btn-success element-form-submit text-uppercase">
-                <span class="element-multilanguage" data-translation-key="Save">Save</span>
+            <button class="btn btn-success element-form-submit text-uppercase element-multilanguage" data-translation-key="Save">
+                Save
             </button>
         </div>
     </div>
@@ -247,22 +246,22 @@
     <div class="element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
         <div id="tickets-sms-settings-max-value-max-redeemed">
-            <label>
-                <span class="element-multilanguage" data-translation-key="Tickets.MaxValue.Redeemed">Maximum value of the redeemed ticket</span>:
+            <label  class="element-multilanguage" data-translation-key="Tickets.MaxValue.Redeemed">
+                Maximum value of the redeemed ticket:
             </label>
             <input name="MaxRedeemAmountForPayed" class="form-input element-form-data" data-type="float" type="text"
                    placeholder="Max. value of the redeemed ticket" value="100.000,00"/>
         </div>
         <div id="tickets-sms-settings-max-value-max-sell">
-            <label>
-                <span class="element-multilanguage" data-translation-key="Tickets.MaxValue.Issued">Maximum value of the issued ticket</span>:
+            <label lass="element-multilanguage" data-translation-key="Tickets.MaxValue.Issued">
+                Maximum value of the issued ticket:
             </label>
             <input name="MaxSellAmountForPayed" class="form-input element-form-data" data-type="float" type="text"
                    placeholder="Max. value of the issued ticket" value="100.000,00"/>
         </div>
         <div id="tickets-max-value-buttons-wrapper">
-            <button class="btn btn-success element-form-submit text-uppercase">
-                <span class="element-multilanguage" data-translation-key="Save">Save</span>
+            <button class="btn btn-success element-form-submit text-uppercase element-multilanguage" data-translation-key="Save">
+                Save
             </button>
         </div>
     </div>
