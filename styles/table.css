@@ -2,7 +2,6 @@
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    margin: 0.1em 0;
 }
 
 .tbody {
@@ -41,6 +40,7 @@
     top: 0;
     left: 0;
     padding-left: 0.5rem;
+    font-size: 13px;
 }
 
 .head.cell {
@@ -49,6 +49,7 @@
     top: 0;
     transition: 0.2s background-color;
     width: 100%;
+    font-size: 14px;
 }
 
 .head.cell:hover {
@@ -87,8 +88,8 @@
 }
 
 .head.cell.sort-asc:after {
-/*    position: absolute;
-    display: inline-block;*/
+    /*    position: absolute;
+        display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
@@ -102,8 +103,8 @@
 }
 
 .head.cell.sort-desc:after {
-/*    position: absolute;
-    display: inline-block;*/
+    /*    position: absolute;
+        display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-down-table-sorting.png");
     height: 13px;
@@ -208,11 +209,27 @@ textarea {
 }
 
 .table-condensed .cell {
-    height: 49px;
+    height: 44px;
+}
+
+.table-condensed .cell .table-time{
+    font-size: 11px !important;
+}
+
+.table-condensed .cell h6{
+    font-size: 15px ;
 }
 
 .table-expanded .cell {
-    height: 60px;
+    height: 49px;
+}
+
+.table-expanded .cell .table-time {
+    font-size: 13px !important;
+}
+
+.table-expanded .cell h6{
+    font-size: 0.8rem;
 }
 
 .empty-table {
@@ -242,4 +259,24 @@ textarea {
 
 .cell-createdby.head.hidden-column, .cell-finishedby.head.hidden-column, .cell-cashoutedby.head.hidden-column, .cell-redeemedby.head.hidden-column {
     display: none;
+}
+
+#aft-tabs-transaction-info .tbody {
+    padding-left: 1.2rem;
+}
+
+#aft-tabs-transaction-info .cell.cell-createdby.first {
+    margin-left: 0;
+    padding-left: 23px;
+    width: 110%;
+    padding-right: 10px;
+}
+
+#aft-tabs-transaction-info .cell.cell-createdby.first .table-time {
+    font-size: 12px;
+}
+
+#aft-tabs-transaction-info .cell.cell-createdby.first .h6 {
+    font-size: 13px;
+    font-weight: bold;
 }

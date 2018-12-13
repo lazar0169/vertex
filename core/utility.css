@@ -20,6 +20,7 @@
     border-bottom: 2px solid #323C41;
     color: rgb(120, 144, 156);
     margin: 1rem 0 1rem -1rem;
+    font-size: 14px;
 }
 
 .tabs-wrapper>div {
@@ -37,7 +38,7 @@
     color: rgb(120, 144, 156);
     display: inline-flex;
     white-space: nowrap;
-    font-size: 0.7rem;
+    font-size: 13px;
 }
 
 .custom-filter>div {

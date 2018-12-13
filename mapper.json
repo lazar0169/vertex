@@ -85,7 +85,8 @@
       "pagination.css",
       "tickets/tickets-tab-content.css",
       "notifications.css",
-      "form.css"
+      "form.css",
+      "fonts.css"
     ]
   }
 }
