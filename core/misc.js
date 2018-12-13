@@ -71,7 +71,7 @@ on('apply-custom-date', function (data) {
     }
     else {
         $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
-        $$(`#ds-${data.selectId}`).children[0].title = `Date from: ${tempArray[0]}, Time from: ${tempArray[1]}, Date to: ${tempArray[2]}, Time to: ${tempArray[3]}`;
+        $$(`#ds-${data.selectId}`).children[0].title = `From: ${tempArray[0]} ${tempArray[1]}, To: ${tempArray[2]} ${tempArray[3]}`;
         $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}, ${tempArray[2]}T${tempArray[3]}`;
         data.target.dataset.value = 'Apply custom date'
         let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).children[0].dataset.value);

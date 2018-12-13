@@ -155,6 +155,10 @@ const dropdownDate = (function () {
         //this is for advance filters
         if (advanceTableFilterIsOpen || e.target.classList && e.target.classList.contains('pika-select') || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
             $$('.advance-filter-active')[0].children[1].classList.remove('hidden');
+            if (e.target.parentNode && e.target.parentNode.classList.contains('apply-advance-filter')) {
+                $$('.advance-filter-active')[0].children[1].classList.add('hidden');
+                $$('.advance-filter-active')[0].classList.remove('advance-filter-active')
+            }
         }
         else {
             if ($$('.advance-filter-active')[0]) {

@@ -54,7 +54,7 @@
 }
 
 #aft-advance-table-filter-active>div>div:first-child {
-    min-width: 100px;
+    min-width: 120px;
     display: inline-flex;
     align-items: center;
     justify-content: flex-end;
@@ -63,4 +63,8 @@
 
 .advance-filter-active {
     background: rgb(55, 71, 79);
+}
+
+.advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
+    width: 200px;
 }

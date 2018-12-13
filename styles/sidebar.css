@@ -21,6 +21,7 @@
 #sidebar.collapse {
     width: 50px;
     min-width: 50px;
+    border-right: 0.1rem solid black;
 }
 
 #sidebar-name {
