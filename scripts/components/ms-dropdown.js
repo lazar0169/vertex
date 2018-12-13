@@ -80,7 +80,7 @@ const multiDropdown = (function () {
         return select;
     }
     window.addEventListener('click', function (e) {
-        e.stopPropagation();
+        e.preventDefault();
         for (let selectId of multiSelectArray) {
             if (e.target.parentNode.id === selectId) {
                 $$(`#${selectId}`).classList.toggle('active-multi-select');

@@ -34,7 +34,7 @@
     white-space: nowrap;
 }
 
-.custom-filter>div {
+.custom-filter>div:not(:first-child) {
     display: inline-flex;
     padding: 0.5rem 0;
 }
@@ -50,6 +50,10 @@
 .advance-table-filter {
     cursor: pointer;
     position: relative;
+    display: block;
+}
+.advance-table-filter>div:first-child{
+    padding: 0 0.5rem;
 }
 
 .advance-table-filter::before {
@@ -75,7 +79,7 @@
     border-left: 1px solid black;
 }
 
-.custom-filter>div>div {
+.custom-filter>div:not(:first-child)>div {
     padding: 0 0.5rem
 }
 

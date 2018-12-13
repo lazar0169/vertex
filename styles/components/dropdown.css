@@ -65,7 +65,7 @@
 }
 
 .multiple-group>div>label>div, .multiple-group>div>label>i, .multiple-group>div>label {
-    pointer-events: none;
+    pointer-events: none !important;
 }
 
 .option-select-date, .timepicker {

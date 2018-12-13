@@ -44,7 +44,6 @@ const aftFilter = (function () {
                     }
                 })*/
         showSelectedFilters();
-        advanceTableFilterInfobar.style.visibility = 'visible';
 
 
 
@@ -67,11 +66,11 @@ const aftFilter = (function () {
 
 
     function showAdvanceTableFilter() {
-        advanceTableFilter.classList.toggle('aft-advance-active');
+        advanceTableFilter.classList.toggle('advance-filter-active');
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
-    advanceTableFilter.addEventListener('click', function () {
+    advanceTableFilter.children[0].addEventListener('click', function () {
         showAdvanceTableFilter();
     });
 
@@ -92,11 +91,21 @@ const aftFilter = (function () {
                 advanceTableFilterInfobar.children[1].children[count].children[1].innerHTML = advanceTableFilterActive.children[count].children[1].children[0].title;
                 advanceTableFilterInfobar.children[1].children[count].title = advanceTableFilterActive.children[count].children[1].children[0].title;
                 advanceTableFilterInfobar.children[1].children[count].classList.remove('hidden');
+
             }
             else {
                 advanceTableFilterInfobar.children[1].children[count].classList.add('hidden');
             }
+        }
 
+        for (let isHidden of advanceTableFilterInfobar.children[1].children) {
+            if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
+                advanceTableFilterInfobar.style.visibility = 'visible';
+                return;
+            }
+            else {
+                advanceTableFilterInfobar.style.visibility = 'hidden';
+            }
         }
 
     }

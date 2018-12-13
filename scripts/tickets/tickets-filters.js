@@ -11,7 +11,7 @@ const ticketsFilter = (function () {
     });
    
     function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.toggle('aft-advance-active');
+        ticketAdvanceFilter.classList.toggle('advance-filter-active');
         
     }
 })();
