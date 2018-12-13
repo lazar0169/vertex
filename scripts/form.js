@@ -127,12 +127,14 @@ let form = (function () {
                         } else {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
+                                    //inputElement.dataset.value = dataToDisplay[inputName];
                                     dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
                                     break;
                                 case 'int':
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'float':
+
                                     inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
                                 case 'string':
@@ -169,6 +171,7 @@ let form = (function () {
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
+
         if (formSettings.fillFormEvent === undefined) {
             formSettings.fillFormEvent = 'form/fillFormData';
         }
@@ -201,9 +204,11 @@ let form = (function () {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
-                        case 'multiple-select':
-                            //ToDo: implement when we have real use case
-                            break;
+                        /*                        case 'multiple-select':/!*
+                                                    if (dataForApi[formInputElement.name] === undefined) {
+                                                        dataForApi[formInputElement.name] = [];
+                                                    }
+                                                    dataForApi[formInputElement.name].push(formInputElement.value);*!/*/
                         case 'single-select':
                             dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
                             break;
@@ -258,6 +263,7 @@ let form = (function () {
     }
 
     function complete(formSettings) {
+
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = false;
@@ -272,7 +278,7 @@ let form = (function () {
                 message: localization.translateMessage(apiResponseData.MessageCode.toString()),
                 type: apiResponseData.MessageType
             });
-        }
+        }        //foreach kroz apiResponse.messages ako bude bilo potrebno
     }
 
     function deleteFormElement() {
@@ -319,6 +325,18 @@ let form = (function () {
     }
 
     //elements event handlers
+
+
+    function formatFloatInputHandler() {
+        let value = this.value;
+        var position = this.selectionStart;
+        value = value.replace(',', '').replace('.', '');
+        let number = value.slice(0, value.length - 2);
+        let decimal = value.slice(value.length - 2, value.length);
+        let float = parseFloat(number + "." + decimal).toFixed(2);
+        this.value = formatFloatValue(float);
+        this.selectionEnd = position;
+    }
 
     function bindSubmitButtonClickHandlers(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
