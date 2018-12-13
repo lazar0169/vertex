@@ -1,6 +1,7 @@
 const aft = (function () {
     on('aft/activated', function (params) {
 
+
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);

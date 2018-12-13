@@ -43,14 +43,12 @@ let form = (function () {
     function collectAllFormElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
-        let inputElementsArray = Array.prototype.slice.call(formInputElements);
-        return inputElementsArray;
+        return Array.prototype.slice.call(formInputElements);
     }
 
     function collectSubmitButtons(formSettings) {
         let submitButtons = $$(formSettings.formContainerSelector).getElementsByClassName('element-form-submit');
-        let submitButtonsArray = Array.prototype.slice.call(submitButtons);
-        return submitButtonsArray;
+        return Array.prototype.slice.call(submitButtons);
     }
 
 
@@ -87,19 +85,28 @@ let form = (function () {
         let formInputElementsArray = collectAllFormElements(formSettings);
 
         formInputElementsArray.forEach(function (inputElement) {
-            if (dataToDisplay[inputElement.name]) {
+
+             let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
+            if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
+
                 if (inputElement.type === 'checkbox') {
-                    inputElement.checked = dataToDisplay[inputElement.name];
-                    let modeDivElement = inputElement.parentNode.previousSibling;
+                    inputElement.checked = dataToDisplay[inputName];
+                    console.log('checkbox data: ',dataToDisplay[inputName]);
+                    //let modeDivElement = inputElement.parentNode.previousSibling;
+                    let modeDivElement = inputElement.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
+                    console.log('e',modeDivElement);
+                    console.log(modeDivElement);
                     if (inputElement.checked === true) {
-                        modeDivElement.innerHTML = 'Yes';
+                        modeDivElement.innerHTML = localization.translateMessage('switchYesLabel',modeDivElement);
+
                     } else {
-                        modeDivElement.innerHTML = 'No';
+                        modeDivElement.innerHTML = localization.translateMessage('switchNoLabel',modeDivElement);
+
                     }
                 } else {
-                    if (inputElement.name !== 'EndpointId') {
-                        if (dataToDisplay[inputElement.name].constructor === Array) {
-                            let values = dataToDisplay[inputElement.name];
+                    if (inputName !== 'EndpointId') {
+                        if (dataToDisplay[inputName].constructor === Array) {
+                            let values = dataToDisplay[inputName];
                             if (values.length > 0) {
                                 inputElement.value = values[0];
                                 let inputsContainer = inputElement.parentNode.parentNode;
@@ -123,28 +130,29 @@ let form = (function () {
                                 firstDeleteButton.classList.remove('hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
-
                         } else {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
-                                    inputElement.dataset.value = dataToDisplay[inputElement.dataset.name];
+                                    //inputElement.dataset.value = dataToDisplay[inputName];
+                                    dropdown.select(inputElement.parentNode,dataToDisplay[inputName]);
                                     break;
                                 case 'int':
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'float':
-                                    inputElement.value = formatFloatValue(dataToDisplay[inputElement.name] / valueMultiplier);
+
+                                    inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
                                 case 'string':
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'array':
-                                    if (dataToDisplay[inputElement.name].length === 1) {
-                                        inputElement.value = dataToDisplay[inputElement.name][0];
+                                    if (dataToDisplay[inputName].length === 1) {
+                                        inputElement.value = dataToDisplay[inputName][0];
                                     }
                                     break;
                                 default:
-                                    inputElement.value = dataToDisplay[inputElement.name];
+                                    inputElement.value = dataToDisplay[inputName];
                             }
                         }
                     }
@@ -327,11 +335,13 @@ let form = (function () {
 
     function formatFloatInputHandler() {
         let value = this.value;
+        var position = this.selectionStart;
         value = value.replace(',', '').replace('.', '');
         let number = value.slice(0, value.length - 2);
         let decimal = value.slice(value.length - 2, value.length);
         let float = parseFloat(number + "." + decimal).toFixed(2);
         this.value = formatFloatValue(float);
+        this.selectionEnd = position;
     }
 
     function bindSubmitButtonClickHandlers(formSettings) {
@@ -359,40 +369,20 @@ let form = (function () {
             let enableSwitch = enableButton.getElementsByTagName('input')[0];
             enableSwitch.addEventListener('click', function () {
                 if (enableSwitch.checked === false) {
-                    enableSwitch.checked = false;
-                    enableMode.innerHTML = 'No';
+                    enableMode.innerHTML = localization.translateMessage('switchNoLabel',enableMode);
                 } else {
-                    enableSwitch.checked = true;
-                    enableMode.innerHTML = 'Yes';
+                    enableMode.innerHTML = localization.translateMessage('switchYesLabel',enableMode);
                 }
             });
 
         });
     }
 
-    function bindFormatInputHandlers(formSettings) {
-        let inputElements = collectAllFormElements(formSettings);
-        for (let i = 0; i < inputElements.length; i++) {
-            let input = inputElements[i];
-            let type = input.dataset.type;
-            switch (type) {
-                case 'float':
-                    if (input.value === '') {
-                        input.value = '0.00';
-                    }
-                    input.addEventListener('keyup', formatFloatInputHandler);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        bindFormatInputHandlers(formSettings);
     }
 
     on('form/init', function (params) {

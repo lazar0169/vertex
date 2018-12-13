@@ -24,11 +24,11 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    /*    font-size: 14px;
-        line-height: 108px;
-        color: #ffffff;
-        font-family: "Open Sans";
-        font-weight: bold;*/
+/*    font-size: 14px;
+    line-height: 108px;
+    color: #ffffff;
+    font-family: "Open Sans";
+    font-weight: bold;*/
 }
 
 .cell.hover {
@@ -196,107 +196,17 @@ textarea {
 
 /** FLAGS **/
 
-.first.row-flag-1 {
+.cell-flag.row-flag-1 {
     border-left: 7px solid lawngreen;
 }
 
-/*.row-flag-2 {*/
-    /*position: relative;*/
-/*}*/
+.cell-flag.row-flag-2 {
+    border-left: 7px solid #F3413A;
+}
 
-/*!*.row-flag-2 ::before {*!*/
-    /*!*position: absolute;*!*/
-    /*!*content: "";*!*/
-    /*!*display: inline-block;*!*/
-    /*!*background:#F3413A;*!*/
-    /*!*left: 10%;*!*/
-    /*!*height: 29px;*!*/
-    /*!*width: 7px;*!*/
-/*!*}*!*/
-
-/*!*.row-flag-2 .table-time , .row-flag-2 h6 {*!*/
-    /*!*padding-left: 15px;*!*/
-/*!*}*!*/
-
-.first.row-flag-3 {
+.cell-flag.row-flag-3 {
     border-left: 7px solid orange;
 }
-
-/*
-
-.tbody > .row-flag-1 {
-    border-left: 7px solid lawngreen;
-}
-
-.tbody > .row-flag-1 ~ .row-flag-1 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.tbody > .row-flag-2 {
-    border-left: 7px solid red;
-}
-
-.tbody > .row-flag-2 ~ .row-flag-2 {
-
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.tbody > .row-flag-3 {
-    border-left: 7px solid orange;
-}
-
-.tbody > .row-flag-3 ~ .row-flag-3 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-*/
-
-
-/*
-
-.tbody > .row-flag-3 {
-    border-left: 7px solid red;
-}
-
-.tbody > .row-flag-3 ~ .row-flag-3 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.tbody > .row-flag-5 {
-    border-left: 7px solid lawngreen;
-}
-
-.tbody > .row-flag-5 ~ .row-flag-5 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.tbody > .row-flag-6 {
-    border-left: 7px solid blue;
-}
-
-.tbody > .row-flag-6 ~ .row-flag-6 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.tbody > .row-flag-8 {
-    border-left: 7px solid yellow;
-}
-
-.tbody > .row-flag-8 ~ .row-flag-8 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.tbody > .row-flag-11 {
-    border-left: 7px solid orange;
-}
-
-.tbody > .row-flag-11 ~ .row-flag-11 {
-    border-left: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.head.cell.first-cell {
-    left: auto;
-    z-index: 0;
-}*/
 
 .table-condensed .cell {
     height: 44px;
