@@ -94,6 +94,7 @@ let form = (function () {
                     console.log('checkbox data: ',dataToDisplay[inputName]);
                     //let modeDivElement = inputElement.parentNode.previousSibling;
                     let modeDivElement = inputElement.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
+                    console.log('e',modeDivElement);
                     console.log(modeDivElement);
                     if (inputElement.checked === true) {
                         modeDivElement.innerHTML = localization.translateMessage('switchYesLabel',modeDivElement);
