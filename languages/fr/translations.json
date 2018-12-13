@@ -6,7 +6,8 @@
         "LoginScreen": {
             "Submit": "Soumettre"
         },
-        "search": "Chercher"
+        "search": "Chercher",
+        "Aft": ""
     },
     "messages": {
         "6": "Réussie!",

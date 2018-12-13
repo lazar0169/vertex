@@ -6,7 +6,8 @@
         "LoginScreen": {
             "Submit": "Potvrdi"
         },
-        "search": "Pretraga"
+        "search": "Pretraga",
+        "Aft": ""
     },
     "messages": {
         "6": "Uspeh!",

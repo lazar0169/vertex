@@ -97,6 +97,7 @@ let localization = (function () {
     function changeLanguage(multiLanguageClassSelector) {
         //load dynamic translations for language into localstorage
         let translatableElements = $$(multiLanguageClassSelector);
+        console.log('translatable elements', translatableElements);
         let translations = loadTranslations(getActiveLanguage());
         saveMessagesToLocalStorage(translations.messages);
         if (translations !== null) {
@@ -114,15 +115,16 @@ let localization = (function () {
         }
     }
 
-
     on('localization/language/change', function (params) {
-        let language = params.language;
-        if (language !== undefined) {
+        alert('localization language change triggered!');
+        if (params !== undefined && params.language !== undefined) {
+            let language = params.language;
             setActiveLanguage(language);
         }
         changeLanguage(multiLanguageElementSelector);
     });
 
+    //OVDE se slusa promena jezika
     let languageElementSelector = $$('#lang-selector');
     if (languageElementSelector !== null) {
         languageElementSelector.addEventListener('change', function () {

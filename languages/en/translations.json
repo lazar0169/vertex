@@ -6,7 +6,19 @@
         "LoginScreen": {
             "Submit": "Submit"
         },
-        "search": "Search"
+        "search": "Search",
+        "Aft": {
+            "Transactions": {
+                "CashableLimit": {
+                    "Handpay": "Cashable handpay transaction limit",
+                    "Normal": "Cashable transaction limit"
+                },
+                "PromoLimit": {
+                    "Handpay": "Promo handpay transaction limit",
+                    "Normal": "Promo transaction limit"
+                }
+            }
+        }
     },
     "messages": {
         "6": "Succesful!",
