@@ -188,7 +188,7 @@ let table = (function () {
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = `repeat(${colsCount+1}, 1fr)`;
+        tbody.style.gridTemplateColumns = '0.12fr ' + `repeat(${colsCount}, 1fr)`;
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
