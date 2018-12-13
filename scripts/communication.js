@@ -174,6 +174,10 @@ let communication = (function () {
                 entryData[key] = entry.EntryData[key];
             });
             entry.EntryData = entryData;
+
+            if(entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ entry.EntryData.TicketType;
+            }
         });
         return data;
     }

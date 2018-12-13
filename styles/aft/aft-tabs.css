@@ -13,6 +13,10 @@
     font-size: 0.7rem;
 }
 
+#aft-tabs-notification-settings-info * , #aft-tabs-enable-transaction-info * {
+    margin: 0.15rem 0 0.20rem 0.05rem;
+}
+
 #aft-enable-transaction-check, #aft-enable-notification-check {
     display: inline-flex;
 }
@@ -31,7 +35,7 @@
     border-bottom: 1px solid rgb(120, 144, 156);
 }
 
-#aft-tabs-enable-transaction-info>div>div:last-child, aft-tabs-notification-settings-info>div>div:last-child {
+#aft-tabs-enable-transaction-info>div>div:last-child, #aft-tabs-notification-settings-info>div>div:last-child {
     padding: 1rem 0.5rem;
 }
 
