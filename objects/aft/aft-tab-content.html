@@ -12,7 +12,9 @@
     <div class=" element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
         <div id="aft-enable-transaction-check" class="element-form-check">
-            <div><span class="element-multilanguage" data-translation-key="Aft.Transactions.Enable">Enable transaction</span>:</div>
+            <div><span class="element-multilanguage"
+                       data-translation-key="Aft.Transactions.Enable">Enable transaction</span>:
+            </div>
             <div id="aft-enable-transaction-mode" class="element-form-mode">Yes</div>
             <label class="form-switch">
                 <input name="EnableTransactions" data-type="int" type="checkbox" class="element-form-data" checked>
@@ -48,7 +50,7 @@
                        placeholder="700.000,00">
             </div>
             <div id="promo-transaction-limit">
-                <label class="form-label"for="promo-limit">
+                <label class="form-label" for="promo-limit">
                     <span class="element-multilanguage" data-translation-key="Aft.Transactions.PromoLimit.Normal">Promo transaction limit</span>:
                 </label>
                 <input name="PromoTransactionLimit" class="form-input element-form-data" data-type="float" type="text"
@@ -57,7 +59,9 @@
             </div>
         </div>
         <div id="aft-transaction-save">
-            <button class="btn btn-success element-form-submit text-uppercase">Save</button>
+            <button class="btn btn-success element-form-submit text-uppercase">
+                <span class="element-multilanguage" data-translation-key="Save">Save</span>
+            </button>
         </div>
     </div>
 </div>
@@ -67,8 +71,12 @@
     <div class=" element-async-form">
         <input name="EndpointId" style="display:none" class="endpointId element-form-data">
         <div id="aft-enable-notification-check" class="element-form-check">
-            <div>Enable notification:</div>
-            <div id="aft-enable-notification-mode" class="element-form-mode">Yes</div>
+            <div><span class="element-multilanguage"
+                       data-translation-key="Aft.Notification.Enable">Enable notification</span>:
+            </div>
+            <div id="aft-enable-notification-mode" class="element-form-mode">
+                <span class="element-multilanguage" data-translation-key="Yes">Yes</span>
+            </div>
             <label class="form-switch">
                 <input name="EnableTransactions" data-type="int" class="element-form-data" type="checkbox" checked>
                 <i class="form-icon"></i>
@@ -77,7 +85,7 @@
         <div id="aft-notification-send" class="aft-notification-settings">
             <div id="aft-notification-send-limit">
                 <label class="form-label" for="notification-limit">
-                    <span class="element-multilanguage" data-translation-key="Aft.Transactions.PromoLimit.Handpay">Send notification when the chasable value of the received transaction is higher than</span>:
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Cashable.Received">Send notification when the chasable value of the received transaction is higher than</span>:
                 </label>
                 <input name="CashableTransactionCreatedLimitForNotification" data-type="float"
                        class="form-input element-form-data" type="text"
@@ -85,7 +93,8 @@
             </div>
             <div id="aft-notification-cashable-paid-limit">
                 <label class="form-label" for="notification-cashable-paid-transaction-limit">
-                    <span class="element-multilanguage" data-translation-key="Aft.Transactions.PromoLimit.Handpay">Send notification when the cashable value of the received transaction is higher than</span>:
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Cashable.Paid">
+                        Send notification when the cashable value of the received transaction is higher than</span>:
                 </label>
                 <input name="CashableTransactionPayedLimitForNotification" class="form-input element-form-data"
                        data-type="float" type="text"
@@ -93,7 +102,8 @@
             </div>
             <div id="aft-notification-promo-received-limit">
                 <label class="form-label" for="notification-promo-received-transaction-limit">
-                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Send.Cashable.">Send notification when the promo value of the received transaction is higher than</span>:
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Promo.Received">
+                        Send notification when the promo value of the received transaction is higher than</span>:
                 </label>
                 <input name="PromoTransactionCreatedLimitForNotification" class="form-input element-form-data"
                        data-type="float" type="text"
@@ -101,7 +111,8 @@
             </div>
             <div id="aft-notifictaion-promo-paid-limit">
                 <label class="form-label" for="notification-promo-paid-transaction-limit">
-                    <span class="element-multilanguage" data-translation-key="Aft.Notification.PromoLimit.Handpay">Send notification when the promo value of the received transaction is higher than</span>:
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Promo.Paid">
+                        Send notification when the promo value of the received transaction is higher than</span>:
                 </label>
                 <input name="PromoTransactionPayedLimitForNotification" class="form-input element-form-data"
                        data-type="float" type="text"
@@ -110,38 +121,53 @@
         </div>
         <div id="aft-notification-send-mobile" class="aft-notification-settings">
             <div>
-                <label class="form-label" for="notification-mobile-phone-number">Mobile phone number:</label>
+                <label class="form-label" for="notification-mobile-phone-number">
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Mobile">
+                        Mobile phone number</span>:
+                </label>
                 <div class="element-form-phone-number">
                     <input name="PhoneNumberList" class="form-input element-form-data"
                            data-type="array" type="text" id="notification-mobile-phone-number"
                            placeholder="xxx-xxx-xxxx">
-                    <button class="btn action-delete-form-element btn-cancel hidden">Delete</button>
+                    <button class="btn action-delete-form-element btn-cancel hidden">
+                        <span  class="element-multilanguage" data-translation-key="Delete">Delete</span>
+                    </button>
                 </div>
             </div>
             <div id="aft-notification-another-phone">
                 <button class="btn btn-cancel action-add-another-field" data-target-selector="element-form-phone-number"
-                        data-max-number="5">ADD another phone number
+                        data-max-number="5">
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Add.Mobile">
+                        ADD another phone number</span>
                 </button>
             </div>
         </div>
         <div id="aft-notification-send-email" class="aft-notification-settings">
             <div>
-                <label class="form-label" for="notification-email-address">Email address:</label>
+                <label class="form-label" for="notification-email-address">
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Email">Email address</span>:
+                </label>
                 <div class="element-form-email">
                     <input name="EmailList" class="form-input element-form-data" data-type="array"
                            type="text" id="notification-email-address"
                            placeholder="Your email">
-                    <button class="btn action-delete-form-element btn-cancel hidden">Delete</button>
+                    <button class="btn action-delete-form-element btn-cancel hidden">
+                        <span class="element-multilanguage" data-translation-key="Delete">Delete</span>
+                    </button>
                 </div>
             </div>
             <div id="aft-notification-another-email">
                 <button class="btn btn-cancel action-add-another-field" data-target-selector="element-form-email"
-                        data-max-number="5">ADD another email address
+                        data-max-number="5">
+                    <span class="element-multilanguage" data-translation-key="Aft.Notification.Add.Email">
+                        ADD another email address</span>
                 </button>
             </div>
         </div>
         <div id="aft-notification-save">
-            <button class="btn btn-success element-form-submit text-uppercase">Save</button>
+            <button class="btn btn-success element-form-submit text-uppercase">
+                <span class="element-multilanguage" data-translation-key="Save">Save</span>
+            </button>
         </div>
     </div>
 </div>
