@@ -90,7 +90,6 @@ let form = (function () {
             if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
 
                 if (inputElement.type === 'checkbox') {
-
                     inputElement.checked = dataToDisplay[inputName];
                     console.log('checkbox data: ',dataToDisplay[inputName]);
                     //let modeDivElement = inputElement.parentNode.previousSibling;
@@ -378,29 +377,11 @@ let form = (function () {
         });
     }
 
-    function bindFormatInputHandlers(formSettings) {
-        let inputElements = collectAllFormElements(formSettings);
-        for (let i = 0; i < inputElements.length; i++) {
-            let input = inputElements[i];
-            let type = input.dataset.type;
-            switch (type) {
-                case 'float':
-                    if (input.value === '') {
-                     //   input.value = '0.00';
-                    }
-                    input.addEventListener('keyup', formatFloatInputHandler);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        bindFormatInputHandlers(formSettings);
     }
 
     on('form/init', function (params) {
