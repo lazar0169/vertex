@@ -1,23 +1,12 @@
 {
     "labels": {
-        "Login": "Login",
-        "Username": "Username",
-        "Password": "Password",
+        "Login": "",
+        "Username": "",
+        "Password": "",
         "LoginScreen": {
-            "Submit": "Submit"
+            "Submit": "asda"
         },
-        "search": "Search"
+        "search": ""
     },
-    "messages": {
-        "6": "Succesful!",
-        "7": "Error!",
-        "22": "Wrong credentials!",
-        "AFT": "AFT",
-        "Casinos": "Casinos",
-        "Jackpots": "Jackpots",
-        "Tickets": "Tickets",
-        "Search": "Search",
-        "Recent search": "",
-        "The request is invalid.": "The request is invalid."
-    }
+    "messages": {}
 }

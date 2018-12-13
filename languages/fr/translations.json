@@ -1,23 +1,12 @@
 {
     "labels": {
-        "Login": "S'identifier",
-        "Username": "Nom d'utilisateur",
-        "Password": "Mot de passe",
+        "Login": "",
+        "Username": "",
+        "Password": "",
         "LoginScreen": {
-            "Submit": "Soumettre"
+            "Submit": ""
         },
-        "search": "Chercher"
+        "search": ""
     },
-    "messages": {
-        "6": "Réussie!",
-        "7": "Error French",
-        "22": "Inscription!",
-        "AFT": "AFT_fra",
-        "Casinos": "Les casinos",
-        "Jackpots": "Jackpots",
-        "Tickets": "Des billets",
-        "Search": "Chercher",
-        "Recent search": "",
-        "The request is invalid.": ""
-    }
+    "messages": {}
 }
