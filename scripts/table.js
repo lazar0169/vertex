@@ -138,6 +138,8 @@ let table = (function () {
 
             let head = document.createElement('div');
             head.innerHTML = '';
+            head.classList.add('cell-flag');
+            head.classList.add('cell');
             tbody.appendChild(head);
 
             for (let col = 0; col < colsCount; col++) {
@@ -203,6 +205,7 @@ let table = (function () {
             rows.push(rowId);
             let cell = document.createElement('div');
             cell.innerHTML = '';
+            cell.classList.add('cell');
             tbody.appendChild(cell);
 
             for (let col = 0; col < colsCount; col++) {
