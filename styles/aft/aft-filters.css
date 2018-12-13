@@ -93,14 +93,16 @@
     color:white;
 }
 
-#aft-export-pdf, #tickets-export-pdf {
+#aft-export-pdf, #tickets-export-pdf, #aft-export-xls, #tickets-export-xls {
+    cursor: pointer;
     height: 35px;
-    background-image: url("/images/pdf-export.png");
     background-repeat: no-repeat;
 }
 
+#aft-export-pdf, #tickets-export-pdf {
+    background-image: url("/images/pdf-export.png");
+}
+
 #aft-export-xls, #tickets-export-xls {
-    height: 35px;
     background-image: url("/images/xls-export.png");
-    background-repeat: no-repeat;
 }

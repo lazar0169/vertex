@@ -295,56 +295,61 @@ let table = (function () {
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
 
-        let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
-        let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
-        let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
-        let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
+        if(lastPage !== 1){
+            let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
+            let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
+            let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
+            let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
 
-        paginationFirstPage.dataset.page = '1';
-        if (activePage - 1 > 0) {
-            let previousPage = activePage - 1;
-            paginationPreviousPage.dataset.page = previousPage.toString();
-        } else {
-            paginationPreviousPage.dataset.page = '1';
-        }
-
-        if (activePage !== lastPage) {
-            let nextPage = activePage + 1;
-            paginationNextPage.dataset.page = nextPage.toString();
-        } else {
-            paginationNextPage.dataset.page = lastPage.toString();
-        }
-
-        paginationLastPage.dataset.page = lastPage.toString();
-
-        let paginationArray = [];
-
-        if (lastPage >= 3) {
-            if (activePage === lastPage) {
-                paginationArray = [activePage - 2, activePage - 1, activePage];
-            } else if (activePage === 1) {
-                paginationArray = [activePage, activePage + 1, activePage + 2];
+            paginationFirstPage.dataset.page = '1';
+            if (activePage - 1 > 0) {
+                let previousPage = activePage - 1;
+                paginationPreviousPage.dataset.page = previousPage.toString();
             } else {
-                paginationArray = [activePage - 1, activePage, activePage + 1];
+                paginationPreviousPage.dataset.page = '1';
             }
-        } else if (lastPage === 2) {
-            paginationArray = ['1', '2'];
+
+            if (activePage !== lastPage) {
+                let nextPage = activePage + 1;
+                paginationNextPage.dataset.page = nextPage.toString();
+            } else {
+                paginationNextPage.dataset.page = lastPage.toString();
+            }
+
+            paginationLastPage.dataset.page = lastPage.toString();
+
+            let paginationArray = [];
+
+            if (lastPage >= 3) {
+                if (activePage === lastPage) {
+                    paginationArray = [activePage - 2, activePage - 1, activePage];
+                } else if (activePage === 1) {
+                    paginationArray = [activePage, activePage + 1, activePage + 2];
+                } else {
+                    paginationArray = [activePage - 1, activePage, activePage + 1];
+                }
+            } else if (lastPage === 2) {
+                paginationArray = ['1', '2'];
+            } else {
+                paginationArray = ['1'];
+            }
+
+            let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
+
+            for (let i = 0; i < paginationButtons.length; i++) {
+                paginationButtons[i].dataset.page = paginationArray[i];
+                paginationButtons[i].innerHTML = paginationArray[i];
+                if (paginationButtons[i].innerHTML === activePage.toString()) {
+                    paginationButtons[i].classList.add('active');
+                } else if (paginationArray[i] === undefined) {
+                    paginationButtons[i].classList.add('hidden');
+                }
+            }
+            displayLastPageNumber(tableSettings);
         } else {
-            paginationArray = ['1'];
+            paginationElement.setAttribute('style', 'display: none');
         }
 
-        let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
-
-        for (let i = 0; i < paginationButtons.length; i++) {
-            paginationButtons[i].dataset.page = paginationArray[i];
-            paginationButtons[i].innerHTML = paginationArray[i];
-            if (paginationButtons[i].innerHTML === activePage.toString()) {
-                paginationButtons[i].classList.add('active');
-            } else if (paginationArray[i] === undefined) {
-                paginationButtons[i].classList.add('hidden');
-            }
-        }
-        displayLastPageNumber(tableSettings);
     }
 
     function resetPaginationActiveButtons(tableSettings) {
