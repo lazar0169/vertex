@@ -1,4 +1,9 @@
 .form-switch {
     top:-5px;
-
+}
+.element-async-form .btn-success {
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.26);
+}
+.element-async-form .btn-success:hover {
+    box-shadow: none;
 }

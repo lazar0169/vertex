@@ -87,15 +87,21 @@ let form = (function () {
         formInputElementsArray.forEach(function (inputElement) {
 
              let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
-            if (inputName !== undefined && dataToDisplay[inputName]) {
+            if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
 
                 if (inputElement.type === 'checkbox') {
+
                     inputElement.checked = dataToDisplay[inputName];
-                    let modeDivElement = inputElement.parentNode.previousSibling;
+                    console.log('checkbox data: ',dataToDisplay[inputName]);
+                    //let modeDivElement = inputElement.parentNode.previousSibling;
+                    let modeDivElement = inputElement.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
+                    console.log(modeDivElement);
                     if (inputElement.checked === true) {
-                        modeDivElement.innerHTML = 'Yes';
+                        modeDivElement.innerHTML = localization.translateMessage('switchYesLabel',modeDivElement);
+
                     } else {
-                        modeDivElement.innerHTML = 'No';
+                        modeDivElement.innerHTML = localization.translateMessage('switchNoLabel',modeDivElement);
+
                     }
                 } else {
                     if (inputName !== 'EndpointId') {
@@ -363,11 +369,9 @@ let form = (function () {
             let enableSwitch = enableButton.getElementsByTagName('input')[0];
             enableSwitch.addEventListener('click', function () {
                 if (enableSwitch.checked === false) {
-                    enableSwitch.checked = false;
-                    enableMode.innerHTML = 'No';
+                    enableMode.innerHTML = localization.translateMessage('switchNoLabel',enableMode);
                 } else {
-                    enableSwitch.checked = true;
-                    enableMode.innerHTML = 'Yes';
+                    enableMode.innerHTML = localization.translateMessage('switchYesLabel',enableMode);
                 }
             });
 
