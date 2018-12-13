@@ -206,6 +206,9 @@ let table = (function () {
             let cell = document.createElement('div');
             cell.innerHTML = '';
             cell.classList.add('cell');
+            cell.classList.add('cell-flag');
+            cell.classList.add(`row-${rowId}`);
+            cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
             tbody.appendChild(cell);
 
             for (let col = 0; col < colsCount; col++) {
