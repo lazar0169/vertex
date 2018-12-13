@@ -9,7 +9,6 @@ const dropdown = (function () {
             return false;
         }
         let options = element.getElementsByClassName("single-option");
-        console.log(options);
         let hasOption = Array.prototype.slice.call(options).filter(function (option) {
             return option.dataset.value === selectedValue;
         });

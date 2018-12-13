@@ -97,7 +97,6 @@ let localization = (function () {
     function changeLanguage(multiLanguageClassSelector) {
         //load dynamic translations for language into localstorage
         let translatableElements = $$(multiLanguageClassSelector);
-        console.log('translatable elements', translatableElements);
         let translations = loadTranslations(getActiveLanguage());
         saveMessagesToLocalStorage(translations.messages);
         if (translations !== null) {

@@ -16,7 +16,6 @@ const aftFilters = (function () {
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
-    // let aftMachinesNumbers = $$('#aft-machines-number');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
     let currentTableSettingsObject;
@@ -68,8 +67,6 @@ const aftFilters = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        // dropdown.generate(machinesNumber, aftMachinesNumbers);
-        // table.bindPageSizeLinkHandlers(tableSettings);
         dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
@@ -96,8 +93,6 @@ const aftFilters = (function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
-        console.log('sort name', sortName);
-        console.log(aftSortName[sortName]);
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
@@ -117,14 +112,12 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
-        console.log('Filters prepared for API:', currentTableSettingsObject.filters);
         return filtersForApi;
     }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
 
         let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
-        console.log('AFT filters that we are sending to API: ', currentTableSettingsObject.filters);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,
@@ -136,7 +129,6 @@ const aftFilters = (function () {
     on('aft/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        console.log('filters for api pagination', filtersForApi);
         trigger('communicate/aft/previewTransactions', {
             tableSettings: tableSettings,
             data: filtersForApi,
@@ -151,7 +143,6 @@ const aftFilters = (function () {
             let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
             filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
-            console.log('Filters for API in api/filters/sorting', filtersForApi);
             trigger('communicate/aft/previewTransactions', {
                 tableSettings: tableSettings,
                 data: filtersForApi,
@@ -163,7 +154,6 @@ const aftFilters = (function () {
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        console.log('Filters for API in api/filters/pageSize', filtersForApi);
         trigger('communicate/aft/previewTransactions', {
             tableSettings: tableSettings,
             data: filtersForApi,

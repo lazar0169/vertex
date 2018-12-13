@@ -33,7 +33,6 @@ let notifications = function () {
     });
 
     on('notifications/show', function (params) {
-        console.log('notification show params', params);
         let paramsMessageCode = params.message;
         let paramsMessageType = params.type;
 

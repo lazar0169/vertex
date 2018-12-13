@@ -1,6 +1,5 @@
 const ticketsFilter = (function () {
 
-
     let ticketSortName = {
         tickettype:  1,
         amount: 2,
@@ -9,9 +8,6 @@ const ticketsFilter = (function () {
         redeemedby: 5, //todo check if this is it
         status: 9
     };
-
-
-
 
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
@@ -115,7 +111,6 @@ const ticketsFilter = (function () {
 
         currentTableSettingsObject.filters = filtersForApi;
 
-        console.log('filters that we send to api in tickets', filtersForApi);
         return filtersForApi;
     }
 
@@ -134,7 +129,6 @@ const ticketsFilter = (function () {
     });
 
     on('tickets/filters/pagination', function (params) {
-        console.log('tickets filters pagination');
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
         trigger('communicate/tickets/previewTickets', {
@@ -145,7 +139,6 @@ const ticketsFilter = (function () {
     });
 
     on('tickets/filters/sorting', function (params) {
-        console.log('tickets filters sorting');
         let tableSettings = params.tableSettings;
         activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
@@ -161,7 +154,6 @@ const ticketsFilter = (function () {
     });
 
     on('tickets/filters/pageSize', function (params) {
-        console.log('tickets filters page size');
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
         trigger('communicate/tickets/previewTickets', {
@@ -170,7 +162,6 @@ const ticketsFilter = (function () {
             callbackEvent: 'table/update'
         });
     })
-
 
 })();
 

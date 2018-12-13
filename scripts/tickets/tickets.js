@@ -28,11 +28,6 @@ const tickets = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
 
-        /*        let addTransactionButton = $$('#page-tickets').getElementsByClassName('tickets-add-transaction')[0];
-                addTransactionButton.addEventListener('click', function () {
-                    trigger('communicate/tickets/getTickets');
-                });*/
-
         trigger('tickets/tab/appearance', {tableSettings: tableSettings});
         trigger('tickets/tab/maxValue', {tableSettings: tableSettings});
         trigger('tickets/tab/smsSettings', {tableSettings: tableSettings});
