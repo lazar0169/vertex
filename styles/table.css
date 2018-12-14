@@ -50,7 +50,7 @@
     position: center;
     width: 100%;
     overflow: auto;
-    height: 93%;
+    max-height: 93%;
 }
 
 .cell {
