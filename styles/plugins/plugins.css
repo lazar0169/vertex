@@ -1,0 +1,66 @@
+/*toggle */
+.vertex-form-checkbox {
+    margin:0;
+    display: flex;
+    align-items: center;
+}
+.vertex-form-checkbox > div,
+.vertex-form-checkbox > label {
+    display:inline-block;
+}
+.vertex-form-checkbox >div:first-child {
+    font-size:15px;
+}
+
+.vertex-form-checkbox .form-switch input[type=checkbox] {
+    width:0 !important;
+    height:0 !important;
+}
+
+.vertex-form-checkbox .checkbox-label {
+    /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
+    color:white !important;
+    margin:0 !important;
+    padding:0 !important;;
+}
+.vertex-form-checkbox .form-switch {
+    height: 23px;
+    width: 45px;
+    padding: 0;
+    margin: 0 0 0 15px !important;
+    min-height: 0;
+}
+.vertex-form-checkbox input+.form-icon {
+    border: none;
+    width: 45px;
+    height: 15px;
+    margin: 0 !important;
+    /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
+    background: rgb(55, 71, 79);
+    box-shadow: unset;
+    pointer-events: all;
+}
+.form-switch input:checked+.form-icon {
+    background: rgb(55, 71, 79);
+    border: none;
+}
+
+.vertex-form-checkbox .form-icon:focus,
+.vertex-form-checkbox .form-icon:active {
+    outline: none;
+}
+.vertex-form-checkbox .form-switch input+.form-icon::before {
+    height:20px;
+    width:20px;
+    left:0;
+    top:-2px;
+}
+.vertex-form-checkbox .form-switch input:checked+.form-icon::before {
+    left:100%;
+    -webkit-transform: translateX(-100%);
+    -moz-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    -o-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+

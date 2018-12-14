@@ -52,6 +52,7 @@ let form = (function () {
     }
 
 
+    /*
     let transactionEnableButton = $$('#aft-enable-transaction-check');
     let transactionEnableMode = $$('#aft-enable-transaction-mode');
     let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
@@ -65,6 +66,7 @@ let form = (function () {
             transactionEnableMode.innerHTML = 'Yes';
         }
     });
+    */
 
     function collectEnableButtons(formSettings) {
         let enableButtons = $$(formSettings.formContainerSelector).getElementsByClassName('element-form-check');
