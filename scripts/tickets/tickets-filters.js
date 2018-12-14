@@ -104,25 +104,29 @@ const ticketsFilter = (function () {
 
     function prepareStatusArrayData(dataArray) {
         let preparedStatusData = [];
-        dataArray.forEach(function (status) {
-            if (ticketStatus[status] !== undefined) {
-                preparedStatusData.push(ticketStatus[status]);
-            } else {
-                preparedStatusData.push(null);
-            }
-        });
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (status) {
+                if (ticketStatus[status] !== undefined) {
+                    preparedStatusData.push(ticketStatus[status]);
+                } else {
+                    preparedStatusData.push(null);
+                }
+            });
+        }
         return preparedStatusData;
     }
 
     function prepareTypeArrayData(dataArray) {
         let preparedTypeData = [];
-        dataArray.forEach(function (status) {
-            if (ticketType[status] !== undefined) {
-                preparedTypeData.push(ticketType[status]);
-            } else {
-                preparedTypeData.push(null);
-            }
-        });
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (status) {
+                if (ticketType[status] !== undefined) {
+                    preparedTypeData.push(ticketType[status]);
+                } else {
+                    preparedTypeData.push(null);
+                }
+            });
+        }
         return preparedTypeData;
     }
 

@@ -210,8 +210,6 @@ let communication = (function () {
             };
         }
 
-        console.log('formated data', formatedData);
-
         tableSettings.formatedData = formatedData;
 
         return formatedData;
@@ -433,7 +431,6 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
-        console.log('table settings object in communciate aft data prepare', tableSettings);
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 

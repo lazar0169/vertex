@@ -19,8 +19,14 @@
     font-size: 0.7rem;
     border-left: 1px solid #2A353A;
     border-right: 1px solid #2A353A;
-    height: 70px;
+    min-height: 70px;
 }
+
+#tickets-advance-table-filter-active {
+
+}
+
+
 /*tickets page - advance filter active*/
 .tickets-advance-active {
     background: rgb(55, 71, 79);
