@@ -1,8 +1,8 @@
 const aftFilters = (function () {
 
     const aftSortName = {
-        amountcashable: 0,
-        amountpromo: 1,
+        cashable: 0,
+        promo: 1,
         amountnonrestrictive: 2,
         eventtime: 3,
         gmcid: 4,

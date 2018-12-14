@@ -43,7 +43,9 @@ let table = (function () {
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
     function makeColumnTitle(columnName) {
-        let columnTitle = columnName.match(/[A-Z][a-z]+/g).join(' ').toUpperCase();
+        let columnTitle = columnName.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+/*        let columnTitle = columnName.match(/([a-z])([A-Z])+/g);
+        columnTitle = columnTitle.join(' ');*/
         return columnTitle;
     }
 
@@ -145,12 +147,13 @@ let table = (function () {
 
             for (let col = 0; col < colsCount; col++) {
                 let head = document.createElement('div');
-                head.innerHTML = makeColumnTitle(Object.keys(tableSettings.tableData[0])[col]);
+                head.innerHTML = makeColumnTitle(Object.keys(tableSettings.formatedData[0])[col]);
                 head.className = 'head cell';
-                let columnName = Object.keys(tableSettings.tableData[0])[col];
+                let columnName = Object.keys(tableSettings.formatedData[0])[col];
                 columnName = columnName.toLowerCase();
                 columnName = columnName.replace(/ /g, '-');
                 head.dataset.sortName = columnName;
+                head.classList.add('text-uppercase');
                 head.classList.add('cell-' + columnName);
                 //head.classList.add();
                 if (tableSettings.stickyRow === true) {
@@ -195,6 +198,8 @@ let table = (function () {
 
     function generateTableRows(tableSettings) {
 
+        console.log('table settings in generate table rows', tableSettings);
+
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
@@ -214,8 +219,8 @@ let table = (function () {
 
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
-                cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
-                let cellClassName = generateCellClassName(tableSettings.tableData, col);
+                cell.innerHTML = tableSettings.formatedData[row][Object.keys(tableSettings.formatedData[row])[col]];
+                let cellClassName = generateCellClassName(tableSettings.formatedData, col);
                 cell.className = 'cell ' + cellClassName;
                 if (col === 0) {
                     cell.classList.add('first');
@@ -239,7 +244,7 @@ let table = (function () {
             }
         }
 
-        styleColsRows(tableSettings.tableData, colsCount, tbody);
+        styleColsRows(tableSettings.formatedData, colsCount, tbody);
     }
 
     /*--------------------------------------------------------------------------------------*/

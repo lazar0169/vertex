@@ -1,10 +1,10 @@
 const ticketsFilter = (function () {
 
     let ticketSortName = {
-        tickettype:  1,
+        type:  1,
         amount: 2,
         code: 3,
-        cashoutedby: 4, //todo check if this is it
+        issuedby: 4, //todo check if this is it
         redeemedby: 5, //todo check if this is it
         status: 9
     };

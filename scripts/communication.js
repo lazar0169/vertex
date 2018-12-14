@@ -124,6 +124,7 @@ let communication = (function () {
 
     function prepareAftTableData(tableSettings, data) {
         let tableData = data.Data.Items;
+        let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
                 entry.EntryData.CreatedBy = '';
@@ -141,14 +142,32 @@ let communication = (function () {
             }
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
-            entry.EntryData.AmountCashable = entry.EntryData.AmountCashable.toFixed(2);
-            entry.EntryData.AmountPromo = entry.EntryData.AmountPromo.toFixed(2);
+            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable % 100);
+            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo % 100);
         });
-        return data;
+
+        for (let i = 0; i < tableData.length; i++) {
+            formatedData[i] = {
+                createdBy: tableData[i].EntryData.CreatedBy,
+                finishedBy: tableData[i].EntryData.FinishedBy,
+                status:  tableData[i].EntryData.Status,
+                machineName:  tableData[i].EntryData.MachineName,
+                type:  tableData[i].EntryData.Type,
+                cashable:  tableData[i].EntryData.AmountCashable,
+                promo:  tableData[i].EntryData.AmountPromo,
+            };
+        }
+
+        console.log('formated data', formatedData);
+
+        tableSettings.formatedData = formatedData;
+
+        return formatedData;
     }
 
     function prepareTicketsTableData(tableSettings, data) {
         let tableData = data.Data.Items;
+        let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
                 entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
@@ -164,22 +183,36 @@ let communication = (function () {
                 entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
 
             }
-            entry.EntryData.Amount = entry.EntryData.Amount.toFixed(2);
+            entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount % 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-            let entryData = {};
+/*            let entryData = {};
             entryData.Code = entry.EntryData.FullTicketValIdationNumber;
             delete entry.EntryData.FullTicketValIdationNumber;
             Object.keys(entry.EntryData).forEach(function(key) {
                 entryData[key] = entry.EntryData[key];
             });
-            entry.EntryData = entryData;
-
+            entry.EntryData = entryData;*/
             if(entry.EntryData.TicketType === 'CashableTicket') {
                 entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ entry.EntryData.TicketType;
             }
         });
-        return data;
+        for (let i = 0; i < tableData.length; i++) {
+            formatedData[i] = {
+                code: tableData[i].EntryData.FullTicketValIdationNumber,
+                issuedBy: tableData[i].EntryData.CashoutedBy,
+                redeemedBy:  tableData[i].EntryData.RedeemedBy,
+                status:  tableData[i].EntryData.Status,
+                type:  tableData[i].EntryData.TicketType,
+                amount:  tableData[i].EntryData.Amount
+            };
+        }
+
+        console.log('formated data', formatedData);
+
+        tableSettings.formatedData = formatedData;
+
+        return formatedData;
     }
 
 
@@ -398,6 +431,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
+        console.log('table settings object in communciate aft data prepare', tableSettings);
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
