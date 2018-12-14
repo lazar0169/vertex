@@ -130,14 +130,14 @@ let communication = (function () {
                 entry.EntryData.CreatedBy = '';
 
             } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
+                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
 
             }
             if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
                 entry.EntryData.FinishedBy = '';
 
             } else {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
+                entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
 
             }
             delete entry.EntryData.CreatedTime;
@@ -165,22 +165,28 @@ let communication = (function () {
         return formatedData;
     }
 
+    function formatTimeData(timeData){
+        console.log('format time data', timeData);
+        console.log('format time data typeof', typeof timeData);
+        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/,'');
+    }
+
     function prepareTicketsTableData(tableSettings, data) {
         let tableData = data.Data.Items;
         let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
 
             } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
 
             }
             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>' + entry.EntryData.RedeemedBy + '</h6>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<h6>' + entry.EntryData.RedeemedBy + '</h6>';
 
             } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
 
             }
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount % 100);
