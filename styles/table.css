@@ -127,7 +127,9 @@
     color: white;
     flex-wrap: wrap;
     width: 500px;
-    margin-bottom: 0;
+    margin: 3px;
+    margin-top: 0;
+    box-shadow: 3px 3px 3px #1E282C;
 }
 
 .element-table-filters-section {

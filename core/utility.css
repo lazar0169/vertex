@@ -32,7 +32,7 @@
 }
 
 .custom-filter {
-    margin: 0;
+    margin: 3px;
     padding: 0;
     width: 100%;
     background: rgba(38, 50, 56);
@@ -41,6 +41,7 @@
     white-space: nowrap;
     font-size: 13px;
     height: 6%;
+    box-shadow: 3px 3px 3px #1E282C;
 }
 
 .custom-filter>div {
