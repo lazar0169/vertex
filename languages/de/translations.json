@@ -1,20 +1,98 @@
 {
     "labels": {
-        "Login": "Anmeldung",
-        "Username": "Nutzername",
-        "Password": "Passwort",
+        "Login": "",
+        "Username": "",
+        "Password": "",
         "LoginScreen": {
-            "Submit": "Einreichen"
+            "Submit": ""
         },
-        "search": "Suche"
+        "search": "",
+        "Aft": {
+            "Transactions": {
+                "Enable": "",
+                "CashableLimit": {
+                    "Handpay": "",
+                    "Normal": ""
+                },
+                "PromoLimit": {
+                    "Handpay": "",
+                    "Normal": ""
+                }
+            },
+            "Notification": {
+                "Enable": "",
+                "Cashable": {
+                    "Received": "",
+                    "Paid": ""
+                },
+                "Promo": {
+                    "Received": "",
+                    "Paid": ""
+                },
+                "Mobile": "",
+                "Add": {
+                    "Mobile": "",
+                    "Email": ""
+                },
+                "Email": ""
+            }
+        },
+        "Save": "",
+        "Delete": "",
+        "Tickets": {
+            "GeneralSettings": {
+                "Title": "",
+                "Casino": "",
+                "Address": "",
+                "City": "",
+                "Currency": ""
+            },
+            "CashableTicket": {
+                "Title": "",
+                "Cashout": "",
+                "Expiring": "",
+                "Void": ""
+            },
+            "PromoTicket": {
+                "Title": "",
+                "Payable": "",
+                "Expiring": "",
+                "Restricted": ""
+            },
+            "Appearance": {
+                "Advanced": {
+                    "Title": "",
+                    "DateFormat": "",
+                    "TimeFormat": "",
+                    "TicketVoidAfter": "",
+                    "Days": "",
+                    "Validation": "",
+                    "Ticket": "",
+                    "Asset": "",
+                    "AssetNumber": ""
+                }
+            },
+            "SmsSettings": {
+                "Enable": {
+                    "Sms": "",
+                    "Email": ""
+                },
+                "Redeemed": "",
+                "Printed": "",
+                "Mobile": "",
+                "Add": {
+                    "Mobile": "",
+                    "Email": ""
+                },
+                "Email": ""
+            },
+            "MaxValue": {
+                "Redeemed": "",
+                "Issued": ""
+            }
+        },
+        "Cancel": "",
+        "Yes": ""
     },
-    "messages": {
-        "22": "Anmeldung!",
-        "AFT": "AFT_de",
-        "Casinos": "Kasinos",
-        "Jackpots": "Jackpots",
-        "Tickets": "Tickets",
-        "Search": "Suche",
-        "Recent search": ""
-    }
+    "messages": {}
 }

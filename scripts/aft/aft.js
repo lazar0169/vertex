@@ -1,6 +1,7 @@
 const aft = (function () {
     on('aft/activated', function (params) {
 
+
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
@@ -25,23 +26,6 @@ const aft = (function () {
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
-
-
-//todo see best way to forward endpoint id
-
-        /*function setEndpointId(tableSettings){
-            let endpointIdInputElements = $$(tableSettings.pageSelectorId).getElementsByClassName('endpointId');
-            console.log('endpoint id input elements', endpointIdInputElements);
-            let endpointIdInputElementsArray = Array.prototype.slice.call(endpointIdInputElements);
-            console.log('endpoint id input elements array', endpointIdInputElementsArray);
-            endpointIdInputElementsArray.forEach(function(endpointIdElement){
-                console.log('endpoint id input elements element', endpointIdElement);
-                endpointIdElement.dataset.value = aftId;
-                console.log('endpoint elem dataset value', endpointIdElement.dataset.value);
-            });
-        }
-
-        setEndpointId(tableSettings);*/
 
         table.init(tableSettings); //initializing table, filters and page size
 

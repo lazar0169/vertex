@@ -68,7 +68,7 @@
 #aft-show-space {
     border-left: 1px solid black;
     border-right: 1px solid black;
-    padding: 0.5rem 0.7rem;
+    padding: 0.8rem 1rem;
 }
 
 #aft-machines-number {
@@ -80,6 +80,7 @@
 
 #ss-4 .element-table-filters {
     background: #3A4950;
+    font-size: 13px;
 }
 
 /*table body padding*/

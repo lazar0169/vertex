@@ -7,28 +7,34 @@ let table = (function () {
         1: 'asc',
         2: 'desc'
     };
+
     const sortingType = {
         none: 0,
         ascending: 1,
         descending: 2
     };
+
     const sortingClass = {
         ascending: 'sort-asc',
         descending: 'sort-desc'
     };
+
     const sortingDataAtt = {
         ascending: 'asc',
         descending: 'desc'
     };
+
     const tagNames = { //caps letters
         input: 'INPUT',
         textarea: 'TEXTAREA',
         select: 'SELECT'
     };
+
     const types = {
         checkbox: 'checkbox',
         radio: 'radio'
     };
+
     const attributes = {
         multiple: 'multiple'
     };
@@ -129,6 +135,13 @@ let table = (function () {
             }
             tbody = document.createElement('div');
             tbody.className = 'tbody';
+
+            let head = document.createElement('div');
+            head.innerHTML = '';
+            head.classList.add('cell-flag');
+            head.classList.add('cell');
+            tbody.appendChild(head);
+
             for (let col = 0; col < colsCount; col++) {
                 let head = document.createElement('div');
                 head.innerHTML = makeColumnTitle(Object.keys(tableSettings.tableData[0])[col]);
@@ -175,7 +188,7 @@ let table = (function () {
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+        tbody.style.gridTemplateColumns = '0.12fr ' + `repeat(${colsCount}, 1fr)`;
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
@@ -190,6 +203,14 @@ let table = (function () {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             }
             rows.push(rowId);
+            let cell = document.createElement('div');
+            cell.innerHTML = '';
+            cell.classList.add('cell');
+            cell.classList.add('cell-flag');
+            cell.classList.add(`row-${rowId}`);
+            cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+            tbody.appendChild(cell);
+
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
                 cell.innerHTML = tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[col]];
@@ -200,7 +221,7 @@ let table = (function () {
                     cell.classList.add('cell');
                 }
                 cell.classList.add(`row-${rowId}`);
-                // cell.classList.add(`row-flag-${tableSettings.tableData[row][Object.keys(tableSettings.tableData[row])[0]]}`);
+                cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
@@ -274,56 +295,61 @@ let table = (function () {
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
 
-        let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
-        let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
-        let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
-        let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
+        if(lastPage !== 1){
+            let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
+            let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
+            let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
+            let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
 
-        paginationFirstPage.dataset.page = '1';
-        if (activePage - 1 > 0) {
-            let previousPage = activePage - 1;
-            paginationPreviousPage.dataset.page = previousPage.toString();
-        } else {
-            paginationPreviousPage.dataset.page = '1';
-        }
-
-        if (activePage !== lastPage) {
-            let nextPage = activePage + 1;
-            paginationNextPage.dataset.page = nextPage.toString();
-        } else {
-            paginationNextPage.dataset.page = lastPage.toString();
-        }
-
-        paginationLastPage.dataset.page = lastPage.toString();
-
-        let paginationArray = [];
-
-        if (lastPage >= 3) {
-            if (activePage === lastPage) {
-                paginationArray = [activePage - 2, activePage - 1, activePage];
-            } else if (activePage === 1) {
-                paginationArray = [activePage, activePage + 1, activePage + 2];
+            paginationFirstPage.dataset.page = '1';
+            if (activePage - 1 > 0) {
+                let previousPage = activePage - 1;
+                paginationPreviousPage.dataset.page = previousPage.toString();
             } else {
-                paginationArray = [activePage - 1, activePage, activePage + 1];
+                paginationPreviousPage.dataset.page = '1';
             }
-        } else if (lastPage === 2) {
-            paginationArray = ['1', '2'];
+
+            if (activePage !== lastPage) {
+                let nextPage = activePage + 1;
+                paginationNextPage.dataset.page = nextPage.toString();
+            } else {
+                paginationNextPage.dataset.page = lastPage.toString();
+            }
+
+            paginationLastPage.dataset.page = lastPage.toString();
+
+            let paginationArray = [];
+
+            if (lastPage >= 3) {
+                if (activePage === lastPage) {
+                    paginationArray = [activePage - 2, activePage - 1, activePage];
+                } else if (activePage === 1) {
+                    paginationArray = [activePage, activePage + 1, activePage + 2];
+                } else {
+                    paginationArray = [activePage - 1, activePage, activePage + 1];
+                }
+            } else if (lastPage === 2) {
+                paginationArray = ['1', '2'];
+            } else {
+                paginationArray = ['1'];
+            }
+
+            let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
+
+            for (let i = 0; i < paginationButtons.length; i++) {
+                paginationButtons[i].dataset.page = paginationArray[i];
+                paginationButtons[i].innerHTML = paginationArray[i];
+                if (paginationButtons[i].innerHTML === activePage.toString()) {
+                    paginationButtons[i].classList.add('active');
+                } else if (paginationArray[i] === undefined) {
+                    paginationButtons[i].classList.add('hidden');
+                }
+            }
+            displayLastPageNumber(tableSettings);
         } else {
-            paginationArray = ['1'];
+            paginationElement.setAttribute('style', 'display: none');
         }
 
-        let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
-
-        for (let i = 0; i < paginationButtons.length; i++) {
-            paginationButtons[i].dataset.page = paginationArray[i];
-            paginationButtons[i].innerHTML = paginationArray[i];
-            if (paginationButtons[i].innerHTML === activePage.toString()) {
-                paginationButtons[i].classList.add('active');
-            } else if (paginationArray[i] === undefined) {
-                paginationButtons[i].classList.add('hidden');
-            }
-        }
-        displayLastPageNumber(tableSettings);
     }
 
     function resetPaginationActiveButtons(tableSettings) {
@@ -411,13 +437,16 @@ let table = (function () {
 
         let tableSettings = params.settingsObject;
         let tableData = [];
+        let tableDataItems = [];
         let apiItems = params.data.Data.Items;
 
         apiItems.forEach(function (item) {
             tableData.push(item.EntryData);
+            tableDataItems.push(item);
         });
 
         tableSettings.tableData = tableData;
+        tableSettings.tableDataItems = tableDataItems;
         tableSettings.NumOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
             initFilters(tableSettings);

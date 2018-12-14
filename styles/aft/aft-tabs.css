@@ -5,7 +5,7 @@
     height: 95%;
 }
 
-.chosen-info-tab {
+.chosen-info-tab, form {
     flex: 1;
     padding: 0.5rem;
     background: rgb(38, 50, 56);
@@ -13,11 +13,15 @@
     font-size: 0.7rem;
 }
 
+#aft-tabs-notification-settings-info * , #aft-tabs-enable-transaction-info * {
+    margin: 0.15rem 0 0.20rem 0.05rem;
+}
+
 #aft-enable-transaction-check, #aft-enable-notification-check {
     display: inline-flex;
 }
 
-#aft-enable-transaction-check>div>div, #aft-enable-notification-check>div>div {
+#aft-enable-transaction-check>div, #aft-enable-notification-check>div {
     padding: 0 0.5rem;
     display: flex;
     align-items: center;
@@ -41,4 +45,12 @@
 
 .aft-notification-settings input, .aft-enable-transaction input {
     width: 320px;
+}
+
+.element-form-email, .element-form-phone-number {
+    display: flex;
+    flex-direction: row;
+}
+#aft-notification-save {
+    padding: 20px 10px;
 }

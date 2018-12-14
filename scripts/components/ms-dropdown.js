@@ -125,21 +125,23 @@ const multiDropdown = (function () {
                     $$(`#${selectId}`).classList.toggle('active-multi-select');
                     $$(`#${selectId}`).children[1].classList.toggle('hidden');
                 } else {
-                    if (e.target.parentNode.parentNode.id === selectId) {
-                        $$(`#${selectId}`).classList.add('active-multi-select');
-                        $$(`#${selectId}`).children[1].classList.remove('hidden');
-                    } else if (e.target.parentNode.parentNode.id === selectId) {
-                        $$(`#${selectId}`).classList.add('active-multi-select');
-                        $$(`#${selectId}`).children[1].classList.remove('hidden');
-                    } else if (e.target.parentNode.parentNode.parentNode.id === selectId) {
-                        $$(`#${selectId}`).classList.add('active-multi-select');
-                        $$(`#${selectId}`).children[1].classList.remove('hidden');
-                    } else if (e.target.parentNode.parentNode.parentNode.parentNode.id === selectId) {
-                        $$(`#${selectId}`).classList.add('active-multi-select');
-                        $$(`#${selectId}`).children[1].classList.remove('hidden');
-                    } else {
-                        $$(`#${selectId}`).classList.remove('active-multi-select');
-                        $$(`#${selectId}`).children[1].classList.add('hidden');
+                    if (e.target!== null && e.target.parentNode !== null &&  e.target.parentNode.parentNode !== null) {
+                        if (e.target.parentNode.parentNode.id === selectId) {
+                            $$(`#${selectId}`).classList.add('active-multi-select');
+                            $$(`#${selectId}`).children[1].classList.remove('hidden');
+                        } else if (e.target.parentNode.parentNode.id === selectId) {
+                            $$(`#${selectId}`).classList.add('active-multi-select');
+                            $$(`#${selectId}`).children[1].classList.remove('hidden');
+                        } else if (e.target.parentNode.parentNode.parentNode !== null && e.target.parentNode.parentNode.parentNode.id === selectId) {
+                            $$(`#${selectId}`).classList.add('active-multi-select');
+                            $$(`#${selectId}`).children[1].classList.remove('hidden');
+                        } else if (e.target.parentNode.parentNode.parentNode.parentNode != null && e.target.parentNode.parentNode.parentNode.parentNode.id === selectId) {
+                            $$(`#${selectId}`).classList.add('active-multi-select');
+                            $$(`#${selectId}`).children[1].classList.remove('hidden');
+                        } else {
+                            $$(`#${selectId}`).classList.remove('active-multi-select');
+                            $$(`#${selectId}`).children[1].classList.add('hidden');
+                        }
                     }
                 }
             }

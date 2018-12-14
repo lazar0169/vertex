@@ -54,7 +54,7 @@
     border: 1px solid rgb(55, 71, 79);
     border-top: none;
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 2;
 }
 
 .active-date-select > div:first-child, .active-single-select > div:first-child, .active-multi-select > div:first-child {

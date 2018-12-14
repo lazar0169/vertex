@@ -38,6 +38,7 @@ function decodeToken(encodedToken) {
     }
 }
 
+
 //ToDo:Lazar - Da li je ok da ovo bude ovde - koristim je vec u 2 modula za sad
 //returns value from an object base on select string -> path='account.createdAt' -> object = user:{account:{createdAt:10/10/2010}}
 //call getProperty("account.createdAt",user);
@@ -53,8 +54,23 @@ function removeChildren(element) {
         element.removeChild(element.lastChild);
     }
 }
+//formats number 2000.53 into 2,000.53
+function formatFloatValue(amount) {
+    let decimalCount = 2, decimal = ".", thousands = ",";
+    try {
+        decimalCount = Math.abs(decimalCount);
+        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
 
+        const negativeSign = amount < 0 ? "-" : "";
 
+        let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+        let j = (i.length > 3) ? i.length % 3 : 0;
+
+        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 //add and remove class
 
