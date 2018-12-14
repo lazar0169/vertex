@@ -697,14 +697,14 @@ let table = (function () {
         return cellClassName;
     }
 
-    function getColumnNames(tableSettings) {
+/*    function getColumnNames(tableSettings) {
         let headers = getHeaders(tableSettings);
         let columnNames = [];
         for (let i = 0; i < headers.length; i++) {
             columnNames.push(getColumnNameFromHeadElement(tableSettings, headers[i]));
         }
         return columnNames;
-    }
+    }*/
 
     function showColumn(tableSettings, columnName) {
         let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
@@ -713,23 +713,6 @@ let table = (function () {
             columnElement.classList.remove('hidden-column');
         });
     }
-
-
-    function hideColumn(tableSettings, columnName) {
-        let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-        let columnElementsArray = Array.prototype.slice.call(columnElements);
-        columnElementsArray.forEach(function (columnElement) {
-            columnElement.classList.add('hidden-column');
-        });
-    }
-
-    /*    function intersectArrays(arrayA, arrayB) {
-            let t;
-            if (arrayB.length > arrayA.length) t = arrayB, arrayB = arrayA, arrayA = t; // indexOf to loop over shorter
-            return arrayA.filter(function (e) {
-                return arrayB.indexOf(e) > -1;
-            });
-        }*/
 
     function getColsToShowNames(columnsToShowTitles) {
         let columnsToShow = [];
@@ -750,69 +733,15 @@ let table = (function () {
 
     function showSelectedColumns(tableSettings, columnsToShowTitles) {
         let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-        let columns = getColumnNames(tableSettings);
-
-        // let hasSelectedColumns = false;
-
-
         let columnsToShow = getColsToShowNames(columnsToShowTitles);
-        console.log('cols to show', columnsToShow);
-        console.log('cols', columns);
-
         let colsCount = columnsToShow.length;
 
-        console.log('cols to show count', colsCount);
-
-        // let flagColumn = tableSettings.tableContainerElement.getElementsByClassName('flag-cell');
         showColumn(tableSettings,'cell-flag');
         columnsToShow.forEach(function(column){
             showColumn(tableSettings, column);
         });
-
-
-       /* let columnsToHide = columns.diff(columnsToShow);
-
-        let colsCount = columnsToHide.length;
-        console.log('array diff', columnsToHide);
-
-
-        columnsToHide.forEach(function(column){
-            hideColumn(tableSettings, column);
-        });*/
-
-        /*      if (columnsToShow !== undefined && columnsToShow.length > 0) {
-                  hasSelectedColumns = true;
-                  colsCount = columnsToShow.length;
-              }
-              columns.forEach(function (column) {
-                      let match = false;
-                      if (hasSelectedColumns) {
-                          columnsToShow.forEach(function (columnToShow) {
-                              if ('cell-' + columnToShow.toLowerCase() === column.toLowerCase()) {
-                                  match = true;
-                              }
-                          });
-                      } else {
-                          match = true;
-                      }
-                      if (match) {
-                          showColumn(tableSettings, column);
-                      } else {
-                          hideColumn(tableSettings, column);
-                      }
-                  }
-              );*/
         styleColsRows(tableSettings, colsCount, tbodyElement);
     }
-
-
-    Array.prototype.diff = function (a) {
-        return this.filter(function (i) {
-            return a.indexOf(i) < 0;
-        });
-    };
-
-    console.log([1, 2, 3].diff([1]));
 
 
     /*--------------------------------------------------------------------------------------*/
@@ -830,11 +759,6 @@ let table = (function () {
         } else {
             filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('select-container'));
         }
-        /*           if (tableSettings.filterContainerSelector !== undefined) {
-                        filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('element-table-filters');
-                    } else {
-                        filterElements = tableSettings.pageSelectorId.getElementsByClassName('element-table-filters');
-                    }*/
         return filterElements;
     }
 
