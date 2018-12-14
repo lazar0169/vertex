@@ -239,7 +239,7 @@ textarea {
 }
 
 .hidden-column {
-    display: none;
+    display: none !important;
 }
 
 

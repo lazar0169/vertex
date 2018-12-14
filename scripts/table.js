@@ -44,8 +44,8 @@ let table = (function () {
 
     function makeColumnTitle(columnName) {
         let columnTitle = columnName.replace(/([a-z](?=[A-Z]))/g, '$1 ');
-/*        let columnTitle = columnName.match(/([a-z])([A-Z])+/g);
-        columnTitle = columnTitle.join(' ');*/
+        /*        let columnTitle = columnName.match(/([a-z])([A-Z])+/g);
+                columnTitle = columnTitle.join(' ');*/
         return columnTitle;
     }
 
@@ -299,7 +299,7 @@ let table = (function () {
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
 
-        if(lastPage !== 1){
+        if (lastPage !== 1) {
             let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
             let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
             let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
@@ -409,11 +409,13 @@ let table = (function () {
 
     function updateTable(tableSettings) {
         let colsCount = getCountOfAllColumns(tableSettings);
-
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
         setSortingHeader(tableSettings);
-        showColumns(tableSettings, tableSettings.ColumnsToShow);
+        if(tableSettings.ColumnsToShow) {
+            hideAllColumns(tableSettings);
+            showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
+        }
         if (colsCount !== 0 && colsCount !== undefined) {
             updateTablePagination(tableSettings);
             bindSortingLinkHandlers(tableSettings);
@@ -597,7 +599,7 @@ let table = (function () {
                 delete headers[i].dataset.direction;
             }
         }
-        if(header !== undefined) {
+        if (header !== undefined) {
             header.classList.add('sort-active');
             header.classList.add('active-column');
             toggleDirection(header, tableSettings);
@@ -662,7 +664,7 @@ let table = (function () {
             let sortOrder = tableSettings.sort.SortOrder;
             if (sortName !== null && sortName !== undefined) {
                 let activeHeadElement = getHeadElementBySortName(tableSettings, sortName);
-                if(activeHeadElement !== undefined) {
+                if (activeHeadElement !== undefined) {
                     makeColumnActiveFromHeader(activeHeadElement, tableSettings);
                     activeHeadElement.classList.add('sort-' + sortOrderEnum[sortOrder]);
                 }
@@ -721,37 +723,96 @@ let table = (function () {
         });
     }
 
-    function showColumns(tableSettings, columnsToShow) {
+    /*    function intersectArrays(arrayA, arrayB) {
+            let t;
+            if (arrayB.length > arrayA.length) t = arrayB, arrayB = arrayA, arrayA = t; // indexOf to loop over shorter
+            return arrayA.filter(function (e) {
+                return arrayB.indexOf(e) > -1;
+            });
+        }*/
+
+    function getColsToShowNames(columnsToShowTitles) {
+        let columnsToShow = [];
+        if(columnsToShow !== undefined) {
+            columnsToShowTitles.forEach(function (columnTitle) {
+                columnsToShow.push('cell-' + columnTitle.toLowerCase());
+            });
+        }
+        return columnsToShow;
+    }
+
+    function hideAllColumns(tableSettings){
+        let allCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+        for (let i = 0; i < allCells.length; i++) {
+            allCells[i].classList.add('hidden-column');
+        }
+    }
+
+    function showSelectedColumns(tableSettings, columnsToShowTitles) {
         let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         let columns = getColumnNames(tableSettings);
 
-        let hasSelectedColumns = false;
-        let colsCount = columns.length;
+        // let hasSelectedColumns = false;
 
-        if (columnsToShow !== undefined && columnsToShow.length > 0) {
-            hasSelectedColumns = true;
-            colsCount = columnsToShow.length;
-        }
-        columns.forEach(function (column) {
-                let match = false;
-                if (hasSelectedColumns) {
-                    columnsToShow.forEach(function (columnToShow) {
-                        if ('cell-' + columnToShow.toLowerCase() === column.toLowerCase()) {
-                            match = true;
-                        }
-                    });
-                } else {
-                    match = true;
-                }
-                if (match) {
-                    showColumn(tableSettings, column);
-                } else {
-                    hideColumn(tableSettings, column);
-                }
-            }
-        );
+
+        let columnsToShow = getColsToShowNames(columnsToShowTitles);
+        console.log('cols to show', columnsToShow);
+        console.log('cols', columns);
+
+        let colsCount = columnsToShow.length;
+
+        console.log('cols to show count', colsCount);
+
+        // let flagColumn = tableSettings.tableContainerElement.getElementsByClassName('flag-cell');
+        showColumn(tableSettings,'cell-flag');
+        columnsToShow.forEach(function(column){
+            showColumn(tableSettings, column);
+        });
+
+
+       /* let columnsToHide = columns.diff(columnsToShow);
+
+        let colsCount = columnsToHide.length;
+        console.log('array diff', columnsToHide);
+
+
+        columnsToHide.forEach(function(column){
+            hideColumn(tableSettings, column);
+        });*/
+
+        /*      if (columnsToShow !== undefined && columnsToShow.length > 0) {
+                  hasSelectedColumns = true;
+                  colsCount = columnsToShow.length;
+              }
+              columns.forEach(function (column) {
+                      let match = false;
+                      if (hasSelectedColumns) {
+                          columnsToShow.forEach(function (columnToShow) {
+                              if ('cell-' + columnToShow.toLowerCase() === column.toLowerCase()) {
+                                  match = true;
+                              }
+                          });
+                      } else {
+                          match = true;
+                      }
+                      if (match) {
+                          showColumn(tableSettings, column);
+                      } else {
+                          hideColumn(tableSettings, column);
+                      }
+                  }
+              );*/
         styleColsRows(tableSettings, colsCount, tbodyElement);
     }
+
+
+    Array.prototype.diff = function (a) {
+        return this.filter(function (i) {
+            return a.indexOf(i) < 0;
+        });
+    };
+
+    console.log([1, 2, 3].diff([1]));
 
 
     /*--------------------------------------------------------------------------------------*/
@@ -992,6 +1053,7 @@ let table = (function () {
         generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
         tableSettings.activePage = 1;
+        delete tableSettings.ColumnsToShow;
 
         if (tableSettings.tableData === undefined) {
             // generateTableHeaders(tableSettings);
