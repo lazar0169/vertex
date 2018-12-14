@@ -140,6 +140,7 @@ let table = (function () {
             head.innerHTML = '';
             head.classList.add('cell-flag');
             head.classList.add('cell');
+            head.classList.add('first-cell');
             tbody.appendChild(head);
 
             for (let col = 0; col < colsCount; col++) {

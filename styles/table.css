@@ -2,6 +2,8 @@
     position: relative;
     width: 100%;
     box-sizing: border-box;
+    height: calc(100vh - 5% - 3% - 2rem - 6% - 44px - 5%); /*100vh - top bar - tabs - tabs margin - custom filter*/
+    overflow: scroll;
 }
 
 .tbody {
@@ -49,6 +51,12 @@
     transition: 0.2s background-color;
     width: 100%;
     font-size: 14px;
+}
+
+.cell-flag.cell.first-cell {
+    top: 0;
+    position: sticky !important;
+    position: -webkit-sticky;
 }
 
 .head.cell:hover {
