@@ -65,6 +65,7 @@
       "user-profile/user-edit-profile.css",
       "sidebar.css",
       "modify-spectre.css",
+      "plugins/plugins.css",
       "machines/machines-page.css",
       "machines/machines-filters.css",
       "machines/machines-table.css",

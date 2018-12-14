@@ -148,18 +148,15 @@
 <div id="tickets-sms-settings-tab-info" class="chosen-info-tab overflow-content hidden">
     <div class=" element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
-        <div id="tickets-enable-sms-check" class="element-form-check">
-            <div class="element-multilanguage"
-            data-translation-key="Tickets.SmsSettings.Enable.Sms">
-                Enable sms:
-            </div>
-            <div id="tickets-enable-sms-mode element-multilanguage" data-translation-key="Yes" class="element-form-mode">
-                Yes
-            </div>
-            <label class="form-switch">
-                <input name="EnableSms" class="element-form-data" type="checkbox" checked>
-                <i class="form-icon"></i>
-            </label>
+        <div id="tickets-enable-sms-check">
+            <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Enable.Sms">Enable sms:</label>
+            <figure class="element-form-check vertex-form-checkbox">
+                <div id="tickets-enable-sms-mode" class="element-form-mode checkbox-label">Yes</div>
+                <label class="form-switch">
+                    <input name="EnableSms" data-type="int" class="element-form-data" type="checkbox">
+                    <i class="form-icon"></i>
+                </label>
+            </figure>
         </div>
         <div id="tickets-sms-settings-max-redemption">
             <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">
@@ -198,18 +195,15 @@
                 </button>
             </div>
         </div>
-        <div id="tickets-enable-email-check" class="element-form-check">
-            <div class="element-multilanguage"
-                 data-translation-key="Tickets.SmsSettings.Enable.Email">
-                Enable email:
-            </div>
-            <div id="tickets-enable-email-mode" class="element-form-mode element-multilanguage" data-translation-key="Yes">
-                Yes
-            </div>
-            <label class="form-switch">
-                <input name="EnableEmail" class="element-form-data" type="checkbox" checked>
-                <i class="form-icon"></i>
-            </label>
+        <div id="tickets-enable-email-check">
+            <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Enable.Email">  Enable email:</label>
+            <figure class="element-form-check vertex-form-checkbox">
+                <div id="tickets-enable-email-mode" class="element-form-mode checkbox-label">Yes</div>
+                <label class="form-switch">
+                    <input name="EnableEmail" data-type="int" class="element-form-data" type="checkbox">
+                    <i class="form-icon"></i>
+                </label>
+            </figure>
         </div>
         <div id="tickets-sms-settings-send-email" class="tickets-sms-settings">
             <div>

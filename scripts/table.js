@@ -438,7 +438,6 @@ let table = (function () {
     }
 
     on('table/update', function (params) {
-        console.log('params in table/update', params);
 
         let tableSettings = params.settingsObject;
         let tableData = [];
