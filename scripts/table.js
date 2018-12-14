@@ -412,8 +412,9 @@ let table = (function () {
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
         setSortingHeader(tableSettings);
-        hideAllColumns(tableSettings);
-        showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
+        if(tableSettings.ColumnsToShow) {
+            showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
+        }
         if (colsCount !== 0 && colsCount !== undefined) {
             updateTablePagination(tableSettings);
             bindSortingLinkHandlers(tableSettings);
@@ -730,10 +731,14 @@ let table = (function () {
     }
 
     function showSelectedColumns(tableSettings, columnsToShowTitles) {
+
+        hideAllColumns(tableSettings);
         let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         let colsCount;
+        console.log('columnstoshow', columnsToShowTitles);
 
-        if (columnsToShowTitles === null || columnsToShowTitles === undefined) {
+
+        if (columnsToShowTitles === null || columnsToShowTitles === undefined || columnsToShowTitles.length === 0) {
             let allColumns = getColumnNames(tableSettings);
             colsCount = allColumns.length;
             showColumn(tableSettings, 'cell-flag');
