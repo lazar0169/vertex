@@ -1,12 +1,29 @@
 const ticketsFilter = (function () {
 
     let ticketSortName = {
-        type:  1,
+        type: 1,
         amount: 2,
         code: 3,
         issuedby: 4, //todo check if this is it
         redeemedby: 5, //todo check if this is it
         status: 9
+    };
+
+    let ticketStatus = {
+        TicketActive: 0,
+        TicketDeleted: 1,
+        TicketStacked: 2,
+        TicketEscrowed: 3,
+        TicketPayed: 4,
+        TicketNotExisting: 5,
+        TicketCanceled: 8
+
+    };
+
+    let ticketType = {
+        Cashable: 0,
+        Promo: 1,
+        Other: 2
     };
 
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
@@ -85,6 +102,58 @@ const ticketsFilter = (function () {
         displayFilters(filters, tableSettings);
     });
 
+    function prepareStatusArrayData(dataArray) {
+        let preparedStatusData = [];
+        dataArray.forEach(function (status) {
+            if (ticketStatus[status] !== undefined) {
+                preparedStatusData.push(ticketStatus[status]);
+            } else {
+                preparedStatusData.push(null);
+            }
+        });
+        return preparedStatusData;
+    }
+
+    function prepareTypeArrayData(dataArray) {
+        let preparedTypeData = [];
+        dataArray.forEach(function (status) {
+            if (ticketType[status] !== undefined) {
+                preparedTypeData.push(ticketType[status]);
+            } else {
+                preparedTypeData.push(null);
+            }
+        });
+        return preparedTypeData;
+    }
+
+
+    function preparePrintedListData(dataArray) {
+        let preparedPrintedListData = [];
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (arrayElement) {
+                let object = {
+                    Name: arrayElement.toString(),
+                    ID: parseInt(arrayElement)
+                };
+                preparedPrintedListData.push(object);
+            });
+        }
+        return preparedPrintedListData;
+    }
+
+    function prepareRedeemListData(dataArray) {
+        let preparedRedeemListData = [];
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (arrayElement) {
+                let object = {
+                    Name: arrayElement.toString(),
+                    ID: parseInt(arrayElement)
+                };
+                preparedRedeemListData.push(object);
+            });
+        }
+        return preparedRedeemListData;
+    }
 
     function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
@@ -95,12 +164,12 @@ const ticketsFilter = (function () {
             "DateTo": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
             "RedeemDateFrom": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
             "RedeemDateTo": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            "PrintedList": pageFilters.Printed,
-            "RedeemList": pageFilters.Redeemed,
-            "Status": pageFilters.Status,
-            "Type": pageFilters.TypesList,
+            "PrintedList": preparePrintedListData(pageFilters.Printed),
+            "RedeemList": prepareRedeemListData(pageFilters.Redeemed),
+            "Status": prepareStatusArrayData(pageFilters.Status),
+            "Type": prepareTypeArrayData(pageFilters.TypesList),
             "BasicData": {
-                "Page": 1,
+                "Page": currentTableSettingsObject.activePage,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
                 "SortOrder": sorting.SortOrder,
                 "SortName": ticketSortName[sorting.SortName] !== undefined ? ticketSortName[sorting.SortName] : null
@@ -115,7 +184,6 @@ const ticketsFilter = (function () {
     }
 
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
-        alert('Apply filters tickets');
         let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
         trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,

@@ -240,6 +240,7 @@ let form = (function () {
                 }
             }
         });
+        console.log('prepared data for API', dataForApi);
         return dataForApi;
     }
 

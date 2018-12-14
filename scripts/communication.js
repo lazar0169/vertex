@@ -158,16 +158,12 @@ let communication = (function () {
             };
         }
 
-        console.log('formated data', formatedData);
-
         tableSettings.formatedData = formatedData;
 
         return formatedData;
     }
 
     function formatTimeData(timeData){
-        console.log('format time data', timeData);
-        console.log('format time data typeof', typeof timeData);
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/,'');
     }
 
@@ -643,16 +639,6 @@ let communication = (function () {
         send(xhr);
     });
 
-    //events for home
-    on('communicate/home/data', function (params) {
-        //FORWARD DATA TO API
-        //GET DATA FROM API
-        let dataFormAPI = {
-            activePage: 2,
-            lastPage: 6
-        };
-        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: dataFormAPI});
-    });
 
     //events for casino
     on('communicate/casino-info', function (params) {

@@ -4,13 +4,14 @@ const aftFilters = (function () {
         cashable: 0,
         promo: 1,
         amountnonrestrictive: 2,
-        eventtime: 3,
+        createdby: 3,
         gmcid: 4,
         jidtp: 5,
         status: 6,
         machinename: 7,
         jackpotname: 8,
-        type: 9
+        type: 9,
+        finishedby: 10
     };
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
@@ -112,6 +113,7 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
+
         return filtersForApi;
     }
 

@@ -198,8 +198,6 @@ let table = (function () {
 
     function generateTableRows(tableSettings) {
 
-        console.log('table settings in generate table rows', tableSettings);
-
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
@@ -816,10 +814,6 @@ let table = (function () {
         if (filters.Columns === null) {
             filters.Columns = [];
         }
-        /*        if (tableSettings.PageSize !== null && tableSettings.PageSize !== undefined) {
-                    tableSettings.PageSize = parseInt(filters.PageSize, 10);
-                    console.log('table settings page size', tableSettings.PageSize);
-                }*/
         return filters;
     }
 
@@ -997,6 +991,7 @@ let table = (function () {
 
         generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
+        tableSettings.activePage = 1;
 
         if (tableSettings.tableData === undefined) {
             // generateTableHeaders(tableSettings);
