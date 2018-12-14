@@ -63,7 +63,7 @@ on('apply-custom-date', function (data) {
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
 
     let tempArray = [dateFrom, `${timeFromHour}:${timeFromMinutes}`, dateTo, `${timeToHour}:${timeToMinutes}`];
-    if (dateFrom === undefined || timeFromHour === '-' || timeFromMinutes === '-' || dateTo === undefined || timeToHour === '-' || timeToMinutes === '-') {
+    if (timeFromHour === '-' || timeFromMinutes === '-' || timeToHour === '-' || timeToMinutes === '-') {
         alert('Wrong parameters, please check parameters.');
         delete data.target.dataset.value
 
@@ -71,35 +71,39 @@ on('apply-custom-date', function (data) {
     else {
         $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
         $$(`#ds-${data.selectId}`).children[0].title = `Date from: ${tempArray[0]}, Time from: ${tempArray[1]}, Date to: ${tempArray[2]}, Time to: ${tempArray[3]}`;
-        $$(`#ds-${data.selectId}`).children[0].dataset.value = tempArray;
+        $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}, ${tempArray[2]}T${tempArray[3]}`;
         data.target.dataset.value = 'Apply custom date'
         let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).children[0].dataset.value);
         console.log(jsonCustomDate);
     }
 });
 on('cancel-custom-date', function (data) {
-    delete $$(`#datepicker-from-${data.selectId}`).dataset.value;
+    let date = new Date();
+    let apiString = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    trigger(`set-date-datepicker`, { pickerId: `datepicker-from-${data.selectId}`, date: apiString });
     let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0].children[0];
-    timeFromHour.innerHTML = hour[0];
-    timeFromHour.dataset.value = hour[0];
+    timeFromHour.innerHTML = hours[0];
+    timeFromHour.dataset.value = hours[0];
     let timeFromMinutes = $$(`#time-from-${data.selectId}`).children[1].children[1].children[0];
     timeFromMinutes.innerHTML = minutes[0];
     timeFromMinutes.dataset.value = minutes[0];
-    delete $$(`#datepicker-to-${data.selectId}`).dataset.value;
     let timeToHour = $$(`#time-to-${data.selectId}`).children[1].children[0].children[0];
     timeToHour.innerHTML = hours[0];
     timeToHour.dataset.value = hours[0];
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0];
     timeToMinutes.innerHTML = minutes[0];
     timeToMinutes.dataset.value = minutes[0];
-    delete $$(`#ds-${data.selectId}`).dataset.value;
+    trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
     $$(`#ds-${data.selectId}`).children[0].innerHTML = nekiniz[0];
     $$(`#ds-${data.selectId}`).children[0].title = nekiniz[0];
+    $$(`#ds-${data.selectId}`).children[0].dataset.value = nekiniz[0];
     delete data.target.dataset.value;
-
 });
 
 on('set-date-datepicker', function (data) {
+    if (data.isCancel) {
+        console.log('ukloni is-selected na td, i isti postavi na danasnji datum');
+    }
     $$(`#${data.pickerId}`).dataset.value = data.date;
-    console.log($$(`#${data.pickerId}`).dataset.value)
+    $$(`#${data.pickerId}`).value = data.date;
 });

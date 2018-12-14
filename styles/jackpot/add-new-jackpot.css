@@ -1,0 +1,97 @@
+#add-new-jackpot-wrapper {
+    width: 100%;
+    height: 100%;
+    background: rgb(38, 50, 56);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#add-new-jackpot-wrapper>div {
+    width: 100%;
+    height: 100%;
+}
+
+#add-new-jackpot-wrapper>div>div {
+    padding: 0.5rem;
+}
+
+#add-new-jackpot-content-inputs {
+    display: flex;
+    flex-flow: row wrap;
+    white-space: nowrap;
+}
+
+#add-new-jackpot-content-inputs>div:not(:first-child) {
+    margin-left: 0.5rem;
+}
+
+.add-new-jackpot-control-settings {
+    border-bottom: 1px solid rgb(120, 144, 156);
+}
+
+.add-new-jackpot-control-settings>div:first-child, .add-new-jackpot-control-settings>div:first-child>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+}
+
+#add-new-jackpot-content-buttons-wrapper {
+    position: absolute;
+    right: 0;
+}
+
+.add-new-jackpot-control-settings-info {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.add-new-jackpot-control-settings-info::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0.5rem;
+    width: 0;
+    height: 0;
+    border-top: 0.4rem solid rgb(30, 155, 227);
+    border-right: 0.15rem solid transparent;
+    border-left: 0.15rem solid transparent;
+}
+
+.add-new-jackpot-control-settings>div:not(:first-child) {
+    width: 100%;
+    height: 30%;
+}
+
+.add-new-jackpot-control-settings>div:not(:first-child)>div {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+    align-items: center;
+}
+
+.add-new-jackpot-control-settings>div:not(:first-child)>div>div {
+    margin-left: 0.5rem;
+}
+
+.add-new-jackpot-control-settings-info>div:not(:first-child) {
+    padding-left: 0.5rem;
+}
+
+.checked-add-new-jackpot-settings {
+    color: white;
+}
+
+.active-add-new-jackpot-settings {
+    color: lime !important;
+}
+
+.add-new-jackpot-control-settings-info>div:not(:first-child) {
+    color: red;
+}
+
+.expanded-add-new-jackpot-settings {
+    padding-bottom: 0.5rem;
+}

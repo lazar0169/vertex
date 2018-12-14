@@ -29,29 +29,29 @@ const aft = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
 
-        let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
+        let addTransactionButton = $$('#aft-add-transaction').children[0];
 
         addTransactionButton.addEventListener('click', function () {
             let data =
-                {
-                    'EndpointId': aftId,
-                    'EndpointName': '',
-                    'Gmcid': 1565666846,
-                    'MachineName': '',
-                    'Type': 0,
-                    'CashableAmount': 13800,
-                    'PromoAmount': 13800,
-                    'ExpirationInDays': 7
-                };
-            trigger('communicate/aft/addTransaction', {data: data, tableSettings: tableSettings});
+            {
+                'EndpointId': aftId,
+                'EndpointName': '',
+                'Gmcid': 1565666846,
+                'MachineName': '',
+                'Type': 0,
+                'CashableAmount': 13800,
+                'PromoAmount': 13800,
+                'ExpirationInDays': 7
+            };
+            trigger('communicate/aft/addTransaction', { data: data, tableSettings: tableSettings });
         });
 
         on('aft/addTransaction', function () {
 
         });
 
-        trigger('aft/tab/transaction', {tableSettings: tableSettings});
-        trigger('aft/tab/notification', {tableSettings: tableSettings});
+        trigger('aft/tab/transaction', { tableSettings: tableSettings });
+        trigger('aft/tab/notification', { tableSettings: tableSettings });
 
     });
 })();

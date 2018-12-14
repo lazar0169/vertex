@@ -52,13 +52,13 @@ let communication = (function () {
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
+            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
         }
-        trigger('communicate/token/refresh', {token: data.TokenInfo});
+        trigger('communicate/token/refresh', { token: data.TokenInfo });
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = {"message": xhr.responseText};
+        let errorData = { "message": xhr.responseText };
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
@@ -170,13 +170,13 @@ let communication = (function () {
             let entryData = {};
             entryData.Code = entry.EntryData.FullTicketValIdationNumber;
             delete entry.EntryData.FullTicketValIdationNumber;
-            Object.keys(entry.EntryData).forEach(function(key) {
+            Object.keys(entry.EntryData).forEach(function (key) {
                 entryData[key] = entry.EntryData[key];
             });
             entry.EntryData = entryData;
 
-            if(entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ entry.EntryData.TicketType;
+            if (entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + entry.EntryData.TicketType;
             }
         });
         return data;
@@ -204,7 +204,7 @@ let communication = (function () {
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
-        trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
+        trigger(event, { data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent });
     });
 
 
@@ -398,7 +398,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
+        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -585,7 +585,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
+        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -611,7 +611,7 @@ let communication = (function () {
             activePage: 2,
             lastPage: 6
         };
-        trigger(params.callbackEvent, {tableSettings: params.tableSettings, data: dataFormAPI});
+        trigger(params.callbackEvent, { tableSettings: params.tableSettings, data: dataFormAPI });
     });
 
     //events for casino
@@ -1082,6 +1082,4 @@ let communication = (function () {
         }
         timeoutSet(params);
     });
-
-
 })();

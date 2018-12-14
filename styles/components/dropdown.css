@@ -44,10 +44,9 @@
 
 }
 
-.default-select > div:not(:first-child), .option-select-date {
-    /*min-width: 120px;*/
-    /*max-width: 400px;*/
-    width: 100%;
+.default-select>div:not(:first-child), .option-select-date {
+    min-width: 120px;
+    max-width: 450px;
     max-height: 300px;
     background: rgb(38, 50, 56);
     position: absolute;
@@ -94,8 +93,8 @@
     width: 100%;
 }
 
-.option-select-date > div:first-child > div {
-    padding-left: 0.5rem;
+.option-select-date>div:first-child>div {
+    padding: 0.2rem 0.5rem;
 }
 
 .option-select-date > div:first-child {
