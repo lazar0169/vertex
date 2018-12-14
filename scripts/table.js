@@ -412,10 +412,8 @@ let table = (function () {
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
         setSortingHeader(tableSettings);
-        if(tableSettings.ColumnsToShow) {
-            hideAllColumns(tableSettings);
-            showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
-        }
+        hideAllColumns(tableSettings);
+        showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
         if (colsCount !== 0 && colsCount !== undefined) {
             updateTablePagination(tableSettings);
             bindSortingLinkHandlers(tableSettings);
@@ -697,14 +695,14 @@ let table = (function () {
         return cellClassName;
     }
 
-/*    function getColumnNames(tableSettings) {
+    function getColumnNames(tableSettings) {
         let headers = getHeaders(tableSettings);
         let columnNames = [];
         for (let i = 0; i < headers.length; i++) {
             columnNames.push(getColumnNameFromHeadElement(tableSettings, headers[i]));
         }
         return columnNames;
-    }*/
+    }
 
     function showColumn(tableSettings, columnName) {
         let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
@@ -716,7 +714,7 @@ let table = (function () {
 
     function getColsToShowNames(columnsToShowTitles) {
         let columnsToShow = [];
-        if(columnsToShow !== undefined) {
+        if (columnsToShow !== undefined) {
             columnsToShowTitles.forEach(function (columnTitle) {
                 columnsToShow.push('cell-' + columnTitle.toLowerCase());
             });
@@ -724,7 +722,7 @@ let table = (function () {
         return columnsToShow;
     }
 
-    function hideAllColumns(tableSettings){
+    function hideAllColumns(tableSettings) {
         let allCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
         for (let i = 0; i < allCells.length; i++) {
             allCells[i].classList.add('hidden-column');
@@ -733,13 +731,24 @@ let table = (function () {
 
     function showSelectedColumns(tableSettings, columnsToShowTitles) {
         let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-        let columnsToShow = getColsToShowNames(columnsToShowTitles);
-        let colsCount = columnsToShow.length;
+        let colsCount;
 
-        showColumn(tableSettings,'cell-flag');
-        columnsToShow.forEach(function(column){
-            showColumn(tableSettings, column);
-        });
+        if (columnsToShowTitles === null || columnsToShowTitles === undefined) {
+            let allColumns = getColumnNames(tableSettings);
+            colsCount = allColumns.length;
+            showColumn(tableSettings, 'cell-flag');
+            allColumns.forEach(function (column) {
+                showColumn(tableSettings, column);
+            });
+        } else {
+            let columnsToShow = getColsToShowNames(columnsToShowTitles);
+            colsCount = columnsToShow.length;
+            showColumn(tableSettings, 'cell-flag');
+            columnsToShow.forEach(function (column) {
+                showColumn(tableSettings, column);
+            });
+
+        }
         styleColsRows(tableSettings, colsCount, tbodyElement);
     }
 
