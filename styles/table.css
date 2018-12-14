@@ -250,11 +250,11 @@ textarea {
     padding-right: 20px;
 }
 
-.cell-createdby, .cell-finishedby, .cell-cashoutedby, .cell-redeemedby {
+.cell-createdby, .cell-finishedby, .cell-issuedby, .cell-redeemedby {
     display: block;
 }
 
-.cell-createdby.head, .cell-finishedby.head, .cell-cashoutedby.head, .cell-redeemedby.head {
+.cell-createdby.head, .cell-finishedby.head, .cell-issuedby.head, .cell-redeemedby.head {
     display: flex;
     flex-direction: row;
 }
