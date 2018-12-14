@@ -340,6 +340,10 @@ let table = (function () {
 
             let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
 
+            for(let i=0; i < paginationButtons.length; i++){
+                paginationButtons[i].classList.remove('active');
+            }
+
             for (let i = 0; i < paginationButtons.length; i++) {
                 paginationButtons[i].dataset.page = paginationArray[i];
                 paginationButtons[i].innerHTML = paginationArray[i];
