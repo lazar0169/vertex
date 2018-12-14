@@ -15,22 +15,29 @@ function validateEncodedToken(accessToken) {
         let accessTokenSplit = accessToken.split('.')[1];
         if (atob(accessTokenSplit)) {
             return true;
-        }
-        else return false;
+        } else return false;
     }
     console.error('Encoded token is not valid!');
     return false;
 }
 
 function decodeToken(encodedToken) {
-    let encodedTokenJSON = JSON.parse(encodedToken);
-    let accessToken = encodedTokenJSON.access_token;
-    if (validateEncodedToken(accessToken)){
-        let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
-        return decodedToken;
+    if(encodedToken === undefined) {
+        console.error('Token does not exist!');
     }
-    console.error('Could not decode token!');
+    else if (encodedToken !== null || encodedToken !== undefined) {
+        let encodedTokenJSON = JSON.parse(encodedToken);
+        let accessToken = encodedTokenJSON.access_token;
+        if (validateEncodedToken(accessToken)) {
+            let decodedToken = JSON.parse(atob(accessToken.split('.')[1]));
+            return decodedToken;
+        }
+        console.error('Could not decode token!');
+    } else {
+        console.error('Token does not exist!');
+    }
 }
+
 
 //ToDo:Lazar - Da li je ok da ovo bude ovde - koristim je vec u 2 modula za sad
 //returns value from an object base on select string -> path='account.createdAt' -> object = user:{account:{createdAt:10/10/2010}}
@@ -41,9 +48,31 @@ function getProperty(path, object) {
     }, object || self);
 }
 
+//removes all children except firs one
+function removeChildren(element) {
+    while (element.childElementCount > 1) {
+        element.removeChild(element.lastChild);
+    }
+}
+//formats number 2000.53 into 2,000.53
+function formatFloatValue(amount) {
+    let decimalCount = 2, decimal = ".", thousands = ",";
+    try {
+        decimalCount = Math.abs(decimalCount);
+        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+        const negativeSign = amount < 0 ? "-" : "";
+
+        let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+        let j = (i.length > 3) ? i.length % 3 : 0;
+
+        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 //add and remove class
-
 
 
 const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;

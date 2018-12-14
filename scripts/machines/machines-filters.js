@@ -3,7 +3,7 @@ const machinesFilter = (function () {
     let machinesFiltersStatus = $$('#machine-filters-status');
     
 
-    machinesFiltersVendors.appendChild(multiDropdown.generate(machinesVendors));
-    machinesFiltersStatus.appendChild(multiDropdown.generate(machinesStatus));
+    // machinesFiltersVendors.appendChild(multiDropdown.generate(machinesVendors));
+    // machinesFiltersStatus.appendChild(multiDropdown.generate(machinesStatus));
     
 })();

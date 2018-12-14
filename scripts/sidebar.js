@@ -105,6 +105,10 @@ const sidebar = (function () {
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
+            let sidebarList = document.getElementById("sidebar-list");
+            while (sidebarList.firstChild) {
+                sidebarList.firstChild.remove();
+            }
             let tempFragment = document.createElement('div');
 
             let center = document.createElement('div');
@@ -176,9 +180,9 @@ const sidebar = (function () {
                     tempFragment.addEventListener('click', function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
-                        trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
-                        // trigger('communicate/category', { category: category }); //todo check if needed
                         selectLink(linkSelectedId);
+                        // trigger('communicate/category', { category: category }); //todo check if needed
+                        trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
                         navigation.hide();
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].List;

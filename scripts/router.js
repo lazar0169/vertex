@@ -99,6 +99,7 @@ let router = (function () {
     }
 
     function changePage(pageName, addStateToHistory, url) {
+        application.checkCurrentUser();
         hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
@@ -249,7 +250,6 @@ let router = (function () {
         }
         return [];
     }
-
 
     //Function for manipulating history stack
     function pushToHistoryStack(route, params) {

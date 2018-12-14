@@ -1,4 +1,16 @@
 const ticketAppearance = (function () {
+
+    let formSettingsAppearance = {};
+    formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
+    formSettingsAppearance.fillEvent = 'communicate/tickets/ticketAppearance';
+    formSettingsAppearance.submitEvent = 'communicate/tickets/saveAppearance';
+
+    on('tickets/tab/appearance', function (params) {
+        formSettingsAppearance.endpointId = params.tableSettings.endpointId;
+        trigger('form/init', {formSettings: formSettingsAppearance});
+        trigger('form/getData', {formSettings: formSettingsAppearance});
+    });
+
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
     let inputCasino = $$('#wrapper-tickets-appearance-general-settings').children[1].children[1];
@@ -8,10 +20,13 @@ const ticketAppearance = (function () {
     let inputChasoutTicket = $$('#wrapper-tickets-appearance-cashable').children[1].children[1];
     let inputExpiringCashout = $$('#wrapper-tickets-appearance-cashable').children[2].children[1];
     let inputExpiringPromo = $$('#wrapper-tickets-appearance-promo').children[2].children[1];
+    let inputPayablePromo = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
     let inputValidation = $$('#tickets-advanced-settings-validation').children[1];
     let inputTicket = $$('#tickets-advanced-settings-ticket').children[1];
     let dateWrapper = $$('#tickets-advanced-settings-date');
+    // let dateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let timeWrapper = $$('#tickets-advanced-settings-time');
+    // let timeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let inputTicketVoid = $$('#tickets-advanced-settings-void').children[1];
     let inputTicketVoidDays = $$('#tickets-advanced-settings-days').children[1];
     let inputAsset = $$('#tickets-advanced-settings-asset').children[1];
@@ -21,6 +36,7 @@ const ticketAppearance = (function () {
     let inputPromoTicket = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
     let cancelTicketAppearance = $$('#appearance-buttons-wrapper').children[0];
     let saveTicketAppearance = $$('#appearance-buttons-wrapper').children[1];
+
 
     let dd = '16';
     let MM = '10';
@@ -35,7 +51,7 @@ const ticketAppearance = (function () {
     let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
-    let dateFormatArray = ['dd.MM.yyyy', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
+    let dateFormatArray = ['dd.MM.yyyy.', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
     let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
     dateWrapper.appendChild(dropdown.generate(dateFormatArray));
     timeWrapper.appendChild(dropdown.generate(timeFormatArray));
@@ -44,6 +60,13 @@ const ticketAppearance = (function () {
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
     let setTimeFormat = $$('#tickets-advanced-settings-time').children[1];
 
+    selectedDateFormat.setAttribute('data-name', 'DateFormat');
+    selectedDateFormat.setAttribute('data-type', 'single-select');
+    selectedDateFormat.classList.add('element-form-data');
+    selectedTimeFormat.setAttribute('data-name', 'TimeFormat');
+    selectedTimeFormat.setAttribute('data-type', 'single-select');
+    selectedTimeFormat.classList.add('element-form-data');
+
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');
         chasableTicket.classList.add('tab-active');
@@ -51,8 +74,7 @@ const ticketAppearance = (function () {
         if (isNaN(inputExpiringCashout.value)) {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
             draw(ticketVoidAfterDaysCoordinate, '');
-        }
-        else {
+        } else {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
             draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
@@ -65,8 +87,7 @@ const ticketAppearance = (function () {
         if (isNaN(inputExpiringPromo.value)) {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringPromo.value);
             draw(ticketVoidAfterDaysCoordinate, '');
-        }
-        else {
+        } else {
             draw(ticketVoidAfterNumberCoordinate, inputExpiringPromo.value);
             draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         }
@@ -227,8 +248,7 @@ const ticketAppearance = (function () {
         draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
         if (!isNaN(inputExpiringCashout.value)) {
             draw(ticketVoidAfterDaysCoordinate, inputCurrency.value);
-        }
-        else {
+        } else {
             draw(ticketVoidAfterDaysCoordinate, '');
         }
         draw(assetCoordinate, `${inputAsset.value} #`);
@@ -344,13 +364,11 @@ const ticketAppearance = (function () {
             ctx.rotate(-Math.PI / 2);
             ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
             ctx.restore();
-        }
-        else if (coordinate.y < 0) {
+        } else if (coordinate.y < 0) {
             ctx.rotate(Math.PI / 2);
             ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
             ctx.restore();
-        }
-        else {
+        } else {
             ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
         }
     }
@@ -364,10 +382,7 @@ const ticketAppearance = (function () {
     }
 
     cancelTicketAppearance.addEventListener('click', function () {
-        alert('Reset to default');
+        trigger('form/getData', {formSettings: formSettingsAppearance});
     });
 
-    saveTicketAppearance.addEventListener('click', function () {
-        alert('Save data');
-    });
 })();

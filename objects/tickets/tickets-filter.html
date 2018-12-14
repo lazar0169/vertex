@@ -4,16 +4,50 @@
     </div>
     <div id="wrapper-tickets-export-to" class="wrapper-export-to center">
         <div id="tickets-export-to">Export to:</div>
-        <div id="tickets-export-pdf"> <span class="mdi mdi-view-sequential"></span></div>
-        <div id="tickets-export-xls"> <span class="mdi mdi-view-sequential show-space-active"></span></div>
+        <div id="tickets-export-pdf"></div>
+        <div id="tickets-export-xls"></div>
     </div>
     <div id="tickets-right-filter" class="custom-right-filter center">
         <div id="tickets-show-space">
-            <span class="mdi mdi-view-sequential"></span>
-            <span class="mdi mdi-view-headline how-space-active"></span>
+            <span class="mdi mdi-view-sequential show-space show-table-expanded"></span>
+            <span class="mdi mdi-view-headline show-space show-table-condensed show-space-active"></span>
         </div>
-        <div id="tickets-machines-number">
+        <div id="tickets-machines-number"  class="page-size select-container" data-name="PageSize">
             <div class='hidden'></div>
+        </div>
+    </div>
+</div>
+<div id="tickets-advance-table-filter-active" class="element-table-filters-container hidden">
+    <div id="tickets-advance-table-filter-print-date" data-name="PrintDate" class="select-container">
+        <div>Print from/to:</div>
+    </div>
+    <div id="tickets-advance-table-filter-redeem-date" data-name="RedeemDate" class="select-container">
+        <div>Redeem from/to:</div>
+    </div>
+    <div id="tickets-advance-table-filter-status" data-name="Status" class="select-container">
+        <div>Status:</div>
+    </div>
+    <div id="tickets-advance-table-filter-types" data-name="TypesList" class="select-container">
+        <div>Type:</div>
+    </div>
+    <div id="tickets-advance-table-filter-printed" data-name="Printed" class="select-container">
+        <div>Printed:</div>
+    </div>
+    <div id="tickets-advance-table-filter-redeemed" data-name="Redeemed" class="select-container">
+        <div>Redeemed:</div>
+    </div>
+    <div id="tickets-advance-table-filter-column" data-name="Column" class="select-container">
+        <div>Choose columns to show:</div>
+    </div>
+
+
+
+    <div>
+        <div id="tickets-advance-table-filter-apply" class="center">
+            <button class="btn btn-success tickets">Apply Filters</button>
+        </div>
+        <div id="tickets-advance-table-filter-clear" class="center">
+            <button class="btn btn-cancel">Clear all</button>
         </div>
     </div>
 </div>

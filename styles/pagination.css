@@ -1,5 +1,5 @@
 .pagination {
-    justify-content: center;
+    justify-content: left;
     width: 500px;
 }
 
@@ -9,9 +9,9 @@
     list-style-type: none;
 }
 
-.element-pagination-page-button.active {
-    background-color: red;
-}
+/*.element-pagination-page-button.active {*/
+    /*background-color: red;*/
+/*}*/
 
 .element-pagination-page-button.hidden {
     display: none;
@@ -24,3 +24,22 @@
 .pagination-last-page-hover {
     display: none;
 }
+
+.element-pagination-page-button,.aft-pagination .element-pagination-link {
+    color: rgb(111,134,144);
+    background: rgb(38, 50, 56);
+    border: none;
+    padding: 0.2rem 0.3rem;
+    border-radius: 10%;
+}
+
+.element-pagination-page-button:hover,.element-pagination-page-button.active,.element-pagination-link {
+    color: rgb(255,255,255);
+    background: rgb(58,73,80);
+    border: none;
+}
+
+.aft-pagination .page-item a {
+    padding: 0;
+}
+
