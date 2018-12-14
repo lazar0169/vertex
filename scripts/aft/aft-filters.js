@@ -25,6 +25,7 @@ const aftFilters = (function () {
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('aft-advance-active');
         advanceTableFilterActive.classList.toggle('hidden');
+        $$(currentTableSettingsObject.tableContainerSelector).classList.toggle('smaller-table');
     }
 
     advanceTableFilter.addEventListener('click', function () {
