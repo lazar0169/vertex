@@ -115,6 +115,8 @@ const aftFilters = (function () {
 
         currentTableSettingsObject.filters = filtersForApi;
 
+        console.log('filters for api', filtersForApi);
+
         return filtersForApi;
     }
 

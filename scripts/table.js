@@ -735,8 +735,6 @@ let table = (function () {
         hideAllColumns(tableSettings);
         let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         let colsCount;
-        console.log('columnstoshow', columnsToShowTitles);
-
 
         if (columnsToShowTitles === null || columnsToShowTitles === undefined || columnsToShowTitles.length === 0) {
             let allColumns = getColumnNames(tableSettings);
