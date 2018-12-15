@@ -109,6 +109,11 @@ let form = (function () {
                             if (values.length > 0) {
                                 inputElement.value = values[0];
                                 let inputsContainer = inputElement.parentNode.parentNode;
+                                let addAnotherButton = null;
+                                if ( inputsContainer.getElementsByClassName('action-add-another-field').length > 0) {
+                                    addAnotherButton = inputsContainer.getElementsByClassName('action-add-another-field')[0].parentNode;
+                                }
+
                                 //add fields if there are more then one value
                                 for (let i = 1; i < values.length; i++) {
                                     let newField = inputElement.parentNode.cloneNode(true);
@@ -116,7 +121,12 @@ let form = (function () {
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
                                     newField.classList.add('element-input-additional-array-value');
-                                    inputsContainer.appendChild(newField);
+                                    if (addAnotherButton !== null) {
+                                        inputsContainer.insertBefore(newField, addAnotherButton);
+                                    }
+                                    else {
+                                        inputsContainer.appendChild(newField);
+                                    }
 
                                     let deleteButtonElement = newField.getElementsByTagName('button')[0];
                                     deleteButtonElement.classList.remove('hidden');
