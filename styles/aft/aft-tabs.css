@@ -18,9 +18,9 @@
 }
 */
 
-#aft-enable-transaction-check, #aft-enable-notification-check {
+/*#aft-enable-transaction-check, #aft-enable-notification-check {
     display: inline-flex;
-}
+}*/
 
 #aft-enable-transaction-check>div, #aft-enable-notification-check>div {
     padding: 0 0.5rem;
