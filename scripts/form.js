@@ -352,6 +352,18 @@ let form = (function () {
         });
     }
 
+    function bindBackButton(formSettings) {
+        let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
+        if (buttons.length > 0) {
+            let button = buttons[0];
+            console.log(button);
+            button.addEventListener('click', function (e) {
+                history.back();
+            });
+        }
+        //there should be only one button
+    };
+
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
         addAnotherFieldButtonsArray.forEach(function (addAnotherFieldButton) {
@@ -382,6 +394,7 @@ let form = (function () {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
+        bindBackButton(formSettings);
     }
 
     on('form/init', function (params) {
