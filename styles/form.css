@@ -56,6 +56,12 @@
     border-radius: 0;
     border-bottom: 1px solid #778f9b;
 }
+
+.element-async-form .form-section .form-section-content .form-group .action-delete-form-element {
+    margin-left:15px;
+    height:35px;
+}
+
 .element-async-form .form-section .form-section-content .form-group:not(:last-child) {
     margin-bottom:20px !important;
 }

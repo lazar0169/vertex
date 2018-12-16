@@ -9,7 +9,7 @@
 
 <!--AFT TAB ENABLE TRANSACTION-->
 <div id="aft-tabs-enable-transaction-info" class="chosen-info-tab overflow-content hidden">
-    <div class=" element-async-form">
+    <form class=" element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
         <div id="aft-enable-transaction-check" class="form-section border-bottom">
             <div class="form-section-content">
@@ -73,20 +73,20 @@
             </div>
         </div>
         <div id="aft-transaction-save" class="form-buttons-section">
-            <button class="btn btn-success element-form-submit"
+            <button type="submit" class="btn btn-success element-form-submit"
             ><strong class="element-multilanguage text-uppercase" data-translation-key="Save">Save</strong>
             </button>
-            <button class="btn btn-cancel action-form-back element-multilanguage"
+            <button type="button" class="btn btn-cancel action-form-back element-multilanguage"
                     data-translation-key="Back">
                 Back
             </button>
         </div>
-    </div>
+    </form>
 </div>
 
 <!--AFT TAB NOTIFICATION SETTINGS-->
 <div id="aft-tabs-notification-settings-info" class="chosen-info-tab overflow-content hidden">
-    <div class=" element-async-form">
+    <form class=" element-async-form">
         <input name="EndpointId" style="display:none" class="endpointId element-form-data">
 
         <div id="aft-enable-notification-check" class="form-section border-bottom">
@@ -151,17 +151,17 @@
                        for="notification-mobile-phone-number">
                     Mobile phone number:
                 </label>
-                <div class="element-form-phone-number form-group">
+                <div class="element-form-phone-number form-group d-flex flex-baseline flex-row">
                     <input name="PhoneNumberList" class="form-input element-form-data"
                            data-type="array" type="text" id="notification-mobile-phone-number"
                            placeholder="xxx-xxx-xxxx">
-                    <button class="btn action-delete-form-element btn-cancel hidden element-multilanguage"
+                    <button type="button" class="btn action-delete-form-element btn-cancel hidden element-multilanguage"
                             data-translation-key="Delete">
                         Delete
                     </button>
                 </div>
                 <div id="aft-notification-another-phone">
-                    <button class="btn btn-cancel action-add-another-field element-multilanguage"
+                    <button type="button" class="btn btn-cancel action-add-another-field element-multilanguage"
                             data-translation-key="Aft.Notification.Add.Mobile"
                             data-target-selector="element-form-phone-number"
                             data-max-number="5">
@@ -176,18 +176,18 @@
                        for="notification-email-address">
                     Email address:
                 </label>
-                <div class="element-form-email form-group">
+                <div class="element-form-email form-group d-flex flex-baseline flex-row">
                     <input name="EmailList" class="form-input element-form-data" data-type="array"
                            type="text" id="notification-email-address"
                            type="text" id="notification-email-address"
                            placeholder="Your email">
-                    <button class="btn action-delete-form-element btn-cancel hidden element-multilanguage"
+                    <button type="button" class="btn action-delete-form-element btn-cancel hidden element-multilanguage"
                             data-translation-key="Delete">
                         Delete
                     </button>
                 </div>
                 <div id="aft-notification-another-email">
-                    <button class="btn btn-cancel action-add-another-field element-multilanguage"
+                    <button type="button" class="btn btn-cancel action-add-another-field element-multilanguage"
                             data-translation-key="Aft.Notification.Add.Email" data-target-selector="element-form-email"
                             data-max-number="5">
                         ADD another email address
@@ -196,7 +196,7 @@
             </div>
         </div>
         <div id="aft-notification-save" class="form-buttons-section">
-            <button class="btn btn-success element-form-submit"
+            <button type="submit" class="btn btn-success element-form-submit"
             ><strong class="element-multilanguage text-uppercase" data-translation-key="Save">Save</strong>
             </button>
             <button class="btn btn-cancel action-form-back element-multilanguage"
@@ -204,5 +204,5 @@
                 Back
             </button>
         </div>
-    </div>
+    </form>
 </div>

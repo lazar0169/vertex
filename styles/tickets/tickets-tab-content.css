@@ -3,10 +3,11 @@
     flex-direction: column;
 }
 
+/*
 #tickets-max-value-tab-info * , #tickets-sms-settings-tab-info * {
     margin: 0.15rem 0 0.20rem 0.05rem;
 }
-
+*/
 #tickets-enable-sms-check, #tickets-enable-email-check {
     display: inline-flex;
 }
@@ -17,7 +18,7 @@
     align-items: center;
     color: rgb(120, 144, 156);
 }
-
+/*
 #tickets-max-value-tab-info * input, #tickets-sms-settings-tab-info * input {
     width: 50%;
 }
@@ -26,13 +27,14 @@
     margin-left: 0.5rem;
     width: 30%;
 }
+*/
 
-#tickets-max-value-tab-info>div>div:not(:last-child), #tickets-sms-settings-tab-info>div>div:not(:last-child) {
+/*#tickets-max-value-tab-info>div>div:not(:last-child), #tickets-sms-settings-tab-info>div>div:not(:last-child) {
     padding: 0.5rem;
     color: rgb(120, 144, 156);
     width: 650px;
     border-bottom: 1px solid rgb(120, 144, 156);
-}
+}*/
 
 .tickets-cashable {
     background-image: url("/images/cashable-table-indicator.png");
