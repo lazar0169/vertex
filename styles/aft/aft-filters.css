@@ -1,12 +1,9 @@
-#aft-add-transaction {
-    padding: 0 1.5rem;
-}
 #aft-add-transaction button {
     font-weight: 600;
     font-size: 14px;
 }
 
-#aft-advance-table-filter-active, #tickets-advance-table-filter-active{
+/* #aft-advance-table-filter-active, #tickets-advance-table-filter-active {
     display: inline-flex;
     flex-flow: row wrap;
     background: rgb(55, 71, 79);
@@ -15,18 +12,20 @@
     justify-content: space-evenly;
     align-items: center;
     position: relative;
-    padding-left: 0.6rem;
-    font-size: 0.7rem;
     border-left: 1px solid #2A353A;
     border-right: 1px solid #2A353A;
-}
+} */
+
 /*tickets page - advance filter active*/
+
 .tickets-advance-active {
     background: rgb(55, 71, 79);
     border-top: 1px solid #2A353A;
     border-left: 1px solid #2A353A;
 }
+
 /*tickets page - icons*/
+
 #tickets-show-space {
     border-left: 1px solid black;
     border-right: 1px solid black;
@@ -37,57 +36,33 @@
     display: inline-flex;
     align-items: center;
     padding: 0.3rem 0.4rem 0.3rem 0.3rem;
-
-}
-
-#aft-advance-table-filter > div {
-    padding: 23px 28px;
-}
-
-#aft-advance-table-filter-active>div:last-child, #tickets-advance-table-filter-active>div:last-child {
-    margin: auto;
-    padding: 0;
-}
-
-#aft-advance-table-filter-active , #tickets-advance-table-filter-active{
-    padding: 0.5rem 0 0.5rem 0.6rem
-}
-
-#aft-advance-table-filter-active .element-table-filters {
-    min-width: 100px;
-    padding: 0.1rem 0 0.2rem 0.5rem;
-    color:rgb(255,255,255) ;
 }
 
 #aft-advance-table-filter-active .default-select {
     border-radius: 10%;
 }
 
-#aft-advance-table-filter-active .element-table-filters:before {
-    top: 0.5rem;
-}
-
 #aft-advance-table-filter-active button {
     font-size: 0.7rem;
 }
+
 #aft-advance-table-filter-active>div:last-child {
     margin: 0;
 }
 
 .aft-advance-active {
-    border-top : 1px solid #2A353A;
     background: rgb(55, 71, 79);
-    color: rgb(255,255,255);
-    border-left: 1px solid #2A353A;
+    color: rgb(255, 255, 255);
 }
 
 #aft-advance-table-filter-clear .btn-cancel {
-    color: #3088D7 ;
+    color: #3088D7;
 }
 
 /*#aft-enable-transaction-check .form-switch .form-icon {
     border:rgb(55, 71, 79);
 }*/
+
 /*
 #aft-enable-transaction-check .form-switch .form-icon:before {
     height:1rem ;
@@ -95,7 +70,7 @@
  }*/
 
 #Enable-transaction-mode {
-    color:white;
+    color: white;
 }
 
 #aft-export-pdf, #tickets-export-pdf, #aft-export-xls, #tickets-export-xls {
@@ -110,4 +85,91 @@
 
 #aft-export-xls, #tickets-export-xls {
     background-image: url("/images/xls-export.png");
+}
+
+#aft-add-transaction {
+    padding: 0 0.5rem;
+}
+
+#aft-advance-table-filter-active-infobar {
+    display: inline-flex;
+    flex-flow: row wrap;
+    align-items: center;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    min-width: 100%;
+    position: relative;
+    font-size: 10px;
+    visibility: hidden;
+}
+
+#aft-advance-table-filter-active-infobar>div:first-child {
+    padding: 0 0.5rem;
+}
+
+.infobar-wrapper-info {
+    display: inline-flex;
+}
+
+.infobar-wrapper-info>div:not(:first-child) {
+    color: white;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 0.5rem;
+}
+
+/* #aft-advance-table-filter-active {
+    display: grid;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    position: absolute;
+    min-width: 250px;
+    max-width: 500px;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+} */
+
+#aft-advance-table-filter-active>div {
+    display: inline-flex;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:first-child {
+    min-width: 120px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    white-space: nowrap;
+}
+
+.advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:last-child {
+    width: 200px;
+}
+
+.advance-filter-active {
+    background: rgb(55, 71, 79);
+}
+
+.advance-filter-active>div:not(:first-child) {
+    display: grid;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    position: absolute;
+    min-width: 250px;
+    max-width: 500px;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.advance-filter-active>div:not(:first-child)>div:last-child {
+    background: rgb(38, 50, 56);
+}
+
+.advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
+    width: 200px;
 }

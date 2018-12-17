@@ -38,7 +38,7 @@
     color: rgb(120, 144, 156);
     display: inline-flex;
     white-space: nowrap;
-    font-size: 13px;
+    padding: 0.5rem 0;
 }
 
 .custom-filter>div:not(:first-child) {
@@ -59,7 +59,8 @@
     position: relative;
     display: block;
 }
-.advance-table-filter>div:first-child{
+
+.advance-table-filter>div:first-child {
     padding: 0 0.5rem;
 }
 
@@ -87,7 +88,7 @@
 }
 
 .custom-filter>div:not(:first-child)>div {
-    padding: 0 0.5rem
+    padding: 0 0.8rem;
 }
 
 .chosen-info-tab {

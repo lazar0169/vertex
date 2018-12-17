@@ -23,7 +23,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-/*    font-size: 14px;
+    /*    font-size: 14px;
     line-height: 108px;
     color: #ffffff;
     font-family: "Open Sans";
@@ -117,8 +117,6 @@
     flex-direction: row;
     justify-content: space-evenly;
     color: white;
-    flex-wrap: wrap;
-    width: 500px;
     margin-bottom: 0;
 }
 
@@ -181,7 +179,6 @@ textarea {
     width: 500px;
     margin: 20px 0;
     justify-content: flex-start;
-
 }
 
 .hide-column-button, .row-flag-button {
@@ -191,7 +188,6 @@ textarea {
 .hidden-column {
     display: none;
 }
-
 
 /** FLAGS **/
 
@@ -211,12 +207,12 @@ textarea {
     height: 44px;
 }
 
-.table-condensed .cell .table-time{
+.table-condensed .cell .table-time {
     font-size: 11px !important;
 }
 
-.table-condensed .cell h6{
-    font-size: 15px ;
+.table-condensed .cell h6 {
+    font-size: 15px;
 }
 
 .table-expanded .cell {
@@ -227,7 +223,7 @@ textarea {
     font-size: 13px !important;
 }
 
-.table-expanded .cell h6{
+.table-expanded .cell h6 {
     font-size: 0.8rem;
 }
 
@@ -254,7 +250,6 @@ textarea {
 .table-time {
     color: #6D818C;
 }
-
 
 .cell-createdby.head.hidden-column, .cell-finishedby.head.hidden-column, .cell-cashoutedby.head.hidden-column, .cell-redeemedby.head.hidden-column {
     display: none;
