@@ -182,7 +182,7 @@ const aftFilters = (function () {
             "MachineList": pageFilters.MachineList,
             "JackpotList": pageFilters.JackpotList,
             "Status": prepareStatusDataForApi(pageFilters.Status),
-            "Type": prepareTypeDataForApi(pageFilters.Columns),
+            "Type": prepareTypeDataForApi(pageFilters.Type),
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
