@@ -142,8 +142,8 @@ let communication = (function () {
             }
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
-            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable % 100);
-            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo % 100);
+            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
+            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
         });
 
         for (let i = 0; i < tableData.length; i++) {
@@ -185,7 +185,7 @@ let communication = (function () {
                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
 
             }
-            entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount % 100);
+            entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
 /*            let entryData = {};
