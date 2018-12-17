@@ -26,13 +26,13 @@
 
 }
 
-
 /*tickets page - advance filter active*/
 .tickets-advance-active {
     background: rgb(55, 71, 79);
     border-top: 1px solid #2A353A;
     border-left: 1px solid #2A353A;
 }
+
 /*tickets page - icons*/
 #tickets-show-space {
     border-left: 1px solid black;
@@ -118,3 +118,5 @@
 #aft-export-xls, #tickets-export-xls {
     background-image: url("/images/xls-export.png");
 }
+
+

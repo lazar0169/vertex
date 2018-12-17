@@ -54,10 +54,10 @@
     display: flex;
     flex-direction: row;
 }
+
 #aft-notification-save {
     padding: 20px 10px;
 }
-
 
 #aft-tabs-transaction-info {
     overflow: hidden;

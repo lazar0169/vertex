@@ -324,3 +324,9 @@ textarea {
     font-size: 13px;
     font-weight: bold;
 }
+
+.cell.cell-cashable {
+    justify-content: flex-end;
+    text-align: right;
+    padding-right: 1.5rem;
+}
