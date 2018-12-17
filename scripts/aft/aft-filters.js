@@ -147,17 +147,12 @@ const aftFilters = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-        console.log('filters from api', filters);
-
         filters.StatusList = formatAftApiData(filters.StatusList);
         filters.TypeList = formatAftApiData(filters.TypeList);
         filters.MachineNameList = formatAftApiData(filters.MachineNameList);
         filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
 
-        console.log('filters to display', filters);
-
         tableSettings.filters = filters;
-
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
@@ -168,8 +163,6 @@ const aftFilters = (function () {
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-
-        console.log('page filters', pageFilters);
 
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
@@ -191,8 +184,6 @@ const aftFilters = (function () {
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
-
-        console.log('filtersForApi', filtersForApi);
 
         return filtersForApi;
     }

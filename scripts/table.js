@@ -781,8 +781,6 @@ let table = (function () {
         if (filters.Columns === null) {
             filters.Columns = [];
         }
-
-        console.log('Element table filters in table.js', filters);
         return filters;
     }
 

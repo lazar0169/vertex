@@ -80,11 +80,7 @@ const ticketsFilter = (function () {
 
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
-
-        console.log('col names of the table', colNamesArray);
         colNamesArray = formatChooseColumnTicketsData(colNamesArray);
-
-        console.log('columns array', colNamesArray);
         return colNamesArray;
     }
 
@@ -126,8 +122,6 @@ const ticketsFilter = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-        console.log('Filters in tickets filters display', filters);
-
         filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
         filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
         filters.TypesList = formatTicketsApiData(filters.TypesList);
@@ -162,7 +156,6 @@ const ticketsFilter = (function () {
                 }
             });
         }
-        console.log('prepared type data', preparedTypeData);
         return preparedTypeData;
     }
 
@@ -216,11 +209,7 @@ const ticketsFilter = (function () {
             "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Column;
-
-        console.log('page filters', pageFilters);
         currentTableSettingsObject.filters = filtersForApi;
-
-        console.log('Prepared filters in tickets', filtersForApi);
 
         return filtersForApi;
     }
