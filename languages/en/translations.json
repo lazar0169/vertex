@@ -38,6 +38,7 @@
             }
         },
         "Save": "",
+        "Back": "",
         "Delete": "",
         "Tickets": {
             "GeneralSettings": {
@@ -91,8 +92,7 @@
                 "Issued": ""
             }
         },
-        "Cancel": "",
-        "Yes": ""
+        "Cancel": ""
     },
     "messages": {}
 }

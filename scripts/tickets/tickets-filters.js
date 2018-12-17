@@ -72,7 +72,6 @@ const ticketsFilter = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
-
         //filter elements
         let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
         let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
@@ -181,7 +180,6 @@ const ticketsFilter = (function () {
             "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
-
         currentTableSettingsObject.filters = filtersForApi;
 
         return filtersForApi;
@@ -193,7 +191,6 @@ const ticketsFilter = (function () {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
-
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {

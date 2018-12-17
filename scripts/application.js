@@ -33,6 +33,5 @@ let application = (function  () {
     return {
         checkCurrentUser: checkCurrentUser
     }
-    
 
 })();

@@ -11,6 +11,8 @@ const ticketAppearance = (function () {
         trigger('form/getData', {formSettings: formSettingsAppearance});
     });
 
+
+
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
     let inputCasino = $$('#wrapper-tickets-appearance-general-settings').children[1].children[1];
@@ -36,7 +38,6 @@ const ticketAppearance = (function () {
     let inputPromoTicket = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
     let cancelTicketAppearance = $$('#appearance-buttons-wrapper').children[0];
     let saveTicketAppearance = $$('#appearance-buttons-wrapper').children[1];
-
 
     let dd = '16';
     let MM = '10';

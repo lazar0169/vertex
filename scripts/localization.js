@@ -6,13 +6,12 @@ let localization = (function () {
     languages.set('de', 'Deutsch');
     languages.set('fr', 'Française');
 
-    const lsLanguageKey=  'vertexLanguage';
+    const lsLanguageKey = 'vertexLanguage';
     const lsMessagesKey = 'vertexTranslations';
     const multiLanguageElementSelector = '.element-multilanguage';
     const keyAttributeName = 'data-translation-key';
     const directory = 'languages';
     const file = 'translations.json';
-
     const defaultLanguage = 'en';
 
     function getFilePath(locale) {
@@ -25,12 +24,10 @@ let localization = (function () {
         if (request.overrideMimeType) {
             request.overrideMimeType('application/json');
         }
-
         request.send();
         if (request.status === 200) {
             return JSON.parse(request.responseText);
-        }
-        else {
+        } else {
             console.error('Unable to load translations!');
             return null;
         }
@@ -63,8 +60,7 @@ let localization = (function () {
 
         if (translation !== undefined && translation !== '') {
             return translation;
-        }
-        else {
+        } else {
             console.error('Translation for ' + key + ' was not found in translations file!');
             return key;
         }
@@ -77,8 +73,7 @@ let localization = (function () {
         if (translation !== null) {
             if (element.placeholder !== undefined) {
                 element.placeholder = translation;
-            }
-            else {
+            } else {
                 element.textContent = translation;
             }
         }
@@ -87,7 +82,7 @@ let localization = (function () {
     function translateMessage(key, element) {
         let translations = JSON.parse(localStorage.getItem(lsMessagesKey));
         //if translating html element that is added dynamically, add required properties
-        if(element !== undefined) {
+        if (element !== undefined) {
             element.classList.add('element-dynamic-translatable');
             element.setAttribute('data-translation-key', key);
         }
@@ -123,7 +118,7 @@ let localization = (function () {
         changeLanguage(multiLanguageElementSelector);
     });
 
-    //OVDE se slusa promena jezika
+    //listener for language change
     let languageElementSelector = $$('#lang-selector');
     if (languageElementSelector !== null) {
         languageElementSelector.addEventListener('change', function () {

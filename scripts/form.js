@@ -2,7 +2,6 @@ let form = (function () {
 
     //all float value are divided / multiplied by 100 because they are in cents
     let valueMultiplier = 100;
-
     let currentEndpointId;
 
     function prepareFloatValue(value) {
@@ -12,7 +11,6 @@ let form = (function () {
 
     function getEvent(formSettings, eventToCheck) {
         let event;
-
         if (formSettings[eventToCheck] !== undefined) {
             event = formSettings[eventToCheck];
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
@@ -39,7 +37,6 @@ let form = (function () {
     }
 
     //helper functions
-
     function collectAllFormElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
@@ -51,29 +48,10 @@ let form = (function () {
         return Array.prototype.slice.call(submitButtons);
     }
 
-
-    /*
-    let transactionEnableButton = $$('#aft-enable-transaction-check');
-    let transactionEnableMode = $$('#aft-enable-transaction-mode');
-    let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
-
-    transactionEnableSwitch.addEventListener('click', function () {
-        if (transactionEnableSwitch.checked === false) {
-            transactionEnableSwitch.checked = false;
-            transactionEnableMode.innerHTML = 'No';
-        } else {
-            transactionEnableSwitch.checked = true;
-            transactionEnableMode.innerHTML = 'Yes';
-        }
-    });
-    */
-
     function collectEnableButtons(formSettings) {
         let enableButtons = $$(formSettings.formContainerSelector).getElementsByClassName('element-form-check');
-        let enableButtonsArray = Array.prototype.slice.call(enableButtons);
-        return enableButtonsArray;
+        return Array.prototype.slice.call(enableButtons);
     }
-
 
     function fillData(formSettings, data) {
         let dataToDisplay = data.Data;
@@ -84,23 +62,21 @@ let form = (function () {
         for (let counter = 0; counter < multipleValueInputContainers.length; counter++) {
             multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
         }
+
         let formInputElementsArray = collectAllFormElements(formSettings);
 
         formInputElementsArray.forEach(function (inputElement) {
-
             let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
             if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
 
                 if (inputElement.type === 'checkbox') {
                     inputElement.checked = dataToDisplay[inputName];
-                    //let modeDivElement = inputElement.parentNode.previousSibling;
                     let modeDivElement = inputElement.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
                     if (inputElement.checked === true) {
                         modeDivElement.innerHTML = localization.translateMessage('switchYesLabel', modeDivElement);
 
                     } else {
                         modeDivElement.innerHTML = localization.translateMessage('switchNoLabel', modeDivElement);
-
                     }
                 } else {
                     if (inputName !== 'EndpointId') {
@@ -122,8 +98,7 @@ let form = (function () {
                                     newField.classList.add('element-input-additional-array-value');
                                     if (addAnotherButton !== null) {
                                         inputsContainer.insertBefore(newField, addAnotherButton);
-                                    }
-                                    else {
+                                    } else {
                                         inputsContainer.appendChild(newField);
                                     }
 
@@ -172,8 +147,6 @@ let form = (function () {
     //ToDo: dokumentovati form settings
     /*formSettings {
         :formContainerElement: required | element that contains form
-
-
     } */
 
     function init(formSettings) {
@@ -200,11 +173,12 @@ let form = (function () {
         }
 
         setEndpointId(formSettings);
+
         if (formContainerElement.formSettings === undefined) {
             initFormHandlers(formSettings);
         }
-        formContainerElement.formSettings = formSettings;
 
+        formContainerElement.formSettings = formSettings;
     }
 
     function collectAndPrepareFormData(formSettings) {
@@ -218,11 +192,11 @@ let form = (function () {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
-                        /*                        case 'multiple-select':/!*
-                                                    if (dataForApi[formInputElement.name] === undefined) {
-                                                        dataForApi[formInputElement.name] = [];
-                                                    }
-                                                    dataForApi[formInputElement.name].push(formInputElement.value);*!/*/
+/*                        case 'multiple-select':
+                            if (dataForApi[formInputElement.name] === undefined) {
+                                dataForApi[formInputElement.name] = [];
+                            }
+                            dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
                             dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
                             break;
@@ -234,7 +208,6 @@ let form = (function () {
                             }
                             break;
                         case 'float':
-                            //dataForApi[formInputElement.name] = parseFloat(formInputElement.value*valueMultiplier);
                             let value = prepareFloatValue(formInputElement.value);
                             dataForApi[formInputElement.name] = value * valueMultiplier;
                             break;
@@ -262,23 +235,18 @@ let form = (function () {
     }
 
     function validate(formSettings) {
-
     }
 
     function error(formSettings) {
-
     }
 
     function success(formSettings) {
-
     }
 
     function serialize(formSettings) {
-
     }
 
     function complete(formSettings) {
-
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = false;
@@ -293,7 +261,7 @@ let form = (function () {
                 message: localization.translateMessage(apiResponseData.MessageCode.toString()),
                 type: apiResponseData.MessageType
             });
-        }        //foreach kroz apiResponse.messages ako bude bilo potrebno
+        }        //foreach through apiResponse.messages if needed
     }
 
     function deleteFormElement() {
@@ -314,6 +282,7 @@ let form = (function () {
 
                 let lastElement = targetElements[targetElements.length - 1];
                 let newField = lastElement.cloneNode(true);
+
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
                 newField.getElementsByTagName('button')[0].classList.remove('hidden');
@@ -321,21 +290,18 @@ let form = (function () {
 
                 let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
 
-                console.log(addAnotherButton);
-                console.log(lastElement.parentNode);
+                lastElement.parentNode.insertBefore(newField, addAnotherButton);
 
-                lastElement.parentNode.insertBefore(newField,addAnotherButton);
                 if (targetElements.length > 1) {
-
                     targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
                 }
+
                 let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
                 deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
                 deleteButtonFirstElement.addEventListener('click', deleteFormElement);
 
                 let deleteButton = newField.getElementsByTagName('button')[0];
                 deleteButton.addEventListener('click', deleteFormElement);
-
             }
         }
     }
@@ -346,8 +312,6 @@ let form = (function () {
     }
 
     //elements event handlers
-
-
     function formatFloatInputHandler() {
         let value = this.value;
         var position = this.selectionStart;
@@ -387,7 +351,7 @@ let form = (function () {
             });
         }
         //there should be only one button
-    };
+    }
 
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
@@ -413,7 +377,6 @@ let form = (function () {
 
         });
     }
-
 
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
@@ -458,7 +421,6 @@ let form = (function () {
     on('form/submit/success', function (params) {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
-        //trigger('notifications/show/success',{message:localization.translateMessage(apiResponse.Message)});
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
     });

@@ -59,7 +59,6 @@ const aftFilters = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
-
         //filter elements
         let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
@@ -113,23 +112,18 @@ const aftFilters = (function () {
             "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
-
         currentTableSettingsObject.filters = filtersForApi;
-
-        console.log('filters for api', filtersForApi);
 
         return filtersForApi;
     }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
-
         let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
-
     });
 
     on('aft/filters/pagination', function (params) {
