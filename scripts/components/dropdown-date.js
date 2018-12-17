@@ -113,7 +113,7 @@ const dropdownDate = (function () {
         return select;
     }
     window.addEventListener('click', function (e) {
-        // e.preventDefault();
+         e.preventDefault();
         let advanceTableFilterIsOpen = false;
         let found = false;
         let current = e.target;
@@ -138,8 +138,7 @@ const dropdownDate = (function () {
             current = current.parentNode;
         }
         //TODO PITAJ LAZARA DA ISPRAVI BAG
-        if (e.target !== null
-            && found && !pickCustom && e.target.dataset && e.target.dataset.value !== 'Custom' || e.target.parentNode && e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset && e.target.dataset.value === 'Apply custom date') {
+        if (found && !pickCustom && e.target.dataset && e.target.dataset.value !== 'Custom' || e.target.parentNode && e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
