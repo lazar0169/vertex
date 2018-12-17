@@ -150,9 +150,9 @@ let communication = (function () {
             formatedData[i] = {
                 createdBy: tableData[i].EntryData.CreatedBy,
                 finishedBy: tableData[i].EntryData.FinishedBy,
-                status:  tableData[i].EntryData.Status,
+                status:  localization.translateMessage(tableData[i].EntryData.Status),
                 machineName:  tableData[i].EntryData.MachineName,
-                type:  tableData[i].EntryData.Type,
+                type:  localization.translateMessage(tableData[i].EntryData.Type),
                 cashable:  tableData[i].EntryData.AmountCashable,
                 promo:  tableData[i].EntryData.AmountPromo,
             };
@@ -204,8 +204,8 @@ let communication = (function () {
                 code: tableData[i].EntryData.FullTicketValIdationNumber,
                 issuedBy: tableData[i].EntryData.CashoutedBy,
                 redeemedBy:  tableData[i].EntryData.RedeemedBy,
-                status:  tableData[i].EntryData.Status,
-                type:  tableData[i].EntryData.TicketType,
+                status:  localization.translateMessage(tableData[i].EntryData.Status),
+                type:  localization.translateMessage(tableData[i].EntryData.TicketType),
                 amount:  tableData[i].EntryData.Amount
             };
         }
