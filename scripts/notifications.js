@@ -18,8 +18,7 @@ let notifications = function () {
             newElement.classList.add('toast-warning');
         }
         $$('.notifications-container')[0].appendChild(newElement);
-        //ToDo: refaktorisati querySelector u get element by class name
-        newElement.querySelector('.btn-clear').addEventListener('click', function () {
+        newElement.getElementsByClassName('btn-clear')[0].addEventListener('click', function () {
             newElement.remove();
         });
         setTimeout(function () {
