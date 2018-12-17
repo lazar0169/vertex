@@ -188,15 +188,8 @@ let communication = (function () {
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-/*            let entryData = {};
-            entryData.Code = entry.EntryData.FullTicketValIdationNumber;
-            delete entry.EntryData.FullTicketValIdationNumber;
-            Object.keys(entry.EntryData).forEach(function(key) {
-                entryData[key] = entry.EntryData[key];
-            });
-            entry.EntryData = entryData;*/
             if(entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ entry.EntryData.TicketType;
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ localization.translateMessage(entry.EntryData.TicketType);
             }
         });
         for (let i = 0; i < tableData.length; i++) {
@@ -205,7 +198,7 @@ let communication = (function () {
                 issuedBy: tableData[i].EntryData.CashoutedBy,
                 redeemedBy:  tableData[i].EntryData.RedeemedBy,
                 status:  localization.translateMessage(tableData[i].EntryData.Status),
-                type:  localization.translateMessage(tableData[i].EntryData.TicketType),
+                type:  tableData[i].EntryData.TicketType,
                 amount:  tableData[i].EntryData.Amount
             };
         }
