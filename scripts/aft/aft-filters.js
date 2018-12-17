@@ -14,7 +14,7 @@ const aftFilters = (function () {
         finishedby: 10
     };
 
-    const statusEnum = {
+/*    const statusEnum = {
         AFTActive: 0,
         AFTCheck: 1,
         AFTPending: 2,
@@ -27,7 +27,7 @@ const aftFilters = (function () {
         AFTNotExisting: 9,
         AFTCancelled: 10,
         AFTCancelledPending: 11
-    };
+    };*/
 
 /*    const aftStatus = {
         '-': '-',
@@ -124,7 +124,7 @@ const aftFilters = (function () {
     function prepareStatusData(statusList){
         let preparedStatusData = [];
         statusList.forEach(function(status){
-            preparedStatusData.push(statusEnum[status]);
+            preparedStatusData.push(parseInt(status));
         });
         console.log('prepared status data', preparedStatusData);
         return preparedStatusData;
