@@ -14,6 +14,37 @@ const aftFilters = (function () {
         finishedby: 10
     };
 
+    const statusEnum = {
+        AFTActive: 0,
+        AFTCheck: 1,
+        AFTPending: 2,
+        AFTPendingForPayed: 3,
+        AFTPendingForDeleted: 4,
+        AFTDeleted: 5,
+        AFTSucceededPayed: 6,
+        AFTPayedFromApp: 7,
+        AFTPendingPayedFromApp: 8,
+        AFTNotExisting: 9,
+        AFTCancelled: 10,
+        AFTCancelledPending: 11
+    };
+
+/*    const aftStatus = {
+        '-': '-',
+        AFTActive: 'Active',
+        AFTCheck: 'Check',
+        AFTPending: 'Pending',
+        AFTPendingForPayed: 'Pending for payed',
+        AFTPendingForDeleted: 'Pending for deleted',
+        AFTDeleted: 'Deleted',
+        AFTSucceededPayed: 'Succeeded payed',
+        AFTPayedFromApp: 'Payed from app',
+        AFTPendingPayedFromApp: 'Pending payed from app',
+        AFTNotExisting: 'Not existing',
+        AFTCancelled: 'Cancelled',
+        AFTCancelledPending: 'Canceled pending'
+    };*/
+
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
@@ -77,10 +108,39 @@ const aftFilters = (function () {
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
+    function formatStatusApiData(statusListArray){
+        let formattedStatusData = [];
+        let statusObject = {};
+        statusListArray.forEach(function(status){
+            statusObject = {
+                Name: localization.translateMessage(status.Name),
+                Value: status.Id
+            };
+            formattedStatusData.push(statusObject);
+        });
+        return formattedStatusData;
+    }
+
+    function prepareStatusData(statusList){
+        let preparedStatusData = [];
+        statusList.forEach(function(status){
+            preparedStatusData.push(statusEnum[status]);
+        });
+        console.log('prepared status data', preparedStatusData);
+        return preparedStatusData;
+    }
+
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
+
+        console.log('filters from api', filters);
+
+        filters.StatusList = formatStatusApiData(filters.StatusList);
+
+        console.log('filters after format status api data', filters);
+
         tableSettings.filters = filters;
 
         tableSettings.filtersInitialized = true;
@@ -93,6 +153,9 @@ const aftFilters = (function () {
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+
+        console.log('collected page filters', pageFilters);
+
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
         let filtersForApi = {
@@ -101,7 +164,7 @@ const aftFilters = (function () {
             "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "MachineList": pageFilters.MachineList,
             "JackpotList": pageFilters.JackpotList,
-            "Status": pageFilters.Status,
+            "Status": prepareStatusData(pageFilters.Status),
             "Type": pageFilters.Type,
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
@@ -113,6 +176,8 @@ const aftFilters = (function () {
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
+
+        console.log('filtersForApi', filtersForApi);
 
         return filtersForApi;
     }

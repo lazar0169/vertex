@@ -483,6 +483,17 @@ let table = (function () {
         bindPageSizeLinkHandlers(tableSettings);
     }
 
+    function getPageSize(tableSettings) {
+        let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
+        if (pageSizeElement !== undefined && pageSizeElement !== null) {
+            let choosenOption = pageSizeElement.getElementsByClassName('element-table-filters')[0];
+            let pageSizeValue = choosenOption.dataset.value;
+            pageSizeValue = parseInt(pageSizeValue, 10);
+            tableSettings.PageSize = pageSizeValue;
+            return pageSizeValue;
+        }
+    }
+
     function handlePageSizeLinkClick(e, tableSettings) {
         e.preventDefault();
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
@@ -771,17 +782,6 @@ let table = (function () {
             filters.Columns = [];
         }
         return filters;
-    }
-
-    function getPageSize(tableSettings) {
-        let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
-        if (pageSizeElement !== undefined && pageSizeElement !== null) {
-            let choosenOption = pageSizeElement.getElementsByClassName('element-table-filters')[0];
-            let pageSizeValue = choosenOption.dataset.value;
-            pageSizeValue = parseInt(pageSizeValue, 10);
-            tableSettings.PageSize = pageSizeValue;
-            return pageSizeValue;
-        }
     }
 
     /*--------------------------------------------------------------------------------------*/

@@ -52,7 +52,7 @@ const multiDropdown = (function () {
         //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected.Name;
-        selected.dataset.value = noSelected.Name;
+        selected.dataset.value = noSelected.Value; //todo check if okay
         selected.title = selected.innerHTML;
         selected.classList.add('element-table-filters');
         //wrapper options group
@@ -63,7 +63,7 @@ const multiDropdown = (function () {
             //option with functionality
             let option = document.createElement('div');
             option.title = element.Name;
-            option.dataset.value = element.Name;
+            option.dataset.value = element.Value; //todo check if okay
             option.innerHTML = `<label class="form-checkbox" >
                                                 <input type="checkbox">
                                                 <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
@@ -96,8 +96,8 @@ const multiDropdown = (function () {
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
                         selected.innerHTML = noSelected.Name;
-                        array.push(noSelected.Name);
-                        arrayInner.push(noSelected.Name);
+                        array.push(noSelected.Value); //todo check if this is okay
+                        arrayInner.push(noSelected.Value); //todo check if this is okay
                     }
                 }
                 selected.title = selected.innerHTML;
