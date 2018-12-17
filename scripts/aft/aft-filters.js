@@ -14,21 +14,7 @@ const aftFilters = (function () {
         finishedby: 10
     };
 
-
-    /*
-        const aftColumnName = {
-            '-': '-',
-            'CREATEDBY': 'Created by',
-            'FINISHEDBY': 'Finished by',
-            'STATUS': 'Status',
-            'MACHINENAME': 'Machine name',
-            'TYPE': 'Type',
-            'CASHABLE': 'Cashable',
-            'PROMO': 'Promo'
-        };
-    */
-
-/*    const statusEnum = {
+    const statusEnum = {
         AFTActive: 0,
         AFTCheck: 1,
         AFTPending: 2,
@@ -41,23 +27,13 @@ const aftFilters = (function () {
         AFTNotExisting: 9,
         AFTCancelled: 10,
         AFTCancelledPending: 11
-    };*/
+    };
 
-/*    const aftStatus = {
-        '-': '-',
-        AFTActive: 'Active',
-        AFTCheck: 'Check',
-        AFTPending: 'Pending',
-        AFTPendingForPayed: 'Pending for payed',
-        AFTPendingForDeleted: 'Pending for deleted',
-        AFTDeleted: 'Deleted',
-        AFTSucceededPayed: 'Succeeded payed',
-        AFTPayedFromApp: 'Payed from app',
-        AFTPendingPayedFromApp: 'Pending payed from app',
-        AFTNotExisting: 'Not existing',
-        AFTCancelled: 'Cancelled',
-        AFTCancelledPending: 'Canceled pending'
-    };*/
+    const typeEnum = {
+        BonusWinHostToMachine: 0,
+        InHouseHostToMachine: 1,
+        InHouseMachineToHost: 2
+    };
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
@@ -98,7 +74,6 @@ const aftFilters = (function () {
     });
 
     function formatChooseColumnData(chooseColumnListArray) {
-        console.log('choose column list array', chooseColumnListArray);
         let formattedColumnArray = [];
         let columnObject = {};
         chooseColumnListArray.forEach(function(column){
@@ -113,8 +88,6 @@ const aftFilters = (function () {
 
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
-
-        console.log('names of columns in table', colNamesArray);
         colNamesArray = formatChooseColumnData(colNamesArray);
         return colNamesArray;
     }
@@ -145,19 +118,31 @@ const aftFilters = (function () {
         listArray.forEach(function(list){
             statusObject = {
                 Name: localization.translateMessage(list.Name),
-                Value: list.Id
+                Value: list.Name,
+                Id: list.Id
             };
             formattedData.push(statusObject);
         });
         return formattedData;
     }
 
-    function prepareDataForApi(list){
+    function prepareStatusDataForApi(list){
         let preparedDataForApi = [];
-        list.forEach(function(listItem){
-            preparedDataForApi.push(parseInt(listItem));
-        });
-        console.log('prepared status data', preparedDataForApi);
+        if(list !== null) {
+            list.forEach(function(listItem){
+                preparedDataForApi.push(parseInt(statusEnum[listItem]));
+            });
+        }
+        return preparedDataForApi;
+    }
+
+    function prepareTypeDataForApi(list){
+        let preparedDataForApi = [];
+        if(list !== null) {
+            list.forEach(function(listItem){
+                preparedDataForApi.push(parseInt(typeEnum[listItem]));
+            });
+        }
         return preparedDataForApi;
     }
 
@@ -166,14 +151,12 @@ const aftFilters = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-        console.log('filters from api', filters);
-
         filters.StatusList = formatApiData(filters.StatusList);
         filters.TypeList = formatApiData(filters.TypeList);
         filters.MachineNameList = formatApiData(filters.MachineNameList);
         filters.JackpotNameList = formatApiData(filters.JackpotNameList);
 
-        console.log('filters after format status api data', filters);
+        console.log('filters to display', filters);
 
         tableSettings.filters = filters;
 
@@ -188,7 +171,7 @@ const aftFilters = (function () {
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
 
-        console.log('collected page filters', pageFilters);
+        console.log('page filters', pageFilters);
 
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
@@ -198,8 +181,8 @@ const aftFilters = (function () {
             "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "MachineList": pageFilters.MachineList,
             "JackpotList": pageFilters.JackpotList,
-            "Status": prepareDataForApi(pageFilters.Status),
-            "Type": prepareDataForApi(pageFilters.Type),
+            "Status": prepareStatusDataForApi(pageFilters.Status),
+            "Type": prepareTypeDataForApi(pageFilters.Columns),
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
