@@ -15,11 +15,10 @@ function setTabListener() {
     for (let tab of tabs) {
         tab.addEventListener('click', function () {
             selectTab(tab.id);
-            selectInfoContent(tab.id)
+            selectInfoContent(tab.id);
         });
     }
 }
-
 
 // highlight chosen tab
 let previousTabSelected;

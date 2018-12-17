@@ -5,6 +5,7 @@ let topBar = (function () {
     let previousTopBar;
 
     function showTopBar(value) {
+        openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
         topBarPath.children[1].innerHTML = `${value.category}/${value.casino}`;
         let currentTopBar = $$(`#top-bar-${value.category.toLowerCase()}`);
         if (previousTopBar) {
@@ -17,7 +18,6 @@ let topBar = (function () {
         $$('#black-area').classList.add('show');
         userProfile.classList.toggle('hidden');
     }
-    openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
     openUserProfile.addEventListener('click', function () {
         showProfile();
     });

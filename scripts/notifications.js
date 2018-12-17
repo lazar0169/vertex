@@ -18,6 +18,7 @@ let notifications = function () {
             newElement.classList.add('toast-warning');
         }
         $$('.notifications-container')[0].appendChild(newElement);
+        //ToDo: refaktorisati querySelector u get element by class name
         newElement.querySelector('.btn-clear').addEventListener('click', function () {
             newElement.remove();
         });
@@ -44,6 +45,20 @@ let notifications = function () {
             templateElementSelector: '#notification-template',
             model: notificationModel,
             callbackEvent: 'notifications/render/finished'
+        });
+    });
+
+    //shortcut event za error
+    on('notifications/show/error', function (message) {
+       trigger('notification/show',{
+          type:messageTypes.error,
+          message:message
+       });
+    });
+    on('notifications/show/success', function (message) {
+        trigger('notification/show',{
+            type:messageTypes.ok,
+            message:message
         });
     });
 

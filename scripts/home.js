@@ -469,7 +469,7 @@ let home = (function () {
             trigger('preloader/hide');
         }, 2000);
 
-        let tableSettings = {};
+/*        let tableSettings = {};
         tableSettings.tableData = testDataTableHome;
         tableSettings.forceRemoveHeaders = true;
         tableSettings.tableContainerSelector = '#table-container-home';
@@ -478,7 +478,7 @@ let home = (function () {
         tableSettings.dataEvent = 'mock/data';
         tableSettings.id = '';
 
-        table.init(tableSettings);
+        table.init(tableSettings);*/
 
         /*TESTING*/
         // table.generateTableContent(tableSettings);

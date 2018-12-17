@@ -18,6 +18,7 @@ let application = (function  () {
                 generateMenu();
             }
             else {
+                sessionStorage.clear();
                 window.location.pathname = "/login";
             }
         }
@@ -25,8 +26,13 @@ let application = (function  () {
 
     window.addEventListener('load', function () {
         //ToDo: Fix timeout hotfix
-        setTimeout(checkCurrentUser, 500);
+        checkCurrentUser();
+/*        setTimeout(checkCurrentUser, 500);*/
     });
+
+    return {
+        checkCurrentUser: checkCurrentUser
+    }
     
 
 })();

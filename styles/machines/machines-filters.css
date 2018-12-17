@@ -56,3 +56,35 @@
 .machine-filters-show-space-active, .show-space-active {
     color: rgb(30, 155, 227);
 }
+
+.mdi-view-sequential:before, .mdi-view-headline:before {
+    font-size: 24px;
+}
+
+#aft-right-filter {
+    padding: 0;
+}
+
+#aft-show-space {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 0.8rem 1rem;
+}
+
+#aft-machines-number {
+    border-left: none;
+    padding: 0.5rem;
+}
+
+/*select for number of results*/
+
+#ss-4 .element-table-filters {
+    background: #3A4950;
+    font-size: 13px;
+}
+
+/*table body padding*/
+
+#aft-tabs-transaction-info {
+    padding-right: 0 !important;
+}

@@ -1,12 +1,98 @@
 {
     "labels": {
-        "Login": "Login",
-        "Username": "Username",
-        "Password": "Password",
+        "Login": "",
+        "Username": "",
+        "Password": "",
         "LoginScreen": {
-            "Submit": "Submit"
+            "Submit": ""
         },
-        "search": "Search"
+        "search": "",
+        "Aft": {
+            "Transactions": {
+                "Enable": "",
+                "CashableLimit": {
+                    "Handpay": "",
+                    "Normal": ""
+                },
+                "PromoLimit": {
+                    "Handpay": "",
+                    "Normal": ""
+                }
+            },
+            "Notification": {
+                "Enable": "",
+                "Cashable": {
+                    "Received": "",
+                    "Paid": ""
+                },
+                "Promo": {
+                    "Received": "",
+                    "Paid": ""
+                },
+                "Mobile": "",
+                "Add": {
+                    "Mobile": "",
+                    "Email": ""
+                },
+                "Email": ""
+            }
+        },
+        "Save": "",
+        "Delete": "",
+        "Tickets": {
+            "GeneralSettings": {
+                "Title": "",
+                "Casino": "",
+                "Address": "",
+                "City": "",
+                "Currency": ""
+            },
+            "CashableTicket": {
+                "Title": "",
+                "Cashout": "",
+                "Expiring": "",
+                "Void": ""
+            },
+            "PromoTicket": {
+                "Title": "",
+                "Payable": "",
+                "Expiring": "",
+                "Restricted": ""
+            },
+            "Appearance": {
+                "Advanced": {
+                    "Title": "",
+                    "DateFormat": "",
+                    "TimeFormat": "",
+                    "TicketVoidAfter": "",
+                    "Days": "",
+                    "Validation": "",
+                    "Ticket": "",
+                    "Asset": "",
+                    "AssetNumber": ""
+                }
+            },
+            "SmsSettings": {
+                "Enable": {
+                    "Sms": "",
+                    "Email": ""
+                },
+                "Redeemed": "",
+                "Printed": "",
+                "Mobile": "",
+                "Add": {
+                    "Mobile": "",
+                    "Email": ""
+                },
+                "Email": ""
+            },
+            "MaxValue": {
+                "Redeemed": "",
+                "Issued": ""
+            }
+        },
+        "Cancel": "",
+        "Yes": ""
     },
     "messages": {
         "22": "Wrong credentials!",

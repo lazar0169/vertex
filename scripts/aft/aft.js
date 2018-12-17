@@ -1,50 +1,57 @@
 const aft = (function () {
-    on('aft/activated', function () {
+    on('aft/activated', function (params) {
+
 
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
 
+        let aftId = params.params[0].value;
+
+
+        selectTab('aft-tabs-transaction');
+        selectInfoContent('aft-tabs-transaction');
 
         let tableSettings = {};
-        tableSettings.forceRemoveHeaders = true;
+        tableSettings.pageSelectorId = '#page-aft';
         tableSettings.tableContainerSelector = '#table-container-aft';
         tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
+        tableSettings.dataEvent = 'communicate/aft/getTransactions';
+        tableSettings.updateTableEvent = 'table/update';
+        tableSettings.prepareDataEvent = 'communicate/aft/data/prepare';
+        tableSettings.sortActiveColumn = 'createdby';
+        tableSettings.endpointId = aftId;
+        tableSettings.id = '';
+        tableSettings.forceRemoveHeaders = true;
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
-        tableSettings.dataEvent = 'communicate/aft';
-        tableSettings.id = '';
+        tableSettings.filtersInitialized = false;
 
+        table.init(tableSettings); //initializing table, filters and page size
 
-        table.init(tableSettings);
+        let addTransactionButton = $$('#aft-add-transaction').children[0];
 
+        addTransactionButton.addEventListener('click', function () {
+            let data =
+            {
+                'EndpointId': aftId,
+                'EndpointName': '',
+                'Gmcid': 1565666846,
+                'MachineName': '',
+                'Type': 0,
+                'CashableAmount': 13800,
+                'PromoAmount': 13800,
+                'ExpirationInDays': 7
+            };
+            trigger('communicate/aft/addTransaction', { data: data, tableSettings: tableSettings });
+        });
 
-        let filtersContainer = $$(tableSettings.filterContainerSelector);
-        console.log('apply filters button');
-        let applyButton = filtersContainer.getElementsByClassName('aft-filters-apply')[0];
-        console.log('apply filters button', applyButton);
+        on('aft/addTransaction', function () {
 
-        if (applyButton !== undefined) {
-            applyButton.addEventListener('click', function () {
-                trigger('table/filters/apply', {tableSettings: tableSettings});
-                console.log('Table settings after clicking Apply button: ', tableSettings);
-            });
-        }
+        });
 
-        //todo potential structural changes
-        /* aft module calls table.init
-        table.init triggers communicate/aft
-        communicate/aft triggers communicate/createAndSendXhr
-        communicate/createAndSendXhr triggers table/update
-        table/update updates table with data from API
-        */
+        trigger('aft/tab/transaction', { tableSettings: tableSettings });
+        trigger('aft/tab/notification', { tableSettings: tableSettings });
 
-        //todo fix how to send tableSettings object through callbacks
-        /*TESTING*/
-        // table.generateTableContent(tableSettings);
-        // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
-        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
-        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData2});
-        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData3});
     });
 })();

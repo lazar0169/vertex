@@ -10,20 +10,21 @@
     content: "";
     position: absolute;
     right: 3px;
-    top: 0.7rem;
+    top: 0.5rem;
     width: 0;
     height: 0;
-    border-top: 0.4rem solid rgb(30, 155, 227);
+    border-top: 0.3rem solid rgb(30, 155, 227);
     border-right: 0.15rem solid transparent;
     border-left: 0.15rem solid transparent;
 }
 
 .default-select>div:first-child, .default-date-select>div:first-child {
     width: 120px;
+    font-size: 0.6rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 0.2rem 1rem 0.2rem 0.5rem;
+    padding: 0.1rem 0.5rem 0.2rem 0.5rem;
     position: relative;
     border: 1px solid rgb(55, 71, 79);
 }
@@ -37,7 +38,7 @@
     border: 1px solid rgb(55, 71, 79);
     border-top: none;
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 2;
 }
 
 .active-date-select>div:first-child, .active-single-select>div:first-child, .active-multi-select>div:first-child {
@@ -92,4 +93,31 @@
 
 .custom-date-buttons-wrapper {
     margin: 0.5rem 0;
+}
+
+
+#tickets-machines-number .element-table-filters .single-option {
+    width: 60px;
+}
+
+#tickets-machines-number {
+    border-left: none;
+}
+
+#tickets-advance-table-filter-clear .btn-cancel {
+    color: #3088D7;
+}
+
+#tickets-tab-info {
+    padding-right: 0 !important;
+}
+
+/*aft and tickets active filters option size*/
+
+#tickets-advance-table-filter-status .default-select .multiple-group, #tickets-advance-table-filter-types .default-select .multiple-group, #tickets-advance-table-filter-column .default-select .multiple-group, #aft-advance-table-filter-finished .default-select .multiple-group, #aft-advance-table-filter-jackpot .default-select .multiple-group, #aft-advance-table-filter-type .default-select .multiple-group, #aft-advance-table-filter-status .default-select .multiple-group, #aft-advance-table-filter-column .default-select .multiple-group {
+    width: 200px;
+}
+
+.tbody::-webkit-scrollbar {
+    height: 0.4rem;
 }

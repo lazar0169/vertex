@@ -1,9 +1,4 @@
 let communication = (function () {
-    let proba2 = $$('#aft-advance-table-filter-finished');
-    let proba3 = $$('#aft-advance-table-filter-jackpot');
-    let proba4 = $$('#aft-advance-table-filter-type');
-    let proba5 = $$('#aft-advance-table-filter-status');
-    // let proba6 = $$('#aft-advance-table-filter-column');
 
     const apiRoutes = {
         authorization: {
@@ -52,40 +47,36 @@ let communication = (function () {
         return xhr;
     }
 
-    function success(xhr, callbackEvent, tableSettings) {
+    function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-
-            trigger(callbackEvent, {data: data, tableSettings: tableSettings});
+            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
         }
+        trigger('communicate/token/refresh', { token: data.TokenInfo });
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = {"message": xhr.responseText};
+        let errorData = { "message": xhr.responseText };
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
     }
 
-    function createRequest(route, requestType, data, successEvent, errorEvent, tableSettings) {
+    function createRequest(route, requestType, data, successEvent, errorEvent, settingsObject) {
         let xhr;
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
-        }
-        else if (requestType === requestTypes.post) {
+        } else if (requestType === requestTypes.post) {
             xhr = createPostRequest(route, data);
-        }
-        else if (requestType === requestTypes.delete) {
+        } else if (requestType === requestTypes.delete) {
             xhr = createDeleteRequest(route);
         }
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                console.log('communication module data', data);
-                success(xhr, successEvent, tableSettings);
-            }
-            else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
+                success(xhr, successEvent, settingsObject);
+            } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
         };
@@ -94,7 +85,6 @@ let communication = (function () {
 
     function send(xhr) {
         if (typeof xhr.customData !== typeof undefined) {
-
             return xhr.send(JSON.stringify(xhr.customData));
         }
         return xhr.send();
@@ -107,8 +97,7 @@ let communication = (function () {
             if (o && typeof o === "object") {
                 return o;
             }
-        }
-        catch (e) {
+        } catch (e) {
             console.error('Forwarded variable is not of JSON type!');
         }
         return undefined;
@@ -132,31 +121,102 @@ let communication = (function () {
         xhr.setRequestHeader(header, value);
     }
 
+
+    function prepareAftTableData(tableSettings, data) {
+        let tableData = data.Data.Items;
+        tableData.forEach(function (entry) {
+            if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
+                entry.EntryData.CreatedBy = '';
+
+            } else {
+                entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
+
+            }
+            if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
+                entry.EntryData.FinishedBy = '';
+
+            } else {
+                entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
+
+            }
+            delete entry.EntryData.CreatedTime;
+            delete entry.EntryData.FinishedTime;
+            entry.EntryData.AmountCashable = entry.EntryData.AmountCashable.toFixed(2);
+            entry.EntryData.AmountPromo = entry.EntryData.AmountPromo.toFixed(2);
+        });
+        return data;
+    }
+
+    function prepareTicketsTableData(tableSettings, data) {
+        let tableData = data.Data.Items;
+        tableData.forEach(function (entry) {
+            if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
+
+            } else {
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
+
+            }
+            if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>' + entry.EntryData.RedeemedBy + '</h6>';
+
+            } else {
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
+
+            }
+            entry.EntryData.Amount = entry.EntryData.Amount.toFixed(2);
+            delete entry.EntryData.CashoutedTime;
+            delete entry.EntryData.RedeemedTime;
+            let entryData = {};
+            entryData.Code = entry.EntryData.FullTicketValIdationNumber;
+            delete entry.EntryData.FullTicketValIdationNumber;
+            Object.keys(entry.EntryData).forEach(function (key) {
+                entryData[key] = entry.EntryData[key];
+            });
+            entry.EntryData = entryData;
+
+            if (entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + entry.EntryData.TicketType;
+            }
+        });
+        return data;
+    }
+
+
     // create and send xhr
     on('communicate/createAndSendXhr', function (params) {
-        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.tableSettings);
+        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.settingsObject);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
     });
 
-    on('jovana/test', function(params) {
+    on('jovana/test', function (params) {
         // parse parameters for table
         let tableData = [];
-        params.data.Data.Items.forEach(function(item) {
+        params.data.Data.Items.forEach(function (item) {
             tableData.push(item.EntryData);
         });
     });
 
 
+    //pagination event
+    on('communicate/pagination', function (params) {
+        let event = params.event;
+        let dataForApi = params.data;
+        trigger(event, { data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent });
+    });
+
+
     /*------------------------------------ AFT EVENTS ------------------------------------*/
 
-    on('communicate/aft', function (params) {
+    //aft get transactions
+    on('communicate/aft/getTransactions', function (params) {
         let route = 'api/transactions/';
-        let request = requestTypes.post;
-        let data = params.data;
-        let successEvent = params.callbackEvent;
         let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
+        let data = params.data;
+        let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -164,42 +224,17 @@ let communication = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            tableSettings: tableSettings
+            settingsObject: tableSettings
         });
-
-        //todo needs to be deleted
-        // trigger('communicate/aft/previewTransactions', {});
-        // trigger('communicate/aft/getNotificationSettings', {})
-        // trigger('communicate/aft/getBasicSettings', {})
-        // trigger('communicate/aft/saveBasicSettings', {})
-        // trigger('communicate/aft/saveNotificationSettings', {})
-        //trigger('communicate/aft/getFilters', {})
-        // trigger('communicate/aft/addTransaction', {})
-        // trigger('communicate/aft/cancelTransaction', {}) greska sa serverom 409
-        // trigger('communicate/aft/cancelPendingTransaction', {}) greska sa serverom 409
     });
 
-    //data with static values, needs to be dynamic
+    //aft pagination filtering sorting
     //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
         let route = 'api/transactions/previewtransactions/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'DateFrom': null,
-            'DateTo': null,
-            'MachineList': null,
-            'JackpotList': null,
-            'Status': null,
-            'Type': null,
-            'BasicData': {
-                'Page': 1,
-                'PageSize': 10,
-                'SortOrder': 0,
-                'SortName': 0
-            }
-
-        };
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -207,17 +242,19 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
         });
     });
+
 
     //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
         let route = 'api/transactions/getnotificationsettings';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
+        // let successEvent = 'aft/tab/notifications/display';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.fillFormEvent;
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -225,65 +262,37 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
-        });
-    });
-
-    //aft get basic settings
-    on('communicate/aft/getBasicSettings', function (params) {
-        let route = 'api/transactions/getbasicsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
-        });
-    });
-
-    //aft save basic settings
-    on('communicate/aft/saveBasicSettings', function (params) {
-        let route = 'api/transactions/savebasicsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EnableTransactions': true,
-            'CashableTransactionLimit': 123456789,
-            'CashableTransactionHandpayLimit': 987654321,
-            'PromoTransactionLimit': 123,
-            'PromoTransactionHandpayLimit': 321
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: formSettings
         });
     });
 
     //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
         let route = 'api/transactions/savenotificationsettings/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EnableNotification': true,
-            'CashableTransactionCreatedLimitForNotification': 123456789,
-            'CashableTransactionPayedLimitForNotification ': 987654321,
-            'PromoTransactionCreatedLimitForNotification ': 123,
-            'PromoTransactionPayedLimitForNotification ': 321,
-            'EmailList': ['mailAddress@gaga.com'],
-            'PhoneNumberList': ['+381111111']
-        };
+        // let successEvent = 'aft/tab/notifications/update';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let data = params.data;
+        let request = requestTypes.post;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //aft get basic settings
+    on('communicate/aft/getBasicSettings', function (params) {
+        let route = 'api/transactions/getbasicsettings/';
+        // let successEvent = 'aft/tab/transactions/display';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.fillFormEvent;
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -291,42 +300,52 @@ let communication = (function () {
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //aft save basic settings
+    on('communicate/aft/saveBasicSettings', function (params) {
+        let route = 'api/transactions/savebasicsettings/';
+        // let successEvent = 'aft/tab/transactions/update';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let data = params.data;
+        let request = requestTypes.post;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
         });
     });
 
     //aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
-        let successEvent = 'communicate/testFilter';
-        let data = {
-            'EndpointId': 2
-        };
+        let successEvent = params.successEvent;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings = params.tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
-            data: data,
+            data: params.data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
         });
     });
 
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
         let route = 'api/transactions/addtransaction/';
-        let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            'MachineName': '',
-            'Type': 0,
-            'CashableAmount': 13800,
-            'PromoAmount': 13800,
-            'ExpirationInDays': 7
-        };
+        let successEvent = 'aft/addTransaction';
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
@@ -342,21 +361,17 @@ let communication = (function () {
     on('communicate/aft/cancelTransaction', function (params) {
         let route = 'api/transactions/canceltransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            //'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-        };
+        let data = params.data;
         let request = requestTypes.post;
+        let tableSettings = params.tableSettings;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
         });
     });
 
@@ -364,22 +379,213 @@ let communication = (function () {
     on('communicate/aft/cancelPendingTransaction', function (params) {
         let route = 'api/transactions/cancelpendingtransaction/';
         let successEvent = 'communicate/test';
-        let data = {
-            'EndpointId': 2,
-            'EndpointName': '',
-            'Gmcid': 1565666846,
-            // 'JidtString': "32,32,32,32,32,32,32,32,50,34,42,33,90,33,40,32,88,33,65,32"
-            'JidtString': '33,32'
-        };
+        let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings = params.tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
         });
+    });
+
+    //prepare data for aft  page
+    on('communicate/aft/data/prepare', function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        prepareAftTableData(tableSettings, data);
+        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
+    });
+
+    /*--------------------------------------------------------------------------------------*/
+
+
+    /*------------------------------------ TICKETS EVENTS ------------------------------------*/
+    //tickets get tickets
+    on('communicate/tickets/getTickets', function (params) {
+        let route = 'api/tickets/';
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets preview ticket action
+    //pagination sorting and filtering
+    on('communicate/tickets/previewTickets', function (params) {
+        let route = 'api/tickets/previewtickets/';
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.prepareDataEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //getting filter values
+    on('communicate/tickets/getFilters', function (params) {
+        let route = 'api/tickets/getfilters/';
+        let successEvent = params.successEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+
+    //getting values for show sms settings
+    on('communicate/tickets/showSmsSettings', function (params) {
+        let route = 'api/tickets/smssettings/';
+        // let successEvent = 'tickets/tab/smsSettings/display';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.fillFormEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+
+    //ShowTitoMaxValueSettings
+    on('communicate/tickets/showMaxValueSettings', function (params) {
+        let route = 'api/tickets/maxvaluesettings/';
+        // let successEvent = 'tickets/tab/maxValue/display';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.fillFormEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //ShowTicketAppearanceSettings
+    on('communicate/tickets/ticketAppearance', function (params) {
+        let route = 'api/tickets/ticketappearance/';
+        // let successEvent = 'tickets/tab/appearance/display';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.fillFormEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+
+    //SaveTitoSmsAction
+    on('communicate/tickets/saveSmsSettings', function (params) {
+        let route = 'api/tickets/savesmssettings/';
+        // let successEvent = 'tickets/tab/smsSettings/update';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+
+    //SaveTitoMaxValuesAction
+    on('communicate/tickets/saveMaxValuesAction', function (params) {
+        let route = 'api/tickets/savemaxvalues/';
+        // let successEvent = 'tickets/tab/maxValue/update';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+
+    //SaveTicketAppearanceAction
+    on('communicate/tickets/saveAppearance', function (params) {
+        let route = 'api/tickets/saveappearance/';
+        // let successEvent = 'tickets/tab/appearance/update';
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let request = requestTypes.post;
+        let data = params.data;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            request: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+
+    //prepare data for tickets  page
+    on('communicate/tickets/data/prepare', function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        prepareTicketsTableData(tableSettings, data);
+        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -841,24 +1047,39 @@ let communication = (function () {
     //test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
-        console.log('communicate/test params.data', params.data);
     });
 
 
     //todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
+    /*
+        //test, set filters for aft
+        window.addEventListener('load', function () {
+            trigger('communicate/aft/getFilters', {})
+        });
+        on('communicate/testFilter', function (params) {
+            //alert('Successful communication');
+            console.log('communicate/testFilter params.data', params.data);
+            params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
+            params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
+            params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
+            params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
+            params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
+        });
+    */
 
-    //test, set filters for aft
-    window.addEventListener('load', function () {
-        trigger('communicate/aft/getFilters', {})
-    });
-    on('communicate/testFilter', function (params) {
-        //alert('Successful communication');
-        console.log('communicate/testFilter params.data', params.data);
-        params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
-        params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
-        params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
-        params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
-        // params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
-    });
+    let timeout = null;
 
+    function timeoutSet(params) {
+        timeout = setTimeout(function () {
+            alert("Your token has expired. Please Login to continue!");
+            trigger('logout');
+        }, params.token.expires_in * 1000);
+    }
+
+    on('communicate/token/refresh', function (params) {
+        if (timeout !== null) {
+            clearTimeout(timeout);
+        }
+        timeoutSet(params);
+    });
 })();

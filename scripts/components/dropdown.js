@@ -4,8 +4,30 @@ const dropdown = (function () {
     //single select array
     let singleSelectArray = [];
 
+    function select(element, selectedValue) {
+        if (!element || !selectedValue) {
+            return false;
+        }
+        let options = element.getElementsByClassName("single-option");
+        let hasOption = Array.prototype.slice.call(options).filter(function (option) {
+            return option.dataset.value === selectedValue;
+        });
+        if (hasOption.length === 0) {
+            return false;
+        } else {
+            let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
+            elementTableFilter.dataset.value = selectedValue;
+            elementTableFilter.title = selectedValue;
+            elementTableFilter.innerText = selectedValue;
+        }
+        return element;
+    }
+
     //generate single dropdown
-    function generate(dataSelect) {
+    function generate(dataSelect, element) {
+        if (element) {
+            removeChildren(element);
+        }
         // wrapper select
         let select = document.createElement('div');
         select.id = `ss-${indexSsId}`;
@@ -16,6 +38,7 @@ const dropdown = (function () {
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
         selected.dataset.value = dataSelect[0];
+        selected.classList.add('element-table-filters');
         selected.addEventListener('click', function () {
             optionGroup.classList.toggle('hidden');
             select.classList.toggle('active-single-select');
@@ -48,20 +71,29 @@ const dropdown = (function () {
 
         indexSsId++;
         singleSelectArray.push(select.id);
+
+        if (element) {
+            element.appendChild(select);
+            return element;
+        }
         return select;
     }
 
+    //TODO THIS PART GENERATES MULTIPLE ERRORS
     window.addEventListener('click', function (e) {
         e.preventDefault();
         for (let selectId of singleSelectArray) {
-            if (e.target.parentNode.id != selectId) {
-                $$(`#${selectId}`).classList.remove('active-single-select');
-                $$(`#${selectId}`).children[1].classList.add('hidden');
+            if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
+                if (e.target.parentNode.id !== selectId) {
+                    $$(`#${selectId}`).classList.remove('active-single-select');
+                    $$(`#${selectId}`).children[1].classList.add('hidden');
+                }
             }
         }
     });
 
     return {
-        generate
+        generate,
+        select
     };
 })();

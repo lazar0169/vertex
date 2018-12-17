@@ -8,7 +8,10 @@ const dropdownDate = (function () {
     //indicate custom option
     let pickCustom = false;
     //generate single dropdown
-    function generate(dataSelect) {
+    function generate(dataSelect, element) {
+        if(element){
+            removeChildren(element);
+        }
         // wrapper select
         let select = document.createElement('div');
         select.dataset.selectId = indexDsId;
@@ -19,6 +22,7 @@ const dropdownDate = (function () {
         selected.innerHTML = dataSelect[0];
         selected.title = selected.innerHTML;
         selected.dataset.value = dataSelect[0];
+        selected.classList.add('element-table-filters');
         //wrapper options group
         let optionGroupWrapper = document.createElement('div');
         optionGroupWrapper.classList.add('hidden');
@@ -102,6 +106,10 @@ const dropdownDate = (function () {
 
         indexDsId++;
         dateSelectArray.push(select.id);
+        if(element){
+            element.appendChild(select);
+            return element;
+        }
         return select;
     }
     window.addEventListener('click', function (e) {
@@ -130,7 +138,9 @@ const dropdownDate = (function () {
             }
             current = current.parentNode;
         }
-        if (found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
+        //TODO PITAJ LAZARA DA ISPRAVI BAG
+        if (e.target !== null && e.target.parentNode
+            &&found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');

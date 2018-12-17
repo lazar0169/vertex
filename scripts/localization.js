@@ -58,8 +58,8 @@ let localization = (function () {
         window.localStorage.setItem(lsMessagesKey, JSON.stringify(messages));
     }
 
-    function translate(key, object) {
-        let translation = getProperty(key, object);
+    function translate(key, translations) {
+        let translation = getProperty(key, translations);
 
         if (translation !== undefined && translation !== '') {
             return translation;
@@ -114,15 +114,16 @@ let localization = (function () {
         }
     }
 
-
     on('localization/language/change', function (params) {
-        let language = params.language;
-        if (language !== undefined) {
+        alert('localization language change triggered!');
+        if (params !== undefined && params.language !== undefined) {
+            let language = params.language;
             setActiveLanguage(language);
         }
         changeLanguage(multiLanguageElementSelector);
     });
 
+    //OVDE se slusa promena jezika
     let languageElementSelector = $$('#lang-selector');
     if (languageElementSelector !== null) {
         languageElementSelector.addEventListener('change', function () {

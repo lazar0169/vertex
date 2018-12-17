@@ -26,7 +26,8 @@
     flex: 1;
     float: right;
     padding: 0 1%;
-    transition: all 0.1s ease;
+    transition: all 0s ease;
+    font-family: "OpenSans-Regular", "MyriadPro-Regular", sans-serif;
 }
 
 .element-template {
