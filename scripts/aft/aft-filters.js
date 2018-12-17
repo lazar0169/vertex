@@ -22,8 +22,8 @@ const aftFilters = (function () {
     let activeHeadElement;
 
     function showAdvanceTableFilter() {
-        advanceTableFilter.classList.toggle('advance-filter-active');
-        advanceTableFilterActive.classList.toggle('hidden');
+        advanceTableFilter.classList.add('advance-filter-active');
+        advanceTableFilterActive.classList.remove('hidden');
     }
 
     advanceTableFilter.addEventListener('click', function () {

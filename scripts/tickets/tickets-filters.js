@@ -21,8 +21,8 @@ const ticketsFilter = (function () {
     let activeHeadElement;
 
     function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.toggle('advance-filter-active');
-        advanceTableFilterActive.classList.toggle('hidden');
+        ticketAdvanceFilter.classList.add('advance-filter-active');
+        advanceTableFilterActive.classList.remove('hidden');
     }
 
     ticketAdvanceFilter.addEventListener('click', function () {

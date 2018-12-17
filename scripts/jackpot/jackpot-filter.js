@@ -9,7 +9,7 @@ const jackpotFilter = (function () {
     jackpotMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
 
     advanceTableFilter.addEventListener('click', function () {
-        advanceTableFilter.classList.toggle('advance-filter-active');
+        advanceTableFilter.classList.add('advance-filter-active');
     });
 
     //close add new jackpot form
