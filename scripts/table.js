@@ -782,7 +782,7 @@ let table = (function () {
             filters.Columns = [];
         }
 
-        console.log('element table filters in table.js', filters);
+        console.log('Element table filters in table.js', filters);
         return filters;
     }
 

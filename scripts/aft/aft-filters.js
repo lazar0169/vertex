@@ -112,18 +112,14 @@ const aftFilters = (function () {
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
-    function formatApiData(listArray){
-        let formattedData = [];
-        let statusObject = {};
-        listArray.forEach(function(list){
-            statusObject = {
-                Name: localization.translateMessage(list.Name),
-                Value: list.Name,
-                Id: list.Id
-            };
-            formattedData.push(statusObject);
-        });
-        return formattedData;
+    function formatAftApiData(listArray){
+        if(listArray !== null && listArray !== undefined) {
+            listArray.forEach(function(list){
+                list.Name = localization.translateMessage(list.Name);
+                list.Value = list.Name;
+            });
+        }
+        return listArray;
     }
 
     function prepareStatusDataForApi(list){
@@ -151,10 +147,12 @@ const aftFilters = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-        filters.StatusList = formatApiData(filters.StatusList);
-        filters.TypeList = formatApiData(filters.TypeList);
-        filters.MachineNameList = formatApiData(filters.MachineNameList);
-        filters.JackpotNameList = formatApiData(filters.JackpotNameList);
+        console.log('filters from api', filters);
+
+        filters.StatusList = formatAftApiData(filters.StatusList);
+        filters.TypeList = formatAftApiData(filters.TypeList);
+        filters.MachineNameList = formatAftApiData(filters.MachineNameList);
+        filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
 
         console.log('filters to display', filters);
 
