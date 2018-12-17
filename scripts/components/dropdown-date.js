@@ -9,7 +9,7 @@ const dropdownDate = (function () {
     let pickCustom = false;
     //generate single dropdown
     function generate(dataSelect, element) {
-        if(element){
+        if (element) {
             removeChildren(element);
         }
         // wrapper select
@@ -106,14 +106,14 @@ const dropdownDate = (function () {
 
         indexDsId++;
         dateSelectArray.push(select.id);
-        if(element){
+        if (element) {
             element.appendChild(select);
             return element;
         }
         return select;
     }
     window.addEventListener('click', function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         let advanceTableFilterIsOpen = false;
         let found = false;
         let current = e.target;
@@ -128,7 +128,6 @@ const dropdownDate = (function () {
                         pickCustom = false;
                     }
                     activeSelectId = selectId;
-                    break;
                 }
             }
             //this is for advance filters
@@ -139,8 +138,8 @@ const dropdownDate = (function () {
             current = current.parentNode;
         }
         //TODO PITAJ LAZARA DA ISPRAVI BAG
-        if (e.target !== null && e.target.parentNode
-            &&found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
+        if (e.target !== null
+            && found && !pickCustom && e.target.dataset && e.target.dataset.value !== 'Custom' || e.target.parentNode && e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
@@ -149,7 +148,7 @@ const dropdownDate = (function () {
             }
             pickCustom = false;
         }
-        else if (found && pickCustom || e.target.classList.contains('pika-select') || found && e.target.dataset.value === 'Custom' || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
+        else if (found && pickCustom || e.target.classList && e.target.classList.contains('pika-select') || found && e.target.dataset && e.target.dataset.value === 'Custom' || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
             $$(`#${activeSelectId}`).classList.add('active-date-select');
             $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
         }
