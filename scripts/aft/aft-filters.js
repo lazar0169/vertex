@@ -14,6 +14,17 @@ const aftFilters = (function () {
         finishedby: 10
     };
 
+    const aftColumnName = {
+        '-': '-',
+        'CREATEDBY': 'Created by',
+        'FINISHEDBY': 'Finished by',
+        'STATUS': 'Status',
+        'MACHINENAME': 'Machine name',
+        'TYPE': 'Type',
+        'CASHABLE': 'Cashable',
+        'PROMO': 'Promo'
+    };
+
 /*    const statusEnum = {
         AFTActive: 0,
         AFTCheck: 1,
@@ -83,8 +94,25 @@ const aftFilters = (function () {
         getFiltersFromAPI(tableSettings);
     });
 
+    function formatChooseColumnData(chooseColumnListArray) {
+        console.log('choose column list array', chooseColumnListArray);
+        let formattedColumnArray = [];
+        let columnObject = {};
+        chooseColumnListArray.forEach(function(column){
+            columnObject = {
+                Name: aftColumnName[column.Name],
+                Value: column.Name
+            };
+            formattedColumnArray.push(columnObject);
+        });
+        return formattedColumnArray;
+    }
+
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
+
+        console.log('names of columns in table', colNamesArray);
+        colNamesArray = formatChooseColumnData(colNamesArray);
         return colNamesArray;
     }
 
