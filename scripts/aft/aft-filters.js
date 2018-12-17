@@ -14,16 +14,19 @@ const aftFilters = (function () {
         finishedby: 10
     };
 
-    const aftColumnName = {
-        '-': '-',
-        'CREATEDBY': 'Created by',
-        'FINISHEDBY': 'Finished by',
-        'STATUS': 'Status',
-        'MACHINENAME': 'Machine name',
-        'TYPE': 'Type',
-        'CASHABLE': 'Cashable',
-        'PROMO': 'Promo'
-    };
+
+    /*
+        const aftColumnName = {
+            '-': '-',
+            'CREATEDBY': 'Created by',
+            'FINISHEDBY': 'Finished by',
+            'STATUS': 'Status',
+            'MACHINENAME': 'Machine name',
+            'TYPE': 'Type',
+            'CASHABLE': 'Cashable',
+            'PROMO': 'Promo'
+        };
+    */
 
 /*    const statusEnum = {
         AFTActive: 0,
@@ -100,7 +103,7 @@ const aftFilters = (function () {
         let columnObject = {};
         chooseColumnListArray.forEach(function(column){
             columnObject = {
-                Name: aftColumnName[column.Name],
+                Name: localization.translateMessage(column.Name),
                 Value: column.Name
             };
             formattedColumnArray.push(columnObject);
@@ -136,26 +139,26 @@ const aftFilters = (function () {
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
-    function formatStatusApiData(statusListArray){
-        let formattedStatusData = [];
+    function formatApiData(listArray){
+        let formattedData = [];
         let statusObject = {};
-        statusListArray.forEach(function(status){
+        listArray.forEach(function(list){
             statusObject = {
-                Name: localization.translateMessage(status.Name),
-                Value: status.Id
+                Name: localization.translateMessage(list.Name),
+                Value: list.Id
             };
-            formattedStatusData.push(statusObject);
+            formattedData.push(statusObject);
         });
-        return formattedStatusData;
+        return formattedData;
     }
 
-    function prepareStatusData(statusList){
-        let preparedStatusData = [];
-        statusList.forEach(function(status){
-            preparedStatusData.push(parseInt(status));
+    function prepareDataForApi(list){
+        let preparedDataForApi = [];
+        list.forEach(function(listItem){
+            preparedDataForApi.push(parseInt(listItem));
         });
-        console.log('prepared status data', preparedStatusData);
-        return preparedStatusData;
+        console.log('prepared status data', preparedDataForApi);
+        return preparedDataForApi;
     }
 
     on('aft/filters/display', function (params) {
@@ -165,7 +168,10 @@ const aftFilters = (function () {
 
         console.log('filters from api', filters);
 
-        filters.StatusList = formatStatusApiData(filters.StatusList);
+        filters.StatusList = formatApiData(filters.StatusList);
+        filters.TypeList = formatApiData(filters.TypeList);
+        filters.MachineNameList = formatApiData(filters.MachineNameList);
+        filters.JackpotNameList = formatApiData(filters.JackpotNameList);
 
         console.log('filters after format status api data', filters);
 
@@ -192,8 +198,8 @@ const aftFilters = (function () {
             "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "MachineList": pageFilters.MachineList,
             "JackpotList": pageFilters.JackpotList,
-            "Status": prepareStatusData(pageFilters.Status),
-            "Type": pageFilters.Type,
+            "Status": prepareDataForApi(pageFilters.Status),
+            "Type": prepareDataForApi(pageFilters.Type),
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
