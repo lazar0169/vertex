@@ -18,6 +18,13 @@ const aftFilters = (function () {
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
 
+    let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
+    let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
+
+
+
+
+
     let currentTableSettingsObject;
     let activeHeadElement;
 
@@ -160,5 +167,45 @@ const aftFilters = (function () {
             callbackEvent: 'table/update'
         });
     })
+
+    advanceTableFilter.children[0].addEventListener('click', function () {
+        showAdvanceTableFilter();
+    });
+
+    clearAdvanceFilter.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        advanceTableFilterInfobar.style.visibility = 'hidden';
+    });
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        showSelectedFilters();
+        advanceTableFilterInfobar.style.visibility = 'hidden';
+    });
+    function showSelectedFilters() {
+
+        for (let count = 0; count < advanceTableFilterActive.children.length - 1; count++) {
+            if (advanceTableFilterActive.children[count].children[1].children[0].dataset && advanceTableFilterActive.children[count].children[1].children[0].dataset.value !== '-') {
+                advanceTableFilterInfobar.children[1].children[count].children[0].innerHTML = advanceTableFilterActive.children[count].children[0].innerHTML;
+                advanceTableFilterInfobar.children[1].children[count].children[1].innerHTML = advanceTableFilterActive.children[count].children[1].children[0].title;
+                advanceTableFilterInfobar.children[1].children[count].title = advanceTableFilterActive.children[count].children[1].children[0].title;
+                advanceTableFilterInfobar.children[1].children[count].classList.remove('hidden');
+
+            }
+            else {
+                advanceTableFilterInfobar.children[1].children[count].classList.add('hidden');
+            }
+        }
+
+        for (let isHidden of advanceTableFilterInfobar.children[1].children) {
+            if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
+                advanceTableFilterInfobar.style.visibility = 'visible';
+                return;
+            }
+            else {
+                advanceTableFilterInfobar.style.visibility = 'hidden';
+            }
+        }
+
+    }
 
 })();
