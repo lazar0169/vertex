@@ -65,7 +65,7 @@ let localization = (function () {
             return translation;
         }
         else {
-            console.error('Translation for ' + key + ' was not found in translations file!');
+            // console.error('Translation for ' + key + ' was not found in translations file!');
             return key;
         }
     }

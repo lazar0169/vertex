@@ -800,7 +800,6 @@ let table = (function () {
     function collectFiltersFromPage(tableSettings) {
         tableSettings.filters = {};
         let filterContainers = collectAllFilterContainers(tableSettings);
-
         let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
             let name = element.dataset.name;
             let filterElement = element.getElementsByClassName('element-table-filters')[0];

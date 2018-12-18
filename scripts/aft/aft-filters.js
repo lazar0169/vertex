@@ -1,17 +1,40 @@
 const aftFilters = (function () {
 
     const aftSortName = {
-        amountcashable: 0,
-        amountpromo: 1,
+        cashable: 0,
+        promo: 1,
         amountnonrestrictive: 2,
-        eventtime: 3,
+        createdby: 3,
         gmcid: 4,
         jidtp: 5,
         status: 6,
         machinename: 7,
         jackpotname: 8,
-        type: 9
+        type: 9,
+        finishedby: 10
     };
+
+    const statusEnum = {
+        AFTActive: 0,
+        AFTCheck: 1,
+        AFTPending: 2,
+        AFTPendingForPayed: 3,
+        AFTPendingForDeleted: 4,
+        AFTDeleted: 5,
+        AFTSucceededPayed: 6,
+        AFTPayedFromApp: 7,
+        AFTPendingPayedFromApp: 8,
+        AFTNotExisting: 9,
+        AFTCancelled: 10,
+        AFTCancelledPending: 11
+    };
+
+    const typeEnum = {
+        BonusWinHostToMachine: 0,
+        InHouseHostToMachine: 1,
+        InHouseMachineToHost: 2
+    };
+
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
@@ -51,8 +74,22 @@ const aftFilters = (function () {
         getFiltersFromAPI(tableSettings);
     });
 
+    function formatChooseColumnData(chooseColumnListArray) {
+        let formattedColumnArray = [];
+        let columnObject = {};
+        chooseColumnListArray.forEach(function(column){
+            columnObject = {
+                Name: localization.translateMessage(column.Name),
+                Value: column.Name
+            };
+            formattedColumnArray.push(columnObject);
+        });
+        return formattedColumnArray;
+    }
+
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
+        colNamesArray = formatChooseColumnData(colNamesArray);
         return colNamesArray;
     }
 
@@ -68,7 +105,7 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
- 
+
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
         multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);
@@ -76,12 +113,47 @@ const aftFilters = (function () {
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
+    function formatAftApiData(listArray){
+        if(listArray !== null && listArray !== undefined) {
+            listArray.forEach(function(list){
+                list.Name = localization.translateMessage(list.Name);
+                list.Value = list.Name;
+            });
+        }
+        return listArray;
+    }
+
+    function prepareStatusDataForApi(list){
+        let preparedDataForApi = [];
+        if(list !== null) {
+            list.forEach(function(listItem){
+                preparedDataForApi.push(parseInt(statusEnum[listItem]));
+            });
+        }
+        return preparedDataForApi;
+    }
+
+    function prepareTypeDataForApi(list){
+        let preparedDataForApi = [];
+        if(list !== null) {
+            list.forEach(function(listItem){
+                preparedDataForApi.push(parseInt(typeEnum[listItem]));
+            });
+        }
+        return preparedDataForApi;
+    }
+
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
-        tableSettings.filters = filters;
 
+        filters.StatusList = formatAftApiData(filters.StatusList);
+        filters.TypeList = formatAftApiData(filters.TypeList);
+        filters.MachineNameList = formatAftApiData(filters.MachineNameList);
+        filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
+
+        tableSettings.filters = filters;
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
@@ -91,7 +163,9 @@ const aftFilters = (function () {
     });
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
+
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+        console.log('filters', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
         let filtersForApi = {
@@ -100,8 +174,8 @@ const aftFilters = (function () {
             "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "MachineList": pageFilters.MachineList,
             "JackpotList": pageFilters.JackpotList,
-            "Status": pageFilters.Status,
-            "Type": pageFilters.Type,
+            "Status": prepareStatusDataForApi(pageFilters.Status),
+            "Type": prepareTypeDataForApi(pageFilters.Type),
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
@@ -161,7 +235,7 @@ const aftFilters = (function () {
             callbackEvent: 'table/update'
         });
     })
-
+/*
     advanceTableFilter.children[0].addEventListener('click', function () {
         showAdvanceTableFilter();
     });
@@ -175,6 +249,7 @@ const aftFilters = (function () {
         showSelectedFilters();
         advanceTableFilterInfobar.style.visibility = 'hidden';
     });
+
     function showSelectedFilters() {
 
         for (let count = 0; count < advanceTableFilterActive.children.length - 1; count++) {
@@ -200,6 +275,6 @@ const aftFilters = (function () {
             }
         }
 
-    }
+    }*/
 
 })();
