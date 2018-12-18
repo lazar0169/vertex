@@ -133,6 +133,9 @@ let table = (function () {
                 head.dataset.sortName = columnName;
                 head.classList.add('text-uppercase');
                 head.classList.add('cell-' + columnName);
+                if(tableSettings.tableDataItems[0].Properties.IsPayoutPossible) {
+                    head.classList.add('payout');
+                }
                 if (tableSettings.stickyRow === true) {
                     head.classList.add('sticky');
                     if (tableSettings.stickyColumn === false) {
@@ -173,7 +176,20 @@ let table = (function () {
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
+    function selectRow(tableSettings, row){
+        console.log(row);
+        let rowElements = tableSettings.tableContainerElement.getElementsByClassName(row);
+        for(let i = 0; i < rowElements.length; i++) {
+            if(rowElements[i].classList.contains('payout')) {
+                rowElements[i].classList.toggle('row-chosen');
+            }
+        }
+        console.log('row', rowElements);
+    }
+
     function generateTableRows(tableSettings) {
+
+        console.log('table settings in generate table rows', tableSettings);
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
@@ -202,6 +218,9 @@ let table = (function () {
                 }
                 cell.classList.add(`row-${rowId}`);
                 cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+                if(tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+                    cell.classList.add('payout');
+                }
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
@@ -211,6 +230,9 @@ let table = (function () {
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
+                cell.addEventListener('click', function () {
+                    selectRow(tableSettings,`row-${rowId}`);
+                });
                 if (col === colsCount - 1) {
                     cell.classList.add('last-cell')
                 }
@@ -259,7 +281,7 @@ let table = (function () {
         });
 
         lastPagePaginationElement.addEventListener('mouseout', function () {
-            lastPagePaginationElement.innerHTML = '>>';
+            lastPagePaginationElement.innerHTML = 'Last';
         });
     }
 

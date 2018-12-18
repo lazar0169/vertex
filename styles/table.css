@@ -330,3 +330,8 @@ textarea {
     text-align: right;
     padding-right: 1.5rem;
 }
+
+.row-chosen {
+    /*background: rgb(55, 71, 79);*/
+    background: #2A414B;
+}
