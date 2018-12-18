@@ -21,6 +21,7 @@
     color: rgb(120, 144, 156);
     margin: 1rem 0 1rem -1rem;
     font-size: 14px;
+    height: 4%;
 }
 
 .tabs-wrapper>div {
@@ -32,13 +33,13 @@
 
 .custom-filter {
     margin: 0;
-    padding: 0;
     width: 100%;
     background: rgba(38, 50, 56);
     color: rgb(120, 144, 156);
     display: inline-flex;
     white-space: nowrap;
     padding: 0.5rem 0;
+    height: 66px;
 }
 
 .custom-filter>div:not(:first-child) {
@@ -144,6 +145,7 @@
     position: relative;
     font-size: 10px;
     visibility: hidden;
+    height: 1rem;
 }
 
 .advance-table-filter-active-infobar>div:first-child {

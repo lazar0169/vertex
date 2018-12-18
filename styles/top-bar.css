@@ -6,6 +6,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    height: 5%;
 }
 
 #top-bar>div {
