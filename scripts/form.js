@@ -192,11 +192,11 @@ let form = (function () {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
-/*                        case 'multiple-select':
-                            if (dataForApi[formInputElement.name] === undefined) {
-                                dataForApi[formInputElement.name] = [];
-                            }
-                            dataForApi[formInputElement.name].push(formInputElement.value);*/
+                        /*                        case 'multiple-select':
+                                                    if (dataForApi[formInputElement.name] === undefined) {
+                                                        dataForApi[formInputElement.name] = [];
+                                                    }
+                                                    dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
                             dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
                             break;

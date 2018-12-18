@@ -97,8 +97,6 @@ const ticketsFilter = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersPrintDate);
-        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersRedeemDate);
         multiDropdown.generate(filters.TicketStateList, ticketsAdvanceTableFiltersStatus);
         multiDropdown.generate(filters.TypesList, ticketsAdvanceTableFiltersTypes);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);

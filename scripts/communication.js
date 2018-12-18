@@ -125,7 +125,6 @@ let communication = (function () {
     function prepareAftTableData(tableSettings, data) {
         let tableData = data.Data.Items;
 
-        console.log('data from API', tableData);
         let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {

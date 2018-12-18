@@ -36,11 +36,10 @@ const toggle  = (function () {
             }
             dropdown.checkboxElement = checkboxEl;
             settings.element.vertexToggle = dropdown;
-            console.log( settings.element);
+            console.log('Settings element', settings.element);
             settings.element.addEventListener('click',dropdown.toggleState);
         }
     }
-
 
     function check(element) {
         element.vertexToggle.checkboxElement.checked = true;
