@@ -180,6 +180,10 @@ let table = (function () {
     }
 
     function selectRow(tableSettings, row){
+        let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+        for(let i=0; i< tableCells.length; i++) {
+            tableCells[i].classList.remove('row-chosen');
+        }
         console.log(row);
         let rowElements = tableSettings.tableContainerElement.getElementsByClassName(row);
         for(let i = 0; i < rowElements.length; i++) {
