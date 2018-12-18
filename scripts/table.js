@@ -166,6 +166,9 @@ let table = (function () {
     function hoverRow(elements, highlight = false) {
         for (let element of document.getElementsByClassName(elements)) {
             element.classList[highlight ? "add" : "remove"]('hover');
+            if (element.classList.contains('payout')) {
+
+            }
         }
     }
 

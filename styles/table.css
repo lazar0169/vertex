@@ -59,17 +59,12 @@
     border-bottom: 1px solid #37454C;
     color: #cfd8dc;
     white-space: nowrap;
-    cursor: pointer;
+    cursor: default;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-/*    font-size: 14px;
-    line-height: 108px;
-    color: #ffffff;
-    font-family: "Open Sans";
-    font-weight: bold;*/
 }
 
 .cell.hover {
@@ -332,8 +327,11 @@ textarea {
     padding-right: 1.5rem;
 }
 
-.row-chosen {
-    /*background: rgb(55, 71, 79);*/
+.cell.payout.row-chosen {
     background: #2A414B;
+    cursor: pointer;
+}
+
+.cell.payout {
     cursor: pointer;
 }
