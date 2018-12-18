@@ -378,6 +378,7 @@ const sidebar = (function () {
         generateLinks(categorySelectedId);
         selectCategory(categorySelectedId);
         trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name });
+
         chosenLink.innerHTML = menuData[categorySelectedId].List;
     });
 

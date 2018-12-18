@@ -35,19 +35,20 @@ const aftFilters = (function () {
         InHouseMachineToHost: 2
     };
 
+
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
+    let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
+    let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
 
     let currentTableSettingsObject;
     let activeHeadElement;
 
     function showAdvanceTableFilter() {
-        advanceTableFilter.classList.toggle('aft-advance-active');
-        advanceTableFilterActive.classList.toggle('hidden');
-        $$(currentTableSettingsObject.tableContainerSelector).classList.toggle('smaller-table');
-        $$(currentTableSettingsObject.tableContainerSelector).getElementsByClassName('pagination')[0].classList.toggle('smaller-table');
+        advanceTableFilter.classList.add('advance-filter-active');
+        advanceTableFilterActive.classList.remove('hidden');
     }
 
     advanceTableFilter.addEventListener('click', function () {
@@ -76,7 +77,7 @@ const aftFilters = (function () {
     function formatChooseColumnData(chooseColumnListArray) {
         let formattedColumnArray = [];
         let columnObject = {};
-        chooseColumnListArray.forEach(function(column){
+        chooseColumnListArray.forEach(function (column) {
             columnObject = {
                 Name: localization.translateMessage(column.Name),
                 Value: column.Name
@@ -94,8 +95,9 @@ const aftFilters = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
+
         //filter elements
-        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+        //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
         let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
         let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
@@ -104,7 +106,6 @@ const aftFilters = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
         multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);
@@ -112,9 +113,9 @@ const aftFilters = (function () {
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
-    function formatAftApiData(listArray){
-        if(listArray !== null && listArray !== undefined) {
-            listArray.forEach(function(list){
+    function formatAftApiData(listArray) {
+        if (listArray !== null && listArray !== undefined) {
+            listArray.forEach(function (list) {
                 list.Name = localization.translateMessage(list.Name);
                 list.Value = list.Name;
             });
@@ -122,20 +123,20 @@ const aftFilters = (function () {
         return listArray;
     }
 
-    function prepareStatusDataForApi(list){
+    function prepareStatusDataForApi(list) {
         let preparedDataForApi = [];
-        if(list !== null) {
-            list.forEach(function(listItem){
+        if (list !== null) {
+            list.forEach(function (listItem) {
                 preparedDataForApi.push(parseInt(statusEnum[listItem]));
             });
         }
         return preparedDataForApi;
     }
 
-    function prepareTypeDataForApi(list){
+    function prepareTypeDataForApi(list) {
         let preparedDataForApi = [];
-        if(list !== null) {
-            list.forEach(function(listItem){
+        if (list !== null) {
+            list.forEach(function (listItem) {
                 preparedDataForApi.push(parseInt(typeEnum[listItem]));
             });
         }
@@ -158,12 +159,13 @@ const aftFilters = (function () {
     });
 
     clearAdvanceFilter.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     });
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
-        let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
 
+        let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
+        console.log('filters', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
         let filtersForApi = {
@@ -183,18 +185,21 @@ const aftFilters = (function () {
             "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
-        currentTableSettingsObject.filters = filtersForApi;
 
+        currentTableSettingsObject.filters = filtersForApi;
         return filtersForApi;
     }
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
+
         let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
 
         trigger('communicate/aft/previewTransactions', {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
+        showSelectedFilters()
+
     });
 
     on('aft/filters/pagination', function (params) {
@@ -231,5 +236,43 @@ const aftFilters = (function () {
             callbackEvent: 'table/update'
         });
     })
+
+
+    clearAdvanceFilter.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        advanceTableFilterInfobar.style.visibility = 'hidden';
+    });
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        showSelectedFilters();
+        advanceTableFilterInfobar.style.visibility = 'hidden';
+    });
+
+    function showSelectedFilters() {
+
+        for (let count = 0; count < advanceTableFilterActive.children.length - 1; count++) {
+            if (advanceTableFilterActive.children[count].children[1].children[0].dataset && advanceTableFilterActive.children[count].children[1].children[0].dataset.value !== '-') {
+                advanceTableFilterInfobar.children[1].children[count].children[0].innerHTML = advanceTableFilterActive.children[count].children[0].innerHTML;
+                advanceTableFilterInfobar.children[1].children[count].children[1].innerHTML = advanceTableFilterActive.children[count].children[1].children[0].title;
+                advanceTableFilterInfobar.children[1].children[count].title = advanceTableFilterActive.children[count].children[1].children[0].title;
+                advanceTableFilterInfobar.children[1].children[count].classList.remove('hidden');
+
+            }
+            else {
+                advanceTableFilterInfobar.children[1].children[count].classList.add('hidden');
+            }
+        }
+
+        for (let isHidden of advanceTableFilterInfobar.children[1].children) {
+            if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
+                advanceTableFilterInfobar.style.visibility = 'visible';
+                return;
+            }
+            else {
+                advanceTableFilterInfobar.style.visibility = 'hidden';
+            }
+        }
+
+    }
 
 })();

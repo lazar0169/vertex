@@ -1,15 +1,45 @@
 <div id="aft-filter" class="custom-filter">
     <div id="aft-advance-table-filter" class="advance-table-filter center">
-        <div>Advance table filter</div>
+        <div data-translation-key="AdvanceTableFilter">Advance table filter</div>
+
+        <div id="aft-advance-table-filter-active" class="hidden">
+            <div id="aft-advance-table-filter-date-range" data-name="DateRange" class="select-container advance-table-filter-select">
+                <div data-translation-key="DataRange">Data range:</div>
+            </div>
+            <div id="aft-advance-table-filter-finished" data-name="MachineList" class="select-container advance-table-filter-select">
+                <div data-translation-key="FinishedBy">Finished by:</div>
+            </div>
+            <div id="aft-advance-table-filter-jackpot" data-name="JackpotList" class="select-container advance-table-filter-select">
+                <div data-translation-key="Jackpot">Jackpot:</div>
+            </div>
+            <div id="aft-advance-table-filter-type" data-name="Type" class="select-container advance-table-filter-select">
+                <div data-translation-key="Type">Type:</div>
+            </div>
+            <div id="aft-advance-table-filter-status" data-name="Status" class="select-container advance-table-filter-select">
+                <div data-translation-key="Status">Status:</div>
+            </div>
+            <div id="aft-advance-table-filter-column" data-name="Columns" class="select-container advance-table-filter-select">
+                <div data-translation-key="ShowColumn">Show column:</div>
+            </div>
+
+            <div class="button-wrapper">
+                <div id="aft-advance-table-filter-apply" class="center apply-advance-filter">
+                    <button class="btn btn-success" data-translation-key="ApplyFilters">Apply Filters</button>
+                </div>
+                <div id="aft-advance-table-filter-clear" class="center">
+                    <button class="btn btn-cancel" data-translation-key="ClearAll">Clear all</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="wrapper-aft-export-to" class="wrapper-export-to center">
-        <div id="aft-export-to">Export to:</div>
+        <div id="aft-export-to" data-translation-key="ExportTo">Export to:</div>
         <div id="aft-export-pdf"></div>
         <div id="aft-export-xls"></div>
     </div>
     <div class="center">
         <div id="aft-add-transaction">
-            <button class="btn btn-success aft-add-transaction">ADD TRANSACTION</button>
+            <button class="btn btn-success" data-translation-key="AddTransaction">ADD TRANSACTION</button>
         </div>
     </div>
     <div id="aft-right-filter" class="custom-right-filter center">
@@ -22,31 +52,36 @@
         </div>
     </div>
 </div>
-<div id="aft-advance-table-filter-active" class="element-table-filters-container hidden">
-    <div id="aft-advance-table-filter-date-range" data-name="DateRange" class="select-container">
-        <div>Date range:</div>
-    </div>
-    <div id="aft-advance-table-filter-finished" data-name="MachineList" class="select-container">
-        <div>Finished by:</div>
-    </div>
-    <div id="aft-advance-table-filter-jackpot" data-name="JackpotList" class="select-container">
-        <div>Jackpot:</div>
-    </div>
-    <div id="aft-advance-table-filter-type" data-name="Type" class="select-container">
-        <div>Type:</div>
-    </div>
-    <div id="aft-advance-table-filter-status" data-name="Status" class="select-container">
-        <div>Status:</div>
-    </div>
-    <div id="aft-advance-table-filter-column" data-name="Columns" class="select-container">
-        <div>Choose column to show:</div>
-    </div>
+
+<div id="aft-advance-table-filter-active-infobar" class="advance-table-filter-active-infobar">
+    <div>ikona</div>
     <div>
-        <div id="aft-advance-table-filter-apply" class="center">
-            <button class="btn btn-success aft-filters-apply">Apply Filters</button>
+        <div id="aft-advance-table-filter-date-range-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
         </div>
-        <div id="aft-advance-table-filter-clear" class="center">
-            <button class="btn btn-cancel">Clear all</button>
+        <div id="aft-advance-table-filter-finished-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
         </div>
+        <div id="aft-advance-table-filter-jackpot-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="aft-advance-table-filter-type-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="aft-advance-table-filter-status-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="aft-advance-table-filter-column-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div id="aft-advance-table-filter-active-infobar-button">
+        <button class="btn btn-cancel" data-translation-key="ClearAll">Clear all</button>
     </div>
 </div>

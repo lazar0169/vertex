@@ -36,7 +36,17 @@ const multiDropdown = (function () {
     }
 
     function generate(dataSelect, element) {
-        if (element) {
+        let existsId;
+        if (element && element.children[1]) {
+            let i = 0;
+            for (let ms of multiSelectArray) {
+                if (ms === element.children[1].id) {
+                    existsId = element.children[1].id;
+                    multiSelectArray.splice(i, 1);
+                    break;
+                }
+                i++;
+            }
             removeChildren(element);
         }
         //array of chosen options
@@ -46,13 +56,20 @@ const multiDropdown = (function () {
         let noSelected = dataSelect.shift();
         //wrapper select
         let select = document.createElement('div');
-        select.dataset.selectId = indexMsId;
         select.classList.add('default-select');
-        select.id = `ms-${indexMsId}`;
+
+        if (existsId) {
+            select.id = existsId;
+        }
+        else {
+            select.id = `ms-${indexMsId}`;
+            indexMsId++;
+        }
+
         //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected.Name;
-        selected.dataset.value = noSelected.Value; //todo check if okay
+        selected.dataset.value = noSelected.Name;
         selected.title = selected.innerHTML;
         selected.classList.add('element-table-filters');
         //wrapper options group
@@ -62,12 +79,12 @@ const multiDropdown = (function () {
         for (let element of dataSelect) {
             //option with functionality
             let option = document.createElement('div');
-            option.title = element.Name;
-            option.dataset.value = element.Value; //todo check if okay
+            option.dataset.value = element.Name;
             option.innerHTML = `<label class="form-checkbox" >
                                                 <input type="checkbox">
-                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
+                                                <i class="form-icon" data-elementId = "${element.Name}"></i> <div data-translation-key="${element.Name}">${element.Name}</div>
                                             </label>`;
+            option.title = option.children[0].children[2].innerHTML;
             optionGroup.appendChild(option);
             optionGroup.classList.add('overflow-y');
             option.addEventListener('click', function (e) {
@@ -96,8 +113,8 @@ const multiDropdown = (function () {
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
                         selected.innerHTML = noSelected.Name;
-                        array.push(noSelected.Value); //todo check if this is okay
-                        arrayInner.push(noSelected.Value); //todo check if this is okay
+                        array.push(noSelected.Name);
+                        arrayInner.push(noSelected.Name);
                     }
                 }
                 selected.title = selected.innerHTML;
@@ -107,7 +124,7 @@ const multiDropdown = (function () {
         select.appendChild(selected);
         select.appendChild(optionGroup);
 
-        indexMsId++;
+
         dataSelect.unshift(noSelected);
         multiSelectArray.push(select.id);
         if (element) {
@@ -118,30 +135,24 @@ const multiDropdown = (function () {
     }
 
     window.addEventListener('click', function (e) {
-        e.stopPropagation();
+        e.preventDefault();
+
         for (let selectId of multiSelectArray) {
-            if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
-                if (e.target.parentNode.id === selectId) {
-                    $$(`#${selectId}`).classList.toggle('active-multi-select');
-                    $$(`#${selectId}`).children[1].classList.toggle('hidden');
-                } else {
-                    if (e.target!== null && e.target.parentNode !== null &&  e.target.parentNode.parentNode !== null) {
-                        if (e.target.parentNode.parentNode.id === selectId) {
-                            $$(`#${selectId}`).classList.add('active-multi-select');
-                            $$(`#${selectId}`).children[1].classList.remove('hidden');
-                        } else if (e.target.parentNode.parentNode.id === selectId) {
-                            $$(`#${selectId}`).classList.add('active-multi-select');
-                            $$(`#${selectId}`).children[1].classList.remove('hidden');
-                        } else if (e.target.parentNode.parentNode.parentNode !== null && e.target.parentNode.parentNode.parentNode.id === selectId) {
-                            $$(`#${selectId}`).classList.add('active-multi-select');
-                            $$(`#${selectId}`).children[1].classList.remove('hidden');
-                        } else if (e.target.parentNode.parentNode.parentNode.parentNode != null && e.target.parentNode.parentNode.parentNode.parentNode.id === selectId) {
-                            $$(`#${selectId}`).classList.add('active-multi-select');
-                            $$(`#${selectId}`).children[1].classList.remove('hidden');
-                        } else {
-                            $$(`#${selectId}`).classList.remove('active-multi-select');
-                            $$(`#${selectId}`).children[1].classList.add('hidden');
-                        }
+            if (e.target.parentNode && e.target.parentNode.id === selectId) {
+                $$(`#${selectId}`).classList.toggle('active-multi-select');
+                $$(`#${selectId}`).children[1].classList.toggle('hidden');
+                $$(`#${selectId}`).parentNode.children[0].classList.add('dropdown-is-active');
+            }
+            else {
+                if (e.target.parentNode && e.target.parentNode.parentNode && e.target.parentNode.parentNode.id === selectId) {
+                    $$(`#${selectId}`).classList.add('active-multi-select');
+                    $$(`#${selectId}`).children[1].classList.remove('hidden');
+                }
+                else {
+                    $$(`#${selectId}`).classList.remove('active-multi-select');
+                    $$(`#${selectId}`).children[1].classList.add('hidden');
+                    if ($$(`#${selectId}`).children[0].dataset.value === '-') {
+                        $$(`#${selectId}`).parentNode.children[0].classList.remove('dropdown-is-active');
                     }
                 }
             }
@@ -153,4 +164,4 @@ const multiDropdown = (function () {
         select
     };
 })
-();
+    ();
