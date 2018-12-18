@@ -6,23 +6,11 @@
     position: relative;
 }
 
-.default-date-select {
-    width: 100%;
-    border-radius: 15%;
-}
-
-.default-date-select > .element-table-filters {
-    width: auto;
-    padding: 0.1rem 0.7rem 0.2rem 0.8rem;
-    border-radius: 15%;
-
-}
-
-.default-select > div:first-child:before, .default-date-select > div:first-child:before {
+.default-select>div:first-child:before, .default-date-select>div:first-child:before {
     content: "";
     position: absolute;
     right: 3px;
-    top: 0.6rem;
+    top: 0.5rem;
     width: 0;
     height: 0;
     border-top: 0.3rem solid rgb(30, 155, 227);
@@ -30,18 +18,15 @@
     border-left: 0.15rem solid transparent;
 }
 
-.default-select > div:first-child, .default-date-select > div:first-child {
-    width: 60px;
+.default-select>div:first-child, .default-date-select>div:first-child {
+    width: 120px;
     font-size: 0.6rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 0.2rem 0rem 0.2rem 1.3rem;
+    padding: 0.1rem 0.5rem 0.2rem 0.5rem;
     position: relative;
     border: 1px solid rgb(55, 71, 79);
-    border-radius: 10%;
-    color: #708690;
-
 }
 
 .default-select>div:not(:first-child), .option-select-date {
@@ -56,17 +41,17 @@
     z-index: 2;
 }
 
-.active-date-select > div:first-child, .active-single-select > div:first-child, .active-multi-select > div:first-child {
+.active-date-select>div:first-child, .active-single-select>div:first-child, .active-multi-select>div:first-child {
     border-bottom: 1px solid rgb(38, 50, 56);
     box-shadow: 0.2rem 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
 }
 
-.default-select > div:not(:first-child) > div {
+.default-select>div:not(:first-child)>div {
     padding: 0.2rem 0.5rem;
     overflow: hidden;
 }
 
-.default-select > div:not(:first-child) > div > label > div {
+.default-select>div:not(:first-child)>div>label>div {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -76,12 +61,12 @@
     cursor: pointer;
 }
 
-.default-select > div:not(:first-child) > div:hover, .default-date-select > div:not(:first-child) > div:first-child > div:hover {
+.default-select>div:not(:first-child)>div:hover, .default-date-select>div:not(:first-child)>div:first-child>div:hover {
     background: rgb(55, 71, 79);
 }
 
-.multiple-group > div > label > div, .multiple-group > div > label > i, .multiple-group > div > label {
-    pointer-events: none;
+.multiple-group>div>label>div, .multiple-group>div>label>i, .multiple-group>div>label {
+    pointer-events: none !important;
 }
 
 .option-select-date, .timepicker {
@@ -89,7 +74,7 @@
     flex-direction: row;
 }
 
-.option-select-date > div {
+.option-select-date>div {
     width: 100%;
 }
 
@@ -97,41 +82,17 @@
     padding: 0.2rem 0.5rem;
 }
 
-.option-select-date > div:first-child {
+.option-select-date>div:first-child {
     min-width: 120px;
 }
 
-.option-select-date > div, .choose-date-time {
+.option-select-date>div, .choose-date-time {
     display: flex;
     flex-direction: column;
 }
 
 .custom-date-buttons-wrapper {
     margin: 0.5rem 0;
-}
-/*select options size*/
-#tickets-advance-table-filter-print-date .option-select-date {
-    width: 100px;
-}
-
-#tickets-advance-table-filter-print-date .element-table-filters {
-    width: 100px;
-}
-
-#tickets-advance-table-filter-print-date .option-select-date .single-option {
-    width: 100px;
-}
-
-#aft-advance-table-filter-date-range .option-select-date .single-option {
-    width: 100px;
-}
-
-#tickets-advance-table-filter-active .option-select-date .single-option {
-    width: 100px;
-}
-
-#tickets-advance-table-filter-active .element-table-filters {
-    width: 100px;
 }
 
 #tickets-machines-number .element-table-filters .single-option {
@@ -143,7 +104,7 @@
 }
 
 #tickets-advance-table-filter-clear .btn-cancel {
-    color : #3088D7;
+    color: #3088D7;
 }
 
 #tickets-tab-info {
@@ -152,10 +113,7 @@
 
 /*aft and tickets active filters option size*/
 
-#tickets-advance-table-filter-status .default-select .multiple-group , #tickets-advance-table-filter-types .default-select .multiple-group ,
-#tickets-advance-table-filter-column .default-select .multiple-group , #aft-advance-table-filter-finished .default-select .multiple-group,
-#aft-advance-table-filter-jackpot .default-select .multiple-group,#aft-advance-table-filter-type .default-select .multiple-group,
-#aft-advance-table-filter-status .default-select .multiple-group,#aft-advance-table-filter-column .default-select .multiple-group {
+#tickets-advance-table-filter-status .default-select .multiple-group, #tickets-advance-table-filter-types .default-select .multiple-group, #tickets-advance-table-filter-column .default-select .multiple-group, #aft-advance-table-filter-finished .default-select .multiple-group, #aft-advance-table-filter-jackpot .default-select .multiple-group, #aft-advance-table-filter-type .default-select .multiple-group, #aft-advance-table-filter-status .default-select .multiple-group, #aft-advance-table-filter-column .default-select .multiple-group {
     width: 200px;
 }
 

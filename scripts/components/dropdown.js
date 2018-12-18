@@ -81,7 +81,7 @@ const dropdown = (function () {
 
     //TODO THIS PART GENERATES MULTIPLE ERRORS
     window.addEventListener('click', function (e) {
-        e.stopPropagation();
+        e.preventDefault();
         for (let selectId of singleSelectArray) {
             if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
                 if (e.target.parentNode.id !== selectId) {

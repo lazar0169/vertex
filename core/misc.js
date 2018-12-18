@@ -70,8 +70,8 @@ on('apply-custom-date', function (data) {
     }
     else {
         $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
-        $$(`#ds-${data.selectId}`).children[0].title = `Date from: ${tempArray[0]}, Time from: ${tempArray[1]}, Date to: ${tempArray[2]}, Time to: ${tempArray[3]}`;
-        $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}, ${tempArray[2]}T${tempArray[3]}`;
+        $$(`#ds-${data.selectId}`).children[0].title = `From: ${tempArray[0]} ${tempArray[1]}:00, To: ${tempArray[2]} ${tempArray[3]}:00`;
+        $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}:00, ${tempArray[2]}T${tempArray[3]}:00`;
         data.target.dataset.value = 'Apply custom date'
         let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).children[0].dataset.value);
         console.log(jsonCustomDate);
@@ -94,9 +94,9 @@ on('cancel-custom-date', function (data) {
     timeToMinutes.innerHTML = minutes[0];
     timeToMinutes.dataset.value = minutes[0];
     trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
-    $$(`#ds-${data.selectId}`).children[0].innerHTML = nekiniz[0];
-    $$(`#ds-${data.selectId}`).children[0].title = nekiniz[0];
-    $$(`#ds-${data.selectId}`).children[0].dataset.value = nekiniz[0];
+    $$(`#ds-${data.selectId}`).children[0].innerHTML = fixedDays[0];
+    $$(`#ds-${data.selectId}`).children[0].title = fixedDays[0];
+    $$(`#ds-${data.selectId}`).children[0].dataset.value = fixedDays[0];
     delete data.target.dataset.value;
 });
 

@@ -21,8 +21,8 @@ const ticketsFilter = (function () {
     let activeHeadElement;
 
     function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.toggle('tickets-advance-active');
-        advanceTableFilterActive.classList.toggle('hidden');
+        ticketAdvanceFilter.classList.add('advance-filter-active');
+        advanceTableFilterActive.classList.remove('hidden');
     }
 
     ticketAdvanceFilter.addEventListener('click', function () {
@@ -57,8 +57,7 @@ const ticketsFilter = (function () {
     function displayFilters(filters, tableSettings) {
 
         //filter elements
-        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
-        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
+        
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
         let ticketsAdvanceTableFiltersPrinted = $$('#tickets-advance-table-filter-printed');
@@ -67,8 +66,7 @@ const ticketsFilter = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersPrintDate);
-        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersRedeemDate);
+       
         multiDropdown.generate(filters.TicketStateList, ticketsAdvanceTableFiltersStatus);
         multiDropdown.generate(filters.TypesList, ticketsAdvanceTableFiltersTypes);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);

@@ -9,7 +9,7 @@ const dropdownDate = (function () {
     let pickCustom = false;
     //generate single dropdown
     function generate(dataSelect, element) {
-        if(element){
+        if (element) {
             removeChildren(element);
         }
         // wrapper select
@@ -30,7 +30,7 @@ const dropdownDate = (function () {
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('overflow-y');
         let customDate = document.createElement('div');
-        
+
         customDate.innerHTML = `<div id="date-from-${indexDsId}" class="choose-date-time">
                                 <div data-translation-key="DateFrom">Date from:</div>
                                 <input id="datepicker-from-${indexDsId}" type="text" class="datepicker" readonly>                                
@@ -72,7 +72,6 @@ const dropdownDate = (function () {
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
 
-
         customDate.classList.add('hidden');
         for (let element of dataSelect) {
             //option with functionality
@@ -93,7 +92,7 @@ const dropdownDate = (function () {
                 else {
                     selected.innerHTML = option.innerHTML;
                     selected.title = selected.innerHTML;
-                    selected.dataset.value = selected.innerHTML;
+                    selected.dataset.value = option.dataset.value;
                     customDate.classList.add('hidden');
                     pickCustom = false;
                 }
@@ -106,20 +105,18 @@ const dropdownDate = (function () {
 
         indexDsId++;
         dateSelectArray.push(select.id);
-        if(element){
+        if (element) {
             element.appendChild(select);
             return element;
         }
         return select;
     }
     window.addEventListener('click', function (e) {
-        e.stopPropagation();
+        e.preventDefault();
+        let advanceTableFilterIsOpen = false;
         let found = false;
         let current = e.target;
         while (current) {
-            if (found) {
-                break;
-            }
             for (let selectId of dateSelectArray) {
                 if (current.id === selectId) {
                     found = true;
@@ -130,14 +127,17 @@ const dropdownDate = (function () {
                         pickCustom = false;
                     }
                     activeSelectId = selectId;
-                    break;
                 }
+            }
+            //this is for advance filters
+            if (current && current.classList && current.classList.contains('advance-filter-active')) {
+                advanceTableFilterIsOpen = true;
+                break;
             }
             current = current.parentNode;
         }
         //TODO PITAJ LAZARA DA ISPRAVI BAG
-        if (e.target !== null && e.target.parentNode
-            &&found && !pickCustom && e.target.dataset.value !== 'Custom' || e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset.value === 'Apply custom date') {
+        if (found && !pickCustom && e.target.dataset && e.target.dataset.value !== 'Custom' || e.target.parentNode && e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
@@ -146,7 +146,7 @@ const dropdownDate = (function () {
             }
             pickCustom = false;
         }
-        else if (found && pickCustom || e.target.classList.contains('pika-select') || found && e.target.dataset.value === 'Custom') {
+        else if (found && pickCustom || e.target.classList && e.target.classList.contains('pika-select') || found && e.target.dataset && e.target.dataset.value === 'Custom' || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
             $$(`#${activeSelectId}`).classList.add('active-date-select');
             $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
         }
@@ -157,6 +157,20 @@ const dropdownDate = (function () {
                 $$('.active-date-select')[0].classList.toggle('active-date-select');
                 activeSelectId = false;
                 pickCustom = false;
+            }
+        }
+        //this is for advance filters
+        if (advanceTableFilterIsOpen || e.target.classList && e.target.classList.contains('pika-select') || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
+            $$('.advance-filter-active')[0].children[1].classList.remove('hidden');
+            if (e.target.parentNode && e.target.parentNode.classList.contains('apply-advance-filter')) {
+                $$('.advance-filter-active')[0].children[1].classList.add('hidden');
+                $$('.advance-filter-active')[0].classList.remove('advance-filter-active')
+            }
+        }
+        else {
+            if ($$('.advance-filter-active')[0]) {
+                $$('.advance-filter-active')[0].children[1].classList.add('hidden');
+                $$('.advance-filter-active')[0].classList.remove('advance-filter-active')
             }
         }
     });
