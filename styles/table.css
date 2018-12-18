@@ -75,6 +75,7 @@
 .cell.hover {
     background-color: #3A4950;
     color: white;
+    cursor: default;
 }
 
 .first.cell {
@@ -334,4 +335,5 @@ textarea {
 .row-chosen {
     /*background: rgb(55, 71, 79);*/
     background: #2A414B;
+    cursor: pointer;
 }
