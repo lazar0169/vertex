@@ -17,13 +17,8 @@ const aftFilters = (function () {
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
-
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
-
-
-
-
 
     let currentTableSettingsObject;
     let activeHeadElement;
@@ -73,8 +68,7 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
         let colNames = getColNamesOfTable(tableSettings);
-
-        
+ 
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
         multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);

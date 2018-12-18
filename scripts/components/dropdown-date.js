@@ -72,7 +72,6 @@ const dropdownDate = (function () {
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
 
-
         customDate.classList.add('hidden');
         for (let element of dataSelect) {
             //option with functionality
