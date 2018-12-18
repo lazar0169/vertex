@@ -336,6 +336,16 @@ let form = (function () {
         });
     }
 
+    function createToggles(formSettings) {
+        form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
+
+        let checkboxes = form.getElementsByClassName('vertex-form-checkbox');
+        for (let i = 0;i<checkboxes.length;i++) {
+            let cb = checkboxes[i];
+            toggle.generate({element:cb});
+        }
+    }
+
     function bindSubmitHandler(formSettings) {
         form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
         form.addEventListener('submit', onSubmit);
@@ -383,6 +393,7 @@ let form = (function () {
         bindAddAnotherClickHandlers(formSettings);
         bindBackButton(formSettings);
         bindSubmitHandler(formSettings);
+        createToggles(formSettings);
     }
 
     on('form/init', function (params) {
