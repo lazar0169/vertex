@@ -3,6 +3,7 @@
     margin:0;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .vertex-form-checkbox > div,
 .vertex-form-checkbox > label {
