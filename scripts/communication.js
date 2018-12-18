@@ -124,6 +124,8 @@ let communication = (function () {
 
     function prepareAftTableData(tableSettings, data) {
         let tableData = data.Data.Items;
+
+        console.log('data from API', tableData);
         let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
@@ -144,6 +146,8 @@ let communication = (function () {
             delete entry.EntryData.FinishedTime;
             entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
             entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
+
+            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) +'">'+entry.EntryData.Status+'</div>'
         });
 
         for (let i = 0; i < tableData.length; i++) {

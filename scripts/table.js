@@ -166,9 +166,6 @@ let table = (function () {
     function hoverRow(elements, highlight = false) {
         for (let element of document.getElementsByClassName(elements)) {
             element.classList[highlight ? "add" : "remove"]('hover');
-            if (element.classList.contains('payout')) {
-
-            }
         }
     }
     function styleColsRows(tableSettingsData, colsCount, tbody) {
@@ -181,17 +178,16 @@ let table = (function () {
     function selectRow(tableSettings, row){
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
         for(let i=0; i< tableCells.length; i++) {
-            tableCells[i].classList.remove('row-chosen');
-        }
-        console.log(row);
-        let rowElements = tableSettings.tableContainerElement.getElementsByClassName(row);
-        for(let i = 0; i < rowElements.length; i++) {
-            if(rowElements[i].classList.contains('payout')) {
-                rowElements[i].classList.toggle('row-chosen');
-                rowElements[i].title = localization.translateMessage('CancelTranslation');
+            if(!tableCells[i].classList.contains(row)) {
+                tableCells[i].classList.remove('row-chosen');
+            } else {
+                if(tableCells[i].classList.contains('payout')) {
+                    tableCells[i].classList.toggle('row-chosen');
+                    tableCells[i].title = localization.translateMessage('CancelTranslation');
+                }
             }
         }
-        console.log('row', rowElements);
+        console.log(row);
     }
 
     function generateTableRows(tableSettings) {
@@ -213,6 +209,8 @@ let table = (function () {
             cell.classList.add(`row-${rowId}`);
             cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
             tbody.appendChild(cell);
+
+            let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
 
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
