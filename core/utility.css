@@ -98,3 +98,38 @@
     color: rgb(120, 144, 156);
     position: relative;
 }
+
+.advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:first-child {
+    min-width: 150px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:last-child {
+    width: 200px;
+}
+
+.advance-filter-active {
+    background: rgb(55, 71, 79);
+}
+
+.advance-filter-active>div:not(:first-child) {
+    display: grid;
+    background: rgb(55, 71, 79);
+    color: rgb(120, 144, 156);
+    position: absolute;
+    min-width: 250px;
+    max-width: 500px;
+    left: 0;
+    z-index: 100;
+    box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.advance-filter-active>div:not(:first-child)>div:last-child {
+    background: rgb(38, 50, 56);
+}
+
+.advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
+    width: 200px;
+}

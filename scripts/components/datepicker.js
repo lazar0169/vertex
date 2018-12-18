@@ -1,6 +1,15 @@
 let datepicker = function () {
     // Initialize all date pickers
     on('load', function () {
+
+        //ToDo: razmisliti kako srediti ovo
+        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
+        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
+        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+        dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
+        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersPrintDate);
+        dropdownDate.generate(nekiniz, ticketsAdvanceTableFiltersRedeemDate);
+
         for (let picker of $$('.datepicker')) {
             new Pikaday({
                 field: picker,

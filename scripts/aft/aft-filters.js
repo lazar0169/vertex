@@ -58,7 +58,7 @@ const aftFilters = (function () {
     function displayFilters(filters, tableSettings) {
 
         //filter elements
-        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+        //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
         let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
         let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
@@ -67,7 +67,7 @@ const aftFilters = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-        dropdownDate.generate(nekiniz, aftAdvanceTableFilterDateRange);
+        
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
         multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);

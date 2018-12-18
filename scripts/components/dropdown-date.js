@@ -93,7 +93,7 @@ const dropdownDate = (function () {
                 else {
                     selected.innerHTML = option.innerHTML;
                     selected.title = selected.innerHTML;
-                    selected.dataset.value = selected.innerHTML;
+                    selected.dataset.value = option.dataset.value;
                     customDate.classList.add('hidden');
                     pickCustom = false;
                 }
@@ -113,7 +113,7 @@ const dropdownDate = (function () {
         return select;
     }
     window.addEventListener('click', function (e) {
-         e.preventDefault();
+        e.preventDefault();
         let advanceTableFilterIsOpen = false;
         let found = false;
         let current = e.target;
