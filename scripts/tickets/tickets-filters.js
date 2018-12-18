@@ -38,7 +38,7 @@ const ticketsFilter = (function () {
     let activeHeadElement;
 
     function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.toggle('tickets-advance-active');
+        ticketAdvanceFilter.classList.toggle('advance-filter-active');
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
