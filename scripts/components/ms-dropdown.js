@@ -43,6 +43,7 @@ const multiDropdown = (function () {
                 if (ms === element.children[1].id) {
                     existsId = element.children[1].id;
                     multiSelectArray.splice(i, 1);
+                    break;
                 }
                 i++;
             }
@@ -61,11 +62,10 @@ const multiDropdown = (function () {
             select.id = existsId;
         }
         else {
-
             select.id = `ms-${indexMsId}`;
             indexMsId++;
         }
-        
+
         //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected.Name;

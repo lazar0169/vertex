@@ -77,7 +77,7 @@ const aftFilters = (function () {
     function formatChooseColumnData(chooseColumnListArray) {
         let formattedColumnArray = [];
         let columnObject = {};
-        chooseColumnListArray.forEach(function(column){
+        chooseColumnListArray.forEach(function (column) {
             columnObject = {
                 Name: localization.translateMessage(column.Name),
                 Value: column.Name
@@ -113,9 +113,9 @@ const aftFilters = (function () {
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
-    function formatAftApiData(listArray){
-        if(listArray !== null && listArray !== undefined) {
-            listArray.forEach(function(list){
+    function formatAftApiData(listArray) {
+        if (listArray !== null && listArray !== undefined) {
+            listArray.forEach(function (list) {
                 list.Name = localization.translateMessage(list.Name);
                 list.Value = list.Name;
             });
@@ -123,20 +123,20 @@ const aftFilters = (function () {
         return listArray;
     }
 
-    function prepareStatusDataForApi(list){
+    function prepareStatusDataForApi(list) {
         let preparedDataForApi = [];
-        if(list !== null) {
-            list.forEach(function(listItem){
+        if (list !== null) {
+            list.forEach(function (listItem) {
                 preparedDataForApi.push(parseInt(statusEnum[listItem]));
             });
         }
         return preparedDataForApi;
     }
 
-    function prepareTypeDataForApi(list){
+    function prepareTypeDataForApi(list) {
         let preparedDataForApi = [];
-        if(list !== null) {
-            list.forEach(function(listItem){
+        if (list !== null) {
+            list.forEach(function (listItem) {
                 preparedDataForApi.push(parseInt(typeEnum[listItem]));
             });
         }
@@ -159,7 +159,7 @@ const aftFilters = (function () {
     });
 
     clearAdvanceFilter.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     });
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
@@ -198,6 +198,7 @@ const aftFilters = (function () {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
+        showSelectedFilters()
 
     });
 
@@ -235,10 +236,7 @@ const aftFilters = (function () {
             callbackEvent: 'table/update'
         });
     })
-/*
-    advanceTableFilter.children[0].addEventListener('click', function () {
-        showAdvanceTableFilter();
-    });
+
 
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
@@ -275,6 +273,6 @@ const aftFilters = (function () {
             }
         }
 
-    }*/
+    }
 
 })();
