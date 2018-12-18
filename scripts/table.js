@@ -149,12 +149,6 @@ let table = (function () {
                 }
                 tbody.appendChild(head);
             }
-            let cancelCell = document.createElement('div');
-            cancelCell.innerHTML = '';
-            cancelCell.classList.add('cancel-cell');
-            cancelCell.classList.add('cell');
-            cancelCell.classList.add('head');
-            tbody.appendChild(cancelCell);
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
@@ -172,13 +166,15 @@ let table = (function () {
     function hoverRow(elements, highlight = false) {
         for (let element of document.getElementsByClassName(elements)) {
             element.classList[highlight ? "add" : "remove"]('hover');
+            if (element.classList.contains('payout')) {
+
+            }
         }
     }
-
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '25px';
+        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)`;
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
@@ -192,12 +188,14 @@ let table = (function () {
         for(let i = 0; i < rowElements.length; i++) {
             if(rowElements[i].classList.contains('payout')) {
                 rowElements[i].classList.toggle('row-chosen');
+                rowElements[i].title = localization.translateMessage('CancelTranslation');
             }
         }
         console.log('row', rowElements);
     }
 
     function generateTableRows(tableSettings) {
+
         console.log('table settings in generate table rows', tableSettings);
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
@@ -247,11 +245,6 @@ let table = (function () {
                 }
                 tbody.appendChild(cell);
             }
-            let cancelCell = document.createElement('div');
-            cancelCell.innerHTML = '';
-            cancelCell.classList.add('cancel-cell');
-            cancelCell.classList.add('cell');
-            tbody.appendChild(cancelCell);
         }
         styleColsRows(tableSettings.formatedData, colsCount, tbody);
     }
