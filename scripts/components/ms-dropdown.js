@@ -36,7 +36,16 @@ const multiDropdown = (function () {
     }
 
     function generate(dataSelect, element) {
-        if (element) {
+        let existsId;
+        if (element && element.children[1]) {
+            let i = 0;
+            for (let ms of multiSelectArray) {
+                if (ms === element.children[1].id) {
+                    existsId = element.children[1].id;
+                    multiSelectArray.splice(i, 1);
+                }
+                i++;
+            }
             removeChildren(element);
         }
         //array of chosen options
@@ -46,9 +55,17 @@ const multiDropdown = (function () {
         let noSelected = dataSelect.shift();
         //wrapper select
         let select = document.createElement('div');
-        select.dataset.selectId = indexMsId;
         select.classList.add('default-select');
-        select.id = `ms-${indexMsId}`;
+
+        if (existsId) {
+            select.id = existsId;
+        }
+        else {
+
+            select.id = `ms-${indexMsId}`;
+            indexMsId++;
+        }
+        
         //selected options
         let selected = document.createElement('div');
         selected.innerHTML = noSelected.Name;
@@ -107,7 +124,7 @@ const multiDropdown = (function () {
         select.appendChild(selected);
         select.appendChild(optionGroup);
 
-        indexMsId++;
+
         dataSelect.unshift(noSelected);
         multiSelectArray.push(select.id);
         if (element) {
