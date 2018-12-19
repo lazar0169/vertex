@@ -68,7 +68,7 @@
 }
 
 .cell.hover {
-    background-color: #3A4950;
+    background-color: rgba(58, 73, 80, 0.4);
     color: white;
     cursor: default;
 }
@@ -98,6 +98,11 @@
 
 .head.cell:hover {
     background-color: rgba(58, 73, 80, 0.4);
+/*    background-image: url("/images/arrow-up-table-sorting.png");
+    height: 13px;
+    width: 8px;
+    top: 27%;
+    margin-left: 5px*/
 }
 
 .head.cell:nth-child(1) {
@@ -131,7 +136,7 @@
     color: white;
 }
 
-.head.cell.sort-asc:after, .head.cell:hover {
+.head.cell.sort-asc:after {
     /*    position: absolute;
         display: inline-block;*/
     content: '';
@@ -316,7 +321,7 @@ textarea {
 
 #aft-tabs-transaction-info .cell.cell-createdby.first {
     margin-left: 0;
-    width: 110%;
+    width: 100%;
     padding-right: 10px;
 }
 
