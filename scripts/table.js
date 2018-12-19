@@ -300,12 +300,14 @@ let table = (function () {
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
+        let rowNumber = 1;
 
         if (lastPage !== 1) {
             let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
             let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
             let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
             let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
+            let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
 
             paginationFirstPage.dataset.page = '1';
             if (activePage - 1 > 0) {
