@@ -188,12 +188,10 @@ let table = (function () {
                 }
             }
         }
-        console.log(row);
     }
 
     function generateTableRows(tableSettings) {
-
-        console.log('table settings in generate table rows', tableSettings);
+        
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
@@ -305,7 +303,6 @@ let table = (function () {
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
 
-        console.log('last page', lastPage)
         // let rowNumber = 1; //todo
 
         if (lastPage === 1 /*|| tableSettings.tableData.length < pageSize*/) {
@@ -318,7 +315,7 @@ let table = (function () {
 
             /*            let paginationRowNumber = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
                         paginationRowNumber.innerHTML = rowNumber.toString();
-                        paginationRowNumber.value = rowNumber.toString();*/
+                        paginationRowNumber.value = rowNumber.toString();*/ //todo
 
             paginationFirstPage.dataset.page = '1';
             if (activePage - 1 > 0) {
