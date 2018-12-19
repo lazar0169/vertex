@@ -153,8 +153,8 @@ let table = (function () {
             }
             let cancel = document.createElement('div');
             cancel.innerHTML = '';
-            cancel.classList.add('cell-cancel');
             cancel.classList.add('cell');
+            cancel.classList.add('cell-cancel');
             tbody.appendChild(cancel);
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
@@ -514,6 +514,7 @@ let table = (function () {
     function updateTable(tableSettings) {
         removeTransactionPopup();
         let colsCount = getCountOfAllColumns(tableSettings);
+        console.log('cols count', colsCount);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
         setSortingHeader(tableSettings);
@@ -810,6 +811,8 @@ let table = (function () {
         columnElementsArray.forEach(function (columnElement) {
             columnElement.classList.remove('hidden-column');
         });
+
+
     }
 
     function getColsToShowNames(columnsToShowTitles) {
@@ -839,6 +842,7 @@ let table = (function () {
             let allColumns = getColumnNames(tableSettings);
             colsCount = allColumns.length;
             showColumn(tableSettings, 'cell-flag');
+            showColumn(tableSettings, 'cell-cancel');
             allColumns.forEach(function (column) {
                 showColumn(tableSettings, column);
             });
@@ -846,6 +850,7 @@ let table = (function () {
             let columnsToShow = getColsToShowNames(columnsToShowTitles);
             colsCount = columnsToShow.length;
             showColumn(tableSettings, 'cell-flag');
+            showColumn(tableSettings, 'cell-cancel');
             columnsToShow.forEach(function (column) {
                 showColumn(tableSettings, column);
             });
