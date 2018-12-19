@@ -70,13 +70,12 @@ let form = (function () {
             if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
 
                 if (inputElement.type === 'checkbox') {
-                    inputElement.checked = dataToDisplay[inputName];
-                    let modeDivElement = inputElement.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
-                    if (inputElement.checked === true) {
-                        modeDivElement.innerHTML = localization.translateMessage('switchYesLabel', modeDivElement);
-
-                    } else {
-                        modeDivElement.innerHTML = localization.translateMessage('switchNoLabel', modeDivElement);
+                    let checkbox = inputElement.parentNode.parentNode;
+                    if (dataToDisplay[inputName] === true) {
+                        checkbox.vertexToggle.check();
+                    }
+                    else {
+                        checkbox.vertexToggle.uncheck();
                     }
                 } else {
                     if (inputName !== 'EndpointId') {
@@ -436,7 +435,7 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-        alert('Form submit error!');
+        //ToDo: neske
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
