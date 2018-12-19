@@ -98,11 +98,15 @@
 
 .head.cell:hover {
     background-color: rgba(58, 73, 80, 0.4);
-/*    background-image: url("/images/arrow-up-table-sorting.png");
+}
+
+.head.cell:hover:after {
+    content: '';
+    background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px*/
+    margin-left: 5px
 }
 
 .head.cell:nth-child(1) {

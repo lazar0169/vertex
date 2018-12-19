@@ -208,6 +208,9 @@ let table = (function () {
             cell.classList.add('cell-flag');
             cell.classList.add(`row-${rowId}`);
             cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+            if(tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+                cell.classList.add('payout');
+            }
             tbody.appendChild(cell);
 
             let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
