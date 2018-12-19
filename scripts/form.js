@@ -174,7 +174,6 @@ let form = (function () {
         setEndpointId(formSettings);
 
         if (formContainerElement.formSettings === undefined) {
-            console.log('init handlers');
             initFormHandlers(formSettings);
         }
 
@@ -436,7 +435,7 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-        alert('Form submit error!');
+        //ToDo: neske
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
