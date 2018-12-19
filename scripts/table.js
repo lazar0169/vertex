@@ -176,9 +176,36 @@ let table = (function () {
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
-    function cancelTransactionPopup(tableSettings, row){
-
+    function cancelTransactionPopup(tableSettings, row) {
+        let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
+        if(cancelTransactionPopupElement === undefined || cancelTransactionPopupElement === null) {
+            let callbackEvent = 'table/cancelTransaction/display';
+            trigger('template/render', {
+                templateElementSelector: '#cancel-transaction-template',
+                callbackEvent: callbackEvent,
+                tableSettings: tableSettings
+            });
+        }
     }
+
+    function removeTransactionPopup(tableSettings){
+        let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
+        if(cancelTransactionPopupElement !== undefined && cancelTransactionPopupElement !== null) {
+            cancelTransactionPopupElement.parentNode.removeChild(cancelTransactionPopupElement);
+        }
+    }
+
+    on('table/cancelTransaction/display', function (params) {
+        console.log('display cancel transaction', params);
+        let cancelTransactionElement = params.element;
+        let tableSettings = params.params.tableSettings;
+        tableSettings.tableContainerElement.prepend(cancelTransactionElement);
+        cancelTransactionElement.classList.add('cancel-transaction');
+        let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
+        let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
+        cancelTransactionElement.setAttribute('style', 'display:inline');
+        console.log(cancelTransactionElement.classList);
+    });
 
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
@@ -187,8 +214,10 @@ let table = (function () {
                 tableCells[i].classList.remove('row-chosen');
             } else {
                 if (tableCells[i].classList.contains('payout')) {
-                    if(tableCells[i].classList.contains('row-chosen')) {
+                    if (tableCells[i].classList.contains('row-chosen')) {
                         cancelTransactionPopup(tableSettings, row);
+                    } else {
+                        removeTransactionPopup(tableSettings);
                     }
                     tableCells[i].classList.toggle('row-chosen');
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
@@ -198,7 +227,7 @@ let table = (function () {
     }
 
     function generateTableRows(tableSettings) {
-        
+
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
