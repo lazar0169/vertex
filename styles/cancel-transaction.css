@@ -18,3 +18,7 @@
     align-self: center;
     color: white;
 }
+
+.cancel-transaction-buttons .btn.btn-link:hover {
+    text-decoration: underline;
+}
