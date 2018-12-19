@@ -151,6 +151,11 @@ let table = (function () {
                 }
                 tbody.appendChild(head);
             }
+            let cancel = document.createElement('div');
+            cancel.innerHTML = '';
+            cancel.classList.add('cell-cancel');
+            cancel.classList.add('cell');
+            tbody.appendChild(cancel);
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
@@ -174,7 +179,7 @@ let table = (function () {
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)`;
+        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '30px';
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
@@ -296,6 +301,16 @@ let table = (function () {
                 }
                 tbody.appendChild(cell);
             }
+            let cancelCell = document.createElement('div');
+            cancelCell.innerHTML = '';
+            cancelCell.classList.add('cell');
+            cancelCell.classList.add('cell-cancel');
+            cancelCell.classList.add(`row-${rowId}`);
+            cancelCell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+                cancelCell.classList.add('payout');
+            }
+            tbody.appendChild(cancelCell);
         }
         styleColsRows(tableSettings.formatedData, colsCount, tbody);
     }
