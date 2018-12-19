@@ -2,7 +2,6 @@ let form = (function () {
 
     //all float value are divided / multiplied by 100 because they are in cents
     let valueMultiplier = 100;
-
     let currentEndpointId;
 
     function prepareFloatValue(value) {
@@ -12,7 +11,6 @@ let form = (function () {
 
     function getEvent(formSettings, eventToCheck) {
         let event;
-
         if (formSettings[eventToCheck] !== undefined) {
             event = formSettings[eventToCheck];
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
@@ -39,7 +37,6 @@ let form = (function () {
     }
 
     //helper functions
-
     function collectAllFormElements(formSettings) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
@@ -51,27 +48,10 @@ let form = (function () {
         return Array.prototype.slice.call(submitButtons);
     }
 
-
-    let transactionEnableButton = $$('#aft-enable-transaction-check');
-    let transactionEnableMode = $$('#aft-enable-transaction-mode');
-    let transactionEnableSwitch = transactionEnableButton.getElementsByTagName('input')[0];
-
-    transactionEnableSwitch.addEventListener('click', function () {
-        if (transactionEnableSwitch.checked === false) {
-            transactionEnableSwitch.checked = false;
-            transactionEnableMode.innerHTML = 'No';
-        } else {
-            transactionEnableSwitch.checked = true;
-            transactionEnableMode.innerHTML = 'Yes';
-        }
-    });
-
     function collectEnableButtons(formSettings) {
         let enableButtons = $$(formSettings.formContainerSelector).getElementsByClassName('element-form-check');
-        let enableButtonsArray = Array.prototype.slice.call(enableButtons);
-        return enableButtonsArray;
+        return Array.prototype.slice.call(enableButtons);
     }
-
 
     function fillData(formSettings, data) {
         let dataToDisplay = data.Data;
@@ -82,23 +62,21 @@ let form = (function () {
         for (let counter = 0; counter < multipleValueInputContainers.length; counter++) {
             multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
         }
+
         let formInputElementsArray = collectAllFormElements(formSettings);
 
         formInputElementsArray.forEach(function (inputElement) {
-
-             let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
+            let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
             if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
 
                 if (inputElement.type === 'checkbox') {
                     inputElement.checked = dataToDisplay[inputName];
-                    //let modeDivElement = inputElement.parentNode.previousSibling;
                     let modeDivElement = inputElement.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
                     if (inputElement.checked === true) {
-                        modeDivElement.innerHTML = localization.translateMessage('switchYesLabel',modeDivElement);
+                        modeDivElement.innerHTML = localization.translateMessage('switchYesLabel', modeDivElement);
 
                     } else {
-                        modeDivElement.innerHTML = localization.translateMessage('switchNoLabel',modeDivElement);
-
+                        modeDivElement.innerHTML = localization.translateMessage('switchNoLabel', modeDivElement);
                     }
                 } else {
                     if (inputName !== 'EndpointId') {
@@ -107,6 +85,10 @@ let form = (function () {
                             if (values.length > 0) {
                                 inputElement.value = values[0];
                                 let inputsContainer = inputElement.parentNode.parentNode;
+                                let addAnotherButton = null;
+                                if (inputsContainer.getElementsByClassName('action-add-another-field').length > 0) {
+                                    addAnotherButton = inputsContainer.getElementsByClassName('action-add-another-field')[0].parentNode;
+                                }
                                 //add fields if there are more then one value
                                 for (let i = 1; i < values.length; i++) {
                                     let newField = inputElement.parentNode.cloneNode(true);
@@ -114,7 +96,11 @@ let form = (function () {
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
                                     newField.classList.add('element-input-additional-array-value');
-                                    inputsContainer.appendChild(newField);
+                                    if (addAnotherButton !== null) {
+                                        inputsContainer.insertBefore(newField, addAnotherButton);
+                                    } else {
+                                        inputsContainer.appendChild(newField);
+                                    }
 
                                     let deleteButtonElement = newField.getElementsByTagName('button')[0];
                                     deleteButtonElement.classList.remove('hidden');
@@ -131,7 +117,7 @@ let form = (function () {
                             switch (inputElement.dataset.type) {
                                 case 'single-select':
                                     //inputElement.dataset.value = dataToDisplay[inputName];
-                                    dropdown.select(inputElement.parentNode,dataToDisplay[inputName]);
+                                    dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
                                     break;
                                 case 'int':
                                     inputElement.value = dataToDisplay[inputName];
@@ -161,8 +147,6 @@ let form = (function () {
     //ToDo: dokumentovati form settings
     /*formSettings {
         :formContainerElement: required | element that contains form
-
-
     } */
 
     function init(formSettings) {
@@ -189,11 +173,12 @@ let form = (function () {
         }
 
         setEndpointId(formSettings);
+
         if (formContainerElement.formSettings === undefined) {
             initFormHandlers(formSettings);
         }
-        formContainerElement.formSettings = formSettings;
 
+        formContainerElement.formSettings = formSettings;
     }
 
     function collectAndPrepareFormData(formSettings) {
@@ -207,11 +192,11 @@ let form = (function () {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
-                        /*                        case 'multiple-select':/!*
+                        /*                        case 'multiple-select':
                                                     if (dataForApi[formInputElement.name] === undefined) {
                                                         dataForApi[formInputElement.name] = [];
                                                     }
-                                                    dataForApi[formInputElement.name].push(formInputElement.value);*!/*/
+                                                    dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
                             dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
                             break;
@@ -223,7 +208,6 @@ let form = (function () {
                             }
                             break;
                         case 'float':
-                            //dataForApi[formInputElement.name] = parseFloat(formInputElement.value*valueMultiplier);
                             let value = prepareFloatValue(formInputElement.value);
                             dataForApi[formInputElement.name] = value * valueMultiplier;
                             break;
@@ -250,23 +234,18 @@ let form = (function () {
     }
 
     function validate(formSettings) {
-
     }
 
     function error(formSettings) {
-
     }
 
     function success(formSettings) {
-
     }
 
     function serialize(formSettings) {
-
     }
 
     function complete(formSettings) {
-
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = false;
@@ -281,7 +260,7 @@ let form = (function () {
                 message: localization.translateMessage(apiResponseData.MessageCode.toString()),
                 type: apiResponseData.MessageType
             });
-        }        //foreach kroz apiResponse.messages ako bude bilo potrebno
+        }        //foreach through apiResponse.messages if needed
     }
 
     function deleteFormElement() {
@@ -299,25 +278,29 @@ let form = (function () {
             let targetSelector = e.currentTarget.dataset.targetSelector;
             let targetElements = $$(formSettings.formContainerSelector).getElementsByClassName(targetSelector);
             if (targetElements.length < e.currentTarget.dataset.maxNumber) {
+
                 let lastElement = targetElements[targetElements.length - 1];
                 let newField = lastElement.cloneNode(true);
+
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
                 newField.getElementsByTagName('button')[0].classList.remove('hidden');
                 newField.classList.add('element-input-additional-array-value');
 
-                lastElement.parentNode.appendChild(newField);
+                let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
+
+                lastElement.parentNode.insertBefore(newField, addAnotherButton);
+
                 if (targetElements.length > 1) {
-                    //ToDo: getElementsByClass .action-delele
                     targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
                 }
+
                 let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
                 deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
                 deleteButtonFirstElement.addEventListener('click', deleteFormElement);
 
                 let deleteButton = newField.getElementsByTagName('button')[0];
                 deleteButton.addEventListener('click', deleteFormElement);
-
             }
         }
     }
@@ -328,8 +311,6 @@ let form = (function () {
     }
 
     //elements event handlers
-
-
     function formatFloatInputHandler() {
         let value = this.value;
         var position = this.selectionStart;
@@ -341,6 +322,11 @@ let form = (function () {
         this.selectionEnd = position;
     }
 
+    function onSubmit(e) {
+        e.preventDefault();
+        return false;
+    }
+
     function bindSubmitButtonClickHandlers(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
@@ -348,6 +334,32 @@ let form = (function () {
                 submit(formSettings, submitButton);
             });
         });
+    }
+
+    function createToggles(formSettings) {
+        form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
+
+        let checkboxes = form.getElementsByClassName('vertex-form-checkbox');
+        for (let i = 0;i<checkboxes.length;i++) {
+            let cb = checkboxes[i];
+            toggle.generate({element:cb});
+        }
+    }
+
+    function bindSubmitHandler(formSettings) {
+        form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
+        form.addEventListener('submit', onSubmit);
+    }
+
+    function bindBackButton(formSettings) {
+        let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
+        if (buttons.length > 0) {
+            let button = buttons[0];
+            button.addEventListener('click', function (e) {
+                history.back();
+            });
+        }
+        //there should be only one button
     }
 
     function bindAddAnotherClickHandlers(formSettings) {
@@ -366,20 +378,22 @@ let form = (function () {
             let enableSwitch = enableButton.getElementsByTagName('input')[0];
             enableSwitch.addEventListener('click', function () {
                 if (enableSwitch.checked === false) {
-                    enableMode.innerHTML = localization.translateMessage('switchNoLabel',enableMode);
+                    enableMode.innerHTML = localization.translateMessage('switchNoLabel', enableMode);
                 } else {
-                    enableMode.innerHTML = localization.translateMessage('switchYesLabel',enableMode);
+                    enableMode.innerHTML = localization.translateMessage('switchYesLabel', enableMode);
                 }
             });
 
         });
     }
 
-
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
+        bindBackButton(formSettings);
+        bindSubmitHandler(formSettings);
+        createToggles(formSettings);
     }
 
     on('form/init', function (params) {
@@ -417,7 +431,6 @@ let form = (function () {
     on('form/submit/success', function (params) {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
-        //trigger('notifications/show/success',{message:localization.translateMessage(apiResponse.Message)});
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
     });

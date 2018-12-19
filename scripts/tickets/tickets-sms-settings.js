@@ -7,6 +7,7 @@ let ticketsSmsSettings = (function(){
 
     on('tickets/tab/smsSettings', function(params){
         formSettingsSmsSettings.endpointId = params.tableSettings.endpointId;
+
         trigger('form/init', {formSettings: formSettingsSmsSettings});
         trigger('form/getData', {formSettings: formSettingsSmsSettings});
     });

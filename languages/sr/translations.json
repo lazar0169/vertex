@@ -38,6 +38,7 @@
             }
         },
         "Save": "",
+        "Back": "",
         "Delete": "",
         "Tickets": {
             "GeneralSettings": {
@@ -92,42 +93,10 @@
             }
         },
         "Cancel": "",
-        "Yes": ""
+        "First": "",
+        "Prev": "",
+        "Next": "",
+        "Last": ""
     },
-    "messages": {
-        "22": "Pogrešan username ili šifra!",
-        "AFT": "AFT",
-        "Casinos": "Kazinoi",
-        "Jackpots": "Džekpotovi",
-        "Tickets": "Tiketi",
-        "Search": "Pretraga",
-        "Recent search": "",
-        "AddTransaction": "DODAJ TRANSAKCIJU",
-        "Active": "Aktivana",
-        "Check": "Provera",
-        "Pending": "Poslata mašini",
-        "PendingForPayed": "Čeka na isplatu",
-        "PendingForDeleted": "Čeka na brisanje",
-        "Deleted": "Obrisana",
-        "SucceededPayed": "Isplaćena",
-        "PayedFromApp": "Isplaćena iz aplikacije",
-        "PendingPayedFromApp": "Isplaćena iz aplikacije nakon što je poslata mašini",
-        "NotExisting": "Ne postoji",
-        "Cancelled": "Poništena",
-        "CancelledPending": "Poništena nakon što je poslata mašini",
-        "BonusWinHostToMachine": "Bonus transakcija",
-        "InHouseHostToMachine": "Uplata na mašinu",
-        "InHouseMachineToHost": "Isplata sa mašine",
-        "TimeFrom": "Vreme od:",
-        "TimeTo": "Vreme do:",
-        "DateFrom": "Od datuma:",
-        "DateTo": "Do datuma:",
-        "Today": "Danas",
-        "Yesterday": "Juče",
-        "Last7Days": "Poslednjih 7 dana",
-        "Last14Days": "Poslednjih 14 dana",
-        "ThisMonth": "Tekući mesec",
-        "LastMont": "Prošli mesec",
-        "CustomDate": "Izaberite datum"
-    }
+    "messages": {}
 }

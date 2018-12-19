@@ -38,6 +38,7 @@
             }
         },
         "Save": "",
+        "Back": "",
         "Delete": "",
         "Tickets": {
             "GeneralSettings": {
@@ -92,42 +93,10 @@
             }
         },
         "Cancel": "",
-        "Yes": ""
+        "First": "",
+        "Prev": "",
+        "Next": "",
+        "Last": ""
     },
-    "messages": {
-        "22": "Anmeldung!",
-        "AFT": "AFT_de",
-        "Casinos": "Kasinos",
-        "Jackpots": "Jackpots",
-        "Tickets": "Tickets",
-        "Search": "Suche",
-        "Recent search": "",
-        "AddTransaction": "",
-        "Active": "",
-        "Check": "",
-        "Pending": "",
-        "PendingForPayed": "",
-        "PendingForDeleted": "",
-        "Deleted": "",
-        "SucceededPayed": "",
-        "PayedFromApp": "",
-        "PendingPayedFromApp": "",
-        "NotExisting": "",
-        "Cancelled": "",
-        "CancelledPending": "",
-        "BonusWinHostToMachine": "",
-        "InHouseHostToMachine": "",
-        "InHouseMachineToHost": "",
-        "TimeFrom": "",
-        "TimeTo": "",
-        "DateFrom": "",
-        "DateTo": "",
-        "Today": "",
-        "Yesterday": "",
-        "Last7Days": "",
-        "Last14Days": "",
-        "ThisMonth": "",
-        "LastMont": "",
-        "CustomDate": ""
-    }
+    "messages": {}
 }

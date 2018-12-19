@@ -52,13 +52,13 @@ let communication = (function () {
         //update token in sessionStorage
         sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
+            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
-        trigger('communicate/token/refresh', { token: data.TokenInfo });
+        trigger('communicate/token/refresh', {token: data.TokenInfo});
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = { "message": xhr.responseText };
+        let errorData = {"message": xhr.responseText};
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
@@ -124,62 +124,91 @@ let communication = (function () {
 
     function prepareAftTableData(tableSettings, data) {
         let tableData = data.Data.Items;
+
+        let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
                 entry.EntryData.CreatedBy = '';
 
             } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + entry.EntryData.CreatedTime + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
+                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<h6>by ' + entry.EntryData.CreatedBy + '</h6>';
 
             }
             if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
                 entry.EntryData.FinishedBy = '';
 
             } else {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + entry.EntryData.FinishedTime + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
+                entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<h6>by ' + entry.EntryData.FinishedBy + '</h6>';
 
             }
             delete entry.EntryData.CreatedTime;
             delete entry.EntryData.FinishedTime;
-            entry.EntryData.AmountCashable = entry.EntryData.AmountCashable.toFixed(2);
-            entry.EntryData.AmountPromo = entry.EntryData.AmountPromo.toFixed(2);
+            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
+            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
+
+            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) +'">'+entry.EntryData.Status+'</div>'
         });
-        return data;
+
+        for (let i = 0; i < tableData.length; i++) {
+            formatedData[i] = {
+                createdBy: tableData[i].EntryData.CreatedBy,
+                finishedBy: tableData[i].EntryData.FinishedBy,
+                status:  localization.translateMessage(tableData[i].EntryData.Status),
+                machineName:  tableData[i].EntryData.MachineName,
+                type:  localization.translateMessage(tableData[i].EntryData.Type),
+                cashable:  tableData[i].EntryData.AmountCashable,
+                promo:  tableData[i].EntryData.AmountPromo,
+            };
+        }
+
+        tableSettings.formatedData = formatedData;
+
+        return formatedData;
+    }
+
+    function formatTimeData(timeData){
+        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/,'');
     }
 
     function prepareTicketsTableData(tableSettings, data) {
         let tableData = data.Data.Items;
+        let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<h6>' + entry.EntryData.CashoutedBy + '</h6>';
 
             } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + entry.EntryData.CashoutedTime + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<h6>by ' + entry.EntryData.CashoutedBy + '</h6>';
 
             }
             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>' + entry.EntryData.RedeemedBy + '</h6>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<h6>' + entry.EntryData.RedeemedBy + '</h6>';
 
             } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + entry.EntryData.RedeemedTime + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<h6>by ' + entry.EntryData.RedeemedBy + '</h6>';
 
             }
-            entry.EntryData.Amount = entry.EntryData.Amount.toFixed(2);
+            entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-            let entryData = {};
-            entryData.Code = entry.EntryData.FullTicketValIdationNumber;
-            delete entry.EntryData.FullTicketValIdationNumber;
-            Object.keys(entry.EntryData).forEach(function (key) {
-                entryData[key] = entry.EntryData[key];
-            });
-            entry.EntryData = entryData;
-
-            if (entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + entry.EntryData.TicketType;
+            if(entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ localization.translateMessage(entry.EntryData.TicketType);
             }
         });
-        return data;
+        for (let i = 0; i < tableData.length; i++) {
+            formatedData[i] = {
+                code: tableData[i].EntryData.FullTicketValIdationNumber,
+                issuedBy: tableData[i].EntryData.CashoutedBy,
+                redeemedBy:  tableData[i].EntryData.RedeemedBy,
+                status:  localization.translateMessage(tableData[i].EntryData.Status),
+                type:  tableData[i].EntryData.TicketType,
+                amount:  tableData[i].EntryData.Amount
+            };
+        }
+
+        tableSettings.formatedData = formatedData;
+
+        return formatedData;
     }
 
 
@@ -204,7 +233,7 @@ let communication = (function () {
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
-        trigger(event, { data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent });
+        trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
     });
 
 
@@ -398,7 +427,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
+        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -585,7 +614,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
+        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -603,16 +632,6 @@ let communication = (function () {
         send(xhr);
     });
 
-    //events for home
-    on('communicate/home/data', function (params) {
-        //FORWARD DATA TO API
-        //GET DATA FROM API
-        let dataFormAPI = {
-            activePage: 2,
-            lastPage: 6
-        };
-        trigger(params.callbackEvent, { tableSettings: params.tableSettings, data: dataFormAPI });
-    });
 
     //events for casino
     on('communicate/casino-info', function (params) {
@@ -1082,4 +1101,6 @@ let communication = (function () {
         }
         timeoutSet(params);
     });
+
+
 })();

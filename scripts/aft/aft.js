@@ -1,13 +1,11 @@
 const aft = (function () {
     on('aft/activated', function (params) {
 
-
         setTimeout(function () {
             trigger('preloader/hide');
         }, 2000);
 
         let aftId = params.params[0].value;
-
 
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
@@ -29,29 +27,29 @@ const aft = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
 
-        let addTransactionButton = $$('#aft-add-transaction').children[0];
+        let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
         addTransactionButton.addEventListener('click', function () {
             let data =
-            {
-                'EndpointId': aftId,
-                'EndpointName': '',
-                'Gmcid': 1565666846,
-                'MachineName': '',
-                'Type': 0,
-                'CashableAmount': 13800,
-                'PromoAmount': 13800,
-                'ExpirationInDays': 7
-            };
-            trigger('communicate/aft/addTransaction', { data: data, tableSettings: tableSettings });
+                {
+                    'EndpointId': aftId,
+                    'EndpointName': '',
+                    'Gmcid': 1565666846,
+                    'MachineName': '',
+                    'Type': 0,
+                    'CashableAmount': 13800,
+                    'PromoAmount': 13800,
+                    'ExpirationInDays': 7
+                };
+            trigger('communicate/aft/addTransaction', {data: data, tableSettings: tableSettings});
         });
 
         on('aft/addTransaction', function () {
 
         });
 
-        trigger('aft/tab/transaction', { tableSettings: tableSettings });
-        trigger('aft/tab/notification', { tableSettings: tableSettings });
+        trigger('aft/tab/transaction', {tableSettings: tableSettings});
+        trigger('aft/tab/notification', {tableSettings: tableSettings});
 
     });
 })();

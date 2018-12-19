@@ -1,12 +1,29 @@
 const ticketsFilter = (function () {
 
     let ticketSortName = {
-        tickettype:  1,
+        type: 1,
         amount: 2,
         code: 3,
-        cashoutedby: 4, //todo check if this is it
+        issuedby: 4, //todo check if this is it
         redeemedby: 5, //todo check if this is it
         status: 9
+    };
+
+    let ticketStatus = {
+        TicketActive: 0,
+        TicketDeleted: 1,
+        TicketStacked: 2,
+        TicketEscrowed: 3,
+        TicketPayed: 4,
+        TicketNotExisting: 5,
+        TicketCanceled: 8
+
+    };
+
+    let ticketType = {
+        Cashable: 0,
+        Promo: 1,
+        Other: 2
     };
 
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
@@ -48,16 +65,30 @@ const ticketsFilter = (function () {
         getFiltersFromAPI(tableSettings);
     });
 
+    function formatChooseColumnTicketsData(chooseColumnListArray) {
+        let formattedColumnArray = [];
+        let columnObject = {};
+        chooseColumnListArray.forEach(function (column) {
+            columnObject = {
+                Name: localization.translateMessage(column.Name),
+                Value: column.Name
+            };
+            formattedColumnArray.push(columnObject);
+        });
+        return formattedColumnArray;
+    }
+
     function getColNamesOfTable(tableSettings) {
         let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
+        colNamesArray = formatChooseColumnTicketsData(colNamesArray);
         return colNamesArray;
     }
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
-
         //filter elements
-        
+        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
+        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
         let ticketsAdvanceTableFiltersPrinted = $$('#tickets-advance-table-filter-printed');
@@ -66,7 +97,6 @@ const ticketsFilter = (function () {
 
         let colNames = getColNamesOfTable(tableSettings);
 
-       
         multiDropdown.generate(filters.TicketStateList, ticketsAdvanceTableFiltersStatus);
         multiDropdown.generate(filters.TypesList, ticketsAdvanceTableFiltersTypes);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
@@ -74,15 +104,86 @@ const ticketsFilter = (function () {
         multiDropdown.generate(colNames, ticketsAdvanceTableFilterColumn);
     }
 
+
+    function formatTicketsApiData(filterArray) {
+        if (filterArray !== undefined && filterArray !== null) {
+            filterArray.forEach(function (filter) {
+                filter.Name = localization.translateMessage(filter.Name);
+                filter.Value = filter.Name;
+            });
+            return filterArray;
+        }
+    }
+
     on('tickets/filters/display', function (params) {
         let apiResponseData = params.data;
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
+
+        filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
+        filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
+        filters.TypesList = formatTicketsApiData(filters.TypesList);
+
         tableSettings.filters = filters;
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
 
+    function prepareStatusArrayData(dataArray) {
+        let preparedStatusData = [];
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (status) {
+                if (ticketStatus[status] !== undefined) {
+                    preparedStatusData.push(ticketStatus[status]);
+                } else {
+                    preparedStatusData.push(null);
+                }
+            });
+        }
+        return preparedStatusData;
+    }
+
+    function prepareTypeArrayData(dataArray) {
+        let preparedTypeData = [];
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (status) {
+                if (ticketType[status] !== undefined) {
+                    preparedTypeData.push(ticketType[status]);
+                } else {
+                    preparedTypeData.push(null);
+                }
+            });
+        }
+        return preparedTypeData;
+    }
+
+    function preparePrintedListData(dataArray) {
+        let preparedPrintedListData = [];
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (arrayElement) {
+                let object = {
+                    Name: arrayElement.toString(),
+                    ID: parseInt(arrayElement)
+                };
+                preparedPrintedListData.push(object);
+            });
+        }
+        return preparedPrintedListData;
+    }
+
+    function prepareRedeemListData(dataArray) {
+        let preparedRedeemListData = [];
+        if (dataArray !== null && dataArray !== undefined) {
+            dataArray.forEach(function (arrayElement) {
+                let object = {
+                    Name: arrayElement.toString(),
+                    ID: parseInt(arrayElement)
+                };
+                preparedRedeemListData.push(object);
+            });
+        }
+        return preparedRedeemListData;
+    }
 
     function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
@@ -93,37 +194,34 @@ const ticketsFilter = (function () {
             "DateTo": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
             "RedeemDateFrom": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
             "RedeemDateTo": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            "PrintedList": pageFilters.Printed,
-            "RedeemList": pageFilters.Redeemed,
-            "Status": pageFilters.Status,
-            "Type": pageFilters.TypesList,
+            "PrintedList": preparePrintedListData(pageFilters.Printed),
+            "RedeemList": prepareRedeemListData(pageFilters.Redeemed),
+            "Status": prepareStatusArrayData(pageFilters.Status),
+            "Type": prepareTypeArrayData(pageFilters.TypesList),
             "BasicData": {
-                "Page": 1,
+                "Page": currentTableSettingsObject.activePage,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
                 "SortOrder": sorting.SortOrder,
                 "SortName": ticketSortName[sorting.SortName] !== undefined ? ticketSortName[sorting.SortName] : null
             },
             "TokenInfo": sessionStorage.token
         };
-        currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
-
+        currentTableSettingsObject.ColumnsToShow = pageFilters.Column;
         currentTableSettingsObject.filters = filtersForApi;
 
         return filtersForApi;
     }
 
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
-        alert('Apply filters tickets');
         let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
         trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
-
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     });
 
     on('tickets/filters/pagination', function (params) {

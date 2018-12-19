@@ -163,9 +163,7 @@ const aftFilters = (function () {
     });
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
-
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        console.log('filters', pageFilters);
         let sorting = table.getSorting(currentTableSettingsObject);
         let sortName = sorting.SortName;
         let filtersForApi = {
