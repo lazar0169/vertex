@@ -7,6 +7,8 @@
     width: 200px;
     font-size: 12px;
     padding: 2px;
+    position: absolute;
+    z-index: 4;
 }
 
 .cancel-transaction.toast.toast-error {
