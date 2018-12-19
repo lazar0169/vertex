@@ -1,0 +1,19 @@
+.cancel-transaction {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 200px;
+    font-size: 12px;
+    padding: 2px;
+}
+
+.cancel-transaction.toast.toast-error {
+    background-color: #F33F37;
+}
+
+.cancel-transaction-buttons .btn.btn-link {
+    align-self: center;
+    color: white;
+}

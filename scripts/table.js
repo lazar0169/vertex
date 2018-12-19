@@ -203,7 +203,6 @@ let table = (function () {
         cancelTransactionElement.classList.add('cancel-transaction');
         let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
         let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
-        cancelTransactionElement.setAttribute('style', 'display:inline');
         console.log(cancelTransactionElement.classList);
     });
 
