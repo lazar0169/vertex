@@ -213,6 +213,13 @@ let table = (function () {
         positionElement(cancelTransactionElement);
         let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
         let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
+        buttonNo.addEventListener('click', function(){
+            removeTransactionPopup();
+        });
+        buttonYes.addEventListener('click', function(){
+            //todo add functionlity for this
+            removeTransactionPopup();
+        });
         console.log(cancelTransactionElement.classList);
     });
 
