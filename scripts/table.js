@@ -200,13 +200,11 @@ let table = (function () {
     }
 
     function positionElement(cancelTransactionElement) {
-        console.log('current offset', currentOffset);
         cancelTransactionElement.style.top = currentOffset.top;
         cancelTransactionElement.style.left = currentOffset.left;
     }
 
     on('table/cancelTransaction/display', function (params) {
-        console.log('display cancel transaction', params);
         let cancelTransactionElement = params.element;
         document.body.prepend(cancelTransactionElement);
         cancelTransactionElement.classList.add('cancel-transaction');
@@ -220,7 +218,6 @@ let table = (function () {
             //todo add functionlity for this
             removeTransactionPopup();
         });
-        console.log(cancelTransactionElement.classList);
     });
 
     function selectRow(tableSettings, row) {
@@ -292,7 +289,6 @@ let table = (function () {
                 }, {passive: false});
                 cell.addEventListener('click', function () {
                     currentOffset = cell.getClientRects()[0];
-                    console.log('current offset', currentOffset);
                     selectRow(tableSettings, `row-${rowId}`);
                 });
                 if (col === colsCount - 1) {
