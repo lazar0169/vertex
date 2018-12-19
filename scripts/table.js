@@ -133,7 +133,7 @@ let table = (function () {
                 head.dataset.sortName = columnName;
                 head.classList.add('text-uppercase');
                 head.classList.add('cell-' + columnName);
-                if(tableSettings.tableDataItems[0].Properties.IsPayoutPossible) {
+                if (tableSettings.tableDataItems[0].Properties.IsPayoutPossible) {
                     head.classList.add('payout');
                 }
                 if (tableSettings.stickyRow === true) {
@@ -168,6 +168,7 @@ let table = (function () {
             element.classList[highlight ? "add" : "remove"]('hover');
         }
     }
+
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
@@ -175,13 +176,13 @@ let table = (function () {
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
-    function selectRow(tableSettings, row){
+    function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
-        for(let i=0; i< tableCells.length; i++) {
-            if(!tableCells[i].classList.contains(row)) {
+        for (let i = 0; i < tableCells.length; i++) {
+            if (!tableCells[i].classList.contains(row)) {
                 tableCells[i].classList.remove('row-chosen');
             } else {
-                if(tableCells[i].classList.contains('payout')) {
+                if (tableCells[i].classList.contains('payout')) {
                     tableCells[i].classList.toggle('row-chosen');
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
                 }
@@ -208,7 +209,7 @@ let table = (function () {
             cell.classList.add('cell-flag');
             cell.classList.add(`row-${rowId}`);
             cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-            if(tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
                 cell.classList.add('payout');
             }
             tbody.appendChild(cell);
@@ -226,7 +227,7 @@ let table = (function () {
                 }
                 cell.classList.add(`row-${rowId}`);
                 cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-                if(tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+                if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
                     cell.classList.add('payout');
                 }
                 if (tableSettings.stickyColumn === true && col === 1) {
@@ -239,7 +240,7 @@ let table = (function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
                 cell.addEventListener('click', function () {
-                    selectRow(tableSettings,`row-${rowId}`);
+                    selectRow(tableSettings, `row-${rowId}`);
                 });
                 if (col === colsCount - 1) {
                     cell.classList.add('last-cell')
@@ -303,17 +304,21 @@ let table = (function () {
         let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
+
+        console.log('last page', lastPage)
         // let rowNumber = 1; //todo
 
-        if (lastPage !== 1) {
+        if (lastPage === 1 /*|| tableSettings.tableData.length < pageSize*/) {
+            hidePagination(tableSettings);
+        } else {
             let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
             let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
             let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
             let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
 
-/*            let paginationRowNumber = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
-            paginationRowNumber.innerHTML = rowNumber.toString();
-            paginationRowNumber.value = rowNumber.toString();*/ //todo
+            /*            let paginationRowNumber = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
+                        paginationRowNumber.innerHTML = rowNumber.toString();
+                        paginationRowNumber.value = rowNumber.toString();*/ //todo
 
             paginationFirstPage.dataset.page = '1';
             if (activePage - 1 > 0) {
@@ -364,8 +369,6 @@ let table = (function () {
                 }
             }
             displayLastPageNumber(tableSettings);
-        } else {
-            paginationElement.setAttribute('style', 'display: none');
         }
 
     }
