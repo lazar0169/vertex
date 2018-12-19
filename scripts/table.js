@@ -307,7 +307,10 @@ let table = (function () {
             let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
             let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
             let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
-            let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
+            let paginationRowNumber = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
+
+            paginationRowNumber.innerHTML = rowNumber.toString();
+            paginationRowNumber.value = rowNumber.toString();
 
             paginationFirstPage.dataset.page = '1';
             if (activePage - 1 > 0) {
