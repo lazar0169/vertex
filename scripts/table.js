@@ -318,7 +318,7 @@ let table = (function () {
 
             /*            let paginationRowNumber = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
                         paginationRowNumber.innerHTML = rowNumber.toString();
-                        paginationRowNumber.value = rowNumber.toString();*/ //todo
+                        paginationRowNumber.value = rowNumber.toString();*/
 
             paginationFirstPage.dataset.page = '1';
             if (activePage - 1 > 0) {
