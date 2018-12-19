@@ -72,12 +72,9 @@ let form = (function () {
                 if (inputElement.type === 'checkbox') {
                     let checkbox = inputElement.parentNode.parentNode;
                     if (dataToDisplay[inputName] === true) {
-                        console.log('check in form.js');
                         checkbox.vertexToggle.check();
                     }
                     else {
-                        console.log('uncheck');
-                        console.log(checkbox);
                         checkbox.vertexToggle.uncheck();
                     }
                 } else {

@@ -46,8 +46,6 @@ const toggle = (function () {
             settings.element.vertexToggle = dropdown;
             settings.element.addEventListener('click', dropdown.toggleState);
             //set up checkbox state label to be translatable
-            console.log('u plugin-u');
-
             if (isChecked(settings.element)) {
                 dropdown.statusLabelElement.innerHTML = localization.translateMessage('switchYesLabel', dropdown.statusLabelElement);
             } else {
@@ -58,8 +56,8 @@ const toggle = (function () {
     }
 
     function check(element) {
-        if (element === null) {
-            element = this.element;
+        if (element === undefined) {
+            element = this['element'];
         }
         element.vertexToggle.checkboxElement.checked = true;
         element.vertexToggle.statusLabelElement.innerHTML = localization.translateMessage('switchYesLabel');
@@ -68,10 +66,8 @@ const toggle = (function () {
     }
 
     function uncheck(element) {
-        console.log(element);
-        console.log(this);
-        if (element === null) {
-            element = this.element;
+        if (element === undefined) {
+            element = this['element'];
         }
         element.vertexToggle.checkboxElement.checked = false;
         element.vertexToggle.statusLabelElement.innerHTML = localization.translateMessage('switchNoLabel');
@@ -79,8 +75,8 @@ const toggle = (function () {
     }
 
     function isChecked(element) {
-        if (element === null) {
-            element = this.element;
+        if (element === undefined) {
+            element = this['element'];
         }
         return element.vertexToggle.checkboxElement.checked;
     }
