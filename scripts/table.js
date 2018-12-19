@@ -423,8 +423,8 @@ let table = (function () {
 
     function showNormalTable(tableSettings) {
         resetTableView(tableSettings);
-        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0].classList.add('show-space-active');
-        tableSettings.tableContainerElement.classList.add('table-condensed');
+        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.add('show-space-active');
+        tableSettings.tableContainerElement.classList.add('table-expanded');
     }
 
     function bindTableViewLinkHandlers(tableSettings) {
