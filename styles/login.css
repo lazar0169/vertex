@@ -80,7 +80,6 @@
     font-family: "OpenSans-Semibold";
     color: white;
     background-color: #3A4950;
-!important;
     border-bottom: 1px solid rgb(120, 144, 156);
 }
 
@@ -191,7 +190,7 @@
         height: auto;
     }
     #login section header {
-        margin:40px auto 0;
+        margin: 40px auto 0;
     }
     #login section header h1 {
         font-size: 65px;
@@ -206,7 +205,7 @@
     }
 }
 
-@media only screen and (min-width: 750px) and (max-width: 1100px)  {
+@media only screen and (min-width: 750px) and (max-width: 1100px) {
     #login section form {
         width: 60%;
         height: auto;
