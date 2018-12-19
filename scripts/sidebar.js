@@ -16,6 +16,7 @@ const sidebar = (function () {
     let mainContent = $$('#main-content');
     let editMode = $$('#machine-edit-mode');
     let tooltipText = $$('#tooltip-text');
+    let headName = $$('#head-name').children[0];
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
     let isExpanded = true;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
@@ -37,6 +38,7 @@ const sidebar = (function () {
             collapse: function () {
                 sidebarMenu.classList.add('collapse');
                 mainContent.classList.add('expand');
+                collapseButton.classList.add('hidden');
             },
             expand: function () {
                 sidebarMenu.classList.remove('collapse');
@@ -74,6 +76,21 @@ const sidebar = (function () {
     back.addEventListener('click', function () {
         navigation.hide();
     });
+
+    headName.addEventListener('mouseenter', function () {
+        if (sidebarMenu.classList.contains('collapse')) {
+            collapseButton.classList.remove('hidden');
+        }
+    });
+
+    collapseButton.addEventListener('mouseleave', function () {
+        if (sidebarMenu.classList.contains('collapse')) {
+            collapseButton.classList.add('hidden');
+        }
+    });
+
+
+
 
     on('show/app', function () {
         navigation.hide();
