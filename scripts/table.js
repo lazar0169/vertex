@@ -176,6 +176,10 @@ let table = (function () {
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
+    function cancelTransactionPopup(tableSettings, row){
+
+    }
+
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
         for (let i = 0; i < tableCells.length; i++) {
@@ -183,6 +187,9 @@ let table = (function () {
                 tableCells[i].classList.remove('row-chosen');
             } else {
                 if (tableCells[i].classList.contains('payout')) {
+                    if(tableCells[i].classList.contains('row-chosen')) {
+                        cancelTransactionPopup(tableSettings, row);
+                    }
                     tableCells[i].classList.toggle('row-chosen');
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
                 }
