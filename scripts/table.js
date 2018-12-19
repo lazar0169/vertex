@@ -191,10 +191,10 @@ let table = (function () {
     }
 
     function removeTransactionPopup() {
-        let cancelTransactionPopupElement = document.body.getElementsByClassName('cancel-transaction');
-        if (cancelTransactionPopupElement.length > null) {
-            for (let i = 0; i < cancelTransactionPopupElement.length; i++) {
-                cancelTransactionPopupElement[i].parentNode.removeChild(cancelTransactionPopupElement[i]);
+        let cancelTransactionPopupElements = document.body.getElementsByClassName('cancel-transaction');
+        if (cancelTransactionPopupElements.length > null) {
+            for (let i = 0; i < cancelTransactionPopupElements.length; i++) {
+                cancelTransactionPopupElements[i].parentNode.removeChild(cancelTransactionPopupElements[i]);
             }
         }
     }
@@ -497,6 +497,7 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
+        removeTransactionPopup();
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
@@ -904,7 +905,8 @@ let table = (function () {
         getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
-        getPageSize: getPageSize
+        getPageSize: getPageSize,
+        removeTransactionPopup: removeTransactionPopup
     };
 
     /*--------------------------------------------------------------------------------------*/
