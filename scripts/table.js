@@ -179,7 +179,7 @@ let table = (function () {
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '30px';
+        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '50px';
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
@@ -216,39 +216,46 @@ let table = (function () {
         positionElement(cancelTransactionElement);
         let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
         let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
-        buttonNo.addEventListener('click', function(){
+        buttonNo.addEventListener('click', function () {
             removeTransactionPopup();
         });
-        buttonYes.addEventListener('click', function(){
+        buttonYes.addEventListener('click', function () {
             //todo add functionlity for this
             removeTransactionPopup();
         });
     });
 
 
-    on('table/cancelButton', function(params) {
-        let tableSettings = params.params.tableSettings;
-        let rowElements = tableSettings.tableContainerElement.getElementsByClassName('row-chosen');
+    on('table/cancelButton', function (params) {
+        let tableSettings = params.model.tableSettings;
+        let row = params.model.row;
+        let rowElements = tableSettings.tableContainerElement.getElementsByClassName(row);
         let cancelButtonElement = params.element;
         cancelButtonElement.classList.add('cancel-button');
-        for(let i =0; i< rowElements.length; i++) {
-            if(rowElements[i].classList.contains('cell-cancel')) {
+        for (let i = 0; i < rowElements.length; i++) {
+            if (rowElements[i].classList.contains('cell-cancel')) {
                 rowElements[i].appendChild(cancelButtonElement);
             }
         }
+        cancelButtonElement.addEventListener('click', function(){
+            cancelTransactionPopup(tableSettings, row);
+        });
 
     });
 
-    function showCancelButton(tableSettings){
+    function showCancelButton(tableSettings, row) {
         let callbackEvent = 'table/cancelButton';
         trigger('template/render', {
             templateElementSelector: '#cancel-button-template',
             callbackEvent: callbackEvent,
-            tableSettings: tableSettings
+            model: {
+                row: row,
+                tableSettings: tableSettings
+            }
         });
     }
 
-    function removeCancelButtons(){
+    function removeCancelButtons() {
         let cancelButtonElements = document.body.getElementsByClassName('cancel-button');
         if (cancelButtonElements.length > null) {
             for (let i = 0; i < cancelButtonElements.length; i++) {
@@ -259,14 +266,14 @@ let table = (function () {
 
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+        removeCancelButtons(tableSettings);
+        showCancelButton(tableSettings, row);
         for (let i = 0; i < tableCells.length; i++) {
             if (!tableCells[i].classList.contains(row)) {
                 tableCells[i].classList.remove('row-chosen');
             } else {
                 if (tableCells[i].classList.contains('payout')) {
                     removeTransactionPopup(tableSettings, row);
-                    removeCancelButtons(tableSettings);
-                    showCancelButton(tableSettings);
                     if (tableCells[i].classList.contains('row-chosen')) {
                         cancelTransactionPopup(tableSettings, row);
                     } else {
@@ -548,7 +555,6 @@ let table = (function () {
         removeTransactionPopup();
         removeCancelButtons();
         let colsCount = getCountOfAllColumns(tableSettings);
-        console.log('cols count', colsCount);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
         setSortingHeader(tableSettings);

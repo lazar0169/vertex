@@ -95,7 +95,8 @@
       "notifications.css",
       "form.css",
       "fonts.css",
-      "cancel-transaction.css"
+      "cancel-transaction.css",
+      "cancel-button.css"
     ]
   }
 }
