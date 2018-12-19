@@ -218,8 +218,8 @@ let table = (function () {
                         cancelTransactionPopup(tableSettings, row);
                     } else {
                         removeTransactionPopup(tableSettings);
+                        tableCells[i].classList.toggle('row-chosen');
                     }
-                    tableCells[i].classList.toggle('row-chosen');
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
                 }
             }
