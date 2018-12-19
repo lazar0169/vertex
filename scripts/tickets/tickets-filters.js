@@ -38,8 +38,8 @@ const ticketsFilter = (function () {
     let activeHeadElement;
 
     function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.toggle('advance-filter-active');
-        advanceTableFilterActive.classList.toggle('hidden');
+        ticketAdvanceFilter.classList.add('advance-filter-active');
+        advanceTableFilterActive.classList.remove('hidden');
     }
 
     ticketAdvanceFilter.addEventListener('click', function () {
@@ -68,7 +68,7 @@ const ticketsFilter = (function () {
     function formatChooseColumnTicketsData(chooseColumnListArray) {
         let formattedColumnArray = [];
         let columnObject = {};
-        chooseColumnListArray.forEach(function(column){
+        chooseColumnListArray.forEach(function (column) {
             columnObject = {
                 Name: localization.translateMessage(column.Name),
                 Value: column.Name
@@ -105,9 +105,9 @@ const ticketsFilter = (function () {
     }
 
 
-    function formatTicketsApiData(filterArray){
-        if(filterArray !== undefined && filterArray !== null) {
-            filterArray.forEach(function(filter){
+    function formatTicketsApiData(filterArray) {
+        if (filterArray !== undefined && filterArray !== null) {
+            filterArray.forEach(function (filter) {
                 filter.Name = localization.translateMessage(filter.Name);
                 filter.Value = filter.Name;
             });
@@ -221,7 +221,7 @@ const ticketsFilter = (function () {
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     });
 
     on('tickets/filters/pagination', function (params) {
