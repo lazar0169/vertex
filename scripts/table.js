@@ -24,6 +24,8 @@ let table = (function () {
         descending: 'desc'
     };
 
+    let currentOffset;
+
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -178,7 +180,7 @@ let table = (function () {
 
     function cancelTransactionPopup(tableSettings, row) {
         let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
-        if(cancelTransactionPopupElement === undefined || cancelTransactionPopupElement === null) {
+        if (cancelTransactionPopupElement === undefined || cancelTransactionPopupElement === null) {
             let callbackEvent = 'table/cancelTransaction/display';
             trigger('template/render', {
                 templateElementSelector: '#cancel-transaction-template',
@@ -188,19 +190,27 @@ let table = (function () {
         }
     }
 
-    function removeTransactionPopup(tableSettings){
-        let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
-        if(cancelTransactionPopupElement !== undefined && cancelTransactionPopupElement !== null) {
-            cancelTransactionPopupElement.parentNode.removeChild(cancelTransactionPopupElement);
+    function removeTransactionPopup() {
+        let cancelTransactionPopupElement = document.body.getElementsByClassName('cancel-transaction');
+        if (cancelTransactionPopupElement.length > null) {
+            for (let i = 0; i < cancelTransactionPopupElement.length; i++) {
+                cancelTransactionPopupElement[i].parentNode.removeChild(cancelTransactionPopupElement[i]);
+            }
         }
+    }
+
+    function positionElement(cancelTransactionElement) {
+        console.log('current offset', currentOffset);
+        cancelTransactionElement.style.top = currentOffset.top;
+        cancelTransactionElement.style.left = currentOffset.left;
     }
 
     on('table/cancelTransaction/display', function (params) {
         console.log('display cancel transaction', params);
         let cancelTransactionElement = params.element;
-        let tableSettings = params.params.tableSettings;
-        tableSettings.tableContainerElement.prepend(cancelTransactionElement);
+        document.body.prepend(cancelTransactionElement);
         cancelTransactionElement.classList.add('cancel-transaction');
+        positionElement(cancelTransactionElement);
         let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
         let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
         console.log(cancelTransactionElement.classList);
@@ -214,9 +224,10 @@ let table = (function () {
             } else {
                 if (tableCells[i].classList.contains('payout')) {
                     if (tableCells[i].classList.contains('row-chosen')) {
+                        removeTransactionPopup(tableSettings, row);
                         cancelTransactionPopup(tableSettings, row);
                     } else {
-                        removeTransactionPopup(tableSettings);
+                        removeTransactionPopup(tableSettings, row);
                         tableCells[i].classList.toggle('row-chosen');
                     }
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
@@ -273,6 +284,8 @@ let table = (function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
                 cell.addEventListener('click', function () {
+                    currentOffset = cell.getClientRects()[0];
+                    console.log('current offset', currentOffset);
                     selectRow(tableSettings, `row-${rowId}`);
                 });
                 if (col === colsCount - 1) {

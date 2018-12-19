@@ -1,4 +1,4 @@
-.cancel-transaction {
+.cancel-transaction.toast.toast-error {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -8,10 +8,9 @@
     font-size: 12px;
     padding: 2px;
     position: absolute;
+    top: 30%;
+    left: 30%;
     z-index: 4;
-}
-
-.cancel-transaction.toast.toast-error {
     background-color: #F33F37;
 }
 
