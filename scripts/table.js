@@ -225,6 +225,38 @@ let table = (function () {
         });
     });
 
+
+    on('table/cancelButton', function(params) {
+        let tableSettings = params.params.tableSettings;
+        let rowElements = tableSettings.tableContainerElement.getElementsByClassName('row-chosen');
+        let cancelButtonElement = params.element;
+        cancelButtonElement.classList.add('cancel-button');
+        for(let i =0; i< rowElements.length; i++) {
+            if(rowElements[i].classList.contains('cell-cancel')) {
+                rowElements[i].appendChild(cancelButtonElement);
+            }
+        }
+
+    });
+
+    function showCancelButton(tableSettings){
+        let callbackEvent = 'table/cancelButton';
+        trigger('template/render', {
+            templateElementSelector: '#cancel-button-template',
+            callbackEvent: callbackEvent,
+            tableSettings: tableSettings
+        });
+    }
+
+    function removeCancelButtons(){
+        let cancelButtonElements = document.body.getElementsByClassName('cancel-button');
+        if (cancelButtonElements.length > null) {
+            for (let i = 0; i < cancelButtonElements.length; i++) {
+                cancelButtonElements[i].parentNode.removeChild(cancelButtonElements[i]);
+            }
+        }
+    }
+
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
         for (let i = 0; i < tableCells.length; i++) {
@@ -232,11 +264,12 @@ let table = (function () {
                 tableCells[i].classList.remove('row-chosen');
             } else {
                 if (tableCells[i].classList.contains('payout')) {
+                    removeTransactionPopup(tableSettings, row);
+                    removeCancelButtons(tableSettings);
+                    showCancelButton(tableSettings);
                     if (tableCells[i].classList.contains('row-chosen')) {
-                        removeTransactionPopup(tableSettings, row);
                         cancelTransactionPopup(tableSettings, row);
                     } else {
-                        removeTransactionPopup(tableSettings, row);
                         tableCells[i].classList.toggle('row-chosen');
                     }
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
@@ -513,6 +546,7 @@ let table = (function () {
 
     function updateTable(tableSettings) {
         removeTransactionPopup();
+        removeCancelButtons();
         let colsCount = getCountOfAllColumns(tableSettings);
         console.log('cols count', colsCount);
         generateTableHeaders(tableSettings);
