@@ -12,17 +12,18 @@
     display: flex;
     flex-direction: column;
     background-color: rgb(38, 50, 56);
-    font-size: 20px;
+    font-size: 0.938em;
     box-sizing: border-box;
     transition: all 0.1s ease;
     white-space: nowrap;
-    font-family: "OpenSans-Regular","MyriadPro-Regular",sans-serif;
+    font-family: "OpenSans-Regular", "MyriadPro-Regular", sans-serif;
+    font-weight: 600;
+    border-right: 0.1rem solid black;
 }
 
 #sidebar.collapse {
     width: 50px;
     min-width: 50px;
-    border-right: 0.1rem solid black;
 }
 
 #sidebar-name {
@@ -48,12 +49,24 @@
     display: block;
 }
 
-.collapse #icon-collapse, .collapse #global-search, .collapse #team-logo {
+.collapse #global-search, .collapse #team-logo {
     position: relative;
     width: 100%;
     padding: 0.5em 0.2em;
     top: 0;
     right: 0;
+}
+
+.collapse #icon-collapse {
+    background-color: rgb(38, 50, 56);
+    top: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: ;
+    justify-content: center;
+    width: 100%;
+    padding: 0.5em 0.2em;
 }
 
 #icon-collapse {
@@ -109,7 +122,7 @@
 }
 
 #sidebar-list>div:hover, #global-search:hover, .link-list:hover, #icon-collapse:hover>.mdi, #back-to-menu:hover {
-    color: rgb(30, 155, 227);
+    color: white;
     text-decoration: none;
 }
 
@@ -130,7 +143,7 @@
     padding: 0 1rem;
     width: auto;
     height: auto;
-    font-size: 20px;
+    font-size: 0.938em;
     z-index: 1000;
 }
 
@@ -169,7 +182,7 @@
     width: auto;
     height: auto;
     opacity: 1;
-    font-size: 20px;
+    font-size: 0.938em;
 }
 
 .list-name {
@@ -198,7 +211,7 @@
     color: rgb(120, 144, 156);
     transition: all 0.2s ease;
     z-index: 30;
-    font-size: 20px;
+    font-size: 0.938em;
     display: flex;
     flex-direction: column;
 }

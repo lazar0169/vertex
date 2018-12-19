@@ -14,6 +14,10 @@
     font-size: 0.7rem;
 }
 
+.tabs:hover {
+    color: white;
+}
+
 .tabs-wrapper {
     display: inline-flex;
     width: calc(102% + 0.3rem);
