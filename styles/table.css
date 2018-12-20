@@ -97,6 +97,7 @@
 
 .head.cell:hover {
     background-color: #2F3B41;
+    cursor: pointer;
 }
 
 .head.cell:hover:after {

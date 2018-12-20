@@ -202,7 +202,8 @@ const ticketsFilter = (function () {
 
     function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sorting = table.getSorting(currentTableSettingsObject);
+        let sortOrder = currentTableSettingsObject.sort.SortOrder;
+        let sortName = currentTableSettingsObject.sort.SortName;
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
@@ -216,8 +217,8 @@ const ticketsFilter = (function () {
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
-                "SortOrder": sorting.SortOrder,
-                "SortName": ticketSortName[sorting.SortName] !== undefined ? ticketSortName[sorting.SortName] : null
+                "SortOrder": sortOrder,
+                "SortName": ticketSortName[sortName] !== undefined ? ticketSortName[sortName] : null
             },
             "TokenInfo": sessionStorage.token
         };
