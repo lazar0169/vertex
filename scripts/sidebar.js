@@ -122,19 +122,25 @@ const sidebar = (function () {
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
-            let sidebarList = document.getElementById("sidebar-list");
-            while (sidebarList.firstChild) {
-                sidebarList.firstChild.remove();
-            }
             let tempFragment = document.createElement('div');
 
             let center = document.createElement('div');
             center.classList.add('center');
+            let categoryEl;
+            if (data[category].Value.length === 0) {
+                categoryEl = document.createElement('a');
+                categoryEl.classList.add('element-navigation-link');
 
-            let categoryEl = document.createElement('div');
+            }
+            else {
+                categoryEl = document.createElement('div');
+            }
             categoryEl.setAttribute('id', category);
             categoryEl.classList.add('list-management');
             categoryEl.classList.add('center');
+
+
+
 
             let span = document.createElement('span');
             let mdiClassName = `mdi-${icons[Object.keys(data).indexOf(category)]}`;
@@ -165,13 +171,20 @@ const sidebar = (function () {
             });
 
             tempFragment.childNodes[0].addEventListener('click', function () {
+
                 categorySelectedId = category;
                 searchCategory = category;
-                generateLinks(category);
-                chosenLink.innerHTML = data[category].List;
                 editMode.classList.add('collapse');
-                searchLink.focus();
-                navigation.show();
+                if (data[category].Value.length === 0) {
+                    alert('ne otvaraj navigaciju')
+                }
+                else {
+                    generateLinks(category);
+                    chosenLink.innerHTML = data[category].List;
+                    searchLink.focus();
+                    navigation.show();
+                }
+
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
