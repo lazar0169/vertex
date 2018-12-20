@@ -94,7 +94,9 @@
       "tickets/tickets-tab-content.css",
       "notifications.css",
       "form.css",
-      "fonts.css"
+      "fonts.css",
+      "cancel-transaction.css",
+      "cancel-button.css"
     ]
   }
 }

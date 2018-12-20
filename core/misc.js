@@ -14,6 +14,7 @@ window.addEventListener('load', function () {
 function setTabListener() {
     for (let tab of tabs) {
         tab.addEventListener('click', function () {
+            table.removeTransactionPopup();
             selectTab(tab.id);
             selectInfoContent(tab.id);
         });

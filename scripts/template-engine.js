@@ -75,8 +75,10 @@ let template = (function () {
         let replacedString = replaceValueInTemplate(newElementString, placeholderValues);
         newElement.innerHTML = replacedString;
         if (typeof callbackEvent !== typeof undefined) {
+            console.log('new element', newElement);
             trigger(callbackEvent, {model: model, element: newElement});
         }
+
         return newElement;
     }
 
@@ -100,7 +102,6 @@ let template = (function () {
         }
         trigger(params.callbackEvent, {element: newHtmlElement, params: params, model: params.model});
     });
-
 
     return {
         replaceText: replaceText

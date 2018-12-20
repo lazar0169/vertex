@@ -24,6 +24,8 @@ let table = (function () {
         descending: 'desc'
     };
 
+    let currentOffset;
+
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -60,9 +62,9 @@ let table = (function () {
         let tbody = getTableBodyElement(tableSettings);
         let headElements = Array.from(tbody.getElementsByClassName('head'));
         headElements.forEach(function (element) {
-            colNames.push({Name: element.innerText.replace(' ', '')})
+            colNames.push({ Name: element.innerText.replace(' ', '') })
         });
-        colNames.unshift({Name: "-"});
+        colNames.unshift({ Name: "-" });
         return colNames;
     }
 
@@ -149,6 +151,11 @@ let table = (function () {
                 }
                 tbody.appendChild(head);
             }
+            let cancel = document.createElement('div');
+            cancel.innerHTML = '';
+            cancel.classList.add('cell');
+            cancel.classList.add('cell-cancel');
+            tbody.appendChild(cancel);
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
@@ -172,18 +179,106 @@ let table = (function () {
     function styleColsRows(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)`;
+        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '50px';
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
+    }
+
+    function cancelTransactionPopup(tableSettings, row) {
+        let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
+        if (cancelTransactionPopupElement === undefined || cancelTransactionPopupElement === null) {
+            let callbackEvent = 'table/cancelTransaction/display';
+            trigger('template/render', {
+                templateElementSelector: '#cancel-transaction-template',
+                callbackEvent: callbackEvent,
+                tableSettings: tableSettings
+            });
+        }
+    }
+
+    function removeTransactionPopup() {
+        let cancelTransactionPopupElements = document.body.getElementsByClassName('cancel-transaction');
+        if (cancelTransactionPopupElements.length > null) {
+            for (let i = 0; i < cancelTransactionPopupElements.length; i++) {
+                cancelTransactionPopupElements[i].parentNode.removeChild(cancelTransactionPopupElements[i]);
+            }
+        }
+    }
+
+    function positionElement(cancelTransactionElement) {
+        cancelTransactionElement.style.top = currentOffset.top;
+        cancelTransactionElement.style.left = currentOffset.left;
+    }
+
+    on('table/cancelTransaction/display', function (params) {
+        let cancelTransactionElement = params.element;
+        document.body.prepend(cancelTransactionElement);
+        cancelTransactionElement.classList.add('cancel-transaction');
+        positionElement(cancelTransactionElement);
+        let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
+        let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
+        buttonNo.addEventListener('click', function () {
+            removeTransactionPopup();
+        });
+        buttonYes.addEventListener('click', function () {
+            //todo add functionlity for this
+            removeTransactionPopup();
+        });
+    });
+
+
+    on('table/cancelButton', function (params) {
+        let tableSettings = params.model.tableSettings;
+        let row = params.model.row;
+        let rowElements = tableSettings.tableContainerElement.getElementsByClassName(row);
+        let cancelButtonElement = params.element;
+        cancelButtonElement.classList.add('cancel-button');
+        for (let i = 0; i < rowElements.length; i++) {
+            if (rowElements[i].classList.contains('cell-cancel')) {
+                rowElements[i].appendChild(cancelButtonElement);
+            }
+        }
+        cancelButtonElement.addEventListener('click', function () {
+            cancelTransactionPopup(tableSettings, row);
+        });
+
+    });
+
+    function showCancelButton(tableSettings, row) {
+        let callbackEvent = 'table/cancelButton';
+        trigger('template/render', {
+            templateElementSelector: '#cancel-button-template',
+            callbackEvent: callbackEvent,
+            model: {
+                row: row,
+                tableSettings: tableSettings
+            }
+        });
+    }
+
+    function removeCancelButtons() {
+        let cancelButtonElements = document.body.getElementsByClassName('cancel-button');
+        if (cancelButtonElements.length > null) {
+            for (let i = 0; i < cancelButtonElements.length; i++) {
+                cancelButtonElements[i].parentNode.removeChild(cancelButtonElements[i]);
+            }
+        }
     }
 
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+        removeCancelButtons(tableSettings);
+        showCancelButton(tableSettings, row);
         for (let i = 0; i < tableCells.length; i++) {
             if (!tableCells[i].classList.contains(row)) {
                 tableCells[i].classList.remove('row-chosen');
             } else {
                 if (tableCells[i].classList.contains('payout')) {
-                    tableCells[i].classList.toggle('row-chosen');
+                    removeTransactionPopup(tableSettings, row);
+                    if (tableCells[i].classList.contains('row-chosen')) {
+                        cancelTransactionPopup(tableSettings, row);
+                    } else {
+                        tableCells[i].classList.toggle('row-chosen');
+                    }
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
                 }
             }
@@ -191,7 +286,7 @@ let table = (function () {
     }
 
     function generateTableRows(tableSettings) {
-        
+
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
@@ -233,11 +328,12 @@ let table = (function () {
                 }
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
+                }, { passive: false });
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
-                }, {passive: false});
+                }, { passive: false });
                 cell.addEventListener('click', function () {
+                    currentOffset = cell.getClientRects()[0];
                     selectRow(tableSettings, `row-${rowId}`);
                 });
                 if (col === colsCount - 1) {
@@ -245,6 +341,16 @@ let table = (function () {
                 }
                 tbody.appendChild(cell);
             }
+            let cancelCell = document.createElement('div');
+            cancelCell.innerHTML = '';
+            cancelCell.classList.add('cell');
+            cancelCell.classList.add('cell-cancel');
+            cancelCell.classList.add(`row-${rowId}`);
+            cancelCell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+                cancelCell.classList.add('payout');
+            }
+            tbody.appendChild(cancelCell);
         }
         styleColsRows(tableSettings.formatedData, colsCount, tbody);
     }
@@ -389,7 +495,7 @@ let table = (function () {
         tableSettings.activePage = e.target.dataset.page;
 
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pagination', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/pagination', { tableSettings: tableSettings });
     }
 
     function bindPaginationLinkHandler(element, tableSettings) {
@@ -446,6 +552,8 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
+        removeTransactionPopup();
+        removeCancelButtons();
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
@@ -472,7 +580,7 @@ let table = (function () {
 
     function initFilters(tableSettings) {
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/init', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/init', { tableSettings: tableSettings });
     }
 
     on('table/update', function (params) {
@@ -498,7 +606,7 @@ let table = (function () {
     });
 
     function initTable(tableSettings) {
-        let data = {EndpointId: tableSettings.endpointId};
+        let data = { EndpointId: tableSettings.endpointId };
         tableSettings.defaultSortColumnSet = false;
 
         trigger(tableSettings.dataEvent, {
@@ -532,7 +640,7 @@ let table = (function () {
     function handlePageSizeLinkClick(e, tableSettings) {
         e.preventDefault();
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pageSize', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/pageSize', { tableSettings: tableSettings });
     }
 
     function bindPageSizeLinkHandler(element, tableSettings) {
@@ -692,7 +800,7 @@ let table = (function () {
         makeColumnActiveFromHeader(e.target, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
-        trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
+        trigger(moduleName + '/filters/sorting', { tableSettings: tableSettings, sorting: sorting });
     }
 
     function bindSortingLinkHandler(element, tableSettings) {
@@ -743,6 +851,8 @@ let table = (function () {
         columnElementsArray.forEach(function (columnElement) {
             columnElement.classList.remove('hidden-column');
         });
+
+
     }
 
     function getColsToShowNames(columnsToShowTitles) {
@@ -772,6 +882,7 @@ let table = (function () {
             let allColumns = getColumnNames(tableSettings);
             colsCount = allColumns.length;
             showColumn(tableSettings, 'cell-flag');
+            showColumn(tableSettings, 'cell-cancel');
             allColumns.forEach(function (column) {
                 showColumn(tableSettings, column);
             });
@@ -779,6 +890,7 @@ let table = (function () {
             let columnsToShow = getColsToShowNames(columnsToShowTitles);
             colsCount = columnsToShow.length;
             showColumn(tableSettings, 'cell-flag');
+            showColumn(tableSettings, 'cell-cancel');
             columnsToShow.forEach(function (column) {
                 showColumn(tableSettings, column);
             });
@@ -853,7 +965,8 @@ let table = (function () {
         getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
-        getPageSize: getPageSize
+        getPageSize: getPageSize,
+        removeTransactionPopup: removeTransactionPopup
     };
 
     /*--------------------------------------------------------------------------------------*/
