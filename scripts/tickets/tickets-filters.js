@@ -86,6 +86,9 @@ const ticketsFilter = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
+
+        console.log('filters to display Tickets', filters);
+
         //filter elements
         let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
         let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
@@ -140,6 +143,9 @@ const ticketsFilter = (function () {
                 }
             });
         }
+        if(preparedStatusData.length === 0) {
+            preparedStatusData = null;
+        }
         return preparedStatusData;
     }
 
@@ -153,6 +159,9 @@ const ticketsFilter = (function () {
                     preparedTypeData.push(null);
                 }
             });
+        }
+        if(preparedTypeData.length === 0) {
+            preparedTypeData = null;
         }
         return preparedTypeData;
     }
@@ -168,6 +177,9 @@ const ticketsFilter = (function () {
                 preparedPrintedListData.push(object);
             });
         }
+        if(preparedPrintedListData.length === 0) {
+            preparedPrintedListData = null;
+        }
         return preparedPrintedListData;
     }
 
@@ -181,6 +193,9 @@ const ticketsFilter = (function () {
                 };
                 preparedRedeemListData.push(object);
             });
+        }
+        if(preparedRedeemListData.length === 0) {
+            preparedRedeemListData = null;
         }
         return preparedRedeemListData;
     }
@@ -208,6 +223,9 @@ const ticketsFilter = (function () {
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Column;
         currentTableSettingsObject.filters = filtersForApi;
+
+
+        console.log('filters for api tickts', filtersForApi);
 
         return filtersForApi;
     }
