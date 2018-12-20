@@ -460,7 +460,6 @@ let table = (function () {
                 }
             }
         }
-
     }
 
     function resetPaginationActiveButtons(tableSettings) {
