@@ -574,6 +574,9 @@ let table = (function () {
             noDataElement.classList.add('empty-table');
             noDataElement.innerText = 'No data to display...';
             let tbody = getTableBodyElement(tableSettings);
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
             tbody.appendChild(noDataElement);
         }
     }

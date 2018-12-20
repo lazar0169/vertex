@@ -96,6 +96,8 @@ const aftFilters = (function () {
     //display initial filters
     function displayFilters(filters, tableSettings) {
 
+        console.log('filters from API', filters);
+
         //filter elements
         //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
@@ -185,6 +187,9 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
+
+        console.log('filters for API aft', filtersForApi);
+
         return filtersForApi;
     }
 
