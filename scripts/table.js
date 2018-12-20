@@ -62,9 +62,9 @@ let table = (function () {
         let tbody = getTableBodyElement(tableSettings);
         let headElements = Array.from(tbody.getElementsByClassName('head'));
         headElements.forEach(function (element) {
-            colNames.push({Name: element.innerText.replace(' ', '')})
+            colNames.push({ Name: element.innerText.replace(' ', '') })
         });
-        colNames.unshift({Name: "-"});
+        colNames.unshift({ Name: "-" });
         return colNames;
     }
 
@@ -328,10 +328,10 @@ let table = (function () {
                 }
                 cell.addEventListener('mouseover', function () {
                     hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
+                }, { passive: false });
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
-                }, {passive: false});
+                }, { passive: false });
                 cell.addEventListener('click', function () {
                     currentOffset = cell.getClientRects()[0];
                     selectRow(tableSettings, `row-${rowId}`);
@@ -495,7 +495,7 @@ let table = (function () {
         tableSettings.activePage = e.target.dataset.page;
 
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pagination', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/pagination', { tableSettings: tableSettings });
     }
 
     function bindPaginationLinkHandler(element, tableSettings) {
@@ -583,7 +583,7 @@ let table = (function () {
 
     function initFilters(tableSettings) {
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/init', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/init', { tableSettings: tableSettings });
     }
 
     on('table/update', function (params) {
@@ -609,7 +609,7 @@ let table = (function () {
     });
 
     function initTable(tableSettings) {
-        let data = {EndpointId: tableSettings.endpointId};
+        let data = { EndpointId: tableSettings.endpointId };
         tableSettings.defaultSortColumnSet = false;
 
         trigger(tableSettings.dataEvent, {
@@ -643,7 +643,7 @@ let table = (function () {
     function handlePageSizeLinkClick(e, tableSettings) {
         e.preventDefault();
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pageSize', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/pageSize', { tableSettings: tableSettings });
     }
 
     function bindPageSizeLinkHandler(element, tableSettings) {
@@ -803,7 +803,7 @@ let table = (function () {
         makeColumnActiveFromHeader(e.target, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
-        trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
+        trigger(moduleName + '/filters/sorting', { tableSettings: tableSettings, sorting: sorting });
     }
 
     function bindSortingLinkHandler(element, tableSettings) {
