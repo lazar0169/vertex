@@ -386,18 +386,6 @@ let table = (function () {
         bindPaginationLinkHandlers(tableSettings);
     });
 
-    function displayLastPageNumber(tableSettings) {
-        let lastPagePaginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page element-pagination-link')[0];
-
-        lastPagePaginationElement.addEventListener('mouseover', function () {
-            lastPagePaginationElement.innerHTML = lastPagePaginationElement.dataset.page;
-        });
-
-        lastPagePaginationElement.addEventListener('mouseout', function () {
-            lastPagePaginationElement.innerHTML = 'Last';
-        });
-    }
-
     function updateTablePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
         paginationElement.classList.remove('hidden');
@@ -471,7 +459,6 @@ let table = (function () {
                     paginationButtons[i].classList.add('hidden');
                 }
             }
-            displayLastPageNumber(tableSettings);
         }
 
     }
