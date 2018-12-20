@@ -24,6 +24,8 @@ let table = (function () {
         descending: 'desc'
     };
 
+    let currentOffset;
+
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -176,6 +178,48 @@ let table = (function () {
         tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
     }
 
+    function cancelTransactionPopup(tableSettings, row) {
+        let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
+        if (cancelTransactionPopupElement === undefined || cancelTransactionPopupElement === null) {
+            let callbackEvent = 'table/cancelTransaction/display';
+            trigger('template/render', {
+                templateElementSelector: '#cancel-transaction-template',
+                callbackEvent: callbackEvent,
+                tableSettings: tableSettings
+            });
+        }
+    }
+
+    function removeTransactionPopup() {
+        let cancelTransactionPopupElements = document.body.getElementsByClassName('cancel-transaction');
+        if (cancelTransactionPopupElements.length > null) {
+            for (let i = 0; i < cancelTransactionPopupElements.length; i++) {
+                cancelTransactionPopupElements[i].parentNode.removeChild(cancelTransactionPopupElements[i]);
+            }
+        }
+    }
+
+    function positionElement(cancelTransactionElement) {
+        cancelTransactionElement.style.top = currentOffset.top;
+        cancelTransactionElement.style.left = currentOffset.left;
+    }
+
+    on('table/cancelTransaction/display', function (params) {
+        let cancelTransactionElement = params.element;
+        document.body.prepend(cancelTransactionElement);
+        cancelTransactionElement.classList.add('cancel-transaction');
+        positionElement(cancelTransactionElement);
+        let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
+        let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
+        buttonNo.addEventListener('click', function(){
+            removeTransactionPopup();
+        });
+        buttonYes.addEventListener('click', function(){
+            //todo add functionlity for this
+            removeTransactionPopup();
+        });
+    });
+
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
         for (let i = 0; i < tableCells.length; i++) {
@@ -183,7 +227,13 @@ let table = (function () {
                 tableCells[i].classList.remove('row-chosen');
             } else {
                 if (tableCells[i].classList.contains('payout')) {
-                    tableCells[i].classList.toggle('row-chosen');
+                    if (tableCells[i].classList.contains('row-chosen')) {
+                        removeTransactionPopup(tableSettings, row);
+                        cancelTransactionPopup(tableSettings, row);
+                    } else {
+                        removeTransactionPopup(tableSettings, row);
+                        tableCells[i].classList.toggle('row-chosen');
+                    }
                     tableCells[i].title = localization.translateMessage('CancelTranslation');
                 }
             }
@@ -191,7 +241,7 @@ let table = (function () {
     }
 
     function generateTableRows(tableSettings) {
-        
+
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
 
@@ -238,6 +288,7 @@ let table = (function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
                 cell.addEventListener('click', function () {
+                    currentOffset = cell.getClientRects()[0];
                     selectRow(tableSettings, `row-${rowId}`);
                 });
                 if (col === colsCount - 1) {
@@ -446,6 +497,7 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
+        removeTransactionPopup();
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
@@ -853,7 +905,8 @@ let table = (function () {
         getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
-        getPageSize: getPageSize
+        getPageSize: getPageSize,
+        removeTransactionPopup: removeTransactionPopup
     };
 
     /*--------------------------------------------------------------------------------------*/
