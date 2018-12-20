@@ -132,7 +132,7 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(statusEnum[listItem]));
             });
         }
-        if(preparedDataForApi.length === null) {
+        if(preparedDataForApi.length === 0) {
             preparedDataForApi = null;
         }
         return preparedDataForApi;
@@ -145,7 +145,7 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(typeEnum[listItem]));
             });
         }
-        if(preparedDataForApi.length === null) {
+        if(preparedDataForApi.length === 0) {
             preparedDataForApi = null;
         }
         return preparedDataForApi;
