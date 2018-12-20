@@ -87,8 +87,6 @@ const ticketsFilter = (function () {
     //display initial filters
     function displayFilters(filters, tableSettings) {
 
-        console.log('filters to display Tickets', filters);
-
         //filter elements
         let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
         let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
@@ -223,9 +221,6 @@ const ticketsFilter = (function () {
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Column;
         currentTableSettingsObject.filters = filtersForApi;
-
-
-        console.log('filters for api tickts', filtersForApi);
 
         return filtersForApi;
     }
