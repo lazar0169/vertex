@@ -43,7 +43,9 @@ body {
     float: left;
 }
 
-.element-navigation-link {}
+.element-navigation-link>span, .element-navigation-link>div {
+    pointer-events: none;
+}
 
 .element-page {
     display: none !important;
