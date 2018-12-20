@@ -210,6 +210,7 @@ let table = (function () {
     }
 
     on('table/cancelTransaction/display', function (params) {
+        removeTransactionPopup();
         let cancelTransactionElement = params.element;
         document.body.prepend(cancelTransactionElement);
         cancelTransactionElement.classList.add('cancel-transaction');
