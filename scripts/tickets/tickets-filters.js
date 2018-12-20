@@ -31,8 +31,8 @@ const ticketsFilter = (function () {
     let ticketsMachinesNumbers = $$('#tickets-machines-number');
     let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#ticket-advance-table-filter-active-infobar-button').children[0];
-    let ticketsAdvanceFilterApllyButton = $$('#tickets-advance-table-filter-apply').getElementsByClassName('btn-success')[0];
-    let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').getElementsByClassName('btn-cancel')[0];
+    let ticketsAdvanceFilterApllyButton = $$('#tickets-advance-table-filter-apply').children[0];
+    let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
     dropdown.generate(machinesNumber, ticketsMachinesNumbers);
 

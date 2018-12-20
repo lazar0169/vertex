@@ -18,7 +18,7 @@ const sidebar = (function () {
     let tooltipText = $$('#tooltip-text');
     let headName = $$('#head-name').children[0];
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
-    let isExpanded = true;
+    let isExpanded = false;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId;
     let linkSelectedId;

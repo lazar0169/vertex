@@ -15,7 +15,6 @@
     background: transparent !important;
     border: none;
     color: rgb(120, 144, 156);
-    text-decoration: underline;
 }
 
 .btn-cancel:focus, .btn-success:focus, .btn-success:hover, .btn-cancel:hover {
@@ -28,6 +27,7 @@
 .btn-cancel:hover {
     color: white !important;
     background: rgb(55, 71, 79) !important;
+    text-decoration: underline;
 }
 
 .btn-cancel:active {
@@ -164,6 +164,10 @@ table {
 
 .table td, .table th {
     border-bottom: .05rem solid rgb(120, 144, 156);
+}
+a{
+
+    color: inherit !important;
 }
 
 a:active, a:focus, a:visited {

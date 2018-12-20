@@ -259,11 +259,11 @@ const aftFilters = (function () {
 
         for (let isHidden of filterInfobar.children[1].children) {
             if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
-                filterInfobar.style.visibility = 'visible';
+                filterInfobar.classList.remove('hidden');
                 return;
             }
             else {
-                filterInfobar.style.visibility = 'hidden';
+                filterInfobar.classList.add('hidden');
             }
         }
 

@@ -1,5 +1,5 @@
 body {
-    font-size:16px;
+    font-size: 16px;
 }
 
 .preloader {
@@ -43,10 +43,7 @@ body {
     float: left;
 }
 
-.element-navigation-link {
-    float: left;
-    display: block;
-}
+.element-navigation-link {}
 
 .element-page {
     display: none !important;
