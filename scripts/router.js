@@ -3,11 +3,11 @@ let router = (function () {
     //Map object with routes
 
     let routes = new Map();
-/*    routes.set('aft', {
-        page: 'aft',
-        id: '#page-aft',
-        path: '/aft'
-    });*/
+    /*    routes.set('aft', {
+            page: 'aft',
+            id: '#page-aft',
+            path: '/aft'
+        });*/
     routes.set('aft', {
         page: 'aft',
         id: '#page-aft',
@@ -62,6 +62,11 @@ let router = (function () {
         page: 'machines',
         id: '#page-machines',
         path: '/machines/{machinesId:integer}'
+    });
+    routes.set('malfunctions', {
+        page: 'malfunctions',
+        id: '#page-malfunctions',
+        path: '/malfunctions'
     });
 
     //Functions for displaying page
@@ -122,7 +127,7 @@ let router = (function () {
         showPage(pageName);
         let eventName = pageName + "/activated";
         //Trigger load event of selected page
-        trigger(eventName, {'params': params});
+        trigger(eventName, { 'params': params });
         //Event name convention: page-PAGENAME-activated
         //ToDo: Trigerovati event sidebar-a da oznaci koji je podmeni aktivan
     }

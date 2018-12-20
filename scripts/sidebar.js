@@ -130,6 +130,7 @@ const sidebar = (function () {
             if (data[category].Value.length === 0) {
                 categoryEl = document.createElement('a');
                 categoryEl.classList.add('element-navigation-link');
+                categoryEl.href = `/${category.toLowerCase()}`;
 
             }
             else {
@@ -176,7 +177,7 @@ const sidebar = (function () {
                 searchCategory = category;
                 editMode.classList.add('collapse');
                 if (data[category].Value.length === 0) {
-                    alert('ne otvaraj navigaciju')
+                    selectCategory(categorySelectedId);
                 }
                 else {
                     generateLinks(category);
