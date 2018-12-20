@@ -89,7 +89,7 @@
     font-size: 12px;
 }
 
-.cell-flag.cell.first-cell {
+.cell.first-cell.cell-flag, .head.cell.cell-cancel {
     top: 0;
     position: sticky !important;
     position: -webkit-sticky;

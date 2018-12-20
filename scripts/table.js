@@ -154,7 +154,11 @@ let table = (function () {
             let cancel = document.createElement('div');
             cancel.innerHTML = '';
             cancel.classList.add('cell');
+            cancel.classList.add('head');
             cancel.classList.add('cell-cancel');
+            if (tableSettings.stickyColumn === true) {
+                cancel.classList.add('sticky');
+            }
             tbody.appendChild(cancel);
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
