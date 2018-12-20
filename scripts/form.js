@@ -350,7 +350,7 @@ let form = (function () {
         form.addEventListener('submit', onSubmit);
     }
 
-    function bindBackButton(formSettings) {
+/*    function bindBackButton(formSettings) {
         let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
         if (buttons.length > 0) {
             let button = buttons[0];
@@ -359,7 +359,7 @@ let form = (function () {
             });
         }
         //there should be only one button
-    }
+    }*/
 
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
@@ -390,7 +390,7 @@ let form = (function () {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        bindBackButton(formSettings);
+        // bindBackButton(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
     }
