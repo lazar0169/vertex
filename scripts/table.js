@@ -154,7 +154,11 @@ let table = (function () {
             let cancel = document.createElement('div');
             cancel.innerHTML = '';
             cancel.classList.add('cell');
+            cancel.classList.add('cell-cancel-head');
             cancel.classList.add('cell-cancel');
+            if (tableSettings.stickyColumn === true) {
+                cancel.classList.add('sticky');
+            }
             tbody.appendChild(cancel);
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
@@ -210,6 +214,7 @@ let table = (function () {
     }
 
     on('table/cancelTransaction/display', function (params) {
+        removeTransactionPopup();
         let cancelTransactionElement = params.element;
         document.body.prepend(cancelTransactionElement);
         cancelTransactionElement.classList.add('cancel-transaction');
@@ -666,6 +671,10 @@ let table = (function () {
 
     function setDefaultActiveColumn(tableSettings) {
         tableSettings.defaultSortColumnSet = true;
+        tableSettings.sort = {
+            SortOrder: sortingType.descending,
+            SortName: tableSettings.sortActiveColumn
+        };
         let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + tableSettings.sortActiveColumn);
         for (let i = 0; i < sortActiveColumnElements.length; i++) {
             if (sortActiveColumnElements[i].classList.contains('head')) {
@@ -727,6 +736,7 @@ let table = (function () {
             SortName: ''
         };
         let activeHeader = getActiveColumn(tableSettings);
+        console.log('active column', activeHeader);
         if (activeHeader !== undefined) {
             tableSettings.sort.SortName = activeHeader.dataset.sortName;
             if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
@@ -738,6 +748,7 @@ let table = (function () {
             tableSettings.sort.SortName = null;
             tableSettings.sort.SortOrder = null;
         }
+        console.log('table sort', tableSettings.sort);
         return tableSettings.sort;
     }
 
