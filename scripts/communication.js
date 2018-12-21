@@ -123,88 +123,89 @@ let communication = (function () {
 
 
     function prepareAftTableData(tableSettings, data) {
-        let tableData = data.Data.Items;
+        let entries = data.Data.Items;
 
         let formatedData = {};
-        tableData.forEach(function (entry) {
-            if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
-                entry.EntryData.CreatedBy = '';
+        let counter = 0;
+        entries.forEach(function (entry) {
+                if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
+                    entry.EntryData.CreatedBy = '';
 
-            } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
+                } else {
+                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
 
+                }
+                if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
+                    entry.EntryData.FinishedBy = '';
+
+                } else {
+                    entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
+
+                }
+                delete entry.EntryData.CreatedTime;
+                delete entry.EntryData.FinishedTime;
+                entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
+                entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
+
+                entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
+
+                formatedData[counter] = {
+                    createdBy: entry.EntryData.CreatedBy,
+                    finishedBy: entry.EntryData.FinishedBy,
+                    status: localization.translateMessage(entry.EntryData.Status),
+                    machineName: entry.EntryData.MachineName,
+                    type: localization.translateMessage(entry.EntryData.Type),
+                    cashable: entry.EntryData.AmountCashable,
+                    promo: entry.EntryData.AmountPromo
+                };
+                counter++;
             }
-            if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
-                entry.EntryData.FinishedBy = '';
-
-            } else {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
-
-            }
-            delete entry.EntryData.CreatedTime;
-            delete entry.EntryData.FinishedTime;
-            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
-            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
-
-            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) +'">'+entry.EntryData.Status+'</div>'
-        });
-
-        for (let i = 0; i < tableData.length; i++) {
-            formatedData[i] = {
-                createdBy: tableData[i].EntryData.CreatedBy,
-                finishedBy: tableData[i].EntryData.FinishedBy,
-                status:  localization.translateMessage(tableData[i].EntryData.Status),
-                machineName:  tableData[i].EntryData.MachineName,
-                type:  localization.translateMessage(tableData[i].EntryData.Type),
-                cashable:  tableData[i].EntryData.AmountCashable,
-                promo:  tableData[i].EntryData.AmountPromo,
-            };
-        }
+        );
 
         tableSettings.formatedData = formatedData;
 
         return formatedData;
     }
 
-    function formatTimeData(timeData){
-        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/,'');
+    function formatTimeData(timeData) {
+        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
     function prepareTicketsTableData(tableSettings, data) {
-        let tableData = data.Data.Items;
+        let entry = data.Data.Items;
         let formatedData = {};
-        tableData.forEach(function (entry) {
+        let counter = 0;
+        entry.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
 
             } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' +  '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
 
             }
             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' +  '<label>' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
 
             } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' +  '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
 
             }
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-            if(entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ localization.translateMessage(entry.EntryData.TicketType);
+            if (entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
             }
-        });
-        for (let i = 0; i < tableData.length; i++) {
-            formatedData[i] = {
-                code: tableData[i].EntryData.FullTicketValIdationNumber,
-                issuedBy: tableData[i].EntryData.CashoutedBy,
-                redeemedBy:  tableData[i].EntryData.RedeemedBy,
-                status:  localization.translateMessage(tableData[i].EntryData.Status),
-                type:  tableData[i].EntryData.TicketType,
-                amount:  tableData[i].EntryData.Amount
+            formatedData[counter] = {
+                code: entry.EntryData.FullTicketValIdationNumber,
+                issuedBy: entry.EntryData.CashoutedBy,
+                redeemedBy: entry.EntryData.RedeemedBy,
+                status: localization.translateMessage(entry.EntryData.Status),
+                type: entry.EntryData.TicketType,
+                amount: entry.EntryData.Amount
             };
-        }
+            counter++;
+        });
 
         tableSettings.formatedData = formatedData;
 
@@ -212,7 +213,7 @@ let communication = (function () {
     }
 
 
-    // create and send xhr
+// create and send xhr
     on('communicate/createAndSendXhr', function (params) {
         let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.settingsObject);
         xhr = setDefaultHeaders(xhr);
@@ -229,7 +230,7 @@ let communication = (function () {
     });
 
 
-    //pagination event
+//pagination event
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
@@ -239,7 +240,7 @@ let communication = (function () {
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
 
-    //aft get transactions
+//aft get transactions
     on('communicate/aft/getTransactions', function (params) {
         let route = 'api/transactions/';
         let tableSettings = params.tableSettings;
@@ -257,8 +258,8 @@ let communication = (function () {
         });
     });
 
-    //aft pagination filtering sorting
-    //aft preview transactions
+//aft pagination filtering sorting
+//aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
         let route = 'api/transactions/previewtransactions/';
         let tableSettings = params.tableSettings;
@@ -277,7 +278,7 @@ let communication = (function () {
     });
 
 
-    //aft get notification settings
+//aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
         let route = 'api/transactions/getnotificationsettings';
         // let successEvent = 'aft/tab/notifications/display';
@@ -296,7 +297,7 @@ let communication = (function () {
         });
     });
 
-    //aft save notification settings
+//aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
         let route = 'api/transactions/savenotificationsettings/';
         // let successEvent = 'aft/tab/notifications/update';
@@ -315,7 +316,7 @@ let communication = (function () {
         });
     });
 
-    //aft get basic settings
+//aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
         let route = 'api/transactions/getbasicsettings/';
         // let successEvent = 'aft/tab/transactions/display';
@@ -334,7 +335,7 @@ let communication = (function () {
         });
     });
 
-    //aft save basic settings
+//aft save basic settings
     on('communicate/aft/saveBasicSettings', function (params) {
         let route = 'api/transactions/savebasicsettings/';
         // let successEvent = 'aft/tab/transactions/update';
@@ -353,7 +354,7 @@ let communication = (function () {
         });
     });
 
-    //aft get filters
+//aft get filters
     on('communicate/aft/getFilters', function (params) {
         let route = 'api/transactions/getfilters';
         let successEvent = params.successEvent;
@@ -370,7 +371,7 @@ let communication = (function () {
         });
     });
 
-    //aft add transaction
+//aft add transaction
     on('communicate/aft/addTransaction', function (params) {
         let route = 'api/transactions/addtransaction/';
         let successEvent = 'aft/addTransaction';
@@ -386,7 +387,7 @@ let communication = (function () {
         });
     });
 
-    //aft cancel transaction
+//aft cancel transaction
     on('communicate/aft/cancelTransaction', function (params) {
         let route = 'api/transactions/canceltransaction/';
         let successEvent = 'communicate/test';
@@ -404,7 +405,7 @@ let communication = (function () {
         });
     });
 
-    //aft cancel pending transaction
+//aft cancel pending transaction
     on('communicate/aft/cancelPendingTransaction', function (params) {
         let route = 'api/transactions/cancelpendingtransaction/';
         let successEvent = 'communicate/test';
@@ -422,7 +423,7 @@ let communication = (function () {
         });
     });
 
-    //prepare data for aft  page
+//prepare data for aft  page
     on('communicate/aft/data/prepare', function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
@@ -434,7 +435,7 @@ let communication = (function () {
 
 
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
-    //tickets get tickets
+//tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
         let route = 'api/tickets/';
         let tableSettings = params.tableSettings;
@@ -452,8 +453,8 @@ let communication = (function () {
         });
     });
 
-    //tickets preview ticket action
-    //pagination sorting and filtering
+//tickets preview ticket action
+//pagination sorting and filtering
     on('communicate/tickets/previewTickets', function (params) {
         let route = 'api/tickets/previewtickets/';
         let tableSettings = params.tableSettings;
@@ -471,7 +472,7 @@ let communication = (function () {
         });
     });
 
-    //getting filter values
+//getting filter values
     on('communicate/tickets/getFilters', function (params) {
         let route = 'api/tickets/getfilters/';
         let successEvent = params.successEvent;
@@ -490,7 +491,7 @@ let communication = (function () {
     });
 
 
-    //getting values for show sms settings
+//getting values for show sms settings
     on('communicate/tickets/showSmsSettings', function (params) {
         let route = 'api/tickets/smssettings/';
         // let successEvent = 'tickets/tab/smsSettings/display';
@@ -510,7 +511,7 @@ let communication = (function () {
     });
 
 
-    //ShowTitoMaxValueSettings
+//ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
         let route = 'api/tickets/maxvaluesettings/';
         // let successEvent = 'tickets/tab/maxValue/display';
@@ -529,7 +530,7 @@ let communication = (function () {
         });
     });
 
-    //ShowTicketAppearanceSettings
+//ShowTicketAppearanceSettings
     on('communicate/tickets/ticketAppearance', function (params) {
         let route = 'api/tickets/ticketappearance/';
         // let successEvent = 'tickets/tab/appearance/display';
@@ -549,7 +550,7 @@ let communication = (function () {
     });
 
 
-    //SaveTitoSmsAction
+//SaveTitoSmsAction
     on('communicate/tickets/saveSmsSettings', function (params) {
         let route = 'api/tickets/savesmssettings/';
         // let successEvent = 'tickets/tab/smsSettings/update';
@@ -569,7 +570,7 @@ let communication = (function () {
     });
 
 
-    //SaveTitoMaxValuesAction
+//SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
         let route = 'api/tickets/savemaxvalues/';
         // let successEvent = 'tickets/tab/maxValue/update';
@@ -589,7 +590,7 @@ let communication = (function () {
     });
 
 
-    //SaveTicketAppearanceAction
+//SaveTicketAppearanceAction
     on('communicate/tickets/saveAppearance', function (params) {
         let route = 'api/tickets/saveappearance/';
         // let successEvent = 'tickets/tab/appearance/update';
@@ -609,7 +610,7 @@ let communication = (function () {
     });
 
 
-    //prepare data for tickets  page
+//prepare data for tickets  page
     on('communicate/tickets/data/prepare', function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
@@ -620,7 +621,7 @@ let communication = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
-    //events for login
+//events for login
     on('communicate/login', function (params) {
         let successEvent = params.successEvent;
         let errorEvent = params.errorEvent;
@@ -633,7 +634,7 @@ let communication = (function () {
     });
 
 
-    //events for casino
+//events for casino
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         //let callbackEventName = params.successEvent;
@@ -673,8 +674,8 @@ let communication = (function () {
         //trigger('communicate/casinos/removeMachineFromCasino', {}) server errorm 500
     });
 
-    //data with static values, need to be dynamic
-    //machines preview transactions
+//data with static values, need to be dynamic
+//machines preview transactions
     on('communicate/casinos/previewMachines', function (params) {
         let route = 'api/machines/previewmachines/';
         let successEvent = 'communicate/test'
@@ -708,7 +709,7 @@ let communication = (function () {
 
     /*------------------------------------ MACHINES EVENTS ------------------------------------*/
 
-    // machines get service data
+// machines get service data
     on('communicate/casinos/getMachineDetails', function (params) {
         let route = 'api/machines/details/';
         let successEvent = 'communicate/test'
@@ -727,7 +728,7 @@ let communication = (function () {
         });
     });
 
-    // machines get service data
+// machines get service data
     on('communicate/casinos/getMachineServiceData', function (params) {
         let route = 'api/machines/servicedata/';
         let successEvent = 'communicate/test'
@@ -746,7 +747,7 @@ let communication = (function () {
         });
     });
 
-    //machines swich service mode
+//machines swich service mode
     on('communicate/casinos/swichServiceMode', function (params) {
         let route = 'api/machines/switchservicemode/';
         let successEvent = 'communicate/test'
@@ -766,7 +767,7 @@ let communication = (function () {
         });
     });
 
-    // machines get history
+// machines get history
     on('communicate/casinos/getMachinesHistory', function (params) {
         let route = 'api/machines/history/';
         let successEvent = 'communicate/test'
@@ -785,7 +786,7 @@ let communication = (function () {
         });
     });
 
-    // machines preview machine history
+// machines preview machine history
     on('communicate/casinos/previewMachinesHistory', function (params) {
         let route = 'api/machines/previewhistory/';
         let successEvent = 'communicate/test'
@@ -808,7 +809,7 @@ let communication = (function () {
         });
     });
 
-    // machines get events
+// machines get events
     on('communicate/casinos/getMachinesEvents', function (params) {
         let route = 'api/machines/events/';
         let successEvent = 'communicate/test'
@@ -827,7 +828,7 @@ let communication = (function () {
         });
     });
 
-    // machines get preview events
+// machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
         let route = 'api/machines/previewevents/';
         let successEvent = 'communicate/test'
@@ -849,7 +850,7 @@ let communication = (function () {
         });
     });
 
-    // machines get all meters
+// machines get all meters
     on('communicate/casinos/getAllMachinesMeters', function (params) {
         let route = 'api/machines/allmeters/';
         let successEvent = 'communicate/test'
@@ -868,7 +869,7 @@ let communication = (function () {
         });
     });
 
-    // machines get preview meters
+// machines get preview meters
     on('communicate/casinos/previewMachinesMeters', function (params) {
         let route = 'api/machines/previewallmeters/';
         let successEvent = 'communicate/test'
@@ -890,7 +891,7 @@ let communication = (function () {
         });
     });
 
-    // machines remove meter
+// machines remove meter
     on('communicate/casinos/removeMeter', function (params) {
         let route = 'api/machines/removemeter';
         let successEvent = 'communicate/test'
@@ -910,7 +911,7 @@ let communication = (function () {
         });
     });
 
-    // machines save meter
+// machines save meter
     on('communicate/casinos/saveMachinesMeters', function (params) {
         let route = 'api/machines/savemeter';
         let successEvent = 'communicate/test'
@@ -931,7 +932,7 @@ let communication = (function () {
         });
     });
 
-    //  machines show meters
+//  machines show meters
     on('communicate/casinos/showMachinesMeters', function (params) {
         let route = 'api/machines/showmeters/';
         let successEvent = 'communicate/test'
@@ -951,7 +952,7 @@ let communication = (function () {
         });
     });
 
-    //  machines edit
+//  machines edit
     on('communicate/casinos/editMachines', function (params) {
         let route = 'api/machines/edit/';
         let successEvent = 'communicate/test'
@@ -970,7 +971,7 @@ let communication = (function () {
         });
     });
 
-    //machines remove machine from casino
+//machines remove machine from casino
     on('communicate/casinos/removeMachineFromCasino', function (params) {
         let route = 'api/machines/remove/';
         let successEvent = 'communicate/test'
@@ -989,7 +990,7 @@ let communication = (function () {
         });
     });
 
-    //machines save machine from casino
+//machines save machine from casino
     on('communicate/casinos/saveMachine', function (params) {
         let route = 'api/machines/save/';
         let successEvent = 'communicate/test'
@@ -1025,18 +1026,18 @@ let communication = (function () {
         });
     });
 
-    // machines get all machines
+// machines get all machines
 
     /*----------------------------------------------------------------------------------------*/
 
 
-    //events for jackpot
+//events for jackpot
 
 
-    //events for tickets
+//events for tickets
 
 
-    //aft events for machines
+//aft events for machines
     on('communicate/machine-info', function (params) {
         let machineId = params.machineId;
         let callbackEventName = params.successEvent;
@@ -1049,27 +1050,27 @@ let communication = (function () {
     });
 
 
-    //events for reports
+//events for reports
 
 
-    //events for users
+//events for users
 
 
-    //events for service
+//events for service
 
 
-    //generate events
+//generate events
     on('communicate/category', function (params) {
         trigger(`communicate/${params.category.toLowerCase()}`);
     });
 
-    //test, need to be deleted
+//test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
     });
 
 
-    //todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
+//todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
     /*
         //test, set filters for aft
         window.addEventListener('load', function () {
@@ -1103,4 +1104,5 @@ let communication = (function () {
     });
 
 
-})();
+})
+();
