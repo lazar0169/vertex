@@ -68,7 +68,7 @@
 }
 
 .cell.hover {
-    background-color: rgba(58, 73, 80, 0.4);
+    background-color: #2F3B41;
     color: white;
     cursor: default;
 }
@@ -89,14 +89,15 @@
     font-size: 12px;
 }
 
-.cell-flag.cell.first-cell {
+.cell.first-cell.cell-flag, .cell-cancel-head.cell.cell-cancel {
     top: 0;
     position: sticky !important;
     position: -webkit-sticky;
 }
 
 .head.cell:hover {
-    background-color: rgba(58, 73, 80, 0.4);
+    background-color: #2F3B41;
+    cursor: pointer;
 }
 
 .head.cell:hover:after {
@@ -114,7 +115,7 @@
 }
 
 .head.active-column {
-    background: rgba(58, 73, 80, 0.4);
+    background: #2F3B41;
     color: white;
 }
 
@@ -135,7 +136,7 @@
 }
 
 .active-column {
-    background: rgba(58, 73, 80, 0.4);
+    background: #2F3B41;
     color: white;
 }
 
