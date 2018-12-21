@@ -11,8 +11,6 @@
     border-right: 1px solid black;
 }
 
-
-
 .aft-advance-active {
     background: rgb(55, 71, 79);
     color: rgb(255, 255, 255);
@@ -38,8 +36,4 @@
 
 #aft-export-xls, #tickets-export-xls {
     background-image: url("/images/xls-export.png");
-}
-
-#aft-add-transaction {
-    padding: 0 0.5rem;
 }
