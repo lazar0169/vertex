@@ -177,6 +177,7 @@
     font-weight: bold;
     font-family: "Open Sans";
     cursor: pointer;
+    border: none;
 }
 
 .secundarybutton {
@@ -190,8 +191,20 @@
     box-shadow: 0px 2px 10px 0px rgba(1, 1, 1, 0.26);
     color: #fff;
     cursor: pointer;
+    border: none;
 }
 
 .primarybutton:hover, .secundarybutton:hover {
     background-color: #2196F3;
+}
+
+.button-link {
+    color: #1e9be3 !important;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.button-link:hover {
+    text-decoration: underline;
 }

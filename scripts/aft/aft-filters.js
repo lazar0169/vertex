@@ -132,7 +132,7 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(statusEnum[listItem]));
             });
         }
-        if(preparedDataForApi.length === 0) {
+        if (preparedDataForApi.length === 0) {
             preparedDataForApi = null;
         }
         return preparedDataForApi;
@@ -145,7 +145,7 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(typeEnum[listItem]));
             });
         }
-        if(preparedDataForApi.length === 0) {
+        if (preparedDataForApi.length === 0) {
             preparedDataForApi = null;
         }
         return preparedDataForApi;
@@ -166,7 +166,7 @@ const aftFilters = (function () {
         displayFilters(filters, tableSettings);
     });
 
-    
+
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);

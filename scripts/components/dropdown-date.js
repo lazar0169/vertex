@@ -54,7 +54,7 @@ const dropdownDate = (function () {
 
         let applyCustom = document.createElement('button');
         applyCustom.classList.add('btn');
-        applyCustom.classList.add('btn-success');
+        applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
         applyCustom.addEventListener('click', function () {
             trigger(`apply-custom-date`, { selectId: select.dataset.selectId, target: applyCustom });

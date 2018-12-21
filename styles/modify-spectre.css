@@ -165,8 +165,8 @@ table {
 .table td, .table th {
     border-bottom: .05rem solid rgb(120, 144, 156);
 }
-a{
 
+a {
     color: inherit !important;
 }
 
@@ -182,4 +182,14 @@ body {
 
 .form-group {
     height: auto;
+}
+
+.loading::after {
+    border: .1rem solid white !important;
+    height: 1em !important;
+    width: 1em !important;
+    margin-left: -0.5em !important;
+    margin-top: -0.5em !important;
+    border-right-color: transparent !important;
+    border-top-color: transparent !important;
 }

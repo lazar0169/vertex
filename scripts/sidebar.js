@@ -131,8 +131,6 @@ const sidebar = (function () {
                 categoryEl = document.createElement('a');
                 categoryEl.classList.add('element-navigation-link');
                 categoryEl.href = `/${category.toLowerCase()}`;
-               // trigger('topBar/category', { category: category });
-
             }
             else {
                 categoryEl = document.createElement('div');
@@ -179,6 +177,7 @@ const sidebar = (function () {
                 editMode.classList.add('collapse');
                 if (data[category].Value.length === 0) {
                     selectCategory(categorySelectedId);
+                    trigger('topBar/category', { category: categorySelectedId });
                 }
                 else {
                     generateLinks(category);
