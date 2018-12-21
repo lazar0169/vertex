@@ -40,18 +40,16 @@
     width: 100%;
     background: rgba(38, 50, 56);
     color: rgb(120, 144, 156);
-    display: inline-flex;
     white-space: nowrap;
-    padding: 0.5rem 0;
+    box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
+    height: 40px;
 }
 
-.custom-filter>div:not(:first-child) {
+.custom-filter>div {
     display: inline-flex;
     padding: 0;
-}
-
-.custom-filter>div:first-child {
-    padding: 0.5rem;
+    height: 100%;
+    padding: 0 0.5rem;
 }
 
 .custom-filter>div:not(:last-child) {
@@ -61,7 +59,6 @@
 .advance-table-filter {
     cursor: pointer;
     position: relative;
-    display: block;
     margin-left: 0.5rem;
 }
 
@@ -73,7 +70,7 @@
     content: "";
     position: absolute;
     right: 3px;
-    top: 1rem;
+    top: 50%;
     width: 0;
     height: 0;
     border-top: 0.4rem solid rgb(30, 155, 227);
@@ -83,16 +80,16 @@
 
 .custom-right-filter {
     display: inline-flex;
-    position: absolute;
-    right: 0;
-    border: none;
+    float: right;
 }
 
 .custom-right-filter>div {
     border-left: 1px solid black;
+    height: 100%;
+    padding: 0 0.5rem;
 }
 
-.custom-filter>div:not(:first-child)>div {
+.custom-filter>div:not(:first-child)>div:not(:first-child) {
     padding: 0 0.8rem;
 }
 
@@ -127,6 +124,7 @@
     min-width: 250px;
     max-width: 500px;
     left: 0;
+    top: 40px;
     z-index: 100;
     box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
 }

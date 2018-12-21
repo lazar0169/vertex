@@ -20,6 +20,7 @@
     height: calc(100vh - 5% - 4% - 2rem);
     /*100vh - top bar - tabs - tabs margin - custom filter*/
     overflow: hidden;
+    margin-top: 0.1rem;
 }
 
 .table::-webkit-scrollbar-track {
