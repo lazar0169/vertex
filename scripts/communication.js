@@ -390,7 +390,7 @@ let communication = (function () {
 //aft cancel transaction
     on('communicate/aft/cancelTransaction', function (params) {
         let route = 'api/transactions/canceltransaction/';
-        let successEvent = 'communicate/test';
+        let successEvent = 'table/update';
         let data = params.data;
         let request = requestTypes.post;
         let tableSettings = params.tableSettings;
