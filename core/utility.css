@@ -62,6 +62,7 @@
     cursor: pointer;
     position: relative;
     display: block;
+    margin-left: 0.5rem;
 }
 
 .advance-table-filter>div:first-child {
@@ -130,8 +131,16 @@
     box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
+.advance-filter-active>div:not(:first-child)>div {
+    display: inline-flex;
+    width: 100%;
+    padding: 0.3rem 0.4rem 0.3rem 0.3rem;
+    white-space: nowrap;
+}
+
 .advance-filter-active>div:not(:first-child)>div:last-child {
     background: rgb(38, 50, 56);
+    cursor: default;
 }
 
 .advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
@@ -207,4 +216,8 @@
 
 .button-link:hover {
     text-decoration: underline;
+}
+
+.button-wrapper>div, .button-wrapper>a, .button-wrapper>button {
+    padding: 0 0.5rem;
 }

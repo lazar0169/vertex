@@ -11,12 +11,7 @@
     border-right: 1px solid black;
 }
 
-#aft-advance-table-filter-active>div, #tickets-advance-table-filter-active>div {
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.3rem 0.4rem 0.3rem 0.3rem;
-}
+
 
 .aft-advance-active {
     background: rgb(55, 71, 79);
@@ -47,10 +42,4 @@
 
 #aft-add-transaction {
     padding: 0 0.5rem;
-}
-
-#aft-advance-table-filter-active>div {
-    display: inline-flex;
-    width: 100%;
-    padding: 0.5rem;
 }
