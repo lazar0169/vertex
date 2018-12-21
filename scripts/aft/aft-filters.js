@@ -96,6 +96,8 @@ const aftFilters = (function () {
     //display initial filters
     function displayFilters(filters, tableSettings) {
 
+        console.log('filters from API', filters);
+
         //filter elements
         //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
@@ -130,6 +132,9 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(statusEnum[listItem]));
             });
         }
+        if(preparedDataForApi.length === 0) {
+            preparedDataForApi = null;
+        }
         return preparedDataForApi;
     }
 
@@ -139,6 +144,9 @@ const aftFilters = (function () {
             list.forEach(function (listItem) {
                 preparedDataForApi.push(parseInt(typeEnum[listItem]));
             });
+        }
+        if(preparedDataForApi.length === 0) {
+            preparedDataForApi = null;
         }
         return preparedDataForApi;
     }
@@ -162,8 +170,8 @@ const aftFilters = (function () {
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sorting = table.getSorting(currentTableSettingsObject);
-        let sortName = sorting.SortName;
+        let sortOrder = currentTableSettingsObject.sort.SortOrder;
+        let sortName = currentTableSettingsObject.sort.SortName;
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
@@ -175,7 +183,7 @@ const aftFilters = (function () {
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
-                "SortOrder": sorting.SortOrder,
+                "SortOrder": sortOrder,
                 "SortName": aftSortName[sortName] !== undefined ? aftSortName[sortName] : null
             },
             "TokenInfo": sessionStorage.token
@@ -183,6 +191,9 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
+
+        console.log('filters for API aft', filtersForApi);
+
         return filtersForApi;
     }
 
@@ -231,13 +242,13 @@ const aftFilters = (function () {
             data: filtersForApi,
             callbackEvent: 'table/update'
         });
-    })
-
+    });
 
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
+
     clearAdvanceFilterInfobar.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });

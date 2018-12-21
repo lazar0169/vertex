@@ -131,6 +131,7 @@ const sidebar = (function () {
                 categoryEl = document.createElement('a');
                 categoryEl.classList.add('element-navigation-link');
                 categoryEl.href = `/${category.toLowerCase()}`;
+               // trigger('topBar/category', { category: category });
 
             }
             else {

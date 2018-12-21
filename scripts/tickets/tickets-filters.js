@@ -88,6 +88,9 @@ const ticketsFilter = (function () {
 
     //display initial filters
     function displayFilters(filters, tableSettings) {
+
+        console.log('filters to display Tickets', filters);
+
         //filter elements
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
@@ -140,6 +143,9 @@ const ticketsFilter = (function () {
                 }
             });
         }
+        if(preparedStatusData.length === 0) {
+            preparedStatusData = null;
+        }
         return preparedStatusData;
     }
 
@@ -153,6 +159,9 @@ const ticketsFilter = (function () {
                     preparedTypeData.push(null);
                 }
             });
+        }
+        if(preparedTypeData.length === 0) {
+            preparedTypeData = null;
         }
         return preparedTypeData;
     }
@@ -168,6 +177,9 @@ const ticketsFilter = (function () {
                 preparedPrintedListData.push(object);
             });
         }
+        if(preparedPrintedListData.length === 0) {
+            preparedPrintedListData = null;
+        }
         return preparedPrintedListData;
     }
 
@@ -182,12 +194,16 @@ const ticketsFilter = (function () {
                 preparedRedeemListData.push(object);
             });
         }
+        if(preparedRedeemListData.length === 0) {
+            preparedRedeemListData = null;
+        }
         return preparedRedeemListData;
     }
 
     function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sorting = table.getSorting(currentTableSettingsObject);
+        let sortOrder = currentTableSettingsObject.sort.SortOrder;
+        let sortName = currentTableSettingsObject.sort.SortName;
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
@@ -201,13 +217,16 @@ const ticketsFilter = (function () {
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
-                "SortOrder": sorting.SortOrder,
-                "SortName": ticketSortName[sorting.SortName] !== undefined ? ticketSortName[sorting.SortName] : null
+                "SortOrder": sortOrder,
+                "SortName": ticketSortName[sortName] !== undefined ? ticketSortName[sortName] : null
             },
             "TokenInfo": sessionStorage.token
         };
         currentTableSettingsObject.ColumnsToShow = pageFilters.Column;
         currentTableSettingsObject.filters = filtersForApi;
+
+
+        console.log('filters for api tickts', filtersForApi);
 
         return filtersForApi;
     }
