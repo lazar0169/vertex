@@ -63,7 +63,6 @@
     right: 0;
     display: flex;
     align-items: center;
-    
     justify-content: center;
     width: 100%;
     padding: 0.5em 0.2em;
@@ -214,11 +213,11 @@
     font-size: 0.938em;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.2);
 }
 
 #navigation-sidebar.collapse {
     transform: translateX(-100%);
-    box-shadow: 50px 5px 50px rgba(45, 51, 61, 0.2);
 }
 
 #navigation-name {

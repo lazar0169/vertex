@@ -42,6 +42,9 @@ const aftFilters = (function () {
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
+    let aftAddTransactionButton = $$('#aft-add-transaction').children[0];
+    let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
+    let transactionTab = $$('#aft-tabs-transaction');
 
     let currentTableSettingsObject;
     let activeHeadElement;
@@ -281,7 +284,21 @@ const aftFilters = (function () {
     }
 
     on('filters/show-selected-filters', function (data) {
-        showSelectedFilters(data.active, data.infobar)
+        showSelectedFilters(data.active, data.infobar);
     });
+
+
+
+
+    //close add new jackpot form
+    transactionTab.addEventListener('click', function () {
+        aftAddTransactionWrapper.classList.add('hidden');
+    });
+    //show add new jackop form
+    aftAddTransactionButton.addEventListener('click', function () {
+        aftAddTransactionWrapper.classList.remove('hidden');
+    });
+
+
 
 })();

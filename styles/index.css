@@ -20,6 +20,7 @@ body {
     height: 100%;
     opacity: 0.7;
     background-color: rgb(10, 14, 16);
+    z-index: 29;
 }
 
 #black-area.show {
@@ -54,4 +55,3 @@ body {
     background-color: rgb(55, 71, 79);
     border-radius: 50px;
 }
-

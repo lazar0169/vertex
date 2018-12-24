@@ -1,13 +1,14 @@
-#add-new-jackpot-wrapper {
+#add-new-jackpot-wrapper, #add-transaction-wrapper {
     width: 100%;
     height: 100%;
     background: rgb(38, 50, 56);
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1;
 }
 
-#add-new-jackpot-wrapper>div {
+#add-new-jackpot-wrapper>div, #add-transaction-wrapper>div {
     width: 100%;
     height: 100%;
 }
