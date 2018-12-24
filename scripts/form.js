@@ -266,10 +266,11 @@ let form = (function () {
     function deleteFormElement() {
         let deleteButtonParentNode = this.parentNode;
         let parentNode = deleteButtonParentNode.parentNode;
-        let childElementCount = parentNode.childElementCount;
+        console.log(parentNode);
         deleteButtonParentNode.remove();
+        let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
-            parentNode.children[1].getElementsByTagName('button')[0].classList.add('hidden');
+            parentNode.getElementsByClassName('button-link')[0].classList.add('hidden');
         }
     }
 
@@ -284,7 +285,8 @@ let form = (function () {
 
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
-                newField.getElementsByTagName('button')[0].classList.remove('hidden');
+                console.log(newField);
+                newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
                 newField.classList.add('element-input-additional-array-value');
 
                 let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
@@ -292,14 +294,14 @@ let form = (function () {
                 lastElement.parentNode.insertBefore(newField, addAnotherButton);
 
                 if (targetElements.length > 1) {
-                    targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
+                    targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
                 }
 
-                let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
+                let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
                 deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
                 deleteButtonFirstElement.addEventListener('click', deleteFormElement);
 
-                let deleteButton = newField.getElementsByTagName('button')[0];
+                let deleteButton = newField.getElementsByClassName('button-link')[0];
                 deleteButton.addEventListener('click', deleteFormElement);
             }
         }

@@ -48,6 +48,8 @@
 
 .element-async-form .form-section .form-section-content label.form-label {
     padding:0;
+    font-weight: bold;
+    font-size:14px;
 }
 
 .element-async-form .form-section .form-section-content input.form-input {
