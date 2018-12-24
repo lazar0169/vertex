@@ -20,7 +20,15 @@ const toggle = (function () {
                 uncheck: uncheck,
                 getState: isChecked,
                 toggleState: toggleState,
+
             };
+            if (settings.onCheck !== 'undefined') {
+                dropdown.onCheck = settings.onCheck;
+            }
+            if (settings.onUncheck !== 'undefined') {
+                dropdown.onUncheck = settings.onUncheck;
+            }
+
 
             //check html of the plugin
             let checkboxEl = dropdown.element.getElementsByTagName('input')[0];
@@ -84,10 +92,17 @@ const toggle = (function () {
     function toggleState(e) {
         e.stopPropagation();
         let target = this;
+        let settings =target.vertexToggle;
         if (isChecked(target)) {
             uncheck(target);
+            if (settings.onUncheck !== undefined) {
+                settings.onUncheck(target);
+            }
         } else {
             check(target);
+            if (settings.onCheck !== undefined) {
+                settings.onCheck(target);
+            }
         }
     }
 
