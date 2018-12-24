@@ -166,7 +166,6 @@ function mergeTranslations(translations, keys) {
             translations[key] = '';
         }
     }
-
     return translations;
 }
 function removeUnusedTranslations(translations, keys) {
