@@ -93,7 +93,6 @@ const toggle = (function () {
         e.stopPropagation();
         let target = this;
         let settings =target.vertexToggle;
-        console.log(settings);
         if (isChecked(target)) {
             uncheck(target);
             if (settings.onUncheck !== undefined) {
