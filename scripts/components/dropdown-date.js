@@ -50,19 +50,19 @@ const dropdownDate = (function () {
 
         let buttonsCustomDate = document.createElement('div');
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
+        buttonsCustomDate.classList.add('button-wrapper');
         buttonsCustomDate.classList.add('center');
 
         let applyCustom = document.createElement('button');
-        applyCustom.classList.add('btn');
+
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
         applyCustom.addEventListener('click', function () {
             trigger(`apply-custom-date`, { selectId: select.dataset.selectId, target: applyCustom });
         });
 
-        let cancelCustom = document.createElement('button');
-        cancelCustom.classList.add('btn');
-        cancelCustom.classList.add('btn-cancel');
+        let cancelCustom = document.createElement('a');
+        cancelCustom.classList.add('button-link');
         cancelCustom.innerHTML = 'Cancel';
         cancelCustom.addEventListener('click', function () {
             trigger(`cancel-custom-date`, { selectId: select.dataset.selectId, target: applyCustom });
