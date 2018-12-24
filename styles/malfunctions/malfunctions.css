@@ -1,0 +1,80 @@
+#page-malfunctions>div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 95%;
+}
+
+#malfunctions-add-message>input {
+    background: transparent;
+    border: none;
+    color: rgb(120, 144, 156);
+    width: 500px;
+}
+
+#malfunctions-add-message>input:focus {
+    outline: none;
+}
+
+#malfunction-info-color-wrapper {
+    display: inline-flex;
+}
+
+#malfunction-info-color-wrapper>div {
+    color: rgb(120, 144, 156);
+}
+
+#malfunction-info-color-wrapper>div>div:first-child {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+#malfunction-info-color-wrapper>div>div:not(:first-child) {
+    padding: 0 0.5rem;
+}
+
+#malfunction-info-color-active {
+    background: rgb(244, 67, 54);
+    /* border-left: 0.5rem solid rgb(244,67,54);  */
+}
+
+#malfunction-info-color-received {
+    background: rgb(255, 152, 0);
+    /* border-left: 0.5rem solid rgb(255,152,0);  */
+}
+
+#malfunction-info-color-inprogress {
+    background: rgb(0, 150, 136);
+    /* border-left: 0.5rem solid rgb(0,150,136);  */
+}
+
+#malfunction-info-color-solved {
+    background: rgb(139, 195, 74);
+    /* border-left: 0.5rem solid rgb(139,195,74);  */
+}
+
+#malfunctions-add-message {
+    position: relative;
+    justify-content: unset;
+    width: 540px;
+}
+
+#malfunctions-add-message>div:not(:first-child) {
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 5px;
+}
+
+#malfunctions-add-message>div:not(:first-child):hover {
+    color: rgb(30, 155, 227);
+    background: rgb(55, 71, 79);
+}
+
+.div-is-focused {
+    border: 5px solid red;
+}
+
+.div-is-focused-element {
+    background: yellowgreen;
+}

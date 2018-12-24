@@ -96,6 +96,8 @@ const aftFilters = (function () {
     //display initial filters
     function displayFilters(filters, tableSettings) {
 
+        console.log('filters from API', filters);
+
         //filter elements
         //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
@@ -130,7 +132,7 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(statusEnum[listItem]));
             });
         }
-        if(preparedDataForApi.length === 0) {
+        if (preparedDataForApi.length === 0) {
             preparedDataForApi = null;
         }
         return preparedDataForApi;
@@ -143,7 +145,7 @@ const aftFilters = (function () {
                 preparedDataForApi.push(parseInt(typeEnum[listItem]));
             });
         }
-        if(preparedDataForApi.length === 0) {
+        if (preparedDataForApi.length === 0) {
             preparedDataForApi = null;
         }
         return preparedDataForApi;
@@ -164,9 +166,7 @@ const aftFilters = (function () {
         displayFilters(filters, tableSettings);
     });
 
-    clearAdvanceFilter.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-    });
+
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
@@ -191,6 +191,8 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
 
+        console.log('filters for API aft', filtersForApi);
+
         return filtersForApi;
     }
 
@@ -202,7 +204,8 @@ const aftFilters = (function () {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
-        showSelectedFilters();
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+
     });
 
     on('aft/filters/pagination', function (params) {
@@ -242,40 +245,42 @@ const aftFilters = (function () {
 
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        advanceTableFilterInfobar.style.visibility = 'hidden';
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
     clearAdvanceFilterInfobar.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        showSelectedFilters();
-        advanceTableFilterInfobar.style.visibility = 'hidden';
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
-    function showSelectedFilters() {
+    function showSelectedFilters(filterActive, filterInfobar) {
 
-        for (let count = 0; count < advanceTableFilterActive.children.length - 1; count++) {
-            if (advanceTableFilterActive.children[count].children[1].children[0].dataset && advanceTableFilterActive.children[count].children[1].children[0].dataset.value !== '-') {
-                advanceTableFilterInfobar.children[1].children[count].children[0].innerHTML = advanceTableFilterActive.children[count].children[0].innerHTML;
-                advanceTableFilterInfobar.children[1].children[count].children[1].innerHTML = advanceTableFilterActive.children[count].children[1].children[0].title;
-                advanceTableFilterInfobar.children[1].children[count].title = advanceTableFilterActive.children[count].children[1].children[0].title;
-                advanceTableFilterInfobar.children[1].children[count].classList.remove('hidden');
-
+        for (let count = 0; count < filterActive.children.length - 1; count++) {
+            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
+                filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
+                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
+                filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
+                filterInfobar.children[1].children[count].classList.remove('hidden');
             }
             else {
-                advanceTableFilterInfobar.children[1].children[count].classList.add('hidden');
+                filterInfobar.children[1].children[count].classList.add('hidden');
             }
         }
 
-        for (let isHidden of advanceTableFilterInfobar.children[1].children) {
+        for (let isHidden of filterInfobar.children[1].children) {
             if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
-                advanceTableFilterInfobar.style.visibility = 'visible';
+                filterInfobar.classList.remove('hidden');
                 return;
             }
             else {
-                advanceTableFilterInfobar.style.visibility = 'hidden';
+                filterInfobar.classList.add('hidden');
             }
         }
 
     }
+
+    on('filters/show-selected-filters', function (data) {
+        showSelectedFilters(data.active, data.infobar)
+    });
 
 })();

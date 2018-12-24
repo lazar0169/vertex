@@ -4,15 +4,22 @@ let topBar = (function () {
     let userProfile = $$('#user-profile');
     let previousTopBar;
 
+    openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
     function showTopBar(value) {
-        openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
-        topBarPath.children[1].innerHTML = `${value.category}/${value.casino}`;
+        if (value.category && value.casino) {
+            topBarPath.children[1].innerHTML = `${value.category}/${value.casino}`;
+        }
+        else {
+            topBarPath.children[1].innerHTML = `${value.category}`;
+        }
         let currentTopBar = $$(`#top-bar-${value.category.toLowerCase()}`);
         if (previousTopBar) {
             previousTopBar.classList.add('hidden');
         }
-        currentTopBar.classList.remove('hidden');
-        previousTopBar = currentTopBar;
+        if (currentTopBar) {
+            currentTopBar.classList.remove('hidden');
+            previousTopBar = currentTopBar;
+        }
     }
     function showProfile() {
         $$('#black-area').classList.add('show');

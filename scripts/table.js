@@ -736,6 +736,7 @@ let table = (function () {
             SortName: ''
         };
         let activeHeader = getActiveColumn(tableSettings);
+        console.log('active column', activeHeader);
         if (activeHeader !== undefined) {
             tableSettings.sort.SortName = activeHeader.dataset.sortName;
             if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
@@ -747,6 +748,7 @@ let table = (function () {
             tableSettings.sort.SortName = null;
             tableSettings.sort.SortOrder = null;
         }
+        console.log('table sort', tableSettings.sort);
         return tableSettings.sort;
     }
 
