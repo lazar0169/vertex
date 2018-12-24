@@ -229,7 +229,8 @@ let form = (function () {
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
-        submitButton.disabled = true;
+        submitButton.disabled = 'disabled';
+        submitButton.classList.add('loading');
         trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
 
@@ -248,7 +249,8 @@ let form = (function () {
     function complete(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
-            submitButton.disabled = false;
+            submitButton.disabled = '';
+            submitButton.classList.remove('loading');
         });
     }
 
