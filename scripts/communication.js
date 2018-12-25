@@ -149,14 +149,23 @@ let communication = (function () {
 
                 entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
 
+
                 formatedData[counter] = {
-                    createdBy: entry.EntryData.CreatedBy,
-                    finishedBy: entry.EntryData.FinishedBy,
-                    status: localization.translateMessage(entry.EntryData.Status),
-                    machineName: entry.EntryData.MachineName,
-                    type: localization.translateMessage(entry.EntryData.Type),
-                    cashable: entry.EntryData.AmountCashable,
-                    promo: entry.EntryData.AmountPromo
+                    row: {
+                        //ToDo: translations - add keys as messages (eg createdBy: 'Created By')
+                        '': entry.Properties.FlagList[0],
+                        createdBy: entry.EntryData.CreatedBy,
+                        finishedBy: entry.EntryData.FinishedBy,
+                        status: localization.translateMessage(entry.EntryData.Status),
+                        machineName: entry.EntryData.MachineName,
+                        type: localization.translateMessage(entry.EntryData.Type),
+                        cashable: entry.EntryData.AmountCashable,
+                        promo: entry.EntryData.AmountPromo,
+                        actions: 'test actions'
+                    },
+                    data: {
+                        isPayoutPossible:entry.Properties.IsPayoutPossible
+                    }
                 };
                 counter++;
             }
@@ -427,7 +436,9 @@ let communication = (function () {
     on('communicate/aft/data/prepare', function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
+
         prepareAftTableData(tableSettings, data);
+
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
@@ -656,16 +667,16 @@ let communication = (function () {
         });
 
         //todo needs to be deleted
-        // trigger('communicate/casinos/previewMachines', {})
-        // trigger('communicate/casinos/getMachineDetails', {})
-        // trigger('communicate/casinos/getMachineServiceData', {})
-        // trigger('communicate/casinos/swichServiceMode', {})
-        // trigger('communicate/casinos/getMachinesHistory', {})
-        // trigger('communicate/casinos/previewMachinesHistory', {})
-        // trigger('communicate/casinos/getMachinesEvents', {})
-        // trigger('communicate/casinos/previewMachineEvents', {})
-        // trigger('communicate/casinos/getAllMachinesMeters', {})
-        // trigger('communicate/casinos/previewMachinesMeters', {})
+        //trigger('communicate/casinos/previewMachines', {})
+        //trigger('communicate/casinos/getMachineDetails', {})
+        //trigger('communicate/casinos/getMachineServiceData', {})
+        //trigger('communicate/casinos/swichServiceMode', {})
+        //trigger('communicate/casinos/getMachinesHistory', {})
+        //trigger('communicate/casinos/previewMachinesHistory', {})
+        //trigger('communicate/casinos/getMachinesEvents', {})
+        //trigger('communicate/casinos/previewMachineEvents', {})
+        //trigger('communicate/casinos/getAllMachinesMeters', {})
+        //trigger('communicate/casinos/previewMachinesMeters', {})
         //trigger('communicate/casinos/removeMeter', {}) server error 500
         // trigger('communicate/casinos/showMachinesMeters', {})
         //trigger('communicate/casinos/saveMachinesMeters', {}) server error 500

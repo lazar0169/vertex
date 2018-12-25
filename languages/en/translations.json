@@ -1,11 +1,16 @@
 {
     "labels": {
+        "Created By": "Neske",
         "Login": "",
         "Username": "",
         "Password": "",
         "LoginScreen": {
             "Submit": ""
         },
+        "CancelTransaction": "",
+        "Yes": "",
+        "No": "",
+        "Cancel": "",
         "search": "",
         "Aft": {
             "Transactions": {
@@ -38,7 +43,6 @@
             }
         },
         "Save": "",
-        "Back": "",
         "Delete": "",
         "Tickets": {
             "GeneralSettings": {
@@ -92,11 +96,14 @@
                 "Issued": ""
             }
         },
-        "Cancel": "",
         "First": "",
         "Prev": "",
         "Next": "",
         "Last": ""
     },
-    "messages": {}
+    "messages": {
+        "MessageCode6": "Ok",
+        "MessageCode1": "Ok",
+        "Tickets": ""
+    }
 }

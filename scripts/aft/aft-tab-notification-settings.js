@@ -6,9 +6,8 @@ let aftTabNotificationSettings = (function(){
     formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
 
     on('aft/tab/notification', function(params){
-        formSettingsNotification.endpointId = params.tableSettings.endpointId;
+        formSettingsNotification.endpointId = params.endpointId;
         trigger('form/init', {formSettings: formSettingsNotification});
         trigger('form/getData', {formSettings: formSettingsNotification});
     });
-
 })();

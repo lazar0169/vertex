@@ -20,7 +20,7 @@ const aft = (function () {
         tableSettings.sortActiveColumn = 'createdby';
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
-        tableSettings.forceRemoveHeaders = true;
+        tableSettings.forceRemoveHeaders = false;
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
@@ -49,7 +49,7 @@ const aft = (function () {
         });
 
         trigger('aft/tab/transaction', {tableSettings: tableSettings});
-        trigger('aft/tab/notification', {tableSettings: tableSettings});
+        trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
 
     });
 })();

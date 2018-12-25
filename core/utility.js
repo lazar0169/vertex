@@ -21,6 +21,13 @@ function validateEncodedToken(accessToken) {
     return false;
 }
 
+function isFunction(functionName) {
+  return functionName && {}.toString.call(functionName) === '[object Function]';
+}
+function isString(variableName) {
+    return Object.prototype.toString.call(variableName) === "[object String]"
+}
+
 function decodeToken(encodedToken) {
     if(encodedToken === undefined) {
         console.error('Token does not exist!');

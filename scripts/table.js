@@ -76,7 +76,7 @@ let table = (function () {
         } else {
             if (tbody === undefined || tbody === null || tableSettings.tableData !== undefined || tableSettings.tableData.length !== 0 || tableSettings.forceRemoveHeaders === true) {
                 //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
-                colsCount = Object.keys(tableSettings.tableData[0]).length;
+                colsCount = Object.keys(tableSettings.formatedData[0].row).length;
             } else {
                 let headElements = tbody.getElementsByClassName('head');
                 colsCount = headElements.length;
@@ -118,26 +118,19 @@ let table = (function () {
             tbody = document.createElement('div');
             tbody.className = 'tbody';
 
-            let head = document.createElement('div');
-            head.innerHTML = '';
-            head.classList.add('cell-flag');
-            head.classList.add('cell');
-            head.classList.add('first-cell');
-            tbody.appendChild(head);
+            let columnNames = Object.keys(tableSettings.formatedData[0].row);
 
             for (let col = 0; col < colsCount; col++) {
                 let head = document.createElement('div');
-                head.innerHTML = makeColumnTitle(Object.keys(tableSettings.formatedData[0])[col]);
+                //head.innerHTML = makeColumnTitle(Object.keys(tableSettings.formatedData[0])[col]);
+                head.innerHTML = localization.translateMessage(columnNames[col], head);
                 head.className = 'head cell';
-                let columnName = Object.keys(tableSettings.formatedData[0])[col];
-                columnName = columnName.toLowerCase();
+                let columnName = columnNames[col].toLowerCase();
                 columnName = columnName.replace(/ /g, '-');
                 head.dataset.sortName = columnName;
                 head.classList.add('text-uppercase');
                 head.classList.add('cell-' + columnName);
-                if (tableSettings.tableDataItems[0].Properties.IsPayoutPossible) {
-                    head.classList.add('payout');
-                }
+
                 if (tableSettings.stickyRow === true) {
                     head.classList.add('sticky');
                     if (tableSettings.stickyColumn === false) {
@@ -151,20 +144,87 @@ let table = (function () {
                 }
                 tbody.appendChild(head);
             }
-            let cancel = document.createElement('div');
-            cancel.innerHTML = '';
-            cancel.classList.add('cell');
-            cancel.classList.add('cell-cancel-head');
-            cancel.classList.add('cell-cancel');
-            if (tableSettings.stickyColumn === true) {
-                cancel.classList.add('sticky');
-            }
-            tbody.appendChild(cancel);
+
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
 
         }
+    }
+
+    function generateTableRows(tableSettings) {
+
+        let colsCount = getCountOfAllColumns(tableSettings);
+        let tbody = getTableBodyElement(tableSettings);
+
+        for (let row = 0; row < tableSettings.tableData.length; row++) {
+            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+            while (rows.includes(rowId)) {
+                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+            }
+            rows.push(rowId);
+
+            let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
+
+            for (let col = 0; col < colsCount; col++) {
+                let cell = document.createElement('div');
+                let cellData = tableSettings.formatedData[row];
+                console.log('cellData',cellData.row);
+
+                cell.innerHTML = cellData[Object.keys(tableSettings.formatedData[row])[col]];
+                let cellClassName = generateCellClassName(tableSettings.formatedData, col);
+                cell.className = 'cell ' + cellClassName;
+                if (col === 0) {
+                    cell.classList.add('first');
+                    cell.classList.add('cell');
+                }
+                cell.classList.add(`row-${rowId}`);
+                cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+                //ToDo: u callback za row
+
+                if (tableSettings.stickyColumn === true && col === 1) {
+                    cell.classList.add('sticky');
+                }
+                cell.addEventListener('mouseover', function () {
+                    hoverRow(`row-${rowId}`, true);
+                }, {passive: false});
+                cell.addEventListener('mouseout', function () {
+                    hoverRow(`row-${rowId}`, false);
+                }, {passive: false});
+                //ToDo: override in module
+                cell.addEventListener('click', function () {
+                    currentOffset = cell.getClientRects()[0];
+                    selectRow(tableSettings, `row-${rowId}`);
+                });
+                if (col === colsCount - 1) {
+                    cell.classList.add('last-cell')
+                }
+                tbody.appendChild(cell);
+                if (tableSettings.onDrawRowCell !== null) {
+                    if (isFunction(tableSettings.onDrawRowCell)) {
+                        tableSettings.onDrawRowCell(cell, data);
+                    } else if (isString(tableSettings.onDrawRowCell)) {
+                        trigger(tableSettings.onDrawRowCell, {cell: cell, data: data})
+                    }
+
+                }
+
+            }
+            /*let cancelCell = document.createElement('div');
+            cancelCell.innerHTML = '';
+            cancelCell.classList.add('cell');
+            cancelCell.classList.add('cell-cancel');
+            cancelCell.classList.add(`row-${rowId}`);
+            cancelCell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
+
+            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
+                cancelCell.classList.add('payout');
+            }*/
+
+
+            tbody.appendChild(cancelCell);
+        }
+        styleColsRows(tableSettings.formatedData, colsCount, tbody);
     }
 
     function generateCellClassName(tableData, colNumber) {
@@ -239,7 +299,6 @@ let table = (function () {
         });
     });
 
-
     on('table/cancelButton', function (params) {
         let tableSettings = params.model.tableSettings;
         let row = params.model.row;
@@ -299,75 +358,6 @@ let table = (function () {
         }
     }
 
-    function generateTableRows(tableSettings) {
-
-        let colsCount = getCountOfAllColumns(tableSettings);
-        let tbody = getTableBodyElement(tableSettings);
-
-        for (let row = 0; row < tableSettings.tableData.length; row++) {
-            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            while (rows.includes(rowId)) {
-                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            }
-            rows.push(rowId);
-            let cell = document.createElement('div');
-            cell.innerHTML = '';
-            cell.classList.add('cell');
-            cell.classList.add('cell-flag');
-            cell.classList.add(`row-${rowId}`);
-            cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
-                cell.classList.add('payout');
-            }
-            tbody.appendChild(cell);
-
-            let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
-
-            for (let col = 0; col < colsCount; col++) {
-                let cell = document.createElement('div');
-                cell.innerHTML = tableSettings.formatedData[row][Object.keys(tableSettings.formatedData[row])[col]];
-                let cellClassName = generateCellClassName(tableSettings.formatedData, col);
-                cell.className = 'cell ' + cellClassName;
-                if (col === 0) {
-                    cell.classList.add('first');
-                    cell.classList.add('cell');
-                }
-                cell.classList.add(`row-${rowId}`);
-                cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-                if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
-                    cell.classList.add('payout');
-                }
-                if (tableSettings.stickyColumn === true && col === 1) {
-                    cell.classList.add('sticky');
-                }
-                cell.addEventListener('mouseover', function () {
-                    hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
-                cell.addEventListener('mouseout', function () {
-                    hoverRow(`row-${rowId}`, false);
-                }, {passive: false});
-                cell.addEventListener('click', function () {
-                    currentOffset = cell.getClientRects()[0];
-                    selectRow(tableSettings, `row-${rowId}`);
-                });
-                if (col === colsCount - 1) {
-                    cell.classList.add('last-cell')
-                }
-                tbody.appendChild(cell);
-            }
-            let cancelCell = document.createElement('div');
-            cancelCell.innerHTML = '';
-            cancelCell.classList.add('cell');
-            cancelCell.classList.add('cell-cancel');
-            cancelCell.classList.add(`row-${rowId}`);
-            cancelCell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
-                cancelCell.classList.add('payout');
-            }
-            tbody.appendChild(cancelCell);
-        }
-        styleColsRows(tableSettings.formatedData, colsCount, tbody);
-    }
 
     /*--------------------------------------------------------------------------------------*/
 
@@ -552,6 +542,7 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
+
         removeTransactionPopup();
         removeCancelButtons();
         let colsCount = getCountOfAllColumns(tableSettings);
@@ -745,7 +736,7 @@ let table = (function () {
             SortName: ''
         };
         let activeHeader = getActiveColumn(tableSettings);
-        console.log('active column', activeHeader);
+
         if (activeHeader !== undefined) {
             tableSettings.sort.SortName = activeHeader.dataset.sortName;
             if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
@@ -757,7 +748,7 @@ let table = (function () {
             tableSettings.sort.SortName = null;
             tableSettings.sort.SortOrder = null;
         }
-        console.log('table sort', tableSettings.sort);
+
         return tableSettings.sort;
     }
 
@@ -945,7 +936,6 @@ let table = (function () {
     /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
     function init(tableSettings) {
-
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
         let tableContainerElement = tableSettings.tableContainerElement;
         tableContainerElement.tableSettings = tableSettings;
