@@ -16,7 +16,7 @@ let form = (function () {
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
             event = formSettings.formContainerElement.dataset[eventToCheck];
         } else {
-            console.error('Event doesn\'t exist!');
+            console.info('Event ' + eventToCheck+ ' doesn\'t exist!');
         }
         return event;
     }
@@ -122,7 +122,6 @@ let form = (function () {
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'float':
-
                                     inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
                                 case 'string':
@@ -170,7 +169,7 @@ let form = (function () {
         if (formSettings.validateEvent === undefined) {
             formSettings.validateEvent = 'form/validate';
         }
-
+        console.log(formSettings);
         setEndpointId(formSettings);
 
         if (formContainerElement.formSettings === undefined) {

@@ -372,17 +372,16 @@ let communication = (function () {
 
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
+        console.log(params);
         let route = 'api/transactions/addtransaction/';
-        let successEvent = 'aft/addTransaction';
         let data = params.data;
         let request = requestTypes.post;
-        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            successEvent: successEvent,
+            errorEvent: params.formSettings.submitErrorEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            successEvent: params.formSettings.submitSuccessEvent
         });
     });
 

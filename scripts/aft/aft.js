@@ -26,28 +26,27 @@ const aft = (function () {
         tableSettings.filtersInitialized = false;
 
         table.init(tableSettings); //initializing table, filters and page size
+        //initialize add transaction form
+        let formSettingsNotification = {};
+        formSettingsNotification.formContainerSelector = '#aft-tabs-add-transaction-form-wrapper';
+        formSettingsNotification.submitEvent = 'communicate/aft/addTransaction';
+        formSettingsNotification.submitErrorEvent = 'aft/addTransaction/error';
+        formSettingsNotification.submitSuccessEvent = 'aft/addTransaction/success';
 
-        let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
-        addTransactionButton.addEventListener('click', function () {
-            let data =
-                {
-                    'EndpointId': aftId,
-                    'EndpointName': '',
-                    'Gmcid': 1565666846,
-                    'MachineName': '',
-                    'Type': 0,
-                    'CashableAmount': 13800,
-                    'PromoAmount': 13800,
-                    'ExpirationInDays': 7
-                };
-            trigger('communicate/aft/addTransaction', {data: data, tableSettings: tableSettings});
+        on('aft/addTransaction/error', function (params) {
+            console.log(params);
+            let messageCode = params.message.MessageCode;
+            let messageType = params.message.MessageType;
+            let message = localization.translateMessage(messageCode.toString());
+            trigger('notifications/show', {message: message, type: messageType});
+        });
+        on('aft/addTransaction/success', function (params) {
+            console.log('uspesno');
         });
 
-        on('aft/addTransaction', function () {
 
-        });
-
+        trigger('form/init', {formSettings: formSettingsNotification});
         trigger('aft/tab/transaction', {tableSettings: tableSettings});
         trigger('aft/tab/notification', {tableSettings: tableSettings});
 

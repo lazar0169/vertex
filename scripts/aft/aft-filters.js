@@ -318,14 +318,14 @@ const aftFilters = (function () {
         trigger('show/app');
     });
 
-    saveNewTransaction.addEventListener('click', function () {
+   /* saveNewTransaction.addEventListener('click', function () {
         saveNewTransaction.classList.add('loading');
 
         //ovde umesto timeout sklanjace se kada stigne odgovor sa servera
         setTimeout(function () {
             saveNewTransaction.classList.remove('loading');
         }, 4000);
-    });
+    });*/
 
 
 })();
