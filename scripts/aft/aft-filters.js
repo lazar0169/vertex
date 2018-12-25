@@ -45,6 +45,8 @@ const aftFilters = (function () {
     let aftAddTransactionButton = $$('#aft-add-transaction').children[0];
     let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
     let transactionTab = $$('#aft-tabs-transaction');
+    let closeAddTransaction = $$('#add-transaction-header-element').children[1];
+    let saveNewTransaction = $$('#add-transaction-save-button').children[0];
 
     let currentTableSettingsObject;
     let activeHeadElement;
@@ -108,6 +110,9 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
         let aftAdvanceTableFilterStatus = $$('#aft-advance-table-filter-status');
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
+        let aftAddTransactionType = $$('#add-transaction-type');
+        let aftAddTransactionMachine = $$('#add-transaction-machine');
+
 
         let colNames = getColNamesOfTable(tableSettings);
 
@@ -116,6 +121,10 @@ const aftFilters = (function () {
         multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);
         multiDropdown.generate(filters.StatusList, aftAdvanceTableFilterStatus);
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
+
+        dropdown.generate(filters.TypeList, aftAddTransactionType);
+        dropdown.generate(filters.MachineNameList, aftAddTransactionMachine);
+
     }
 
     function formatAftApiData(listArray) {
@@ -292,13 +301,31 @@ const aftFilters = (function () {
 
     //close add new jackpot form
     transactionTab.addEventListener('click', function () {
+        $$('#black-area').classList.remove('show');
         aftAddTransactionWrapper.classList.add('hidden');
     });
     //show add new jackop form
     aftAddTransactionButton.addEventListener('click', function () {
+        $$('#black-area').classList.add('show');
         aftAddTransactionWrapper.classList.remove('hidden');
     });
 
+    on('show/app', function () {
+        aftAddTransactionWrapper.classList.add('hidden');
+    });
+
+    closeAddTransaction.addEventListener('click', function () {
+        trigger('show/app');
+    });
+
+    saveNewTransaction.addEventListener('click', function () {
+        saveNewTransaction.classList.add('loading');
+
+        //ovde umesto timeout sklanjace se kada stigne odgovor sa servera
+        setTimeout(function () {
+            saveNewTransaction.classList.remove('loading');
+        }, 4000);
+    });
 
 
 })();

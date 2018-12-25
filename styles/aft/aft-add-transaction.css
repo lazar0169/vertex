@@ -1,0 +1,77 @@
+#add-transaction-wrapper {
+    position: absolute;
+    transform: translateX(0);
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: rgb(38, 50, 56);
+    z-index: 1;
+    transition: all 0.2s ease;
+    color: rgb(120, 144, 156);
+    overflow: hidden;
+}
+
+#add-transaction-wrapper>div>div:first-child {
+    background: #37474f;
+    height: 2em;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.5);
+    white-space: nowrap;
+}
+
+#add-transaction-wrapper>div>div:first-child>div:not(:first-child) {
+    position: absolute;
+    top: 0.5rem;
+    font-size: 12px;
+    right: 0.5rem;
+}
+
+/* #add-transaction-wrapper>form>div{
+    background: #37474f;
+    height: 2em;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    font-weight: bold;
+    box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.5);
+    white-space: nowrap;
+} */
+
+#add-transaction-wrapper>div>form>div:not(:last-child) {
+    display: flex;
+    padding: 0.5rem;
+}
+
+#add-transaction-wrapper>div>form>div>div:first-child, #add-transaction-wrapper>div>form>div>label {
+    width: 150px;
+}
+
+#add-transaction-wrapper .default-select {
+    margin: 0;
+}
+
+#add-transaction-wrapper .default-select>div:first-child {
+    width: 225px;
+}
+
+#add-transaction-wrapper>div>form>div>input {
+    width: 450px;
+}
+
+#add-transaction-save-button>button {
+    float: right;
+}
+
+#add-transaction-header-element>div:not(:first-child) {
+    cursor: pointer;
+}
+
+#add-transaction-header-element>div:not(:first-child):hover {
+    color: white;
+}

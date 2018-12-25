@@ -25,19 +25,44 @@ const dropdown = (function () {
 
     //generate single dropdown
     function generate(dataSelect, element) {
-        if (element) {
+        let existsId;
+        if (element && element.children[1]) {
+            let i = 0;
+            for (let ss of singleSelectArray) {
+                if (ss === element.children[1].id) {
+                    existsId = element.children[1].id;
+                    singleSelectArray.splice(i, 1);
+                    break;
+                }
+                i++;
+            }
             removeChildren(element);
         }
+
+
+
+
         // wrapper select
         let select = document.createElement('div');
-        select.id = `ss-${indexSsId}`;
-        select.dataset.selectId = indexSsId;
+        if (existsId) {
+            select.id = indexSsId;
+        }
+        else {
+            select.id = `ss-${indexSsId}`;
+            indexSsId++;
+        }
         select.classList.add('default-select');
         //selected option
         let selected = document.createElement('div');
-        selected.innerHTML = dataSelect[0];
+        if (typeof dataSelect[0] === 'object') {
+            selected.innerHTML = dataSelect[0].Name;
+            selected.dataset.value = dataSelect[0].Name;
+        }
+        else {
+            selected.innerHTML = dataSelect[0];
+            selected.dataset.value = dataSelect[0];
+        }
         selected.title = selected.innerHTML;
-        selected.dataset.value = dataSelect[0];
         selected.classList.add('element-table-filters');
         selected.addEventListener('click', function () {
             optionGroup.classList.toggle('hidden');
@@ -48,13 +73,21 @@ const dropdown = (function () {
         optionGroup.classList.add('hidden');
         optionGroup.classList.add('overflow-y');
         for (let element of dataSelect) {
-            //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
-            option.innerHTML = element;
+            if (typeof element === 'object') {
+                option.innerHTML = element.Name;
+                option.dataset.value = element.Name;
+                option.dataset.translationKey = element.Name;
+            }
+            else {
+                option.innerHTML = element;
+                option.dataset.value = element;
+                option.dataset.translationKey = element;
+
+            }
+            //option with functionality
             option.title = option.innerHTML;
-            option.dataset.value = element;
-            option.dataset.translationKey = element;
             optionGroup.appendChild(option);
 
             option.addEventListener('click', function (e) {

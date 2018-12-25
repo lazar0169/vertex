@@ -1,4 +1,4 @@
-#add-new-jackpot-wrapper, #add-transaction-wrapper {
+#add-new-jackpot-wrapper {
     width: 100%;
     height: 100%;
     background: rgb(38, 50, 56);
@@ -7,7 +7,7 @@
     left: 0;
 }
 
-#add-new-jackpot-wrapper>div, #add-transaction-wrapper>div {
+#add-new-jackpot-wrapper>div {
     width: 100%;
     height: 100%;
 }

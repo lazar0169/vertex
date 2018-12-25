@@ -79,6 +79,7 @@
       "machines/edit-page.css",
       "aft/aft-filters.css",
       "aft/aft-tabs.css",
+      "aft/aft-add-transaction.css",
       "tickets/tickets-tabs.css",
       "tickets/tickets-appearance.css",
       "jackpot/jackpot-filter.css",
