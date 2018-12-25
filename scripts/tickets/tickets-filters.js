@@ -29,8 +29,10 @@ const ticketsFilter = (function () {
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketsMachinesNumbers = $$('#tickets-machines-number');
-    let ticketsAdvanceFilterApllyButton = $$('#tickets-advance-table-filter-apply').getElementsByClassName('btn-success')[0];
-    let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').getElementsByClassName('btn-cancel')[0];
+    let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
+    let clearAdvanceFilterInfobar = $$('#ticket-advance-table-filter-active-infobar-button').children[0];
+    let ticketsAdvanceFilterApllyButton = $$('#tickets-advance-table-filter-apply').children[0];
+    let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
     dropdown.generate(machinesNumber, ticketsMachinesNumbers);
 
@@ -90,8 +92,6 @@ const ticketsFilter = (function () {
         console.log('filters to display Tickets', filters);
 
         //filter elements
-        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
-        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
         let ticketsAdvanceTableFiltersPrinted = $$('#tickets-advance-table-filter-printed');
@@ -237,10 +237,13 @@ const ticketsFilter = (function () {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
+
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
     on('tickets/filters/pagination', function (params) {
@@ -266,6 +269,12 @@ const ticketsFilter = (function () {
                 callbackEvent: 'table/update'
             });
         }
+    });
+
+
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
     on('tickets/filters/pageSize', function (params) {

@@ -18,7 +18,7 @@ const sidebar = (function () {
     let tooltipText = $$('#tooltip-text');
     let headName = $$('#head-name').children[0];
     // variables to check sidebar, if isExpand = true sidebar is max size, else sidebar is collapsed, isExpandNav is like isExpand
-    let isExpanded = true;
+    let isExpanded = false;
     // variables for selected list and link, default category is 1st category from data  and default link is 1st link from 1st category
     let categorySelectedId;
     let linkSelectedId;
@@ -122,19 +122,25 @@ const sidebar = (function () {
     function generateMenu(data) {
         let fragment = document.createDocumentFragment();
         for (let category in data) {
-            let sidebarList = document.getElementById("sidebar-list");
-            while (sidebarList.firstChild) {
-                sidebarList.firstChild.remove();
-            }
             let tempFragment = document.createElement('div');
 
             let center = document.createElement('div');
             center.classList.add('center');
-
-            let categoryEl = document.createElement('div');
+            let categoryEl;
+            if (data[category].Value.length === 0) {
+                categoryEl = document.createElement('a');
+                categoryEl.classList.add('element-navigation-link');
+                categoryEl.href = `/${category.toLowerCase()}`;
+            }
+            else {
+                categoryEl = document.createElement('div');
+            }
             categoryEl.setAttribute('id', category);
             categoryEl.classList.add('list-management');
             categoryEl.classList.add('center');
+
+
+
 
             let span = document.createElement('span');
             let mdiClassName = `mdi-${icons[Object.keys(data).indexOf(category)]}`;
@@ -165,13 +171,21 @@ const sidebar = (function () {
             });
 
             tempFragment.childNodes[0].addEventListener('click', function () {
+
                 categorySelectedId = category;
                 searchCategory = category;
-                generateLinks(category);
-                chosenLink.innerHTML = data[category].List;
                 editMode.classList.add('collapse');
-                searchLink.focus();
-                navigation.show();
+                if (data[category].Value.length === 0) {
+                    selectCategory(categorySelectedId);
+                    trigger('topBar/category', { category: categorySelectedId });
+                }
+                else {
+                    generateLinks(category);
+                    chosenLink.innerHTML = data[category].List;
+                    searchLink.focus();
+                    navigation.show();
+                }
+
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
