@@ -132,14 +132,14 @@ let communication = (function () {
                     entry.EntryData.CreatedBy = '';
 
                 } else {
-                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
+                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' +  '<label>by ' + entry.EntryData.CreatedBy + '</label>';
 
                 }
                 if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
                     entry.EntryData.FinishedBy = '';
 
                 } else {
-                    entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
+                    entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
 
                 }
                 delete entry.EntryData.CreatedTime;
@@ -149,10 +149,18 @@ let communication = (function () {
 
                 entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
 
+                let cancelIndicator = document.createElement('span');
+                let icon = document.createElement('i');
+                //ToDo: Ubaciti klasu za font
+                icon.innerHTML = 'X';
+                let text = document.createElement('span');
+                text.innerHTML = localization.translateMessage('Cancel',text);
+                cancelIndicator.classList.add('cancel-indicator');
+                cancelIndicator.appendChild(icon);
+                cancelIndicator.appendChild(text);
 
                 formatedData[counter] = {
                     rowData: {
-                        //ToDo: translations - add keys as messages (eg createdBy: 'Created By')
                         flag: entry.Properties.FlagList[0],
                         createdBy: entry.EntryData.CreatedBy,
                         finishedBy: entry.EntryData.FinishedBy,
@@ -161,7 +169,7 @@ let communication = (function () {
                         type: localization.translateMessage(entry.EntryData.Type),
                         cashable: entry.EntryData.AmountCashable,
                         promo: entry.EntryData.AmountPromo,
-                        actions: 'test actions'
+                        actions: cancelIndicator
                     },
                     data: {
                         isPayoutPossible:entry.Properties.IsPayoutPossible

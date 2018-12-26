@@ -150,7 +150,7 @@ let table = (function () {
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
-            setTableDimensions(tableSettings.data, colsCount, tbody);
+            setTableDimensions(tableSettings, colsCount, tbody);
         }
     }
 
@@ -183,7 +183,13 @@ let table = (function () {
 
                 let cellContent = rowData[dataKey];
 
-                cell.innerHTML = cellContent;
+                //handle case if cellContent is html element
+                if (isElement(cellContent) || isNode(cellContent)) {
+                    cell.appendChild(cellContent);
+                }
+                else {
+                    cell.innerHTML = cellContent;
+                }
 
                 let cellClassName = generateCellClassName(dataKey);
 
@@ -191,7 +197,10 @@ let table = (function () {
                 cell.classList.add('table-item');
                 cell.classList.add('row-' + rowId);
                 cell.classList.add(cellClassName);
-
+                //ToDo: Document this
+                if (dataKey === 'actions') {
+                    cell.classList.add('table-actions-column');
+                }
 
                 let headers = getHeaders(tableSettings);
                 let header = headers[col];
@@ -203,9 +212,12 @@ let table = (function () {
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
-                cell.addEventListener('mouseover', function () {
-                    hoverRow(`row-${rowId}`, true);
-                }, {passive: false});
+                if (tableSettings.onHoverRow === undefined) {
+                    cell.addEventListener('mouseover', function () {
+                        hoverRow(`row-${rowId}`, true);
+                    }, {passive: false});
+                }
+
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
@@ -221,17 +233,24 @@ let table = (function () {
                 // cellContent - formatted data
                 // cell - cell html element
                 // position - position of the column from the left border of the table (0,1,2...)
+                // row data - remote row data
                 if (tableSettings.onDrawRowCell !== null) {
                     if (isFunction(tableSettings.onDrawRowCell)) {
-                        tableSettings.onDrawRowCell(dataKey,cellContent, cell,col);
+                        tableSettings.onDrawRowCell(dataKey, cellContent, cell, col,tableSettings.tableData[row]);
                     } else if (isString(tableSettings.onDrawRowCell)) {
-                        trigger(tableSettings.onDrawRowCell, {key: dataKey, value: cellContent,element:cell,position:col})
+                        trigger(tableSettings.onDrawRowCell, {
+                            key: dataKey,
+                            value: cellContent,
+                            element: cell,
+                            position: col,
+                            rowData: tableSettings.tableData[row]
+                        })
                     }
                 }
             }
         }
         if (tableSettings.tableData.length > 0) {
-            setTableDimensions(tableSettings.tableData, colsCount, tbody);
+            setTableDimensions(tableSettings, colsCount, tbody);
         }
     }
 
@@ -245,14 +264,32 @@ let table = (function () {
         }
     }
 
-    function setTableDimensions(tableSettingsData, colsCount, tbody) {
+    function setTableDimensions(tableSettings, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
         //tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '50px';
+        let tableSettingsData = tableSettings.tableData;
         if (tableSettingsData !== undefined && tableSettingsData !== null && tableSettingsData.length > 0) {
             tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
         }
-        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+        let headers = getHeaders(tableSettings);
+        if (headers !== undefined && headers.length > 0) {
+            let style = '';
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                if (!header.classList.contains('hidden')) {
+                    if (header.classList.contains('fixed-width')) {
+                        style += " " + header.offsetWidth + 'px';
+                    } else {
+                        style += " 1fr";
+                    }
+                }
+            }
+            tbody.style.gridTemplateColumns = style.trim();
+
+        } else {
+            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+        }
     }
 
     function cancelTransactionPopup(tableSettings, row) {
@@ -580,7 +617,7 @@ let table = (function () {
                 tbody.removeChild(tbody.firstChild);
             }
             tbody.appendChild(noDataElement);
-            setTableDimensions(tableSettings.tableData, 1, tbody);
+            setTableDimensions(tableSettings, 1, tbody);
 
         }
     }
@@ -898,7 +935,7 @@ let table = (function () {
                 showColumn(tableSettings, column);
             });
         }
-        setTableDimensions(tableSettings.tableData, colsCount, tbodyElement);
+        setTableDimensions(tableSettings, colsCount, tbodyElement);
     }
 
     /*--------------------------------------------------------------------------------------*/
@@ -940,6 +977,7 @@ let table = (function () {
 
     function init(tableSettings) {
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
+        tableSettings.tableContainerElement.classList.add('vertex-table');
         let tableContainerElement = tableSettings.tableContainerElement;
         tableContainerElement.tableSettings = tableSettings;
 
@@ -956,7 +994,7 @@ let table = (function () {
 
         if (tableSettings.tableData === undefined) {
             //generateTableHeaders(tableSettings);
-            setTableDimensions(tableSettings.tableData, getColsCount(tableSettings), getTableBodyElement(tableSettings));
+            setTableDimensions(tableSettings, getColsCount(tableSettings), getTableBodyElement(tableSettings));
             initTable(tableSettings);
         } else {
             updateTable(tableSettings);

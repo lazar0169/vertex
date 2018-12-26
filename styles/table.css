@@ -260,6 +260,43 @@ textarea {
     height: 44px;
 }
 
+.vertex-table .cancel-indicator {
+}
+
+.vertex-table .hover .cancel-indicator {
+    display:flex;
+}
+
+.vertex-table .table-actions-column {
+    width:49px;
+    padding:0;
+}
+.vertex-table.table-condensed .table-actions-column {
+    width:44px;
+}
+
+
+.vertex-table .cancel-indicator {
+    width:100%;
+    height:100%;
+    max-width: 49px;
+    display:none;
+    flex-direction: column;
+    background: rgb(30, 155, 227);
+    justify-content: center;
+    align-items: center;
+}
+.vertex-table .cancel-indicator span {
+    font-size:12px;
+    color:white;
+}
+.vertex-table .cell.cell-column {
+    flex-direction: column;
+}
+.vertex-table .cell.justify-content-start {
+    justify-content: flex-start;
+}
+
 .table-condensed .cell .table-time {
     font-size: 11px !important;
 }
@@ -329,15 +366,8 @@ textarea {
     padding-right: 1.5rem;
 }
 
-.cell.payout.row-chosen {
-    background: #1d262b;
+.vertex-table .cell.clickable {
     cursor: pointer;
 }
 
-.cell.payout {
-    cursor: pointer;
-}
 
-.cell.cancel-cell:hover {
-    background: none;
-}

@@ -47,6 +47,19 @@ function isFunction(functionName) {
 function isString(variableName) {
     return Object.prototype.toString.call(variableName) === "[object String]"
 }
+function isNode(variable){
+    return (
+        typeof Node === "object" ? variable instanceof Node :
+            variable && typeof variable === "object" && typeof variable.nodeType === "number" && typeof variable.nodeName==="string"
+    );
+}
+
+function isElement(variable){
+    return (
+        typeof HTMLElement === "object" ? variable instanceof HTMLElement : //DOM2
+            variable && typeof variable === "object" && variable !== null && variable.nodeType === 1 && typeof variable.nodeName==="string"
+    );
+}
 
 function decodeToken(encodedToken) {
     if (encodedToken === undefined) {
