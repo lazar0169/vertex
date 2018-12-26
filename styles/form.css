@@ -48,6 +48,8 @@
 
 .element-async-form .form-section .form-section-content label.form-label {
     padding:0;
+    font-weight: bold;
+    font-size:14px;
 }
 
 .element-async-form .form-section .form-section-content input.form-input {
@@ -69,4 +71,12 @@
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.26);
     width:120px;
     background-color:#1e9be3;
+}
+.collapsible {
+    -webkit-transition: height 0.5s ease-out;
+    -moz-transition: height 0.5s ease-out;
+    -ms-transition: height 0.5s ease-out;
+    -o-transition: height 0.5s ease-out;
+    transition: height 0.5s ease-out;
+    overflow-y: hidden;
 }
