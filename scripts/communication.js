@@ -1101,7 +1101,7 @@ let communication = (function () {
         timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, tokenInfo.expires_in * 1000 / 90);
+        }, tokenInfo.expires_in * 1000);
     }
 
 })();
