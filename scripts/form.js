@@ -68,14 +68,15 @@ let form = (function () {
         formInputElementsArray.forEach(function (inputElement) {
             let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
             if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
-
                 if (inputElement.type === 'checkbox') {
                     let checkbox = inputElement.parentNode.parentNode;
-                    if (dataToDisplay[inputName] === true) {
-                        checkbox.vertexToggle.check();
-                    }
-                    else {
-                        checkbox.vertexToggle.uncheck();
+                    //only for toggle checkboxes
+                    if (checkbox.classList.contains('element-form-check') > 0) {
+                        if (dataToDisplay[inputName] === true) {
+                            checkbox.vertexToggle.check();
+                        } else {
+                            checkbox.vertexToggle.uncheck();
+                        }
                     }
                 } else {
                     if (inputName !== 'EndpointId') {
@@ -228,7 +229,8 @@ let form = (function () {
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
-        submitButton.disabled = true;
+        submitButton.disabled = 'disabled';
+        submitButton.classList.add('loading');
         trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
     }
 
@@ -247,7 +249,8 @@ let form = (function () {
     function complete(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
         submitButtonsArray.forEach(function (submitButton) {
-            submitButton.disabled = false;
+            submitButton.disabled = '';
+            submitButton.classList.remove('loading');
         });
     }
 
@@ -265,10 +268,11 @@ let form = (function () {
     function deleteFormElement() {
         let deleteButtonParentNode = this.parentNode;
         let parentNode = deleteButtonParentNode.parentNode;
-        let childElementCount = parentNode.childElementCount;
+        console.log(parentNode);
         deleteButtonParentNode.remove();
+        let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
-            parentNode.children[1].getElementsByTagName('button')[0].classList.add('hidden');
+            parentNode.getElementsByClassName('button-link')[0].classList.add('hidden');
         }
     }
 
@@ -283,7 +287,8 @@ let form = (function () {
 
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
-                newField.getElementsByTagName('button')[0].classList.remove('hidden');
+                console.log(newField);
+                newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
                 newField.classList.add('element-input-additional-array-value');
 
                 let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
@@ -291,14 +296,14 @@ let form = (function () {
                 lastElement.parentNode.insertBefore(newField, addAnotherButton);
 
                 if (targetElements.length > 1) {
-                    targetElements[0].getElementsByTagName('button')[0].classList.remove('hidden');
+                    targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
                 }
 
-                let deleteButtonFirstElement = targetElements[0].getElementsByTagName('button')[0];
+                let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
                 deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
                 deleteButtonFirstElement.addEventListener('click', deleteFormElement);
 
-                let deleteButton = newField.getElementsByTagName('button')[0];
+                let deleteButton = newField.getElementsByClassName('button-link')[0];
                 deleteButton.addEventListener('click', deleteFormElement);
             }
         }
@@ -337,11 +342,32 @@ let form = (function () {
 
     function createToggles(formSettings) {
         form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
-
         let checkboxes = form.getElementsByClassName('vertex-form-checkbox');
-        for (let i = 0;i<checkboxes.length;i++) {
+        for (let i = 0; i < checkboxes.length; i++) {
             let cb = checkboxes[i];
-            toggle.generate({element:cb});
+            toggle.generate({
+                element: cb,
+                onUncheck: toggleSection,
+                onCheck: toggleSection
+            });
+        }
+    }
+
+    function toggleSection(e) {
+        if (e === undefined) {
+            e = this['element'];
+        }
+        let targetSelector = e.dataset.target;
+        let checked = e.vertexToggle.getState(e);
+        if (targetSelector !== undefined) {
+            let targetElement = $$(targetSelector);
+            if (targetElement !== undefined && targetElement !== null) {
+                if (checked === false) {
+                    collapseElement(targetElement);
+                } else {
+                    expandElement(targetElement);
+                }
+            }
         }
     }
 
@@ -350,16 +376,16 @@ let form = (function () {
         form.addEventListener('submit', onSubmit);
     }
 
-/*    function bindBackButton(formSettings) {
-        let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
-        if (buttons.length > 0) {
-            let button = buttons[0];
-            button.addEventListener('click', function (e) {
-                history.back();
-            });
-        }
-        //there should be only one button
-    }*/
+    /*    function bindBackButton(formSettings) {
+            let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
+            if (buttons.length > 0) {
+                let button = buttons[0];
+                button.addEventListener('click', function (e) {
+                    history.back();
+                });
+            }
+            //there should be only one button
+        }*/
 
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);

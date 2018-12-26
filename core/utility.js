@@ -9,6 +9,26 @@ function $$(selector) {
     }
 }
 
+function collapseElement(element) {
+    let sectionHeight = element.scrollHeight;
+    let elementTransition = element.style.transition;
+    element.style.transition = '';
+    requestAnimationFrame(function () {
+        element.style.height = sectionHeight + 'px';
+        element.style.transition = elementTransition;
+        requestAnimationFrame(function () {
+            element.style.height = 0 + 'px';
+        });
+    });
+}
+
+function expandElement(element) {
+    let sectionHeight = element.scrollHeight;
+    if (sectionHeight !== 0) {
+        element.style.height = sectionHeight + 'px';
+    }
+}
+
 function validateEncodedToken(accessToken) {
     let match = accessToken.match(/\./g);
     if (match.length === 2) {
@@ -29,10 +49,9 @@ function isString(variableName) {
 }
 
 function decodeToken(encodedToken) {
-    if(encodedToken === undefined) {
+    if (encodedToken === undefined) {
         console.error('Token does not exist!');
-    }
-    else if (encodedToken !== null || encodedToken !== undefined) {
+    } else if (encodedToken !== null || encodedToken !== undefined) {
         let encodedTokenJSON = JSON.parse(encodedToken);
         let accessToken = encodedTokenJSON.access_token;
         if (validateEncodedToken(accessToken)) {
@@ -61,6 +80,7 @@ function removeChildren(element) {
         element.removeChild(element.lastChild);
     }
 }
+
 //formats number 2000.53 into 2,000.53
 function formatFloatValue(amount) {
     let decimalCount = 2, decimal = ".", thousands = ",";
