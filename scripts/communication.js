@@ -1093,7 +1093,6 @@ let communication = (function () {
         });
     */
 
-
     function refreshToken(tokenInfo) {
         if (timeout !== 0) {
             window.clearTimeout(timeout);
