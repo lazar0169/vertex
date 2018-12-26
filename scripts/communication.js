@@ -1094,14 +1094,14 @@ let communication = (function () {
     */
 
     function refreshToken(tokenInfo) {
-        if (timeout !== 0) {
+        if (timeout !== null) {
             window.clearTimeout(timeout);
             timeout = null;
         }
         timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, tokenInfo.expires_in * 1000);
+        }, tokenInfo.expires_in * 1000 / 90);
     }
 
 })();
