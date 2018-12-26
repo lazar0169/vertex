@@ -105,3 +105,6 @@ const isIe = !!navigator.userAgent.match(/Trident.*rv\:11\./);
 const isSafari = navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
 const isOpera = !!window.opera || navigator.userAgent.indexOf('Opera') >= 0;
 
+
+
+

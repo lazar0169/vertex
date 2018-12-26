@@ -17,7 +17,7 @@ let login = (function () {
         trigger('communicate/login', {
             data: {'UserName': usernameValue, "Password": passwordValue},
             successEvent: 'login/success',
-            errorEvent: "login/error"
+            errorEvent: 'login/error'
         });
     });
 

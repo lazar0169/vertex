@@ -28,6 +28,8 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
+    let timeout = 0;
+
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
         xhr.open(requestTypes.get, apiUrl + route, true);
@@ -49,12 +51,17 @@ let communication = (function () {
 
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
+        if(data.Data){
+            sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+            refreshToken(data.TokenInfo);
+        } else {
+            sessionStorage["token"] = JSON.stringify(data);
+            refreshToken(data);
+        }
         //update token in sessionStorage
-        sessionStorage["token"] = JSON.stringify(data.TokenInfo);
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
-        trigger('communicate/token/refresh', {token: data.TokenInfo});
     }
 
     function error(xhr, errorEventCallback) {
@@ -146,18 +153,18 @@ let communication = (function () {
             entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
             entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
 
-            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) +'">'+entry.EntryData.Status+'</div>'
+            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
         });
 
         for (let i = 0; i < tableData.length; i++) {
             formatedData[i] = {
                 createdBy: tableData[i].EntryData.CreatedBy,
                 finishedBy: tableData[i].EntryData.FinishedBy,
-                status:  localization.translateMessage(tableData[i].EntryData.Status),
-                machineName:  tableData[i].EntryData.MachineName,
-                type:  localization.translateMessage(tableData[i].EntryData.Type),
-                cashable:  tableData[i].EntryData.AmountCashable,
-                promo:  tableData[i].EntryData.AmountPromo,
+                status: localization.translateMessage(tableData[i].EntryData.Status),
+                machineName: tableData[i].EntryData.MachineName,
+                type: localization.translateMessage(tableData[i].EntryData.Type),
+                cashable: tableData[i].EntryData.AmountCashable,
+                promo: tableData[i].EntryData.AmountPromo,
             };
         }
 
@@ -166,8 +173,8 @@ let communication = (function () {
         return formatedData;
     }
 
-    function formatTimeData(timeData){
-        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/,'');
+    function formatTimeData(timeData) {
+        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
     function prepareTicketsTableData(tableSettings, data) {
@@ -178,31 +185,31 @@ let communication = (function () {
                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
 
             } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' +  '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
+                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
 
             }
             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' +  '<label>' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
 
             } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' +  '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
 
             }
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-            if(entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ localization.translateMessage(entry.EntryData.TicketType);
+            if (entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
             }
         });
         for (let i = 0; i < tableData.length; i++) {
             formatedData[i] = {
                 code: tableData[i].EntryData.FullTicketValIdationNumber,
                 issuedBy: tableData[i].EntryData.CashoutedBy,
-                redeemedBy:  tableData[i].EntryData.RedeemedBy,
-                status:  localization.translateMessage(tableData[i].EntryData.Status),
-                type:  tableData[i].EntryData.TicketType,
-                amount:  tableData[i].EntryData.Amount
+                redeemedBy: tableData[i].EntryData.RedeemedBy,
+                status: localization.translateMessage(tableData[i].EntryData.Status),
+                type: tableData[i].EntryData.TicketType,
+                amount: tableData[i].EntryData.Amount
             };
         }
 
@@ -830,7 +837,7 @@ let communication = (function () {
     // machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
         let route = 'api/machines/previewevents/';
-        let successEvent = 'communicate/test'
+        let successEvent = 'communicate/test';
         let data = {
             'EndpointId': 4,
             'Gmcid': 33193329841023,
@@ -1086,21 +1093,16 @@ let communication = (function () {
         });
     */
 
-    let timeout = null;
 
-    function timeoutSet(params) {
-        timeout = setTimeout(function () {
+    function refreshToken(tokenInfo) {
+        if (timeout !== 0) {
+            window.clearTimeout(timeout);
+            timeout = 0;
+        }
+        timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, params.token.expires_in * 1000);
+        }, tokenInfo.expires_in * 1000 / 30);
     }
-
-    on('communicate/token/refresh', function (params) {
-        if (timeout !== null) {
-            clearTimeout(timeout);
-        }
-        timeoutSet(params);
-    });
-
 
 })();
