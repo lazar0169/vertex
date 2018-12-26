@@ -16,17 +16,19 @@ let form = (function () {
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
             event = formSettings.formContainerElement.dataset[eventToCheck];
         } else {
-            console.info('Event ' + eventToCheck+ ' doesn\'t exist!');
+            console.info('Event ' + eventToCheck + ' doesn\'t exist!');
         }
         return event;
     }
 
     function setEndpointId(formSettings) {
         currentEndpointId = formSettings.endpointId;
-        let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
-        endpointIdInputElements.forEach(function (element) {
-            element.dataset.value = currentEndpointId;
-        });
+        if (formSettings.endpointId !== undefined && formSettings.endpointId !== null) {
+            let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
+            endpointIdInputElements.forEach(function (element) {
+                element.dataset.value = currentEndpointId;
+            });
+        }
     }
 
     function getFormData(formSettings) {
@@ -197,7 +199,10 @@ let form = (function () {
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
-                            dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
+                            dataForApi[formInputElement.dataset.name] = formInputElement.firstChild.dataset.value.toString();
+                            if (formInputElement.dataset.nameId !== undefined && formInputElement.dataset.valueId !== undefined) {
+                                dataForApi[formInputElement.dataset.nameId] = formInputElement.firstChild.dataset.valueId.toString();
+                            }
                             break;
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {

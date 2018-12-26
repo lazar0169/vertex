@@ -24,7 +24,7 @@ const dropdown = (function () {
     }
 
     //generate single dropdown
-    function generate(dataSelect, element) {
+    function generate(dataSelect, element,name) {
         let existsId;
         if (element && element.children[1]) {
             let i = 0;
@@ -52,6 +52,13 @@ const dropdown = (function () {
             indexSsId++;
         }
         select.classList.add('default-select');
+        select.classList.add('element-form-data');
+        select.dataset.type = 'single-select';
+
+        if (name !== undefined && name !== null) {
+            select.dataset.name = name;
+        }
+
         //selected option
         let selected = document.createElement('div');
         if (typeof dataSelect[0] === 'object') {

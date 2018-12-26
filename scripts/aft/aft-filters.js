@@ -122,8 +122,8 @@ const aftFilters = (function () {
         multiDropdown.generate(filters.StatusList, aftAdvanceTableFilterStatus);
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
 
-        dropdown.generate(filters.TypeList, aftAddTransactionType);
-        dropdown.generate(filters.MachineNameList, aftAddTransactionMachine);
+        dropdown.generate(filters.TypeList, aftAddTransactionType,'Type');
+        dropdown.generate(filters.MachineNameList, aftAddTransactionMachine,'MachineName');
 
     }
 

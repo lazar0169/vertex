@@ -27,11 +27,12 @@ const aft = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
         //initialize add transaction form
-        let formSettingsNotification = {};
-        formSettingsNotification.formContainerSelector = '#aft-tabs-add-transaction-form-wrapper';
-        formSettingsNotification.submitEvent = 'communicate/aft/addTransaction';
-        formSettingsNotification.submitErrorEvent = 'aft/addTransaction/error';
-        formSettingsNotification.submitSuccessEvent = 'aft/addTransaction/success';
+        let addTransactionFormSettings = {};
+        addTransactionFormSettings.formContainerSelector = '#aft-tabs-add-transaction-form-wrapper';
+        addTransactionFormSettings.submitEvent = 'communicate/aft/addTransaction';
+        addTransactionFormSettings.submitErrorEvent = 'aft/addTransaction/error';
+        addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
+        addTransactionFormSettings.endpointId = aftId;
 
 
         on('aft/addTransaction/error', function (params) {
@@ -46,7 +47,7 @@ const aft = (function () {
         });
 
 
-        trigger('form/init', { formSettings: formSettingsNotification });
+        trigger('form/init', { formSettings: addTransactionFormSettings });
         trigger('aft/tab/transaction', { tableSettings: tableSettings });
         trigger('aft/tab/notification', { tableSettings: tableSettings });
 
