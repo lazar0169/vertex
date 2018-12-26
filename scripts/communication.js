@@ -51,6 +51,7 @@ let communication = (function () {
 
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
+        //update token in sessionStorage
         if(data.Data){
             sessionStorage["token"] = JSON.stringify(data.TokenInfo);
             refreshToken(data.TokenInfo);
@@ -58,7 +59,6 @@ let communication = (function () {
             sessionStorage["token"] = JSON.stringify(data);
             refreshToken(data);
         }
-        //update token in sessionStorage
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
@@ -1102,7 +1102,7 @@ let communication = (function () {
         timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, tokenInfo.expires_in * 1000 / 30);
+        }, tokenInfo.expires_in * 1000);
     }
 
 })();
