@@ -372,7 +372,6 @@ let communication = (function () {
 
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
-        console.log(params);
         let route = 'api/transactions/addtransaction/';
         let data = params.data;
         let request = requestTypes.post;

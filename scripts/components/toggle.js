@@ -21,6 +21,12 @@ const toggle = (function () {
                 getState: isChecked,
                 toggleState: toggleState,
             };
+            if (settings.onCheck !== 'undefined') {
+                dropdown.onCheck = settings.onCheck;
+            }
+            if (settings.onUncheck !== 'undefined') {
+                dropdown.onUncheck = settings.onUncheck;
+            }
 
             //check html of the plugin
             let checkboxEl = dropdown.element.getElementsByTagName('input')[0];
@@ -62,7 +68,9 @@ const toggle = (function () {
         element.vertexToggle.checkboxElement.checked = true;
         element.vertexToggle.statusLabelElement.innerHTML = localization.translateMessage('switchYesLabel');
         element.vertexToggle.statusLabelElement.dataset.translationKey = 'switchYesLabel';
-
+        if (element.vertexToggle.onCheck !== undefined) {
+            element.vertexToggle.onCheck(element);
+        }
     }
 
     function uncheck(element) {
@@ -72,6 +80,10 @@ const toggle = (function () {
         element.vertexToggle.checkboxElement.checked = false;
         element.vertexToggle.statusLabelElement.innerHTML = localization.translateMessage('switchNoLabel');
         element.vertexToggle.statusLabelElement.dataset.translationKey = 'switchNoLabel';
+
+        if (element.vertexToggle.onUncheck !== undefined) {
+            element.vertexToggle.onUncheck(element);
+        }
     }
 
     function isChecked(element) {
@@ -84,10 +96,13 @@ const toggle = (function () {
     function toggleState(e) {
         e.stopPropagation();
         let target = this;
+        let settings = target.vertexToggle;
         if (isChecked(target)) {
             uncheck(target);
+
         } else {
             check(target);
+
         }
     }
 

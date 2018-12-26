@@ -36,19 +36,20 @@ const aft = (function () {
 
         on('aft/addTransaction/error', function (params) {
             console.log(params);
-            let messageCode = params.message.MessageCode;
-            let messageType = params.message.MessageType;
-            let message = localization.translateMessage(messageCode.toString());
-            trigger('notifications/show', {message: message, type: messageType});
+            console.log(JSON.parse(params.message));
+            let messageCode = JSON.parse(params.message);
+            //let messageType = params.message.MessageType;
+            let message = localization.translateMessage(messageCode.Message);
+            trigger('notifications/show', { message: message, type: 'string' });
         });
         on('aft/addTransaction/success', function (params) {
             console.log('uspesno');
         });
 
 
-        trigger('form/init', {formSettings: formSettingsNotification});
-        trigger('aft/tab/transaction', {tableSettings: tableSettings});
-        trigger('aft/tab/notification', {tableSettings: tableSettings});
+        trigger('form/init', { formSettings: formSettingsNotification });
+        trigger('aft/tab/transaction', { tableSettings: tableSettings });
+        trigger('aft/tab/notification', { tableSettings: tableSettings });
 
     });
 })();

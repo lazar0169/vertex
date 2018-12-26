@@ -3,7 +3,7 @@
     transform: translateX(0);
     top: 0;
     right: 0;
-    width: 40%;
+    width: 400px;
     height: 100%;
     background: rgb(38, 50, 56);
     z-index: 1;
@@ -14,12 +14,12 @@
 
 #add-transaction-wrapper>div>div:first-child {
     background: #37474f;
-    height: 2em;
-    font-size: 2em;
+    height: 64px;
+    font-size: 16px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     padding: 0.5rem;
-    font-weight: bold;
     box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.5);
     white-space: nowrap;
 }
@@ -31,41 +31,24 @@
     right: 0.5rem;
 }
 
-/* #add-transaction-wrapper>form>div{
-    background: #37474f;
-    height: 2em;
-    font-size: 2em;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    font-weight: bold;
-    box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.5);
-    white-space: nowrap;
-} */
-
-#add-transaction-wrapper form>div:not(:last-child) {
-    display: flex;
-    padding: 0.5rem;
+#aft-tabs-add-transaction-form-wrapper .form-section, #add-transaction-save-button>button {
+    margin-left: 30px;
 }
 
-#add-transaction-wrapper> form>div>div:first-child, #add-transaction-wrapper>div>form>div>label {
-    width: 150px;
+#aft-tabs-add-transaction-form-wrapper .form-section>div>div:first-child, #aft-tabs-add-transaction-form-wrapper .form-section>div>label {
+    padding: .3rem 0;
 }
 
 #add-transaction-wrapper .default-select {
     margin: 0;
 }
 
-#add-transaction-wrapper .default-select>div:first-child {
-    width: 225px;
+#add-transaction-wrapper .default-select>div:first-child, #add-transaction-wrapper input {
+    width: 250px;
 }
 
-#add-transaction-wrapper> form>div>input {
-    width: 450px;
-}
-
-#add-transaction-save-button>button {
-    float: right;
+#aft-tabs-add-transaction-form-wrapper .form-section>div {
+    margin-bottom: .4rem;
 }
 
 #add-transaction-header-element>div:not(:first-child) {
