@@ -25,6 +25,14 @@ const aft = (function () {
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
 
+        tableSettings.onDrawRowCell = function(column,cellContent, cell,position) {
+            if (column === 'flag') {
+                cell.classList.add('row-flag-' + cellContent.toString().trim());
+                cell.classList.add('cell-flag');
+                cell.innerHTML = '';
+            }
+        };
+
         table.init(tableSettings); //initializing table, filters and page size
 
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];

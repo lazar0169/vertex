@@ -125,7 +125,7 @@ let communication = (function () {
     function prepareAftTableData(tableSettings, data) {
         let entries = data.Data.Items;
 
-        let formatedData = {};
+        let formatedData = [];
         let counter = 0;
         entries.forEach(function (entry) {
                 if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
@@ -151,9 +151,9 @@ let communication = (function () {
 
 
                 formatedData[counter] = {
-                    row: {
+                    rowData: {
                         //ToDo: translations - add keys as messages (eg createdBy: 'Created By')
-                        '': entry.Properties.FlagList[0],
+                        flag: entry.Properties.FlagList[0],
                         createdBy: entry.EntryData.CreatedBy,
                         finishedBy: entry.EntryData.FinishedBy,
                         status: localization.translateMessage(entry.EntryData.Status),
@@ -171,8 +171,6 @@ let communication = (function () {
             }
         );
 
-        tableSettings.formatedData = formatedData;
-
         return formatedData;
     }
 
@@ -182,7 +180,7 @@ let communication = (function () {
 
     function prepareTicketsTableData(tableSettings, data) {
         let entry = data.Data.Items;
-        let formatedData = {};
+        let formatedData = [];
         let counter = 0;
         entry.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
@@ -216,7 +214,7 @@ let communication = (function () {
             counter++;
         });
 
-        tableSettings.formatedData = formatedData;
+        tableSettings.tableData = formatedData;
 
         return formatedData;
     }
@@ -436,9 +434,7 @@ let communication = (function () {
     on('communicate/aft/data/prepare', function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
-
-        prepareAftTableData(tableSettings, data);
-
+        tableSettings.tableData = prepareAftTableData(tableSettings, data);
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 

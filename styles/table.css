@@ -240,6 +240,10 @@ textarea {
 
 /** FLAGS **/
 
+.head.cell.cell-flag,
+.table-item.cell.cell-flag{
+    width:25px;
+}
 .cell-flag.row-flag-1 {
     border-left: 7px solid lawngreen;
 }

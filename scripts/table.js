@@ -69,18 +69,16 @@ let table = (function () {
     }
 
     function getCountOfAllColumns(tableSettings) {
-        let colsCount;
+        let colsCount = 0;
         let tbody = getTableBodyElement(tableSettings);
-        if (tableSettings === undefined || tableSettings.tableData === undefined || tableSettings.tableData === null || tableSettings.tableData.length === 0) {
-            colsCount = 0;
-        } else {
-            if (tbody === undefined || tbody === null || tableSettings.tableData !== undefined || tableSettings.tableData.length !== 0 || tableSettings.forceRemoveHeaders === true) {
-                //ToDo: proveri koja je razlika izmedju object.keys.length i bez keys.length
-                colsCount = Object.keys(tableSettings.formatedData[0].row).length;
-            } else {
-                let headElements = tbody.getElementsByClassName('head');
-                colsCount = headElements.length;
-            }
+
+        let headElements = tbody.getElementsByClassName('head');
+
+        if (headElements !== undefined && headElements !== null && headElements.length > 0) {
+            colsCount = headElements.length;
+        } else if (tableSettings.tableData !== undefined || tableSettings.tableData.length !== 0) {
+            colsCount = Object.keys(tableSettings.tableData[0].rowData).length;
+
         }
         return colsCount;
     }
@@ -88,7 +86,7 @@ let table = (function () {
     function getColsCount(tableSettings) {
         let colsCount;
         if (tableSettings.ColumnsToShow === undefined || tableSettings.ColumnsToShow === null || tableSettings.ColumnsToShow.length === 0) {
-            getCountOfAllColumns(tableSettings);
+            colsCount = getCountOfAllColumns(tableSettings);
         } else {
             colsCount = tableSettings.ColumnsToShow.length;
         }
@@ -102,6 +100,10 @@ let table = (function () {
         return colsCount;
     }
 
+    function getHeaders(tableSettings) {
+        return tableSettings.tableContainerElement.getElementsByClassName('head');
+    }
+
     function hasHeaders(tableSettings) {
         return tableSettings.tableContainerElement.getElementsByClassName('head').length > 0;
     }
@@ -110,15 +112,15 @@ let table = (function () {
         let colsCount = getCountOfAllColumns(tableSettings);
         let headers = hasHeaders(tableSettings);
 
+        let tbody = getTableBodyElement(tableSettings);
         if (!headers || tableSettings.forceRemoveHeaders === true) {
-            let tbody = getTableBodyElement(tableSettings);
             if (tbody !== null && tbody !== undefined) {
                 tbody.parentNode.removeChild(tbody);
             }
             tbody = document.createElement('div');
             tbody.className = 'tbody';
 
-            let columnNames = Object.keys(tableSettings.formatedData[0].row);
+            let columnNames = Object.keys(tableSettings.tableData[0].rowData);
 
             for (let col = 0; col < colsCount; col++) {
                 let head = document.createElement('div');
@@ -148,40 +150,56 @@ let table = (function () {
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
-
+            setTableDimensions(tableSettings.data, colsCount, tbody);
         }
     }
 
     function generateTableRows(tableSettings) {
-
         let colsCount = getCountOfAllColumns(tableSettings);
         let tbody = getTableBodyElement(tableSettings);
+        let tableItems = tbody.getElementsByClassName('table-item');
+        //remove displayed rows
+        if (tableItems !== undefined && tableItems != null) {
+            while (tableItems.length > 0) {
+                let item = tableItems[0];
+                item.parentNode.removeChild(item);
+            }
+        }
 
         for (let row = 0; row < tableSettings.tableData.length; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             while (rows.includes(rowId)) {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             }
-            rows.push(rowId);
 
-            let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
+            //let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
+
+            let rowKeys = Object.keys(tableSettings.tableData[row].rowData);
 
             for (let col = 0; col < colsCount; col++) {
                 let cell = document.createElement('div');
-                let cellData = tableSettings.formatedData[row];
-                console.log('cellData',cellData.row);
+                let rowData = tableSettings.tableData[row].rowData;
+                let dataKey = rowKeys[col];
 
-                cell.innerHTML = cellData[Object.keys(tableSettings.formatedData[row])[col]];
-                let cellClassName = generateCellClassName(tableSettings.formatedData, col);
-                cell.className = 'cell ' + cellClassName;
-                if (col === 0) {
-                    cell.classList.add('first');
-                    cell.classList.add('cell');
+                let cellContent = rowData[dataKey];
+
+                cell.innerHTML = cellContent;
+
+                let cellClassName = generateCellClassName(dataKey);
+
+                cell.classList.add('cell');
+                cell.classList.add('table-item');
+                cell.classList.add('row-' + rowId);
+                cell.classList.add(cellClassName);
+
+
+                let headers = getHeaders(tableSettings);
+                let header = headers[col];
+                if (!header.classList.contains(cellClassName)) {
+                    header.classList.add(cellClassName);
                 }
-                cell.classList.add(`row-${rowId}`);
-                cell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-                //ToDo: u callback za row
 
+                //ToDo: test if 0 or 1
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
@@ -191,47 +209,34 @@ let table = (function () {
                 cell.addEventListener('mouseout', function () {
                     hoverRow(`row-${rowId}`, false);
                 }, {passive: false});
-                //ToDo: override in module
                 cell.addEventListener('click', function () {
                     currentOffset = cell.getClientRects()[0];
                     selectRow(tableSettings, `row-${rowId}`);
                 });
-                if (col === colsCount - 1) {
-                    cell.classList.add('last-cell')
-                }
+
                 tbody.appendChild(cell);
+
+                //parameters:
+                // column - name of the property/column
+                // cellContent - formatted data
+                // cell - cell html element
+                // position - position of the column from the left border of the table (0,1,2...)
                 if (tableSettings.onDrawRowCell !== null) {
                     if (isFunction(tableSettings.onDrawRowCell)) {
-                        tableSettings.onDrawRowCell(cell, data);
+                        tableSettings.onDrawRowCell(dataKey,cellContent, cell,col);
                     } else if (isString(tableSettings.onDrawRowCell)) {
-                        trigger(tableSettings.onDrawRowCell, {cell: cell, data: data})
+                        trigger(tableSettings.onDrawRowCell, {key: dataKey, value: cellContent,element:cell,position:col})
                     }
-
                 }
-
             }
-            /*let cancelCell = document.createElement('div');
-            cancelCell.innerHTML = '';
-            cancelCell.classList.add('cell');
-            cancelCell.classList.add('cell-cancel');
-            cancelCell.classList.add(`row-${rowId}`);
-            cancelCell.classList.add(`row-flag-${tableSettings.tableDataItems[row].Properties.FlagList[0]}`);
-
-            if (tableSettings.tableDataItems[row].Properties.IsPayoutPossible) {
-                cancelCell.classList.add('payout');
-            }*/
-
-
-            tbody.appendChild(cancelCell);
         }
-        styleColsRows(tableSettings.formatedData, colsCount, tbody);
+        if (tableSettings.tableData.length > 0) {
+            setTableDimensions(tableSettings.tableData, colsCount, tbody);
+        }
     }
 
-    function generateCellClassName(tableData, colNumber) {
-        let cellClassName = 'cell-' + Object.keys(tableData[0])[colNumber];
-        cellClassName = cellClassName.toLowerCase();
-        cellClassName = cellClassName.replace(' ', '-');
-        return cellClassName;
+    function generateCellClassName(propertyName) {
+        return 'column-' + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
     }
 
     function hoverRow(elements, highlight = false) {
@@ -240,11 +245,14 @@ let table = (function () {
         }
     }
 
-    function styleColsRows(tableSettingsData, colsCount, tbody) {
+    function setTableDimensions(tableSettingsData, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '50px';
-        tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
+        //tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '50px';
+        if (tableSettingsData !== undefined && tableSettingsData !== null && tableSettingsData.length > 0) {
+            tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
+        }
+        tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
     }
 
     function cancelTransactionPopup(tableSettings, row) {
@@ -542,17 +550,20 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
-
         removeTransactionPopup();
         removeCancelButtons();
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
+
         setSortingHeader(tableSettings);
-        if (tableSettings.ColumnsToShow) {
+
+        if (tableSettings.ColumnsToShow !== undefined && tableSettings.ColumnsToShow !== null && tableSettings.ColumnsToShow.length > 0) {
             showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
         }
-        if (colsCount !== 0 && colsCount !== undefined) {
+        let itemsCount = tableSettings.tableData === null ? 0 : Object.keys(tableSettings.tableData).length;
+
+        if (itemsCount > 0) {
             updateTablePagination(tableSettings);
             bindSortingLinkHandlers(tableSettings);
             bindTableViewLinkHandlers(tableSettings);
@@ -569,6 +580,8 @@ let table = (function () {
                 tbody.removeChild(tbody.firstChild);
             }
             tbody.appendChild(noDataElement);
+            setTableDimensions(tableSettings.tableData, 1, tbody);
+
         }
     }
 
@@ -578,19 +591,7 @@ let table = (function () {
     }
 
     on('table/update', function (params) {
-
         let tableSettings = params.settingsObject;
-        let tableData = [];
-        let tableDataItems = [];
-        let apiItems = params.data.Data.Items;
-
-        apiItems.forEach(function (item) {
-            tableData.push(item.EntryData);
-            tableDataItems.push(item);
-        });
-
-        tableSettings.tableData = tableData;
-        tableSettings.tableDataItems = tableDataItems;
         tableSettings.NumOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
             initFilters(tableSettings);
@@ -796,6 +797,7 @@ let table = (function () {
 
 
     function handleSortingLinkClick(e, tableSettings) {
+        console.log('sorted');
         e.preventDefault();
         makeColumnActiveFromHeader(e.target, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
@@ -829,7 +831,7 @@ let table = (function () {
         let classList = headElement.classList;
         let cellClassName;
         for (let i = 0; i < classList.length; i++) {
-            if (classList[i].includes('cell-')) {
+            if (classList[i].includes('column-')) {
                 cellClassName = classList[i];
             }
         }
@@ -851,7 +853,7 @@ let table = (function () {
         columnElementsArray.forEach(function (columnElement) {
             columnElement.classList.remove('hidden-column');
         });
-
+        //resize table
 
     }
 
@@ -881,6 +883,7 @@ let table = (function () {
         if (columnsToShowTitles === null || columnsToShowTitles === undefined || columnsToShowTitles.length === 0) {
             let allColumns = getColumnNames(tableSettings);
             colsCount = allColumns.length;
+            //ToDo:preraditi
             showColumn(tableSettings, 'cell-flag');
             showColumn(tableSettings, 'cell-cancel');
             allColumns.forEach(function (column) {
@@ -895,7 +898,7 @@ let table = (function () {
                 showColumn(tableSettings, column);
             });
         }
-        styleColsRows(tableSettings, colsCount, tbodyElement);
+        setTableDimensions(tableSettings.tableData, colsCount, tbodyElement);
     }
 
     /*--------------------------------------------------------------------------------------*/
@@ -952,7 +955,8 @@ let table = (function () {
         delete tableSettings.ColumnsToShow;
 
         if (tableSettings.tableData === undefined) {
-            // generateTableHeaders(tableSettings);
+            //generateTableHeaders(tableSettings);
+            setTableDimensions(tableSettings.tableData, getColsCount(tableSettings), getTableBodyElement(tableSettings));
             initTable(tableSettings);
         } else {
             updateTable(tableSettings);
