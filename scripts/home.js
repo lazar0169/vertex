@@ -1,5 +1,8 @@
 let home = (function () {
 
+    let token = JSON.parse(sessionStorage.token);
+    trigger('communicate/token/refresh', {token: token});
+
     let testDataTableHome = [{
         "Flag": 1,
         "Period": "11/28/2017",
