@@ -48,6 +48,8 @@ const aft = (function () {
 
 
         trigger('form/init', { formSettings: addTransactionFormSettings });
+        //ToDo: @Nikola ovde ubaci endpoint name
+        trigger('form/add/hiddenField',{formSettings:addTransactionFormSettings,name:'EndpointName',value:"test"});
         trigger('aft/tab/transaction', { tableSettings: tableSettings });
         trigger('aft/tab/notification', { tableSettings: tableSettings });
 

@@ -172,7 +172,6 @@ let form = (function () {
         if (formSettings.validateEvent === undefined) {
             formSettings.validateEvent = 'form/validate';
         }
-        console.log(formSettings);
         setEndpointId(formSettings);
 
         if (formContainerElement.formSettings === undefined) {
@@ -224,6 +223,9 @@ let form = (function () {
                             }
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
+                        case'default':
+                            dataForApi[formInputElement.name].push(formInputElement.value);
+                            break;
                     }
                 }
             }
@@ -272,7 +274,6 @@ let form = (function () {
     function deleteFormElement() {
         let deleteButtonParentNode = this.parentNode;
         let parentNode = deleteButtonParentNode.parentNode;
-        console.log(parentNode);
         deleteButtonParentNode.remove();
         let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
@@ -291,7 +292,6 @@ let form = (function () {
 
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
-                console.log(newField);
                 newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
                 newField.classList.add('element-input-additional-array-value');
 
@@ -355,6 +355,20 @@ let form = (function () {
                 onCheck: toggleSection
             });
         }
+    }
+
+    function addHiddenField(formSettings, name, value) {
+        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        console.log(formElement);
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        input.classList.add('element-form-data');
+        input.dataset.type = 'string';
+        console.log(input);
+        formElement.appendChild(input);
+        console.log(input);
     }
 
     function toggleSection(e) {
@@ -424,6 +438,11 @@ let form = (function () {
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
     }
+
+    on('form/add/hiddenField', function (params)
+    {
+        addHiddenField(params.formSettings,params.name, params.value);
+    });
 
     on('form/init', function (params) {
         let formSettings = params.formSettings;
