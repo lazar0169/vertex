@@ -28,7 +28,7 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
-    let timeout = 0;
+    let timeout = null;
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
@@ -1096,7 +1096,7 @@ let communication = (function () {
     function refreshToken(tokenInfo) {
         if (timeout !== 0) {
             window.clearTimeout(timeout);
-            timeout = 0;
+            timeout = null;
         }
         timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");

@@ -1,3 +1,5 @@
+
+
 function $$(selector) {
     switch (selector[0]) {
         case '.':
