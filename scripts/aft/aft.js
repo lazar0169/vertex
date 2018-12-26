@@ -35,12 +35,11 @@ const aft = (function () {
 
 
         on('aft/addTransaction/error', function (params) {
-            console.log(params);
-            console.log(JSON.parse(params.message));
-            let messageCode = JSON.parse(params.message);
+            let messageToShow = JSON.parse(params.message)
             //let messageType = params.message.MessageType;
-            let message = localization.translateMessage(messageCode.Message);
-            trigger('notifications/show', { message: message, type: 'string' });
+            trigger('notifications/show', {
+                message: messageToShow.Message
+            });
         });
         on('aft/addTransaction/success', function (params) {
             console.log('uspesno');

@@ -51,8 +51,9 @@
     height: 100%;
     padding: 0 0.5rem;
 }
-.custom-filter>div:first-child{
-    padding-right: 1rem; 
+
+.custom-filter>div:first-child {
+    padding-right: 1rem;
 }
 
 .custom-filter>div:not(:last-child) {
@@ -230,4 +231,8 @@
 
 .wrapper-export-to>div:first-child {
     padding-right: 0.5rem;
+}
+
+.input-number-right {
+    text-align: right;
 }
