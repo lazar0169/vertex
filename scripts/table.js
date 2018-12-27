@@ -1,5 +1,9 @@
 let table = (function () {
 
+    let columnClassPrefix = 'column-';
+    let rowClassPrefix = 'row-';
+    let cellClassPrefix = 'cell-';
+
     let rows = [];
 
     const sortOrderEnum = {
@@ -131,7 +135,7 @@ let table = (function () {
                 columnName = columnName.replace(/ /g, '-');
                 head.dataset.sortName = columnName;
                 head.classList.add('text-uppercase');
-                head.classList.add('cell-' + columnName);
+                head.classList.add(columnClassPrefix + columnName);
 
                 if (tableSettings.stickyRow === true) {
                     head.classList.add('sticky');
@@ -166,7 +170,9 @@ let table = (function () {
             }
         }
 
-        for (let row = 0; row < tableSettings.tableData.length; row++) {
+        let rowsCount = tableSettings.tableData.length;
+
+        for (let row = 0; row < rowsCount; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             while (rows.includes(rowId)) {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
@@ -186,8 +192,7 @@ let table = (function () {
                 //handle case if cellContent is html element
                 if (isElement(cellContent) || isNode(cellContent)) {
                     cell.appendChild(cellContent);
-                }
-                else {
+                } else {
                     cell.innerHTML = cellContent;
                 }
 
@@ -195,7 +200,7 @@ let table = (function () {
 
                 cell.classList.add('cell');
                 cell.classList.add('table-item');
-                cell.classList.add('row-' + rowId);
+                cell.classList.add(rowClassPrefix + rowId);
                 cell.classList.add(cellClassName);
                 //ToDo: Document this
                 if (dataKey === 'actions') {
@@ -214,16 +219,16 @@ let table = (function () {
                 }
                 if (tableSettings.onHoverRow === undefined) {
                     cell.addEventListener('mouseover', function () {
-                        hoverRow(`row-${rowId}`, true);
+                        hoverRow(rowClassPrefix +rowId, true);
                     }, {passive: false});
                 }
 
                 cell.addEventListener('mouseout', function () {
-                    hoverRow(`row-${rowId}`, false);
+                    hoverRow(rowClassPrefix +rowId, false);
                 }, {passive: false});
                 cell.addEventListener('click', function () {
                     currentOffset = cell.getClientRects()[0];
-                    selectRow(tableSettings, `row-${rowId}`);
+                    selectRow(tableSettings, rowClassPrefix +rowId);
                 });
 
                 tbody.appendChild(cell);
@@ -236,7 +241,7 @@ let table = (function () {
                 // row data - remote row data
                 if (tableSettings.onDrawRowCell !== null) {
                     if (isFunction(tableSettings.onDrawRowCell)) {
-                        tableSettings.onDrawRowCell(dataKey, cellContent, cell, col,tableSettings.tableData[row]);
+                        tableSettings.onDrawRowCell(dataKey, cellContent, cell, col, tableSettings.tableData[row]);
                     } else if (isString(tableSettings.onDrawRowCell)) {
                         trigger(tableSettings.onDrawRowCell, {
                             key: dataKey,
@@ -249,13 +254,15 @@ let table = (function () {
                 }
             }
         }
-        if (tableSettings.tableData.length > 0) {
+        if (rowsCount > 0) {
+            //highlight sorted column if there is one
+            setSortActiveColumn(tableSettings);
             setTableDimensions(tableSettings, colsCount, tbody);
         }
     }
 
     function generateCellClassName(propertyName) {
-        return 'column-' + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+        return columnClassPrefix + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
     }
 
     function hoverRow(elements, highlight = false) {
@@ -344,48 +351,9 @@ let table = (function () {
         });
     });
 
-    on('table/cancelButton', function (params) {
-        let tableSettings = params.model.tableSettings;
-        let row = params.model.row;
-        let rowElements = tableSettings.tableContainerElement.getElementsByClassName(row);
-        let cancelButtonElement = params.element;
-        cancelButtonElement.classList.add('cancel-button');
-        for (let i = 0; i < rowElements.length; i++) {
-            if (rowElements[i].classList.contains('cell-cancel')) {
-                rowElements[i].appendChild(cancelButtonElement);
-            }
-        }
-        cancelButtonElement.addEventListener('click', function () {
-            cancelTransactionPopup(tableSettings, row);
-        });
-
-    });
-
-    function showCancelButton(tableSettings, row) {
-        let callbackEvent = 'table/cancelButton';
-        trigger('template/render', {
-            templateElementSelector: '#cancel-button-template',
-            callbackEvent: callbackEvent,
-            model: {
-                row: row,
-                tableSettings: tableSettings
-            }
-        });
-    }
-
-    function removeCancelButtons() {
-        let cancelButtonElements = document.body.getElementsByClassName('cancel-button');
-        if (cancelButtonElements.length > null) {
-            for (let i = 0; i < cancelButtonElements.length; i++) {
-                cancelButtonElements[i].parentNode.removeChild(cancelButtonElements[i]);
-            }
-        }
-    }
-
     function selectRow(tableSettings, row) {
         let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
-        removeCancelButtons(tableSettings);
-        showCancelButton(tableSettings, row);
+
         for (let i = 0; i < tableCells.length; i++) {
             if (!tableCells[i].classList.contains(row)) {
                 tableCells[i].classList.remove('row-chosen');
@@ -588,7 +556,7 @@ let table = (function () {
 
     function updateTable(tableSettings) {
         removeTransactionPopup();
-        removeCancelButtons();
+
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
@@ -713,7 +681,7 @@ let table = (function () {
             SortOrder: sortingType.descending,
             SortName: tableSettings.sortActiveColumn
         };
-        let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName('cell-' + tableSettings.sortActiveColumn);
+        let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName(columnClassPrefix + tableSettings.sortActiveColumn);
         for (let i = 0; i < sortActiveColumnElements.length; i++) {
             if (sortActiveColumnElements[i].classList.contains('head')) {
                 sortActiveColumnElements[i].classList.add('sort-active');
@@ -726,6 +694,7 @@ let table = (function () {
 
     function makeColumnActiveFromHeader(header, tableSettings) {
         let headers = getHeaders(tableSettings);
+        //be sure that there's only one active header
         for (let i = 0; i < headers.length; i++) {
             if (headers[i] !== header) {
                 headers[i].classList.remove('sort-active');
@@ -740,15 +709,19 @@ let table = (function () {
             header.classList.add('active-column');
             toggleDirection(header, tableSettings);
 
+            console.trace();
+            //remove previous active column
             let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
             Array.prototype.slice.call(tableCells).forEach(function (cell) {
-                cell.classList.remove('active-column')
+               // cell.classList.remove('active-column')
             });
 
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
+            console.log('colum name', columnName);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
                 columnElements[j].classList.add('active-column');
+                console.log(columnElements[j]);
             }
         }
     }
@@ -791,7 +764,7 @@ let table = (function () {
     }
 
     function getHeadElementBySortName(tableSettings, sortName) {
-        let cellName = 'cell-' + sortName;
+        let cellName = columnClassPrefix + sortName;
         return tableSettings.tableContainerElement.getElementsByClassName(cellName)[0];
     }
 
@@ -812,18 +785,10 @@ let table = (function () {
     function setSortActiveColumn(tableSettings) {
         let headers = getHeaders(tableSettings);
         for (let header of headers) {
-            if (header.classList.contains('cell-' + tableSettings.sortActiveColumn)) {
-                makeColumnActiveFromHeader(header);
+            console.log(header);
+            if (header.classList.contains(columnClassPrefix + tableSettings.sortActiveColumn)) {
+                makeColumnActiveFromHeader(header, tableSettings);
             }
-        }
-    }
-
-    function removeFlagClass(columnElement) {
-        let flagClassRegExp = /(row-flag-\d+) ?/;
-        let columnElementClasses = columnElement.className;
-        if (flagClassRegExp.exec(columnElementClasses) !== null) {
-            let flagClass = flagClassRegExp.exec(columnElementClasses)[1];
-            columnElement.classList.remove(flagClass);
         }
     }
 
@@ -838,26 +803,29 @@ let table = (function () {
         let table = element.parentNode.parentNode;
         let tableSettings = table.tableSettings;
         e.preventDefault();
-        makeColumnActiveFromHeader(e.target, tableSettings);
+        makeColumnActiveFromHeader(element, tableSettings);
+        //set active column class
+        //parse to array
+        let classes = Array.prototype.slice.call(element.classList, 0)
+        let result = classes.filter(function (item, index) {
+            return /^column/.test(item);
+        });
+        tableSettings.sortActiveColumn = result[0].replace(columnClassPrefix,'');
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
-        console.log('sorting');
-        console.log(sorting);
         trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
-        console.log(tableSettings);
-
     }
 
     function bindSortingLinkHandler(element) {
         element.removeEventListener('click', handleSortingLinkClick);
         element.addEventListener('click', handleSortingLinkClick);
 
-       /* element.removeEventListener('click', function (e, tableSettings) {
-            handleSortingLinkClick(e, tableSettings);
-        });
-        element.addEventListener('click', function (e) {
-            handleSortingLinkClick(e, tableSettings);
-        });*/
+        /* element.removeEventListener('click', function (e, tableSettings) {
+             handleSortingLinkClick(e, tableSettings);
+         });
+         element.addEventListener('click', function (e) {
+             handleSortingLinkClick(e, tableSettings);
+         });*/
     }
 
     function bindSortingLinkHandlers(tableSettings) {
@@ -877,7 +845,7 @@ let table = (function () {
         let classList = headElement.classList;
         let cellClassName;
         for (let i = 0; i < classList.length; i++) {
-            if (classList[i].includes('column-')) {
+            if (classList[i].includes(columnClassPrefix)) {
                 cellClassName = classList[i];
             }
         }
@@ -907,7 +875,7 @@ let table = (function () {
         let columnsToShow = [];
         if (columnsToShow !== undefined) {
             columnsToShowTitles.forEach(function (columnTitle) {
-                columnsToShow.push('cell-' + columnTitle.toLowerCase());
+                columnsToShow.push(columnClassPrefix + columnTitle.toLowerCase());
             });
         }
         return columnsToShow;
