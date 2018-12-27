@@ -139,9 +139,6 @@ const sidebar = (function () {
             categoryEl.classList.add('list-management');
             categoryEl.classList.add('center');
 
-
-
-
             let span = document.createElement('span');
             let mdiClassName = `mdi-${icons[Object.keys(data).indexOf(category)]}`;
             span.classList.add('mdi');
@@ -176,7 +173,9 @@ const sidebar = (function () {
                 searchCategory = category;
                 editMode.classList.add('collapse');
                 if (data[category].Value.length === 0) {
+                    linkSelectedId = undefined;
                     selectCategory(categorySelectedId);
+                    selectLink(linkSelectedId)
                     trigger('topBar/category', { category: categorySelectedId });
                 }
                 else {
@@ -203,6 +202,10 @@ const sidebar = (function () {
                 for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
                     tempFragment.id = `link-${categoryValue.Id}`;
+
+                    //data-value
+                    tempFragment.dataset.value = categoryValue.Name
+
                     //element-navigation-link class is needed for functionalities in router
                     tempFragment.classList = 'link-list element-navigation-link';
                     //elements in search mapped to coresponding path
@@ -240,6 +243,7 @@ const sidebar = (function () {
                             //elements in search mapped to coresponding path
                             tempValue.href = `/${category.toLowerCase()}/${value.Id}`;
                             tempValue.id = `link-${value.Id}`;
+                            tempValue.dataset.value = value.Name;
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'Search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.Name} (${value.category})`;
@@ -276,17 +280,17 @@ const sidebar = (function () {
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
-        selectLink(linkSelectedId);//ToDO ovde dolazi najverovatnije do greske pri generisanju pravog linka
+        selectLink(linkSelectedId);
     }
 
     // highlight chosen link
     function selectLink(name) {
         if (previousLinkSelected) {
-            previousLinkSelected.classList.remove('list-active');
+            previousLinkSelected.classList.remove('link-active');
         }
         let linkSelected = $$(`#${name}`);
         if (linkSelected) {
-            linkSelected.classList.add('list-active');
+            linkSelected.classList.add('link-active');
             previousLinkSelected = linkSelected;
         }
     }

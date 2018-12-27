@@ -49,7 +49,15 @@ const aft = (function () {
 
         trigger('form/init', { formSettings: addTransactionFormSettings });
         //ToDo: @Nikola ovde ubaci endpoint name
-        trigger('form/add/hiddenField',{formSettings:addTransactionFormSettings,name:'EndpointName',value:"test"});
+
+        // if ($$('.link-active')[0]) {
+        //     console.log($$('.link-active')[0].dataset.value)
+        // }
+
+
+
+
+        trigger('form/add/hiddenField', { formSettings: addTransactionFormSettings, name: 'EndpointName', value: $$('.link-active')[0].dataset.value });
         trigger('aft/tab/transaction', { tableSettings: tableSettings });
         trigger('aft/tab/notification', { tableSettings: tableSettings });
 

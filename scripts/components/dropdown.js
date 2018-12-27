@@ -24,7 +24,7 @@ const dropdown = (function () {
     }
 
     //generate single dropdown
-    function generate(dataSelect, element,name) {
+    function generate(dataSelect, element, name) {
         let existsId;
         if (element && element.children[1]) {
             let i = 0;
@@ -64,6 +64,10 @@ const dropdown = (function () {
         if (typeof dataSelect[0] === 'object') {
             selected.innerHTML = dataSelect[0].Name;
             selected.dataset.value = dataSelect[0].Name;
+            if (dataSelect[0].LongId !== undefined && dataSelect[0].LongId !== null) {
+                selected.dataset.valueLongId = dataSelect[0].LongId;
+                select.dataset.nameLongId = 'Gmcid';
+            }
         }
         else {
             selected.innerHTML = dataSelect[0];
@@ -86,6 +90,9 @@ const dropdown = (function () {
                 option.innerHTML = element.Name;
                 option.dataset.value = element.Name;
                 option.dataset.translationKey = element.Name;
+                if (element.LongId !== undefined && element.LongId !== null) {
+                    option.dataset.valueLongId = element.LongId;
+                }
             }
             else {
                 option.innerHTML = element;
@@ -102,6 +109,7 @@ const dropdown = (function () {
                 selected.innerHTML = option.innerHTML;
                 selected.title = selected.innerHTML;
                 selected.dataset.value = option.dataset.value;
+                selected.dataset.valueLongId = option.dataset.valueLongId;
                 select.classList.remove('active-single-select');
                 optionGroup.classList.add('hidden');
             });
