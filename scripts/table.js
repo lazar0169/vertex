@@ -717,11 +717,9 @@ let table = (function () {
             });
 
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
-            console.log('colum name', columnName);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
                 columnElements[j].classList.add('active-column');
-                console.log(columnElements[j]);
             }
         }
     }
@@ -785,7 +783,6 @@ let table = (function () {
     function setSortActiveColumn(tableSettings) {
         let headers = getHeaders(tableSettings);
         for (let header of headers) {
-            console.log(header);
             if (header.classList.contains(columnClassPrefix + tableSettings.sortActiveColumn)) {
                 makeColumnActiveFromHeader(header, tableSettings);
             }
@@ -806,7 +803,7 @@ let table = (function () {
         makeColumnActiveFromHeader(element, tableSettings);
         //set active column class
         //parse to array
-        let classes = Array.prototype.slice.call(element.classList, 0)
+        let classes = Array.prototype.slice.call(element.classList, 0);
         let result = classes.filter(function (item, index) {
             return /^column/.test(item);
         });

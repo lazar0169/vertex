@@ -130,6 +130,7 @@ let communication = (function () {
 
 
     function prepareAftTableData(tableSettings, data) {
+        console.log(data);
         let entries = data.Data.Items;
 
         let formatedData = [];
