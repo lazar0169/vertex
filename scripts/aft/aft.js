@@ -25,17 +25,18 @@ const aft = (function () {
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
 
-        tableSettings.onDrawRowCell = function(column,cellContent, cell,position,rowData) {
+        tableSettings.onDrawRowCell = function (column, cellContent, cell, position, rowData) {
             if (column === 'flag') {
-                cell.classList.add('row-flag-' + cellContent.toString().trim());
+                if (cellContent !== undefined) {
+                    cell.classList.add('row-flag-' + cellContent.toString().trim());
+                }
                 cell.classList.add('cell-flag');
                 cell.innerHTML = '';
-            }
-            else if (column === 'finishedBy' || column === 'createdBy') {
+            } else if (column === 'finishedBy' || column === 'createdBy') {
                 cell.classList.add('cell-column');
                 cell.classList.add('justify-content-start');
+                cell.classList.add('align-items-start');
             }
-            console.log(rowData.data.isPayoutPossible === true);
             if (rowData.data.isPayoutPossible === true) {
                 cell.classList.add('clickable');
             }

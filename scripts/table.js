@@ -833,29 +833,38 @@ let table = (function () {
     /*--------------------------- SORTING LINK CLICK HANDLERS ----------------------------*/
 
 
-    function handleSortingLinkClick(e, tableSettings) {
-        console.log('sorted');
+    function handleSortingLinkClick(e) {
+        let element = e.target;
+        let table = element.parentNode.parentNode;
+        let tableSettings = table.tableSettings;
         e.preventDefault();
         makeColumnActiveFromHeader(e.target, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
+        console.log('sorting');
+        console.log(sorting);
         trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
+        console.log(tableSettings);
+
     }
 
-    function bindSortingLinkHandler(element, tableSettings) {
-        element.removeEventListener('click', function (e, tableSettings) {
+    function bindSortingLinkHandler(element) {
+        element.removeEventListener('click', handleSortingLinkClick);
+        element.addEventListener('click', handleSortingLinkClick);
+
+       /* element.removeEventListener('click', function (e, tableSettings) {
             handleSortingLinkClick(e, tableSettings);
         });
         element.addEventListener('click', function (e) {
             handleSortingLinkClick(e, tableSettings);
-        });
+        });*/
     }
 
     function bindSortingLinkHandlers(tableSettings) {
         let headElements = getHeaders(tableSettings);
         for (let i = 0; i < headElements.length; i++) {
             let headElement = headElements[i];
-            bindSortingLinkHandler(headElement, tableSettings);
+            bindSortingLinkHandler(headElement);
         }
     }
 

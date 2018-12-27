@@ -296,6 +296,9 @@ textarea {
 .vertex-table .cell.justify-content-start {
     justify-content: flex-start;
 }
+.vertex-table .cell.align-items-start {
+    align-items: flex-start;
+}
 
 .table-condensed .cell .table-time {
     font-size: 11px !important;
