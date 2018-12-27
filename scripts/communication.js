@@ -52,7 +52,7 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        if(data.Data){
+        if(data.TokenInfo){
             sessionStorage["token"] = JSON.stringify(data.TokenInfo);
             refreshToken(data.TokenInfo);
         } else {
