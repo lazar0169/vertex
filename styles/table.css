@@ -65,7 +65,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    font-size: 13px;
+    font-family: OpenSans-Regular;
+    font-size: 14px;
 }
 
 .cell.hover {
@@ -87,7 +88,8 @@
     top: 0;
     transition: 0.2s background-color;
     width: 100%;
-    font-size: 12px;
+    font-family: OpenSans-Bold;
+    font-size: 13px;
 }
 
 .cell.first-cell.cell-flag, .cell-cancel-head.cell.cell-cancel {
@@ -336,4 +338,9 @@ textarea {
 
 .cell.cancel-cell:hover {
     background: none;
+}
+
+title {
+    font-family: OpenSans-Regular;
+    font-size: 13px;
 }
