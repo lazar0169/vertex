@@ -28,6 +28,8 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
+    let timeout = null;
+
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
         xhr.open(requestTypes.get, apiUrl + route, true);
@@ -50,11 +52,16 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+        if(data.Data){
+            sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+            refreshToken(data.TokenInfo);
+        } else {
+            sessionStorage["token"] = JSON.stringify(data);
+            refreshToken(data);
+        }
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
-        trigger('communicate/token/refresh', {token: data.TokenInfo});
     }
 
     function error(xhr, errorEventCallback) {
@@ -846,7 +853,7 @@ let communication = (function () {
 // machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
         let route = 'api/machines/previewevents/';
-        let successEvent = 'communicate/test'
+        let successEvent = 'communicate/test';
         let data = {
             'EndpointId': 4,
             'Gmcid': 33193329841023,
@@ -1102,22 +1109,20 @@ let communication = (function () {
         });
     */
 
-    let timeout = null;
-
-    function timeoutSet(params) {
-        timeout = setTimeout(function () {
+    function refreshToken(tokenInfo) {
+        if (timeout !== null) {
+            window.clearTimeout(timeout);
+            timeout = null;
+        }
+        timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, params.token.expires_in * 1000);
+        }, tokenInfo.expires_in * 1000);
     }
 
-    on('communicate/token/refresh', function (params) {
-        if (timeout !== null) {
-            clearTimeout(timeout);
-        }
-        timeoutSet(params);
-    });
-
+    on('communicate/token/refresh', function(params){
+        refreshToken(params.token);
+    })
 
 })
 ();
