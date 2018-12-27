@@ -36,28 +36,29 @@ const aft = (function () {
 
 
         on('aft/addTransaction/error', function (params) {
-            let messageToShow = JSON.parse(params.message)
+            let messageToShow = JSON.parse(params.message);
             //let messageType = params.message.MessageType;
             trigger('notifications/show', {
                 message: messageToShow.Message
             });
+            trigger('form/complete',{formSettings:addTransactionFormSettings});
+
         });
         on('aft/addTransaction/success', function (params) {
             console.log('uspesno');
+            trigger('form/complete',{formSettings:addTransactionFormSettings});
+
         });
 
 
         trigger('form/init', { formSettings: addTransactionFormSettings });
-        //ToDo: @Nikola ovde ubaci endpoint name
 
-        // if ($$('.link-active')[0]) {
-        //     console.log($$('.link-active')[0].dataset.value)
-        // }
+        let endpointName = '';
+        if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
+            endpointName = $$('.link-active')[0].dataset.value;
+        }
 
-
-
-
-        trigger('form/add/hiddenField', { formSettings: addTransactionFormSettings, name: 'EndpointName', value: $$('.link-active')[0].dataset.value });
+        trigger('form/add/hiddenField', { formSettings: addTransactionFormSettings, name: 'EndpointName', value: endpointName });
         trigger('aft/tab/transaction', { tableSettings: tableSettings });
         trigger('aft/tab/notification', { tableSettings: tableSettings });
 

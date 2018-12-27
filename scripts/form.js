@@ -198,9 +198,11 @@ let form = (function () {
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
-                            dataForApi[formInputElement.dataset.name] = formInputElement.firstChild.dataset.value.toString();
-                            if (formInputElement.dataset.nameId !== undefined && formInputElement.dataset.valueId !== undefined) {
-                                dataForApi[formInputElement.dataset.nameId] = formInputElement.firstChild.dataset.valueId.toString();
+                            let valueElement = formInputElement.firstChild;
+                            dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
+                            console.log(formInputElement.dataset);
+                            if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
+                                dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }
                             break;
                         case 'int':
@@ -254,6 +256,7 @@ let form = (function () {
 
     function complete(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
+        console.log(submitButtonsArray);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = '';
             submitButton.classList.remove('loading');
@@ -488,6 +491,7 @@ let form = (function () {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
+        console.log('error');
         complete(formSettings);
     });
 
