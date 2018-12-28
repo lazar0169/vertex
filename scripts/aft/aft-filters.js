@@ -124,6 +124,7 @@ const aftFilters = (function () {
             };
         });
         multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
+
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 

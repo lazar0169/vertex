@@ -3,7 +3,8 @@ let table = (function () {
     let columnClassPrefix = 'column-';
     let rowClassPrefix = 'row-';
     let cellClassPrefix = 'cell-';
-    let activeElementsClass = 'active-column';
+    let activeColumnElementsClass = 'active-column';
+    let activeRowElementsClass = 'row-chosen';
     let rows = [];
 
     const sortOrderEnum = {
@@ -196,12 +197,12 @@ let table = (function () {
                     cell.innerHTML = cellContent;
                 }
 
-                let cellClassName = generateCellClassName(dataKey);
+                let cellColumnClass = generateCellClassName(dataKey);
 
                 cell.classList.add('cell');
                 cell.classList.add('table-item');
                 cell.classList.add(rowClassPrefix + rowId);
-                cell.classList.add(cellClassName);
+                cell.classList.add(cellColumnClass);
                 //ToDo: Document this
                 if (dataKey === 'actions') {
                     cell.classList.add('table-actions-column');
@@ -209,8 +210,8 @@ let table = (function () {
 
                 let headers = getHeaders(tableSettings);
                 let header = headers[col];
-                if (!header.classList.contains(cellClassName)) {
-                    header.classList.add(cellClassName);
+                if (!header.classList.contains(cellColumnClass)) {
+                    header.classList.add(cellColumnClass);
                 }
 
                 //ToDo: test if 0 or 1
@@ -226,9 +227,25 @@ let table = (function () {
                 cell.addEventListener('mouseout', function () {
                     hoverRow(rowClassPrefix + rowId, false);
                 }, {passive: false});
+
+                //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
+
                 cell.addEventListener('click', function () {
+                    //check if there's on beforeCellClick handler
+                    if (tableSettings.onBeforeCellClick !== undefined) {
+                            tableSettings.onBeforeCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
+                    }
                     currentOffset = cell.getClientRects()[0];
-                    selectRow(tableSettings, rowClassPrefix + rowId);
+                    //check if there's custom on cell click hadler
+                    if (tableSettings.onCellClick === undefined) {
+                        selectRow(tableSettings, rowClassPrefix + rowId);
+                    } else {
+                            tableSettings.onCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+
+                    }
+                    if (tableSettings.onAfterCellClick !== undefined) {
+                            tableSettings.onAfterCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                    }
                 });
 
                 tbody.appendChild(cell);
@@ -352,22 +369,15 @@ let table = (function () {
     });
 
     function selectRow(tableSettings, row) {
-        let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
+        let selectedTableRowCells = tableSettings.tableContainerElement.getElementsByClassName(activeRowElementsClass);
+        while (selectedTableRowCells.length > 0) {
+            selectedTableRowCells[0].classList.remove(activeRowElementsClass);
+        }
+        console.log(row);
+        let newSelectedRowCells = tableSettings.tableContainerElement.getElementsByClassName(row);
 
-        for (let i = 0; i < tableCells.length; i++) {
-            if (!tableCells[i].classList.contains(row)) {
-                tableCells[i].classList.remove('row-chosen');
-            } else {
-                if (tableCells[i].classList.contains('payout')) {
-                    removeTransactionPopup(tableSettings, row);
-                    if (tableCells[i].classList.contains('row-chosen')) {
-                        cancelTransactionPopup(tableSettings, row);
-                    } else {
-                        tableCells[i].classList.toggle('row-chosen');
-                    }
-                    tableCells[i].title = localization.translateMessage('CancelTranslation');
-                }
-            }
+        for (let i = 0; i < newSelectedRowCells.length; i++) {
+            newSelectedRowCells[i].classList.add(activeRowElementsClass);
         }
     }
 
@@ -688,7 +698,7 @@ let table = (function () {
                 sortActiveColumnElements[i].classList.add('sort-desc');
                 sortActiveColumnElements[i].dataset.direction = sortingDataAtt.descending;
             }
-            sortActiveColumnElements[i].classList.add(activeElementsClass);
+            sortActiveColumnElements[i].classList.add(activeRowElementsClass);
         }
     }
 
@@ -700,13 +710,13 @@ let table = (function () {
                 headers[i].classList.remove('sort-active');
                 headers[i].classList.remove('sort-asc');
                 headers[i].classList.remove('sort-desc');
-                headers[i].classList.remove(activeElementsClass);
+                headers[i].classList.remove(activeRowElementsClass);
                 delete headers[i].dataset.direction;
             }
         }
         if (header !== undefined) {
             header.classList.add('sort-active');
-            header.classList.add(activeElementsClass);
+            header.classList.add(activeRowElementsClass);
             toggleDirection(header, tableSettings);
 
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
@@ -714,7 +724,7 @@ let table = (function () {
             console.log(columnName);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add(activeElementsClass);
+                columnElements[j].classList.add(activeRowElementsClass);
             }
         }
     }
@@ -949,8 +959,16 @@ let table = (function () {
         if (tableSettings.dataEvent !== null) {
             tableSettings.dataEvent = getEvent(tableSettings);
         }
-
-        generateTablePagination(tableSettings);
+        //check if all settings argument are set correctly
+        if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
+            console.error('onBeforeCellClick callback is not a function');
+        }if (tableSettings.onCellClick !== undefined && !isFunction(tableSettings.onCellClick)) {
+            console.error('onCellClick callback is not a function');
+        }
+        if (tableSettings.onAfterCellClick !== undefined && !isFunction(tableSettings.onAfterCellClick)) {
+            console.error('onAfterCellClick callback is not a function');
+        }
+            generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
         tableSettings.activePage = 1;
         delete tableSettings.ColumnsToShow;
@@ -978,10 +996,9 @@ let table = (function () {
 
     /*--------------------------------------------HELPER FUNCTIONS-----------------------------------------*/
     function deselectActiveColumn(table) {
-        let activeElements = table.getElementsByClassName(activeElementsClass);
-        console.log('length',activeElements.length);
+        let activeElements = table.getElementsByClassName(activeRowElementsClass);
         while (activeElements.length > 0) {
-            activeElements[0].classList.remove(activeElementsClass);
+            activeElements[0].classList.remove(activeRowElementsClass);
         }
     }
 

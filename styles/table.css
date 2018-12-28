@@ -67,7 +67,9 @@
     justify-content: flex-start;
     font-size: 13px;
 }
-
+.vertex-table .cell.row-chosen {
+    background-color: #2F3B41;
+}
 .cell.hover {
     background-color: #2F3B41;
     color: white;

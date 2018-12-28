@@ -25,6 +25,7 @@ const aft = (function () {
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
 
+
         tableSettings.onDrawRowCell = function (column, cellContent, cell, position, rowData) {
             if (column === 'flag') {
                 if (cellContent !== undefined) {

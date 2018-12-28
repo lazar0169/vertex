@@ -13,12 +13,9 @@ const multiDropdown = (function () {
         let titles = [];
         let values = [];
         let multipleGroup = element.getElementsByClassName("multiple-group")[0];
-        console.log(multipleGroup);
         let options = multipleGroup.children;
         Array.prototype.slice.call(options).forEach(function (option) {
-            console.log(option);
             option.click();
-
             /*let checkboxContainer = option.getElementsByClassName("form-checkbox")[0];
             let checkbox = checkboxContainer.getElementsByTagName("input")[0];
             checkbox.checked = false;
@@ -79,7 +76,6 @@ const multiDropdown = (function () {
                 selected.dataset.value = noSelectedData.name;
             }
         } else {
-            console.log(noSelectedData);
             selected.innerHTML = noSelectedData.Name;
             selected.dataset.value = noSelectedData.Name;
             noSelected.Name = noSelectedData.Name;
