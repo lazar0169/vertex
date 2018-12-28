@@ -122,8 +122,8 @@ const aftFilters = (function () {
         multiDropdown.generate(filters.StatusList, aftAdvanceTableFilterStatus);
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
 
-        dropdown.generate(filters.TypeList, aftAddTransactionType,'Type');
-        dropdown.generate(filters.MachineNameList, aftAddTransactionMachine,'MachineName');
+        dropdown.generate(filters.TypeList.slice(1, filters.TypeList.length), aftAddTransactionType, 'Type');
+        dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
 
     }
 
@@ -318,14 +318,14 @@ const aftFilters = (function () {
         trigger('show/app');
     });
 
-   /* saveNewTransaction.addEventListener('click', function () {
-        saveNewTransaction.classList.add('loading');
-
-        //ovde umesto timeout sklanjace se kada stigne odgovor sa servera
-        setTimeout(function () {
-            saveNewTransaction.classList.remove('loading');
-        }, 4000);
-    });*/
+    /* saveNewTransaction.addEventListener('click', function () {
+         saveNewTransaction.classList.add('loading');
+ 
+         //ovde umesto timeout sklanjace se kada stigne odgovor sa servera
+         setTimeout(function () {
+             saveNewTransaction.classList.remove('loading');
+         }, 4000);
+     });*/
 
 
 })();

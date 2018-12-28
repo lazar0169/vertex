@@ -41,12 +41,12 @@ const aft = (function () {
             trigger('notifications/show', {
                 message: messageToShow.Message
             });
-            trigger('form/complete',{formSettings:addTransactionFormSettings});
+            trigger('form/complete', { formSettings: addTransactionFormSettings });
 
         });
         on('aft/addTransaction/success', function (params) {
             console.log('uspesno');
-            trigger('form/complete',{formSettings:addTransactionFormSettings});
+            trigger('form/complete', { formSettings: addTransactionFormSettings });
 
         });
 
@@ -58,6 +58,7 @@ const aft = (function () {
             endpointName = $$('.link-active')[0].dataset.value;
         }
 
+        
         trigger('form/add/hiddenField', { formSettings: addTransactionFormSettings, name: 'EndpointName', value: endpointName });
         trigger('aft/tab/transaction', { tableSettings: tableSettings });
         trigger('aft/tab/notification', { tableSettings: tableSettings });

@@ -64,7 +64,7 @@ const dropdown = (function () {
         if (typeof dataSelect[0] === 'object') {
             selected.innerHTML = dataSelect[0].Name;
             selected.dataset.value = dataSelect[0].Name;
-            if (dataSelect[0].LongId !== undefined && dataSelect[0].LongId !== null) {
+            if (dataSelect[0].LongId !== undefined && dataSelect[0].LongId !== null && dataSelect[0].LongId !== 0) {
                 selected.dataset.valueLongId = dataSelect[0].LongId;
                 select.dataset.nameLongId = 'Gmcid';
             }
@@ -90,7 +90,7 @@ const dropdown = (function () {
                 option.innerHTML = element.Name;
                 option.dataset.value = element.Name;
                 option.dataset.translationKey = element.Name;
-                if (element.LongId !== undefined && element.LongId !== null) {
+                if (element.LongId !== undefined && element.LongId !== null && element.LongId !== 0) {
                     option.dataset.valueLongId = element.LongId;
                 }
             }
