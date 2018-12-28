@@ -37,6 +37,7 @@ const aftFilters = (function () {
 
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
+    let advanceTableFilterButton = $$('#aft-advance-table-filter').children[0];
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
@@ -51,19 +52,20 @@ const aftFilters = (function () {
     let currentTableSettingsObject;
     let activeHeadElement;
 
-    function showAdvanceTableFilter() {
-        advanceTableFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
+    function toggleAdvanceTableFilter(){
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        advanceTableFilterActive.classList.toggle('hidden');
     }
 
-    advanceTableFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
+    advanceTableFilterButton.addEventListener('click', function () {
+        toggleAdvanceTableFilter();
     });
 
     function getFiltersFromAPI(tableSettings) {
         let data = {
             'EndpointId': tableSettings.endpointId
         };
+        console.log('data', data);
         let tableSettingsObject = tableSettings;
         let successEvent = 'aft/filters/display';
         trigger('communicate/aft/getFilters', {

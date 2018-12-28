@@ -28,6 +28,8 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
+    let timeout = null;
+
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
         xhr.open(requestTypes.get, apiUrl + route, true);
@@ -50,11 +52,16 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+        if(data.TokenInfo){
+            sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+            refreshToken(data.TokenInfo);
+        } else {
+            sessionStorage["token"] = JSON.stringify(data);
+            refreshToken(data);
+        }
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, { data: data, settingsObject: settingsObject });
         }
-        trigger('communicate/token/refresh', { token: data.TokenInfo });
     }
 
     function error(xhr, errorEventCallback) {
@@ -131,14 +138,14 @@ let communication = (function () {
                 entry.EntryData.CreatedBy = '';
 
             } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
+                entry.EntryData.CreatedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.CreatedBy + '</label>';
 
             }
             if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
                 entry.EntryData.FinishedBy = '';
 
             } else {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
+                entry.EntryData.FinishedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.FinishedBy + '</label>';
 
             }
             delete entry.EntryData.CreatedTime;
@@ -175,17 +182,17 @@ let communication = (function () {
         let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
+                entry.EntryData.CashoutedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">' + entry.EntryData.CashoutedBy + '</label>';
 
             } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
+                entry.EntryData.CashoutedBy = '<time class="table-time"  style="font-size:13px;">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.CashoutedBy + '</label>';
 
             }
             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">' + entry.EntryData.RedeemedBy + '</label>';
 
             } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.RedeemedBy + '</label>';
 
             }
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
@@ -828,7 +835,7 @@ let communication = (function () {
     // machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
         let route = 'api/machines/previewevents/';
-        let successEvent = 'communicate/test'
+        let successEvent = 'communicate/test';
         let data = {
             'EndpointId': 4,
             'Gmcid': 33193329841023,
@@ -1084,21 +1091,19 @@ let communication = (function () {
         });
     */
 
-    let timeout = null;
-
-    function timeoutSet(params) {
-        timeout = setTimeout(function () {
+    function refreshToken(tokenInfo) {
+        if (timeout !== null) {
+            window.clearTimeout(timeout);
+            timeout = null;
+        }
+        timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, params.token.expires_in * 1000);
+        }, tokenInfo.expires_in * 1000);
     }
 
-    on('communicate/token/refresh', function (params) {
-        if (timeout !== null) {
-            clearTimeout(timeout);
-        }
-        timeoutSet(params);
-    });
-
+    on('communicate/token/refresh', function(params){
+        refreshToken(params.token);
+    })
 
 })();
