@@ -136,7 +136,6 @@
 }
 .head.cell:nth-child(1) {
     left: 0;
-    z-index: 1;
 }
 
 .head.active-column {

@@ -52,7 +52,7 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        if(data.Data){
+        if (data.Data) {
             sessionStorage["token"] = JSON.stringify(data.TokenInfo);
             refreshToken(data.TokenInfo);
         } else {
@@ -130,7 +130,6 @@ let communication = (function () {
 
 
     function prepareAftTableData(tableSettings, data) {
-        console.log(data);
         let entries = data.Data.Items;
 
         let formatedData = [];
@@ -140,7 +139,7 @@ let communication = (function () {
                     entry.EntryData.CreatedBy = '';
 
                 } else {
-                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' +  '<label>by ' + entry.EntryData.CreatedBy + '</label>';
+                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
 
                 }
                 if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
@@ -162,7 +161,7 @@ let communication = (function () {
                 //ToDo: Ubaciti klasu za font
                 icon.innerHTML = 'X';
                 let text = document.createElement('span');
-                text.innerHTML = localization.translateMessage('Cancel',text);
+                text.innerHTML = localization.translateMessage('Cancel', text);
                 cancelIndicator.classList.add('cancel-indicator');
                 cancelIndicator.appendChild(icon);
                 cancelIndicator.appendChild(text);
@@ -180,7 +179,7 @@ let communication = (function () {
                         actions: cancelIndicator
                     },
                     data: {
-                        isPayoutPossible:entry.Properties.IsPayoutPossible
+                        isPayoutPossible: entry.Properties.IsPayoutPossible
                     }
                 };
                 counter++;
@@ -243,15 +242,6 @@ let communication = (function () {
         xhr = setAuthHeader(xhr);
         send(xhr);
     });
-
-    on('jovana/test', function (params) {
-        // parse parameters for table
-        let tableData = [];
-        params.data.Data.Items.forEach(function (item) {
-            tableData.push(item.EntryData);
-        });
-    });
-
 
 //pagination event
     on('communicate/pagination', function (params) {
@@ -1121,7 +1111,7 @@ let communication = (function () {
         }, tokenInfo.expires_in * 1000);
     }
 
-    on('communicate/token/refresh', function(params){
+    on('communicate/token/refresh', function (params) {
         refreshToken(params.token);
     })
 

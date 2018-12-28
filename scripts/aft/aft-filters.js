@@ -108,8 +108,22 @@ const aftFilters = (function () {
 
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
-        multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);
-        multiDropdown.generate(filters.StatusList, aftAdvanceTableFilterStatus);
+        let types = filters.TypeList.map(function(item){
+            return {
+                name:item.Name,
+                value:item.Id,
+                parsed:true
+            };
+        });
+        multiDropdown.generate(types, aftAdvanceTableFilterType);
+        let statuses = filters.StatusList.map(function(item){
+            return {
+                name:item.Name,
+                value:item.Id,
+                parsed:true
+            };
+        });
+        multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
     }
 
@@ -170,14 +184,15 @@ const aftFilters = (function () {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
         let sortOrder = currentTableSettingsObject.sort.SortOrder;
         let sortName = currentTableSettingsObject.sort.SortName;
+
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
             "DateFrom": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "DateTo": pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             "MachineList": pageFilters.MachineList,
             "JackpotList": pageFilters.JackpotList,
-            "Status": prepareStatusDataForApi(pageFilters.Status),
-            "Type": prepareTypeDataForApi(pageFilters.Type),
+            "Status": pageFilters.Status,
+            "Type": pageFilters.Type,
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": table.getPageSize(currentTableSettingsObject),
@@ -189,8 +204,6 @@ const aftFilters = (function () {
         currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
         currentTableSettingsObject.filters = filtersForApi;
-
-        console.log('filters for API aft', filtersForApi);
 
         return filtersForApi;
     }
@@ -241,19 +254,15 @@ const aftFilters = (function () {
             callbackEvent: 'table/update'
         });
     });
-
     clearAdvanceFilter.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
-
     clearAdvanceFilterInfobar.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
-
     function showSelectedFilters(filterActive, filterInfobar) {
-
         for (let count = 0; count < filterActive.children.length - 1; count++) {
             if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
                 filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
@@ -265,7 +274,6 @@ const aftFilters = (function () {
                 filterInfobar.children[1].children[count].classList.add('hidden');
             }
         }
-
         for (let isHidden of filterInfobar.children[1].children) {
             if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
                 filterInfobar.classList.remove('hidden');
@@ -275,11 +283,8 @@ const aftFilters = (function () {
                 filterInfobar.classList.add('hidden');
             }
         }
-
     }
-
     on('filters/show-selected-filters', function (data) {
         showSelectedFilters(data.active, data.infobar)
     });
-
 })();

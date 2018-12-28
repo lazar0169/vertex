@@ -99,7 +99,13 @@
         "First": "",
         "Prev": "",
         "Next": "",
-        "Last": ""
+        "Last": "",
+        "Finished By": "",
+        "Status": "",
+        "Machine Name": "",
+        "Type": "",
+        "Cashable": "",
+        "Promo": ""
     },
     "messages": {
         "MessageCode6": "Ok",

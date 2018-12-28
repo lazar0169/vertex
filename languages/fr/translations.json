@@ -98,7 +98,14 @@
         "First": "",
         "Prev": "",
         "Next": "",
-        "Last": ""
+        "Last": "",
+        "Created By": "",
+        "Finished By": "",
+        "Status": "",
+        "Machine Name": "",
+        "Type": "",
+        "Cashable": "",
+        "Promo": ""
     },
     "messages": {
         "MessageCode6": "",

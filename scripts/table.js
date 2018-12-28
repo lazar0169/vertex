@@ -3,7 +3,7 @@ let table = (function () {
     let columnClassPrefix = 'column-';
     let rowClassPrefix = 'row-';
     let cellClassPrefix = 'cell-';
-
+    let activeElementsClass = 'active-column';
     let rows = [];
 
     const sortOrderEnum = {
@@ -219,16 +219,16 @@ let table = (function () {
                 }
                 if (tableSettings.onHoverRow === undefined) {
                     cell.addEventListener('mouseover', function () {
-                        hoverRow(rowClassPrefix +rowId, true);
+                        hoverRow(rowClassPrefix + rowId, true);
                     }, {passive: false});
                 }
 
                 cell.addEventListener('mouseout', function () {
-                    hoverRow(rowClassPrefix +rowId, false);
+                    hoverRow(rowClassPrefix + rowId, false);
                 }, {passive: false});
                 cell.addEventListener('click', function () {
                     currentOffset = cell.getClientRects()[0];
-                    selectRow(tableSettings, rowClassPrefix +rowId);
+                    selectRow(tableSettings, rowClassPrefix + rowId);
                 });
 
                 tbody.appendChild(cell);
@@ -688,7 +688,7 @@ let table = (function () {
                 sortActiveColumnElements[i].classList.add('sort-desc');
                 sortActiveColumnElements[i].dataset.direction = sortingDataAtt.descending;
             }
-            sortActiveColumnElements[i].classList.add('active-column');
+            sortActiveColumnElements[i].classList.add(activeElementsClass);
         }
     }
 
@@ -700,26 +700,21 @@ let table = (function () {
                 headers[i].classList.remove('sort-active');
                 headers[i].classList.remove('sort-asc');
                 headers[i].classList.remove('sort-desc');
-                headers[i].classList.remove('active-column');
+                headers[i].classList.remove(activeElementsClass);
                 delete headers[i].dataset.direction;
             }
         }
         if (header !== undefined) {
             header.classList.add('sort-active');
-            header.classList.add('active-column');
+            header.classList.add(activeElementsClass);
             toggleDirection(header, tableSettings);
 
-            console.trace();
-            //remove previous active column
-            let tableCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
-            Array.prototype.slice.call(tableCells).forEach(function (cell) {
-               // cell.classList.remove('active-column')
-            });
-
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
+            console.log('active column name');
+            console.log(columnName);
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add('active-column');
+                columnElements[j].classList.add(activeElementsClass);
             }
         }
     }
@@ -744,6 +739,7 @@ let table = (function () {
             SortOrder: '',
             SortName: ''
         };
+
         let activeHeader = getActiveColumn(tableSettings);
 
         if (activeHeader !== undefined) {
@@ -793,13 +789,13 @@ let table = (function () {
 
 
     /*--------------------------- SORTING LINK CLICK HANDLERS ----------------------------*/
-
-
     function handleSortingLinkClick(e) {
         let element = e.target;
         let table = element.parentNode.parentNode;
         let tableSettings = table.tableSettings;
         e.preventDefault();
+        deselectActiveColumn(table);
+
         makeColumnActiveFromHeader(element, tableSettings);
         //set active column class
         //parse to array
@@ -807,7 +803,7 @@ let table = (function () {
         let result = classes.filter(function (item, index) {
             return /^column/.test(item);
         });
-        tableSettings.sortActiveColumn = result[0].replace(columnClassPrefix,'');
+        tableSettings.sortActiveColumn = result[0].replace(columnClassPrefix, '');
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
         trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
@@ -816,13 +812,6 @@ let table = (function () {
     function bindSortingLinkHandler(element) {
         element.removeEventListener('click', handleSortingLinkClick);
         element.addEventListener('click', handleSortingLinkClick);
-
-        /* element.removeEventListener('click', function (e, tableSettings) {
-             handleSortingLinkClick(e, tableSettings);
-         });
-         element.addEventListener('click', function (e) {
-             handleSortingLinkClick(e, tableSettings);
-         });*/
     }
 
     function bindSortingLinkHandlers(tableSettings) {
@@ -985,5 +974,15 @@ let table = (function () {
     };
 
     /*--------------------------------------------------------------------------------------*/
+
+
+    /*--------------------------------------------HELPER FUNCTIONS-----------------------------------------*/
+    function deselectActiveColumn(table) {
+        let activeElements = table.getElementsByClassName(activeElementsClass);
+        console.log('length',activeElements.length);
+        while (activeElements.length > 0) {
+            activeElements[0].classList.remove(activeElementsClass);
+        }
+    }
 
 })();
