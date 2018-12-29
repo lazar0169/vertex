@@ -175,8 +175,9 @@ const sidebar = (function () {
                 if (data[category].Value.length === 0) {
                     linkSelectedId = undefined;
                     selectCategory(categorySelectedId);
-                    selectLink(linkSelectedId)
+                    selectLink(linkSelectedId);
                     trigger('topBar/category', { category: categorySelectedId });
+                    saveCategoryAndLink(categorySelectedId, linkSelectedId)
                 }
                 else {
                     generateLinks(category);
@@ -215,8 +216,9 @@ const sidebar = (function () {
                         linkSelectedId = `link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
-                        // trigger('communicate/category', { category: category }); //todo check if needed
                         trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
+                        saveCategoryAndLink(searchCategory, linkSelectedId)
+                        // trigger('communicate/category', { category: category }); //todo check if needed
                         navigation.hide();
                         let temp = categoryValue;
                         temp.categoryName = tempData[searchCategory].List;
@@ -263,9 +265,11 @@ const sidebar = (function () {
                                     // entry.List = tempData[category].List;
                                     categorySelectedId = category;
                                 }
+
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
                                 trigger('topBar/category', { category: value.categoryName, casino: value.Name });
+                                saveCategoryAndLink(categorySelectedId, linkSelectedId)
                                 trigger('communicate/category', { category: categorySelectedId });
                                 navigation.hide();
                             });
@@ -281,6 +285,7 @@ const sidebar = (function () {
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
         selectLink(linkSelectedId);
+
     }
 
     // highlight chosen link
@@ -405,16 +410,35 @@ const sidebar = (function () {
         linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
 
+    //save category and link id in localStorage
+    function saveCategoryAndLink(category, link) {
+        let categoryAndLink = {
+            category: category,
+            link: link,
+            path: $$('#top-bar-path').innerHTML
+        }
+        sessionStorage.setItem('categoryAndLink', JSON.stringify(categoryAndLink));
+
+    }
+
     //events
     on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;
         generateMenu(menuData);
         initVariables();
         generateLinks(categorySelectedId);
-        selectCategory(categorySelectedId);
-        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name });
 
+        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name });
         chosenLink.innerHTML = menuData[categorySelectedId].List;
+        if (sessionStorage.categoryAndLink) {
+            let categoryAndLink = JSON.parse(sessionStorage.categoryAndLink)
+            categorySelectedId = categoryAndLink.category;
+            //selectLink(categoryAndLink.link);
+            $$('#top-bar-path').innerHTML = categoryAndLink.path
+            generateLinks(categorySelectedId);
+            linkSelectedId = categoryAndLink.link;
+        }
+        selectCategory(categorySelectedId);
     });
 
 })();

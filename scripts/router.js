@@ -307,6 +307,8 @@ let router = (function () {
         else {
             console.error('Page not found!');
             changePage('home');
+            //remove categoryAndLink form sessionStorage
+            sessionStorage.removeItem('categoryAndLink');
         }
         bindNavigationLinkHandlers();
     }
