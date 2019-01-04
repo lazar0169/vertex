@@ -108,21 +108,12 @@ const aftFilters = (function () {
 
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
-        let types = filters.TypeList.map(function(item){
-            return {
-                name:item.Name,
-                value:item.Id,
-                parsed:true
-            };
-        });
+        let types = table.parseFilterValues(filters.TypeList,'Name','Id',-1);
+        console.log('types',types);
         multiDropdown.generate(types, aftAdvanceTableFilterType);
-        let statuses = filters.StatusList.map(function(item){
-            return {
-                name:item.Name,
-                value:item.Id,
-                parsed:true
-            };
-        });
+
+        let statuses = table.parseFilterValues(filters.StatusList,'Name','Id',-1);
+
         multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
 
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
@@ -169,8 +160,6 @@ const aftFilters = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-        filters.StatusList = formatAftApiData(filters.StatusList);
-        filters.TypeList = formatAftApiData(filters.TypeList);
         filters.MachineNameList = formatAftApiData(filters.MachineNameList);
         filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
 

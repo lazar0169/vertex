@@ -7,6 +7,9 @@ let table = (function () {
     let activeRowElementsClass = 'row-chosen';
     let rows = [];
 
+    // 'null' as dataset values are always converted to string
+    const nullFilterValues = ['-',null,'null'];
+
     const sortOrderEnum = {
         0: 'none',
         1: 'asc',
@@ -233,18 +236,18 @@ let table = (function () {
                 cell.addEventListener('click', function () {
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
-                            tableSettings.onBeforeCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
+                        tableSettings.onBeforeCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
                     }
                     currentOffset = cell.getClientRects()[0];
                     //check if there's custom on cell click hadler
                     if (tableSettings.onCellClick === undefined) {
                         selectRow(tableSettings, rowClassPrefix + rowId);
                     } else {
-                            tableSettings.onCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                        tableSettings.onCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
 
                     }
                     if (tableSettings.onAfterCellClick !== undefined) {
-                            tableSettings.onAfterCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                        tableSettings.onAfterCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
                     }
                 });
 
@@ -935,7 +938,12 @@ let table = (function () {
         let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
             let name = element.dataset.name;
             let filterElement = element.getElementsByClassName('element-table-filters')[0];
-            accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
+            console.log('no selected filter value');
+            console.log(filterElement.dataset.value);
+            //proveriti s Nikolom ovo
+            //accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
+
+            accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
             return accumulated;
         }, {});
         if (filters.Columns === null) {
@@ -962,13 +970,14 @@ let table = (function () {
         //check if all settings argument are set correctly
         if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
             console.error('onBeforeCellClick callback is not a function');
-        }if (tableSettings.onCellClick !== undefined && !isFunction(tableSettings.onCellClick)) {
+        }
+        if (tableSettings.onCellClick !== undefined && !isFunction(tableSettings.onCellClick)) {
             console.error('onCellClick callback is not a function');
         }
         if (tableSettings.onAfterCellClick !== undefined && !isFunction(tableSettings.onAfterCellClick)) {
             console.error('onAfterCellClick callback is not a function');
         }
-            generateTablePagination(tableSettings);
+        generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
         tableSettings.activePage = 1;
         delete tableSettings.ColumnsToShow;
@@ -988,7 +997,8 @@ let table = (function () {
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
         getPageSize: getPageSize,
-        removeTransactionPopup: removeTransactionPopup
+        removeTransactionPopup: removeTransactionPopup,
+        parseFilterValues: parseFilterValues
     };
 
     /*--------------------------------------------------------------------------------------*/
@@ -1002,4 +1012,23 @@ let table = (function () {
         }
     }
 
+    function parseFilterValues(array, nameProperty, valueProperty, nullValue) {
+        return array.map(function (elem) {
+            let item = {};
+            item.name = elem[nameProperty];
+            if (nullValue === 'undefined') {
+                item.value = elem[valueProperty];
+            } else {
+                //unsafe comparison needed here as all results from api are handled as string
+                if (elem[valueProperty] == nullValue) {
+                    item.value = null;
+                } else {
+                    item.value = elem[valueProperty];
+                }
+            }
+            //hack to avoid conflicts with current dropdowns
+            item.parsed = true;
+            return item;
+        });
+    }
 })();

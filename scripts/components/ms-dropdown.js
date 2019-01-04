@@ -52,6 +52,7 @@ const multiDropdown = (function () {
         let arrayInner = [];
         //initial select form data
         let noSelectedData = dataSelect.shift();
+
         //wrapper select
         let select = document.createElement('div');
         select.classList.add('default-select');
@@ -71,14 +72,19 @@ const multiDropdown = (function () {
             selected.innerHTML = noSelectedData.name;
             noSelected.Name = noSelectedData.name;
             if (noSelectedData.value !== undefined) {
+                noSelected.Value = noSelectedData.value === null ? 'null' : noSelectedData.value;
                 selected.dataset.value = noSelectedData.value;
             } else {
                 selected.dataset.value = noSelectedData.name;
+                noSelected.Value = noSelectedData.name;
+
             }
         } else {
             selected.innerHTML = noSelectedData.Name;
             selected.dataset.value = noSelectedData.Name;
             noSelected.Name = noSelectedData.Name;
+            //set null as string as dataset values are always converted to string
+            noSelected.Value = 'null';
         }
         selected.title = selected.innerHTML;
         selected.classList.add('element-table-filters');
@@ -86,6 +92,7 @@ const multiDropdown = (function () {
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('hidden');
         optionGroup.classList.add('multiple-group');
+
         for (let element of dataSelect) {
             //option with functionality
             let option = document.createElement('div');
@@ -156,9 +163,12 @@ const multiDropdown = (function () {
                     selected.innerHTML = arrayInner;
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
+                        console.log('noSelect');
+                        console.log(noSelected);
+
                         selected.innerHTML = noSelected.Name;
-                        array.push(noSelected.Name);
-                        arrayInner.push(noSelected.Name);
+                        array.push(noSelected.Value);
+                        arrayInner.push(noSelected.Value);
                     }
                 }
 
