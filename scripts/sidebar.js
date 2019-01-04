@@ -202,7 +202,7 @@ const sidebar = (function () {
             if (searchCategory) { // if searchCategory is not undefined, this function generates links based on it
                 for (let categoryValue of tempData[searchCategory].Value) {
                     let tempFragment = document.createElement('a');
-                    tempFragment.id = `link-${categoryValue.Id}`;
+                    tempFragment.id = `${searchCategory}-link-${categoryValue.Id}`;
 
                     //data-value
                     tempFragment.dataset.value = categoryValue.Name
@@ -213,7 +213,7 @@ const sidebar = (function () {
                     tempFragment.href = `/${searchCategory.toLowerCase()}/${categoryValue.Id}`; //ToDo LINK
                     tempFragment.innerHTML = categoryValue.Name;
                     tempFragment.addEventListener('click', function () {
-                        linkSelectedId = `link-${categoryValue.Id}`;
+                        linkSelectedId = `${searchCategory}-link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
                         trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
@@ -244,18 +244,19 @@ const sidebar = (function () {
                             tempValue.classList = 'link-list element-navigation-link';
                             //elements in search mapped to coresponding path
                             tempValue.href = `/${category.toLowerCase()}/${value.Id}`;
-                            tempValue.id = `link-${value.Id}`;
                             tempValue.dataset.value = value.Name;
                             tempValue.innerHTML = `${value.Name} (${category})`;
                             if (category === 'Search') {// if category is 'search', link has name and category name in brakets 
                                 tempValue.innerHTML = `${value.Name} (${value.category})`;
                                 tempValue.href = `/${value.category.toLowerCase()}/${value.Id}`;
+                                tempValue.id = `${value.category}-link-${value.Id}`;
                             } else {
                                 tempValue.innerHTML = value.Name;
+                                tempValue.id = `${category.toLowerCase()}-link-${value.Id}`;
                             }
                             tempValue.addEventListener('click', function () {
-                                searchCategory = categorySelectedId;
-                                linkSelectedId = `link-${value.Id}`;
+                                // searchCategory = categorySelectedId;
+
                                 let entry = value;
                                 if (category === 'Search') {// if category is 'search' category, categorySelectedId take category value from object
                                     categorySelectedId = value.category.charAt(0).toUpperCase() + value.category.slice(1).toLowerCase();
@@ -265,9 +266,11 @@ const sidebar = (function () {
                                     // entry.List = tempData[category].List;
                                     categorySelectedId = category;
                                 }
+                                linkSelectedId = `${categorySelectedId}-link-${value.Id}`;
 
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
+                                selectLink(linkSelectedId);
                                 trigger('topBar/category', { category: value.categoryName, casino: value.Name });
                                 saveCategoryAndLink(categorySelectedId, linkSelectedId)
                                 trigger('communicate/category', { category: categorySelectedId });
@@ -407,7 +410,7 @@ const sidebar = (function () {
     //helper functions
     function initVariables() {
         categorySelectedId = Object.keys(menuData)[0];
-        linkSelectedId = `link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
+        linkSelectedId = `${categorySelectedId}-link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
 
     //save category and link id in localStorage
