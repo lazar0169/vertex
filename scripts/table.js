@@ -242,7 +242,7 @@ let table = (function () {
                 rowElements[i].appendChild(cancelButtonElement);
             }
         }
-        cancelButtonElement.addEventListener('click', function(){
+        cancelButtonElement.addEventListener('click', function () {
             cancelTransactionPopup(tableSettings, row);
         });
 
@@ -358,6 +358,7 @@ let table = (function () {
             tbody.appendChild(cancelCell);
         }
         styleColsRows(tableSettings.formatedData, colsCount, tbody);
+        trigger('showing-top-bar-value', { tableData: tableSettings.tableData })
     }
 
     /*--------------------------------------------------------------------------------------*/
@@ -548,6 +549,7 @@ let table = (function () {
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
+
         setSortingHeader(tableSettings);
         if (tableSettings.ColumnsToShow) {
             showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);

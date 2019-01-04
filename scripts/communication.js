@@ -52,7 +52,7 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        if(data.TokenInfo){
+        if (data.TokenInfo) {
             sessionStorage["token"] = JSON.stringify(data.TokenInfo);
             refreshToken(data.TokenInfo);
         } else {
@@ -1102,7 +1102,7 @@ let communication = (function () {
         }, tokenInfo.expires_in * 1000);
     }
 
-    on('communicate/token/refresh', function(params){
+    on('communicate/token/refresh', function (params) {
         refreshToken(params.token);
     })
 

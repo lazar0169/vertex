@@ -29,3 +29,7 @@
 #top-bar-logout-user {
     cursor: pointer;
 }
+
+.element-cashable-active-tickets-value, .element-promo-active-tickets-value {
+    color: white;
+}

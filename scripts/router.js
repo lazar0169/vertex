@@ -302,6 +302,10 @@ let router = (function () {
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
+            //remove categoryAndLink form sessionStorage
+            if (pageName === 'home') {
+                sessionStorage.removeItem('categoryAndLink');
+            }
             changePage(pageName);
         }
         else {
