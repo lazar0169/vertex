@@ -8,7 +8,7 @@ let table = (function () {
     let rows = [];
 
     // 'null' as dataset values are always converted to string
-    const nullFilterValues = ['-',null,'null'];
+    const nullFilterValues = ['-', null, 'null'];
 
     const sortOrderEnum = {
         0: 'none',
@@ -65,16 +65,6 @@ let table = (function () {
         return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
     }
 
-    function getColNamesOfDisplayedTable(tableSettings) {
-        let colNames = [];
-        let tbody = getTableBodyElement(tableSettings);
-        let headElements = Array.from(tbody.getElementsByClassName('head'));
-        headElements.forEach(function (element) {
-            colNames.push({Name: element.innerText.replace(' ', '')})
-        });
-        colNames.unshift({Name: "-"});
-        return colNames;
-    }
 
     function getCountOfAllColumns(tableSettings) {
         let colsCount = 0;
@@ -202,6 +192,11 @@ let table = (function () {
 
                 let cellColumnClass = generateCellClassName(dataKey);
 
+                tableSettings.columns.push({
+                    dataKey
+                });
+
+
                 cell.classList.add('cell');
                 cell.classList.add('table-item');
                 cell.classList.add(rowClassPrefix + rowId);
@@ -278,6 +273,17 @@ let table = (function () {
             //highlight sorted column if there is one
             setSortActiveColumn(tableSettings);
             setTableDimensions(tableSettings, colsCount, tbody);
+
+            //callback when all rows are drew
+            if (tableSettings.onAfterDrawRows !== null) {
+                if (isFunction(tableSettings.onAfterDrawRows)) {
+                    tableSettings.onAfterDrawRows(tableSettings);
+                } else if (isString(tableSettings.onAfterDrawRows)) {
+                    trigger(tableSettings.onAfterDrawRows, {
+                        tableSettings: tableSettings
+                    });
+                }
+            }
         }
     }
 
@@ -376,7 +382,6 @@ let table = (function () {
         while (selectedTableRowCells.length > 0) {
             selectedTableRowCells[0].classList.remove(activeRowElementsClass);
         }
-        console.log(row);
         let newSelectedRowCells = tableSettings.tableContainerElement.getElementsByClassName(row);
 
         for (let i = 0; i < newSelectedRowCells.length; i++) {
@@ -723,8 +728,7 @@ let table = (function () {
             toggleDirection(header, tableSettings);
 
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
-            console.log('active column name');
-            console.log(columnName);
+
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
                 columnElements[j].classList.add(activeRowElementsClass);
@@ -938,11 +942,8 @@ let table = (function () {
         let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
             let name = element.dataset.name;
             let filterElement = element.getElementsByClassName('element-table-filters')[0];
-            console.log('no selected filter value');
-            console.log(filterElement.dataset.value);
             //proveriti s Nikolom ovo
             //accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
-
             accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
             return accumulated;
         }, {});
@@ -967,16 +968,10 @@ let table = (function () {
         if (tableSettings.dataEvent !== null) {
             tableSettings.dataEvent = getEvent(tableSettings);
         }
-        //check if all settings argument are set correctly
-        if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
-            console.error('onBeforeCellClick callback is not a function');
-        }
-        if (tableSettings.onCellClick !== undefined && !isFunction(tableSettings.onCellClick)) {
-            console.error('onCellClick callback is not a function');
-        }
-        if (tableSettings.onAfterCellClick !== undefined && !isFunction(tableSettings.onAfterCellClick)) {
-            console.error('onAfterCellClick callback is not a function');
-        }
+
+        setDefaultSettings(tableSettings);
+        checkTableSettings(tableSettings);
+
         generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
         tableSettings.activePage = 1;
@@ -994,6 +989,7 @@ let table = (function () {
     return {
         init: init,
         getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
+        getHideableColumns: getHideableColumns,
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
         getPageSize: getPageSize,
@@ -1004,12 +1000,85 @@ let table = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
-    /*--------------------------------------------HELPER FUNCTIONS-----------------------------------------*/
+    /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+    function setDefaultSettings(tableSettings) {
+        if (tableSettings.columns === undefined) {
+            tableSettings.columns = [];
+        }
+
+    }
+
+    function checkTableSettings(tableSettings) {
+        //check if all settings argument are set correctly
+        //check callback functions - allow either function or a string - name of the event to be triggered
+        if (tableSettings.onAfterDrawRows !== undefined &&
+            !isFunction(tableSettings.onAfterDrawRows) &&
+            !isString(tableSettings.onAfterDrawRows)) {
+            console.error('onBeforeCellClick callback is not a function or event trigger');
+        }
+        if (tableSettings.onDrawRowCell !== undefined &&
+            !isFunction(tableSettings.onDrawRowCell) &&
+            !isString(tableSettings.onDrawRowCell)) {
+            console.error('onDrawRowCell callback is not a function or event trigger');
+        }
+        if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
+            console.error('onBeforeCellClick callback is not a function');
+        }
+        if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
+            console.error('onBeforeCellClick callback is not a function');
+        }
+        if (tableSettings.onCellClick !== undefined && !isFunction(tableSettings.onCellClick)) {
+            console.error('onCellClick callback is not a function');
+        }
+        if (tableSettings.onAfterCellClick !== undefined && !isFunction(tableSettings.onAfterCellClick)) {
+            console.error('onAfterCellClick callback is not a function');
+        }
+    }
+
     function deselectActiveColumn(table) {
         let activeElements = table.getElementsByClassName(activeRowElementsClass);
         while (activeElements.length > 0) {
             activeElements[0].classList.remove(activeRowElementsClass);
         }
+    }
+
+    /*-------------------------------PUBLIC HELPER FUNCTIONS--------------------------------*/
+    function getHideableColumns(tableSettings) {
+        let headers = Array.from(getHeaders(tableSettings));
+        let columns = [];
+
+        headers.forEach(function (element) {
+            if (element.dataset.alwaysVisible === undefined || element.dataset.alwaysVisible === false) {
+                let item ={};
+                if (element.dataset.columnName === undefined) {
+                    item.value = element.innerText.replace(' ', '');
+                    item.name = element.dataset.translationKey;
+                } else {
+                    item.name = element.dataset.translationKey;
+                    item.value = element.dataset.columnName;
+                }
+                columns.push(item)
+            }
+        });
+        return columns;
+
+    }
+
+    function getColNamesOfDisplayedTable(tableSettings) {
+        let colNames = [];
+        let tbody = getTableBodyElement(tableSettings);
+        let headElements = Array.from(tbody.getElementsByClassName('head'));
+        headElements.forEach(function (element) {
+            let name = '';
+            if (element.dataset.columnName === 'undefined') {
+                name = element.dataset.columnName;
+            } else {
+                name = element.innerText.replace(' ', '');
+            }
+            colNames.push({Name: name})
+        });
+        colNames.unshift({Name: "-"});
+        return colNames;
     }
 
     function parseFilterValues(array, nameProperty, valueProperty, nullValue) {

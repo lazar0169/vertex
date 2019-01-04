@@ -104,19 +104,27 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterStatus = $$('#aft-advance-table-filter-status');
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
 
-        let colNames = getColNamesOfTable(tableSettings);
+
+        let hideableColumns = table.getHideableColumns(tableSettings);
+
 
         multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
         multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
+
         let types = table.parseFilterValues(filters.TypeList,'Name','Id',-1);
-        console.log('types',types);
         multiDropdown.generate(types, aftAdvanceTableFilterType);
 
         let statuses = table.parseFilterValues(filters.StatusList,'Name','Id',-1);
-
         multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
 
-        multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
+        hideableColumns.unshift({name:'-',value:null});
+        //ToDo Neske: this can be removed when solution for parsed hack is found
+        let columns =  hideableColumns.map(function(item){
+           item.parsed = true;
+           return item;
+        });
+
+        multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
     }
 
     function formatAftApiData(listArray) {
@@ -191,8 +199,8 @@ const aftFilters = (function () {
             },
             "TokenInfo": sessionStorage.token
         };
-        currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
 
+        currentTableSettingsObject.ColumnsToShow = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
 
         return filtersForApi;

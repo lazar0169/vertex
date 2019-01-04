@@ -26,27 +26,13 @@ const aft = (function () {
         tableSettings.filtersInitialized = false;
 
 
-        tableSettings.onDrawRowCell = function (column, cellContent, cell, position, rowData) {
-            if (column === 'flag') {
-                if (cellContent !== undefined) {
-                    cell.classList.add('row-flag-' + cellContent.toString().trim());
-                }
-                cell.classList.add('cell-flag');
-                cell.innerHTML = '';
-            } else if (column === 'finishedBy' || column === 'createdBy') {
-                cell.classList.add('cell-column');
-                cell.classList.add('justify-content-start');
-                cell.classList.add('align-items-start');
-            }
-            if (rowData.data.isPayoutPossible === true) {
-                cell.classList.add('clickable');
-            }
-        };
+        tableSettings.onDrawRowCell = 'aft/table/drawCell';
 
         table.init(tableSettings); //initializing table, filters and page size
 
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
+        //ToDo: Nikola - jel možemo ovo da brišemo?
         addTransactionButton.addEventListener('click', function () {
             let data =
                 {
@@ -68,6 +54,30 @@ const aft = (function () {
 
         trigger('aft/tab/transaction', {tableSettings: tableSettings});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
+
+
+        /*********************----Events------*********************/
+        on('aft/table/drawCell',function(params) {
+            onDrawTableCell(params.key,params.value, params.element, params.position, params.rowData);
+        });
+         //ToDo: refaktorisi helper funkcije u evente
+        /*********************----Helper functions------*********************/
+        function onDrawTableCell(column, cellContent, cell, position, rowData) {
+            if (column === 'flag') {
+                if (cellContent !== undefined) {
+                    cell.classList.add('row-flag-' + cellContent.toString().trim());
+                }
+                cell.classList.add('cell-flag');
+                cell.innerHTML = '';
+            } else if (column === 'finishedBy' || column === 'createdBy') {
+                cell.classList.add('cell-column');
+                cell.classList.add('justify-content-start');
+                cell.classList.add('align-items-start');
+            }
+            if (rowData.data.isPayoutPossible === true) {
+                cell.classList.add('clickable');
+            }
+        };
 
     });
 })();
