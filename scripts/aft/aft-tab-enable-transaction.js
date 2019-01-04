@@ -7,7 +7,7 @@ let aftTabEnableTransaction = (function () {
     formSettingsTransaction.fillFormEvent = 'form/fillFormData';
 
     on('aft/tab/transaction', function (params) {
-        formSettingsTransaction.endpointId = params.tableSettings.endpointId;
+        formSettingsTransaction.endpointId = params.endpointId;
         trigger('form/init', {formSettings: formSettingsTransaction});
         trigger('form/getData', {formSettings: formSettingsTransaction});
     });

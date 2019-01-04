@@ -892,7 +892,6 @@ let table = (function () {
     }
 
     function showSelectedColumns(tableSettings, columnsToShowTitles) {
-
         hideAllColumns(tableSettings);
         let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
         let colsCount;

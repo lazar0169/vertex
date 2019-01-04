@@ -52,7 +52,7 @@ const aft = (function () {
 
         });
 
-        trigger('aft/tab/transaction', {tableSettings: tableSettings});
+        trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
 
 
