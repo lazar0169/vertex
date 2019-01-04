@@ -68,7 +68,7 @@ on('apply-custom-date', function (data) {
     let tempArray = [dateFrom, `${timeFromHour}:${timeFromMinutes}`, dateTo, `${timeToHour}:${timeToMinutes}`];
     if (timeFromHour === '-' || timeFromMinutes === '-' || timeToHour === '-' || timeToMinutes === '-') {
         alert('Wrong parameters, please check parameters.');
-        delete data.target.dataset.value
+        delete data.target.dataset.value;
 
     }
     else {
@@ -82,7 +82,8 @@ on('apply-custom-date', function (data) {
 });
 on('cancel-custom-date', function (data) {
     let date = new Date();
-    let apiString = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    let apiString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
     trigger(`set-date-datepicker`, { pickerId: `datepicker-from-${data.selectId}`, date: apiString });
     let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0].children[0];
     timeFromHour.innerHTML = hours[0];

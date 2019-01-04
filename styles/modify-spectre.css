@@ -154,7 +154,7 @@ tr, .table.table-striped tbody tr:nth-of-type(odd) {
     background: rgb(55, 71, 79);
 }
 
-.table.table-striped tbody {
+.table.table-striped tbody, a:hover {
     color: white;
 }
 
@@ -167,7 +167,7 @@ table {
 }
 
 a {
-    color: inherit !important;
+    color: inherit;
 }
 
 a:active, a:focus, a:visited {

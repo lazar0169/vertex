@@ -255,7 +255,7 @@ const sidebar = (function () {
                                 tempValue.id = `${category.toLowerCase()}-link-${value.Id}`;
                             }
                             tempValue.addEventListener('click', function () {
-                                // searchCategory = categorySelectedId;
+
 
                                 let entry = value;
                                 if (category === 'Search') {// if category is 'search' category, categorySelectedId take category value from object
@@ -266,6 +266,7 @@ const sidebar = (function () {
                                     // entry.List = tempData[category].List;
                                     categorySelectedId = category;
                                 }
+                                searchCategory = categorySelectedId;
                                 linkSelectedId = `${categorySelectedId}-link-${value.Id}`;
 
                                 recentSearch(entry);
