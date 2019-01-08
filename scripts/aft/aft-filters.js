@@ -47,7 +47,6 @@ const aftFilters = (function () {
         filters.MachineNameList = formatAftApiData(filters.MachineNameList);
         filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
 
-        console.log('filters response');
         tableSettings.filters = filters;
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
@@ -171,19 +170,14 @@ const aftFilters = (function () {
             if (currentTableSettingsObject.filters.BasicData !== undefined) {
                 let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
                 let clonedExistingFilters = JSON.parse(JSON.stringify(currentTableSettingsObject.filters));
-                console.log('clonedFilters');
-                console.log(clonedFilters);
-                console.log('clonedExistingFilters');
-                console.log(clonedExistingFilters);
+
                 //delete pages as that data will differ from old and new filters data
                 delete clonedFilters.BasicData.Page;
                 delete clonedFilters.TokenInfo;
                 delete clonedExistingFilters.BasicData.Page;
                 delete clonedExistingFilters.TokenInfo;
 
-                console.log('compare:',compareObjects(clonedExistingFilters,clonedFilters));
                 if (!compareObjects(clonedFilters, clonedExistingFilters)) {
-                    console.log('compare false');
                     currentTableSettingsObject.activePage = 1;
                     filtersForApi.BasicData.Page = 1;
                 }
