@@ -744,20 +744,20 @@ let table = (function () {
                 headers[i].classList.remove('sort-active');
                 headers[i].classList.remove('sort-asc');
                 headers[i].classList.remove('sort-desc');
-                headers[i].classList.remove(activeRowElementsClass);
+                headers[i].classList.remove(activeColumnElementsClass);
                 delete headers[i].dataset.direction;
             }
         }
         if (header !== undefined) {
             header.classList.add('sort-active');
-            header.classList.add(activeRowElementsClass);
+            header.classList.add(activeColumnElementsClass);
             toggleDirection(header, tableSettings);
 
             let columnName = getColumnNameFromHeadElement(tableSettings, header);
 
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add(activeRowElementsClass);
+                columnElements[j].classList.add(activeColumnElementsClass);
             }
         }
     }
@@ -1045,9 +1045,10 @@ let table = (function () {
     }
 
     function deselectActiveColumn(table) {
-        let activeElements = table.getElementsByClassName(activeRowElementsClass);
+        let activeElements = table.getElementsByClassName(activeColumnElementsClass);
         while (activeElements.length > 0) {
-            activeElements[0].classList.remove(activeRowElementsClass);
+//            activeElements[0].classList.remove(activeRowElementsClass);
+            activeElements[0].classList.remove(activeColumnElementsClass);
         }
     }
 
