@@ -1,10 +1,12 @@
 let table = (function () {
 
+    //html class name constants
     let columnClassPrefix = 'column-';
     let rowClassPrefix = 'row-';
     let cellClassPrefix = 'cell-';
     let activeColumnElementsClass = 'active-column';
     let activeRowElementsClass = 'row-chosen';
+    let hiddenCellClassName = 'hidden';
     let rows = [];
 
     // 'null' as dataset values are always converted to string
@@ -74,7 +76,7 @@ let table = (function () {
 
         if (headElements !== undefined && headElements !== null && headElements.length > 0) {
             colsCount = headElements.length;
-        } else if (tableSettings.tableData !== undefined || tableSettings.tableData.length !== 0) {
+        } else if (tableSettings.tableData !== undefined || tableSettings.tableData.length > 0) {
             colsCount = Object.keys(tableSettings.tableData[0].rowData).length;
 
         }
@@ -165,6 +167,14 @@ let table = (function () {
         }
 
         let rowsCount = tableSettings.tableData.length;
+        let visibleColumns = tableSettings.visibleColumns.length > 0 ? tableSettings.visibleColumns : [];
+        let visibleColumnsClasses = [];
+
+        if (visibleColumns.length > 0) {
+            for (let i = 0; i < visibleColumns.length; i++) {
+                visibleColumnsClasses.push(generateCellClassName(visibleColumns[i]));
+            }
+        }
 
         for (let row = 0; row < rowsCount; row++) {
             let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
@@ -208,8 +218,27 @@ let table = (function () {
 
                 let headers = getHeaders(tableSettings);
                 let header = headers[col];
+                //add column class to the headers first time that rows are generated
                 if (!header.classList.contains(cellColumnClass)) {
                     header.classList.add(cellColumnClass);
+                }
+
+                //display or hide column cells if there are hidden columns
+                //do not hide columns that are marked as always visible
+                if (header.dataset.alwaysVisible === undefined || header.dataset.alwaysVisible === false) {
+                    if (visibleColumnsClasses.length > 0) {
+                        if (visibleColumnsClasses.indexOf(cellColumnClass) > -1) {
+                            cell.classList.remove(hiddenCellClassName);
+                            header.classList.remove(hiddenCellClassName);
+                        } else {
+                            cell.classList.add(hiddenCellClassName);
+                            header.classList.add(hiddenCellClassName);
+                        }
+                    }
+                    else {
+                        cell.classList.remove(hiddenCellClassName);
+                        header.classList.remove(hiddenCellClassName);
+                    }
                 }
 
                 //ToDo: test if 0 or 1
@@ -509,7 +538,7 @@ let table = (function () {
 
     /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
 
-    function handleLinkClick(e, tableSettings) {
+    function handlePaginationLinkClick(e, tableSettings) {
         e.preventDefault();
         resetPaginationActiveButtons(tableSettings);
         e.target.classList.add('active');
@@ -521,10 +550,10 @@ let table = (function () {
 
     function bindPaginationLinkHandler(element, tableSettings) {
         element.removeEventListener('click', function (e, tableSettings) {
-            handleLinkClick(e, tableSettings);
+            handlePaginationLinkClick(e, tableSettings);
         });
         element.addEventListener('click', function (e) {
-            handleLinkClick(e, tableSettings);
+            handlePaginationLinkClick(e, tableSettings);
         });
     }
 
@@ -573,7 +602,6 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
-        removeTransactionPopup();
 
         let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
@@ -581,12 +609,10 @@ let table = (function () {
 
         setSortingHeader(tableSettings);
 
-        if (tableSettings.ColumnsToShow !== undefined && tableSettings.ColumnsToShow !== null && tableSettings.ColumnsToShow.length > 0) {
-            showSelectedColumns(tableSettings, tableSettings.ColumnsToShow);
-        }
         let itemsCount = tableSettings.tableData === null ? 0 : Object.keys(tableSettings.tableData).length;
 
         if (itemsCount > 0) {
+
             updateTablePagination(tableSettings);
             bindSortingLinkHandlers(tableSettings);
             bindTableViewLinkHandlers(tableSettings);
@@ -810,6 +836,7 @@ let table = (function () {
         let element = e.target;
         let table = element.parentNode.parentNode;
         let tableSettings = table.tableSettings;
+        tableSettings.activePage = 1;
         e.preventDefault();
         deselectActiveColumn(table);
 
@@ -891,31 +918,6 @@ let table = (function () {
         }
     }
 
-    function showSelectedColumns(tableSettings, columnsToShowTitles) {
-        hideAllColumns(tableSettings);
-        let tbodyElement = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-        let colsCount;
-
-        if (columnsToShowTitles === null || columnsToShowTitles === undefined || columnsToShowTitles.length === 0) {
-            let allColumns = getColumnNames(tableSettings);
-            colsCount = allColumns.length;
-            //ToDo:preraditi
-            showColumn(tableSettings, 'cell-flag');
-            showColumn(tableSettings, 'cell-cancel');
-            allColumns.forEach(function (column) {
-                showColumn(tableSettings, column);
-            });
-        } else {
-            let columnsToShow = getColsToShowNames(columnsToShowTitles);
-            colsCount = columnsToShow.length;
-            showColumn(tableSettings, 'cell-flag');
-            showColumn(tableSettings, 'cell-cancel');
-            columnsToShow.forEach(function (column) {
-                showColumn(tableSettings, column);
-            });
-        }
-        setTableDimensions(tableSettings, colsCount, tbodyElement);
-    }
 
     /*--------------------------------------------------------------------------------------*/
 
@@ -935,7 +937,7 @@ let table = (function () {
     }
 
     function collectFiltersFromPage(tableSettings) {
-        tableSettings.filters = {};
+        //tableSettings.filters = {};
         let filterContainers = collectAllFilterContainers(tableSettings);
 
         let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
@@ -1000,10 +1002,18 @@ let table = (function () {
 
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+
     function setDefaultSettings(tableSettings) {
+        if (tableSettings.filters === undefined) {
+            tableSettings.filters = null;
+        }
+        if (tableSettings.visibleColumns === undefined) {
+            tableSettings.visibleColumns = [];
+        }
         if (tableSettings.columns === undefined) {
             tableSettings.columns = [];
         }
+
 
     }
 
@@ -1048,7 +1058,7 @@ let table = (function () {
 
         headers.forEach(function (element) {
             if (element.dataset.alwaysVisible === undefined || element.dataset.alwaysVisible === false) {
-                let item ={};
+                let item = {};
                 if (element.dataset.columnName === undefined) {
                     item.value = element.innerText.replace(' ', '');
                     item.name = element.dataset.translationKey;

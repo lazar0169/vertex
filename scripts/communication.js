@@ -257,7 +257,7 @@ let communication = (function () {
     on('communicate/aft/getTransactions', function (params) {
         let route = 'api/transactions/';
         let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.prepareDataEvent;
+        let successEvent = tableSettings.processRemoteData;
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -276,7 +276,7 @@ let communication = (function () {
     on('communicate/aft/previewTransactions', function (params) {
         let route = 'api/transactions/previewtransactions/';
         let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.prepareDataEvent;
+        let successEvent = tableSettings.processRemoteData;
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -452,7 +452,7 @@ let communication = (function () {
     on('communicate/tickets/getTickets', function (params) {
         let route = 'api/tickets/';
         let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.prepareDataEvent;
+        let successEvent = tableSettings.processRemoteData;
         let request = requestTypes.post;
         let data = params.data;
         let errorEvent = '';
@@ -471,7 +471,7 @@ let communication = (function () {
     on('communicate/tickets/previewTickets', function (params) {
         let route = 'api/tickets/previewtickets/';
         let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.prepareDataEvent;
+        let successEvent = tableSettings.processRemoteData;
         let request = requestTypes.post;
         let data = params.data;
         let errorEvent = '';

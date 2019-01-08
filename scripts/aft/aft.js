@@ -16,7 +16,7 @@ const aft = (function () {
         tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
         tableSettings.dataEvent = 'communicate/aft/getTransactions';
         tableSettings.updateTableEvent = 'table/update';
-        tableSettings.prepareDataEvent = 'communicate/aft/data/prepare';
+        tableSettings.processRemoteData = 'communicate/aft/data/prepare';
         tableSettings.sortActiveColumn = 'createdby';
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
@@ -24,7 +24,6 @@ const aft = (function () {
         tableSettings.stickyRow = true;
         tableSettings.stickyColumn = false;
         tableSettings.filtersInitialized = false;
-
 
         tableSettings.onDrawRowCell = 'aft/table/drawCell';
 
@@ -55,12 +54,10 @@ const aft = (function () {
         trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
 
-
         /*********************----Events------*********************/
         on('aft/table/drawCell',function(params) {
             onDrawTableCell(params.key,params.value, params.element, params.position, params.rowData);
         });
-         //ToDo: refaktorisi helper funkcije u evente
         /*********************----Helper functions------*********************/
         function onDrawTableCell(column, cellContent, cell, position, rowData) {
             if (column === 'flag') {
