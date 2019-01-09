@@ -358,7 +358,8 @@ let table = (function () {
             tbody.appendChild(cancelCell);
         }
         styleColsRows(tableSettings.formatedData, colsCount, tbody);
-        trigger('showing-top-bar-value', { tableData: tableSettings.tableData })
+
+
     }
 
     /*--------------------------------------------------------------------------------------*/

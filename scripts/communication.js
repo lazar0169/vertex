@@ -215,6 +215,8 @@ let communication = (function () {
 
         tableSettings.formatedData = formatedData;
 
+        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue })
+
         return formatedData;
     }
 
@@ -660,6 +662,7 @@ let communication = (function () {
         });
 
         //todo needs to be deleted
+        // trigger('communicate/casinos/getAllMachines', {})
         // trigger('communicate/casinos/previewMachines', {})
         // trigger('communicate/casinos/getMachineDetails', {})
         // trigger('communicate/casinos/getMachineServiceData', {})
@@ -712,6 +715,24 @@ let communication = (function () {
 
 
     /*------------------------------------ MACHINES EVENTS ------------------------------------*/
+
+    //get all machines
+    on('communicate/casinos/getAllMachines', function (params) {
+        let route = 'api/machines/';
+        let successEvent = 'communicate/test'
+        let data = {
+            'EndpointId': 4
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
 
     // machines get service data
     on('communicate/casinos/getMachineDetails', function (params) {
@@ -1071,6 +1092,8 @@ let communication = (function () {
     //test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
+        console.log(params);
+        trigger('showing-machines-top-bar-value', { dataItemValue: params.data.Data })
     });
 
 
