@@ -35,7 +35,7 @@ body {
 }
 
 .element-template {
-    display: none;
+    display: none !important;
 }
 
 .navigation-links {

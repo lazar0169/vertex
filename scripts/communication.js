@@ -179,7 +179,9 @@ let communication = (function () {
                         actions: cancelIndicator
                     },
                     data: {
-                        isPayoutPossible: entry.Properties.IsPayoutPossible
+                        isPayoutPossible: entry.Properties.IsPayoutPossible,
+                        gmcid:entry.Properties.Gmcid,
+                        jidtString:entry.Properties.JidtString
                     }
                 };
                 counter++;

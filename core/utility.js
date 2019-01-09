@@ -1,3 +1,22 @@
+//Set up element.closest to work in IE
+if (!Element.prototype.matches) {
+    Element.prototype.matches = Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+    Element.prototype.closest = function(s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };
+}
+
+
 function $$(selector) {
     switch (selector[0]) {
         case '.':
@@ -27,6 +46,33 @@ function expandElement(element) {
     if (sectionHeight !== 0) {
         element.style.height = sectionHeight + 'px';
     }
+}
+
+function keepAbsoluteChildInParent(parent, child, offset) {
+    if (offset === undefined) {
+        offset = 10;
+    }
+
+    let childHeight = child.offsetHeight;
+    let childWidth = child.offsetWidth;
+
+    let parentRect = parent.getBoundingClientRect();
+    let childRect = child.getBoundingClientRect();
+
+
+    if (childRect.left < parentRect.left) {
+        child.style.left = parentRect.left + offset + 'px';
+    }
+    if (childRect.right > parentRect.right) {
+        child.style.left = parentRect.right - childWidth - offset + 'px';
+    }
+    if (childRect.top < parentRect.top) {
+        child.style.top = parentRect.top + offset + 'px';
+    }
+    if (childRect.bottom > parentRect.bottom) {
+        child.style.top = parentRect.bottom - childHeight - offset + 'px';
+    }
+
 }
 
 function validateEncodedToken(accessToken) {

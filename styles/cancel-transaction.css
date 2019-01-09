@@ -1,24 +1,29 @@
-.cancel-transaction.toast.toast-error {
+.cancel-transaction {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     align-content: center;
     width: 200px;
-    font-size: 12px;
+    font-size: 13px;
+    font-family: 'OpenSans-Regular';
+    font-weight: 500;
     padding: 2px;
-    position: absolute;
+    position: fixed;
     top: 30%;
     left: 30%;
     z-index: 4;
-    background-color: #F33F37;
+    border-radius: 3px;
+    background-color: #f44336;
+    box-shadow: 0 2px 10px 0 rgba(1, 1, 1, 0.41);
 }
+
+
 
 .cancel-transaction-buttons .btn.btn-link {
     align-self: center;
     color: white;
+    font-weight: bold;
 }
 
-.cancel-transaction-buttons .btn.btn-link:hover {
-    text-decoration: underline;
-}
+

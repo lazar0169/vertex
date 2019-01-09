@@ -108,3 +108,11 @@ on('set-date-datepicker', function (data) {
     $$(`#${data.pickerId}`).dataset.value = data.date;
     $$(`#${data.pickerId}`).value = data.date;
 });
+
+//popups
+function dimissPopUp(e) {
+    let popup = e.target.closest('.element-pop-up');
+    if (popup !== undefined && popup !== null) {
+        popup.parentNode.removeChild(popup);
+    }
+}

@@ -36,6 +36,14 @@ let table = (function () {
 
     let currentOffset;
 
+    /*-------------------------------EVENTS--------------------------------*/
+    on('table/deselect/active-row', function (params) {
+        deselectActiveRow(params.tableSettings.tableContainerElement);
+    });
+    on('table/deselect/hover-row', function (params) {
+        deselectHoverRow(params.tableSettings.tableContainerElement);
+    });
+
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -257,21 +265,21 @@ let table = (function () {
 
                 //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
 
-                cell.addEventListener('click', function () {
+                cell.addEventListener('click', function (e) {
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
-                        tableSettings.onBeforeCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
+                        tableSettings.onBeforeCellClick(e,dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
                     }
                     currentOffset = cell.getClientRects()[0];
                     //check if there's custom on cell click hadler
                     if (tableSettings.onCellClick === undefined) {
                         selectRow(tableSettings, rowClassPrefix + rowId);
                     } else {
-                        tableSettings.onCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                        tableSettings.onCellClick(e,dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
 
                     }
                     if (tableSettings.onAfterCellClick !== undefined) {
-                        tableSettings.onAfterCellClick(dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                        tableSettings.onAfterCellClick(e,dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
                     }
                 });
 
@@ -354,57 +362,6 @@ let table = (function () {
         }
     }
 
-    function cancelTransactionPopup(tableSettings, row) {
-        let cancelTransactionPopupElement = tableSettings.tableContainerElement.getElementsByClassName('cancel-transaction')[0];
-        if (cancelTransactionPopupElement === undefined || cancelTransactionPopupElement === null) {
-            let callbackEvent = 'table/cancelTransaction/display';
-            trigger('template/render', {
-                templateElementSelector: '#cancel-transaction-template',
-                callbackEvent: callbackEvent,
-                tableSettings: tableSettings
-            });
-        }
-    }
-
-    function removeTransactionPopup() {
-        let cancelTransactionPopupElements = document.body.getElementsByClassName('cancel-transaction');
-        if (cancelTransactionPopupElements.length > null) {
-            for (let i = 0; i < cancelTransactionPopupElements.length; i++) {
-                cancelTransactionPopupElements[i].parentNode.removeChild(cancelTransactionPopupElements[i]);
-            }
-        }
-    }
-
-    function positionElement(cancelTransactionElement) {
-        cancelTransactionElement.style.top = currentOffset.top;
-        cancelTransactionElement.style.left = currentOffset.left;
-    }
-
-    on('table/cancelTransaction/display', function (params) {
-        removeTransactionPopup();
-        let cancelTransactionElement = params.element;
-        document.body.prepend(cancelTransactionElement);
-        cancelTransactionElement.classList.add('cancel-transaction');
-        positionElement(cancelTransactionElement);
-        let buttonYes = cancelTransactionElement.getElementsByClassName('btn-yes')[0];
-        let buttonNo = cancelTransactionElement.getElementsByClassName('btn-no')[0];
-        buttonNo.addEventListener('click', function () {
-            removeTransactionPopup();
-        });
-        buttonYes.addEventListener('click', function () {
-            removeTransactionPopup();
-            //todo dummy data
-            trigger('communicate/aft/cancelTransaction', {
-                data: {
-                    EndpointId: 2,
-                    EndpointName: 'name',
-                    Gmcid: 123,
-                    JidtString: 'string'
-                }
-
-            })
-        });
-    });
 
     function selectRow(tableSettings, row) {
         let selectedTableRowCells = tableSettings.tableContainerElement.getElementsByClassName(activeRowElementsClass);
@@ -994,14 +951,20 @@ let table = (function () {
         collectFiltersFromPage: collectFiltersFromPage,
         getSorting: getSorting,
         getPageSize: getPageSize,
-        removeTransactionPopup: removeTransactionPopup,
-        parseFilterValues: parseFilterValues
+        parseFilterValues: parseFilterValues,
+        getBounds:getBounds
     };
 
     /*--------------------------------------------------------------------------------------*/
 
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+    function positionElementInsideTable(tableSettings,element) {
+        let bounds = getBounds(tableSettings);
+        let elementBounds = element.getBoundingClientRect();
+
+
+    }
 
     function setDefaultSettings(tableSettings) {
         if (tableSettings.filters === undefined) {
@@ -1047,12 +1010,28 @@ let table = (function () {
     function deselectActiveColumn(table) {
         let activeElements = table.getElementsByClassName(activeColumnElementsClass);
         while (activeElements.length > 0) {
-//            activeElements[0].classList.remove(activeRowElementsClass);
             activeElements[0].classList.remove(activeColumnElementsClass);
+        }
+    }
+    function deselectActiveRow(table) {
+        let activeElements = table.getElementsByClassName(activeRowElementsClass);
+
+        while (activeElements.length > 0) {
+            activeElements[0].classList.remove(activeRowElementsClass);
+        }
+    }
+    function deselectHoverRow(table) {
+        let elements = table.getElementsByClassName('hover');
+        while (elements.length > 0) {
+            elements[0].classList.remove('hover');
         }
     }
 
     /*-------------------------------PUBLIC HELPER FUNCTIONS--------------------------------*/
+    function getBounds(tableSettings) {
+        return tableSettings.tableContainerElement.getBoundingClientRect();
+    }
+
     function getHideableColumns(tableSettings) {
         let headers = Array.from(getHeaders(tableSettings));
         let columns = [];
@@ -1110,4 +1089,7 @@ let table = (function () {
             return item;
         });
     }
+
+
+
 })();

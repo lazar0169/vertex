@@ -66,6 +66,7 @@
     align-items: center;
     justify-content: flex-start;
     font-size: 13px;
+    pointer-events: none;
 }
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
@@ -84,6 +85,7 @@
 }
 
 .head.cell {
+    pointer-events: auto;
     background-color: rgb(38, 50, 56);
     color: #728894;
     top: 0;
@@ -162,7 +164,7 @@
 }
 
 .active-column {
-    background: #2F3B41;
+    background: #2b383f;
     color: white;
 }
 
@@ -372,6 +374,7 @@ textarea {
 
 .vertex-table .cell.clickable {
     cursor: pointer;
+    pointer-events: auto;
 }
 
 
