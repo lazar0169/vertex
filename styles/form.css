@@ -1,8 +1,7 @@
 .element-async-form {
-    padding-left:30px;
-    margin:0 !important;
+    padding-left: 30px;
+    margin: 0 !important;
 }
-
 
 .element-async-form .btn-success:hover {
     box-shadow: none;
@@ -12,66 +11,74 @@
     margin: 0 0 0 15px !important;
     /*takodje resiti importante */
 }
+
 .element-async-form .form-label {
-    font-size:15px;
-    color:rgb(120, 144, 156);
+    font-size: 15px;
+    color: rgb(120, 144, 156);
 }
+
 .element-async-form .form-section {
     padding: 20px 0 0 0;
     color: rgb(120, 144, 156);
-    display:flex;
+    display: flex;
     flex-direction: column;
 }
+
 .element-async-form button.btn {
-    height:40px;
+    height: 40px;
 }
+
 .element-async-form .form-buttons-section {
     padding-top: 30px;
 }
+
 .element-async-form .form-buttons-section button:not(:last-child) {
-    margin-right:15px;
+    margin-right: 15px;
 }
 
 .element-async-form .form-section .form-section-content {
     max-width: 490px;
-    padding: 0  !important;
+    padding: 0 !important;
     margin: 0 !important;
 }
-.element-async-form .form-section .form-section-content > label.checkbox-label {
-  margin-bottom:0 !important;
+
+.element-async-form .form-section .form-section-content>label.checkbox-label {
+    margin-bottom: 0 !important;
 }
 
 .element-async-form .form-section.border-bottom .form-section-content {
     border-bottom: 1px solid #37474f;
-    padding-bottom:20px !important;
+    padding-bottom: 20px !important;
 }
 
 .element-async-form .form-section .form-section-content label.form-label {
-    padding:0;
+    padding: 0;
     font-weight: bold;
-    font-size:14px;
+    font-size: 13px;
 }
 
 .element-async-form .form-section .form-section-content input.form-input {
     max-width: 320px;
-    margin-top:5px !important;
+    margin: 0 !important;
     border-radius: 0;
     border-bottom: 1px solid #778f9b;
 }
 
 .element-async-form .form-section .form-section-content .form-group .action-delete-form-element {
-    margin-left:15px;
-    height:35px;
+    margin-left: 15px;
+    height: 35px;
 }
 
 .element-async-form .form-section .form-section-content .form-group:not(:last-child) {
-    margin-bottom:20px !important;
+    margin-bottom: 20px !important;
 }
+
 .element-async-form .btn-success {
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.26);
-    width:120px;
-    background-color:#1e9be3;
+    width: 120px;
+    background-color: #1e9be3;
 }
+
 .collapsible {
     -webkit-transition: height 0.5s ease-out;
     -moz-transition: height 0.5s ease-out;
@@ -80,5 +87,3 @@
     transition: height 0.5s ease-out;
     overflow-y: hidden;
 }
-
-

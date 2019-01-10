@@ -1,3 +1,129 @@
 <div id="users-add-new-user" class="hidden">
-    forma za dodavanje novog korisnika
+    <form class="element-async-form">
+
+        <div id="add-new-user-user-type" class="form-section border-bottom">
+            <div class="form-section-content">
+                <label class="form-label element-multilanguage" data-translation-key="UserType">
+                    User Type:
+                </label>
+                <figure class="element-form-radio vertex-form-radio">
+                    <label class="form-radio">
+                        <input type="radio" name="user-type">
+                        <i class="form-icon"></i>
+                        <div>Accounting User</div>
+                    </label>
+                </figure>
+                <figure class="element-form-radio vertex-form-radio">
+                    <label class="form-radio">
+                        <input type="radio" name="user-type" checked="">
+                        <i class="form-icon"></i>
+                        <div>Cash Desk User</div>
+                    </label>
+                </figure>
+            </div>
+        </div>
+
+        <section id="add-new-user-account">
+            <div class="form-section">
+                <div class="form-section-content">
+                    <div id="add-new-user-account-username" class="form-group">
+                        <label class="form-label element-multilanguage" data-translation-key="UserName">User Name</label>
+                        <input name="NewUserName" data-type="string" class="form-input element-form-data" type="text"
+                            placeholder="User Name" value="">
+                    </div>
+
+                    <div id="add-new-user-account-username" class="form-group">
+                        <label class="form-label element-multilanguage" data-translation-key="Password">Password</label>
+                        <input name="Password" data-type="string" class="form-input element-form-data" type="text"
+                            placeholder="User Name" value="">
+                    </div>
+
+                    <div id="add-new-user-account-username" class="form-group">
+                        <label class="form-label element-multilanguage" data-translation-key="ConfirmPassword">Confirm
+                            Password</label>
+                        <input name="ConfirmPassword" data-type="string" class="form-input element-form-data" type="text"
+                            placeholder="User Name" value="">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="add-new-user-role">
+            <div class="form-section">
+                <div class="form-section-content">
+                    <label class="form-label element-multilanguage" data-translation-key="ChoseRole"></label>
+
+                    <div id="add-new-user-role-radio">
+                        <figure class="element-form-radio vertex-form-radio vertex-form-radio-border">
+                            <label class="form-radio">
+                                <input type="radio" name="user-role">
+                                <i class="form-icon"></i>
+                                <div class="element-multilanguage" data-translation-key="Admin">Admin</div>
+                            </label>
+                        </figure>
+                        <figure class="element-form-radio vertex-form-radio vertex-form-radio-border">
+                            <label class="form-radio">
+                                <input type="radio" name="user-role">
+                                <i class="form-icon"></i>
+                                <div class="element-multilanguage" data-translation-key="Manager">Manager</div>
+                            </label>
+                        </figure>
+                        <figure class="element-form-radio vertex-form-radio vertex-form-radio-border">
+                            <label class="form-radio">
+                                <input type="radio" name="user-role" checked>
+                                <i class="form-icon"></i>
+                                <div class="element-multilanguage" data-translation-key="Service">Service</div>
+                            </label>
+                        </figure>
+                        <figure class="element-form-radio vertex-form-radio vertex-form-radio-border">
+                            <label class="form-radio">
+                                <input type="radio" name="user-role">
+                                <i class="form-icon"></i>
+                                <div class="element-multilanguage" data-translation-key="Custom">Custom</div>
+                            </label>
+                        </figure>
+                    </div>
+
+                    <div id="add-new-user-role-wrapper">
+                        <div id="add-new-user-role-settings">ovde role koje treba da se dinamicki naprave</div>
+                        <div id="add-new-user-role-apply">
+                            <label class="form-label element-multilanguage" data-translation-key="UserType">
+                                User Type:
+                            </label>
+                            <figure class="element-form-radio vertex-form-radio">
+                                <label class="form-radio">
+                                    <input type="radio" name="apply-role-on" checked>
+                                    <i class="form-icon"></i>
+                                    <div class="element-multilanguage" data-translation-key="AllCasinos">All Casinos</div>
+                                </label>
+                            </figure>
+                            <figure class="element-form-radio vertex-form-radio">
+                                <label class="form-radio">
+                                    <input type="radio" name="apply-role-on">
+                                    <i class="form-icon"></i>
+                                    <div class="element-multilanguage" data-translation-key="ChooseCasino(s)">Choose
+                                        Casino(s)</div>
+                                </label>
+                            </figure>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+        <div id="add-new-user-buttons-wrapper">
+            <button type="submit" class="primarybutton element-form-submit element-multilanguage" data-translation-key="Save">
+                Save
+            </button>
+            <a type="button" class="button-link element-form-cancel element-multilanguage" data-translation-key="Cancel">
+                Cancel
+            </a>
+        </div>
+
+    </form>
 </div>

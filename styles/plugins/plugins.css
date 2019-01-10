@@ -1,29 +1,33 @@
 /*toggle */
+
 .vertex-form-checkbox {
-    margin:0;
+    margin: 0;
     display: flex;
     align-items: center;
     cursor: pointer;
 }
-.vertex-form-checkbox > div,
-.vertex-form-checkbox > label {
-    display:inline-block;
+
+.vertex-form-checkbox>div, .vertex-form-checkbox>label {
+    display: inline-block;
 }
-.vertex-form-checkbox >div:first-child {
-    font-size:15px;
+
+.vertex-form-checkbox>div:first-child {
+    font-size: 15px;
 }
 
 .vertex-form-checkbox .form-switch input[type=checkbox] {
-    width:0 !important;
-    height:0 !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .vertex-form-checkbox .checkbox-label {
     /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
-    color:white !important;
-    margin:0 !important;
-    padding:0 !important;;
+    color: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    ;
 }
+
 .vertex-form-checkbox .form-switch {
     height: 23px;
     width: 45px;
@@ -31,6 +35,7 @@
     margin: 0 0 0 15px !important;
     min-height: 0;
 }
+
 .vertex-form-checkbox input+.form-icon {
     border: none;
     width: 45px;
@@ -41,23 +46,25 @@
     box-shadow: unset;
     pointer-events: all;
 }
+
 .form-switch input:checked+.form-icon {
     background: rgb(55, 71, 79);
     border: none;
 }
 
-.vertex-form-checkbox .form-icon:focus,
-.vertex-form-checkbox .form-icon:active {
+.vertex-form-checkbox .form-icon:focus, .vertex-form-checkbox .form-icon:active {
     outline: none;
 }
+
 .vertex-form-checkbox .form-switch input+.form-icon::before {
-    height:20px;
-    width:20px;
-    left:0;
-    top:-2px;
+    height: 20px;
+    width: 20px;
+    left: 0;
+    top: -2px;
 }
+
 .vertex-form-checkbox .form-switch input:checked+.form-icon::before {
-    left:100%;
+    left: 100%;
     -webkit-transform: translateX(-100%);
     -moz-transform: translateX(-100%);
     -ms-transform: translateX(-100%);
@@ -65,3 +72,37 @@
     transform: translateX(-100%);
 }
 
+/* radio button */
+
+.vertex-form-radio input+.form-icon {
+    border: none;
+    margin: 0 !important;
+    /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
+    background: #778f9b;
+    box-shadow: unset;
+    pointer-events: all;
+}
+
+.element-async-form .vertex-form-radio {
+    margin: 0;
+}
+
+.vertex-form-radio .form-radio {
+    margin: 0;
+}
+
+.vertex-form-radio-border .form-radio input:checked+.form-icon+div {
+    border-bottom: 1px solid white;
+}
+
+.vertex-form-radio-border .form-radio input:checked+.form-icon+div::before {
+    content: "";
+    position: absolute;
+    left: 53%;
+    bottom: -5px;
+    width: 0;
+    height: 0;
+    border-top: 0.4rem solid white;
+    border-right: 0.3rem solid transparent;
+    border-left: 0.3rem solid transparent;
+}

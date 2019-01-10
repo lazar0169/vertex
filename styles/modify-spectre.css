@@ -43,7 +43,7 @@
 }
 
 .form-checkbox .form-icon, .form-checkbox input:focus+.form-icon, .form-checkbox input:checked+.form-icon, .form-radio input+.form-icon {
-    background: rgb(55, 71, 79);
+    background: #778f9b;
     border: .05rem solid rgb(120, 144, 156);
     box-shadow: unset;
     pointer-events: all;
@@ -120,6 +120,7 @@
     padding: 0.2rem 1rem 0.2rem 0.5rem;
     line-height: unset;
     height: auto;
+    font-size: 13px;
 }
 
 .form-input:focus {
@@ -198,4 +199,8 @@ body {
     margin-top: -0.5em !important;
     border-right-color: transparent !important;
     border-top-color: transparent !important;
+}
+
+[type=reset], [type=submit], button, html [type=button] {
+    -webkit-appearance: inherit !important;
 }

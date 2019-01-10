@@ -11,8 +11,23 @@
 }
 
 .add-new-user-active, .add-new-user-active:hover, .add-new-user-active:focus {
-    background: rgb(120, 144, 156);
+    background: #778f9b;
     color: rgb(38, 50, 56);
     border: none;
     outline: none;
+    pointer-events: none;
+}
+
+#add-new-user-account, #add-new-user-role {
+    padding-bottom: 20px;
+}
+
+#add-new-user-role-radio {
+    display: inline-flex;
+}
+
+#add-new-user-role-wrapper {
+    padding: 0.5rem;
+    border-bottom: 1px solid #778f9b;
+    background: rgb(55, 71, 79);
 }
