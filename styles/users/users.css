@@ -1,0 +1,18 @@
+#users-add-new-user-button {
+    padding-bottom: 0.5rem;
+}
+
+#users-add-new-user {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+}
+
+.add-new-user-active, .add-new-user-active:hover, .add-new-user-active:focus {
+    background: rgb(120, 144, 156);
+    color: rgb(38, 50, 56);
+    border: none;
+    outline: none;
+}

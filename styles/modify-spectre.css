@@ -170,8 +170,14 @@ a {
     color: inherit;
 }
 
-a:active, a:focus, a:visited {
-    color: rgb(120, 144, 156);
+a:visited {
+    color: inherit;
+    box-shadow: unset;
+    text-decoration: none;
+}
+
+a:active, a:focus {
+    color: white;
     box-shadow: unset;
     text-decoration: none;
 }

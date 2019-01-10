@@ -68,6 +68,11 @@ let router = (function () {
         id: '#page-malfunctions',
         path: '/malfunctions'
     });
+    routes.set('users', {
+        page: 'users',
+        id: '#page-users',
+        path: '/users'
+    });
 
     //Functions for displaying page
 
