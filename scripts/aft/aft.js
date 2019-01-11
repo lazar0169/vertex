@@ -177,7 +177,8 @@ const aft = (function () {
             if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
                 endpointName = $$('.link-active')[0].dataset.value;
             }
-            trigger('communication/aft/transactions/cancel', {
+            //trigger('communication/aft/transactions/cancel', {
+            trigger(communication.events.aft.transactions.cancel, {
                 gmcid: e.target.trasactionData.gmcid,
                 jidtString: e.target.trasactionData.jidtString,
                 endpointId: endpointId,
