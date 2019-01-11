@@ -61,4 +61,10 @@ let notifications = function () {
         });
     });
 
+
+    return {
+        messageTypes : messageTypes
+    }
+
+
 }();

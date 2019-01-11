@@ -37,6 +37,15 @@ let table = (function () {
     let currentOffset;
 
     /*-------------------------------EVENTS--------------------------------*/
+    on ('table/dismiss-popup',function(params){
+        dismissPopup(params.target,params.tableSettings);
+    });
+    on ('table/disable-scroll',function(params){
+        disableScroll(params.tableSettings);
+    });
+    on ('table/enable-scroll',function(params){
+        enableScroll(params.tableSettings);
+    });
     on('table/deselect/active-row', function (params) {
         deselectActiveRow(params.tableSettings.tableContainerElement);
     });
@@ -74,7 +83,6 @@ let table = (function () {
     function getTableBodyElement(tableSettings) {
         return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
     }
-
 
     function getCountOfAllColumns(tableSettings) {
         let colsCount = 0;
@@ -362,7 +370,6 @@ let table = (function () {
         }
     }
 
-
     function selectRow(tableSettings, row) {
         let selectedTableRowCells = tableSettings.tableContainerElement.getElementsByClassName(activeRowElementsClass);
         while (selectedTableRowCells.length > 0) {
@@ -374,13 +381,9 @@ let table = (function () {
             newSelectedRowCells[i].classList.add(activeRowElementsClass);
         }
     }
-
-
     /*--------------------------------------------------------------------------------------*/
 
-
     /*-------------------------------------- PAGINATION ---------------------------------------*/
-
 
     function hidePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
@@ -959,13 +962,24 @@ let table = (function () {
 
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+    function dismissPopup(target,tableSettings) {
+        dimissPopUp(target);
+        enableScroll(tableSettings);
+    }
+    function disableScroll(tableSettings) {
+        let tbody = getTableBodyElement(tableSettings);
+        tbody.classList.add('no-scroll');
+    }
+    function enableScroll(tableSettings) {
+        let tbody = getTableBodyElement(tableSettings);
+        tbody.classList.remove('no-scroll');
+    }
     function positionElementInsideTable(tableSettings,element) {
         let bounds = getBounds(tableSettings);
         let elementBounds = element.getBoundingClientRect();
 
 
     }
-
     function setDefaultSettings(tableSettings) {
         if (tableSettings.filters === undefined) {
             tableSettings.filters = null;
@@ -979,7 +993,6 @@ let table = (function () {
 
 
     }
-
     function checkTableSettings(tableSettings) {
         //check if all settings argument are set correctly
         //check callback functions - allow either function or a string - name of the event to be triggered
@@ -1006,7 +1019,6 @@ let table = (function () {
             console.error('onAfterCellClick callback is not a function');
         }
     }
-
     function deselectActiveColumn(table) {
         let activeElements = table.getElementsByClassName(activeColumnElementsClass);
         while (activeElements.length > 0) {
@@ -1089,7 +1101,4 @@ let table = (function () {
             return item;
         });
     }
-
-
-
 })();

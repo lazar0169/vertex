@@ -6,6 +6,8 @@ let communication = (function () {
             logout: "logout/",
         },
         aft: {
+            cancelTransaction: 'api/transactions/canceltransaction/',
+            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/',
             edit: "aft/",
             list: "list/",
             ticket: "ticket/"
@@ -52,7 +54,8 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        if (data.Data) {
+        if (data.TokenInfo !== undefined && data.TokenInfo !== null) {
+
             sessionStorage["token"] = JSON.stringify(data.TokenInfo);
             refreshToken(data.TokenInfo);
         } else {
@@ -65,9 +68,20 @@ let communication = (function () {
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = {"message": xhr.responseText};
+        //try to parse error as JSON
+        let errorResponse = tryParseJSON(xhr.responseText);
+        if (errorResponse === 'undefined') {
+            errorResponse = xhr.responseText;
+        }
+        //ToDo: refactor to send xhr only
+        let errorData = {'message': errorResponse, 'xhr': xhr};
         if (typeof errorEventCallback !== typeof undefined) {
-            trigger(errorEventCallback, errorData);
+            if (isString(errorEventCallback)) {
+                trigger(errorEventCallback, errorData);
+            } else if (isFunction(errorEventCallback)) {
+                errorEventCallback(errorData);
+            }
+
         }
     }
 
@@ -180,8 +194,8 @@ let communication = (function () {
                     },
                     data: {
                         isPayoutPossible: entry.Properties.IsPayoutPossible,
-                        gmcid:entry.Properties.Gmcid,
-                        jidtString:entry.Properties.JidtString
+                        gmcid: entry.Properties.Gmcid,
+                        jidtString: entry.Properties.JidtString
                     }
                 };
                 counter++;
@@ -239,7 +253,7 @@ let communication = (function () {
 
 // create and send xhr
     on('communicate/createAndSendXhr', function (params) {
-        let xhr = createRequest(params.route, params.request, params.data, params.successEvent, params.errorEvent, params.settingsObject);
+        let xhr = createRequest(params.route, params.requestType, params.data, params.successEvent, params.errorEvent, params.settingsObject);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
@@ -254,7 +268,16 @@ let communication = (function () {
 
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
-
+    //aft cancel transaction
+    on('communication/aft/transactions/cancel', function (params) {
+        let data = {
+            EndpointId: params.endpointId,
+            Gmcid: params.gmcid,
+            JidtString: params.jidtString,
+            EndpointName: params.endpointName,
+        };
+        sendRequest(apiRoutes.aft.cancelTransaction, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
+    });
 //aft get transactions
     on('communicate/aft/getTransactions', function (params) {
         let route = 'api/transactions/';
@@ -265,7 +288,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -286,7 +309,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: tableSettings
         });
@@ -306,7 +329,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: formSettings
         });
@@ -325,7 +348,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: formSettings
         });
@@ -344,7 +367,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: formSettings
         });
@@ -363,7 +386,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: formSettings
         });
@@ -380,7 +403,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: params.data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: tableSettings
         });
@@ -397,7 +420,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -414,7 +437,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: tableSettings
         });
@@ -432,7 +455,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent,
             settingsObject: tableSettings
         });
@@ -460,7 +483,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -479,7 +502,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -497,7 +520,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -517,7 +540,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -537,7 +560,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -556,7 +579,7 @@ let communication = (function () {
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -576,7 +599,7 @@ let communication = (function () {
         let data = params.data;
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -596,7 +619,7 @@ let communication = (function () {
         let data = params.data;
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -616,7 +639,7 @@ let communication = (function () {
         let data = params.data;
         trigger('communicate/createAndSendXhr', {
             route: route,
-            request: request,
+            requestType: request,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
@@ -666,7 +689,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
 
@@ -715,7 +738,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
 
@@ -738,7 +761,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -757,7 +780,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -777,7 +800,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -796,7 +819,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -819,7 +842,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -838,7 +861,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -860,7 +883,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -879,7 +902,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -901,7 +924,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -921,7 +944,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -942,7 +965,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -962,7 +985,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -981,7 +1004,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -1000,7 +1023,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -1036,7 +1059,7 @@ let communication = (function () {
             route: route,
             successEvent: successEvent,
             data: data,
-            request: request,
+            requestType: request,
             errorEvent: errorEvent
         });
     });
@@ -1079,34 +1102,13 @@ let communication = (function () {
         trigger(`communicate/${params.category.toLowerCase()}`);
     });
 
-//test, need to be deleted
-    on('communicate/test', function (params) {
-        //alert('Successful communication');
-    });
-
-
-//todo HERE IS THE PART THAT STOPS NORMAL COMMUNICATION BETWEEN MODULES
-    /*
-        //test, set filters for aft
-        window.addEventListener('load', function () {
-            trigger('communicate/aft/getFilters', {})
-        });
-        on('communicate/testFilter', function (params) {
-            //alert('Successful communication');
-            console.log('communicate/testFilter params.data', params.data);
-            params.data.Data.MachineNameList.length === 0 ? alert('Empty params') : proba2.appendChild(multiDropdown.generate(params.data.Data.MachineNameList));
-            params.data.Data.JackpotNameList.length === 0 ? alert('Empty params') : proba3.appendChild(multiDropdown.generate(params.data.Data.JackpotNameList));
-            params.data.Data.TypeList.length === 0 ? alert('Empty params') : proba4.appendChild(multiDropdown.generate(params.data.Data.TypeList));
-            params.data.Data.StatusList.length === 0 ? alert('Empty params') : proba5.appendChild(multiDropdown.generate(params.data.Data.StatusList));
-            params.data.Data.ColumnsList.length === 0 ? alert('Empty params') : proba6.appendChild(multiDropdown.generate(params.data.Data.ColumnsList));
-        });
-    */
 
     function refreshToken(tokenInfo) {
         if (timeout !== null) {
             window.clearTimeout(timeout);
             timeout = null;
         }
+
         timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
@@ -1116,6 +1118,34 @@ let communication = (function () {
     on('communicate/token/refresh', function (params) {
         refreshToken(params.token);
     })
+    /*------------------------------------ MODULE EVENTS ------------------------------------*/
+    on('communication/error/', handleError);
+
+    /*------------------------------------ MODULE PRIVATE FUNCTIONS ------------------------------------*/
+    function sendRequest(route, type, data, successEvent, errorEvent, additionalData) {
+        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData);
+        xhr = setDefaultHeaders(xhr);
+        xhr = setAuthHeader(xhr);
+        send(xhr);
+    }
+
+    function handleError(error) {
+        console.log(error.message);
+        if (error.xhr.status < 500) {
+            trigger('notifications/show', {
+                message: localization.translateMessage(error.message.MessageCode.toString()),
+                type: error.message.MessageType
+            });
+            if (error.TokenInfo !== undefined) {
+                refreshToken(error.TokenInfo);
+            }
+        } else {
+            trigger('notifications/show', {
+                message: localization.translateMessage('InternalServerError'),
+                type: notifications.messageTypes.error
+            });
+        }
+    }
 
 })
 ();

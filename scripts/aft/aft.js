@@ -1,6 +1,8 @@
 const aft = (function () {
 
-    const cancelableStatuses = ['AFTActive', 'AFTPending','AFTCheck'];
+    const cancelableStatuses = ['AFTActive', 'AFTPending', 'AFTCheck'];
+
+    let endpointId;
 
     on('aft/activated', function (params) {
 
@@ -11,6 +13,7 @@ const aft = (function () {
         }, 2000);
 
         let aftId = params.params[0].value;
+        endpointId = aftId;
 
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
@@ -60,65 +63,146 @@ const aft = (function () {
         trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
 
-        /*********************----Events------*********************/
+        /*********************----Dom event handlers------*********************/
+        window.addEventListener('click', function (e) {
+            let selector = '#' + cancelTransactionsPopUpId;
+            let popup = $$(selector);
+            if (popup !== null) {
+                if (e.target.closest(selector) === null) {
+                    dismissCancelTransactionPopUp();
+                    deselectHighlightedTransaction();
+                }
+            }
+        });
+
+        /*********************----Module Events------*********************/
+        on('aft/transactions/canceled/error', function (params) {
+            console.log('error');
+            trigger('communication/error/', params);
+            dismissCancelTransactionPopUp();
+            deselectHighlightedTransaction();
+        });
+        on('aft/transactions/canceled', onTransactionCanceled);
         on('aft/table/drawCell', function (params) {
             onDrawTableCell(params.key, params.value, params.element, params.position, params.rowData);
         });
-        on('aft/table/display/cancel-pop-up', function (params) {
+        on('aft/table/show/cancel-pop-up', function (params) {
+            beforeShowPopUp(params.params.event,params.element,onCancelTransaction,onCancelPopUpAction,
+                params.params.event.target.closest('.cell'),$$('#table-container-aft'));
+        });
+
+        //code executed befor popup is added to dom and
+        on('aft/table/show/cancel-pending-pop-up', function (params) {
             //bind click handlers here
-            let event = params.params.event;
-            let coordinates = {
-                x:event.clientX,
-                y:event.clientY
-            };
+            beforeShowPopUp(params.params.event,params.element,onCancelTransaction,onCancelPopUpAction,
+                params.params.event.target.closest('.cell'),$$('#table-container-aft'));
 
-            let newElement = params.element;
-
-            let targetCell = event.target.closest('.cell');
-
-            newElement.setAttribute('id',cancelTransactionsPopUpId);
-            newElement.style.left = coordinates.x+ 5 + 'px';
-            newElement.style.top = coordinates.y+5 + 'px';
-            targetCell.append(newElement);
-
-            //stop event propagation as new element is part of the cell which has click event handler
-            newElement.addEventListener('click',function(e){
-                e.stopPropagation();
-            });
-            let yesButton = newElement.getElementsByClassName('action-cancel-transaction')[0];
-            console.log(yesButton);
-            let noButton = newElement.getElementsByClassName('action-dismiss-pop-up')[0];
-            yesButton.addEventListener('click',onCancelTransaction);
-            yesButton.trasactionData = targetCell.trasactionData;
-            noButton.addEventListener('click',function(e){
-                e.stopPropagation();
-                dimissPopUp(e);
-                trigger('table/deselect/active-row',{tableSettings:$$('#table-container-aft').tableSettings});
-                trigger('table/deselect/hover-row',{tableSettings:$$('#table-container-aft').tableSettings});
-            });
-
-            keepAbsoluteChildInParent($$('#table-container-aft'),$$('#'+cancelTransactionsPopUpId));
+            //bind popup event handlers in order for the popup to be removed when clicked outside
         });
 
 
         /*********************----Helper functions------*********************/
-        function onCancelTransaction(e) {
+        function onCancelPopUpAction(e) {
             e.stopPropagation();
-            console.log(e.target.trasactionData);
+            dismissCancelTransactionPopUp();
+            deselectHighlightedTransaction();
         }
-        function onTableCellClick(event, dataKey, cellContent, cell, col, data, rowId, cellColumnClass, tableSettings) {
-            let activePopup = $$('#'+cancelTransactionsPopUpId);
-            if (activePopup !== undefined && activePopup !== null) {
-                activePopup.parentNode.removeChild(activePopup);
-            }
-            //remove previous popup
+
+        function beforeShowPopUp(event,element,confirmCallback,cancelCallback,parentElement,boundsContainer) {
+
+            let coordinates = {
+                x: event.clientX,
+                y: event.clientY
+            };
+
+            element.setAttribute('id', cancelTransactionsPopUpId);
+            element.style.left = coordinates.x + 5 + 'px';
+            element.style.top = coordinates.y + 5 + 'px';
+
+
+            //stop event propagation as new element is part of the cell which has click event handler
+            element.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+            let yesButton = element.getElementsByClassName('action-cancel-transaction')[0];
+            let noButton = element.getElementsByClassName('action-dismiss-pop-up')[0];
+            yesButton.addEventListener('click', confirmCallback);
+            //pass transaction data from cell to button to avoid dom manipulation in handler
+            yesButton.trasactionData = parentElement.trasactionData;
+
+            noButton.addEventListener('click', cancelCallback);
+
+            parentElement.append(element);
+            keepAbsoluteChildInParent(boundsContainer, $$('#' + cancelTransactionsPopUpId));
+        }
+
+
+
+        function displayTransactionPopUp(title, callbackEvent) {
+            trigger('table/disable-scroll', {tableSettings: tableSettings});
             trigger('template/render', {
                 templateElementSelector: '#cancel-transaction-template',
-                callbackEvent: 'aft/table/display/cancel-pop-up',
-                event:event
+                callbackEvent: callbackEvent,
+                event: event,
+                model: {
+                    title: localization.translateMessage(title)
+                }
             });
         }
 
+        function onTransactionCanceled(params) {
+            console.log(params);
+            let data = params.Data;
+
+            dismissCancelTransactionPopUp();
+            if (data.DisplayEscrowedDeleteDialog === 'undefined' || data.DisplayEscrowedDeleteDialog === false) {
+                deselectHighlightedTransaction();
+                trigger('notifications/show', {
+                    message: localization.translateMessage(data.MessageCode.toString()),
+                    type: data.MessageType
+                });
+                trigger('aft/filters/filter-table');
+            } else {
+                displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up');
+            }
+        }
+
+        function onCancelTransaction(e) {
+            e.stopPropagation();
+            //ToDo Lazar&Nevena: To be removed?
+            //pričali smo da ćemo da izbacimo duple podatke koji se šalju API-ju (endpointName i endpointId) na primer
+            // ali da bi mi trenutno radili pozivi ovo moram da ostavim
+            let endpointName = '';
+            if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
+                endpointName = $$('.link-active')[0].dataset.value;
+            }
+            trigger('communication/aft/transactions/cancel', {
+                gmcid: e.target.trasactionData.gmcid,
+                jidtString: e.target.trasactionData.jidtString,
+                endpointId: endpointId,
+                //ToDo: To be removed?
+                endpointName: endpointName
+            });
+        }
+
+        function onTableCellClick(event, dataKey, cellContent, cell, col, data, rowId, cellColumnClass, tableSettings) {
+            event.stopPropagation();
+            dismissCancelTransactionPopUp();
+            //remove previous popup
+            trigger('table/disable-scroll', {tableSettings: tableSettings});
+            displayTransactionPopUp('CancelTransaction', 'aft/table/show/cancel-pop-up');
+        }
+
+        function dismissCancelTransactionPopUp() {
+            trigger('table/dismiss-popup', {target: $$('#' + cancelTransactionsPopUpId), tableSettings: tableSettings});
+        }
+
+        function deselectHighlightedTransaction() {
+            let tableSettings = $$('#table-container-aft').tableSettings;
+            trigger('table/deselect/active-row', {tableSettings: tableSettings});
+            trigger('table/deselect/hover-row', {tableSettings: tableSettings});
+        }
 
         function onDrawTableCell(column, cellContent, cell, position, rowData) {
             if (column === 'flag') {
@@ -137,7 +221,7 @@ const aft = (function () {
             }
             let transactionData = {
                 gmcid: rowData.data.gmcid,
-                jidtString:rowData.data.jidtString
+                jidtString: rowData.data.jidtString
             };
             cell.trasactionData = transactionData;
         }

@@ -38,7 +38,6 @@ const aftFilters = (function () {
         currentTableSettingsObject = tableSettings;
         getFiltersFromAPI(tableSettings);
     });
-
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
         let tableSettings = params.settingsObject;
@@ -51,7 +50,6 @@ const aftFilters = (function () {
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
-
     on('aft/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
@@ -88,6 +86,7 @@ const aftFilters = (function () {
             callbackEvent: 'table/update'
         });
     });
+    on('aft/filters/filter-table',filterAftTable);
 
     /*********************----Helper functions----*********************/
     function filterAftTable() {
@@ -183,7 +182,6 @@ const aftFilters = (function () {
                 }
             }
         }
-
         //Set visible columns for tableSettings object
         currentTableSettingsObject.visibleColumns = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
@@ -243,6 +241,4 @@ const aftFilters = (function () {
             }
         }
     }
-
-
 })();

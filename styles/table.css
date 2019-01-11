@@ -45,12 +45,15 @@
     background-color: #6F858F;
 }
 
-.tbody {
+.vertex-table .tbody {
     display: grid;
     position: center;
     width: 100%;
     overflow: auto;
     max-height: 80%;
+}
+.vertex-table .tbody.no-scroll {
+    overflow: hidden !important;
 }
 
 .cell {
