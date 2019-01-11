@@ -94,10 +94,19 @@ const aft = (function () {
         //code executed befor popup is added to dom and
         on('aft/table/show/cancel-pending-pop-up', function (params) {
             //bind click handlers here
+            let containerCell = params.params.event.target.closest('.cell');
+            if (containerCell.transactionData === undefined) {
+                console.error('there`s no transaction data on targeted cell!');
+            }
+            else {
+                containerCell.transactionData.pending = true;
+            }
             beforeShowPopUp(params.params.event,params.element,onCancelTransaction,onCancelPopUpAction,
                 params.params.event.target.closest('.cell'),$$('#table-container-aft'));
-
-            //bind popup event handlers in order for the popup to be removed when clicked outside
+            //remove transaction flag so that user can initiate whole process again
+            if (containerCell.transactionData.pending !== undefined) {
+                delete containerCell.transactionData.pending;
+            }
         });
 
 
@@ -178,11 +187,16 @@ const aft = (function () {
                 endpointName = $$('.link-active')[0].dataset.value;
             }
             trigger('communication/aft/transactions/cancel', {
+                transactionData:{
                 gmcid: e.target.trasactionData.gmcid,
                 jidtString: e.target.trasactionData.jidtString,
                 endpointId: endpointId,
                 //ToDo: To be removed?
                 endpointName: endpointName
+            },
+                status: {
+                    pending:e.target.transactionData.pending !== undefined
+                }
             });
         }
 

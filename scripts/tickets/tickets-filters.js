@@ -202,7 +202,7 @@ const ticketsFilter = (function () {
 
     function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sortOrder = currentTableSettingsObject.sort.SortOrder;
+        let sortDirection = currentTableSettingsObject.sort.SortDirection;
         let sortName = currentTableSettingsObject.sort.SortName;
         let filtersForApi = {
             "EndpointId": currentTableSettingsObject.endpointId,
@@ -217,7 +217,7 @@ const ticketsFilter = (function () {
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
-                "SortOrder": sortOrder,
+                "SortOrder": sortDirection,
                 "SortName": ticketSortName[sortName] !== undefined ? ticketSortName[sortName] : null
             },
             "TokenInfo": sessionStorage.token
@@ -261,7 +261,7 @@ const ticketsFilter = (function () {
         activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
             let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
-            filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
+            filtersForApi.BasicData.SortOrder = params.sorting.SortDirection;
             filtersForApi.BasicData.SortName = ticketSortName[params.sorting.SortName] !== undefined ? ticketSortName[params.sorting.SortName] : null;
             trigger('communicate/tickets/previewTickets', {
                 tableSettings: tableSettings,

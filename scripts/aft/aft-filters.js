@@ -64,7 +64,7 @@ const aftFilters = (function () {
         activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
             let filtersForApi = prepareAftFiltersForApi(tableSettings);
-            filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
+            filtersForApi.BasicData.SortDirection = params.sorting.SortDirection;
             filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
             trigger('communicate/aft/previewTransactions', {
                 tableSettings: tableSettings,
@@ -143,7 +143,7 @@ const aftFilters = (function () {
 
     function prepareAftFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sortOrder = currentTableSettingsObject.sort.SortOrder;
+        let sortDirection = currentTableSettingsObject.sort.SortDirection;
         let sortName = currentTableSettingsObject.sort.SortName;
 
 
@@ -158,7 +158,7 @@ const aftFilters = (function () {
             'BasicData': {
                 'Page': currentTableSettingsObject.activePage,
                 'PageSize': table.getPageSize(currentTableSettingsObject),
-                'SortOrder': sortOrder,
+                'SortOrder': sortDirection,
                 'SortName': aftSortName[sortName] !== undefined ? aftSortName[sortName] : null
             },
             'TokenInfo': sessionStorage.token

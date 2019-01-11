@@ -270,13 +270,15 @@ let communication = (function () {
     /*------------------------------------ AFT EVENTS ------------------------------------*/
     //aft cancel transaction
     on('communication/aft/transactions/cancel', function (params) {
+        console.log(params);
         let data = {
-            EndpointId: params.endpointId,
-            Gmcid: params.gmcid,
-            JidtString: params.jidtString,
-            EndpointName: params.endpointName,
+            EndpointId: params.transactionData.endpointId,
+            Gmcid: params.transactionData.gmcid,
+            JidtString: params.transactionData.jidtString,
+            EndpointName: params.transactionData.endpointName,
         };
-        sendRequest(apiRoutes.aft.cancelTransaction, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
+        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
+        sendRequest(route, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
     });
 //aft get transactions
     on('communicate/aft/getTransactions', function (params) {

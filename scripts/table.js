@@ -12,7 +12,7 @@ let table = (function () {
     // 'null' as dataset values are always converted to string
     const nullFilterValues = ['-', null, 'null'];
 
-    const sortOrderEnum = {
+    const sortDirectionEnum = {
         0: 'none',
         1: 'asc',
         2: 'desc'
@@ -682,7 +682,7 @@ let table = (function () {
     function setDefaultActiveColumn(tableSettings) {
         tableSettings.defaultSortColumnSet = true;
         tableSettings.sort = {
-            SortOrder: sortingType.descending,
+            SortDirection: sortingType.descending,
             SortName: tableSettings.sortActiveColumn
         };
         let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName(columnClassPrefix + tableSettings.sortActiveColumn);
@@ -739,8 +739,8 @@ let table = (function () {
 
     function getSorting(tableSettings) {
         tableSettings.sort = {
-            SortOrder: '',
-            SortName: ''
+            SortDirection: null,
+            SortName: null
         };
 
         let activeHeader = getActiveColumn(tableSettings);
@@ -748,13 +748,13 @@ let table = (function () {
         if (activeHeader !== undefined) {
             tableSettings.sort.SortName = activeHeader.dataset.sortName;
             if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
-                tableSettings.sort.SortOrder = sortingType.ascending;
+                tableSettings.sort.SortDirection = sortingType.ascending;
             } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
-                tableSettings.sort.SortOrder = sortingType.descending;
+                tableSettings.sort.SortDirection = sortingType.descending;
             }
         } else {
             tableSettings.sort.SortName = null;
-            tableSettings.sort.SortOrder = null;
+            tableSettings.sort.SortDirection = null;
         }
 
         return tableSettings.sort;
@@ -768,12 +768,12 @@ let table = (function () {
     function setSortingHeader(tableSettings) {
         if (tableSettings.sort) {
             let sortName = tableSettings.sort.SortName;
-            let sortOrder = tableSettings.sort.SortOrder;
+            let sortDirection = tableSettings.sort.SortDirection;
             if (sortName !== null && sortName !== undefined) {
                 let activeHeadElement = getHeadElementBySortName(tableSettings, sortName);
                 if (activeHeadElement !== undefined) {
                     makeColumnActiveFromHeader(activeHeadElement, tableSettings);
-                    activeHeadElement.classList.add('sort-' + sortOrderEnum[sortOrder]);
+                    activeHeadElement.classList.add('sort-' + sortDirectionEnum[sortDirection]);
                 }
             }
         }
@@ -989,6 +989,16 @@ let table = (function () {
         }
         if (tableSettings.columns === undefined) {
             tableSettings.columns = [];
+        }
+        //set default fort values
+        if (tableSettings.sort === undefined) {
+            tableSettings.sort = {};
+        }
+        if (tableSettings.sort.SortDirection === undefined) {
+            tableSettings.sort.SortDirection = null;
+        }
+        if (tableSettings.sort.SortName === undefined) {
+            tableSettings.sort.SortName = null;
         }
 
 
