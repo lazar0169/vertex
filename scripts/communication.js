@@ -18,7 +18,7 @@ let communication = (function () {
             getFilters: 'transactions/getfilters/',
             addTransaction: 'transactions/addtransaction/',
             cancelTransaction: 'transactions/canceltransaction/',
-            cancelPendingTransaction: 'transactions/cancelpendingtransaction/',
+            cancelPendingTransaction: 'transactions/cancelpendingtransaction/'
         },
         tickets: {
             getTickets: 'tickets/',
@@ -33,10 +33,35 @@ let communication = (function () {
         }
     };
 
-    const moduleEvents= {
-        aft:{
+    const moduleEvents = {
+        aft: {
             transactions: {
-                cancel: 'communication/aft/transactions/cancel'
+                getTransaction: 'communicate/aft/getTransactions',
+                previewTransaction: 'communicate/aft/previewTransactions',
+                cancelTransaction: 'communication/aft/transactions/cancel',
+                addTransaction: '',
+                cancelPendingTransaction: '',
+                getNotificationSettings: 'communicate/aft/getNotificationSettings',
+                saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
+                getBasicSettings: 'communicate/aft/getBasicSettings',
+                saveBasicSettings: 'communicate/aft/saveBasicSettings',
+                getFilters: 'communicate/aft/getFilters'
+            },
+            data: {
+                prepare: 'communicate/aft/data/prepare'
+            }
+        },
+        tickets: {
+            transactions: {
+                getTickets: 'tickets/',
+                previewTickets: 'communicate/tickets/previewTickets',
+                getFilters: 'communicate/tickets/getFilters',
+                showSmsSettings: 'communicate/tickets/showSmsSettings',
+                saveSmsSettings: 'communicate/tickets/saveSmsSettings',
+                showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
+                saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
+                ticketAppearance: 'communicate/tickets/ticketAppearance',
+                saveAppearance: 'communicate/tickets/saveAppearance'
             }
         }
     };

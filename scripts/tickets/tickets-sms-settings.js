@@ -2,8 +2,8 @@ let ticketsSmsSettings = (function(){
 
     let formSettingsSmsSettings = {};
     formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
-    formSettingsSmsSettings.fillEvent = 'communicate/tickets/showSmsSettings';
-    formSettingsSmsSettings.submitEvent = 'communicate/tickets/saveSmsSettings';
+    formSettingsSmsSettings.fillEvent = communication.events.tickets.transactions.showSmsSettings;
+    formSettingsSmsSettings.submitEvent = communication.events.tickets.transactions.saveSmsSettings;
 
     on('tickets/tab/smsSettings', function(params){
         formSettingsSmsSettings.endpointId = params.tableSettings.endpointId;

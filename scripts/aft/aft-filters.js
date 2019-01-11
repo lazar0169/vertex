@@ -53,7 +53,7 @@ const aftFilters = (function () {
     on('aft/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        trigger('communicate/aft/previewTransactions', {
+        trigger(communication.events.aft.transactions.previewTransaction, {
             tableSettings: tableSettings,
             data: filtersForApi,
             callbackEvent: 'table/update'
@@ -66,7 +66,7 @@ const aftFilters = (function () {
             let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
             filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
-            trigger('communicate/aft/previewTransactions', {
+            trigger(communication.events.aft.transactions.previewTransaction, {
                 tableSettings: tableSettings,
                 data: filtersForApi,
                 callbackEvent: 'table/update'
@@ -80,7 +80,7 @@ const aftFilters = (function () {
         let tableSettings = params.tableSettings;
         tableSettings.activePage = 1;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        trigger('communicate/aft/previewTransactions', {
+        trigger(communication.events.aft.transactions.previewTransaction, {
             tableSettings: tableSettings,
             data: filtersForApi,
             callbackEvent: 'table/update'
@@ -91,7 +91,7 @@ const aftFilters = (function () {
     /*********************----Helper functions----*********************/
     function filterAftTable() {
         let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
-        trigger('communicate/aft/previewTransactions', {
+        trigger(communication.events.aft.transactions.previewTransaction, {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
@@ -196,7 +196,7 @@ const aftFilters = (function () {
         };
         let tableSettingsObject = tableSettings;
         let successEvent = 'aft/filters/display';
-        trigger('communicate/aft/getFilters', {
+        trigger(communication.events.aft.transactions.getFilters, {
             data: data,
             successEvent: successEvent,
             tableSettings: tableSettingsObject
