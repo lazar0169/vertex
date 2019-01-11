@@ -2,7 +2,7 @@ let aftTabNotificationSettings = (function(){
 
     let formSettingsNotification = {};
     formSettingsNotification.formContainerSelector = '#aft-tabs-notification-settings-info';
-    formSettingsNotification.fillEvent = communication.events.aft.transactions.getNotificationSettings;
+    formSettingsNotification.getData = communication.events.aft.transactions.getNotificationSettings;
     formSettingsNotification.submitEvent = communication.events.aft.transactions.saveNotificationSettings;
 
     on('aft/tab/notification', function(params){

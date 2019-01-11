@@ -33,7 +33,7 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
+        trigger(formSettings.getData, {data: data, formSettings: formSettings});
     }
 
     //helper functions
@@ -152,15 +152,15 @@ let form = (function () {
     function init(formSettings) {
         let formContainerElement = $$(formSettings.formContainerSelector);
         formSettings.formContainerElement = formContainerElement;
-        if (formSettings.fillEvent !== null) {
-            formSettings.fillEvent = getEvent(formSettings, 'fillEvent');
+        if (formSettings.getData !== null) {
+            formSettings.getData = getEvent(formSettings, 'getData');
         }
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
 
-        if (formSettings.fillFormEvent === undefined) {
-            formSettings.fillFormEvent = 'form/fillFormData';
+        if (formSettings.populateData === undefined) {
+            formSettings.populateData = 'form/fillFormData';
         }
         if (formSettings.submitSuccessEvent === undefined) {
             formSettings.submitSuccessEvent = 'form/submit/success';

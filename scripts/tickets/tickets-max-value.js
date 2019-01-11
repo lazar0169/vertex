@@ -2,7 +2,7 @@ let ticketsMaxValue = (function () {
 
     let formSettingsMaxValue = {};
     formSettingsMaxValue.formContainerSelector = '#tickets-max-value-tab-info';
-    formSettingsMaxValue.fillEvent = communication.events.tickets.transactions.showMaxValueSettings;
+    formSettingsMaxValue.getData = communication.events.tickets.transactions.showMaxValueSettings;
     formSettingsMaxValue.submitEvent = communication.events.tickets.transactions.saveMaxValuesAction;
 
     on('tickets/tab/maxValue', function (params) {

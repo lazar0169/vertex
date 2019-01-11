@@ -2,7 +2,7 @@ const ticketAppearance = (function () {
 
     let formSettingsAppearance = {};
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
-    formSettingsAppearance.fillEvent = communication.events.tickets.transactions.ticketAppearance;
+    formSettingsAppearance.getData = communication.events.tickets.transactions.ticketAppearance;
     formSettingsAppearance.submitEvent = communication.events.tickets.transactions.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {

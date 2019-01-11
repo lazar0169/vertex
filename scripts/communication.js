@@ -9,31 +9,31 @@ let communication = (function () {
             edit: "aft/",
             list: "list/",
             ticket: "ticket/",
-            getTransaction: 'transactions/',
-            previewTransaction: 'transactions/previewtransactions/',
-            getNotificationSettings: 'transactions/getnotificationsettings/',
-            saveNotificationSettings: 'transactions/savenotificationsettings/',
-            getBasicSettings: 'transactions/getbasicsettings/',
-            saveBasicSettings: 'transactions/savebasicsettings/',
-            getFilters: 'transactions/getfilters/',
-            addTransaction: 'transactions/addtransaction/',
-            cancelTransaction: 'transactions/canceltransaction/',
-            cancelPendingTransaction: 'transactions/cancelpendingtransaction/'
+            getTransaction: 'api/transactions/',
+            previewTransaction: 'api/transactions/previewtransactions/',
+            getNotificationSettings: 'api/transactions/getnotificationsettings/',
+            saveNotificationSettings: 'api/transactions/savenotificationsettings/',
+            getBasicSettings: 'api/transactions/getbasicsettings/',
+            saveBasicSettings: 'api/transactions/savebasicsettings/',
+            getFilters: 'api/transactions/getfilters/',
+            addTransaction: 'api/transactions/addtransaction/',
+            cancelTransaction: 'api/transactions/canceltransaction/',
+            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/'
         },
         tickets: {
-            getTickets: 'tickets/',
-            previewTickets: 'tickets/previewtickets/',
-            getFilters: 'tickets/getfilters',
-            showSmsSettings: 'tickets/smssettings/',
-            showMaxValueSettings: 'tickets/maxvaluesettings/',
-            ticketAppearance: 'tickets/ticketappearance/',
-            saveSmsSettings: 'tickets/savesmssettings/',
-            saveMaxValuesAction: 'tickets/savemaxvalues/',
+            getTickets: 'api/tickets/',
+            previewTickets: 'api/tickets/previewtickets/',
+            getFilters: 'api/tickets/getfilters',
+            showSmsSettings: 'api/tickets/smssettings/',
+            showMaxValueSettings: 'api/tickets/maxvaluesettings/',
+            ticketAppearance: 'api/tickets/ticketappearance/',
+            saveSmsSettings: 'api/tickets/savesmssettings/',
+            saveMaxValuesAction: 'api/tickets/savemaxvalues/',
             saveAppearance: 'api/tickets/saveappearance/'
         }
     };
 
-    const moduleEvents = {
+    const events = {
         aft: {
             transactions: {
                 getTransaction: 'communicate/aft/getTransactions',
@@ -80,7 +80,7 @@ let communication = (function () {
         delete: 'DELETE'
     };
 
-    const apiUrl = 'https://api.fazigaming.com/api/';
+    const apiUrl = 'https://api.fazigaming.com/';
 
     let timeout = null;
 
@@ -321,7 +321,7 @@ let communication = (function () {
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
     //aft cancel transaction
-    on(moduleEvents.aft.transactions.cancel, function (params) {
+    on(events.aft.transactions.cancel, function (params) {
         let data = {
             EndpointId: params.endpointId,
             Gmcid: params.gmcid,
@@ -1200,7 +1200,7 @@ let communication = (function () {
     }
 
     return {
-        events: moduleEvents,
+        events: events,
         apiRoutes: apiRoutes
     }
 })
