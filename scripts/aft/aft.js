@@ -22,9 +22,9 @@ const aft = (function () {
         tableSettings.pageSelectorId = '#page-aft';
         tableSettings.tableContainerSelector = '#table-container-aft';
         tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
-        tableSettings.dataEvent = 'communicate/aft/getTransactions';
+        tableSettings.dataEvent = communication.events.aft.transactions.getTransaction;
         tableSettings.updateTableEvent = 'table/update';
-        tableSettings.processRemoteData = 'communicate/aft/data/prepare';
+        tableSettings.processRemoteData = communication.events.aft.data.prepare;
         tableSettings.sortActiveColumn = 'createdby';
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
@@ -186,14 +186,14 @@ const aft = (function () {
             if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
                 endpointName = $$('.link-active')[0].dataset.value;
             }
-            trigger('communication/aft/transactions/cancel', {
-                transactionData:{
+            //trigger('communication/aft/transactions/cancel', {
+            trigger(communication.events.aft.transactions.cancelTransaction, {
                 gmcid: e.target.trasactionData.gmcid,
                 jidtString: e.target.trasactionData.jidtString,
                 endpointId: endpointId,
                 //ToDo: To be removed?
                 endpointName: endpointName
-            },
+            ,
                 status: {
                     pending:e.target.transactionData.pending !== undefined
                 }

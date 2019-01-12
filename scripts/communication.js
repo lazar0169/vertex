@@ -6,11 +6,63 @@ let communication = (function () {
             logout: "logout/",
         },
         aft: {
-            cancelTransaction: 'api/transactions/canceltransaction/',
-            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/',
             edit: "aft/",
             list: "list/",
-            ticket: "ticket/"
+            ticket: "ticket/",
+            getTransaction: 'api/transactions/',
+            previewTransaction: 'api/transactions/previewtransactions/',
+            getNotificationSettings: 'api/transactions/getnotificationsettings/',
+            saveNotificationSettings: 'api/transactions/savenotificationsettings/',
+            getBasicSettings: 'api/transactions/getbasicsettings/',
+            saveBasicSettings: 'api/transactions/savebasicsettings/',
+            getFilters: 'api/transactions/getfilters/',
+            addTransaction: 'api/transactions/addtransaction/',
+            cancelTransaction: 'api/transactions/canceltransaction/',
+            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/'
+        },
+        tickets: {
+            getTickets: 'api/tickets/',
+            previewTickets: 'api/tickets/previewtickets/',
+            getFilters: 'api/tickets/getfilters',
+            showSmsSettings: 'api/tickets/smssettings/',
+            showMaxValueSettings: 'api/tickets/maxvaluesettings/',
+            ticketAppearance: 'api/tickets/ticketappearance/',
+            saveSmsSettings: 'api/tickets/savesmssettings/',
+            saveMaxValuesAction: 'api/tickets/savemaxvalues/',
+            saveAppearance: 'api/tickets/saveappearance/'
+        }
+    };
+
+    const events = {
+        aft: {
+            transactions: {
+                getTransaction: 'communicate/aft/getTransactions',
+                previewTransaction: 'communicate/aft/previewTransactions',
+                cancelTransaction: 'communication/aft/transactions/cancel',
+                addTransaction: '',
+                cancelPendingTransaction: '',
+                getNotificationSettings: 'communicate/aft/getNotificationSettings',
+                saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
+                getBasicSettings: 'communicate/aft/getBasicSettings',
+                saveBasicSettings: 'communicate/aft/saveBasicSettings',
+                getFilters: 'communicate/aft/getFilters'
+            },
+            data: {
+                prepare: 'communicate/aft/data/prepare'
+            }
+        },
+        tickets: {
+            transactions: {
+                getTickets: 'tickets/',
+                previewTickets: 'communicate/tickets/previewTickets',
+                getFilters: 'communicate/tickets/getFilters',
+                showSmsSettings: 'communicate/tickets/showSmsSettings',
+                saveSmsSettings: 'communicate/tickets/saveSmsSettings',
+                showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
+                saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
+                ticketAppearance: 'communicate/tickets/ticketAppearance',
+                saveAppearance: 'communicate/tickets/saveAppearance'
+            }
         }
     };
 
@@ -269,8 +321,7 @@ let communication = (function () {
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
     //aft cancel transaction
-    on('communication/aft/transactions/cancel', function (params) {
-        console.log(params);
+    on(events.aft.transactions.cancel, function (params) {
         let data = {
             EndpointId: params.transactionData.endpointId,
             Gmcid: params.transactionData.gmcid,
@@ -282,7 +333,7 @@ let communication = (function () {
     });
 //aft get transactions
     on('communicate/aft/getTransactions', function (params) {
-        let route = 'api/transactions/';
+        let route = apiRoutes.aft.getTransaction;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
         let data = params.data;
@@ -301,7 +352,7 @@ let communication = (function () {
 //aft pagination filtering sorting
 //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
-        let route = 'api/transactions/previewtransactions/';
+        let route = apiRoutes.aft.previewTransaction;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
         let data = params.data;
@@ -320,10 +371,10 @@ let communication = (function () {
 
 //aft get notification settings
     on('communicate/aft/getNotificationSettings', function (params) {
-        let route = 'api/transactions/getnotificationsettings';
+        let route = apiRoutes.aft.getNotificationSettings;
         // let successEvent = 'aft/tab/notifications/display';
         let formSettings = params.formSettings;
-        let successEvent = formSettings.fillFormEvent;
+        let successEvent = formSettings.populateData;
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -339,7 +390,7 @@ let communication = (function () {
 
 //aft save notification settings
     on('communicate/aft/saveNotificationSettings', function (params) {
-        let route = 'api/transactions/savenotificationsettings/';
+        let route = apiRoutes.aft.saveNotificationSettings;
         // let successEvent = 'aft/tab/notifications/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
@@ -358,10 +409,10 @@ let communication = (function () {
 
 //aft get basic settings
     on('communicate/aft/getBasicSettings', function (params) {
-        let route = 'api/transactions/getbasicsettings/';
+        let route = apiRoutes.aft.getBasicSettings;
         // let successEvent = 'aft/tab/transactions/display';
         let formSettings = params.formSettings;
-        let successEvent = formSettings.fillFormEvent;
+        let successEvent = formSettings.populateData;
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -377,7 +428,7 @@ let communication = (function () {
 
 //aft save basic settings
     on('communicate/aft/saveBasicSettings', function (params) {
-        let route = 'api/transactions/savebasicsettings/';
+        let route = apiRoutes.aft.saveBasicSettings;
         // let successEvent = 'aft/tab/transactions/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
@@ -396,7 +447,7 @@ let communication = (function () {
 
 //aft get filters
     on('communicate/aft/getFilters', function (params) {
-        let route = 'api/transactions/getfilters';
+        let route = apiRoutes.aft.getFilters;
         let successEvent = params.successEvent;
         let request = requestTypes.post;
         let errorEvent = '';
@@ -413,7 +464,7 @@ let communication = (function () {
 
 //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
-        let route = 'api/transactions/addtransaction/';
+        let route = apiRoutes.aft.addTransaction;
         let successEvent = 'aft/addTransaction';
         let data = params.data;
         let request = requestTypes.post;
@@ -429,7 +480,7 @@ let communication = (function () {
 
 //aft cancel transaction
     on('communicate/aft/cancelTransaction', function (params) {
-        let route = 'api/transactions/canceltransaction/';
+        let route = apiRoutes.aft.cancelTransaction;
         let successEvent = 'table/update';
         let data = params.data;
         let request = requestTypes.post;
@@ -447,7 +498,7 @@ let communication = (function () {
 
 //aft cancel pending transaction
     on('communicate/aft/cancelPendingTransaction', function (params) {
-        let route = 'api/transactions/cancelpendingtransaction/';
+        let route = apiRoutes.aft.cancelPendingTransaction;
         let successEvent = 'communicate/test';
         let data = params.data;
         let request = requestTypes.post;
@@ -477,7 +528,7 @@ let communication = (function () {
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
 //tickets get tickets
     on('communicate/tickets/getTickets', function (params) {
-        let route = 'api/tickets/';
+        let route = apiRoutes.tickets.getTickets;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
         let request = requestTypes.post;
@@ -496,7 +547,7 @@ let communication = (function () {
 //tickets preview ticket action
 //pagination sorting and filtering
     on('communicate/tickets/previewTickets', function (params) {
-        let route = 'api/tickets/previewtickets/';
+        let route = apiRoutes.tickets.previewTickets;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
         let request = requestTypes.post;
@@ -514,7 +565,7 @@ let communication = (function () {
 
 //getting filter values
     on('communicate/tickets/getFilters', function (params) {
-        let route = 'api/tickets/getfilters/';
+        let route = apiRoutes.tickets.getFilters;
         let successEvent = params.successEvent;
         let request = requestTypes.post;
         let data = params.data;
@@ -533,10 +584,10 @@ let communication = (function () {
 
 //getting values for show sms settings
     on('communicate/tickets/showSmsSettings', function (params) {
-        let route = 'api/tickets/smssettings/';
+        let route = apiRoutes.tickets.showSmsSettings;
         // let successEvent = 'tickets/tab/smsSettings/display';
         let formSettings = params.formSettings;
-        let successEvent = formSettings.fillFormEvent;
+        let successEvent = formSettings.populateData;
         let request = requestTypes.post;
         let data = params.data;
         let errorEvent = '';
@@ -553,10 +604,10 @@ let communication = (function () {
 
 //ShowTitoMaxValueSettings
     on('communicate/tickets/showMaxValueSettings', function (params) {
-        let route = 'api/tickets/maxvaluesettings/';
+        let route = apiRoutes.tickets.showMaxValueSettings;
         // let successEvent = 'tickets/tab/maxValue/display';
         let formSettings = params.formSettings;
-        let successEvent = formSettings.fillFormEvent;
+        let successEvent = formSettings.populateData;
         let request = requestTypes.post;
         let data = params.data;
         let errorEvent = '';
@@ -572,10 +623,10 @@ let communication = (function () {
 
 //ShowTicketAppearanceSettings
     on('communicate/tickets/ticketAppearance', function (params) {
-        let route = 'api/tickets/ticketappearance/';
+        let route = apiRoutes.tickets.ticketAppearance;
         // let successEvent = 'tickets/tab/appearance/display';
         let formSettings = params.formSettings;
-        let successEvent = formSettings.fillFormEvent;
+        let successEvent = formSettings.populateData;
         let request = requestTypes.post;
         let data = params.data;
         let errorEvent = '';
@@ -592,7 +643,7 @@ let communication = (function () {
 
 //SaveTitoSmsAction
     on('communicate/tickets/saveSmsSettings', function (params) {
-        let route = 'api/tickets/savesmssettings/';
+        let route = apiRoutes.tickets.saveSmsSettings;
         // let successEvent = 'tickets/tab/smsSettings/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
@@ -612,7 +663,7 @@ let communication = (function () {
 
 //SaveTitoMaxValuesAction
     on('communicate/tickets/saveMaxValuesAction', function (params) {
-        let route = 'api/tickets/savemaxvalues/';
+        let route = apiRoutes.tickets.saveMaxValuesAction;
         // let successEvent = 'tickets/tab/maxValue/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
@@ -632,7 +683,7 @@ let communication = (function () {
 
 //SaveTicketAppearanceAction
     on('communicate/tickets/saveAppearance', function (params) {
-        let route = 'api/tickets/saveappearance/';
+        let route = apiRoutes.tickets.saveAppearance;
         // let successEvent = 'tickets/tab/appearance/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
@@ -1149,5 +1200,9 @@ let communication = (function () {
         }
     }
 
+    return {
+        events: events,
+        apiRoutes: apiRoutes
+    }
 })
 ();

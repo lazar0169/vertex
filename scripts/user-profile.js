@@ -15,7 +15,7 @@ const userEditProfileModule = (function () {
     });
 
     logout.addEventListener('click', function () {
-        application.checkCurrentUser();
+        // application.checkCurrentUser();
         trigger('logout');//todo make this trigger work
     });
     backUserEditProfile.addEventListener('click', function () {
