@@ -9,8 +9,8 @@ let communication = (function () {
             edit: "aft/",
             list: "list/",
             ticket: "ticket/",
-            getTransaction: 'api/transactions/',
-            previewTransaction: 'api/transactions/previewtransactions/',
+            getTransactions: 'api/transactions/',
+            previewTransactions: 'api/transactions/previewtransactions/',
             getNotificationSettings: 'api/transactions/getnotificationsettings/',
             saveNotificationSettings: 'api/transactions/savenotificationsettings/',
             getBasicSettings: 'api/transactions/getbasicsettings/',
@@ -36,8 +36,8 @@ let communication = (function () {
     const events = {
         aft: {
             transactions: {
-                getTransaction: 'communicate/aft/getTransactions',
-                previewTransaction: 'communicate/aft/previewTransactions',
+                getTransactions: 'communicate/aft/getTransactions',
+                previewTransactions: 'communicate/aft/previewTransactions',
                 cancelTransaction: 'communication/aft/transactions/cancel',
                 addTransaction: '',
                 cancelPendingTransaction: '',
@@ -52,17 +52,16 @@ let communication = (function () {
             }
         },
         tickets: {
-            transactions: {
-                getTickets: 'tickets/',
-                previewTickets: 'communicate/tickets/previewTickets',
-                getFilters: 'communicate/tickets/getFilters',
-                showSmsSettings: 'communicate/tickets/showSmsSettings',
-                saveSmsSettings: 'communicate/tickets/saveSmsSettings',
-                showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
-                saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
-                ticketAppearance: 'communicate/tickets/ticketAppearance',
-                saveAppearance: 'communicate/tickets/saveAppearance'
-            }
+            parseRemoteData: 'communicate/tickets/data/parse',
+            getTickets: 'communicate/tickets/getTickets/',
+            previewTickets: 'communicate/tickets/previewTickets',
+            getFilters: 'communicate/tickets/getFilters',
+            showSmsSettings: 'communicate/tickets/showSmsSettings',
+            saveSmsSettings: 'communicate/tickets/saveSmsSettings',
+            showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
+            saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
+            ticketAppearance: 'communicate/tickets/ticketAppearance',
+            saveAppearance: 'communicate/tickets/saveAppearance'
         }
     };
 
@@ -261,6 +260,7 @@ let communication = (function () {
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
+    //ToDo: refactor in on rowDisplay
     function prepareTicketsTableData(tableSettings, data) {
         let entry = data.Data.Items;
         let formatedData = [];
@@ -287,12 +287,15 @@ let communication = (function () {
                 entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
             }
             formatedData[counter] = {
-                code: entry.EntryData.FullTicketValIdationNumber,
-                issuedBy: entry.EntryData.CashoutedBy,
-                redeemedBy: entry.EntryData.RedeemedBy,
-                status: localization.translateMessage(entry.EntryData.Status),
-                type: entry.EntryData.TicketType,
-                amount: entry.EntryData.Amount
+                rowData: {
+                    code: entry.EntryData.FullTicketValIdationNumber,
+                    issuedBy: entry.EntryData.CashoutedBy,
+                    redeemedBy: entry.EntryData.RedeemedBy,
+                    status: localization.translateMessage(entry.EntryData.Status),
+                    type: entry.EntryData.TicketType,
+                    amount: entry.EntryData.Amount
+                },
+                data: {}
             };
             counter++;
         });
@@ -321,7 +324,9 @@ let communication = (function () {
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
     //aft cancel transaction
-    on(events.aft.transactions.cancel, function (params) {
+    on(events.aft.transactions.cancelTransaction, function (params) {
+        console.log('params');
+        console.log(params);
         let data = {
             EndpointId: params.transactionData.endpointId,
             Gmcid: params.transactionData.gmcid,
@@ -332,8 +337,9 @@ let communication = (function () {
         sendRequest(route, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
     });
 //aft get transactions
-    on('communicate/aft/getTransactions', function (params) {
-        let route = apiRoutes.aft.getTransaction;
+    on(events.aft.transactions.getTransactions, function (params) {
+
+        let route = apiRoutes.aft.getTransactions;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
         let data = params.data;
@@ -352,7 +358,7 @@ let communication = (function () {
 //aft pagination filtering sorting
 //aft preview transactions
     on('communicate/aft/previewTransactions', function (params) {
-        let route = apiRoutes.aft.previewTransaction;
+        let route = apiRoutes.aft.previewTransactions;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
         let data = params.data;
@@ -515,7 +521,7 @@ let communication = (function () {
     });
 
 //prepare data for aft  page
-    on('communicate/aft/data/prepare', function (params) {
+    on(events.aft.data.prepare, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
         tableSettings.tableData = prepareAftTableData(tableSettings, data);
@@ -527,7 +533,8 @@ let communication = (function () {
 
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
 //tickets get tickets
-    on('communicate/tickets/getTickets', function (params) {
+    on(events.tickets.getTickets, function (params) {
+        console.log('get tickets called');
         let route = apiRoutes.tickets.getTickets;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
@@ -702,7 +709,8 @@ let communication = (function () {
 
 
 //prepare data for tickets  page
-    on('communicate/tickets/data/prepare', function (params) {
+    on(events.tickets.parseRemoteData, function (params) {
+        console.log('parse remote tickets data called');
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);

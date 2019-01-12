@@ -70,12 +70,12 @@ let table = (function () {
     function getEvent(tableSettings) {
         let event;
 
-        if (tableSettings.dataEvent !== undefined) {
-            event = tableSettings.dataEvent;
-        } else if (tableSettings.tableContainerElement.dataset.dataEvent !== undefined) {
-            event = tableSettings.tableContainerElement.dataset.dataEvent;
+        if (tableSettings.getDataEvent !== undefined) {
+            event = tableSettings.getDataEvent;
+        } else if (tableSettings.tableContainerElement.dataset.getDataEvent !== undefined) {
+            event = tableSettings.tableContainerElement.dataset.getDataEvent;
         } else {
-            console.error('Event doesn\'t exist!');
+            console.error('getDataEvent Event doesn\'t exist!');
         }
         return event;
     }
@@ -92,7 +92,7 @@ let table = (function () {
 
         if (headElements !== undefined && headElements !== null && headElements.length > 0) {
             colsCount = headElements.length;
-        } else if (tableSettings.tableData !== undefined || tableSettings.tableData.length > 0) {
+        } else if (tableSettings.tableData !== undefined && tableSettings.tableData.length > 0) {
             colsCount = Object.keys(tableSettings.tableData[0].rowData).length;
 
         }
@@ -613,7 +613,7 @@ let table = (function () {
         let data = {EndpointId: tableSettings.endpointId};
         tableSettings.defaultSortColumnSet = false;
 
-        trigger(tableSettings.dataEvent, {
+        trigger(tableSettings.getDataEvent, {
             data: data,
             tableSettings: tableSettings
         });
@@ -926,8 +926,8 @@ let table = (function () {
 
         tableSettings.PageSize = 50;
 
-        if (tableSettings.dataEvent !== null) {
-            tableSettings.dataEvent = getEvent(tableSettings);
+        if (tableSettings.getDataEvent !== null) {
+            tableSettings.getDataEvent = getEvent(tableSettings);
         }
 
         setDefaultSettings(tableSettings);
@@ -999,6 +999,12 @@ let table = (function () {
         }
         if (tableSettings.sort.SortName === undefined) {
             tableSettings.sort.SortName = null;
+        }
+        if (tableSettings.stickyColumn === undefined) {
+            tableSettings.stickyColumn = false;
+        }
+        if (tableSettings.filtersInitialized === undefined) {
+            tableSettings.filtersInitialized = false;
         }
 
 

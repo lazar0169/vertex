@@ -53,7 +53,7 @@ const aftFilters = (function () {
     on('aft/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        trigger(communication.events.aft.transactions.previewTransaction, {
+        trigger(communication.events.aft.transactions.previewTransactions, {
             tableSettings: tableSettings,
             data: filtersForApi,
             callbackEvent: 'table/update'
@@ -66,7 +66,7 @@ const aftFilters = (function () {
             let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortDirection = params.sorting.SortDirection;
             filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
-            trigger(communication.events.aft.transactions.previewTransaction, {
+            trigger(communication.events.aft.transactions.previewTransactions, {
                 tableSettings: tableSettings,
                 data: filtersForApi,
                 callbackEvent: 'table/update'
@@ -80,7 +80,7 @@ const aftFilters = (function () {
         let tableSettings = params.tableSettings;
         tableSettings.activePage = 1;
         let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        trigger(communication.events.aft.transactions.previewTransaction, {
+        trigger(communication.events.aft.transactions.previewTransactions, {
             tableSettings: tableSettings,
             data: filtersForApi,
             callbackEvent: 'table/update'
@@ -91,7 +91,7 @@ const aftFilters = (function () {
     /*********************----Helper functions----*********************/
     function filterAftTable() {
         let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
-        trigger(communication.events.aft.transactions.previewTransaction, {
+        trigger(communication.events.aft.transactions.previewTransactions, {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });

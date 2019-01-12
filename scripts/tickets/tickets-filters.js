@@ -54,7 +54,7 @@ const ticketsFilter = (function () {
         };
         let tableSettingsObject = tableSettings;
         let successEvent = 'tickets/filters/display';
-        trigger(communication.events.tickets.transactions.getFilters, {
+        trigger(communication.events.tickets.getFilters, {
             data: data,
             successEvent: successEvent,
             tableSettings: tableSettingsObject
@@ -233,7 +233,7 @@ const ticketsFilter = (function () {
 
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
         let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
-        trigger(communication.events.tickets.transactions.previewTickets, {
+        trigger(communication.events.tickets.previewTickets, {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
@@ -249,7 +249,7 @@ const ticketsFilter = (function () {
     on('tickets/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
-        trigger(communication.events.tickets.transactions.previewTickets, {
+        trigger(communication.events.tickets.previewTickets, {
             tableSettings: tableSettings,
             data: filtersForApi,
             callbackEvent: 'table/update'
@@ -263,7 +263,7 @@ const ticketsFilter = (function () {
             let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortOrder = params.sorting.SortDirection;
             filtersForApi.BasicData.SortName = ticketSortName[params.sorting.SortName] !== undefined ? ticketSortName[params.sorting.SortName] : null;
-            trigger(communication.events.tickets.transactions.previewTickets, {
+            trigger(communication.events.tickets.previewTickets, {
                 tableSettings: tableSettings,
                 data: filtersForApi,
                 callbackEvent: 'table/update'
@@ -280,7 +280,7 @@ const ticketsFilter = (function () {
     on('tickets/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
-        trigger(communication.events.tickets.transactions.previewTickets, {
+        trigger(communication.events.tickets.previewTickets, {
             tableSettings: tableSettings,
             data: filtersForApi,
             callbackEvent: 'table/update'

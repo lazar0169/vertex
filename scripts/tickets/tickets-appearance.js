@@ -2,8 +2,8 @@ const ticketAppearance = (function () {
 
     let formSettingsAppearance = {};
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
-    formSettingsAppearance.getData = communication.events.tickets.transactions.ticketAppearance;
-    formSettingsAppearance.submitEvent = communication.events.tickets.transactions.saveAppearance;
+    formSettingsAppearance.getData = communication.events.tickets.ticketAppearance;
+    formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
         formSettingsAppearance.endpointId = params.tableSettings.endpointId;
