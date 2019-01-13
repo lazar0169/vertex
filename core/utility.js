@@ -46,6 +46,22 @@ function expandElement(element) {
     if (sectionHeight !== 0) {
         element.style.height = sectionHeight + 'px';
     }
+    element.addEventListener("webkittransitionEnd", expandTransitionEnd,false);
+    element.addEventListener("transitionend", expandTransitionEnd,false);
+    element.addEventListener("otransitionend", expandTransitionEnd,false);
+    element.addEventListener("MSAnimationEnd", expandTransitionEnd,false);
+}
+//remove fixed height on elements after they are expanded
+function expandTransitionEnd(e) {
+    let target = e.target;
+    let targetedHeight = target.style.height;
+    if (targetedHeight !== '0px') {
+        target.style.height = 'auto';
+        target.removeEventListener("webkittransitionEnd", expandTransitionEnd, false);
+        target.removeEventListener("transitionend", expandTransitionEnd, false);
+        target.removeEventListener("otransitionend", expandTransitionEnd, false);
+        target.removeEventListener("MSAnimationEnd", expandTransitionEnd, false);
+    }
 }
 
 function keepAbsoluteChildInParent(parent, child, offset) {
