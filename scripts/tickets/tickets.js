@@ -17,16 +17,11 @@ const tickets = (function () {
         //tableSettings.dataEvent = 'communicate/tickets/getTickets';
         tableSettings.getDataEvent = communication.events.tickets.getTickets;
         tableSettings.updateEvent = 'table/update';
-        //tableSettings.processRemoteData = 'communicate/tickets/data/prepare';
         tableSettings.processRemoteData = communication.events.tickets.parseRemoteData;
-        //tableSettings.paginationEvent = 'communicate/tickets/PreviewTicketAction';
         tableSettings.endpointId = ticketId;
-        tableSettings.sortActiveColumn = 'issuedby';
+        //tableSettings.sortActiveColumn = 'issuedby';
         tableSettings.id = '';
-        tableSettings.forceRemoveHeaders = true;
         tableSettings.stickyRow = true;
-        tableSettings.stickyColumn = false;
-        tableSettings.filtersInitialized = false;
 
         tableSettings.onDrawRowCell = 'tickets/table/drawCell';
 
@@ -42,7 +37,6 @@ const tickets = (function () {
     });
     /*********************----Helper functions------*********************/
     function onDrawTableCell(column, cellContent, cell, position, entryData) {
-        console.log(entryData);
          if (column === 'issuedBy' || column === 'redeemedBy') {
             cell.classList.add('flex-column');
             cell.classList.add('justify-content-start');
@@ -62,6 +56,5 @@ const tickets = (function () {
          else if (column === 'amount'){
              cell.classList.add('text-right');
          }
-
     }
 })();

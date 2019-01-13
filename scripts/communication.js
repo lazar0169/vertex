@@ -363,6 +363,19 @@ let communication = (function () {
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
+
+        //ToDo: prodiskutovati na sastanku
+       /* let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
+        let tableItems = tbody.getElementsByClassName('table-item');
+        //remove displayed rows
+        if (tableItems !== undefined && tableItems != null) {
+            while (tableItems.length > 0) {
+                let item = tableItems[0];
+                item.parentNode.removeChild(item);
+            }
+        }
+*/
+
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
@@ -711,6 +724,7 @@ let communication = (function () {
     on(events.tickets.parseRemoteData, function (params) {
         console.log('parse remote tickets data called');
         let tableSettings = params.settingsObject;
+        console.log(tableSettings);
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
         trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});

@@ -23,10 +23,9 @@ const aft = (function () {
         tableSettings.getDataEvent = communication.events.aft.transactions.getTransactions;
         tableSettings.updateTableEvent = 'table/update';
         tableSettings.processRemoteData = communication.events.aft.data.prepare;
-        tableSettings.sortActiveColumn = 'createdby';
+        //tableSettings.sortActiveColumn = 'createdby';
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
-        tableSettings.forceRemoveHeaders = false;
         tableSettings.stickyRow = true;
 
         tableSettings.onDrawRowCell = 'aft/table/drawCell';

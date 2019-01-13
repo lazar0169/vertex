@@ -13,11 +13,11 @@
     overflow-y: scroll;
 }
 
-.table {
+.vertex-table.table {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    height: calc(100vh - 5% - 4% - 2rem);
+
     /*100vh - top bar - tabs - tabs margin - custom filter*/
     overflow: hidden;
     margin-top: 0.1rem;
@@ -271,7 +271,7 @@ textarea {
 
 .vertex-table .table-actions-column {
     width:49px;
-    padding:0;
+    padding:0 !important;
 }
 .vertex-table.table-condensed .table-actions-column {
     width:44px;

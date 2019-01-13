@@ -37,13 +37,13 @@ let table = (function () {
     let currentOffset;
 
     /*-------------------------------EVENTS--------------------------------*/
-    on ('table/dismiss-popup',function(params){
-        dismissPopup(params.target,params.tableSettings);
+    on('table/dismiss-popup', function (params) {
+        dismissPopup(params.target, params.tableSettings);
     });
-    on ('table/disable-scroll',function(params){
+    on('table/disable-scroll', function (params) {
         disableScroll(params.tableSettings);
     });
-    on ('table/enable-scroll',function(params){
+    on('table/enable-scroll', function (params) {
         enableScroll(params.tableSettings);
     });
     on('table/deselect/active-row', function (params) {
@@ -183,6 +183,10 @@ let table = (function () {
         }
 
         let rowsCount = tableSettings.tableData.length;
+
+        console.log('tableSettings.visibleColumns');
+        console.log(tableSettings.visibleColumns);
+
         let visibleColumns = tableSettings.visibleColumns.length > 0 ? tableSettings.visibleColumns : [];
         let visibleColumnsClasses = [];
 
@@ -250,8 +254,7 @@ let table = (function () {
                             cell.classList.add(hiddenCellClassName);
                             header.classList.add(hiddenCellClassName);
                         }
-                    }
-                    else {
+                    } else {
                         cell.classList.remove(hiddenCellClassName);
                         header.classList.remove(hiddenCellClassName);
                     }
@@ -261,7 +264,7 @@ let table = (function () {
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
-                if (col === colsCount-1) {
+                if (col === colsCount - 1) {
                     cell.classList.add('last-cell');
                 }
                 if (tableSettings.onHoverRow === undefined) {
@@ -279,18 +282,18 @@ let table = (function () {
                 cell.addEventListener('click', function (e) {
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
-                        tableSettings.onBeforeCellClick(e,dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
+                        tableSettings.onBeforeCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
                     }
                     currentOffset = cell.getClientRects()[0];
                     //check if there's custom on cell click hadler
                     if (tableSettings.onCellClick === undefined) {
                         selectRow(tableSettings, rowClassPrefix + rowId);
                     } else {
-                        tableSettings.onCellClick(e,dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                        tableSettings.onCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
 
                     }
                     if (tableSettings.onAfterCellClick !== undefined) {
-                        tableSettings.onAfterCellClick(e,dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
+                        tableSettings.onAfterCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
                     }
                 });
 
@@ -319,10 +322,11 @@ let table = (function () {
         }
         if (rowsCount > 0) {
             //highlight sorted column if there is one
-            setSortActiveColumn(tableSettings);
+            markActiveColumnRows(tableSettings);
+
             setTableDimensions(tableSettings, colsCount, tbody);
 
-            //callback when all rows are drew
+            //callback when all rows are drawn
             if (tableSettings.onAfterDrawRows !== null) {
                 if (isFunction(tableSettings.onAfterDrawRows)) {
                     tableSettings.onAfterDrawRows(tableSettings);
@@ -384,6 +388,7 @@ let table = (function () {
             newSelectedRowCells[i].classList.add(activeRowElementsClass);
         }
     }
+
     /*--------------------------------------------------------------------------------------*/
 
     /*-------------------------------------- PAGINATION ---------------------------------------*/
@@ -570,8 +575,6 @@ let table = (function () {
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
 
-        setSortingHeader(tableSettings);
-
         let itemsCount = tableSettings.tableData === null ? 0 : Object.keys(tableSettings.tableData).length;
 
         if (itemsCount > 0) {
@@ -699,10 +702,29 @@ let table = (function () {
         }
     }
 
-    function makeColumnActiveFromHeader(header, tableSettings) {
+    function markActiveColumnRows(tableSettings) {
         let headers = getHeaders(tableSettings);
+        let columnName = null;
+        for (let i = 0; i < headers.length; i++) {
+            let header = headers[i];
+            if (header.classList.contains('active-column')) {
+                columnName = getColumnNameFromHeadElement(header);
+            }
+        }
+        if (columnName !== null) {
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
+            for (let j = 0; j < columnElements.length; j++) {
+                columnElements[j].classList.add(activeColumnElementsClass);
+            }
+        }
+    }
+
+    function setSortingAttributes(header, tableSettings) {
+        let headers = getHeaders(tableSettings);
+
         //be sure that there's only one active header
         for (let i = 0; i < headers.length; i++) {
+
             if (headers[i] !== header) {
                 headers[i].classList.remove('sort-active');
                 headers[i].classList.remove('sort-asc');
@@ -714,18 +736,11 @@ let table = (function () {
         if (header !== undefined) {
             header.classList.add('sort-active');
             header.classList.add(activeColumnElementsClass);
-            toggleDirection(header, tableSettings);
-
-            let columnName = getColumnNameFromHeadElement(tableSettings, header);
-
-            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-            for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add(activeColumnElementsClass);
-            }
+            toggleSortDirectionClasses(header, tableSettings);
         }
     }
 
-    function toggleDirection(header) {
+    function toggleSortDirectionClasses(header) {
         if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
             header.classList.add(sortingClass.ascending);
             header.dataset.direction = sortingDataAtt.ascending;
@@ -768,25 +783,12 @@ let table = (function () {
         return tableSettings.tableContainerElement.getElementsByClassName(cellName)[0];
     }
 
-    function setSortingHeader(tableSettings) {
-        if (tableSettings.sort) {
-            let sortName = tableSettings.sort.SortName;
-            let sortDirection = tableSettings.sort.SortDirection;
-            if (sortName !== null && sortName !== undefined) {
-                let activeHeadElement = getHeadElementBySortName(tableSettings, sortName);
-                if (activeHeadElement !== undefined) {
-                    makeColumnActiveFromHeader(activeHeadElement, tableSettings);
-                    activeHeadElement.classList.add('sort-' + sortDirectionEnum[sortDirection]);
-                }
-            }
-        }
-    }
 
     function setSortActiveColumn(tableSettings) {
         let headers = getHeaders(tableSettings);
         for (let header of headers) {
             if (header.classList.contains(columnClassPrefix + tableSettings.sortActiveColumn)) {
-                makeColumnActiveFromHeader(header, tableSettings);
+                setSortingAttributes(header, tableSettings);
             }
         }
     }
@@ -796,14 +798,16 @@ let table = (function () {
 
     /*--------------------------- SORTING LINK CLICK HANDLERS ----------------------------*/
     function handleSortingLinkClick(e) {
+
         let element = e.target;
         let table = element.parentNode.parentNode;
         let tableSettings = table.tableSettings;
         tableSettings.activePage = 1;
         e.preventDefault();
+        //ToDo: odluciti kada se markira aktivna kolona
         deselectActiveColumn(table);
 
-        makeColumnActiveFromHeader(element, tableSettings);
+        setSortingAttributes(element, tableSettings);
         //set active column class
         //parse to array
         let classes = Array.prototype.slice.call(element.classList, 0);
@@ -834,7 +838,7 @@ let table = (function () {
 
     /*------------------------------- SHOWING/HIDING COLUMNS -------------------------------*/
 
-    function getColumnNameFromHeadElement(tableSettings, headElement) {
+    function getColumnNameFromHeadElement(headElement) {
         let classList = headElement.classList;
         let cellClassName;
         for (let i = 0; i < classList.length; i++) {
@@ -849,7 +853,7 @@ let table = (function () {
         let headers = getHeaders(tableSettings);
         let columnNames = [];
         for (let i = 0; i < headers.length; i++) {
-            columnNames.push(getColumnNameFromHeadElement(tableSettings, headers[i]));
+            columnNames.push(getColumnNameFromHeadElement(headers[i]));
         }
         return columnNames;
     }
@@ -911,7 +915,7 @@ let table = (function () {
             accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
             return accumulated;
         }, {});
-        if (filters.Columns === null) {
+        if (filters.Columns === undefined || filters.Columns === null) {
             filters.Columns = [];
         }
         return filters;
@@ -958,31 +962,36 @@ let table = (function () {
         getSorting: getSorting,
         getPageSize: getPageSize,
         parseFilterValues: parseFilterValues,
-        getBounds:getBounds
+        getBounds: getBounds,
+        setFiltersPage: setFiltersPage
     };
 
     /*--------------------------------------------------------------------------------------*/
 
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
-    function dismissPopup(target,tableSettings) {
+    function dismissPopup(target, tableSettings) {
         dimissPopUp(target);
         enableScroll(tableSettings);
     }
+
     function disableScroll(tableSettings) {
         let tbody = getTableBodyElement(tableSettings);
         tbody.classList.add('no-scroll');
     }
+
     function enableScroll(tableSettings) {
         let tbody = getTableBodyElement(tableSettings);
         tbody.classList.remove('no-scroll');
     }
-    function positionElementInsideTable(tableSettings,element) {
+
+    function positionElementInsideTable(tableSettings, element) {
         let bounds = getBounds(tableSettings);
         let elementBounds = element.getBoundingClientRect();
 
 
     }
+
     function setDefaultSettings(tableSettings) {
         if (tableSettings.filters === undefined) {
             tableSettings.filters = null;
@@ -1009,9 +1018,14 @@ let table = (function () {
         if (tableSettings.filtersInitialized === undefined) {
             tableSettings.filtersInitialized = false;
         }
+        if (tableSettings.forceRemoveHeaders === undefined) {
+            tableSettings.forceRemoveHeaders = false;
+
+        }
 
 
     }
+
     function checkTableSettings(tableSettings) {
         //check if all settings argument are set correctly
         //check callback functions - allow either function or a string - name of the event to be triggered
@@ -1038,12 +1052,14 @@ let table = (function () {
             console.error('onAfterCellClick callback is not a function');
         }
     }
+
     function deselectActiveColumn(table) {
         let activeElements = table.getElementsByClassName(activeColumnElementsClass);
         while (activeElements.length > 0) {
             activeElements[0].classList.remove(activeColumnElementsClass);
         }
     }
+
     function deselectActiveRow(table) {
         let activeElements = table.getElementsByClassName(activeRowElementsClass);
 
@@ -1051,6 +1067,7 @@ let table = (function () {
             activeElements[0].classList.remove(activeRowElementsClass);
         }
     }
+
     function deselectHoverRow(table) {
         let elements = table.getElementsByClassName('hover');
         while (elements.length > 0) {
@@ -1059,6 +1076,26 @@ let table = (function () {
     }
 
     /*-------------------------------PUBLIC HELPER FUNCTIONS--------------------------------*/
+    function setFiltersPage(currentTableSettingsObject, filtersForApi) {
+        if (currentTableSettingsObject.filters !== null) {
+            if (currentTableSettingsObject.filters.BasicData !== undefined) {
+                let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
+                let clonedExistingFilters = JSON.parse(JSON.stringify(currentTableSettingsObject.filters));
+
+                //delete pages as that data will differ from old and new filters data
+                delete clonedFilters.BasicData.Page;
+                delete clonedFilters.TokenInfo;
+                delete clonedExistingFilters.BasicData.Page;
+                delete clonedExistingFilters.TokenInfo;
+
+                if (!compareObjects(clonedFilters, clonedExistingFilters)) {
+                    currentTableSettingsObject.activePage = 1;
+                    filtersForApi.BasicData.Page = 1;
+                }
+            }
+        }
+    }
+
     function getBounds(tableSettings) {
         return tableSettings.tableContainerElement.getBoundingClientRect();
     }

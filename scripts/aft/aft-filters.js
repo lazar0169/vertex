@@ -165,7 +165,7 @@ const aftFilters = (function () {
         };
 
         //reset to page 1 if filters are changed
-        if (currentTableSettingsObject.filters !== null) {
+        /*if (currentTableSettingsObject.filters !== null) {
             if (currentTableSettingsObject.filters.BasicData !== undefined) {
                 let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
                 let clonedExistingFilters = JSON.parse(JSON.stringify(currentTableSettingsObject.filters));
@@ -181,11 +181,11 @@ const aftFilters = (function () {
                     filtersForApi.BasicData.Page = 1;
                 }
             }
-        }
+        }*/
+        table.setFiltersPage(currentTableSettingsObject,filtersForApi);
         //Set visible columns for tableSettings object
         currentTableSettingsObject.visibleColumns = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
-        currentTableSettingsObject.filtersA = filtersForApi;
 
         return filtersForApi;
     }

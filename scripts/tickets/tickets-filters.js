@@ -98,13 +98,24 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFiltersRedeemed = $$('#tickets-advance-table-filter-redeemed');
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
 
-        let colNames = getColNamesOfTable(tableSettings);
-
-        multiDropdown.generate(filters.TicketStateList, ticketsAdvanceTableFiltersStatus);
-        multiDropdown.generate(filters.TypesList, ticketsAdvanceTableFiltersTypes);
+        let states =  table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
+        multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
+        let types =  table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
+        multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
-        multiDropdown.generate(colNames, ticketsAdvanceTableFilterColumn);
+
+        //hide/show columns picker
+        ticketsAdvanceTableFilterColumn.classList.add('table-element-select-columns');
+        ticketsAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
+        let hideableColumns = table.getHideableColumns(tableSettings);
+        hideableColumns.unshift({name: '-', value: null});
+        //ToDo Neske: this can be removed when solution for parsed hack is found
+        let columns = hideableColumns.map(function (item) {
+            item.parsed = true;
+            return item;
+        });
+        multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
     }
 
 
@@ -212,8 +223,8 @@ const ticketsFilter = (function () {
             "RedeemDateTo": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
             "PrintedList": preparePrintedListData(pageFilters.Printed),
             "RedeemList": prepareRedeemListData(pageFilters.Redeemed),
-            "Status": prepareStatusArrayData(pageFilters.Status),
-            "Type": prepareTypeArrayData(pageFilters.TypesList),
+            "Status": pageFilters.Status,
+            "Type": pageFilters.TypesList,
             "BasicData": {
                 "Page": currentTableSettingsObject.activePage,
                 "PageSize": parseInt(pageFilters.PageSize, 10),
@@ -222,11 +233,13 @@ const ticketsFilter = (function () {
             },
             "TokenInfo": sessionStorage.token
         };
-        currentTableSettingsObject.ColumnsToShow = pageFilters.Column;
+
+        table.setFiltersPage(currentTableSettingsObject,filtersForApi);
+        //Set visible columns for tableSettings object
+        currentTableSettingsObject.visibleColumns = pageFilters.Columns;
+        console.log(currentTableSettingsObject.visibleColumns);
+
         currentTableSettingsObject.filters = filtersForApi;
-
-
-        console.log('filters for api tickts', filtersForApi);
 
         return filtersForApi;
     }
