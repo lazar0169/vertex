@@ -155,9 +155,7 @@
 }
 
 .table .cell.last-cell {
-    justify-content: flex-end;
-    text-align: right;
-    padding-right: 1.5rem;
+    padding-right: 30px;
 }
 
 .sticky {
@@ -170,8 +168,6 @@
     background: #2b383f;
     color: white;
 }
-
-
 
 .element-table-filters-container {}
 
@@ -296,7 +292,7 @@ textarea {
     font-size:12px;
     color:white;
 }
-.vertex-table .cell.cell-column {
+.vertex-table .cell.flex-column {
     flex-direction: column;
 }
 .vertex-table .cell.justify-content-start {
@@ -305,7 +301,10 @@ textarea {
 .vertex-table .cell.align-items-start {
     align-items: flex-start;
 }
-
+.vertex-table .cell.text-right {
+    justify-content: flex-end;
+    text-align: right;
+}
 .table-condensed .cell .table-time {
     font-size: 11px !important;
 }

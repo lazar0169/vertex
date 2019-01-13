@@ -261,6 +261,9 @@ let table = (function () {
                 if (tableSettings.stickyColumn === true && col === 1) {
                     cell.classList.add('sticky');
                 }
+                if (col === colsCount-1) {
+                    cell.classList.add('last-cell');
+                }
                 if (tableSettings.onHoverRow === undefined) {
                     cell.addEventListener('mouseover', function () {
                         hoverRow(rowClassPrefix + rowId, true);

@@ -73,7 +73,6 @@ const aft = (function () {
 
     });
 
-
     on('aft/transactions/canceled/error', function (params) {
         console.log('error');
         trigger('communication/error/', params);
@@ -105,7 +104,6 @@ const aft = (function () {
             delete containerCell.transactionData.pending;
         }
     });
-
 
     /*********************----Helper functions------*********************/
     function onCancelPopUpAction(e) {
@@ -225,7 +223,7 @@ const aft = (function () {
             cell.classList.add('cell-flag');
             cell.innerHTML = '';
         } else if (column === 'finishedBy' || column === 'createdBy') {
-            cell.classList.add('cell-column');
+            cell.classList.add('flex-column');
             cell.classList.add('justify-content-start');
             cell.classList.add('align-items-start');
         }

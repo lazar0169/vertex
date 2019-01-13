@@ -266,7 +266,7 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entry.forEach(function (entry) {
-            if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
+           /* if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
 
             } else {
@@ -279,13 +279,9 @@ let communication = (function () {
             } else {
                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
 
-            }
+            }*/
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
-            delete entry.EntryData.CashoutedTime;
-            delete entry.EntryData.RedeemedTime;
-            if (entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
-            }
+
             formatedData[counter] = {
                 rowData: {
                     code: entry.EntryData.FullTicketValIdationNumber,
@@ -295,7 +291,10 @@ let communication = (function () {
                     type: entry.EntryData.TicketType,
                     amount: entry.EntryData.Amount
                 },
-                data: {}
+                data: {
+                    issuedAt: formatTimeData(entry.EntryData.CashoutedTime),
+                    redeemedAt:formatTimeData(entry.EntryData.RedeemedTime),
+                }
             };
             counter++;
         });

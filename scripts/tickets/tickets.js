@@ -30,7 +30,6 @@ const tickets = (function () {
 
         tableSettings.onDrawRowCell = 'tickets/table/drawCell';
 
-
         table.init(tableSettings); //initializing table, filters and page size
 
         trigger('tickets/tab/appearance', {tableSettings: tableSettings});
@@ -38,5 +37,31 @@ const tickets = (function () {
         trigger('tickets/tab/smsSettings', {tableSettings: tableSettings});
     });
     /*********************----Module Events------*********************/
+    on('tickets/table/drawCell', function (params) {
+        onDrawTableCell(params.key, params.value, params.element, params.position, params.rowData);
+    });
+    /*********************----Helper functions------*********************/
+    function onDrawTableCell(column, cellContent, cell, position, entryData) {
+        console.log(entryData);
+         if (column === 'issuedBy' || column === 'redeemedBy') {
+            cell.classList.add('flex-column');
+            cell.classList.add('justify-content-start');
+            cell.classList.add('align-items-start');
+        }
+         if (column === 'issuedBy') {
+            cell.innerHTML = `<time class='table-time'>${entryData.data.issuedAt}</time><label>${entryData.rowData.issuedBy}</label>`;
+         }
+         else if (column === 'redeemedBy') {
+             cell.innerHTML = `<time class='table-time'>${entryData.data.redeemedAt}</time><label>${entryData.rowData.redeemedBy}</label>`;
+         }
+         else if (column === 'type') {
+             if (entryData.type === 'CashableTicket') {
+                 cell.innerHTML = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
+             }
+         }
+         else if (column === 'amount'){
+             cell.classList.add('text-right');
+         }
 
+    }
 })();

@@ -223,6 +223,9 @@ function removeChildren(element) {
         element.removeChild(element.lastChild);
     }
 }
+function formatTimeData(timeData) {
+    return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
+}
 
 //formats number 2000.53 into 2,000.53
 function formatFloatValue(amount) {
