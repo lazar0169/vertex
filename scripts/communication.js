@@ -324,8 +324,6 @@ let communication = (function () {
     /*------------------------------------ AFT EVENTS ------------------------------------*/
     //aft cancel transaction
     on(events.aft.transactions.cancelTransaction, function (params) {
-        console.log('params');
-        console.log(params);
         let data = {
             EndpointId: params.transactionData.endpointId,
             Gmcid: params.transactionData.gmcid,
@@ -546,7 +544,6 @@ let communication = (function () {
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
 //tickets get tickets
     on(events.tickets.getTickets, function (params) {
-        console.log('get tickets called');
         let route = apiRoutes.tickets.getTickets;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
@@ -722,9 +719,7 @@ let communication = (function () {
 
 //prepare data for tickets  page
     on(events.tickets.parseRemoteData, function (params) {
-        console.log('parse remote tickets data called');
         let tableSettings = params.settingsObject;
-        console.log(tableSettings);
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
         trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
@@ -1204,7 +1199,6 @@ let communication = (function () {
     }
 
     function handleError(error) {
-        console.log(error.message);
         if (error.xhr.status < 500) {
             trigger('notifications/show', {
                 message: localization.translateMessage(error.message.MessageCode.toString()),

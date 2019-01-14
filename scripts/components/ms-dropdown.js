@@ -163,9 +163,6 @@ const multiDropdown = (function () {
                     selected.innerHTML = arrayInner;
                     option.children[0].children[0].checked = false;
                     if (selected.innerHTML === '') {
-                        console.log('noSelect');
-                        console.log(noSelected);
-
                         selected.innerHTML = noSelected.Name;
                         array.push(noSelected.Value);
                         arrayInner.push(noSelected.Value);

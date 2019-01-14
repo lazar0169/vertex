@@ -330,8 +330,6 @@ let table = (function () {
             tbody.classList.remove('d-hide');
             tableSettings.noDataElement.classList.add('d-hide');
             setTableDimensions(tableSettings, colsCount, tbody);
-
-
         }
         else {
             hidePagination(tableSettings);

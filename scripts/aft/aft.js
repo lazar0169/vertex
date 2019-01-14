@@ -73,7 +73,6 @@ const aft = (function () {
     });
 
     on('aft/transactions/canceled/error', function (params) {
-        console.log('error');
         trigger('communication/error/', params);
         dismissCancelTransactionPopUp();
         deselectHighlightedTransaction();
@@ -132,8 +131,6 @@ const aft = (function () {
         let noButton = element.getElementsByClassName('action-dismiss-pop-up')[0];
         yesButton.addEventListener('click', confirmCallback);
         //pass transaction data from cell to button to avoid dom manipulation in handler
-        console.log('parent element transaction data');
-        console.log(parentElement.transactionData);
         yesButton.transactionData = parentElement.transactionData;
 
         noButton.addEventListener('click', cancelCallback);
@@ -156,7 +153,6 @@ const aft = (function () {
     }
 
     function onTransactionCanceled(params) {
-        console.log(params);
         let data = params.Data;
 
         dismissCancelTransactionPopUp();

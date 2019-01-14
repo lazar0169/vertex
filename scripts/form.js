@@ -4,6 +4,14 @@ let form = (function () {
     let valueMultiplier = 100;
     let currentEndpointId;
 
+    const inputTypes = {
+        singleSelect : 'single-select',
+        integer: 'int',
+        float:'float',
+        string:'string',
+        array:'array'
+    }
+
     function prepareFloatValue(value) {
         value = value.replace(',', '');
         return parseFloat(value);
@@ -38,7 +46,7 @@ let form = (function () {
 
     //helper functions
     function collectAllFormElements(formSettings) {
-        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        let formElement = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
         return Array.prototype.slice.call(formInputElements);
     }
@@ -115,21 +123,20 @@ let form = (function () {
                             }
                         } else {
                             switch (inputElement.dataset.type) {
-                                case 'single-select':
+                                case inputTypes.singleSelect:
                                     //inputElement.dataset.value = dataToDisplay[inputName];
                                     dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
                                     break;
-                                case 'int':
+                                case inputTypes.integer:
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
-                                case 'float':
-
+                                case inputTypes.float:
                                     inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
-                                case 'string':
+                                case inputTypes.string:
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
-                                case 'array':
+                                case inputTypes.array:
                                     if (dataToDisplay[inputName].length === 1) {
                                         inputElement.value = dataToDisplay[inputName][0];
                                     }
@@ -268,7 +275,6 @@ let form = (function () {
     function deleteFormElement() {
         let deleteButtonParentNode = this.parentNode;
         let parentNode = deleteButtonParentNode.parentNode;
-        console.log(parentNode);
         deleteButtonParentNode.remove();
         let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
@@ -287,7 +293,6 @@ let form = (function () {
 
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
-                console.log(newField);
                 newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
                 newField.classList.add('element-input-additional-array-value');
 
@@ -352,6 +357,16 @@ let form = (function () {
             });
         }
     }
+    function createCurrencyInputs(formSettings) {
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        for (let i = 0;i<formInputElements.length;i++) {
+            let input = formInputElements[i];
+            if (input.dataset.type === inputTypes.float) {
+                currencyInput.generate(input);
+            }
+        }
+    }
+
 
     function toggleSection(e) {
         if (e === undefined) {
@@ -416,7 +431,7 @@ let form = (function () {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        // bindBackButton(formSettings);
+        createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
     }

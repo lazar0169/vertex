@@ -245,7 +245,9 @@ function formatTimeData(timeData) {
 
 //formats number 2000.53 into 2,000.53
 function formatFloatValue(amount) {
-    let decimalCount = 2, decimal = ".", thousands = ",";
+    let decimalCount = config.decimalCount;
+    let decimal = config.decimalSeparator;
+    let thousands = config.thousandSeparator;
     try {
         decimalCount = Math.abs(decimalCount);
         decimalCount = isNaN(decimalCount) ? 2 : decimalCount;

@@ -89,8 +89,6 @@ const ticketsFilter = (function () {
     //display initial filters
     function displayFilters(filters, tableSettings) {
 
-        console.log('filters to display Tickets', filters);
-
         //filter elements
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
@@ -237,7 +235,6 @@ const ticketsFilter = (function () {
         table.setFiltersPage(currentTableSettingsObject,filtersForApi);
         //Set visible columns for tableSettings object
         currentTableSettingsObject.visibleColumns = pageFilters.Columns;
-        console.log(currentTableSettingsObject.visibleColumns);
 
         currentTableSettingsObject.filters = filtersForApi;
 
