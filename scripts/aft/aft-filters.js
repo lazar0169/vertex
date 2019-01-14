@@ -52,25 +52,22 @@ const aftFilters = (function () {
     });
     on('aft/filters/pagination', function (params) {
         let tableSettings = params.tableSettings;
-        let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        trigger(communication.events.aft.transactions.previewTransactions, {
-            tableSettings: tableSettings,
-            data: filtersForApi,
-            callbackEvent: 'table/update'
-        });
+        //let filtersForApi = prepareAftFiltersForApi(tableSettings);
+        filterAftTable()
     });
     on('aft/filters/sorting', function (params) {
         let tableSettings = params.tableSettings;
         activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            let filtersForApi = prepareAftFiltersForApi(tableSettings);
+            /*let filtersForApi = prepareAftFiltersForApi(tableSettings);
             filtersForApi.BasicData.SortDirection = params.sorting.SortDirection;
             filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
-            trigger(communication.events.aft.transactions.previewTransactions, {
+            */filterAftTable();
+           /* trigger(communication.events.aft.transactions.previewTransactions, {
                 tableSettings: tableSettings,
                 data: filtersForApi,
                 callbackEvent: 'table/update'
-            });
+            });*/
         }
     });
     on('filters/show-selected-filters', function (data) {
@@ -79,27 +76,30 @@ const aftFilters = (function () {
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         tableSettings.activePage = 1;
-        let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        trigger(communication.events.aft.transactions.previewTransactions, {
-            tableSettings: tableSettings,
-            data: filtersForApi,
-            callbackEvent: 'table/update'
-        });
+        console.log('filters for api');
+        filterAftTable();
     });
-    on('aft/filters/filter-table',filterAftTable);
+    on('aft/filters/filter-table', function(params){
+        filterAftTable(params.showFilters);
+    });
 
     /*********************----Helper functions----*********************/
-    function filterAftTable() {
-        let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
-        trigger(communication.events.aft.transactions.previewTransactions, {
-            data: filtersForApi,
-            tableSettings: currentTableSettingsObject
-        });
-        trigger('filters/show-selected-filters', {
-            active: advanceTableFilterActive,
-            infobar: advanceTableFilterInfobar
-        });
+    function filterAftTable(showFilters) {
+        console.log('showFilters');
+        console.log(showFilters);
+        if (showFilters === undefined) {
+            showFilters = false;
+        }
+        let params = {};
+        params.tableSettings = currentTableSettingsObject;
+        params.data = prepareAftFiltersForApi(currentTableSettingsObject);
+        if (showFilters) {
+            params.activeFiltersElement = advanceTableFilterActive;
+            params.infobarElement = advanceTableFilterInfobar;
+        }
+        trigger('table/filter', params);
     }
+
 
     function displayFilters(filters, tableSettings) {
         //filter elements
@@ -146,7 +146,6 @@ const aftFilters = (function () {
         let sortDirection = currentTableSettingsObject.sort.SortDirection;
         let sortName = currentTableSettingsObject.sort.SortName;
 
-
         let filtersForApi = {
             'EndpointId': currentTableSettingsObject.endpointId,
             'DateFrom': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
@@ -165,24 +164,7 @@ const aftFilters = (function () {
         };
 
         //reset to page 1 if filters are changed
-        /*if (currentTableSettingsObject.filters !== null) {
-            if (currentTableSettingsObject.filters.BasicData !== undefined) {
-                let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
-                let clonedExistingFilters = JSON.parse(JSON.stringify(currentTableSettingsObject.filters));
-
-                //delete pages as that data will differ from old and new filters data
-                delete clonedFilters.BasicData.Page;
-                delete clonedFilters.TokenInfo;
-                delete clonedExistingFilters.BasicData.Page;
-                delete clonedExistingFilters.TokenInfo;
-
-                if (!compareObjects(clonedFilters, clonedExistingFilters)) {
-                    currentTableSettingsObject.activePage = 1;
-                    filtersForApi.BasicData.Page = 1;
-                }
-            }
-        }*/
-        table.setFiltersPage(currentTableSettingsObject,filtersForApi);
+        table.setFiltersPage(currentTableSettingsObject, filtersForApi);
         //Set visible columns for tableSettings object
         currentTableSettingsObject.visibleColumns = pageFilters.Columns;
         currentTableSettingsObject.filters = filtersForApi;
@@ -213,12 +195,12 @@ const aftFilters = (function () {
         currentTableSettingsObject.activePage = 1;
         currentTableSettingsObject.visibleColumns = [];
         currentTableSettingsObject.filters = null;
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+      /*  trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
         trigger('filters/show-selected-filters', {
             active: advanceTableFilterActive,
             infobar: advanceTableFilterInfobar
-        });
-        filterAftTable();
+        });*/
+        filterAftTable(true);
     }
 
     function showSelectedFilters(filterActive, filterInfobar) {

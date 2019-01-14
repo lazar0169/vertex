@@ -1,14 +1,16 @@
 let communication = (function () {
 
+    const apiUrl = 'https://api.fazigaming.com/';
+
     const apiRoutes = {
         authorization: {
-            login: "login/",
-            logout: "logout/",
+            login: 'login/',
+            logout: 'logout/',
         },
         aft: {
-            edit: "aft/",
-            list: "list/",
-            ticket: "ticket/",
+            edit: 'api/aft/',
+            list: 'api/list/',
+            ticket: 'api/ticket/',
             getTransactions: 'api/transactions/',
             previewTransactions: 'api/transactions/previewtransactions/',
             getNotificationSettings: 'api/transactions/getnotificationsettings/',
@@ -79,7 +81,6 @@ let communication = (function () {
         delete: 'DELETE'
     };
 
-    const apiUrl = 'https://api.fazigaming.com/';
 
     let timeout = null;
 
@@ -354,7 +355,7 @@ let communication = (function () {
 
 //aft pagination filtering sorting
 //aft preview transactions
-    on('communicate/aft/previewTransactions', function (params) {
+    on(events.aft.transactions.previewTransactions, function (params) {
         let route = apiRoutes.aft.previewTransactions;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
@@ -362,17 +363,7 @@ let communication = (function () {
         let request = requestTypes.post;
         let errorEvent = '';
 
-        //ToDo: prodiskutovati na sastanku
-       /* let tbody = tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-        let tableItems = tbody.getElementsByClassName('table-item');
-        //remove displayed rows
-        if (tableItems !== undefined && tableItems != null) {
-            while (tableItems.length > 0) {
-                let item = tableItems[0];
-                item.parentNode.removeChild(item);
-            }
-        }
-*/
+
 
         trigger('communicate/createAndSendXhr', {
             route: route,

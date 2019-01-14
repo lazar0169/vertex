@@ -14,11 +14,9 @@
 }
 
 .vertex-table.table {
-    position: relative;
+    position: static;
     width: 100%;
     box-sizing: border-box;
-
-    /*100vh - top bar - tabs - tabs margin - custom filter*/
     overflow: hidden;
     margin-top: 0.1rem;
 }

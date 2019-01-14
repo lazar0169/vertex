@@ -19,8 +19,10 @@ const aft = (function () {
         let tableSettings = {};
         tableSettings.pageSelectorId = '#page-aft';
         tableSettings.tableContainerSelector = '#table-container-aft';
-        tableSettings.filterContainerSelector = '#aft-advance-table-filter-active';
+        tableSettings.filtersContainerSelector = '#aft-filter';
+        //tableSettings.advancedFilterContainerSelector = '#aft-advance-table-filter-active';
         tableSettings.getDataEvent = communication.events.aft.transactions.getTransactions;
+        tableSettings.filterDataEvent = communication.events.aft.transactions.previewTransactions;
         tableSettings.updateTableEvent = 'table/update';
         tableSettings.processRemoteData = communication.events.aft.data.prepare;
         //tableSettings.sortActiveColumn = 'createdby';
@@ -162,7 +164,7 @@ const aft = (function () {
                 message: localization.translateMessage(data.MessageCode.toString()),
                 type: data.MessageType
             });
-            trigger('aft/filters/filter-table');
+            trigger('aft/filters/filter-table',{showFilters:true});
         } else {
             displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up');
         }

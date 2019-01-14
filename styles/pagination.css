@@ -2,8 +2,8 @@
     justify-content: left;
     width: 500px;
     position: absolute;
-    left: 0;
-    top: calc(100vh - 32%);
+    left:0;
+    bottom:0;
 }
 
 .pagination ul {

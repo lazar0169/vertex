@@ -40,6 +40,16 @@ let table = (function () {
     let currentOffset;
 
     /*-------------------------------EVENTS--------------------------------*/
+    on('table/before-filter', function (params) {
+        trigger(params.tableSettings.filterDataEvent, {
+            data: params.data,
+            tableSettings: params.tableSettings
+        });
+        trigger('filters/show-selected-filters', {
+            active: params.activeFiltersContainer,
+            infobar: params.activeFiltersContainer
+        });
+    });
     on('table/dismiss-popup', function (params) {
         dismissPopup(params.target, params.tableSettings);
     });
@@ -323,15 +333,11 @@ let table = (function () {
             //highlight sorted column if there is one
             markActiveColumnRows(tableSettings);
             updateTablePagination(tableSettings);
-            //ToDo: remove sorting link handlers from here
-            bindSortingLinkHandlers(tableSettings);
-            //ToDo: remove sorting link handlers from here
-            bindTableViewLinkHandlers(tableSettings);
+
             tbody.classList.remove('d-hide');
             tableSettings.noDataElement.classList.add('d-hide');
             setTableDimensions(tableSettings, colsCount, tbody);
-        }
-        else {
+        } else {
             hidePagination(tableSettings);
             tableSettings.noDataElement.classList.remove('d-hide');
             tbody.classList.add('d-hide');
@@ -417,7 +423,8 @@ let table = (function () {
                 callbackEvent: callbackEvent,
                 tableSettings: tableSettings
             });
-        } ;
+        }
+        ;
     }
 
     on('table/pagination/display', function (params) {
@@ -431,17 +438,17 @@ let table = (function () {
     function updateTablePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
         paginationElement.classList.remove('hidden');
-        let activePage = tableSettings.activePage !== undefined ? tableSettings.activePage : 1;
+        let activePage = tableSettings.activePage;
         activePage = parseInt(activePage);
         let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
         pageSize = parseInt(pageSize);
-        let numOfItems = tableSettings.NumOfItems !== undefined ? tableSettings.NumOfItems : 50;
+        let numOfItems = tableSettings.TotalNumberOfItems;
         numOfItems = parseInt(numOfItems);
         let lastPage = Math.ceil(numOfItems / pageSize);
 
         // let rowNumber = 1; //todo
 
-        if (lastPage === 1 /*|| tableSettings.tableData.length < pageSize*/) {
+        if (lastPage === 1) {
             hidePagination(tableSettings);
         } else {
             let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
@@ -582,6 +589,9 @@ let table = (function () {
     function updateTable(tableSettings) {
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
+        if (tableSettings.showPreloader) {
+            trigger('preloader/hide');
+        }
     }
 
     function initFilters(tableSettings) {
@@ -589,9 +599,11 @@ let table = (function () {
         trigger(moduleName + '/filters/init', {tableSettings: tableSettings});
     }
 
+    on('table/filter', filterTable);
+
     on('table/update', function (params) {
         let tableSettings = params.settingsObject;
-        tableSettings.NumOfItems = params.data.Data.NumOfItems;
+        tableSettings.TotalNumberOfItems = params.data.Data.NumOfItems;
         if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
             initFilters(tableSettings);
             showNormalTable(tableSettings);
@@ -603,6 +615,10 @@ let table = (function () {
         let data = {EndpointId: tableSettings.endpointId};
         tableSettings.defaultSortColumnSet = false;
 
+
+        if (tableSettings.showPreloader) {
+            trigger('preloader/show')
+        }
         trigger(tableSettings.getDataEvent, {
             data: data,
             tableSettings: tableSettings
@@ -610,9 +626,6 @@ let table = (function () {
     }
 
     /*--------------------------------------------------------------------------------------*/
-
-
-    /*-------------------------------------- PAGE SIZE -------------------------------------*/
 
     function generateNoDataElement(tableSettings) {
         let noData = tableSettings.tableContainerElement.getElementsByClassName(emptyTableElementClass);
@@ -623,16 +636,21 @@ let table = (function () {
             noDataElement.innerText = 'No data to display...';
             tableSettings.tableContainerElement.appendChild(noDataElement);
             tableSettings.noDataElement = noDataElement;
-        }
-        else {
+        } else {
             tableSettings.noDataElement = noData[0];
         }
     }
 
+    /*-------------------------------------- PAGE SIZE -------------------------------------*/
+
+
     function generatePageSizeDropdown(tableSettings) {
-        let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
-        dropdown.generate(machinesNumber, pageSizeElement);
-        bindPageSizeLinkHandlers(tableSettings);
+        let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
+        console.log('generate');
+        console.log(tableSettings.filtersContainerElement);
+        console.log(pageSizeDropdown);
+        dropdown.generate(machinesNumber, pageSizeDropdown);
+        bindPageSizeLinkHandlers(pageSizeDropdown,tableSettings);
     }
 
     function getPageSize(tableSettings) {
@@ -661,12 +679,11 @@ let table = (function () {
         });
     }
 
-    function bindPageSizeLinkHandlers(tableSettings) {
-        let pageSizeButton = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
-        if (pageSizeButton !== undefined && pageSizeButton !== null) {
-            let pageSizeOptions = pageSizeButton.getElementsByClassName('single-option');
+    function bindPageSizeLinkHandlers(pageSizeDropdown,tableSettings) {
+        if (pageSizeDropdown !== undefined && pageSizeDropdown !== null) {
+            let pageSizeOptions = pageSizeDropdown.getElementsByClassName('single-option');
             for (let i = 0; i < pageSizeOptions.length; i++) {
-                bindPageSizeLinkHandler(pageSizeOptions[i], tableSettings);
+                bindPageSizeLinkHandler(pageSizeOptions[i],tableSettings);
             }
         }
     }
@@ -782,7 +799,6 @@ let table = (function () {
         return tableSettings.tableContainerElement.getElementsByClassName(cellName)[0];
     }
 
-
     function setSortActiveColumn(tableSettings) {
         let headers = getHeaders(tableSettings);
         for (let header of headers) {
@@ -884,7 +900,6 @@ let table = (function () {
         }
     }
 
-
     /*--------------------------------------------------------------------------------------*/
 
 
@@ -894,8 +909,8 @@ let table = (function () {
         let filterElements;
         if (tableSettings.pageSelectorId !== undefined) {
             filterElements = $$(tableSettings.pageSelectorId).getElementsByClassName('select-container');
-        } else if (tableSettings.filterContainerSelector !== undefined) {
-            filterElements = $$(tableSettings.filterContainerSelector).getElementsByClassName('select-container');
+        } else if (tableSettings.advancedFilterContainerSelector !== undefined) {
+            filterElements = $$(tableSettings.advancedFilterContainerSelector).getElementsByClassName('select-container');
         } else {
             filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('select-container'));
         }
@@ -911,7 +926,11 @@ let table = (function () {
             let filterElement = element.getElementsByClassName('element-table-filters')[0];
             //proveriti s Nikolom ovo
             //accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
-            accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
+            if (filterElement !== undefined) {
+                accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
+            } else {
+                accumulated[name] = null;
+            }
             return accumulated;
         }, {});
         if (filters.Columns === undefined || filters.Columns === null) {
@@ -920,18 +939,48 @@ let table = (function () {
         return filters;
     }
 
+    function filterTable(params) {
+        let tableSettings = params.tableSettings;
+        if (tableSettings.showPreloader) {
+            trigger('preloader/show');
+        }
+        trigger(tableSettings.filterDataEvent, {
+            tableSettings: tableSettings,
+            data: params.data,
+        });
+        if (params.activeFiltersElement !== undefined &&
+            params.infobarElement !== undefined) {
+            trigger('filters/show-selected-filters', {
+                active: params.activeFiltersElement,
+                infobar: params.infobarElement
+            });
+        }
+    }
+
     /*--------------------------------------------------------------------------------------*/
 
     /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
     function init(tableSettings) {
+        //cache table and filters containers in table settings
+        console.log(tableSettings);
         tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
+        tableSettings.filtersContainerElement = $$(tableSettings.filtersContainerSelector);
+        if (tableSettings.advancedFiltersContainerElement !== undefined) {
+            tableSettings.advancedFiltersContainerElement = $$(tableSettings.advancedFilterContainerSelector);
+        }
+        //set advanced filters container element automatically
+        else if (tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter').length > 0) {
+            tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter');
+            tableSettings.advancedFilterContainerSelector = `#{tableSettings.advancedFiltersContainerElement.dataset.id}`;
+        }
+
+        console.log('tableSettings');
+        console.log(tableSettings);
+
         tableSettings.tableContainerElement.classList.add('vertex-table');
         let tableContainerElement = tableSettings.tableContainerElement;
         tableContainerElement.tableSettings = tableSettings;
-
-
-
 
         if (tableSettings.getDataEvent !== null) {
             tableSettings.getDataEvent = getEvent(tableSettings);
@@ -943,6 +992,10 @@ let table = (function () {
         generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
         generateNoDataElement(tableSettings);
+
+        bindSortingLinkHandlers(tableSettings);
+        bindTableViewLinkHandlers(tableSettings);
+
         delete tableSettings.ColumnsToShow;
 
         if (tableSettings.tableData === undefined) {
@@ -985,13 +1038,6 @@ let table = (function () {
         tbody.classList.remove('no-scroll');
     }
 
-    function positionElementInsideTable(tableSettings, element) {
-        let bounds = getBounds(tableSettings);
-        let elementBounds = element.getBoundingClientRect();
-
-
-    }
-
     function setDefaultSettings(tableSettings) {
         if (tableSettings.filters === undefined) {
             tableSettings.filters = null;
@@ -1025,7 +1071,10 @@ let table = (function () {
             tableSettings.PageSize = defaultPageSize;
         }
         if (tableSettings.activePage === undefined) {
-        tableSettings.activePage = defaultPage;
+            tableSettings.activePage = defaultPage;
+        }
+        if (tableSettings.showPreloader === undefined) {
+            tableSettings.showPreloader = true;
         }
 
 
