@@ -1,12 +1,15 @@
 let table = (function () {
 
     //html class name constants
-    let columnClassPrefix = 'column-';
-    let rowClassPrefix = 'row-';
-    let cellClassPrefix = 'cell-';
-    let activeColumnElementsClass = 'active-column';
-    let activeRowElementsClass = 'row-chosen';
-    let hiddenCellClassName = 'hidden';
+    const columnClassPrefix = 'column-';
+    const rowClassPrefix = 'row-';
+    const cellClassPrefix = 'cell-';
+    const activeColumnElementsClass = 'active-column';
+    const activeRowElementsClass = 'row-chosen';
+    const hiddenCellClassName = 'hidden';
+    const emptyTableElementClass = 'table-element-no-data';
+    const defaultPageSize = 50;
+    const defaultPage = 1;
     let rows = [];
 
     // 'null' as dataset values are always converted to string
@@ -79,6 +82,7 @@ let table = (function () {
         }
         return event;
     }
+
 
     function getTableBodyElement(tableSettings) {
         return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
@@ -184,9 +188,6 @@ let table = (function () {
 
         let rowsCount = tableSettings.tableData.length;
 
-        console.log('tableSettings.visibleColumns');
-        console.log(tableSettings.visibleColumns);
-
         let visibleColumns = tableSettings.visibleColumns.length > 0 ? tableSettings.visibleColumns : [];
         let visibleColumnsClasses = [];
 
@@ -201,8 +202,6 @@ let table = (function () {
             while (rows.includes(rowId)) {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             }
-
-            //let tooltipErrorCode = tableSettings.tableDataItems[row].Properties.ErrorCode;
 
             let rowKeys = Object.keys(tableSettings.tableData[row].rowData);
 
@@ -225,7 +224,6 @@ let table = (function () {
                 tableSettings.columns.push({
                     dataKey
                 });
-
 
                 cell.classList.add('cell');
                 cell.classList.add('table-item');
@@ -320,21 +318,35 @@ let table = (function () {
                 }
             }
         }
+
         if (rowsCount > 0) {
             //highlight sorted column if there is one
             markActiveColumnRows(tableSettings);
-
+            updateTablePagination(tableSettings);
+            //ToDo: remove sorting link handlers from here
+            bindSortingLinkHandlers(tableSettings);
+            //ToDo: remove sorting link handlers from here
+            bindTableViewLinkHandlers(tableSettings);
+            tbody.classList.remove('d-hide');
+            tableSettings.noDataElement.classList.add('d-hide');
             setTableDimensions(tableSettings, colsCount, tbody);
 
-            //callback when all rows are drawn
-            if (tableSettings.onAfterDrawRows !== null) {
-                if (isFunction(tableSettings.onAfterDrawRows)) {
-                    tableSettings.onAfterDrawRows(tableSettings);
-                } else if (isString(tableSettings.onAfterDrawRows)) {
-                    trigger(tableSettings.onAfterDrawRows, {
-                        tableSettings: tableSettings
-                    });
-                }
+
+        }
+        else {
+            hidePagination(tableSettings);
+            tableSettings.noDataElement.classList.remove('d-hide');
+            tbody.classList.add('d-hide');
+            setTableDimensions(tableSettings, 1, tbody);
+        }
+        //callback when table rows finished drawing
+        if (tableSettings.onAfterDrawRows !== null) {
+            if (isFunction(tableSettings.onAfterDrawRows)) {
+                tableSettings.onAfterDrawRows(tableSettings);
+            } else if (isString(tableSettings.onAfterDrawRows)) {
+                trigger(tableSettings.onAfterDrawRows, {
+                    tableSettings: tableSettings
+                });
             }
         }
     }
@@ -407,7 +419,7 @@ let table = (function () {
                 callbackEvent: callbackEvent,
                 tableSettings: tableSettings
             });
-        } else return;
+        } ;
     }
 
     on('table/pagination/display', function (params) {
@@ -570,34 +582,8 @@ let table = (function () {
     /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
     function updateTable(tableSettings) {
-
-        let colsCount = getCountOfAllColumns(tableSettings);
         generateTableHeaders(tableSettings);
         generateTableRows(tableSettings);
-
-        let itemsCount = tableSettings.tableData === null ? 0 : Object.keys(tableSettings.tableData).length;
-
-        if (itemsCount > 0) {
-
-            updateTablePagination(tableSettings);
-            bindSortingLinkHandlers(tableSettings);
-            bindTableViewLinkHandlers(tableSettings);
-            if (tableSettings.defaultSortColumnSet === false) {
-                setDefaultActiveColumn(tableSettings);
-            }
-        } else {
-            hidePagination(tableSettings);
-            let noDataElement = document.createElement('div');
-            noDataElement.classList.add('empty-table');
-            noDataElement.innerText = 'No data to display...';
-            let tbody = getTableBodyElement(tableSettings);
-            while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-            }
-            tbody.appendChild(noDataElement);
-            setTableDimensions(tableSettings, 1, tbody);
-
-        }
     }
 
     function initFilters(tableSettings) {
@@ -629,6 +615,21 @@ let table = (function () {
 
 
     /*-------------------------------------- PAGE SIZE -------------------------------------*/
+
+    function generateNoDataElement(tableSettings) {
+        let noData = tableSettings.tableContainerElement.getElementsByClassName(emptyTableElementClass);
+        if (noData.length <= 0) {
+            let noDataElement = document.createElement('div');
+            noDataElement.classList.add(emptyTableElementClass);
+            noDataElement.classList.add('d-hide');
+            noDataElement.innerText = 'No data to display...';
+            tableSettings.tableContainerElement.appendChild(noDataElement);
+            tableSettings.noDataElement = noDataElement;
+        }
+        else {
+            tableSettings.noDataElement = noData[0];
+        }
+    }
 
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
@@ -931,7 +932,8 @@ let table = (function () {
         let tableContainerElement = tableSettings.tableContainerElement;
         tableContainerElement.tableSettings = tableSettings;
 
-        tableSettings.PageSize = 50;
+
+
 
         if (tableSettings.getDataEvent !== null) {
             tableSettings.getDataEvent = getEvent(tableSettings);
@@ -942,7 +944,7 @@ let table = (function () {
 
         generateTablePagination(tableSettings);
         generatePageSizeDropdown(tableSettings);
-        tableSettings.activePage = 1;
+        generateNoDataElement(tableSettings);
         delete tableSettings.ColumnsToShow;
 
         if (tableSettings.tableData === undefined) {
@@ -1020,7 +1022,12 @@ let table = (function () {
         }
         if (tableSettings.forceRemoveHeaders === undefined) {
             tableSettings.forceRemoveHeaders = false;
-
+        }
+        if (tableSettings.PageSize === undefined) {
+            tableSettings.PageSize = defaultPageSize;
+        }
+        if (tableSettings.activePage === undefined) {
+        tableSettings.activePage = defaultPage;
         }
 
 

@@ -325,7 +325,7 @@ textarea {
     font-size: 0.8rem;
 }*/
 
-.empty-table {
+.table-element-no-data {
     padding: 25px;
     font-size: 30px;
 }
