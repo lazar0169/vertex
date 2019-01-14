@@ -6,19 +6,26 @@ const currencyInput = (function () {
 
     function bindHandlers(element) {
         element.removeEventListener('keypress', onKeyDown);
+        element.removeEventListener('focus', onFocus);
         element.removeEventListener('blur', onBlur);
 
         element.addEventListener('keypress', onKeyDown);
         element.addEventListener('blur', onBlur);
+        element.addEventListener('focus', onFocus);
     }
 
     function onKeyDown(e) {
         e = e || window.event;
-        var charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
-        var charStr = String.fromCharCode(charCode);
-        console.log(charStr);
-        console.log(config.thousandSeparator === charStr);
+        let charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+        let charStr = String.fromCharCode(charCode);
+        console.log(e.target.value);
+        console.log(e.target.value.includes(config.decimalSeparator));
         if (config.thousandSeparator === charStr) {
+            e.preventDefault();
+            return false;
+        }
+        else if (config.decimalSeparator === charStr && e.target.value.indexOf(config.decimalSeparator) >= 0) {
+            e.preventDefault();
             return false;
         }
     }
@@ -26,12 +33,17 @@ const currencyInput = (function () {
     function onBlur(e) {
         let target = e.target;
         let value = target.value;
-        value = value.replace(',', '');
         let parsedValue = formatFloatValue(value);
         console.log(parsedValue);
         target.value = parsedValue;
     }
 
+    function onFocus(e) {
+        let target = e.target;
+        let value = target.value;
+        value = value.replace(',', '');
+        target.value = value;
+    }
 
     return {
         generate
