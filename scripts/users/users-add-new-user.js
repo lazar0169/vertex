@@ -45,11 +45,11 @@ const usersAddNewUser = (function () {
                 addNewUserRoleList[count].classList.remove('hidden');
             }
 
-            for (let nesto = 0; nesto < roleData.RoleList[count].MainRoleList.length; nesto++) {
+            for (let countRole = 0; countRole < roleData.RoleList[count].MainRoleList.length; countRole++) {
                 let categoryRoleWrapper = document.createElement('div');
                 let checkedBox;
 
-                if (roleData.RoleList[count].MainRoleList[nesto].Enabled) {
+                if (roleData.RoleList[count].MainRoleList[countRole].Enabled) {
                     checkedBox = 'checked';
                 }
                 else {
@@ -58,7 +58,7 @@ const usersAddNewUser = (function () {
                 categoryRoleWrapper.innerHTML = `<figure class="element-form-check vertex-form-checkbox-box add-new-user-checked">
                     <label class="form-checkbox" >
                         <input type="checkbox" class="add-new-user-checked-status" ${checkedBox}>
-                        <i class="form-icon" data-elementId = "${roleData.RoleList[count].MainRoleList[nesto].Name}"></i> <div data-translation-key="${roleData.RoleList[count].MainRoleList[nesto].Name}">${roleData.RoleList[count].MainRoleList[nesto].Name}</div>
+                        <i class="form-icon" data-elementId = "${roleData.RoleList[count].MainRoleList[countRole].Name}"></i> <div data-translation-key="${roleData.RoleList[count].MainRoleList[countRole].Name}">${roleData.RoleList[count].MainRoleList[countRole].Name}</div>
                     </label>
                 </figure>`
                 addNewUserRoleList[count].appendChild(categoryRoleWrapper);

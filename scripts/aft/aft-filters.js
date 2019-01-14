@@ -52,7 +52,7 @@ const aftFilters = (function () {
     let currentTableSettingsObject;
     let activeHeadElement;
 
-    function toggleAdvanceTableFilter(){
+    function toggleAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
         advanceTableFilterActive.classList.toggle('hidden');
     }
@@ -306,10 +306,16 @@ const aftFilters = (function () {
         $$('#black-area').classList.remove('show');
         aftAddTransactionWrapper.classList.add('hidden');
     });
-    //show add new jackop form
+    //show 
     aftAddTransactionButton.addEventListener('click', function () {
         $$('#black-area').classList.add('show');
         aftAddTransactionWrapper.classList.remove('hidden');
+    });
+    // ToDO: treba da postoji jedan jedinstven event
+    window.addEventListener('keyup', function (event) {
+        if (event.keyCode == 27) {
+            aftAddTransactionWrapper.classList.add('hidden');
+        }
     });
 
     on('show/app', function () {

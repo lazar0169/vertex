@@ -107,28 +107,6 @@ let roleData = {
             ]
         },
         {
-            "MainRoleName": "PROBA",
-            "MainRoleEnabled": true,
-            "MainRoleList": [
-                {
-                    "Name": "asdsd",
-                    "Enabled": false
-                },
-                {
-                    "Name": "asd",
-                    "Enabled": false
-                },
-                {
-                    "Name": "ddd",
-                    "Enabled": false
-                },
-                {
-                    "Name": "MinMaxValssssueSettings",
-                    "Enabled": false
-                }
-            ]
-        },
-        {
             "MainRoleName": "Jackpot",
             "MainRoleEnabled": false,
             "MainRoleList": [
