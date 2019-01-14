@@ -27,7 +27,17 @@
 }
 
 #add-new-user-role-wrapper {
-    padding: 0.5rem;
     border-bottom: 1px solid #778f9b;
     background: rgb(55, 71, 79);
+    padding: 0 0.5rem;
+}
+
+.add-new-user-role-list {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.border-bottom-role {
+    border-bottom: 1px solid rgb(38, 50, 56);
+    padding-bottom: 20px !important;
 }

@@ -14,11 +14,11 @@ const users = (function () {
 
     });
 
-    addNewUserButtonsWrapper.children[1].addEventListener('click', function(){
+    // cancel button
+    addNewUserButtonsWrapper.children[1].addEventListener('click', function () {
         addNewUserButtonWrapper.children[0].classList.remove('add-new-user-active');
         addNewUserWrapper.classList.add('hidden');
     });
 
-    
-
+    trigger('users/generate-role', { role: roleData })
 })();

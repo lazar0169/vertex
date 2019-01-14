@@ -1093,7 +1093,7 @@ let communication = (function () {
     on('communicate/test', function (params) {
         //alert('Successful communication');
         console.log(params);
-        trigger('showing-machines-top-bar-value', { dataItemValue: params.data.Data })
+        trigger('showing-machines-top-bar-value', { dataItemValue: params.data.Data.ItemValue })
     });
 
 

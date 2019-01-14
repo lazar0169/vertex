@@ -42,7 +42,7 @@
     height: 15px;
     margin: 0 !important;
     /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
-    background: rgb(55, 71, 79);
+    background: rgb(38, 50, 56);
     box-shadow: unset;
     pointer-events: all;
 }
@@ -78,16 +78,16 @@
     border: none;
     margin: 0 !important;
     /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
-    background: #778f9b;
+    background: rgb(120, 144, 156);
     box-shadow: unset;
     pointer-events: all;
 }
 
-.element-async-form .vertex-form-radio {
+.element-async-form .vertex-form-radio, .element-async-form .vertex-form-checkbox-box {
     margin: 0;
 }
 
-.vertex-form-radio .form-radio {
+.vertex-form-radio .form-radio, .vertex-form-checkbox-box .form-checkbox {
     margin: 0;
 }
 

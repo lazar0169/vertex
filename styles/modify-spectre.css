@@ -43,7 +43,7 @@
 }
 
 .form-checkbox .form-icon, .form-checkbox input:focus+.form-icon, .form-checkbox input:checked+.form-icon, .form-radio input+.form-icon {
-    background: #778f9b;
+    background: rgb(120, 144, 156);
     border: .05rem solid rgb(120, 144, 156);
     box-shadow: unset;
     pointer-events: all;
