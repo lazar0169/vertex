@@ -88,7 +88,7 @@
 }
 
 .vertex-form-radio .form-radio, .vertex-form-checkbox-box .form-checkbox {
-    margin: 0;
+    margin: 0 0 0 15px;
 }
 
 .vertex-form-radio-border .form-radio input:checked+.form-icon+div {
