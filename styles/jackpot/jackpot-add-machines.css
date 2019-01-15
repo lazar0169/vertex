@@ -79,7 +79,6 @@
 #choose-machines-jackpot-content-filters>div>div:not(:first-child) {
     background: rgb(38, 50, 56);
     z-index: 1;
-    max-height: 200px;
     width: 100%;
     padding: 0 0.5rem;
     cursor: default;
@@ -197,4 +196,9 @@
 
 .color-white {
     color: white !important;
+}
+
+#choose-machines-jackpot-content-filters-casinos .overflow-y {
+    max-height: 250px;
+    padding: 0.5rem
 }

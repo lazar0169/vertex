@@ -106,9 +106,18 @@ const jackpotChooseParticipatingMachines = (function () {
     //create jackpot filter (by place)
     function createJackpotFilterCasinos(data) {
         let cityArray = [];
+        let wrapperOptionAndSearch = document.createElement('div');
+        wrapperOptionAndSearch.classList.add('hidden');
+
+
+        wrapperOptionAndSearch.innerHTML = `<div class="center">
+                                    <input id="search-casino" class="element-multilanguage search" type="text" onfocus="value=''" placeholder="search" data-translation-key="search">
+                                    </div>`
+
         let wrapperOption = document.createElement('div');
-        wrapperOption.classList.add('hidden');
-        wrapperOption.classList.add('overflow-y');
+        wrapperOption.classList.add('overflow-y')
+
+
 
         let allCasinos = document.createElement('div');
 
@@ -128,8 +137,8 @@ const jackpotChooseParticipatingMachines = (function () {
                                     <input type="checkbox">
                                     <i class="form-icon" data-elementId = "All"></i> <div>All</div>
                                     </label>`;
+        wrapperOption.appendChild(allCasinos)
 
-        wrapperOption.appendChild(allCasinos);
         allCasinos.dataset.value = 'all';
         allCasinos.title = allCasinos.children[0].children[2].innerHTML;
 
@@ -223,8 +232,9 @@ const jackpotChooseParticipatingMachines = (function () {
                     }
                 }
             }
+            wrapperOptionAndSearch.appendChild(wrapperOption)
         }
-        return wrapperOption;
+        return wrapperOptionAndSearch;
     }
 
     function selectAllCities(div) {
