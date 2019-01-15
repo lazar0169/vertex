@@ -76,6 +76,32 @@ const usersAddNewUser = (function () {
                 case 'radio':
                     element.addEventListener('click', function () {
                         element.getElementsByClassName('add-new-user-checked-status')[0].checked = true;
+
+
+                        switch (element.getElementsByClassName('add-new-user-checked-status')[0].name) {
+
+                            case 'user-role':
+
+                                if (element.getElementsByClassName('add-new-user-checked-status')[0].dataset.value === 'user-role-manager') {
+                                    element.parentNode.parentNode.children[2].children[0].classList.add('hidden');
+                                }
+                                else {
+                                    element.parentNode.parentNode.children[2].children[0].classList.remove('hidden');
+                                }
+                                break;
+
+                            case 'apply-role-on':
+                                if (element.getElementsByClassName('add-new-user-checked-status')[0].dataset.value === 'chooseCasino') {
+                                    element.parentNode.children[3].classList.remove('hidden');
+                                }
+                                else {
+                                    element.parentNode.children[3].classList.add('hidden');
+                                }
+                                break;
+                        }
+
+
+
                     });
                     break;
 
@@ -90,7 +116,6 @@ const usersAddNewUser = (function () {
                                 element.parentNode.children[1].classList.add('hidden');
                                 element.parentNode.parentNode.children[1].classList.add('hidden');
                                 element.children[2].innerHTML = "Off";
-
                             }
                         }
                         else {
@@ -117,6 +142,11 @@ const usersAddNewUser = (function () {
 
     on('users/generate-role', function (data) {
         generateRole(data.role);
+
+        $$('#add-new-user-role-apply').appendChild(jackpotChooseParticipatingMachines.createJackpotFilterCasinos(casinoData));
+
+
+
         setClickAndChangeCheckedStatus();
     })
 })();

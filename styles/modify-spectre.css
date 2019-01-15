@@ -204,3 +204,7 @@ body {
 [type=reset], [type=submit], button, html [type=button] {
     -webkit-appearance: inherit !important;
 }
+
+figure input[type=checkbox]:checked + div {
+    background: green;
+  }
