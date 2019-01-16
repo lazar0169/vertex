@@ -24,20 +24,56 @@ const dropdown = (function () {
     }
 
     //generate single dropdown
-    function generate(dataSelect, element) {
-        if (element) {
+    function generate(dataSelect, element, name) {
+        let existsId;
+        if (element && element.children[1]) {
+            let i = 0;
+            for (let ss of singleSelectArray) {
+                if (ss === element.children[1].id) {
+                    existsId = element.children[1].id;
+                    singleSelectArray.splice(i, 1);
+                    break;
+                }
+                i++;
+            }
             removeChildren(element);
         }
+
+
+
+
         // wrapper select
         let select = document.createElement('div');
-        select.id = `ss-${indexSsId}`;
-        select.dataset.selectId = indexSsId;
+        if (existsId) {
+            select.id = indexSsId;
+        }
+        else {
+            select.id = `ss-${indexSsId}`;
+            indexSsId++;
+        }
         select.classList.add('default-select');
+        select.classList.add('element-form-data');
+        select.dataset.type = 'single-select';
+
+        if (name !== undefined && name !== null) {
+            select.dataset.name = name;
+        }
+
         //selected option
         let selected = document.createElement('div');
-        selected.innerHTML = dataSelect[0];
+        if (typeof dataSelect[0] === 'object') {
+            selected.innerHTML = dataSelect[0].Name;
+            selected.dataset.value = dataSelect[0].Name;
+            if (dataSelect[0].LongId !== undefined && dataSelect[0].LongId !== null && dataSelect[0].LongId !== 0) {
+                selected.dataset.valueLongId = dataSelect[0].LongId;
+                select.dataset.nameLongId = 'Gmcid';
+            }
+        }
+        else {
+            selected.innerHTML = dataSelect[0];
+            selected.dataset.value = dataSelect[0];
+        }
         selected.title = selected.innerHTML;
-        selected.dataset.value = dataSelect[0];
         selected.classList.add('element-table-filters');
         selected.addEventListener('click', function () {
             optionGroup.classList.toggle('hidden');
@@ -48,13 +84,24 @@ const dropdown = (function () {
         optionGroup.classList.add('hidden');
         optionGroup.classList.add('overflow-y');
         for (let element of dataSelect) {
-            //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
-            option.innerHTML = element;
+            if (typeof element === 'object') {
+                option.innerHTML = element.Name;
+                option.dataset.value = element.Name;
+                option.dataset.translationKey = element.Name;
+                if (element.LongId !== undefined && element.LongId !== null && element.LongId !== 0) {
+                    option.dataset.valueLongId = element.LongId;
+                }
+            }
+            else {
+                option.innerHTML = element;
+                option.dataset.value = element;
+                option.dataset.translationKey = element;
+
+            }
+            //option with functionality
             option.title = option.innerHTML;
-            option.dataset.value = element;
-            option.dataset.translationKey = element;
             optionGroup.appendChild(option);
 
             option.addEventListener('click', function (e) {
@@ -62,6 +109,7 @@ const dropdown = (function () {
                 selected.innerHTML = option.innerHTML;
                 selected.title = selected.innerHTML;
                 selected.dataset.value = option.dataset.value;
+                selected.dataset.valueLongId = option.dataset.valueLongId;
                 select.classList.remove('active-single-select');
                 optionGroup.classList.add('hidden');
             });

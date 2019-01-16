@@ -40,6 +40,7 @@ const detailsBar = (function () {
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 27) {
             details.hide();
+            
         }
     });
 

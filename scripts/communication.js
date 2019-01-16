@@ -52,7 +52,7 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        if(data.TokenInfo){
+        if (data.TokenInfo) {
             sessionStorage["token"] = JSON.stringify(data.TokenInfo);
             refreshToken(data.TokenInfo);
         } else {
@@ -60,12 +60,12 @@ let communication = (function () {
             refreshToken(data);
         }
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
+            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
         }
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = {"message": xhr.responseText};
+        let errorData = { "message": xhr.responseText };
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
@@ -215,6 +215,8 @@ let communication = (function () {
 
         tableSettings.formatedData = formatedData;
 
+        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue })
+
         return formatedData;
     }
 
@@ -240,7 +242,7 @@ let communication = (function () {
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
-        trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
+        trigger(event, { data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent });
     });
 
 
@@ -380,16 +382,14 @@ let communication = (function () {
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
         let route = 'api/transactions/addtransaction/';
-        let successEvent = 'aft/addTransaction';
         let data = params.data;
         let request = requestTypes.post;
-        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            successEvent: successEvent,
+            errorEvent: params.formSettings.submitErrorEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            successEvent: params.formSettings.submitSuccessEvent
         });
     });
 
@@ -434,7 +434,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
+        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -621,7 +621,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
+        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -662,6 +662,7 @@ let communication = (function () {
         });
 
         //todo needs to be deleted
+        // trigger('communicate/casinos/getAllMachines', {})
         // trigger('communicate/casinos/previewMachines', {})
         // trigger('communicate/casinos/getMachineDetails', {})
         // trigger('communicate/casinos/getMachineServiceData', {})
@@ -714,6 +715,24 @@ let communication = (function () {
 
 
     /*------------------------------------ MACHINES EVENTS ------------------------------------*/
+
+    //get all machines
+    on('communicate/casinos/getAllMachines', function (params) {
+        let route = 'api/machines/';
+        let successEvent = 'communicate/test'
+        let data = {
+            'EndpointId': 4
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
 
     // machines get service data
     on('communicate/casinos/getMachineDetails', function (params) {
@@ -1073,6 +1092,8 @@ let communication = (function () {
     //test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
+        console.log(params);
+        trigger('showing-machines-top-bar-value', { dataItemValue: params.data.Data.ItemValue })
     });
 
 
@@ -1104,7 +1125,7 @@ let communication = (function () {
         }, tokenInfo.expires_in * 1000);
     }
 
-    on('communicate/token/refresh', function(params){
+    on('communicate/token/refresh', function (params) {
         refreshToken(params.token);
     })
 

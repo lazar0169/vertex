@@ -4,7 +4,7 @@ let topBar = (function () {
     let userProfile = $$('#user-profile');
     let previousTopBar;
 
-    if(sessionStorage.token) {
+    if (sessionStorage.token) {
         openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
     }
     function showTopBar(value) {

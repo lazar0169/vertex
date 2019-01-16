@@ -1,6 +1,6 @@
 let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
 let fixedDays = ['-', 'Today', 'Yesterday', 'Last 7 Days', 'Last 14 Days', 'This Month', 'Last Month', 'Custom'];
-let columnName = [{Name: '-'}, { Name: 'Column1' }, { Name: 'Column2' }, { Name: 'Column3' }]
+let columnName = [{ Name: '-' }, { Name: 'Column1' }, { Name: 'Column2' }, { Name: 'Column3' }]
 let machinesNumber = ['50', '25', '10', '5'];
 let pictureName = ['Belgrade', 'New York', 'Surdulica', 'Nis'];
 let machinesVendors = [{ Name: '-' }, { Name: 'Fazi' }, { Name: 'Admiral' }, { Name: 'Favorit' }];
@@ -53,3 +53,131 @@ let casinoData = {
 /*
 let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
 */
+
+
+let roleData = {
+    "UserType": "1",
+    "UserName": "Maja",
+    "Password": "maja00",
+    "ConfirmPassword": "maja00",
+    "MainRole": "0",
+    "RoleList": [
+        {
+            "MainRoleName": "Casino",
+            "MainRoleEnabled": false,
+            "MainRoleList": [
+                {
+                    "Name": "AllCasinos",
+                    "Enabled": false
+                },
+                {
+                    "Name": "Machines",
+                    "Enabled": false
+                },
+                {
+                    "Name": "Acceptors",
+                    "Enabled": true
+                },
+                {
+                    "Name": "ResetBillAcceptor",
+                    "Enabled": true
+                }
+            ]
+        },
+        {
+            "MainRoleName": "TITO",
+            "MainRoleEnabled": true,
+            "MainRoleList": [
+                {
+                    "Name": "PreviewTickets",
+                    "Enabled": true
+                },
+                {
+                    "Name": "SmsSettings",
+                    "Enabled": false
+                },
+                {
+                    "Name": "ApperanceSettings",
+                    "Enabled": false
+                },
+                {
+                    "Name": "MinMaxValueSettings",
+                    "Enabled": true
+                }
+            ]
+        },
+        {
+            "MainRoleName": "Jackpot",
+            "MainRoleEnabled": false,
+            "MainRoleList": [
+                {
+                    "Name": "PreviewJackpot",
+                    "Enabled": true
+                },
+                {
+                    "Name": "Edit",
+                    "Enabled": false
+                },
+                {
+                    "Name": "Delete",
+                    "Enabled": true
+                },
+                {
+                    "Name": "Add",
+                    "Enabled": false
+                },
+                {
+                    "Name": "History",
+                    "Enabled": true
+                },
+                {
+                    "Name": "Settings",
+                    "Enabled": false
+                },
+                {
+                    "Name": "Delete",
+                    "Enabled": true
+                },
+                {
+                    "Name": "Animation settings",
+                    "Enabled": false
+                },
+            ]
+        },
+        {
+            "MainRoleName": "AFT",
+            "MainRoleEnabled": false,
+            "MainRoleList": [
+                {
+                    "Name": "PreviewAft",
+                    "Enabled": true
+                },
+                {
+                    "Name": "EnableTransaction",
+                    "Enabled": false
+                },
+                {
+                    "Name": "NotificationSettings",
+                    "Enabled": true
+                }
+            ]
+        }
+
+    ],
+    "CasinoList": [{
+        "Name": "Bolnica",
+        "Enabled": true
+    },
+    {
+        "Name": "Marger",
+        "Enabled": true
+    },
+    {
+        "Name": "Bulevar3",
+        "Enabled": true
+    },
+    {
+        "Name": "Tvrdjava",
+        "Enabled": true
+    }]
+}

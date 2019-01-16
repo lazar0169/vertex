@@ -68,6 +68,11 @@ let router = (function () {
         id: '#page-malfunctions',
         path: '/malfunctions'
     });
+    routes.set('users', {
+        page: 'users',
+        id: '#page-users',
+        path: '/users'
+    });
 
     //Functions for displaying page
 
@@ -302,11 +307,17 @@ let router = (function () {
         let path = window.location.pathname;
         let pageName = getPageNameFromUrl(path);
         if (pageName != null) {
+            //remove categoryAndLink form sessionStorage
+            if (pageName === 'home') {
+                sessionStorage.removeItem('categoryAndLink');
+            }
             changePage(pageName);
         }
         else {
             console.error('Page not found!');
             changePage('home');
+            //remove categoryAndLink form sessionStorage
+            sessionStorage.removeItem('categoryAndLink');
         }
         bindNavigationLinkHandlers();
     }

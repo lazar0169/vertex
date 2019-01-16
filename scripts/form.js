@@ -16,17 +16,19 @@ let form = (function () {
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
             event = formSettings.formContainerElement.dataset[eventToCheck];
         } else {
-            console.error('Event doesn\'t exist!');
+            console.info('Event ' + eventToCheck + ' doesn\'t exist!');
         }
         return event;
     }
 
     function setEndpointId(formSettings) {
         currentEndpointId = formSettings.endpointId;
-        let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
-        endpointIdInputElements.forEach(function (element) {
-            element.dataset.value = currentEndpointId;
-        });
+        if (formSettings.endpointId !== undefined && formSettings.endpointId !== null) {
+            let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
+            endpointIdInputElements.forEach(function (element) {
+                element.dataset.value = currentEndpointId;
+            });
+        }
     }
 
     function getFormData(formSettings) {
@@ -123,7 +125,6 @@ let form = (function () {
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case 'float':
-
                                     inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
                                 case 'string':
@@ -171,7 +172,6 @@ let form = (function () {
         if (formSettings.validateEvent === undefined) {
             formSettings.validateEvent = 'form/validate';
         }
-
         setEndpointId(formSettings);
 
         if (formContainerElement.formSettings === undefined) {
@@ -198,7 +198,12 @@ let form = (function () {
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
-                            dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
+                            let valueElement = formInputElement.firstChild;
+                            dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
+                            console.log(formInputElement.dataset);
+                            if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
+                                dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
+                            }
                             break;
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {
@@ -218,6 +223,9 @@ let form = (function () {
                             if (dataForApi[formInputElement.name] === undefined) {
                                 dataForApi[formInputElement.name] = [];
                             }
+                            dataForApi[formInputElement.name].push(formInputElement.value);
+                            break;
+                        case'default':
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
                     }
@@ -248,6 +256,7 @@ let form = (function () {
 
     function complete(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
+        console.log(submitButtonsArray);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = '';
             submitButton.classList.remove('loading');
@@ -268,7 +277,6 @@ let form = (function () {
     function deleteFormElement() {
         let deleteButtonParentNode = this.parentNode;
         let parentNode = deleteButtonParentNode.parentNode;
-        console.log(parentNode);
         deleteButtonParentNode.remove();
         let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
@@ -287,7 +295,6 @@ let form = (function () {
 
                 newField.getElementsByTagName('input')[0].removeAttribute('id');
                 newField.getElementsByTagName('input')[0].value = '';
-                console.log(newField);
                 newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
                 newField.classList.add('element-input-additional-array-value');
 
@@ -351,6 +358,20 @@ let form = (function () {
                 onCheck: toggleSection
             });
         }
+    }
+
+    function addHiddenField(formSettings, name, value) {
+        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        console.log(formElement);
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        input.classList.add('element-form-data');
+        input.dataset.type = 'string';
+        console.log(input);
+        formElement.appendChild(input);
+        console.log(input);
     }
 
     function toggleSection(e) {
@@ -421,6 +442,11 @@ let form = (function () {
         createToggles(formSettings);
     }
 
+    on('form/add/hiddenField', function (params)
+    {
+        addHiddenField(params.formSettings,params.name, params.value);
+    });
+
     on('form/init', function (params) {
         let formSettings = params.formSettings;
         init(formSettings);
@@ -465,6 +491,7 @@ let form = (function () {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
+        console.log('error');
         complete(formSettings);
     });
 
