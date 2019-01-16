@@ -45,7 +45,6 @@ const aft = (function () {
 
         });
         on('aft/addTransaction/success', function (params) {
-            console.log('uspesno');
             trigger('form/complete', { formSettings: addTransactionFormSettings });
 
         });
@@ -57,7 +56,6 @@ const aft = (function () {
         if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
             endpointName = $$('.link-active')[0].dataset.value;
         }
-
         
         trigger('form/add/hiddenField', { formSettings: addTransactionFormSettings, name: 'EndpointName', value: endpointName });
         trigger('aft/tab/transaction', { tableSettings: tableSettings });

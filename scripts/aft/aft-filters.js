@@ -47,7 +47,6 @@ const aftFilters = (function () {
     let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
     let transactionTab = $$('#aft-tabs-transaction');
     let closeAddTransaction = $$('#add-transaction-header-element').children[1];
-    let saveNewTransaction = $$('#add-transaction-save-button').children[0];
 
     let currentTableSettingsObject;
     let activeHeadElement;
@@ -301,7 +300,7 @@ const aftFilters = (function () {
 
 
 
-    //close add new jackpot form
+    //close
     transactionTab.addEventListener('click', function () {
         $$('#black-area').classList.remove('show');
         aftAddTransactionWrapper.classList.add('hidden');
@@ -325,15 +324,5 @@ const aftFilters = (function () {
     closeAddTransaction.addEventListener('click', function () {
         trigger('show/app');
     });
-
-    /* saveNewTransaction.addEventListener('click', function () {
-         saveNewTransaction.classList.add('loading');
- 
-         //ovde umesto timeout sklanjace se kada stigne odgovor sa servera
-         setTimeout(function () {
-             saveNewTransaction.classList.remove('loading');
-         }, 4000);
-     });*/
-
 
 })();
