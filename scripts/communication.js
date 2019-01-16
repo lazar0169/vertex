@@ -28,6 +28,8 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
+    let timeout = null;
+
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
         xhr.open(requestTypes.get, apiUrl + route, true);
@@ -50,15 +52,20 @@ let communication = (function () {
     function success(xhr, callbackEvent, settingsObject) {
         let data = tryParseJSON(xhr.responseText);
         //update token in sessionStorage
-        sessionStorage["token"] = JSON.stringify(data.TokenInfo);
-        if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
+        if (data.TokenInfo) {
+            sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+            refreshToken(data.TokenInfo);
+        } else {
+            sessionStorage["token"] = JSON.stringify(data);
+            refreshToken(data);
         }
-        trigger('communicate/token/refresh', {token: data.TokenInfo});
+        if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
+            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
+        }
     }
 
     function error(xhr, errorEventCallback) {
-        let errorData = {"message": xhr.responseText};
+        let errorData = { "message": xhr.responseText };
         if (typeof errorEventCallback !== typeof undefined) {
             trigger(errorEventCallback, errorData);
         }
@@ -131,14 +138,14 @@ let communication = (function () {
                 entry.EntryData.CreatedBy = '';
 
             } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
+                entry.EntryData.CreatedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.CreatedBy + '</label>';
 
             }
             if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
                 entry.EntryData.FinishedBy = '';
 
             } else {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
+                entry.EntryData.FinishedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.FinishedBy + '</label>';
 
             }
             delete entry.EntryData.CreatedTime;
@@ -146,18 +153,18 @@ let communication = (function () {
             entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
             entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
 
-            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) +'">'+entry.EntryData.Status+'</div>'
+            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
         });
 
         for (let i = 0; i < tableData.length; i++) {
             formatedData[i] = {
                 createdBy: tableData[i].EntryData.CreatedBy,
                 finishedBy: tableData[i].EntryData.FinishedBy,
-                status:  localization.translateMessage(tableData[i].EntryData.Status),
-                machineName:  tableData[i].EntryData.MachineName,
-                type:  localization.translateMessage(tableData[i].EntryData.Type),
-                cashable:  tableData[i].EntryData.AmountCashable,
-                promo:  tableData[i].EntryData.AmountPromo,
+                status: localization.translateMessage(tableData[i].EntryData.Status),
+                machineName: tableData[i].EntryData.MachineName,
+                type: localization.translateMessage(tableData[i].EntryData.Type),
+                cashable: tableData[i].EntryData.AmountCashable,
+                promo: tableData[i].EntryData.AmountPromo,
             };
         }
 
@@ -166,8 +173,8 @@ let communication = (function () {
         return formatedData;
     }
 
-    function formatTimeData(timeData){
-        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/,'');
+    function formatTimeData(timeData) {
+        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
     function prepareTicketsTableData(tableSettings, data) {
@@ -175,38 +182,40 @@ let communication = (function () {
         let formatedData = {};
         tableData.forEach(function (entry) {
             if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
+                entry.EntryData.CashoutedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">' + entry.EntryData.CashoutedBy + '</label>';
 
             } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' +  '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
+                entry.EntryData.CashoutedBy = '<time class="table-time"  style="font-size:13px;">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.CashoutedBy + '</label>';
 
             }
             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' +  '<label>' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">' + entry.EntryData.RedeemedBy + '</label>';
 
             } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' +  '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
+                entry.EntryData.RedeemedBy = '<time class="table-time" style="font-size:13px;">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label style="font-size:13px;">by ' + entry.EntryData.RedeemedBy + '</label>';
 
             }
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
             delete entry.EntryData.CashoutedTime;
             delete entry.EntryData.RedeemedTime;
-            if(entry.EntryData.TicketType === 'CashableTicket') {
-                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>'+ localization.translateMessage(entry.EntryData.TicketType);
+            if (entry.EntryData.TicketType === 'CashableTicket') {
+                entry.EntryData.TicketType = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
             }
         });
         for (let i = 0; i < tableData.length; i++) {
             formatedData[i] = {
                 code: tableData[i].EntryData.FullTicketValIdationNumber,
                 issuedBy: tableData[i].EntryData.CashoutedBy,
-                redeemedBy:  tableData[i].EntryData.RedeemedBy,
-                status:  localization.translateMessage(tableData[i].EntryData.Status),
-                type:  tableData[i].EntryData.TicketType,
-                amount:  tableData[i].EntryData.Amount
+                redeemedBy: tableData[i].EntryData.RedeemedBy,
+                status: localization.translateMessage(tableData[i].EntryData.Status),
+                type: tableData[i].EntryData.TicketType,
+                amount: tableData[i].EntryData.Amount
             };
         }
 
         tableSettings.formatedData = formatedData;
+
+        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue })
 
         return formatedData;
     }
@@ -233,7 +242,7 @@ let communication = (function () {
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
-        trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
+        trigger(event, { data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent });
     });
 
 
@@ -373,16 +382,14 @@ let communication = (function () {
     //aft add transaction
     on('communicate/aft/addTransaction', function (params) {
         let route = 'api/transactions/addtransaction/';
-        let successEvent = 'aft/addTransaction';
         let data = params.data;
         let request = requestTypes.post;
-        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            successEvent: successEvent,
+            errorEvent: params.formSettings.submitErrorEvent,
             data: data,
             request: request,
-            errorEvent: errorEvent
+            successEvent: params.formSettings.submitSuccessEvent
         });
     });
 
@@ -427,7 +434,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
+        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -614,7 +621,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
+        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
     });
 
     /*--------------------------------------------------------------------------------------*/
@@ -655,6 +662,7 @@ let communication = (function () {
         });
 
         //todo needs to be deleted
+        // trigger('communicate/casinos/getAllMachines', {})
         // trigger('communicate/casinos/previewMachines', {})
         // trigger('communicate/casinos/getMachineDetails', {})
         // trigger('communicate/casinos/getMachineServiceData', {})
@@ -707,6 +715,24 @@ let communication = (function () {
 
 
     /*------------------------------------ MACHINES EVENTS ------------------------------------*/
+
+    //get all machines
+    on('communicate/casinos/getAllMachines', function (params) {
+        let route = 'api/machines/';
+        let successEvent = 'communicate/test'
+        let data = {
+            'EndpointId': 4
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
 
     // machines get service data
     on('communicate/casinos/getMachineDetails', function (params) {
@@ -830,7 +856,7 @@ let communication = (function () {
     // machines get preview events
     on('communicate/casinos/previewMachineEvents', function (params) {
         let route = 'api/machines/previewevents/';
-        let successEvent = 'communicate/test'
+        let successEvent = 'communicate/test';
         let data = {
             'EndpointId': 4,
             'Gmcid': 33193329841023,
@@ -1066,6 +1092,8 @@ let communication = (function () {
     //test, need to be deleted
     on('communicate/test', function (params) {
         //alert('Successful communication');
+        console.log(params);
+        trigger('showing-machines-top-bar-value', { dataItemValue: params.data.Data.ItemValue })
     });
 
 
@@ -1086,21 +1114,19 @@ let communication = (function () {
         });
     */
 
-    let timeout = null;
-
-    function timeoutSet(params) {
-        timeout = setTimeout(function () {
+    function refreshToken(tokenInfo) {
+        if (timeout !== null) {
+            window.clearTimeout(timeout);
+            timeout = null;
+        }
+        timeout = window.setTimeout(function () {
             alert("Your token has expired. Please Login to continue!");
             trigger('logout');
-        }, params.token.expires_in * 1000);
+        }, tokenInfo.expires_in * 1000);
     }
 
     on('communicate/token/refresh', function (params) {
-        if (timeout !== null) {
-            clearTimeout(timeout);
-        }
-        timeoutSet(params);
-    });
-
+        refreshToken(params.token);
+    })
 
 })();

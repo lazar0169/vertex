@@ -2,6 +2,12 @@
     font-family: 'OpenSans-Regular';
     src: url('/fonts/OpenSans-Regular.ttf');
 }
+
+@font-face {
+    font-family: 'OpenSans-Bold';
+    src: url('/fonts/OpenSans-Bold.ttf');
+}
+
 @font-face {
     font-family: 'MyriadPro-Regular';
     src: url('/fonts/MyriadPro-Regular.otf');

@@ -18,8 +18,4 @@ const malfunctions = (function () {
         addMalfunctionMsg.children[0].value = "";
         addMalfunctionMsg.children[1].classList.add('hidden');
     });
-
-
-
-
 })();

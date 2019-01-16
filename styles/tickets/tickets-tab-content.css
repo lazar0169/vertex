@@ -8,9 +8,7 @@
     margin: 0.15rem 0 0.20rem 0.05rem;
 }
 */
-#tickets-enable-sms-check, #tickets-enable-email-check {
-    display: inline-flex;
-}
+
 
 #tickets-enable-sms-check>div, #tickets-enable-email-check>div {
     padding: 0 0.5rem;

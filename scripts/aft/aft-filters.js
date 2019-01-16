@@ -37,28 +37,34 @@ const aftFilters = (function () {
 
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
+    let advanceTableFilterButton = $$('#aft-advance-table-filter').children[0];
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
+    let aftAddTransactionButton = $$('#aft-add-transaction').children[0];
+    let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
+    let transactionTab = $$('#aft-tabs-transaction');
+    let closeAddTransaction = $$('#add-transaction-header-element').children[1];
 
     let currentTableSettingsObject;
     let activeHeadElement;
 
-    function showAdvanceTableFilter() {
-        advanceTableFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
+    function toggleAdvanceTableFilter() {
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        advanceTableFilterActive.classList.toggle('hidden');
     }
 
-    advanceTableFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
+    advanceTableFilterButton.addEventListener('click', function () {
+        toggleAdvanceTableFilter();
     });
 
     function getFiltersFromAPI(tableSettings) {
         let data = {
             'EndpointId': tableSettings.endpointId
         };
+        console.log('data', data);
         let tableSettingsObject = tableSettings;
         let successEvent = 'aft/filters/display';
         trigger('communicate/aft/getFilters', {
@@ -105,6 +111,9 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
         let aftAdvanceTableFilterStatus = $$('#aft-advance-table-filter-status');
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
+        let aftAddTransactionType = $$('#add-transaction-type');
+        let aftAddTransactionMachine = $$('#add-transaction-machine');
+
 
         let colNames = getColNamesOfTable(tableSettings);
 
@@ -113,6 +122,10 @@ const aftFilters = (function () {
         multiDropdown.generate(filters.TypeList, aftAdvanceTableFilterType);
         multiDropdown.generate(filters.StatusList, aftAdvanceTableFilterStatus);
         multiDropdown.generate(colNames, aftAdvanceTableFilterColumn);
+
+        dropdown.generate(filters.TypeList.slice(1, filters.TypeList.length), aftAddTransactionType, 'Type');
+        dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
+
     }
 
     function formatAftApiData(listArray) {
@@ -280,7 +293,35 @@ const aftFilters = (function () {
     }
 
     on('filters/show-selected-filters', function (data) {
-        showSelectedFilters(data.active, data.infobar)
+        showSelectedFilters(data.active, data.infobar);
+    });
+
+
+
+
+    //close
+    transactionTab.addEventListener('click', function () {
+        $$('#black-area').classList.remove('show');
+        aftAddTransactionWrapper.classList.add('hidden');
+    });
+    //show 
+    aftAddTransactionButton.addEventListener('click', function () {
+        $$('#black-area').classList.add('show');
+        aftAddTransactionWrapper.classList.remove('hidden');
+    });
+    // ToDO: treba da postoji jedan jedinstven event
+    window.addEventListener('keyup', function (event) {
+        if (event.keyCode == 27) {
+            aftAddTransactionWrapper.classList.add('hidden');
+        }
+    });
+
+    on('show/app', function () {
+        aftAddTransactionWrapper.classList.add('hidden');
+    });
+
+    closeAddTransaction.addEventListener('click', function () {
+        trigger('show/app');
     });
 
 })();

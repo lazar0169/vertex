@@ -27,6 +27,7 @@ const ticketsFilter = (function () {
     };
 
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
+    let ticketAdvanceFilterButton = $$('#tickets-advance-table-filter').children[0];
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketsMachinesNumbers = $$('#tickets-machines-number');
     let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
@@ -39,13 +40,13 @@ const ticketsFilter = (function () {
     let currentTableSettingsObject;
     let activeHeadElement;
 
-    function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
+    function toggleAdvanceTableFilter() {
+        ticketAdvanceFilter.classList.toggle('advance-filter-active');
+        advanceTableFilterActive.classList.toggle('hidden');
     }
 
-    ticketAdvanceFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
+    ticketAdvanceFilterButton.addEventListener('click', function () {
+        toggleAdvanceTableFilter();
     });
 
     function getFiltersFromAPI(tableSettings) {
@@ -237,13 +238,14 @@ const ticketsFilter = (function () {
             data: filtersForApi,
             tableSettings: currentTableSettingsObject
         });
-
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+
     });
 
     on('tickets/filters/pagination', function (params) {
@@ -254,6 +256,7 @@ const ticketsFilter = (function () {
             data: filtersForApi,
             callbackEvent: 'table/update'
         });
+
     });
 
     on('tickets/filters/sorting', function (params) {

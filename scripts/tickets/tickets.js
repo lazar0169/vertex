@@ -28,8 +28,26 @@ const tickets = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
 
-        trigger('tickets/tab/appearance', {tableSettings: tableSettings});
-        trigger('tickets/tab/maxValue', {tableSettings: tableSettings});
-        trigger('tickets/tab/smsSettings', {tableSettings: tableSettings});
+        trigger('tickets/tab/appearance', { tableSettings: tableSettings });
+        trigger('tickets/tab/maxValue', { tableSettings: tableSettings });
+        trigger('tickets/tab/smsSettings', { tableSettings: tableSettings });
+
+        function topBarInfoBoxValue(data) {
+            let topBarValueCashable = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-value');
+            topBarValueCashable[0].innerHTML = data.SumCashable;
+            let topBarNumberOfCashableTickets = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-number');
+            topBarNumberOfCashableTickets[0].innerHTML = `/${data.NumOfCashable}`;
+
+            let topBarInfoPromoValue = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-value');
+            topBarInfoPromoValue[0].innerHTML = data.SumPromo;
+            let topBarnumberOfPromoTickets = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-number');
+            topBarnumberOfPromoTickets[0].innerHTML = `/${data.NumOfPromo}`;
+        }
+
+        on('showing-tickets-top-bar-value', function (data) {
+            topBarInfoBoxValue(data.dataItemValue)
+            
+        });
+
     });
 })();

@@ -4,7 +4,9 @@ let topBar = (function () {
     let userProfile = $$('#user-profile');
     let previousTopBar;
 
-    openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
+    if (sessionStorage.token) {
+        openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
+    }
     function showTopBar(value) {
         if (value.category && value.casino) {
             topBarPath.children[1].innerHTML = `${value.category}/${value.casino}`;
