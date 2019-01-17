@@ -65,12 +65,12 @@
       "notifications.js"
     ],
     "styles": [
+      "modify-spectre.css",
       "index.css",
       "top-bar.css",
       "user-profile/user-profile-page.css",
       "user-profile/user-info-profile.css",
       "user-profile/user-edit-profile.css",
-      "modify-spectre.css",
       "sidebar.css",
       "common.css",
       "plugins/plugins.css",

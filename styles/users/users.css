@@ -29,7 +29,7 @@
 #add-new-user-role-wrapper {
     border-bottom: 1px solid #778f9b;
     background: rgb(55, 71, 79);
-    padding: 0 0.5rem;
+    padding: 0.5rem;
 }
 
 .add-new-user-role-list {
@@ -49,4 +49,8 @@
 
 .role-select-all-button {
     margin: 0 0 0 15px;
+}
+
+ #add-new-user-buttons-wrapper .button-link {
+    padding-left: 0.5rem;
 }

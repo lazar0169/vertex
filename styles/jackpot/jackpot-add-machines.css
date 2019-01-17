@@ -77,10 +77,7 @@
 }
 
 #choose-machines-jackpot-content-filters>div>div:not(:first-child) {
-    background: rgb(38, 50, 56);
-    z-index: 1;
     width: 100%;
-    padding: 0 0.5rem;
     cursor: default;
 }
 

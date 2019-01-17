@@ -53,6 +53,7 @@ const aftFilters = (function () {
 
     function toggleAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: advanceTableFilter });
         advanceTableFilterActive.classList.toggle('hidden');
     }
 

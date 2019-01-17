@@ -54,10 +54,6 @@
     padding: 0 0.5rem;
 }
 
-.custom-filter>div:first-child {
-    padding-right: 1rem;
-}
-
 .custom-filter>div:not(:last-child) {
     border-right: 1px solid black;
 }
@@ -88,11 +84,10 @@
 }
 
 .advance-table-filter>div:first-child {
-    padding-right: 0.5rem;
     border-bottom: 0.5rem solid transparent;
 }
 
-.advance-table-filter::before {
+/* .advance-table-filter::before {
     content: "";
     position: absolute;
     right: 0.5rem;
@@ -102,7 +97,7 @@
     border-top: 0.4rem solid rgb(30, 155, 227);
     border-right: 0.15rem solid transparent;
     border-left: 0.15rem solid transparent;
-}
+} */
 
 .chosen-info-tab {
     flex: 1;
@@ -241,4 +236,30 @@
 
 .option-casionos-in-city-wrapper {
     padding: 0 0.5rem;
+}
+
+.border-bottom-cities {
+    border-bottom: 1px solid #37474f;
+}
+
+.background-dark {
+    background: rgb(38, 50, 56);
+    box-shadow: 0 0 10px #000000;
+}
+
+.option-casino:hover label, .option-city:hover, .option-all:hover {
+    cursor: pointer !important;
+    color: white !important;
+}
+
+.closed-arrow {
+    padding: 10px;
+    transform: rotate(0deg);
+    transition: all .15s ease-in;
+}
+
+.opened-arrow {
+    transform: rotate(180deg);
+    transition: all .15s ease-in-out;
+    color: white;
 }

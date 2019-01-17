@@ -38,9 +38,6 @@
     background: rgb(36, 82, 108) !important;
 }
 
-.form-switch, .form-checkbox, .form-radio {
-    color: rgb(120, 144, 156);
-}
 
 .form-checkbox .form-icon, .form-checkbox input:focus+.form-icon, .form-checkbox input:checked+.form-icon, .form-radio input+.form-icon {
     background: rgb(120, 144, 156);
@@ -59,6 +56,10 @@
     background: rgb(30, 155, 227);
     height: 7px;
     width: 7px;
+}
+
+.form-switch input+.form-icon {
+    background: black;
 }
 
 .form-switch input+.form-icon::before {
@@ -204,7 +205,3 @@ body {
 [type=reset], [type=submit], button, html [type=button] {
     -webkit-appearance: inherit !important;
 }
-
-figure input[type=checkbox]:checked + div {
-    background: green;
-  }

@@ -42,6 +42,8 @@ const ticketsFilter = (function () {
 
     function toggleAdvanceTableFilter() {
         ticketAdvanceFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: ticketAdvanceFilter });
+
         advanceTableFilterActive.classList.toggle('hidden');
     }
 

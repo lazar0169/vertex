@@ -170,7 +170,8 @@ const dropdownDate = (function () {
         else {
             if ($$('.advance-filter-active')[0]) {
                 $$('.advance-filter-active')[0].children[1].classList.add('hidden');
-                $$('.advance-filter-active')[0].classList.remove('advance-filter-active')
+                trigger('opened-arrow', { div: $$('.advance-filter-active')[0] });
+                $$('.advance-filter-active')[0].classList.remove('advance-filter-active');
             }
         }
     });

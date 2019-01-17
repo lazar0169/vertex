@@ -111,3 +111,14 @@ on('set-date-datepicker', function (data) {
     $$(`#${data.pickerId}`).dataset.value = data.date;
     $$(`#${data.pickerId}`).value = data.date;
 });
+
+
+function openCloseArrow(div) {
+
+    div.children[0].children[1].classList.toggle('opened-arrow')
+
+}
+
+on('opened-arrow', function (data) {
+    openCloseArrow(data.div)
+})

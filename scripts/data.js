@@ -76,11 +76,11 @@ let roleData = {
                 },
                 {
                     "Name": "Acceptors",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "ResetBillAcceptor",
-                    "Enabled": true
+                    "Enabled": false
                 }
             ]
         },
@@ -112,7 +112,7 @@ let roleData = {
             "MainRoleList": [
                 {
                     "Name": "PreviewJackpot",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Edit",
@@ -120,7 +120,7 @@ let roleData = {
                 },
                 {
                     "Name": "Delete",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Add",
@@ -128,7 +128,7 @@ let roleData = {
                 },
                 {
                     "Name": "History",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Settings",
@@ -136,7 +136,7 @@ let roleData = {
                 },
                 {
                     "Name": "Delete",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Animation settings",
@@ -150,7 +150,7 @@ let roleData = {
             "MainRoleList": [
                 {
                     "Name": "PreviewAft",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "EnableTransaction",
@@ -158,7 +158,7 @@ let roleData = {
                 },
                 {
                     "Name": "NotificationSettings",
-                    "Enabled": true
+                    "Enabled": false
                 }
             ]
         }
