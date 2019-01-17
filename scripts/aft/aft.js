@@ -19,12 +19,10 @@ const aft = (function () {
         tableSettings.getDataEvent = communication.events.aft.transactions.getTransactions;
         tableSettings.filterDataEvent = communication.events.aft.transactions.previewTransactions;
         tableSettings.updateTableEvent = 'table/update';
-        tableSettings.processRemoteData = communication.events.aft.data.prepare;
-        //tableSettings.sortActiveColumn = 'createdby';
+        tableSettings.processRemoteData = communication.events.aft.data.parseRemoteData;
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
         tableSettings.stickyRow = true;
-
         tableSettings.onDrawRowCell = 'aft/table/drawCell';
         tableSettings.onAfterCellClick = onTableCellClick;
 

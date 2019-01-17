@@ -1,31 +1,5 @@
 const ticketsFilter = (function () {
 
-    let ticketSortName = {
-        type: 1,
-        amount: 2,
-        code: 3,
-        issuedby: 4, //todo check if this is it
-        redeemedby: 5, //todo check if this is it
-        status: 9
-    };
-
-    let ticketStatus = {
-        TicketActive: 0,
-        TicketDeleted: 1,
-        TicketStacked: 2,
-        TicketEscrowed: 3,
-        TicketPayed: 4,
-        TicketNotExisting: 5,
-        TicketCanceled: 8
-
-    };
-
-    let ticketType = {
-        Cashable: 0,
-        Promo: 1,
-        Other: 2
-    };
-
     let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketsMachinesNumbers = $$('#tickets-machines-number');
@@ -36,17 +10,102 @@ const ticketsFilter = (function () {
 
     dropdown.generate(machinesNumber, ticketsMachinesNumbers);
 
-    let currentTableSettingsObject;
     let activeHeadElement;
+
+
+    /*********************----Events Listeners------*********************/
+    ticketAdvanceFilter.addEventListener('click', function () {
+        showAdvanceTableFilter();
+    });
+
+    ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
+        let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
+        trigger(communication.events.tickets.previewTickets, {
+            data: filtersForApi,
+            tableSettings: currentTableSettingsObject
+        });
+
+        trigger('filters/show-selected-filters', {
+            active: advanceTableFilterActive,
+            infobar: advanceTableFilterInfobar
+        });
+    });
+
+    ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('filters/show-selected-filters', {
+            active: advanceTableFilterActive,
+            infobar: advanceTableFilterInfobar
+        });
+    });
+
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('filters/show-selected-filters', {
+            active: advanceTableFilterActive,
+            infobar: advanceTableFilterInfobar
+        });
+    });
+
+    /*********************----Module Events----************************/
+
+    on('tickets/filters/init', function (params) {
+        let tableSettings = params.tableSettings;
+        currentTableSettingsObject = tableSettings;
+        getFiltersFromAPI(tableSettings);
+    });
+    on('tickets/filters/display', function (params) {
+        let apiResponseData = params.data;
+        let tableSettings = params.settingsObject;
+        let filters = apiResponseData.Data;
+
+        filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
+        filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
+        filters.TypesList = formatTicketsApiData(filters.TypesList);
+
+        tableSettings.filters = filters;
+        tableSettings.filtersInitialized = true;
+        displayFilters(filters, tableSettings);
+    });
+    on('tickets/filters/pagination', function (params) {
+        let tableSettings = params.tableSettings;
+        let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
+        trigger(communication.events.tickets.previewTickets, {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
+    });
+    on('tickets/filters/sorting', function (params) {
+        let tableSettings = params.tableSettings;
+        activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
+        if (activeHeadElement !== null && activeHeadElement !== undefined) {
+            let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
+            filtersForApi.BasicData.SortOrder = params.sorting.SortDirection;
+            filtersForApi.BasicData.SortName = ticketSortName[params.sorting.SortName] !== undefined ? ticketSortName[params.sorting.SortName] : null;
+            trigger(communication.events.tickets.previewTickets, {
+                tableSettings: tableSettings,
+                data: filtersForApi,
+                callbackEvent: 'table/update'
+            });
+        }
+    });
+    on('tickets/filters/pageSize', function (params) {
+        let tableSettings = params.tableSettings;
+        let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
+        trigger(communication.events.tickets.previewTickets, {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
+    })
+
+    /*********************----Helper functions----*********************/
 
     function showAdvanceTableFilter() {
         ticketAdvanceFilter.classList.add('advance-filter-active');
         advanceTableFilterActive.classList.remove('hidden');
     }
-
-    ticketAdvanceFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
-    });
 
     function getFiltersFromAPI(tableSettings) {
         let data = {
@@ -61,12 +120,6 @@ const ticketsFilter = (function () {
         });
     }
 
-    on('tickets/filters/init', function (params) {
-        let tableSettings = params.tableSettings;
-        currentTableSettingsObject = tableSettings;
-        getFiltersFromAPI(tableSettings);
-    });
-
     function formatChooseColumnTicketsData(chooseColumnListArray) {
         let formattedColumnArray = [];
         let columnObject = {};
@@ -80,15 +133,8 @@ const ticketsFilter = (function () {
         return formattedColumnArray;
     }
 
-    function getColNamesOfTable(tableSettings) {
-        let colNamesArray = table.getColNamesOfDisplayedTable(tableSettings);
-        colNamesArray = formatChooseColumnTicketsData(colNamesArray);
-        return colNamesArray;
-    }
-
     //display initial filters
     function displayFilters(filters, tableSettings) {
-
         //filter elements
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
@@ -96,9 +142,9 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFiltersRedeemed = $$('#tickets-advance-table-filter-redeemed');
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
 
-        let states =  table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
+        let states = table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
         multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
-        let types =  table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
+        let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
         multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
@@ -116,7 +162,6 @@ const ticketsFilter = (function () {
         multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
     }
 
-
     function formatTicketsApiData(filterArray) {
         if (filterArray !== undefined && filterArray !== null) {
             filterArray.forEach(function (filter) {
@@ -125,54 +170,6 @@ const ticketsFilter = (function () {
             });
             return filterArray;
         }
-    }
-
-    on('tickets/filters/display', function (params) {
-        let apiResponseData = params.data;
-        let tableSettings = params.settingsObject;
-        let filters = apiResponseData.Data;
-
-        filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
-        filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
-        filters.TypesList = formatTicketsApiData(filters.TypesList);
-
-        tableSettings.filters = filters;
-        tableSettings.filtersInitialized = true;
-        displayFilters(filters, tableSettings);
-    });
-
-    function prepareStatusArrayData(dataArray) {
-        let preparedStatusData = [];
-        if (dataArray !== null && dataArray !== undefined) {
-            dataArray.forEach(function (status) {
-                if (ticketStatus[status] !== undefined) {
-                    preparedStatusData.push(ticketStatus[status]);
-                } else {
-                    preparedStatusData.push(null);
-                }
-            });
-        }
-        if(preparedStatusData.length === 0) {
-            preparedStatusData = null;
-        }
-        return preparedStatusData;
-    }
-
-    function prepareTypeArrayData(dataArray) {
-        let preparedTypeData = [];
-        if (dataArray !== null && dataArray !== undefined) {
-            dataArray.forEach(function (status) {
-                if (ticketType[status] !== undefined) {
-                    preparedTypeData.push(ticketType[status]);
-                } else {
-                    preparedTypeData.push(null);
-                }
-            });
-        }
-        if(preparedTypeData.length === 0) {
-            preparedTypeData = null;
-        }
-        return preparedTypeData;
     }
 
     function preparePrintedListData(dataArray) {
@@ -186,7 +183,7 @@ const ticketsFilter = (function () {
                 preparedPrintedListData.push(object);
             });
         }
-        if(preparedPrintedListData.length === 0) {
+        if (preparedPrintedListData.length === 0) {
             preparedPrintedListData = null;
         }
         return preparedPrintedListData;
@@ -203,7 +200,7 @@ const ticketsFilter = (function () {
                 preparedRedeemListData.push(object);
             });
         }
-        if(preparedRedeemListData.length === 0) {
+        if (preparedRedeemListData.length === 0) {
             preparedRedeemListData = null;
         }
         return preparedRedeemListData;
@@ -232,7 +229,7 @@ const ticketsFilter = (function () {
             'TokenInfo': sessionStorage.token
         };
 
-        table.setFiltersPage(currentTableSettingsObject,filtersForApi);
+        table.setFiltersPage(currentTableSettingsObject, filtersForApi);
         //Set visible columns for tableSettings object
         currentTableSettingsObject.visibleColumns = pageFilters.Columns;
 
@@ -240,62 +237,6 @@ const ticketsFilter = (function () {
 
         return filtersForApi;
     }
-
-    ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
-        let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
-        trigger(communication.events.tickets.previewTickets, {
-            data: filtersForApi,
-            tableSettings: currentTableSettingsObject
-        });
-
-        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
-    });
-
-    ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
-    });
-
-    on('tickets/filters/pagination', function (params) {
-        let tableSettings = params.tableSettings;
-        let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
-        trigger(communication.events.tickets.previewTickets, {
-            tableSettings: tableSettings,
-            data: filtersForApi,
-            callbackEvent: 'table/update'
-        });
-    });
-
-    on('tickets/filters/sorting', function (params) {
-        let tableSettings = params.tableSettings;
-        activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
-        if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
-            filtersForApi.BasicData.SortOrder = params.sorting.SortDirection;
-            filtersForApi.BasicData.SortName = ticketSortName[params.sorting.SortName] !== undefined ? ticketSortName[params.sorting.SortName] : null;
-            trigger(communication.events.tickets.previewTickets, {
-                tableSettings: tableSettings,
-                data: filtersForApi,
-                callbackEvent: 'table/update'
-            });
-        }
-    });
-
-
-    clearAdvanceFilterInfobar.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
-    });
-
-    on('tickets/filters/pageSize', function (params) {
-        let tableSettings = params.tableSettings;
-        let filtersForApi = prepareTicketsFiltersForApi(tableSettings);
-        trigger(communication.events.tickets.previewTickets, {
-            tableSettings: tableSettings,
-            data: filtersForApi,
-            callbackEvent: 'table/update'
-        });
-    })
 
 })();
 

@@ -50,7 +50,7 @@ let communication = (function () {
                 getFilters: 'communicate/aft/getFilters'
             },
             data: {
-                prepare: 'communicate/aft/data/prepare'
+                parseRemoteData: 'communicate/aft/data/parseRemoteData'
             }
         },
         tickets: {
@@ -521,8 +521,8 @@ let communication = (function () {
         });
     });
 
-//prepare data for aft  page
-    on(events.aft.data.prepare, function (params) {
+//parseRemoteData data for aft  page
+    on(events.aft.data.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
         tableSettings.tableData = prepareAftTableData(tableSettings, data);
@@ -553,7 +553,7 @@ let communication = (function () {
 
 //tickets preview ticket action
 //pagination sorting and filtering
-    on('communicate/tickets/previewTickets', function (params) {
+    on(events.tickets.previewTickets, function (params) {
         let route = apiRoutes.tickets.previewTickets;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
@@ -708,7 +708,7 @@ let communication = (function () {
     });
 
 
-//prepare data for tickets  page
+//parseRemoteData data for tickets  page
     on(events.tickets.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
