@@ -333,7 +333,6 @@ let table = (function () {
             //highlight sorted column if there is one
             markActiveColumnRows(tableSettings);
             updateTablePagination(tableSettings);
-
             tbody.classList.remove('d-hide');
             tableSettings.noDataElement.classList.add('d-hide');
             setTableDimensions(tableSettings, colsCount, tbody);
@@ -416,15 +415,15 @@ let table = (function () {
 
     function generateTablePagination(tableSettings) {
         let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
-        if (paginationElement === undefined) {
+        if (paginationElement !== undefined) {
+            paginationElement.parentNode.removeChild(paginationElement);
+        }
             let callbackEvent = 'table/pagination/display';
             trigger('template/render', {
                 templateElementSelector: '#pagination',
                 callbackEvent: callbackEvent,
                 tableSettings: tableSettings
             });
-        }
-        ;
     }
 
     on('table/pagination/display', function (params) {
@@ -455,10 +454,6 @@ let table = (function () {
             let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
             let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
             let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
-
-            /*            let paginationRowNumber = tableSettings.tableContainerElement.getElementsByClassName('pagination-row-number')[0];
-                        paginationRowNumber.innerHTML = rowNumber.toString();
-                        paginationRowNumber.value = rowNumber.toString();*/ //todo
 
             paginationFirstPage.dataset.page = '1';
             if (activePage - 1 > 0) {
@@ -527,8 +522,8 @@ let table = (function () {
         e.preventDefault();
         resetPaginationActiveButtons(tableSettings);
         e.target.classList.add('active');
-        tableSettings.activePage = e.target.dataset.page;
-
+        tableSettings.activePage = parseInt(e.target.dataset.page);
+        //ToDo: refactor this to be in table module
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         trigger(moduleName + '/filters/pagination', {tableSettings: tableSettings});
     }
@@ -646,9 +641,6 @@ let table = (function () {
 
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-        console.log('generate');
-        console.log(tableSettings.filtersContainerElement);
-        console.log(pageSizeDropdown);
         dropdown.generate(machinesNumber, pageSizeDropdown);
         bindPageSizeLinkHandlers(pageSizeDropdown,tableSettings);
     }
@@ -658,7 +650,7 @@ let table = (function () {
         if (pageSizeElement !== undefined && pageSizeElement !== null) {
             let choosenOption = pageSizeElement.getElementsByClassName('element-table-filters')[0];
             let pageSizeValue = choosenOption.dataset.value;
-            pageSizeValue = parseInt(pageSizeValue, 10);
+            pageSizeValue = parseInt(pageSizeValue);
             tableSettings.PageSize = pageSizeValue;
             return pageSizeValue;
         }
@@ -813,7 +805,6 @@ let table = (function () {
 
     /*--------------------------- SORTING LINK CLICK HANDLERS ----------------------------*/
     function handleSortingLinkClick(e) {
-
         let element = e.target;
         let table = element.parentNode.parentNode;
         let tableSettings = table.tableSettings;
@@ -821,7 +812,6 @@ let table = (function () {
         e.preventDefault();
         //ToDo: odluciti kada se markira aktivna kolona
         deselectActiveColumn(table);
-
         setSortingAttributes(element, tableSettings);
         //set active column class
         //parse to array
@@ -962,24 +952,30 @@ let table = (function () {
     /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
     function init(tableSettings) {
+
+        let tableContainerElement = $$(tableSettings.tableContainerSelector);
+        if (tableContainerElement.tableSettings !== undefined) {
+            console.log('table settings deleted in init');
+            delete tableContainerElement.tableSettings;
+        }
+
         //cache table and filters containers in table settings
-        console.log(tableSettings);
-        tableSettings.tableContainerElement = $$(tableSettings.tableContainerSelector);
+        tableSettings.tableContainerElement = tableContainerElement;
         tableSettings.filtersContainerElement = $$(tableSettings.filtersContainerSelector);
+
+
+
         if (tableSettings.advancedFiltersContainerElement !== undefined) {
             tableSettings.advancedFiltersContainerElement = $$(tableSettings.advancedFilterContainerSelector);
         }
         //set advanced filters container element automatically
         else if (tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter').length > 0) {
             tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter');
-            tableSettings.advancedFilterContainerSelector = `#{tableSettings.advancedFiltersContainerElement.dataset.id}`;
+            tableSettings.advancedFilterContainerSelector = `#${tableSettings.advancedFiltersContainerElement.id}`;
         }
 
-        console.log('tableSettings');
-        console.log(tableSettings);
-
         tableSettings.tableContainerElement.classList.add('vertex-table');
-        let tableContainerElement = tableSettings.tableContainerElement;
+
         tableContainerElement.tableSettings = tableSettings;
 
         if (tableSettings.getDataEvent !== null) {
@@ -1129,8 +1125,13 @@ let table = (function () {
         }
     }
 
+    function getTableSettingsFromParentSelector(parentSelector) {
+        return $$(parentSelector).tableSettings;
+    }
+
     /*-------------------------------PUBLIC HELPER FUNCTIONS--------------------------------*/
     function setFiltersPage(currentTableSettingsObject, filtersForApi) {
+
         if (currentTableSettingsObject.filters !== null) {
             if (currentTableSettingsObject.filters.BasicData !== undefined) {
                 let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
@@ -1141,7 +1142,6 @@ let table = (function () {
                 delete clonedFilters.TokenInfo;
                 delete clonedExistingFilters.BasicData.Page;
                 delete clonedExistingFilters.TokenInfo;
-
                 if (!compareObjects(clonedFilters, clonedExistingFilters)) {
                     currentTableSettingsObject.activePage = 1;
                     filtersForApi.BasicData.Page = 1;

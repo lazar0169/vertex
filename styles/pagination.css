@@ -40,6 +40,10 @@
     border-radius: 10%;
 }
 
+.element-pagination-page-button, .aft-pagination .element-pagination-link:active {
+    outline:none;
+}
+
 .element-pagination-link, .element-pagination-page-button {
     cursor: pointer;
 }

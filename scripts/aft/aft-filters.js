@@ -20,12 +20,13 @@ const aftFilters = (function () {
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
 
-    let currentTableSettingsObject;
     let activeHeadElement;
 
     //display initial filters
     /*********************----Events Listeners------*********************/
-    aftAdvanceApplyFilters.addEventListener('click', filterAftTable);
+    aftAdvanceApplyFilters.addEventListener('click', function(){
+        filterAftTable(true);
+    });
     clearAdvanceFilter.addEventListener('click', clearAftFilters);
     clearAdvanceFilterInfobar.addEventListener('click', clearAftFilters);
     advanceTableFilter.addEventListener('click', function () {
@@ -35,7 +36,7 @@ const aftFilters = (function () {
     /*********************----Module Events----************************/
     on('aft/filters/init', function (params) {
         let tableSettings = params.tableSettings;
-        currentTableSettingsObject = tableSettings;
+
         getFiltersFromAPI(tableSettings);
     });
     on('aft/filters/display', function (params) {
@@ -46,28 +47,19 @@ const aftFilters = (function () {
         filters.MachineNameList = formatAftApiData(filters.MachineNameList);
         filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
 
-        tableSettings.filters = filters;
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
     on('aft/filters/pagination', function (params) {
-        let tableSettings = params.tableSettings;
-        //let filtersForApi = prepareAftFiltersForApi(tableSettings);
-        filterAftTable()
+        console.log('table Settings in pagination');
+        console.log(params.tableSettings);
+        filterAftTable();
     });
     on('aft/filters/sorting', function (params) {
         let tableSettings = params.tableSettings;
-        activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
+        activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            /*let filtersForApi = prepareAftFiltersForApi(tableSettings);
-            filtersForApi.BasicData.SortDirection = params.sorting.SortDirection;
-            filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
-            */filterAftTable();
-           /* trigger(communication.events.aft.transactions.previewTransactions, {
-                tableSettings: tableSettings,
-                data: filtersForApi,
-                callbackEvent: 'table/update'
-            });*/
+            filterAftTable();
         }
     });
     on('filters/show-selected-filters', function (data) {
@@ -76,7 +68,6 @@ const aftFilters = (function () {
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         tableSettings.activePage = 1;
-        console.log('filters for api');
         filterAftTable();
     });
     on('aft/filters/filter-table', function(params){
@@ -84,15 +75,20 @@ const aftFilters = (function () {
     });
 
     /*********************----Helper functions----*********************/
+    function getActiveTableSettings() {
+        return $$('#table-container-aft').tableSettings;
+    }
+
     function filterAftTable(showFilters) {
-        console.log('showFilters');
-        console.log(showFilters);
         if (showFilters === undefined) {
             showFilters = false;
         }
         let params = {};
-        params.tableSettings = currentTableSettingsObject;
-        params.data = prepareAftFiltersForApi(currentTableSettingsObject);
+        let tableSettings = getActiveTableSettings();
+        console.log('table settings in get filters for API');
+        console.log(tableSettings);
+        params.tableSettings = tableSettings;
+        params.data = prepareAftFiltersForApi(tableSettings);
         if (showFilters) {
             params.activeFiltersElement = advanceTableFilterActive;
             params.infobarElement = advanceTableFilterInfobar;
@@ -141,13 +137,19 @@ const aftFilters = (function () {
         return listArray;
     }
 
-    function prepareAftFiltersForApi(currentTableSettingsObject) {
-        let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sortDirection = currentTableSettingsObject.sort.SortDirection;
-        let sortName = currentTableSettingsObject.sort.SortName;
+    function prepareAftFiltersForApi(activeTableSettings) {
+        if (activeTableSettings === undefined) {
+            console.log('table settings are undefined in prepare filters for API');
+            activeTableSettings = getActiveTableSettings();
+        }
+        console.log('activeTableSettingsObject in prepare Filters for API');
+        console.log(activeTableSettings);
+        let pageFilters = table.collectFiltersFromPage(activeTableSettings);
+        let sortDirection = activeTableSettings.sort.SortDirection;
+        let sortName = activeTableSettings.sort.SortName;
 
         let filtersForApi = {
-            'EndpointId': currentTableSettingsObject.endpointId,
+            'EndpointId': activeTableSettings.endpointId,
             'DateFrom': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             'DateTo': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
             'MachineList': pageFilters.MachineList,
@@ -155,8 +157,8 @@ const aftFilters = (function () {
             'Status': pageFilters.Status,
             'Type': pageFilters.Type,
             'BasicData': {
-                'Page': currentTableSettingsObject.activePage,
-                'PageSize': table.getPageSize(currentTableSettingsObject),
+                'Page': activeTableSettings.activePage,
+                'PageSize': table.getPageSize(activeTableSettings),
                 'SortOrder': sortDirection,
                 'SortName': aftSortName[sortName] !== undefined ? aftSortName[sortName] : null
             },
@@ -164,10 +166,10 @@ const aftFilters = (function () {
         };
 
         //reset to page 1 if filters are changed
-        table.setFiltersPage(currentTableSettingsObject, filtersForApi);
+        table.setFiltersPage(activeTableSettings, filtersForApi);
         //Set visible columns for tableSettings object
-        currentTableSettingsObject.visibleColumns = pageFilters.Columns;
-        currentTableSettingsObject.filters = filtersForApi;
+        activeTableSettings.visibleColumns = pageFilters.Columns;
+        activeTableSettings.filters = filtersForApi;
 
         return filtersForApi;
     }
@@ -191,15 +193,12 @@ const aftFilters = (function () {
     }
 
     function clearAftFilters() {
+        console.log('clear all filters function called');
         //reset page to 1
-        currentTableSettingsObject.activePage = 1;
-        currentTableSettingsObject.visibleColumns = [];
-        currentTableSettingsObject.filters = null;
-      /*  trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
-        trigger('filters/show-selected-filters', {
-            active: advanceTableFilterActive,
-            infobar: advanceTableFilterInfobar
-        });*/
+        let tableSettings = getActiveTableSettings();
+        tableSettings.activePage = 1;
+        tableSettings.visibleColumns = [];
+        tableSettings.filters = null;
         filterAftTable(true);
     }
 

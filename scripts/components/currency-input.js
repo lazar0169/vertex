@@ -16,10 +16,9 @@ const currencyInput = (function () {
 
     function onKeyDown(e) {
         e = e || window.event;
-        let charCode = (typeof e.which == "undefined") ? e.keyCode : e.which;
+        let charCode = (e.which === undefined) ? e.keyCode : e.which;
         let charStr = String.fromCharCode(charCode);
-        console.log(e.target.value);
-        console.log(e.target.value.includes(config.decimalSeparator));
+
         if (config.thousandSeparator === charStr) {
             e.preventDefault();
             return false;
