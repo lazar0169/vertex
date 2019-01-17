@@ -1,17 +1,4 @@
 const aftFilters = (function () {
-    const aftSortName = {
-        cashable: 0,
-        promo: 1,
-        amountnonrestrictive: 2,
-        createdby: 3,
-        gmcid: 4,
-        jidtp: 5,
-        status: 6,
-        machinename: 7,
-        jackpotname: 8,
-        type: 9,
-        finishedby: 10
-    };
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
@@ -27,7 +14,7 @@ const aftFilters = (function () {
     aftAdvanceApplyFilters.addEventListener('click', function(){
         filterAftTable(true);
     });
-    clearAdvanceFilter.addEventListener('click', clearAftFilters);
+    clearAdvanceFilter.addEventListener('click',removeSelectedFilters);
     clearAdvanceFilterInfobar.addEventListener('click', clearAftFilters);
     advanceTableFilter.addEventListener('click', function () {
         showAdvanceTableFilter();
@@ -185,12 +172,17 @@ const aftFilters = (function () {
         advanceTableFilterActive.classList.remove('hidden');
     }
 
+    function removeSelectedFilters() {
+        //ToDo: Nikola - jel možeš ovde da isprazniš sve dropdown-e?
+    }
+
     function clearAftFilters() {
         //reset page to 1
         let tableSettings = getActiveTableSettings();
         tableSettings.activePage = 1;
         tableSettings.visibleColumns = [];
         tableSettings.filters = null;
+        console.log('clear filters',tableSettings);
         filterAftTable(true);
     }
 
