@@ -5,11 +5,6 @@ const aft = (function () {
 
     on('aft/activated', function (params) {
 
-
-        setTimeout(function () {
-            trigger('preloader/hide');
-        }, 2000);
-
         let aftId = params.params[0].value;
         endpointId = aftId;
 

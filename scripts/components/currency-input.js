@@ -33,7 +33,6 @@ const currencyInput = (function () {
         let target = e.target;
         let value = target.value;
         let parsedValue = formatFloatValue(value);
-        console.log(parsedValue);
         target.value = parsedValue;
     }
 

@@ -211,25 +211,25 @@ const ticketsFilter = (function () {
 
     function prepareTicketsFiltersForApi(currentTableSettingsObject) {
         let pageFilters = table.collectFiltersFromPage(currentTableSettingsObject);
-        let sortDirection = currentTableSettingsObject.sort.SortDirection;
-        let sortName = currentTableSettingsObject.sort.SortName;
+        let sortDirection = currentTableSettingsObject.sort.sortDirection;
+        let sortName = currentTableSettingsObject.sort.sortName;
         let filtersForApi = {
-            "EndpointId": currentTableSettingsObject.endpointId,
-            "DateFrom": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
-            "DateTo": pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
-            "RedeemDateFrom": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            "RedeemDateTo": pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            "PrintedList": preparePrintedListData(pageFilters.Printed),
-            "RedeemList": prepareRedeemListData(pageFilters.Redeemed),
-            "Status": pageFilters.Status,
-            "Type": pageFilters.TypesList,
-            "BasicData": {
-                "Page": currentTableSettingsObject.activePage,
-                "PageSize": parseInt(pageFilters.PageSize, 10),
-                "SortOrder": sortDirection,
-                "SortName": ticketSortName[sortName] !== undefined ? ticketSortName[sortName] : null
+            'EndpointId': currentTableSettingsObject.endpointId,
+            'DateFrom': pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
+            'DateTo': pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
+            'RedeemDateFrom': pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
+            'RedeemDateTo': pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
+            'PrintedList': preparePrintedListData(pageFilters.Printed),
+            'RedeemList': prepareRedeemListData(pageFilters.Redeemed),
+            'Status': pageFilters.Status,
+            'Type': pageFilters.TypesList,
+            'BasicData': {
+                'Page': currentTableSettingsObject.activePage,
+                'PageSize': parseInt(pageFilters.PageSize),
+                'SortOrder': sortDirection,
+                'SortName': ticketSortName[sortName] !== undefined ? ticketSortName[sortName] : null
             },
-            "TokenInfo": sessionStorage.token
+            'TokenInfo': sessionStorage.token
         };
 
         table.setFiltersPage(currentTableSettingsObject,filtersForApi);

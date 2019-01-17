@@ -1,14 +1,16 @@
 let preloader = (function () {
 
-    let preloaderElement = $$('#preloader');
 
     function showPreloader() {
+        let preloaderElement = $$('#preloader');
+        preloaderElement.showCount++;
         preloaderElement.classList.remove('hide');
         preloaderElement.classList.remove('fade-out');
 
     }
 
     function hidePreloader() {
+        let preloaderElement = $$('#preloader');
         preloaderElement.classList.remove('fade-in');
         preloaderElement.classList.add('fade-out');
     }
@@ -18,21 +20,29 @@ let preloader = (function () {
     });
 
     on('preloader/hide', function () {
-        let element = $$('#preloader');
-        element.removeEventListener("webkittransitionEnd", onTransitionEnd, false);
-        element.removeEventListener("transitionend", onTransitionEnd, false);
-        element.removeEventListener("otransitionend", onTransitionEnd, false);
-        element.removeEventListener("MSAnimationEnd", onTransitionEnd, false);
+        //let element = $$('#preloader');
+        let preloaderElement = $$('#preloader');
+        preloaderElement.showCount--;
+        if (preloaderElement.showCount <= 0) {
+            preloaderElement.showCount = 0;
+            preloaderElement.removeEventListener("webkittransitionEnd", onTransitionEnd, false);
+            preloaderElement.removeEventListener("transitionend", onTransitionEnd, false);
+            preloaderElement.removeEventListener("otransitionend", onTransitionEnd, false);
+            preloaderElement.removeEventListener("MSAnimationEnd", onTransitionEnd, false);
 
-        element.addEventListener("webkittransitionEnd", onTransitionEnd, false);
-        element.addEventListener("transitionend", onTransitionEnd, false);
-        element.addEventListener("otransitionend", onTransitionEnd, false);
-        element.addEventListener("MSAnimationEnd", onTransitionEnd, false);
-        hidePreloader();
+            preloaderElement.addEventListener("webkittransitionEnd", onTransitionEnd, false);
+            preloaderElement.addEventListener("transitionend", onTransitionEnd, false);
+            preloaderElement.addEventListener("otransitionend", onTransitionEnd, false);
+            preloaderElement.addEventListener("MSAnimationEnd", onTransitionEnd, false);
+            hidePreloader();
+        }
     })
 
-    function init(element) {
-
+    function init() {
+        let preloaderElement = $$('#preloader');
+        if (preloaderElement !== null) {
+        preloaderElement.showCount = 0;
+        }
     }
 
     function onTransitionEnd(e) {
@@ -44,6 +54,6 @@ let preloader = (function () {
         element.removeEventListener("MSAnimationEnd", onTransitionEnd, false);
     }
 
-    init(preloaderElement);
+    init();
 
 })();

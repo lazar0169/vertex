@@ -4,10 +4,11 @@ let table = (function () {
     const columnClassPrefix = 'column-';
     const rowClassPrefix = 'row-';
     const cellClassPrefix = 'cell-';
-    const activeColumnElementsClass = 'active-column';
+    const highlightedColumnElementsClass = 'active-column';
     const activeRowElementsClass = 'row-chosen';
     const hiddenCellClassName = 'hidden';
     const emptyTableElementClass = 'table-element-no-data';
+    const sortOrderClassPrefix = 'table-sort-order-id';
     const defaultPageSize = 50;
     const defaultPage = 1;
     let rows = [];
@@ -15,13 +16,8 @@ let table = (function () {
     // 'null' as dataset values are always converted to string
     const nullFilterValues = ['-', null, 'null'];
 
-    const sortDirectionEnum = {
-        0: 'none',
-        1: 'asc',
-        2: 'desc'
-    };
 
-    const sortingType = {
+    const sortOrderEnum = {
         none: 0,
         ascending: 1,
         descending: 2
@@ -123,17 +119,6 @@ let table = (function () {
         return colsCount;
     }
 
-    function getCurrentColsCount(tableSettings) {
-        let colsCount;
-        let headers = getHeaders(tableSettings);
-        colsCount = headers.length;
-        return colsCount;
-    }
-
-    function getHeaders(tableSettings) {
-        return tableSettings.tableContainerElement.getElementsByClassName('head');
-    }
-
     function hasHeaders(tableSettings) {
         return tableSettings.tableContainerElement.getElementsByClassName('head').length > 0;
     }
@@ -144,6 +129,7 @@ let table = (function () {
 
         let tbody = getTableBodyElement(tableSettings);
         if (!headers || tableSettings.forceRemoveHeaders === true) {
+            //ToDo: neske rewrite this part if needed
             if (tbody !== null && tbody !== undefined) {
                 tbody.parentNode.removeChild(tbody);
             }
@@ -154,7 +140,6 @@ let table = (function () {
 
             for (let col = 0; col < colsCount; col++) {
                 let head = document.createElement('div');
-                //head.innerHTML = makeColumnTitle(Object.keys(tableSettings.formatedData[0])[col]);
                 head.innerHTML = localization.translateMessage(columnNames[col], head);
                 head.className = 'head cell';
                 let columnName = columnNames[col].toLowerCase();
@@ -180,6 +165,8 @@ let table = (function () {
             let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
             insertAfter(filterContainerElement, tbody);
         } else {
+            //generate headers sort classes
+            generateHeadersOrderClasses(tableSettings);
             setTableDimensions(tableSettings, colsCount, tbody);
         }
     }
@@ -231,9 +218,11 @@ let table = (function () {
 
                 let cellColumnClass = generateCellClassName(dataKey);
 
-                tableSettings.columns.push({
-                    dataKey
-                });
+                if (tableSettings.columns.indexOf(dataKey) < 0) {
+                    tableSettings.columns.push({
+                        dataKey
+                    });
+                }
 
                 cell.classList.add('cell');
                 cell.classList.add('table-item');
@@ -323,7 +312,7 @@ let table = (function () {
                             element: cell,
                             position: col,
                             rowData: tableSettings.tableData[row]
-                        })
+                        });
                     }
                 }
             }
@@ -333,6 +322,9 @@ let table = (function () {
             //highlight sorted column if there is one
             markActiveColumnRows(tableSettings);
             updateTablePagination(tableSettings);
+            //highlight after response from API is received
+            deselectActiveColumn(tableSettings);
+            highlightSortedColumn(tableSettings);
             tbody.classList.remove('d-hide');
             tableSettings.noDataElement.classList.add('d-hide');
             setTableDimensions(tableSettings, colsCount, tbody);
@@ -367,7 +359,6 @@ let table = (function () {
     function setTableDimensions(tableSettings, colsCount, tbody) {
         tbody.style.gridTemplateColumns = null;
         tbody.style.gridTemplateRows = null;
-        //tbody.style.gridTemplateColumns = '25px ' + `repeat(${colsCount}, 1fr)` + '50px';
         let tableSettingsData = tableSettings.tableData;
         if (tableSettingsData !== undefined && tableSettingsData !== null && tableSettingsData.length > 0) {
             tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
@@ -389,6 +380,30 @@ let table = (function () {
 
         } else {
             tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
+        }
+    }
+
+    function generateHeadersOrderClasses(tableSettings) {
+        let headers = getHeaders(tableSettings);
+        for (let i = 0; i < headers.length; i++) {
+            let header = headers[i];
+            if (header.dataset.sortId !== undefined && header.dataset.sortId !== null
+                && header.dataset.sortId !== '') {
+                header.classList.add(`${sortOrderClassPrefix}-${header.dataset.sortId}`)
+            }
+        }
+    }
+
+    function highlightSortedColumn(tableSettings) {
+        let activeHeader = getSortedHeaderByAPIdata(tableSettings);
+        if (activeHeader !== undefined && activeHeader !== null) {
+            activeHeader.classList.add(highlightedColumnElementsClass);
+            setSortDirectionOnHeader(activeHeader, tableSettings.sort.sortDirection);
+            let columnClass = getColumnNameFromHeadElement(activeHeader);
+            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnClass);
+            for (let i = 0; i < columnElements.length; i++) {
+                columnElements[i].classList.add(highlightedColumnElementsClass);
+            }
         }
     }
 
@@ -418,12 +433,12 @@ let table = (function () {
         if (paginationElement !== undefined) {
             paginationElement.parentNode.removeChild(paginationElement);
         }
-            let callbackEvent = 'table/pagination/display';
-            trigger('template/render', {
-                templateElementSelector: '#pagination',
-                callbackEvent: callbackEvent,
-                tableSettings: tableSettings
-            });
+        let callbackEvent = 'table/pagination/display';
+        trigger('template/render', {
+            templateElementSelector: '#pagination',
+            callbackEvent: callbackEvent,
+            tableSettings: tableSettings
+        });
     }
 
     on('table/pagination/display', function (params) {
@@ -603,6 +618,11 @@ let table = (function () {
             initFilters(tableSettings);
             showNormalTable(tableSettings);
         }
+        //update sorting data from API
+        tableSettings.sort = {
+            sortDirection: params.data.Data.ItemValue.SortDirection,
+            sortName: params.data.Data.ItemValue.SortedBy,
+        };
         updateTable(tableSettings);
     });
 
@@ -642,7 +662,7 @@ let table = (function () {
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
         dropdown.generate(machinesNumber, pageSizeDropdown);
-        bindPageSizeLinkHandlers(pageSizeDropdown,tableSettings);
+        bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);
     }
 
     function getPageSize(tableSettings) {
@@ -671,11 +691,11 @@ let table = (function () {
         });
     }
 
-    function bindPageSizeLinkHandlers(pageSizeDropdown,tableSettings) {
+    function bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings) {
         if (pageSizeDropdown !== undefined && pageSizeDropdown !== null) {
             let pageSizeOptions = pageSizeDropdown.getElementsByClassName('single-option');
             for (let i = 0; i < pageSizeOptions.length; i++) {
-                bindPageSizeLinkHandler(pageSizeOptions[i],tableSettings);
+                bindPageSizeLinkHandler(pageSizeOptions[i], tableSettings);
             }
         }
     }
@@ -689,25 +709,12 @@ let table = (function () {
         return tableSettings.tableContainerElement.getElementsByClassName('head');
     }
 
-    function getActiveColumn(tableSettings) {
+    function getSortedHeader(tableSettings) {
         return tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
     }
 
-    function setDefaultActiveColumn(tableSettings) {
-        tableSettings.defaultSortColumnSet = true;
-        tableSettings.sort = {
-            SortDirection: sortingType.descending,
-            SortName: tableSettings.sortActiveColumn
-        };
-        let sortActiveColumnElements = tableSettings.tableContainerElement.getElementsByClassName(columnClassPrefix + tableSettings.sortActiveColumn);
-        for (let i = 0; i < sortActiveColumnElements.length; i++) {
-            if (sortActiveColumnElements[i].classList.contains('head')) {
-                sortActiveColumnElements[i].classList.add('sort-active');
-                sortActiveColumnElements[i].classList.add('sort-desc');
-                sortActiveColumnElements[i].dataset.direction = sortingDataAtt.descending;
-            }
-            sortActiveColumnElements[i].classList.add(activeRowElementsClass);
-        }
+    function getSortedHeaderByAPIdata(tableSettings) {
+        return tableSettings.tableContainerElement.getElementsByClassName(`${sortOrderClassPrefix}-${tableSettings.sort.sortName}`)[0];
     }
 
     function markActiveColumnRows(tableSettings) {
@@ -722,7 +729,7 @@ let table = (function () {
         if (columnName !== null) {
             let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
             for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add(activeColumnElementsClass);
+                columnElements[j].classList.add(highlightedColumnElementsClass);
             }
         }
     }
@@ -732,19 +739,18 @@ let table = (function () {
 
         //be sure that there's only one active header
         for (let i = 0; i < headers.length; i++) {
-
             if (headers[i] !== header) {
                 headers[i].classList.remove('sort-active');
                 headers[i].classList.remove('sort-asc');
                 headers[i].classList.remove('sort-desc');
-                headers[i].classList.remove(activeColumnElementsClass);
+                headers[i].classList.remove(highlightedColumnElementsClass);
                 delete headers[i].dataset.direction;
             }
         }
         if (header !== undefined) {
             header.classList.add('sort-active');
-            header.classList.add(activeColumnElementsClass);
-            toggleSortDirectionClasses(header, tableSettings);
+            // header.classList.add(activeColumnElementsClass);
+            toggleSortDirectionClasses(header);
         }
     }
 
@@ -763,32 +769,44 @@ let table = (function () {
         }
     }
 
+    function setSortDirectionOnHeader(header, sortDirection) {
+        header.classList.remove(sortingClass.ascending);
+        header.classList.remove(sortingClass.descending);
+        header.dataset.direction = null;
+        if (sortDirection === sortOrderEnum.ascending) {
+            header.classList.add('sort-active');
+            header.classList.add(sortingClass.ascending);
+            header.dataset.direction = sortingDataAtt.ascending;
+
+        } else if (sortDirection === sortOrderEnum.descending) {
+            header.classList.add('sort-active');
+            header.classList.add(sortingClass.descending);
+            header.dataset.direction = sortingDataAtt.descending;
+
+        }
+    }
+
     function getSorting(tableSettings) {
         tableSettings.sort = {
-            SortDirection: null,
-            SortName: null
+            sortDirection: null,
+            sortName: null,
         };
 
-        let activeHeader = getActiveColumn(tableSettings);
+        let activeHeader = getSortedHeader(tableSettings);
 
         if (activeHeader !== undefined) {
-            tableSettings.sort.SortName = activeHeader.dataset.sortName;
+            tableSettings.sort.sortName = parseInt(activeHeader.dataset.sortId);
             if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
-                tableSettings.sort.SortDirection = sortingType.ascending;
+                tableSettings.sort.sortDirection = sortOrderEnum.ascending;
             } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
-                tableSettings.sort.SortDirection = sortingType.descending;
+                tableSettings.sort.sortDirection = sortOrderEnum.descending;
             }
         } else {
-            tableSettings.sort.SortName = null;
-            tableSettings.sort.SortDirection = null;
+            tableSettings.sort.sortName = null;
+            tableSettings.sort.sortDirection = null;
         }
 
         return tableSettings.sort;
-    }
-
-    function getHeadElementBySortName(tableSettings, sortName) {
-        let cellName = columnClassPrefix + sortName;
-        return tableSettings.tableContainerElement.getElementsByClassName(cellName)[0];
     }
 
     function setSortActiveColumn(tableSettings) {
@@ -810,16 +828,7 @@ let table = (function () {
         let tableSettings = table.tableSettings;
         tableSettings.activePage = 1;
         e.preventDefault();
-        //ToDo: odluciti kada se markira aktivna kolona
-        deselectActiveColumn(table);
         setSortingAttributes(element, tableSettings);
-        //set active column class
-        //parse to array
-        let classes = Array.prototype.slice.call(element.classList, 0);
-        let result = classes.filter(function (item, index) {
-            return /^column/.test(item);
-        });
-        tableSettings.sortActiveColumn = result[0].replace(columnClassPrefix, '');
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
         trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
@@ -845,13 +854,13 @@ let table = (function () {
 
     function getColumnNameFromHeadElement(headElement) {
         let classList = headElement.classList;
-        let cellClassName;
         for (let i = 0; i < classList.length; i++) {
-            if (classList[i].includes(columnClassPrefix)) {
-                cellClassName = classList[i];
+            let className = classList[i];
+            if (className.indexOf(columnClassPrefix) === 0) {
+                return className;
             }
         }
-        return cellClassName;
+        return null;
     }
 
     function getColumnNames(tableSettings) {
@@ -954,15 +963,14 @@ let table = (function () {
     function init(tableSettings) {
 
         let tableContainerElement = $$(tableSettings.tableContainerSelector);
+        //remove reference on previous table settings
         if (tableContainerElement.tableSettings !== undefined) {
-            console.log('table settings deleted in init');
             delete tableContainerElement.tableSettings;
         }
 
         //cache table and filters containers in table settings
         tableSettings.tableContainerElement = tableContainerElement;
         tableSettings.filtersContainerElement = $$(tableSettings.filtersContainerSelector);
-
 
 
         if (tableSettings.advancedFiltersContainerElement !== undefined) {
@@ -1048,11 +1056,11 @@ let table = (function () {
         if (tableSettings.sort === undefined) {
             tableSettings.sort = {};
         }
-        if (tableSettings.sort.SortDirection === undefined) {
-            tableSettings.sort.SortDirection = null;
+        if (tableSettings.sort.sortDirection === undefined) {
+            tableSettings.sort.sortDirection = null;
         }
-        if (tableSettings.sort.SortName === undefined) {
-            tableSettings.sort.SortName = null;
+        if (tableSettings.sort.sortName === undefined) {
+            tableSettings.sort.sortName = null;
         }
         if (tableSettings.stickyColumn === undefined) {
             tableSettings.stickyColumn = false;
@@ -1103,10 +1111,10 @@ let table = (function () {
         }
     }
 
-    function deselectActiveColumn(table) {
-        let activeElements = table.getElementsByClassName(activeColumnElementsClass);
+    function deselectActiveColumn(tableSettings) {
+        let activeElements = tableSettings.tableContainerElement.getElementsByClassName(highlightedColumnElementsClass);
         while (activeElements.length > 0) {
-            activeElements[0].classList.remove(activeColumnElementsClass);
+            activeElements[0].classList.remove(highlightedColumnElementsClass);
         }
     }
 

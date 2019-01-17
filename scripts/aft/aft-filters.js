@@ -51,8 +51,6 @@ const aftFilters = (function () {
         displayFilters(filters, tableSettings);
     });
     on('aft/filters/pagination', function (params) {
-        console.log('table Settings in pagination');
-        console.log(params.tableSettings);
         filterAftTable();
     });
     on('aft/filters/sorting', function (params) {
@@ -85,8 +83,6 @@ const aftFilters = (function () {
         }
         let params = {};
         let tableSettings = getActiveTableSettings();
-        console.log('table settings in get filters for API');
-        console.log(tableSettings);
         params.tableSettings = tableSettings;
         params.data = prepareAftFiltersForApi(tableSettings);
         if (showFilters) {
@@ -139,14 +135,11 @@ const aftFilters = (function () {
 
     function prepareAftFiltersForApi(activeTableSettings) {
         if (activeTableSettings === undefined) {
-            console.log('table settings are undefined in prepare filters for API');
             activeTableSettings = getActiveTableSettings();
         }
-        console.log('activeTableSettingsObject in prepare Filters for API');
-        console.log(activeTableSettings);
         let pageFilters = table.collectFiltersFromPage(activeTableSettings);
-        let sortDirection = activeTableSettings.sort.SortDirection;
-        let sortName = activeTableSettings.sort.SortName;
+        let sortDirection = activeTableSettings.sort.sortDirection;
+        let sortName = activeTableSettings.sort.sortName;
 
         let filtersForApi = {
             'EndpointId': activeTableSettings.endpointId,
@@ -160,7 +153,7 @@ const aftFilters = (function () {
                 'Page': activeTableSettings.activePage,
                 'PageSize': table.getPageSize(activeTableSettings),
                 'SortOrder': sortDirection,
-                'SortName': aftSortName[sortName] !== undefined ? aftSortName[sortName] : null
+                'SortName': sortName
             },
             'TokenInfo': sessionStorage.token
         };
@@ -193,7 +186,6 @@ const aftFilters = (function () {
     }
 
     function clearAftFilters() {
-        console.log('clear all filters function called');
         //reset page to 1
         let tableSettings = getActiveTableSettings();
         tableSettings.activePage = 1;
