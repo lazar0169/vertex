@@ -142,7 +142,7 @@ const jackpotChooseParticipatingMachines = (function () {
                 optionCity.innerHTML = `<div class="option-city"> <div> <label class="form-checkbox" >
                                     <input type="checkbox" name='checkbox-group-cities'>
                                     <i class="form-icon" data-elementId = "${element.City}"></i>
-                                    </label></div> <div>${element.City}</div>
+                                    </label></div> <div class="center opened-closed-wrapper"><div>${element.City}</div>  <span class="closed-arrow">&#9660;</span></div>
                                     </div>`;
                 wrapperOption.appendChild(optionCity);
 
@@ -166,6 +166,7 @@ const jackpotChooseParticipatingMachines = (function () {
                 });
 
                 optionCity.children[0].children[1].addEventListener('click', function () {
+                    trigger('opened-arrow', { div: optionCity.children[0].children[1] });
                     optionCity.children[1].classList.toggle('hidden');
                 });
 

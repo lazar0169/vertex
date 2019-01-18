@@ -53,7 +53,7 @@ const aftFilters = (function () {
 
     function toggleAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter });
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
@@ -213,6 +213,7 @@ const aftFilters = (function () {
 
     aftAdvanceApplyFilters.addEventListener('click', function () {
 
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
 
         trigger('communicate/aft/previewTransactions', {

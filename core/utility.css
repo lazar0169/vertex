@@ -85,6 +85,7 @@
 
 .advance-table-filter>div:first-child {
     border-bottom: 0.5rem solid transparent;
+    padding-right: 1rem;
 }
 
 /* .advance-table-filter::before {
@@ -208,7 +209,14 @@
 }
 
 .primarybutton:hover, .secundarybutton:hover {
-    background-color: #2196F3;
+    background: -moz-linear-gradient(top, #2af598 0%, #08aeea 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #2af598 0%, #08aeea 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #2af598 0%, #08aeea 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2af598', endColorstr='#08aeea', GradientType=0);
+    /* IE6-9 */
 }
 
 .button-link {
@@ -253,13 +261,36 @@
 }
 
 .closed-arrow {
-    padding: 10px;
     transform: rotate(0deg);
     transition: all .15s ease-in;
+    color: rgb(120, 144, 156);
 }
 
 .opened-arrow {
     transform: rotate(180deg);
     transition: all .15s ease-in-out;
+    color: white;
+}
+
+.opened-closed-wrapper>div, .opened-closed-wrapper>span {
+    pointer-events: none;
+}
+
+.opened-closed-wrapper>span {
+    position: absolute;
+    right: 0.3rem;
+}
+
+.search-casino {
+    border-bottom: 10px solid rgb(55, 71, 79);
+}
+
+/* videti ovaj deo kako uraditi */
+
+figure label {
+    cursor: pointer;
+}
+
+figure:hover {
     color: white;
 }

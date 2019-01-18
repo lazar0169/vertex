@@ -84,14 +84,6 @@
     color: white;
 }
 
-.active-add-new-jackpot-settings {
-    color: lime !important;
-}
-
-.add-new-jackpot-control-settings-info>div:not(:first-child) {
-    color: red;
-}
-
 .expanded-add-new-jackpot-settings {
     padding-bottom: 0.5rem;
 }

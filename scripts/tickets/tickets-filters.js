@@ -42,7 +42,7 @@ const ticketsFilter = (function () {
 
     function toggleAdvanceTableFilter() {
         ticketAdvanceFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: ticketAdvanceFilter });
+        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
 
         advanceTableFilterActive.classList.toggle('hidden');
     }
@@ -235,6 +235,7 @@ const ticketsFilter = (function () {
     }
 
     ticketsAdvanceFilterApllyButton.addEventListener('click', function () {
+        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
         let filtersForApi = prepareTicketsFiltersForApi(currentTableSettingsObject);
         trigger('communicate/tickets/previewTickets', {
             data: filtersForApi,

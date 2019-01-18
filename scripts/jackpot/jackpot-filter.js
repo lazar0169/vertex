@@ -10,7 +10,7 @@ const jackpotFilter = (function () {
 
     advanceTableFilter.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter });
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
     });
 
     //close add new jackpot form

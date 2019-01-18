@@ -7,8 +7,8 @@ const ticketAppearance = (function () {
 
     on('tickets/tab/appearance', function (params) {
         formSettingsAppearance.endpointId = params.tableSettings.endpointId;
-        trigger('form/init', {formSettings: formSettingsAppearance});
-        trigger('form/getData', {formSettings: formSettingsAppearance});
+        trigger('form/init', { formSettings: formSettingsAppearance });
+        trigger('form/getData', { formSettings: formSettingsAppearance });
     });
 
 
@@ -259,6 +259,7 @@ const ticketAppearance = (function () {
     });
 
     ticketAppearanceAdvance.addEventListener('click', function () {
+        trigger('opened-arrow', { div: ticketAppearanceAdvance });
         ticketAppearanceAdvanceShow.classList.toggle('hidden');
     });
 
@@ -383,7 +384,7 @@ const ticketAppearance = (function () {
     }
 
     cancelTicketAppearance.addEventListener('click', function () {
-        trigger('form/getData', {formSettings: formSettingsAppearance});
+        trigger('form/getData', { formSettings: formSettingsAppearance });
     });
 
 })();

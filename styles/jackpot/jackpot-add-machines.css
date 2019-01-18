@@ -179,16 +179,8 @@
     cursor: pointer;
 }
 
-.option-city>div:not(:first-child)::before {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0.5rem;
-    width: 0;
-    height: 0;
-    border-top: 0.4rem solid rgb(30, 155, 227);
-    border-right: 0.15rem solid transparent;
-    border-left: 0.15rem solid transparent;
+.option-city>div:not(:first-child)>div:first-child {
+    width: 100%;
 }
 
 .color-white {
