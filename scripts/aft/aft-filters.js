@@ -23,7 +23,6 @@ const aftFilters = (function () {
     /*********************----Module Events----************************/
     on('aft/filters/init', function (params) {
         let tableSettings = params.tableSettings;
-
         getFiltersFromAPI(tableSettings);
     });
     on('aft/filters/display', function (params) {
@@ -41,19 +40,18 @@ const aftFilters = (function () {
         filterAftTable();
     });
     on('aft/filters/sorting', function (params) {
-        let tableSettings = params.tableSettings;
         activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
         if (activeHeadElement !== null && activeHeadElement !== undefined) {
             filterAftTable();
         }
     });
-    on('filters/show-selected-filters', function (data) {
-        showSelectedFilters(data.active, data.infobar)
-    });
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         tableSettings.activePage = 1;
         filterAftTable();
+    });
+    on('filters/show-selected-filters', function (data) {
+        showSelectedFilters(data.active, data.infobar)
     });
     on('aft/filters/filter-table', function(params){
         filterAftTable(params.showFilters);
@@ -63,7 +61,6 @@ const aftFilters = (function () {
     function getActiveTableSettings() {
         return $$('#table-container-aft').tableSettings;
     }
-
     function filterAftTable(showFilters) {
         if (showFilters === undefined) {
             showFilters = false;
@@ -78,8 +75,31 @@ const aftFilters = (function () {
         }
         trigger('table/filter', params);
     }
-
-
+    function removeSelectedFilters() {
+        //ToDo: Nikola - jel možeš ovde da isprazniš sve dropdown-e?
+    }
+    function clearAftFilters() {
+        removeSelectedFilters();
+        //reset page to 1
+        let tableSettings = getActiveTableSettings();
+        tableSettings.activePage = 1;
+        tableSettings.visibleColumns = [];
+        tableSettings.filters = null;
+        console.log('clear filters',tableSettings);
+        filterAftTable(true);
+    }
+    function getFiltersFromAPI(tableSettings) {
+        let data = {
+            'EndpointId': tableSettings.endpointId
+        };
+        let tableSettingsObject = tableSettings;
+        let successEvent = 'aft/filters/display';
+        trigger(communication.events.aft.transactions.getFilters, {
+            data: data,
+            successEvent: successEvent,
+            tableSettings: tableSettingsObject
+        });
+    }
     function displayFilters(filters, tableSettings) {
         //filter elements
         //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
@@ -109,7 +129,10 @@ const aftFilters = (function () {
         });
         multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
     }
-
+    function showAdvanceTableFilter() {
+        advanceTableFilter.classList.add('advance-filter-active');
+        advanceTableFilterActive.classList.remove('hidden');
+    }
     function formatAftApiData(listArray) {
         if (listArray !== null && listArray !== undefined) {
             listArray.forEach(function (list) {
@@ -119,7 +142,6 @@ const aftFilters = (function () {
         }
         return listArray;
     }
-
     function prepareAftFiltersForApi(activeTableSettings) {
         if (activeTableSettings === undefined) {
             activeTableSettings = getActiveTableSettings();
@@ -144,48 +166,13 @@ const aftFilters = (function () {
             },
             'TokenInfo': sessionStorage.token
         };
-
         //reset to page 1 if filters are changed
         table.setFiltersPage(activeTableSettings, filtersForApi);
         //Set visible columns for tableSettings object
         activeTableSettings.visibleColumns = pageFilters.Columns;
         activeTableSettings.filters = filtersForApi;
-
         return filtersForApi;
     }
-
-    function getFiltersFromAPI(tableSettings) {
-        let data = {
-            'EndpointId': tableSettings.endpointId
-        };
-        let tableSettingsObject = tableSettings;
-        let successEvent = 'aft/filters/display';
-        trigger(communication.events.aft.transactions.getFilters, {
-            data: data,
-            successEvent: successEvent,
-            tableSettings: tableSettingsObject
-        });
-    }
-
-    function showAdvanceTableFilter() {
-        advanceTableFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
-    }
-
-    function removeSelectedFilters() {
-        //ToDo: Nikola - jel možeš ovde da isprazniš sve dropdown-e?
-    }
-
-    function clearAftFilters() {
-        //reset page to 1
-        let tableSettings = getActiveTableSettings();
-        tableSettings.activePage = 1;
-        tableSettings.visibleColumns = [];
-        tableSettings.filters = null;
-        console.log('clear filters',tableSettings);
-        filterAftTable(true);
-    }
-
     function showSelectedFilters(filterActive, filterInfobar) {
         for (let count = 0; count < filterActive.children.length - 1; count++) {
             if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
