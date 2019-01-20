@@ -30,7 +30,7 @@ const aft = (function () {
         //initialize add transaction form
         let addTransactionFormSettings = {};
         addTransactionFormSettings.formContainerSelector = '#aft-tabs-add-transaction-form-wrapper';
-        addTransactionFormSettings.submitEvent = 'communicate/aft/addTransaction';
+        addTransactionFormSettings.submitEvent = communication.events.aft.transactions.addTransaction;
         addTransactionFormSettings.submitErrorEvent = 'aft/addTransaction/error';
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
@@ -67,16 +67,20 @@ const aft = (function () {
 
     /*********************----Module Events------*********************/
     on('aft/addTransaction/error', function (params) {
-        let messageToShow = JSON.parse(params.message);
+        console.log(params);
         //let messageType = params.message.MessageType;
         trigger('notifications/show', {
-            message: messageToShow.Message
+            message: params.message.MessageCode,
+            type: params.message.MessageType,
         });
-        trigger('form/complete', { formSettings: addTransactionFormSettings });
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
 
     });
     on('aft/addTransaction/success', function (params) {
-        trigger('form/complete', { formSettings: addTransactionFormSettings });
+        console.log(params);
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
+        trigger('aft/filters/filter-table',{showFilters:false});
+        //ToDo: Neske i Nikola - da li isprazniti formu i sakriti pop up koji izadje sa desne strane?
 
     });
 

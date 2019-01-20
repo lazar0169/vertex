@@ -41,7 +41,7 @@ let communication = (function () {
                 getTransactions: 'communicate/aft/getTransactions',
                 previewTransactions: 'communicate/aft/previewTransactions',
                 cancelTransaction: 'communication/aft/transactions/cancel',
-                addTransaction: '',
+                addTransaction: 'communicate/aft/addTransaction',
                 cancelPendingTransaction: '',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
@@ -469,12 +469,12 @@ let communication = (function () {
     });
 
 //aft add transaction
-    on('communicate/aft/addTransaction', function (params) {
+    on(events.aft.transactions.addTransaction, function (params) {
         let route = apiRoutes.aft.addTransaction;
-        let successEvent = 'aft/addTransaction';
+        let successEvent = params.formSettings.submitSuccessEvent;
         let data = params.data;
         let request = requestTypes.post;
-        let errorEvent = '';
+        let errorEvent = params.formSettings.submitErrorEvent;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
