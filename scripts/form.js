@@ -112,14 +112,14 @@ let form = (function () {
                                         inputsContainer.appendChild(newField);
                                     }
 
-                                    let deleteButtonElement = newField.getElementsByTagName('button')[0];
+                                    let deleteButtonElement = newField.getElementsByClassName('button-link')[0];
                                     deleteButtonElement.classList.remove('hidden');
                                     deleteButtonElement.addEventListener('click', deleteFormElement);
                                 }
                             }
                             //display delete button for first field
                             if (values.length > 1) {
-                                let firstDeleteButton = inputElement.parentNode.getElementsByTagName('button')[0];
+                                let firstDeleteButton = inputElement.parentNode.getElementsByClassName('button-link')[0];
                                 firstDeleteButton.classList.remove('hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
@@ -413,17 +413,6 @@ let form = (function () {
         form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
         form.addEventListener('submit', onSubmit);
     }
-
-    /*    function bindBackButton(formSettings) {
-            let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
-            if (buttons.length > 0) {
-                let button = buttons[0];
-                button.addEventListener('click', function (e) {
-                    history.back();
-                });
-            }
-            //there should be only one button
-        }*/
 
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);

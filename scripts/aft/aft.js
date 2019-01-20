@@ -35,23 +35,19 @@ const aft = (function () {
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
 
+        trigger('form/init', { formSettings: addTransactionFormSettings });
+        let endpointName = '';
+        if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
+            endpointName = $$('.link-active')[0].dataset.value;
+        }
+        trigger('form/add/hiddenField', { formSettings: addTransactionFormSettings, name: 'EndpointName', value: endpointName });
+
+        trigger('aft/tab/transaction', { tableSettings: tableSettings });
+        trigger('aft/tab/notification', { tableSettings: tableSettings });
+
+
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
-        //ToDo: Nikola - jel možemo ovo da brišemo?
-        addTransactionButton.addEventListener('click', function () {
-            let data =
-                {
-                    'EndpointId': aftId,
-                    'EndpointName': '',
-                    'Gmcid': 1565666846,
-                    'MachineName': '',
-                    'Type': 0,
-                    'CashableAmount': 13800,
-                    'PromoAmount': 13800,
-                    'ExpirationInDays': 7
-                };
-            trigger('communicate/aft/addTransaction', {data: data, tableSettings: tableSettings});
-        });
         trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
     });
@@ -70,7 +66,17 @@ const aft = (function () {
     });
 
     /*********************----Module Events------*********************/
-    on('aft/transactions/add', function () {
+    on('aft/addTransaction/error', function (params) {
+        let messageToShow = JSON.parse(params.message);
+        //let messageType = params.message.MessageType;
+        trigger('notifications/show', {
+            message: messageToShow.Message
+        });
+        trigger('form/complete', { formSettings: addTransactionFormSettings });
+
+    });
+    on('aft/addTransaction/success', function (params) {
+        trigger('form/complete', { formSettings: addTransactionFormSettings });
 
     });
 

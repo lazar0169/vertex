@@ -1,7 +1,6 @@
 const aftFilters = (function () {
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
-    let advanceTableFilterButton = $$('#aft-advance-table-filter').children[0];
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
@@ -23,14 +22,9 @@ const aftFilters = (function () {
     clearAdvanceFilterInfobar.addEventListener('click', clearAftFilters);
     advanceTableFilter.addEventListener('click', function () {
         showAdvanceTableFilter();
-    function toggleAdvanceTableFilter() {
-        advanceTableFilter.classList.toggle('advance-filter-active');
-        advanceTableFilterActive.classList.toggle('hidden');
-    }
-
-    advanceTableFilterButton.addEventListener('click', function () {
-        toggleAdvanceTableFilter();
     });
+
+
 
     /*********************----Module Events----************************/
     on('aft/filters/init', function (params) {
@@ -70,6 +64,11 @@ const aftFilters = (function () {
     });
 
     /*********************----Helper functions----*********************/
+    function toggleAdvanceTableFilter() {
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        advanceTableFilterActive.classList.toggle('hidden');
+    }
+
     function getActiveTableSettings() {
         return $$('#table-container-aft').tableSettings;
     }
@@ -215,9 +214,6 @@ const aftFilters = (function () {
     on('filters/show-selected-filters', function (data) {
         showSelectedFilters(data.active, data.infobar);
     });
-
-
-
 
     //close
     transactionTab.addEventListener('click', function () {
