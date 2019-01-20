@@ -36,7 +36,6 @@ const ticketsFilter = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-        console.log(filters);
 
         filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
         filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
