@@ -1,3 +1,5 @@
+
+
 let blackArea = $$('#black-area');
 if (typeof blackArea !== 'undefined' && blackArea !== null) {
     $$('#black-area').addEventListener('click', function () {
@@ -66,7 +68,7 @@ on('apply-custom-date', function (data) {
     let tempArray = [dateFrom, `${timeFromHour}:${timeFromMinutes}`, dateTo, `${timeToHour}:${timeToMinutes}`];
     if (timeFromHour === '-' || timeFromMinutes === '-' || timeToHour === '-' || timeToMinutes === '-') {
         alert('Wrong parameters, please check parameters.');
-        delete data.target.dataset.value
+        delete data.target.dataset.value;
 
     } else {
         $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
@@ -79,8 +81,9 @@ on('apply-custom-date', function (data) {
 });
 on('cancel-custom-date', function (data) {
     let date = new Date();
-    let apiString = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-    trigger(`set-date-datepicker`, {pickerId: `datepicker-from-${data.selectId}`, date: apiString});
+    let apiString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+    trigger(`set-date-datepicker`, { pickerId: `datepicker-from-${data.selectId}`, date: apiString });
     let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0].children[0];
     timeFromHour.innerHTML = hours[0];
     timeFromHour.dataset.value = hours[0];
@@ -93,7 +96,7 @@ on('cancel-custom-date', function (data) {
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0];
     timeToMinutes.innerHTML = minutes[0];
     timeToMinutes.dataset.value = minutes[0];
-    trigger(`set-date-datepicker`, {pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true});
+    trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
     $$(`#ds-${data.selectId}`).children[0].innerHTML = fixedDays[0];
     $$(`#ds-${data.selectId}`).children[0].title = fixedDays[0];
     $$(`#ds-${data.selectId}`).children[0].dataset.value = fixedDays[0];

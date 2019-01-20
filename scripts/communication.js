@@ -115,7 +115,7 @@ let communication = (function () {
             refreshToken(data);
         }
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
+            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
         }
     }
 
@@ -133,7 +133,6 @@ let communication = (function () {
             } else if (isFunction(errorEventCallback)) {
                 errorEventCallback(errorData);
             }
-
         }
     }
 
@@ -302,6 +301,9 @@ let communication = (function () {
 
         tableSettings.tableData = formatedData;
 
+        //ToDo Neske: Pitati Nikolu šta je ovo
+        //trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue })
+
         return formatedData;
     }
 
@@ -362,9 +364,6 @@ let communication = (function () {
         let data = params.data;
         let request = requestTypes.post;
         let errorEvent = '';
-
-
-
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
@@ -808,6 +807,25 @@ let communication = (function () {
     /*------------------------------------ MACHINES EVENTS ------------------------------------*/
 
 // machines get service data
+    //get all machines
+    on('communicate/casinos/getAllMachines', function (params) {
+        let route = 'api/machines/';
+        let successEvent = 'communicate/test'
+        let data = {
+            'EndpointId': 4
+        };
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            request: request,
+            errorEvent: errorEvent
+        });
+    });
+
+    // machines get service data
     on('communicate/casinos/getMachineDetails', function (params) {
         let route = 'api/machines/details/';
         let successEvent = 'communicate/test'

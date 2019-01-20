@@ -1,0 +1,60 @@
+#add-transaction-wrapper {
+    position: absolute;
+    transform: translateX(0);
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    background: rgb(38, 50, 56);
+    z-index: 1;
+    transition: all 0.2s ease;
+    color: rgb(120, 144, 156);
+    overflow: hidden;
+}
+
+#add-transaction-wrapper>div>div:first-child {
+    background: #37474f;
+    height: 64px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.5);
+    white-space: nowrap;
+}
+
+#add-transaction-wrapper>div>div:first-child>div:not(:first-child) {
+    position: absolute;
+    top: 0.5rem;
+    font-size: 12px;
+    right: 0.5rem;
+}
+
+#aft-tabs-add-transaction-form-wrapper .form-section, #add-transaction-save-button>button {
+    margin-left: 30px;
+}
+
+#aft-tabs-add-transaction-form-wrapper .form-section>div>div:first-child, #aft-tabs-add-transaction-form-wrapper .form-section>div>label {
+    padding: .3rem 0;
+}
+
+#add-transaction-wrapper .default-select {
+    margin: 0;
+}
+
+#add-transaction-wrapper .default-select>div:first-child, #add-transaction-wrapper input {
+    width: 250px;
+}
+
+#aft-tabs-add-transaction-form-wrapper .form-section>div {
+    margin-bottom: .4rem;
+}
+
+#add-transaction-header-element>div:not(:first-child) {
+    cursor: pointer;
+}
+
+#add-transaction-header-element>div:not(:first-child):hover {
+    color: white;
+}

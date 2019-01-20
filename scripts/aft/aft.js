@@ -27,6 +27,13 @@ const aft = (function () {
         tableSettings.onAfterCellClick = onTableCellClick;
 
         table.init(tableSettings); //initializing table, filters and page size
+        //initialize add transaction form
+        let addTransactionFormSettings = {};
+        addTransactionFormSettings.formContainerSelector = '#aft-tabs-add-transaction-form-wrapper';
+        addTransactionFormSettings.submitEvent = 'communicate/aft/addTransaction';
+        addTransactionFormSettings.submitErrorEvent = 'aft/addTransaction/error';
+        addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
+        addTransactionFormSettings.endpointId = aftId;
 
         let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 

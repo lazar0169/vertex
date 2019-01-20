@@ -61,7 +61,7 @@ const addNewJackpot = (function () {
 
     removeAllMachines.addEventListener('click', function () {
         alert('Remove all machines');
-    })
+    });
 
 
 })();

@@ -24,17 +24,19 @@ let form = (function () {
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
             event = formSettings.formContainerElement.dataset[eventToCheck];
         } else {
-            console.error('Event doesn\'t exist!');
+            console.info('Event ' + eventToCheck + ' doesn\'t exist!');
         }
         return event;
     }
 
     function setEndpointId(formSettings) {
         currentEndpointId = formSettings.endpointId;
-        let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
-        endpointIdInputElements.forEach(function (element) {
-            element.dataset.value = currentEndpointId;
-        });
+        if (formSettings.endpointId !== undefined && formSettings.endpointId !== null) {
+            let endpointIdInputElements = Array.prototype.slice.call($$(formSettings.formContainerSelector).getElementsByClassName('endpointId'));
+            endpointIdInputElements.forEach(function (element) {
+                element.dataset.value = currentEndpointId;
+            });
+        }
     }
 
     function getFormData(formSettings) {
@@ -178,7 +180,6 @@ let form = (function () {
         if (formSettings.validateEvent === undefined) {
             formSettings.validateEvent = 'form/validate';
         }
-
         setEndpointId(formSettings);
 
         if (formContainerElement.formSettings === undefined) {
@@ -205,7 +206,12 @@ let form = (function () {
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
-                            dataForApi[formInputElement.dataset.name] = formInputElement.dataset.value.toString();
+                            let valueElement = formInputElement.firstChild;
+                            dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
+                            console.log(formInputElement.dataset);
+                            if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
+                                dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
+                            }
                             break;
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {
@@ -225,6 +231,9 @@ let form = (function () {
                             if (dataForApi[formInputElement.name] === undefined) {
                                 dataForApi[formInputElement.name] = [];
                             }
+                            dataForApi[formInputElement.name].push(formInputElement.value);
+                            break;
+                        case'default':
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
                     }
@@ -368,6 +377,20 @@ let form = (function () {
     }
 
 
+    function addHiddenField(formSettings, name, value) {
+        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        console.log(formElement);
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        input.classList.add('element-form-data');
+        input.dataset.type = 'string';
+        console.log(input);
+        formElement.appendChild(input);
+        console.log(input);
+    }
+
     function toggleSection(e) {
         if (e === undefined) {
             e = this['element'];
@@ -435,6 +458,11 @@ let form = (function () {
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
     }
+
+    on('form/add/hiddenField', function (params)
+    {
+        addHiddenField(params.formSettings,params.name, params.value);
+    });
 
     on('form/init', function (params) {
         let formSettings = params.formSettings;

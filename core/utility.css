@@ -10,8 +10,8 @@
 
 .tabs {
     cursor: pointer;
-    font-weight: 600;
-    font-size: 0.7rem;
+    font-family: OpenSans-Bold;
+    font-size: 14px;
 }
 
 .tabs:hover {
@@ -24,25 +24,27 @@
     border-bottom: 2px solid #323C41;
     color: rgb(120, 144, 156);
     margin: 1rem 0 1rem -1rem;
-    font-size: 14px;
 }
 
 .tabs-wrapper>div {
     padding: 0 0.2rem 0;
-    font-weight: 600;
-    font-size: 0.7rem;
     margin-left: 1rem;
 }
 
 .custom-filter {
-    margin: 0;
     padding: 0;
     width: 100%;
-    background: rgba(38, 50, 56);
+    background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     white-space: nowrap;
+    -moz-box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
+    -webkit-box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
     box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
     height: 40px;
+    font-family: OpenSans-Regular;
+    font-size: 13px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .custom-filter>div {
@@ -51,8 +53,9 @@
     height: 100%;
     padding: 0 0.5rem;
 }
-.custom-filter>div:first-child{
-    padding-right: 1rem; 
+
+.custom-filter>div:first-child {
+    padding-right: 1rem;
 }
 
 .custom-filter>div:not(:last-child) {
@@ -103,7 +106,7 @@
 
 .chosen-info-tab {
     flex: 1;
-    padding: 0 0.5rem 0.5rem 0 !important;
+    /* padding: 0 0.5rem 0.5rem 0 !important; */
     background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     position: relative;
@@ -230,4 +233,12 @@
 
 .wrapper-export-to>div:first-child {
     padding-right: 0.5rem;
+}
+
+.input-number-right {
+    text-align: right;
+}
+
+.option-casionos-in-city-wrapper {
+    padding: 0 0.5rem;
 }

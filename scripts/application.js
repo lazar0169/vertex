@@ -27,6 +27,7 @@ let application = (function  () {
     window.addEventListener('load', function () {
         //ToDo: Fix timeout hotfix
         checkCurrentUser();
+        trigger('set-category-and-link',)
 /*        setTimeout(checkCurrentUser, 500);*/
     });
 

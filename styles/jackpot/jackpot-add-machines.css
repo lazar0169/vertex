@@ -6,7 +6,7 @@
     background: transparent;
     left: 0;
     top: 0;
-    z-index: 1;
+    z-index: 30;
 }
 
 #choose-machines-jackpot-wrapper>div {
@@ -79,7 +79,6 @@
 #choose-machines-jackpot-content-filters>div>div:not(:first-child) {
     background: rgb(38, 50, 56);
     z-index: 1;
-    max-height: 200px;
     width: 100%;
     padding: 0 0.5rem;
     cursor: default;
@@ -88,10 +87,6 @@
 #choose-machines-jackpot-content-filters>div>div:not(:first-child) label {
     cursor: pointer;
     white-space: nowrap;
-}
-
-#choose-machines-jackpot-content-filters-casinos>div:not(:first-child)>div:not(:first-child)>div:not(:first-child) {
-    padding: 0 0.5rem;
 }
 
 #choose-machines-jackpot-content>div:first-child>div {
@@ -175,19 +170,19 @@
     background: rgb(38, 50, 56);
 }
 
-.city-option {
+.option-city {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.city-option>div {
+.option-city>div:not(:first-child) {
     position: relative;
     width: 100%;
     cursor: pointer;
 }
 
-.city-option>div::before {
+.option-city>div:not(:first-child)::before {
     content: "";
     position: absolute;
     right: 0;
@@ -199,6 +194,11 @@
     border-left: 0.15rem solid transparent;
 }
 
-.is-checked-city>div {
+.color-white {
     color: white !important;
+}
+
+#choose-machines-jackpot-content-filters-casinos .overflow-y {
+    max-height: 250px;
+    padding: 0.5rem
 }

@@ -66,6 +66,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    font-family: OpenSans-Regular;
     font-size: 13px;
     pointer-events: none;
 }
@@ -92,6 +93,7 @@
     top: 0;
     transition: 0.2s background-color;
     width: 100%;
+    font-family: OpenSans-Bold;
     font-size: 12px;
 }
 
