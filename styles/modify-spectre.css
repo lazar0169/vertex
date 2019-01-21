@@ -38,7 +38,6 @@
     background: rgb(36, 82, 108) !important;
 }
 
-
 .form-checkbox .form-icon, .form-checkbox input:focus+.form-icon, .form-checkbox input:checked+.form-icon, .form-radio input+.form-icon {
     background: rgb(120, 144, 156);
     border: .05rem solid rgb(120, 144, 156);
@@ -204,4 +203,8 @@ body {
 
 [type=reset], [type=submit], button, html [type=button] {
     -webkit-appearance: inherit !important;
+}
+
+.form-checkbox, .form-radio, .form-switch {
+    margin: 0;
 }
