@@ -1,5 +1,7 @@
 let communication = (function () {
 
+    /*-------------------------------------- VARIABLES ---------------------------------------*/
+
     const apiUrl = 'https://api.fazigaming.com/';
 
     const apiRoutes = {
@@ -36,6 +38,10 @@ let communication = (function () {
     };
 
     const events = {
+        authorization: {
+            login: 'login/',
+            logout: 'logout/',
+        },
         aft: {
             transactions: {
                 getTransactions: 'communicate/aft/getTransactions',
@@ -43,10 +49,10 @@ let communication = (function () {
                 cancelTransaction: 'communication/aft/transactions/cancel',
                 addTransaction: 'communicate/aft/addTransaction',
                 cancelPendingTransaction: 'communicate/aft/cancelPendingTransaction',
-                getNotificationSettings: 'communicate/aft/getNotificationSettings',
-                saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
                 getBasicSettings: 'communicate/aft/getBasicSettings',
                 saveBasicSettings: 'communicate/aft/saveBasicSettings',
+                getNotificationSettings: 'communicate/aft/getNotificationSettings',
+                saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
                 getFilters: 'communicate/aft/getFilters'
             },
             data: {
@@ -81,8 +87,12 @@ let communication = (function () {
         delete: 'DELETE'
     };
 
-
     let timeout = null;
+
+    /*-----------------------------------------------------------------------------------------*/
+
+
+    /*--------------------------------------- FUNCTIONS ---------------------------------------*/
 
     function createGetRequest(route) {
         let xhr = new XMLHttpRequest();
@@ -182,7 +192,7 @@ let communication = (function () {
     }
 
     function setAuthHeader(xhr) {
-        // take token from sessionStorage and set refresh and authorization 
+        // take token from sessionStorage and set refresh and authorization
         let token = JSON.parse(sessionStorage['token']);
         xhr.setRequestHeader('refresh', token.refresh_token);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token.access_token);
@@ -193,10 +203,8 @@ let communication = (function () {
         xhr.setRequestHeader(header, value);
     }
 
-
     function prepareAftTableData(tableSettings, data) {
         let entries = data.Data.Items;
-
         let formatedData = [];
         let counter = 0;
         entries.forEach(function (entry) {
@@ -307,8 +315,35 @@ let communication = (function () {
         return formatedData;
     }
 
+    function sendRequest(route, type, data, successEvent, errorEvent, additionalData) {
+        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData);
+        xhr = setDefaultHeaders(xhr);
+        xhr = setAuthHeader(xhr);
+        send(xhr);
+    }
 
-// create and send xhr
+    function handleError(error) {
+        if (error.xhr.status < 500) {
+            trigger('notifications/show', {
+                message: localization.translateMessage(error.message.MessageCode.toString()),
+                type: error.message.MessageType
+            });
+            if (error.TokenInfo !== undefined) {
+                refreshToken(error.TokenInfo);
+            }
+        } else {
+            trigger('notifications/show', {
+                message: localization.translateMessage('InternalServerError'),
+                type: notifications.messageTypes.error
+            });
+        }
+    }
+
+    /*----------------------------------------------------------------------------------------*/
+    /*---------------------------------------- EVENTS ----------------------------------------*/
+    /*----------------------------------------------------------------------------------------*/
+
+    //create and send xhr
     on('communicate/createAndSendXhr', function (params) {
         let xhr = createRequest(params.route, params.requestType, params.data, params.successEvent, params.errorEvent, params.settingsObject);
         xhr = setDefaultHeaders(xhr);
@@ -316,203 +351,43 @@ let communication = (function () {
         send(xhr);
     });
 
-//pagination event
+    //pagination event
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
         trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
     });
 
-    /*-----------------------------------------------------------------------------------------*/
-
-
-    /*-------------------------------------- AFT EVENTS ---------------------------------------*/
-
-    //aft get transactions
-    on(events.aft.transactions.getTransactions, function (params) {
-        let route = apiRoutes.aft.getTransactions;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            requestType: request,
-            data: data,
-            successEvent: successEvent,
-            errorEvent: errorEvent,
-            settingsObject: tableSettings
-        });
+    //generate events
+    on('communicate/category', function (params) {
+        trigger(`communicate/${params.category.toLowerCase()}`);
     });
 
-    //aft pagination filtering sorting
-    //aft preview transactions
-    on(events.aft.transactions.previewTransactions, function (params) {
-        let route = apiRoutes.aft.previewTransactions;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: tableSettings
-        });
-    });
+    /*----------------------------------------------------------------------------------------*/
 
-    //aft cancel transaction
-    on(events.aft.transactions.cancelTransaction, function (params) {
-        let data = {
-            EndpointId: params.transactionData.endpointId,
-            Gmcid: params.transactionData.gmcid,
-            JidtString: params.transactionData.jidtString,
-            EndpointName: params.transactionData.endpointName,
-        };
-        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
-        sendRequest(route, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
-    });
+    /*--------------------------------- AUTHORISATION EVENTS ---------------------------------*/
 
-    //aft add transaction
-    on(events.aft.transactions.addTransaction, function (params) {
-        let route = apiRoutes.aft.addTransaction;
-        let successEvent = params.formSettings.submitSuccessEvent;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = params.formSettings.submitErrorEvent;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent
-        });
-    });
-
-    //aft cancel pending transaction
-    on(events.aft.transactions.cancelPendingTransaction, function (params) {
-        let route = apiRoutes.aft.cancelPendingTransaction;
-        let successEvent = 'communicate/test';
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        let tableSettings = params.tableSettings;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: tableSettings
-        });
-    });
-
-    //aft get notification settings
-    on(events.aft.transactions.getNotificationSettings, function (params) {
-        let route = apiRoutes.aft.getNotificationSettings;
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.populateData;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: formSettings
-        });
-    });
-
-    //aft save notification settings
-    on(events.aft.transactions.saveNotificationSettings, function (params) {
-        let route = apiRoutes.aft.saveNotificationSettings;
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.submitSuccessEvent;
-        let errorEvent = formSettings.submitErrorEvent;
-        let data = params.data;
-        let request = requestTypes.post;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: formSettings
-        });
-    });
-
-    //aft get basic settings
-    on(events.aft.transactions.getBasicSettings, function (params) {
-        let route = apiRoutes.aft.getBasicSettings;
-        // let successEvent = 'aft/tab/transactions/display';
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.populateData;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: formSettings
-        });
-    });
-
-    //aft save basic settings
-    on(events.aft.transactions.saveBasicSettings, function (params) {
-        let route = apiRoutes.aft.saveBasicSettings;
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.submitSuccessEvent;
-        let errorEvent = formSettings.submitErrorEvent;
-        let data = params.data;
-        let request = requestTypes.post;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: formSettings
-        });
-    });
-
-    //aft get filters
-    on(events.aft.transactions.getFilters, function (params) {
-        let route = apiRoutes.aft.getFilters;
+    //login
+    on(events.authorization.login, function (params) {
+        let route = apiRoutes.authorization.login;
         let successEvent = params.successEvent;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        let tableSettings = params.tableSettings;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: params.data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: tableSettings
-        });
-    });
-
-    //parseRemoteData data for aft  page
-    on(events.aft.data.parseRemoteData, function (params) {
-        let tableSettings = params.settingsObject;
-        let data = params.data;
-        tableSettings.tableData = prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
+        let errorEvent = params.errorEvent;
+        let data = typeof params.data === typeof undefined ? null : params.data;
+        let xhr = createRequest(route, requestTypes.post, data, successEvent, errorEvent);
+        xhr = setDefaultHeaders(xhr);
+        send(xhr);
     });
 
     /*----------------------------------------------------------------------------------------*/
 
 
-    /*------------------------------------ TICKETS EVENTS ------------------------------------*/
+    /*------------------------------------- JACKPOTS EVENTS -----------------------------------*/
+
+
+    /*-----------------------------------------------------------------------------------------*/
+
+
+    /*------------------------------------- TICKETS EVENTS ------------------------------------*/
 
     //tickets get tickets
     on(events.tickets.getTickets, function (params) {
@@ -551,7 +426,7 @@ let communication = (function () {
         });
     });
 
-    //tickets getting filter values
+    //tickets get filter values
     on(events.tickets.getFilters, function (params) {
         let route = apiRoutes.tickets.getFilters;
         let successEvent = params.successEvent;
@@ -662,7 +537,6 @@ let communication = (function () {
     //SaveTicketAppearanceAction
     on(events.tickets.saveAppearance, function (params) {
         let route = apiRoutes.tickets.saveAppearance;
-        // let successEvent = 'tickets/tab/appearance/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
@@ -686,98 +560,201 @@ let communication = (function () {
         trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
     });
 
-    /*--------------------------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------------------------*/
 
 
-    /*-------------------------------------LOGIN EVENTS-------------------------------------*/
+    /*-------------------------------------- AFT EVENTS ---------------------------------------*/
 
-    //events for login
-    on('communicate/login', function (params) {
+    //aft get transactions
+    on(events.aft.transactions.getTransactions, function (params) {
+        let route = apiRoutes.aft.getTransactions;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //aft pagination filtering sorting
+    //aft preview transactions
+    on(events.aft.transactions.previewTransactions, function (params) {
+        let route = apiRoutes.aft.previewTransactions;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //aft cancel transaction
+    on(events.aft.transactions.cancelTransaction, function (params) {
+        let data = {
+            EndpointId: params.transactionData.endpointId,
+            Gmcid: params.transactionData.gmcid,
+            JidtString: params.transactionData.jidtString,
+            EndpointName: params.transactionData.endpointName,
+        };
+        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
+        sendRequest(route, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
+    });
+
+    //aft add transaction
+    on(events.aft.transactions.addTransaction, function (params) {
+        let route = apiRoutes.aft.addTransaction;
+        let successEvent = params.formSettings.submitSuccessEvent;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = params.formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft cancel pending transaction
+    on(events.aft.transactions.cancelPendingTransaction, function (params) {
+        let route = apiRoutes.aft.cancelPendingTransaction;
+        let successEvent = 'communicate/test';
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        let tableSettings = params.tableSettings;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //aft get basic settings
+    on(events.aft.transactions.getBasicSettings, function (params) {
+        let route = apiRoutes.aft.getBasicSettings;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.populateData;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //aft save basic settings
+    on(events.aft.transactions.saveBasicSettings, function (params) {
+        let route = apiRoutes.aft.saveBasicSettings;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let data = params.data;
+        let request = requestTypes.post;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //aft get notification settings
+    on(events.aft.transactions.getNotificationSettings, function (params) {
+        let route = apiRoutes.aft.getNotificationSettings;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.populateData;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //aft save notification settings
+    on(events.aft.transactions.saveNotificationSettings, function (params) {
+        let route = apiRoutes.aft.saveNotificationSettings;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        let data = params.data;
+        let request = requestTypes.post;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
+
+    //aft get filters
+    on(events.aft.transactions.getFilters, function (params) {
+        let route = apiRoutes.aft.getFilters;
         let successEvent = params.successEvent;
-        let errorEvent = params.errorEvent;
-        let route = apiRoutes.authorization.login;
-        let data = typeof params.data === typeof undefined ? null : params.data;
-        let xhr = createRequest(route, requestTypes.post, data, successEvent, errorEvent);
-        xhr = setDefaultHeaders(xhr);
-        //xhr = setAuthHeader(xhr);
-        send(xhr);
-    });
-
-
-    //events for casino
-    on('communicate/casino-info', function (params) {
-        //let casinoId = params.casinoId;
-        //let callbackEventName = params.successEvent;
-        // let data = typeof params.data === typeof undefined ? null : params.data;
-        // let xhr = createRequest(route, requestTypes.delete, data, callbackEventName);
-        let route = 'api/machines/';
-        let successEvent = 'communicate/test'
-        let data = {
-            'EndpointId': 4
-        };
         let request = requestTypes.post;
         let errorEvent = '';
+        let tableSettings = params.tableSettings;
         trigger('communicate/createAndSendXhr', {
             route: route,
             successEvent: successEvent,
-            data: data,
+            data: params.data,
             requestType: request,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
         });
-
-        //todo needs to be deleted
-        //trigger('communicate/casinos/previewMachines', {})
-        //trigger('communicate/casinos/getMachineDetails', {})
-        //trigger('communicate/casinos/getMachineServiceData', {})
-        //trigger('communicate/casinos/swichServiceMode', {})
-        //trigger('communicate/casinos/getMachinesHistory', {})
-        //trigger('communicate/casinos/previewMachinesHistory', {})
-        //trigger('communicate/casinos/getMachinesEvents', {})
-        //trigger('communicate/casinos/previewMachineEvents', {})
-        //trigger('communicate/casinos/getAllMachinesMeters', {})
-        //trigger('communicate/casinos/previewMachinesMeters', {})
-        //trigger('communicate/casinos/removeMeter', {}) server error 500
-        // trigger('communicate/casinos/showMachinesMeters', {})
-        //trigger('communicate/casinos/saveMachinesMeters', {}) server error 500
-        // trigger('communicate/casinos/editMachines', {})
-        //trigger('communicate/casinos/saveMachine', {}) server error 500
-        //trigger('communicate/casinos/removeMachineFromCasino', {}) server errorm 500
     });
 
-//data with static values, need to be dynamic
-//machines preview transactions
-    on('communicate/casinos/previewMachines', function (params) {
-        let route = 'api/machines/previewmachines/';
-        let successEvent = 'communicate/test'
-        let data = {
-            'EndpointId': 4,
-            'BasicData': {
-                'Page': 1,
-                'PageSize': 10,
-                'SortOrder': 0,
-                'SortName': 0,
-            },
-            'VendorList': [0],
-            'Status': [3],
-            'AdditionalData': {
-                'OnlyActive': 'false',
-                'MachineName': ''
-            }
-        };
-        let request = requestTypes.post;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent
-        });
-
+    //parseRemoteData data for aft  page
+    on(events.aft.data.parseRemoteData, function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        tableSettings.tableData = prepareAftTableData(tableSettings, data);
+        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
+    /*---------------------------------------------------------------------------------------*/
 
-    /*------------------------------------ MACHINES EVENTS ------------------------------------*/
+
+    /*----------------------------------- CASINOS EVENTS ------------------------------------*/
+
+
+    /*---------------------------------------------------------------------------------------*/
+
+
+    /*------------------------------------ MACHINES EVENTS ----------------------------------*/
 
 // machines get service data
     //get all machines
@@ -1115,18 +1092,7 @@ let communication = (function () {
         });
     });
 
-// machines get all machines
-
-    /*----------------------------------------------------------------------------------------*/
-
-
-//events for jackpot
-
-
-//events for tickets
-
-
-//aft events for machines
+    //machines
     on('communicate/machine-info', function (params) {
         let machineId = params.machineId;
         let callbackEventName = params.successEvent;
@@ -1138,21 +1104,20 @@ let communication = (function () {
         send(xhr);
     });
 
-
-//events for reports
-
-
-//events for users
+    /*-----------------------------------------------------------------------------------------*/
 
 
-//events for service
+    /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
+
+    /*-----------------------------------------------------------------------------------------*/
 
 
-//generate events
-    on('communicate/category', function (params) {
-        trigger(`communicate/${params.category.toLowerCase()}`);
-    });
+    /*------------------------------------ USERS EVENTS ---------------------------------------*/
 
+    /*-----------------------------------------------------------------------------------------*/
+
+
+    /*----------------------------------- REFRESH TOKEN ---------------------------------------*/
 
     function refreshToken(tokenInfo) {
         if (timeout !== null) {
@@ -1168,38 +1133,14 @@ let communication = (function () {
 
     on('communicate/token/refresh', function (params) {
         refreshToken(params.token);
-    })
-    /*------------------------------------ MODULE EVENTS ------------------------------------*/
-    on('communication/error/', handleError);
+    });
 
-    /*------------------------------------ MODULE PRIVATE FUNCTIONS ------------------------------------*/
-    function sendRequest(route, type, data, successEvent, errorEvent, additionalData) {
-        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData);
-        xhr = setDefaultHeaders(xhr);
-        xhr = setAuthHeader(xhr);
-        send(xhr);
-    }
+    /*----------------------------------------------------------------------------------------*/
 
-    function handleError(error) {
-        if (error.xhr.status < 500) {
-            trigger('notifications/show', {
-                message: localization.translateMessage(error.message.MessageCode.toString()),
-                type: error.message.MessageType
-            });
-            if (error.TokenInfo !== undefined) {
-                refreshToken(error.TokenInfo);
-            }
-        } else {
-            trigger('notifications/show', {
-                message: localization.translateMessage('InternalServerError'),
-                type: notifications.messageTypes.error
-            });
-        }
-    }
 
     return {
-        events: events,
-        apiRoutes: apiRoutes
+        apiRoutes: apiRoutes,
+        events: events
     }
-})
-();
+
+})();
