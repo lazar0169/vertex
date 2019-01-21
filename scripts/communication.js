@@ -42,7 +42,7 @@ let communication = (function () {
                 previewTransactions: 'communicate/aft/previewTransactions',
                 cancelTransaction: 'communication/aft/transactions/cancel',
                 addTransaction: 'communicate/aft/addTransaction',
-                cancelPendingTransaction: '',
+                cancelPendingTransaction: 'communicate/aft/cancelPendingTransaction',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
                 getBasicSettings: 'communicate/aft/getBasicSettings',
@@ -115,7 +115,7 @@ let communication = (function () {
             refreshToken(data);
         }
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
+            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
     }
 
@@ -266,20 +266,20 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entry.forEach(function (entry) {
-           /* if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
+            /* if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
+                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
 
-            } else {
-                entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
+             } else {
+                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
 
-            }
-            if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
+             }
+             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
+                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
 
-            } else {
-                entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
+             } else {
+                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
 
-            }*/
+             }*/
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
 
             formatedData[counter] = {
@@ -293,7 +293,7 @@ let communication = (function () {
                 },
                 data: {
                     issuedAt: formatTimeData(entry.EntryData.CashoutedTime),
-                    redeemedAt:formatTimeData(entry.EntryData.RedeemedTime),
+                    redeemedAt: formatTimeData(entry.EntryData.RedeemedTime),
                 }
             };
             counter++;
@@ -325,20 +325,9 @@ let communication = (function () {
 
 
     /*------------------------------------ AFT EVENTS ------------------------------------*/
-    //aft cancel transaction
-    on(events.aft.transactions.cancelTransaction, function (params) {
-        let data = {
-            EndpointId: params.transactionData.endpointId,
-            Gmcid: params.transactionData.gmcid,
-            JidtString: params.transactionData.jidtString,
-            EndpointName: params.transactionData.endpointName,
-        };
-        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
-        sendRequest(route, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
-    });
-//aft get transactions
-    on(events.aft.transactions.getTransactions, function (params) {
 
+    //aft get transactions
+    on(events.aft.transactions.getTransactions, function (params) {
         let route = apiRoutes.aft.getTransactions;
         let tableSettings = params.tableSettings;
         let successEvent = tableSettings.processRemoteData;
@@ -355,8 +344,8 @@ let communication = (function () {
         });
     });
 
-//aft pagination filtering sorting
-//aft preview transactions
+    //aft pagination filtering sorting
+    //aft preview transactions
     on(events.aft.transactions.previewTransactions, function (params) {
         let route = apiRoutes.aft.previewTransactions;
         let tableSettings = params.tableSettings;
@@ -374,11 +363,55 @@ let communication = (function () {
         });
     });
 
+    //aft cancel transaction
+    on(events.aft.transactions.cancelTransaction, function (params) {
+        let data = {
+            EndpointId: params.transactionData.endpointId,
+            Gmcid: params.transactionData.gmcid,
+            JidtString: params.transactionData.jidtString,
+            EndpointName: params.transactionData.endpointName,
+        };
+        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
+        sendRequest(route, requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
+    });
 
-//aft get notification settings
-    on('communicate/aft/getNotificationSettings', function (params) {
+    //aft add transaction
+    on(events.aft.transactions.addTransaction, function (params) {
+        let route = apiRoutes.aft.addTransaction;
+        let successEvent = params.formSettings.submitSuccessEvent;
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = params.formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft cancel pending transaction
+    on(events.aft.transactions.cancelPendingTransaction, function (params) {
+        let route = apiRoutes.aft.cancelPendingTransaction;
+        let successEvent = 'communicate/test';
+        let data = params.data;
+        let request = requestTypes.post;
+        let errorEvent = '';
+        let tableSettings = params.tableSettings;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            successEvent: successEvent,
+            data: data,
+            requestType: request,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //aft get notification settings
+    on(events.aft.transactions.getNotificationSettings, function (params) {
         let route = apiRoutes.aft.getNotificationSettings;
-        // let successEvent = 'aft/tab/notifications/display';
         let formSettings = params.formSettings;
         let successEvent = formSettings.populateData;
         let data = params.data;
@@ -394,10 +427,9 @@ let communication = (function () {
         });
     });
 
-//aft save notification settings
-    on('communicate/aft/saveNotificationSettings', function (params) {
+    //aft save notification settings
+    on(events.aft.transactions.saveNotificationSettings, function (params) {
         let route = apiRoutes.aft.saveNotificationSettings;
-        // let successEvent = 'aft/tab/notifications/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
@@ -413,8 +445,8 @@ let communication = (function () {
         });
     });
 
-//aft get basic settings
-    on('communicate/aft/getBasicSettings', function (params) {
+    //aft get basic settings
+    on(events.aft.transactions.getBasicSettings, function (params) {
         let route = apiRoutes.aft.getBasicSettings;
         // let successEvent = 'aft/tab/transactions/display';
         let formSettings = params.formSettings;
@@ -432,10 +464,9 @@ let communication = (function () {
         });
     });
 
-//aft save basic settings
-    on('communicate/aft/saveBasicSettings', function (params) {
+    //aft save basic settings
+    on(events.aft.transactions.saveBasicSettings, function (params) {
         let route = apiRoutes.aft.saveBasicSettings;
-        // let successEvent = 'aft/tab/transactions/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
@@ -451,8 +482,8 @@ let communication = (function () {
         });
     });
 
-//aft get filters
-    on('communicate/aft/getFilters', function (params) {
+    //aft get filters
+    on(events.aft.transactions.getFilters, function (params) {
         let route = apiRoutes.aft.getFilters;
         let successEvent = params.successEvent;
         let request = requestTypes.post;
@@ -468,59 +499,7 @@ let communication = (function () {
         });
     });
 
-//aft add transaction
-    on(events.aft.transactions.addTransaction, function (params) {
-        let route = apiRoutes.aft.addTransaction;
-        let successEvent = params.formSettings.submitSuccessEvent;
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = params.formSettings.submitErrorEvent;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent
-        });
-    });
-
-//aft cancel transaction
-    on('communicate/aft/cancelTransaction', function (params) {
-        let route = apiRoutes.aft.cancelTransaction;
-        let successEvent = 'table/update';
-        let data = params.data;
-        let request = requestTypes.post;
-        let tableSettings = params.tableSettings;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: tableSettings
-        });
-    });
-
-//aft cancel pending transaction
-    on('communicate/aft/cancelPendingTransaction', function (params) {
-        let route = apiRoutes.aft.cancelPendingTransaction;
-        let successEvent = 'communicate/test';
-        let data = params.data;
-        let request = requestTypes.post;
-        let errorEvent = '';
-        let tableSettings = params.tableSettings;
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            successEvent: successEvent,
-            data: data,
-            requestType: request,
-            errorEvent: errorEvent,
-            settingsObject: tableSettings
-        });
-    });
-
-//parseRemoteData data for aft  page
+    //parseRemoteData data for aft  page
     on(events.aft.data.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
@@ -532,7 +511,8 @@ let communication = (function () {
 
 
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
-//tickets get tickets
+
+    //tickets get tickets
     on(events.tickets.getTickets, function (params) {
         let route = apiRoutes.tickets.getTickets;
         let tableSettings = params.tableSettings;
