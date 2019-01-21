@@ -323,8 +323,10 @@ let communication = (function () {
         trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
     });
 
+    /*-----------------------------------------------------------------------------------------*/
 
-    /*------------------------------------ AFT EVENTS ------------------------------------*/
+
+    /*-------------------------------------- AFT EVENTS ---------------------------------------*/
 
     //aft get transactions
     on(events.aft.transactions.getTransactions, function (params) {
@@ -507,7 +509,7 @@ let communication = (function () {
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
-    /*--------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------*/
 
 
     /*------------------------------------ TICKETS EVENTS ------------------------------------*/
@@ -530,8 +532,8 @@ let communication = (function () {
         });
     });
 
-//tickets preview ticket action
-//pagination sorting and filtering
+    //tickets preview ticket action
+    //tickets pagination sorting and filtering
     on(events.tickets.previewTickets, function (params) {
         let route = apiRoutes.tickets.previewTickets;
         let tableSettings = params.tableSettings;
@@ -549,8 +551,8 @@ let communication = (function () {
         });
     });
 
-//getting filter values
-    on('communicate/tickets/getFilters', function (params) {
+    //tickets getting filter values
+    on(events.tickets.getFilters, function (params) {
         let route = apiRoutes.tickets.getFilters;
         let successEvent = params.successEvent;
         let request = requestTypes.post;
@@ -567,11 +569,9 @@ let communication = (function () {
         });
     });
 
-
-//getting values for show sms settings
-    on('communicate/tickets/showSmsSettings', function (params) {
+    //tickets getting values for show sms settings
+    on(events.tickets.showSmsSettings, function (params) {
         let route = apiRoutes.tickets.showSmsSettings;
-        // let successEvent = 'tickets/tab/smsSettings/display';
         let formSettings = params.formSettings;
         let successEvent = formSettings.populateData;
         let request = requestTypes.post;
@@ -587,50 +587,9 @@ let communication = (function () {
         });
     });
 
-
-//ShowTitoMaxValueSettings
-    on('communicate/tickets/showMaxValueSettings', function (params) {
-        let route = apiRoutes.tickets.showMaxValueSettings;
-        // let successEvent = 'tickets/tab/maxValue/display';
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.populateData;
-        let request = requestTypes.post;
-        let data = params.data;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            requestType: request,
-            data: data,
-            successEvent: successEvent,
-            errorEvent: errorEvent,
-            settingsObject: formSettings
-        });
-    });
-
-//ShowTicketAppearanceSettings
-    on('communicate/tickets/ticketAppearance', function (params) {
-        let route = apiRoutes.tickets.ticketAppearance;
-        // let successEvent = 'tickets/tab/appearance/display';
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.populateData;
-        let request = requestTypes.post;
-        let data = params.data;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            requestType: request,
-            data: data,
-            successEvent: successEvent,
-            errorEvent: errorEvent,
-            settingsObject: formSettings
-        });
-    });
-
-
-//SaveTitoSmsAction
-    on('communicate/tickets/saveSmsSettings', function (params) {
+    //tickets SaveTitoSmsAction
+    on(events.tickets.saveSmsSettings, function (params) {
         let route = apiRoutes.tickets.saveSmsSettings;
-        // let successEvent = 'tickets/tab/smsSettings/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
@@ -646,11 +605,27 @@ let communication = (function () {
         });
     });
 
+    //tickets ShowTitoMaxValueSettings
+    on(events.tickets.showMaxValueSettings, function (params) {
+        let route = apiRoutes.tickets.showMaxValueSettings;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.populateData;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
 
-//SaveTitoMaxValuesAction
-    on('communicate/tickets/saveMaxValuesAction', function (params) {
+    //tickets SaveTitoMaxValuesAction
+    on(events.tickets.saveMaxValuesAction, function (params) {
         let route = apiRoutes.tickets.saveMaxValuesAction;
-        // let successEvent = 'tickets/tab/maxValue/update';
         let formSettings = params.formSettings;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
@@ -666,9 +641,26 @@ let communication = (function () {
         });
     });
 
+    //ShowTicketAppearanceSettings
+    on(events.tickets.ticketAppearance, function (params) {
+        let route = apiRoutes.tickets.ticketAppearance;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.populateData;
+        let request = requestTypes.post;
+        let data = params.data;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: formSettings
+        });
+    });
 
-//SaveTicketAppearanceAction
-    on('communicate/tickets/saveAppearance', function (params) {
+    //SaveTicketAppearanceAction
+    on(events.tickets.saveAppearance, function (params) {
         let route = apiRoutes.tickets.saveAppearance;
         // let successEvent = 'tickets/tab/appearance/update';
         let formSettings = params.formSettings;
@@ -686,8 +678,7 @@ let communication = (function () {
         });
     });
 
-
-//parseRemoteData data for tickets  page
+    //parseRemoteData data for tickets  page
     on(events.tickets.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
@@ -698,7 +689,9 @@ let communication = (function () {
     /*--------------------------------------------------------------------------------------*/
 
 
-//events for login
+    /*-------------------------------------LOGIN EVENTS-------------------------------------*/
+
+    //events for login
     on('communicate/login', function (params) {
         let successEvent = params.successEvent;
         let errorEvent = params.errorEvent;
@@ -711,7 +704,7 @@ let communication = (function () {
     });
 
 
-//events for casino
+    //events for casino
     on('communicate/casino-info', function (params) {
         //let casinoId = params.casinoId;
         //let callbackEventName = params.successEvent;
