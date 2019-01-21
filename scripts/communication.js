@@ -34,6 +34,27 @@ let communication = (function () {
             saveSmsSettings: 'api/tickets/savesmssettings/',
             saveMaxValuesAction: 'api/tickets/savemaxvalues/',
             saveAppearance: 'api/tickets/saveappearance/'
+        },
+        casinos: {},
+        machines: {
+            getMachines: 'api/machines/',
+            previewMachines: 'api/machines/previewmachines/',
+            getMachineDetails: 'api/machines/details/',
+            getMachineServiceData: 'api/machines/servicedata/',
+            swichServiceMode: 'api/machines/switchservicemode/',
+            getMachineHistory: 'api/machines/history/',
+            previewMachineHistory: 'api/machines/previewhistory/',
+            getMachineEvents: 'api/machines/events/',
+            previewMachineEvents: 'api/machines/previewevents/',
+            getAllMachineMeters: 'api/machines/allmeters/',
+            previewMachineMeters: 'api/machines/previewallmeters/',
+            removeMeter: 'api/machines/removemeter/',
+            showMachineMeters: 'api/machines/showmeters/',
+            saveMachineMeters: 'api/machines/savemeter/',
+            editMachine: 'api/machines/edit/',
+            saveMachine: 'api/machines/save/',
+            removeMachineFromCasino: 'api/machines/remove/',
+
         }
     };
 
@@ -41,6 +62,18 @@ let communication = (function () {
         authorization: {
             login: 'login/',
             logout: 'logout/',
+        },
+        tickets: {
+            parseRemoteData: 'communicate/tickets/data/parse',
+            getTickets: 'communicate/tickets/getTickets/',
+            previewTickets: 'communicate/tickets/previewTickets',
+            getFilters: 'communicate/tickets/getFilters',
+            showSmsSettings: 'communicate/tickets/showSmsSettings',
+            saveSmsSettings: 'communicate/tickets/saveSmsSettings',
+            showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
+            saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
+            ticketAppearance: 'communicate/tickets/ticketAppearance',
+            saveAppearance: 'communicate/tickets/saveAppearance'
         },
         aft: {
             transactions: {
@@ -59,18 +92,11 @@ let communication = (function () {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'
             }
         },
-        tickets: {
-            parseRemoteData: 'communicate/tickets/data/parse',
-            getTickets: 'communicate/tickets/getTickets/',
-            previewTickets: 'communicate/tickets/previewTickets',
-            getFilters: 'communicate/tickets/getFilters',
-            showSmsSettings: 'communicate/tickets/showSmsSettings',
-            saveSmsSettings: 'communicate/tickets/saveSmsSettings',
-            showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
-            saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
-            ticketAppearance: 'communicate/tickets/ticketAppearance',
-            saveAppearance: 'communicate/tickets/saveAppearance'
+        casinos: {},
+        machines: {
+
         }
+
     };
 
     const xhrStates = {
