@@ -46,11 +46,11 @@ body {
 }
 
 .overflow-x::-webkit-scrollbar-track, .overflow-y::-webkit-scrollbar-track, .overflow-content::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgb(55, 71, 79);
-    background-color: rgb(120, 144, 156);
+    /* box-shadow: inset 0 0 6px rgb(55, 71, 79); */
+    background-color: transparent
 }
 
 .overflow-x::-webkit-scrollbar-thumb, .overflow-y::-webkit-scrollbar-thumb, .overflow-content::-webkit-scrollbar-thumb {
-    background-color: rgb(55, 71, 79);
+    background-color: #78909c;
     border-radius: 50px;
 }

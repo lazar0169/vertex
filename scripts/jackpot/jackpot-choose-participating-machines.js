@@ -104,6 +104,8 @@ const jackpotChooseParticipatingMachines = (function () {
         let wrapperOptionAndSearch = document.createElement('div');
         wrapperOptionAndSearch.classList.add('hidden');
         wrapperOptionAndSearch.classList.add('background-dark');
+        wrapperOptionAndSearch.classList.add('overflow-y');
+        wrapperOptionAndSearch.classList.add('cities-wrapper');
 
         wrapperOptionAndSearch.innerHTML = `<div class="center">
                                     <input class="element-multilanguage search search-casino" type="text" onfocus="value=''" placeholder="search" data-translation-key="search">
