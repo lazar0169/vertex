@@ -54,6 +54,26 @@ let communication = (function () {
             editMachine: 'api/machines/edit/',
             saveMachine: 'api/machines/save/',
             removeMachineFromCasino: 'api/machines/remove/'
+        },
+        jackpots: {
+            getJackpots: 'api/jackpots/',
+            previewJackpots: 'api/jackpots/previewjackpots/',
+            getEvents: 'api/jackpots/events/',
+            previewEvents: 'api/jackpots/previewevents/',
+            getJackpotHistory: 'api/jackpots/history/',
+            previewJackpotHistory: 'api/jackpots/previewhistory/',
+            getFilters: 'api/jackpots/getfilters/',
+            showJackpotInfo: 'api/jackpots/showinfo/',
+            setIgnoreRestrictions: 'api/jackpots/setignore/',
+            showJackpotEditInfo: 'api/jackpots/editjackpot/',
+            changeJackpotState: 'api/jackpots/changestate/',
+            removeJackpot: ' api/jackpots/remove/',
+            addJackpot: 'api/jackpots/addjackpot/',
+            getJackpotSettings: 'api/jackpots/getsettings/',
+            getJackpotPlasmaSettings: 'api/jackpots/getplasmasettings/',
+            setJackpotSettings: 'api/jackpots/savesettings/',
+            setJackpotPlasmaSettings: 'api/jackpots/saveplasmasettings/',
+            saveJackpot: 'api/jackpots/save/'
         }
     };
 
@@ -110,6 +130,26 @@ let communication = (function () {
             editMachine: 'communicate/machines/edit',
             saveMachine: 'communicate/machines/save',
             removeMachineFromCasino: 'communicate/machines/remove'
+        },
+        jackpots: {
+            getJackpots: 'communicate/jackpots/',
+            previewJackpots: 'communicate/jackpots/previewJackpots/',
+            getEvents: 'communicate/jackpots/getEvents/',
+            previewEvents: 'communicate/jackpots/previewEvents/',
+            getJackpotHistory: 'communicate/jackpots/getHistory/',
+            previewJackpotHistory: 'communicate/jackpots/previewHistory/',
+            getFilters: 'communicate/jackpots/getFilters/',
+            showJackpotInfo: 'communicate/jackpots/showInfo/',
+            setIgnoreRestrictions: 'communicate/jackpots/setIgnore/',
+            showJackpotEditInfo: 'communicate/jackpots/editInfo/',
+            changeJackpotState: 'communicate/jackpots/changeState/',
+            removeJackpot: ' communicate/jackpots/remove/',
+            addJackpot: 'communicate/jackpots/addJackpot/',
+            getJackpotSettings: 'communicate/jackpots/getSettings/',
+            getJackpotPlasmaSettings: 'communicate/jackpots/getPlasmaSettings/',
+            setJackpotSettings: 'communicate/jackpots/setSettings/',
+            setJackpotPlasmaSettings: 'communicate/jackpots/setPlasmaSettings/',
+            saveJackpot: 'communicate/jackpots/save/'
         }
     };
 
