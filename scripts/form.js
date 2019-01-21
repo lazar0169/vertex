@@ -206,9 +206,11 @@ let form = (function () {
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
+                            //ToDo: Neske - ispravi ovaj bug
+                            console.log('single select input');
+                            console.log(formInputElement);
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
-                            console.log(formInputElement.dataset);
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }
@@ -386,9 +388,7 @@ let form = (function () {
         input.value = value;
         input.classList.add('element-form-data');
         input.dataset.type = 'string';
-        console.log(input);
         formElement.appendChild(input);
-        console.log(input);
     }
 
     function toggleSection(e) {
@@ -463,7 +463,7 @@ let form = (function () {
         getFormData(formSettings);
     });
 
-    on('from/validate', function (params) {
+    on('form/validate', function (params) {
         let formSettings = params.formSettings;
         validate(formSettings);
     });

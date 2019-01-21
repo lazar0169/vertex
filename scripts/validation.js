@@ -9,7 +9,8 @@ let localization = (function () {
     }
 
 
-    function init() {
+
+    function init(settings) {
 
     }
 
@@ -33,8 +34,9 @@ let localization = (function () {
 
     }
 
-    function setDefaultSettings() {
-        
+    function setDefaultSettings(settings) {
+        let validationSettings = {};
+
     }
 
 })();

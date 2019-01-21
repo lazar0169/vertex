@@ -4,7 +4,6 @@ const aft = (function () {
     let endpointId;
 
     on('aft/activated', function (params) {
-
         let aftId = params.params[0].value;
         endpointId = aftId;
 
@@ -46,11 +45,6 @@ const aft = (function () {
             value: endpointName
         });
 
-        trigger('aft/tab/transaction', {tableSettings: tableSettings});
-        trigger('aft/tab/notification', {tableSettings: tableSettings});
-
-
-        let addTransactionButton = $$('#page-aft').getElementsByClassName('aft-add-transaction')[0];
 
         trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
@@ -71,17 +65,16 @@ const aft = (function () {
 
     /*********************----Module Events------*********************/
     on('aft/addTransaction/error', function (params) {
-        console.log(params);
+
         //let messageType = params.message.MessageType;
         trigger('notifications/show', {
             message: params.message.MessageCode,
             type: params.message.MessageType,
         });
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-
+        trigger('aft/filters/filter-table', {showFilters: false});
     });
     on('aft/addTransaction/success', function (params) {
-        console.log(params);
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('aft/filters/filter-table', {showFilters: false});
         //ToDo: Neske i Nikola - da li isprazniti formu i sakriti pop up koji izadje sa desne strane?
@@ -104,7 +97,6 @@ const aft = (function () {
 
     //code executed before popup is added to dom and
     on('aft/table/show/cancel-pending-pop-up', function (params) {
-        console.log(params);
         let containerCell = params.params.containerCell;
         if (containerCell.transactionData === undefined) {
             console.error('there`s no transaction data on targeted cell!');
@@ -129,7 +121,6 @@ const aft = (function () {
 
     function beforeShowPopUp(coordinates, element, confirmCallback, cancelCallback, parentElement, boundsContainer) {
         element.setAttribute('id', cancelTransactionsPopUpId);
-        console.log('coordinates ', coordinates);
         element.style.left = coordinates.x + 'px';
         element.style.top = coordinates.y + 'px';
 
@@ -166,7 +157,6 @@ const aft = (function () {
     }
 
     function transactionCanceled(params) {
-        console.log('params trans canceled', params);
         let data = params.data;
         let additionalData = data.Data;
         //get popup coordinates if following popup should be displayed
