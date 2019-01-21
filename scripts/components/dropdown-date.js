@@ -129,7 +129,8 @@ const dropdownDate = (function () {
                     if (current.id != activeSelectId && activeSelectId) {
                         $$(`.active-date-select`)[0].children[1].children[1].classList.add('hidden');
                         $$(`.active-date-select`)[0].children[1].classList.add('hidden');
-                        $$('.active-date-select')[0].classList.toggle('active-date-select');
+                        $$('.active-date-select')[0].children[0].children[1].classList.remove('opened-arrow');
+                        $$('.active-date-select')[0].classList.remove('active-date-select');
                         pickCustom = false;
                     }
                     activeSelectId = selectId;
