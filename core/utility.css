@@ -248,7 +248,7 @@
     box-shadow: 0 0 10px #000000;
 }
 
-.option-casino:hover label, .option-city:hover, .option-all:hover {
+.option-casino:hover label, .option-city:hover, .option-all:hover label {
     cursor: pointer !important;
     color: white !important;
 }

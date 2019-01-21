@@ -26,8 +26,7 @@ const addNewJackpot = (function () {
                     else {
                         element.parentNode.parentNode.children[1].classList.toggle('hidden');
                         element.parentNode.classList.toggle('expanded-add-new-jackpot-settings');
-                        element.children[1].classList.toggle('opened-arrow');
-
+                        trigger('opened-arrow', { div: element });
                     }
                 }
             });
