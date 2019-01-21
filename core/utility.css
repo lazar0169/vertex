@@ -249,7 +249,7 @@
 }
 
 .cities-wrapper {
-    height: 210px;
+    max-height: 210px;
 }
 
 .option-casino:hover label, .option-city:hover, .option-all:hover label {
