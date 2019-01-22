@@ -118,7 +118,7 @@ const ticketsFilter = (function () {
         multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
         let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
         multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
-        console.log(filters.PrintedAndRedeemed);
+        console.log('Printed and redeemed',filters.PrintedAndRedeemed);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
 

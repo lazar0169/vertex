@@ -1,5 +1,4 @@
 let aftTabEnableTransaction = (function () {
-
     let formSettingsTransaction = {};
     formSettingsTransaction.formContainerSelector = '#aft-tabs-enable-transaction-info';
     formSettingsTransaction.getData = communication.events.aft.transactions.getBasicSettings;
@@ -11,5 +10,4 @@ let aftTabEnableTransaction = (function () {
         trigger('form/init', {formSettings: formSettingsTransaction});
         trigger('form/getData', {formSettings: formSettingsTransaction});
     });
-
 })();

@@ -5,11 +5,11 @@ let form = (function () {
     let currentEndpointId;
 
     const inputTypes = {
-        singleSelect : 'single-select',
+        singleSelect: 'single-select',
         integer: 'int',
-        float:'float',
-        string:'string',
-        array:'array'
+        float: 'float',
+        string: 'string',
+        array: 'array'
     }
 
     function prepareFloatValue(value) {
@@ -206,9 +206,6 @@ let form = (function () {
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case 'single-select':
-                            //ToDo: Neske - ispravi ovaj bug
-                            console.log('single select input');
-                            console.log(formInputElement);
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
@@ -218,8 +215,6 @@ let form = (function () {
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {
                                 dataForApi[formInputElement.name] = parseInt(formInputElement.value);
-                            } else {
-                                dataForApi[formInputElement.name] = 5; //todo validation
                             }
                             break;
                         case 'float':
@@ -368,9 +363,10 @@ let form = (function () {
             });
         }
     }
+
     function createCurrencyInputs(formSettings) {
         let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
-        for (let i = 0;i<formInputElements.length;i++) {
+        for (let i = 0; i < formInputElements.length; i++) {
             let input = formInputElements[i];
             if (input.dataset.type === inputTypes.float) {
                 currencyInput.generate(input);
@@ -439,6 +435,17 @@ let form = (function () {
         });
     }
 
+    function initValidation(formSettings) {
+        if (formSettings.formContainerElement.getAttribute('novalidate') === undefined ||
+            formSettings.formContainerElement.getAttribute('novalidate') === null ||
+            formSettings.formContainerElement.getAttribute('novalidate') == false) {
+            let formInputElementsArray = collectAllFormElements(formSettings);
+            for (let i = 0; i < formInputElementsArray.length; i++) {
+                validation.init(formInputElementsArray[i], {});
+            }
+        }
+    }
+
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
@@ -446,11 +453,11 @@ let form = (function () {
         createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
+        initValidation(formSettings);
     }
 
-    on('form/add/hiddenField', function (params)
-    {
-        addHiddenField(params.formSettings,params.name, params.value);
+    on('form/add/hiddenField', function (params) {
+        addHiddenField(params.formSettings, params.name, params.value);
     });
 
     on('form/init', function (params) {
@@ -474,7 +481,6 @@ let form = (function () {
         submit(formSettings);
     });
 
-    //ToDo: check if this event is necessary
     on('form/complete', function (params) {
         complete(params.formSettings);
     });
@@ -493,7 +499,6 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-        //ToDo: neske
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
