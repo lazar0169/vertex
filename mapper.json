@@ -53,6 +53,7 @@
       "malfunctions/malfunctions.js",
       "users/users-add-new-user.js",
       "users/users.js",
+      "users/users-filters.js",
       "session.js",
       "preloader.js",
       "application.js",

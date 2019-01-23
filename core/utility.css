@@ -76,8 +76,24 @@
     padding: 0 0.8rem;
 }
 
-.advance-table-filter {
+.advance-filter-tabele-search {
     cursor: pointer;
+}
+
+.advance-filter-tabele-search>div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background: rgb(38, 50, 56);
+}
+
+.advance-filter-tabele-search-active .search {
+    height: 40px !important;
+    width: 600px !important;
+}
+
+.advance-table-filter {
     position: relative;
     border-left: 0.5rem solid rgb(38, 50, 56);
     border-top: 0.5rem solid rgb(38, 50, 56);
@@ -86,6 +102,7 @@
 .advance-table-filter>div:first-child {
     border-bottom: 0.5rem solid transparent;
     padding-right: 1rem;
+    cursor: pointer;
 }
 
 /* .advance-table-filter::before {

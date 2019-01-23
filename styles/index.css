@@ -12,6 +12,7 @@ body {
     background: white;
     font-family: 'roboto';
     user-select: none;
+    overflow: hidden;
 }
 
 #black-area {

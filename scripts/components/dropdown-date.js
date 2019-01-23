@@ -183,6 +183,23 @@ const dropdownDate = (function () {
                 $$('.advance-filter-active')[0].classList.remove('advance-filter-active');
             }
         }
+        //this is for table search
+        if (e.target.classList && e.target.classList.contains('advance-filter-tabele-search')) {
+
+            if ($$('.advance-filter-tabele-search-active')[0]) {
+                $$('.advance-filter-tabele-search-active')[0].children[0].classList.add('hidden');
+                $$('.advance-filter-tabele-search-active')[0].classList.remove('advance-filter-tabele-search-active');
+            }
+
+            e.target.children[0].classList.remove('hidden');
+            e.target.classList.add('advance-filter-tabele-search-active');
+            e.target.children[0].children[0].focus();
+        }
+
+        else if ($$('.advance-filter-tabele-search-active')[0] && document.activeElement.classList && !document.activeElement.classList.contains('search')) {
+            $$('.advance-filter-tabele-search-active')[0].children[0].classList.add('hidden');
+            $$('.advance-filter-tabele-search-active')[0].classList.remove('advance-filter-tabele-search-active');
+        }
     });
     return {
         generate
