@@ -72,10 +72,6 @@
     align-items: center;
 }
 
-.custom-filter>div:not(:first-child)>div:not(:first-child) {
-    padding: 0 0.8rem;
-}
-
 .advance-filter-tabele-search {
     cursor: pointer;
 }
@@ -153,16 +149,18 @@
     box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
-.advance-filter-active>div:not(:first-child)>div {
+.advance-filter-active>div:not(:first-child)>div:not(:last-child) {
     display: inline-flex;
     width: 100%;
-    padding: 0.3rem 0.4rem 0.3rem 0.3rem;
+    padding: 0.3rem 0.4rem 0.3rem 0.8rem;
     white-space: nowrap;
 }
 
 .advance-filter-active>div:not(:first-child)>div:last-child {
     background: rgb(38, 50, 56);
     cursor: default;
+    display: inline-flex;
+    padding: 0.3rem 0rem 0.3rem 0rem;
 }
 
 .advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
