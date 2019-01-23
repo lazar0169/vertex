@@ -16,9 +16,9 @@
     box-sizing: border-box;
     transition: all 0.1s ease;
     white-space: nowrap;
-    font-family: "OpenSans-Regular", "MyriadPro-Regular", sans-serif;
+    font-family: "Open Sans";
     font-weight: 600;
-    border-right: 0.1rem solid black;
+    border-right: 2px solid black;
 }
 
 #sidebar.collapse {

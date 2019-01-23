@@ -100,7 +100,7 @@ const jackpotChooseParticipatingMachines = (function () {
 
     //create jackpot filter (by place)
     function createJackpotFilterCasinos(data) {
-        let cityArray = [];
+
         let wrapperOptionAndSearch = document.createElement('div');
         wrapperOptionAndSearch.classList.add('hidden');
         wrapperOptionAndSearch.classList.add('background-dark');
@@ -110,8 +110,26 @@ const jackpotChooseParticipatingMachines = (function () {
         wrapperOptionAndSearch.innerHTML = `<div class="center">
                                     <input class="element-multilanguage search search-casino" type="text" onfocus="value=''" placeholder="search" data-translation-key="search">
                                     </div>`
+
+        wrapperOptionAndSearch.children[0].children[0].addEventListener('keyup', function (e) {
+            let termin = wrapperOptionAndSearch.children[0].children[0].value
+            searchCasinosAndCities(wrapperOptionAndSearch, data, termin);
+        });
+
+
+
+        generateCasinosAndCities(wrapperOptionAndSearch, data);
+
+
+        return wrapperOptionAndSearch;
+    }
+
+    //generating casinos in cities
+    function generateCasinosAndCities(div, data) {
+
+        let cityArray = [];
         let wrapperOption = document.createElement('div');
-        wrapperOption.classList.add('overflow-y')
+        wrapperOption.classList.add('overflow-y');
 
         let allCasinos = document.createElement('div');
         allCasinos.classList.add('option-all')
@@ -223,10 +241,47 @@ const jackpotChooseParticipatingMachines = (function () {
                     }
                 }
             }
-            wrapperOptionAndSearch.appendChild(wrapperOption)
         }
-        return wrapperOptionAndSearch;
+        div.appendChild(wrapperOption)
     }
+
+
+    //search casions in cities
+    function searchCasinosAndCities(wrapperOptionAndSearch, data, termin) {
+        console.log(data.Value);
+        console.log(wrapperOptionAndSearch);
+        let i = 0;
+        let arrayResult = [];
+        for (let value of data.Value) {
+            let valueName = value.Name.toLowerCase();
+            let valueCity = value.City.toLowerCase();
+            let index = valueName.indexOf(termin);
+            let index1 = valueName.indexOf(` ${termin}`);
+            let index2 = valueCity.indexOf(termin);
+            let index3 = valueCity.indexOf(` ${termin}`)
+            if (index === 0 ||
+                index1 !== -1 ||
+                index2 === 0 ||
+                index3 !== -1) {
+                arrayResult[i] = value;
+                i++;
+            }
+        }
+        let newObject = {
+            'List': data.List,
+            'Value': arrayResult
+        };
+        if (newObject.Value.length === 0) {
+            wrapperOptionAndSearch.children[1].innerHTML = 'nema podataka'
+        }
+        else {
+            wrapperOptionAndSearch.children[1].remove();
+            generateCasinosAndCities(wrapperOptionAndSearch, newObject)
+        }
+
+
+    }
+
 
     function checkGroupCasinosCheckbox(group, groupName) {
         //ovde si stao prosledjujes ime grupe
