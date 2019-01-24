@@ -47,14 +47,7 @@ let notifications = function () {
         });
     });
 
-    //shortcut event za error
-    on('notifications/show/error', function (message) {
-       trigger('notifications/show',{
-          type:messageTypes.error,
-          message:message
-       });
-    });
-
+    //shortcut event for success
     on('notifications/show/success', function (message) {
         trigger('notifications/show',{
             type:messageTypes.ok,
@@ -62,6 +55,13 @@ let notifications = function () {
         });
     });
 
+    //shortcut event for error
+    on('notifications/show/error', function (message) {
+       trigger('notifications/show',{
+          type:messageTypes.error,
+          message:message
+       });
+    });
     return {
         messageTypes : messageTypes
     }
