@@ -22,13 +22,16 @@ const ticketsFilter = (function () {
     /*********************----Events Listeners------*********************/
 
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
-       filterTicketsTable(true);
+        filterTicketsTable(true);
+        ticketAdvanceFilterButton.children[1].classList.remove('opened-arrow');
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
     clearAdvanceFilterInfobar.addEventListener('click', clearFilters);
-    ticketAdvanceFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
+    ticketAdvanceFilterButton.addEventListener('click', function () {
+        ticketAdvanceFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
+        ticketAdvanceFilter.children[1].classList.toggle('hidden');
     });
     /*********************----Module Events----************************/
 
@@ -51,7 +54,7 @@ const ticketsFilter = (function () {
         displayFilters(filters, tableSettings);
     });
     on('tickets/filters/pagination', function (params) {
-       filterTicketsTable();
+        filterTicketsTable();
     });
     on('tickets/filters/sorting', function (params) {
         activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
@@ -64,7 +67,7 @@ const ticketsFilter = (function () {
         tableSettings.activePage = 1;
         filterTicketsTable();
     });
-    on('tickets/filters/filter-table', function(params){
+    on('tickets/filters/filter-table', function (params) {
         filterTicketsTable(params.showFilters);
     });
 
@@ -131,7 +134,7 @@ const ticketsFilter = (function () {
         ticketsAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         ticketsAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({name: '-', value: null});
+        hideableColumns.unshift({ name: '-', value: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
         let columns = hideableColumns.map(function (item) {
             item.parsed = true;
@@ -139,10 +142,11 @@ const ticketsFilter = (function () {
         });
         multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
     }
-    function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
-    }
+    // function showAdvanceTableFilter() {
+    //     ticketAdvanceFilter.classList.add('advance-filter-active');
+    //     advanceTableFilterActive.classList.remove('hidden');
+
+    // }
     function formatTicketsApiData(filterArray) {
         if (filterArray !== undefined && filterArray !== null) {
             filterArray.forEach(function (filter) {
