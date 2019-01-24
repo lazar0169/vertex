@@ -49,16 +49,22 @@ let notifications = function () {
 
     //shortcut event za error
     on('notifications/show/error', function (message) {
-       trigger('notification/show',{
+       trigger('notifications/show',{
           type:messageTypes.error,
           message:message
        });
     });
     on('notifications/show/success', function (message) {
-        trigger('notification/show',{
+        trigger('notifications/show',{
             type:messageTypes.ok,
             message:message
         });
     });
+
+
+    return {
+        messageTypes : messageTypes
+    }
+
 
 }();

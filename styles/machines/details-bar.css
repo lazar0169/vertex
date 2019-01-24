@@ -159,7 +159,8 @@
 
 .active-content {
     width: 100%;
-    height: calc(100vh - 5% - 4% - 2.3rem);
+    height:calc(100vh - 130px);
+    max-height:calc(100vh - 130px);
 }
 
 .table-head {

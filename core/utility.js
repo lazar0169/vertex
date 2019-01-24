@@ -1,3 +1,22 @@
+//Set up element.closest to work in IE
+if (!Element.prototype.matches) {
+    Element.prototype.matches = Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector;
+}
+
+if (!Element.prototype.closest) {
+    Element.prototype.closest = function(s) {
+        var el = this;
+        if (!document.documentElement.contains(el)) return null;
+        do {
+            if (el.matches(s)) return el;
+            el = el.parentElement || el.parentNode;
+        } while (el !== null && el.nodeType === 1);
+        return null;
+    };
+}
+
+
 function $$(selector) {
     switch (selector[0]) {
         case '.':
@@ -27,6 +46,49 @@ function expandElement(element) {
     if (sectionHeight !== 0) {
         element.style.height = sectionHeight + 'px';
     }
+    element.addEventListener("webkittransitionEnd", expandTransitionEnd,false);
+    element.addEventListener("transitionend", expandTransitionEnd,false);
+    element.addEventListener("otransitionend", expandTransitionEnd,false);
+    element.addEventListener("MSAnimationEnd", expandTransitionEnd,false);
+}
+//remove fixed height on elements after they are expanded
+function expandTransitionEnd(e) {
+    let target = e.target;
+    let targetedHeight = target.style.height;
+    if (targetedHeight !== '0px') {
+        target.style.height = 'auto';
+        target.removeEventListener("webkittransitionEnd", expandTransitionEnd, false);
+        target.removeEventListener("transitionend", expandTransitionEnd, false);
+        target.removeEventListener("otransitionend", expandTransitionEnd, false);
+        target.removeEventListener("MSAnimationEnd", expandTransitionEnd, false);
+    }
+}
+
+function keepAbsoluteChildInParent(parent, child, offset) {
+    if (offset === undefined) {
+        offset = 10;
+    }
+
+    let childHeight = child.offsetHeight;
+    let childWidth = child.offsetWidth;
+
+    let parentRect = parent.getBoundingClientRect();
+    let childRect = child.getBoundingClientRect();
+
+
+    if (childRect.left < parentRect.left) {
+        child.style.left = parentRect.left + offset + 'px';
+    }
+    if (childRect.right > parentRect.right) {
+        child.style.left = parentRect.right - childWidth - offset + 'px';
+    }
+    if (childRect.top < parentRect.top) {
+        child.style.top = parentRect.top + offset + 'px';
+    }
+    if (childRect.bottom > parentRect.bottom) {
+        child.style.top = parentRect.bottom - childHeight - offset + 'px';
+    }
+
 }
 
 function validateEncodedToken(accessToken) {
@@ -39,6 +101,110 @@ function validateEncodedToken(accessToken) {
     }
     console.error('Encoded token is not valid!');
     return false;
+}
+
+function isFunction(functionName) {
+    return functionName && {}.toString.call(functionName) === '[object Function]';
+}
+
+function isString(variableName) {
+    return Object.prototype.toString.call(variableName) === "[object String]"
+}
+
+function isNode(variable) {
+    return (
+        typeof Node === "object" ? variable instanceof Node :
+            variable && typeof variable === "object" && typeof variable.nodeType === "number" && typeof variable.nodeName === "string"
+    );
+}
+
+function compareObjects() {
+    let i, l, leftChain, rightChain;
+
+    function compare2Objects(x, y) {
+        let p;
+        if (isNaN(x) && isNaN(y) && typeof x === 'number' && typeof y === 'number') {
+            return true;
+        }
+        if (x === y) {
+            return true;
+        }
+        if ((typeof x === 'function' && typeof y === 'function') ||
+            (x instanceof Date && y instanceof Date) ||
+            (x instanceof RegExp && y instanceof RegExp) ||
+            (x instanceof String && y instanceof String) ||
+            (x instanceof Number && y instanceof Number)) {
+            return x.toString() === y.toString();
+        }
+        if (!(x instanceof Object && y instanceof Object)) {
+            return false;
+        }
+        if (x.isPrototypeOf(y) || y.isPrototypeOf(x)) {
+            return false;
+        }
+        if (x.constructor !== y.constructor) {
+            return false;
+        }
+        if (x.prototype !== y.prototype) {
+            return false;
+        }
+        if (leftChain.indexOf(x) > -1 || rightChain.indexOf(y) > -1) {
+            return false;
+        }
+        for (p in y) {
+            if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
+                return false;
+            } else if (typeof y[p] !== typeof x[p]) {
+                return false;
+            }
+        }
+        for (p in x) {
+            if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
+                return false;
+            } else if (typeof y[p] !== typeof x[p]) {
+                return false;
+            }
+
+            switch (typeof (x[p])) {
+                case 'object':
+                case 'function':
+                    leftChain.push(x);
+                    rightChain.push(y);
+                    if (!compare2Objects(x[p], y[p])) {
+                        return false;
+                    }
+                    leftChain.pop();
+                    rightChain.pop();
+                    break;
+                default:
+                    if (x[p] !== y[p]) {
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+
+    if (arguments.length < 1) {
+        console.error('need at least two objects to compare');
+        return true;
+    }
+    for (i = 1, l = arguments.length; i < l; i++) {
+        leftChain = [];
+        rightChain = [];
+        if (!compare2Objects(arguments[0], arguments[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function isElement(variable) {
+    return (
+        typeof HTMLElement === "object" ? variable instanceof HTMLElement : //DOM2
+            variable && typeof variable === "object" && variable !== null && variable.nodeType === 1 && typeof variable.nodeName === "string"
+    );
 }
 
 function decodeToken(encodedToken) {
@@ -73,10 +239,15 @@ function removeChildren(element) {
         element.removeChild(element.lastChild);
     }
 }
+function formatTimeData(timeData) {
+    return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
+}
 
 //formats number 2000.53 into 2,000.53
 function formatFloatValue(amount) {
-    let decimalCount = 2, decimal = ".", thousands = ",";
+    let decimalCount = config.decimalCount;
+    let decimal = config.decimalSeparator;
+    let thousands = config.thousandSeparator;
     try {
         decimalCount = Math.abs(decimalCount);
         decimalCount = isNaN(decimalCount) ? 2 : decimalCount;

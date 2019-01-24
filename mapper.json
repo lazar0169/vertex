@@ -1,6 +1,7 @@
 {
   "index": {
     "scripts": [
+      "config.js",
       "localization.js",
       "login.js",
       "session.js",
@@ -18,6 +19,7 @@
   },
   "main": {
     "scripts": [
+      "config.js",
       "table.js",
       "data.js",
       "top-bar.js",
@@ -26,10 +28,13 @@
       "template-engine.js",
       "mock.js",
       "form.js",
+      "localization.js",
+      "communication.js",
       "aft/aft.js",
       "aft/aft-filters.js",
       "aft/aft-tab-enable-transaction.js",
       "aft/aft-tab-notification-settings.js",
+      "components/currency-input.js",
       "components/dropdown.js",
       "components/clear-dropdown-filter.js",
       "components/ms-dropdown.js",
@@ -37,7 +42,6 @@
       "components/toggle.js",
       "machines/details-bar.js",
       "casino.js",
-      "communication.js",
       "machines.js",
       "machines/machines-filters.js",
       "machines/edit-page.js",
@@ -58,7 +62,6 @@
       "preloader.js",
       "application.js",
       "home.js",
-      "localization.js",
       "router.js",
       "components/datepicker.js",
       "components/timepicker.js",
@@ -82,6 +85,7 @@
       "machines/edit-page.css",
       "aft/aft-filters.css",
       "aft/aft-tabs.css",
+      "aft/aft-table.css",
       "aft/aft-add-transaction.css",
       "tickets/tickets-tabs.css",
       "tickets/tickets-appearance.css",

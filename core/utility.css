@@ -263,9 +263,9 @@
     box-shadow: 0 0 10px #000000;
 }
 
-.cities-wrapper {
+/* .cities-wrapper {
     max-height: 210px;
-}
+} */
 
 .option-casino:hover label, .option-city:hover, .option-all:hover label {
     cursor: pointer !important;

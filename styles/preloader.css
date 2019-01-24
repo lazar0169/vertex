@@ -11,21 +11,19 @@
     color: white;
     background: #2B353B;
     opacity: 1;
-    -webkit-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    transition: all 0.5s;
-}
-
-#preloader.fade-out {
-    opacity: 0;
     -moz-transition: opacity 0.4s ease-in-out;
     -o-transition: opacity 0.4s ease-in-out;
     -webkit-transition: opacity 0.4s ease-in-out;
     transition: opacity 0.4s ease-in-out;
 }
 
+#preloader.fade-out {
+    opacity:0;
+}
+#preloader.fade-in {
+    opacity:1;
+}
+
 #preloader.hide {
-    display: none;
+z-index: -1
 }

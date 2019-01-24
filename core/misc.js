@@ -16,7 +16,6 @@ window.addEventListener('load', function () {
 function setTabListener() {
     for (let tab of tabs) {
         tab.addEventListener('click', function () {
-            table.removeTransactionPopup();
             selectTab(tab.id);
             selectInfoContent(tab.id);
         });
@@ -40,6 +39,7 @@ function selectTab(name) {
 
 //shows content for selected tab
 let previousInfoContSelected;
+
 function selectInfoContent(name) {
     if (previousInfoContSelected) {
         previousInfoContSelected.classList.remove('active-content');
@@ -122,3 +122,17 @@ function openCloseArrow(div) {
 on('opened-arrow', function (data) {
     openCloseArrow(data.div)
 })
+//popups
+function dimissPopUp(target) {
+    if (target === undefined || target === null) {
+        return false;
+    }
+    let popup = target.closest('.element-pop-up');
+    if (popup !== undefined && popup !== null) {
+        popup.parentNode.removeChild(popup);
+    }
+}
+
+//ToDo: naći bolje ime za funkciju
+//this function will bind handlers to the element which will react when user clicks outside element
+
