@@ -1,7 +1,6 @@
 let validation = (function () {
 
     const errorMessageAttributeSuffix = '-error-message';
-
     const inputTypes = {
         singleSelect: 'single-select',
         integer: 'int',
@@ -30,10 +29,32 @@ let validation = (function () {
     defaultErrorMessages[inputTypes.integer] = 'IntegerValidationErrorMessage';
     defaultErrorMessages[inputTypes.string] = 'StringValidationErrorMessage';
     defaultErrorMessages[inputTypes.float] = 'FloatValidationErrorMessage';
-    defaultErrorMessages[constraintsOperators.required] = 'RequiredValidationErrorMessage';
-    defaultErrorMessages[constraintsOperators.greaterThan] = 'GreaterThanValidationErrorMessage';
-    defaultErrorMessages[constraintsOperators.lesserThan] = 'LesserThanValidationErrorMessage';
-    defaultErrorMessages[constraintsOperators.equals] = 'EqualsValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.required] = 'RequiredValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.minimum] = 'LesserThanValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.maximum] = 'GreaterThanValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.equals] = 'EqualsValidationErrorMessage';
+
+    let operatorFunctions = {};
+    // a - input value
+    // b - compared value
+    operatorFunctions[constraintsOperators.greaterThan] = function (a, b) {
+        a = parseFloat(a.replace(/,/g, ''));
+        console.log('a:', a);
+        console.log('b:', b);
+        return a > b;
+    };
+    operatorFunctions[constraintsOperators.lesserThan] = function (a, b) {
+        a = parseFloat(a.replace(',', ''));
+        return a < b
+    };
+    operatorFunctions[constraintsOperators.equals] = function (a, b) {
+        return a === b;
+    };
+    operatorFunctions[constraintsOperators.required] = function (a) {
+        return a !== undefined && a !== null && a !== '';
+    };
+    //endregion
+
 
     return {
         init: init
@@ -43,6 +64,7 @@ let validation = (function () {
     function onKeyPress(e) {
         e = e || window.event;
         let target = e.target;
+
         let val = target.value;
 
         let charCode = (e.which === undefined) ? e.keyCode : e.which;
@@ -53,8 +75,8 @@ let validation = (function () {
 
         let newValue = val.slice(0, start) + charStr + val.slice(end);
 
-        let rules = target.vertexValidation.rules;
-        if (!validateRules(rules, newValue)) {
+        target.vertexValidation.errors = [];
+        if (!validateRules(target.vertexValidation, newValue)) {
             e.preventDefault();
             return false;
         }
@@ -67,8 +89,8 @@ let validation = (function () {
         let clipboardData = e.clipboardData || window.clipboardData;
         let pastedData = clipboardData.getData('Text');
 
-        let rules = target.vertexValidation.rules;
-        if (!validateRules(rules, pastedData)) {
+        target.vertexValidation.errors = [];
+        if (!validateRules(target.vertexValidation, pastedData)) {
             e.preventDefault();
             return false;
         }
@@ -87,7 +109,6 @@ let validation = (function () {
         bindHandlers(element);
     }
 
-
     function bindHandlers(element) {
         element.removeEventListener('keypress', onKeyPress);
         element.removeEventListener('paste', onPaste);
@@ -97,17 +118,49 @@ let validation = (function () {
 
     }
 
-    function validate(target) {
-        console.log('this', this);
-        console.log('this', target);
+    function validate(validationSettings) {
+        if (validationSettings === undefined) {
+            validationSettings = this;
+        }
+        if (validationSettings.input.getAttribute('novalidate') === 'true') {
+            return true;
+        }
+        validationSettings.errors = [];
+        validationSettings.input.classList.remove(validationSettings.errorClass);
+
+
+        hideErrors(validationSettings);
+        let value = validationSettings.input.value;
+        let valid = true;
+        valid = validateRules(validationSettings, value) && valid;
+        valid = validateConstraints(validationSettings, value) && valid;
+        if (!valid) {
+            validationSettings.input.classList.add(validationSettings.errorClass);
+            if (validationSettings.showErrors) {
+                showErrors(validationSettings);
+            }
+        }
+        return valid;
     }
 
-    function showErrors() {
-
+    function showErrors(validationSettings) {
+        for (let i = 0; i < validationSettings.errors.length; i++) {
+            let errorMessage = validationSettings.errors[i];
+            let errorElement = document.createElement(validationSettings.errorElement);
+            errorElement.classList.add('vertex-error-container');
+            errorElement.innerHTML = localization.translateMessage(errorMessage, errorElement);
+            validationSettings.input.after(errorElement);
+            validationSettings.errorElements.push(errorElement);
+        }
     }
 
-    function hideErrors() {
-
+    function hideErrors(validationSettings) {
+        while (validationSettings.errorElements.length > 0) {
+            let element = validationSettings.errorElements.pop();
+            console.log('error el:',element);
+            console.log('error el parent:',element.parentNode);
+            element.parentNode.removeChild(element);
+        }
     }
 
 
@@ -117,6 +170,9 @@ let validation = (function () {
         settings.validate = validate;
         settings.showErrors = showErrors;
         settings.hideErrors = hideErrors;
+
+        settings.errors = [];
+        settings.errorElements = [];
 
         if (isEmpty(settings.shouldValidate)) {
             settings.shouldValidate = true;
@@ -142,7 +198,7 @@ let validation = (function () {
                             rule.regex = new RegExp('^\\d+$');
                             break;
                         case inputTypes.float:
-                            rule.regex = new RegExp(/^-?\d*\.?\d*$/);
+                            rule.regex = new RegExp(/^\d{1,3}(,\d{3})*(\.\d+)?$/);
                             break;
                         case inputTypes.string:
                             rule.regex = new RegExp('/[A-Z]/g');
@@ -158,28 +214,29 @@ let validation = (function () {
         if (isEmpty(settings.constraints)) {
             settings.constraints = new Map();
 
-            let min = element.getAttribute(constraintAttributes.minimum) !== null;
-            let max = element.getAttribute(constraintAttributes.maximum) !== null;
-            let equals = element.getAttribute(constraintAttributes.equals) !== null;
-            let required = element.getAttribute(constraintAttributes.required) !== null;
+            let min = element.getAttribute(constraintAttributes.minimum);
+            let max = element.getAttribute(constraintAttributes.maximum);
+            let equals = element.getAttribute(constraintAttributes.equals);
+            let required = element.getAttribute(constraintAttributes.required);
 
-            if (min !== undefined) {
+
+            if (!isEmpty(min)) {
                 settings.constraints.set(constraintAttributes.minimum, {
                         name: constraintAttributes.minimum,
                         operator: constraintsOperators.greaterThan,
-                        value: min
+                        value: parseFloat(min)
                     }
                 )
             }
-            if (max !== undefined) {
+            if (!isEmpty(max)) {
                 settings.constraints.set(constraintAttributes.maximum, {
                         name: constraintAttributes.maximum,
                         operator: constraintsOperators.lesserThan,
-                        value: max
+                        value: parseFloat(max)
                     }
                 )
             }
-            if (equals !== undefined) {
+            if (!isEmpty(equals)) {
                 settings.constraints.set(constraintAttributes.equals, {
                         name: constraintAttributes.equals,
                         operator: constraintsOperators.equals,
@@ -187,7 +244,7 @@ let validation = (function () {
                     }
                 )
             }
-            if (required !== undefined) {
+            if (!isEmpty(required)) {
                 settings.constraints.set(constraintAttributes.required, {
                         name: constraintAttributes.required,
                         operator: constraintsOperators.required,
@@ -198,23 +255,24 @@ let validation = (function () {
         }
         if (isEmpty(settings.errorMessages)) {
             settings.errorMessages = new Map();
-            for (let i = 0; i < settings.rules.length; i++) {
-                let errorMessageAttributeName = settings.rules[i].type + errorMessageAttributeSuffix;
-                if (element.getAttribute(errorMessageAttributeName) !== undefined) {
-                    settings.errorMessages.set(settings.rules[i].type, element.getAttribute(errorMessageAttributeName));
+            //for (let i = 0; i < settings.rules.length; i++) {
+            settings.rules.forEach(function (rule) {
+                let errorMessageAttributeName = rule.type + errorMessageAttributeSuffix;
+                if (!isEmpty(element.getAttribute(errorMessageAttributeName))) {
+                    settings.errorMessages.set(rule.type, element.getAttribute(errorMessageAttributeName));
                 } else {
-                    settings.errorMessages.set(settings.rules[i].type, defaultErrorMessages[settings.rules[i].type]);
-
+                    settings.errorMessages.set(rule.type, defaultErrorMessages[rule.type]);
                 }
-            }
-            for (let i = 0; i < settings.rules.length; i++) {
-                let errorMessageAttributeName = settings.constraints[i].type + errorMessageAttributeSuffix;
-                if (element.getAttribute(errorMessageAttributeName) !== undefined) {
-                    settings.errorMessages.set(settings.constraints[i].name, element.getAttribute(errorMessageAttributeName));
+            });
+//            for (let i = 0; i < settings.constraints.length; i++) {
+            settings.constraints.forEach(function (constraint) {
+                let errorMessageAttributeName = constraint.type + errorMessageAttributeSuffix;
+                if (!isEmpty(element.getAttribute(errorMessageAttributeName))) {
+                    settings.errorMessages.set(constraint.name, element.getAttribute(errorMessageAttributeName));
                 } else {
-                    settings.errorMessages.set(settings.constraints[i].name, defaultErrorMessages[settings.rules[i].type]);
+                    settings.errorMessages.set(constraint.name, defaultErrorMessages[constraint.name]);
                 }
-            }
+            });
         }
         if (isEmpty(settings.errorElement)) {
             settings.errorElement = 'div';
@@ -225,32 +283,34 @@ let validation = (function () {
         return settings;
     }
 
-    function validateRules(rules, value) {
+    function validateRules(settings, value) {
+        let rules = settings.rules;
         let keys = Array.from(rules.keys());
         let valid = true;
         for (let i = 0; i < keys.length; i++) {
             let rule = rules.get(keys[i]);
+            console.log(rule);
             if (value.match(rule.regex) === null) {
                 valid = false;
-                break;
+                settings.errors.push(settings.errorMessages.get(rule.type));
             }
         }
         return valid;
     }
 
-    let operatorFunctions = {};
-    operatorFunctions[constraintsOperators.greaterThan] = function (a, b) {
-        return a > b
-    };
-    operatorFunctions[constraintsOperators.lesserThan] = function (a, b) {
-        return a < b
-    };
-    operatorFunctions[constraintsOperators.equals] = function (a, b) {
-        return a === b;
-    };
-    operatorFunctions[constraintsOperators.required] = function (a) {
-        return a === undefined && a === null && a === '';
-    };
-    //endregion
+    function validateConstraints(settings, value) {
+        let constraints = settings.constraints;
+        let keys = Array.from(constraints.keys());
+        let valid = true;
+        for (let i = 0; i < keys.length; i++) {
+            let constraint = constraints.get(keys[i]);
+            console.log(constraint);
+            if (!operatorFunctions[constraint.operator](value, constraint.value)) {
+                valid = false;
+                settings.errors.push(settings.errorMessages.get(constraint.name));
+            }
+        }
+        return valid;
+    }
 })
 ();

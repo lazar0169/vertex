@@ -13,7 +13,7 @@ let form = (function () {
     }
 
     function prepareFloatValue(value) {
-        value = value.replace(',', '');
+        value = value.replace(/,/g, '');
         return parseFloat(value);
     }
 
@@ -185,6 +185,9 @@ let form = (function () {
         if (formContainerElement.formSettings === undefined) {
             initFormHandlers(formSettings);
         }
+        if (formSettings.shouldValidate === undefined) {
+            formSettings.shouldValidate = false;
+        }
 
         formContainerElement.formSettings = formSettings;
     }
@@ -242,12 +245,32 @@ let form = (function () {
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
-        submitButton.disabled = 'disabled';
-        submitButton.classList.add('loading');
-        trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
+        let valid = validate(formSettings);
+
+        if (valid) {
+            submitButton.disabled = 'disabled';
+            submitButton.classList.add('loading');
+            trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
+        }
+        else {
+            return false;
+        }
     }
 
     function validate(formSettings) {
+        //skip validation if not required
+        if (formSettings.shouldValidate === false) {
+            return true;
+        }
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        let valid = true;
+        for(let i = 0;i<formInputElements.length;i++) {
+            let input = formInputElements[i];
+            if (input.vertexValidation !== undefined) {
+                valid =  input.vertexValidation.validate() && valid;
+            }
+        }
+        return valid;
     }
 
     function error(formSettings) {
@@ -329,7 +352,7 @@ let form = (function () {
     function formatFloatInputHandler() {
         let value = this.value;
         var position = this.selectionStart;
-        value = value.replace(',', '').replace('.', '');
+        value = value.replace(/,/g, '').replace('.', '');
         let number = value.slice(0, value.length - 2);
         let decimal = value.slice(value.length - 2, value.length);
         let float = parseFloat(number + "." + decimal).toFixed(2);
@@ -377,7 +400,6 @@ let form = (function () {
 
     function addHiddenField(formSettings, name, value) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
-        console.log(formElement);
         let input = document.createElement('input');
         input.type = 'hidden';
         input.name = name;
@@ -439,6 +461,7 @@ let form = (function () {
         if (formSettings.formContainerElement.getAttribute('novalidate') === undefined ||
             formSettings.formContainerElement.getAttribute('novalidate') === null ||
             formSettings.formContainerElement.getAttribute('novalidate') == false) {
+            formSettings.shouldValidate = true;
             let formInputElementsArray = collectAllFormElements(formSettings);
             for (let i = 0; i < formInputElementsArray.length; i++) {
                 validation.init(formInputElementsArray[i], {});

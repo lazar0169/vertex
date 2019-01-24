@@ -39,7 +39,7 @@ const currencyInput = (function () {
     function onFocus(e) {
         let target = e.target;
         let value = target.value;
-        value = value.replace(',', '');
+        value = value.replace(/,/g, '');
         target.value = value;
     }
 
