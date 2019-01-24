@@ -92,7 +92,7 @@ const multiDropdown = (function () {
             //set null as string as dataset values are always converted to string
             noSelected.Value = 'null';
         }
-        selected.title = selected.innerHTML;
+        selected.title = selected.children[0].innerHTML;
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');

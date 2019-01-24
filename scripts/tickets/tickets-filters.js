@@ -26,8 +26,14 @@ const ticketsFilter = (function () {
         ticketAdvanceFilterButton.children[1].classList.remove('opened-arrow');
     });
 
-    ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
-    clearAdvanceFilterInfobar.addEventListener('click', clearFilters);
+    ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+    });
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+    });
     ticketAdvanceFilterButton.addEventListener('click', function () {
         ticketAdvanceFilter.classList.toggle('advance-filter-active');
         trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });

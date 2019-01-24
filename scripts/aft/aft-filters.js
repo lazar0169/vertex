@@ -15,12 +15,12 @@ const aftFilters = (function () {
 
     //display initial filters
     /*********************----Events Listeners------*********************/
-    aftAdvanceApplyFilters.addEventListener('click', function(){
+    aftAdvanceApplyFilters.addEventListener('click', function () {
         filterAftTable(true);
     });
-    clearAdvanceFilter.addEventListener('click',removeSelectedFilters);
+    clearAdvanceFilter.addEventListener('click', removeSelectedFilters);
     clearAdvanceFilterInfobar.addEventListener('click', clearAftFilters);
-    advanceTableFilter.addEventListener('click', function () {
+    advanceTableFilter.children[0].addEventListener('click', function () {
         showAdvanceTableFilter();
     });
 
@@ -59,16 +59,11 @@ const aftFilters = (function () {
     on('filters/show-selected-filters', function (data) {
         showSelectedFilters(data.active, data.infobar)
     });
-    on('aft/filters/filter-table', function(params){
+    on('aft/filters/filter-table', function (params) {
         filterAftTable(params.showFilters);
     });
 
     /*********************----Helper functions----*********************/
-    function toggleAdvanceTableFilter() {
-        advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
-        advanceTableFilterActive.classList.toggle('hidden');
-    }
 
     function getActiveTableSettings() {
         return $$('#table-container-aft').tableSettings;
@@ -97,7 +92,7 @@ const aftFilters = (function () {
         tableSettings.activePage = 1;
         tableSettings.visibleColumns = [];
         tableSettings.filters = null;
-        console.log('clear filters',tableSettings);
+        console.log('clear filters', tableSettings);
         filterAftTable(true);
     }
     function getFiltersFromAPI(tableSettings) {
@@ -136,7 +131,7 @@ const aftFilters = (function () {
         aftAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         aftAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({name: '-', value: null});
+        hideableColumns.unshift({ name: '-', value: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
         let columns = hideableColumns.map(function (item) {
             item.parsed = true;
@@ -148,8 +143,9 @@ const aftFilters = (function () {
         dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
     }
     function showAdvanceTableFilter() {
-        advanceTableFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        advanceTableFilterActive.classList.toggle('hidden');
     }
     function formatAftApiData(listArray) {
         if (listArray !== null && listArray !== undefined) {
@@ -252,7 +248,7 @@ const aftFilters = (function () {
 
     function showSelectedFilters(filterActive, filterInfobar) {
         for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
+            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== "null") {
                 filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
                 filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
                 filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
@@ -270,10 +266,6 @@ const aftFilters = (function () {
             }
         }
     }
-
-    on('filters/show-selected-filters', function (data) {
-        showSelectedFilters(data.active, data.infobar);
-    });
 
     //close
     transactionTab.addEventListener('click', function () {
