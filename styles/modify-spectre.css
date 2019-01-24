@@ -4,6 +4,13 @@
     transition: none;
 }
 
+.btn.btn-link:active,
+.btn.btn-link:focus {
+    box-shadow: none;
+    background:0 0;
+    outline:none
+}
+
 .btn-success {
     background: rgb(30, 155, 227) !important;
     border-color: rgb(30, 155, 227) !important;

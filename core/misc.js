@@ -16,7 +16,6 @@ window.addEventListener('load', function () {
 function setTabListener() {
     for (let tab of tabs) {
         tab.addEventListener('click', function () {
-            table.removeTransactionPopup();
             selectTab(tab.id);
             selectInfoContent(tab.id);
         });
@@ -40,6 +39,7 @@ function selectTab(name) {
 
 //shows content for selected tab
 let previousInfoContSelected;
+
 function selectInfoContent(name) {
     if (previousInfoContSelected) {
         previousInfoContSelected.classList.remove('active-content');
@@ -70,8 +70,7 @@ on('apply-custom-date', function (data) {
         alert('Wrong parameters, please check parameters.');
         delete data.target.dataset.value;
 
-    }
-    else {
+    } else {
         $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
         $$(`#ds-${data.selectId}`).children[0].title = `From: ${tempArray[0]} ${tempArray[1]}:00, To: ${tempArray[2]} ${tempArray[3]}:00`;
         $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}:00, ${tempArray[2]}T${tempArray[3]}:00`;
@@ -111,3 +110,18 @@ on('set-date-datepicker', function (data) {
     $$(`#${data.pickerId}`).dataset.value = data.date;
     $$(`#${data.pickerId}`).value = data.date;
 });
+
+//popups
+function dimissPopUp(target) {
+    if (target === undefined || target === null) {
+        return false;
+    }
+    let popup = target.closest('.element-pop-up');
+    if (popup !== undefined && popup !== null) {
+        popup.parentNode.removeChild(popup);
+    }
+}
+
+//ToDo: naći bolje ime za funkciju
+//this function will bind handlers to the element which will react when user clicks outside element
+

@@ -4,6 +4,14 @@ let form = (function () {
     let valueMultiplier = 100;
     let currentEndpointId;
 
+    const inputTypes = {
+        singleSelect : 'single-select',
+        integer: 'int',
+        float:'float',
+        string:'string',
+        array:'array'
+    }
+
     function prepareFloatValue(value) {
         value = value.replace(',', '');
         return parseFloat(value);
@@ -35,12 +43,12 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
+        trigger(formSettings.getData, {data: data, formSettings: formSettings});
     }
 
     //helper functions
     function collectAllFormElements(formSettings) {
-        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        let formElement = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
         return Array.prototype.slice.call(formInputElements);
     }
@@ -104,33 +112,33 @@ let form = (function () {
                                         inputsContainer.appendChild(newField);
                                     }
 
-                                    let deleteButtonElement = newField.getElementsByTagName('button')[0];
+                                    let deleteButtonElement = newField.getElementsByClassName('button-link')[0];
                                     deleteButtonElement.classList.remove('hidden');
                                     deleteButtonElement.addEventListener('click', deleteFormElement);
                                 }
                             }
                             //display delete button for first field
                             if (values.length > 1) {
-                                let firstDeleteButton = inputElement.parentNode.getElementsByTagName('button')[0];
+                                let firstDeleteButton = inputElement.parentNode.getElementsByClassName('button-link')[0];
                                 firstDeleteButton.classList.remove('hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
                         } else {
                             switch (inputElement.dataset.type) {
-                                case 'single-select':
+                                case inputTypes.singleSelect:
                                     //inputElement.dataset.value = dataToDisplay[inputName];
                                     dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
                                     break;
-                                case 'int':
+                                case inputTypes.integer:
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
-                                case 'float':
+                                case inputTypes.float:
                                     inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
-                                case 'string':
+                                case inputTypes.string:
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
-                                case 'array':
+                                case inputTypes.array:
                                     if (dataToDisplay[inputName].length === 1) {
                                         inputElement.value = dataToDisplay[inputName][0];
                                     }
@@ -153,15 +161,15 @@ let form = (function () {
     function init(formSettings) {
         let formContainerElement = $$(formSettings.formContainerSelector);
         formSettings.formContainerElement = formContainerElement;
-        if (formSettings.fillEvent !== null) {
-            formSettings.fillEvent = getEvent(formSettings, 'fillEvent');
+        if (formSettings.getData !== null) {
+            formSettings.getData = getEvent(formSettings, 'getData');
         }
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
 
-        if (formSettings.fillFormEvent === undefined) {
-            formSettings.fillFormEvent = 'form/fillFormData';
+        if (formSettings.populateData === undefined) {
+            formSettings.populateData = 'form/fillFormData';
         }
         if (formSettings.submitSuccessEvent === undefined) {
             formSettings.submitSuccessEvent = 'form/submit/success';
@@ -256,7 +264,6 @@ let form = (function () {
 
     function complete(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
-        console.log(submitButtonsArray);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = '';
             submitButton.classList.remove('loading');
@@ -359,6 +366,16 @@ let form = (function () {
             });
         }
     }
+    function createCurrencyInputs(formSettings) {
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        for (let i = 0;i<formInputElements.length;i++) {
+            let input = formInputElements[i];
+            if (input.dataset.type === inputTypes.float) {
+                currencyInput.generate(input);
+            }
+        }
+    }
+
 
     function addHiddenField(formSettings, name, value) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
@@ -397,17 +414,6 @@ let form = (function () {
         form.addEventListener('submit', onSubmit);
     }
 
-    /*    function bindBackButton(formSettings) {
-            let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
-            if (buttons.length > 0) {
-                let button = buttons[0];
-                button.addEventListener('click', function (e) {
-                    history.back();
-                });
-            }
-            //there should be only one button
-        }*/
-
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
         addAnotherFieldButtonsArray.forEach(function (addAnotherFieldButton) {
@@ -437,7 +443,7 @@ let form = (function () {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        // bindBackButton(formSettings);
+        createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
     }
@@ -491,7 +497,6 @@ let form = (function () {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
-        console.log('error');
         complete(formSettings);
     });
 

@@ -6,6 +6,10 @@
         "LoginScreen": {
             "Submit": ""
         },
+        "CancelTransaction": "",
+        "Yes": "",
+        "No": "",
+        "Cancel": "",
         "search": "",
         "Aft": {
             "Transactions": {
@@ -38,7 +42,6 @@
             }
         },
         "Save": "",
-        "Back": "",
         "Delete": "",
         "Tickets": {
             "GeneralSettings": {
@@ -92,11 +95,21 @@
                 "Issued": ""
             }
         },
-        "Cancel": "",
         "First": "",
         "Prev": "",
         "Next": "",
-        "Last": ""
+        "Last": "",
+        "Created By": "",
+        "Finished By": "",
+        "Status": "",
+        "Machine Name": "",
+        "Type": "",
+        "Cashable": "",
+        "Promo": ""
     },
-    "messages": {}
+    "messages": {
+        "MessageCode6": "",
+        "MessageCode1": "",
+        "Tickets": ""
+    }
 }

@@ -2,13 +2,12 @@ let aftTabNotificationSettings = (function(){
 
     let formSettingsNotification = {};
     formSettingsNotification.formContainerSelector = '#aft-tabs-notification-settings-info';
-    formSettingsNotification.fillEvent = 'communicate/aft/getNotificationSettings';
-    formSettingsNotification.submitEvent = 'communicate/aft/saveNotificationSettings';
+    formSettingsNotification.getData = communication.events.aft.transactions.getNotificationSettings;
+    formSettingsNotification.submitEvent = communication.events.aft.transactions.saveNotificationSettings;
 
     on('aft/tab/notification', function(params){
-        formSettingsNotification.endpointId = params.tableSettings.endpointId;
+        formSettingsNotification.endpointId = params.endpointId;
         trigger('form/init', {formSettings: formSettingsNotification});
         trigger('form/getData', {formSettings: formSettingsNotification});
     });
-
 })();

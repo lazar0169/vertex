@@ -99,7 +99,6 @@ const toggle = (function () {
         let settings = target.vertexToggle;
         if (isChecked(target)) {
             uncheck(target);
-
         } else {
             check(target);
 
