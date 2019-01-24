@@ -54,6 +54,7 @@ let notifications = function () {
           message:message
        });
     });
+
     on('notifications/show/success', function (message) {
         trigger('notifications/show',{
             type:messageTypes.ok,
@@ -61,10 +62,8 @@ let notifications = function () {
         });
     });
 
-
     return {
         messageTypes : messageTypes
     }
-
 
 }();
