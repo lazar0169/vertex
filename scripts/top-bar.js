@@ -5,7 +5,7 @@ let topBar = (function () {
     let previousTopBar;
 
     if (sessionStorage.token) {
-        openUserProfile.innerHTML = decodeToken(sessionStorage.token).preferred_username;
+        openUserProfile.children[0].innerHTML = decodeToken(sessionStorage.token).preferred_username;
     }
     function showTopBar(value) {
         if (value.category && value.casino) {

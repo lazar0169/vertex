@@ -87,7 +87,14 @@ const multiDropdown = (function () {
             }
         } else {
             selected.children[0].innerHTML = noSelectedData.Name;
-            selected.dataset.value = noSelectedData.Name;
+
+            if (noSelectedData.Value === '-' || noSelectedData.Value === 'null' || !noSelected.Value) {
+                selected.dataset.value = null;
+            }
+            else {
+                selected.dataset.value = noSelectedData.Name;
+            }
+           
             noSelected.Name = noSelectedData.Name;
             //set null as string as dataset values are always converted to string
             noSelected.Value = 'null';
@@ -172,10 +179,11 @@ const multiDropdown = (function () {
                     option.children[0].children[0].checked = false;
                     if (selected.children[0].innerHTML === '') {
                         selected.children[0].innerHTML = noSelected.Name;
-                        array.push(noSelected.Name);
+                        array.push('null');
                         arrayInner.push(noSelected.Name);
                     }
                 }
+
                 selected.title = selected.children[0].innerHTML;
                 selected.dataset.value = array;
             });

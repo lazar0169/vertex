@@ -127,6 +127,7 @@ const jackpotChooseParticipatingMachines = (function () {
     function generateCasinosAndCities(div, data) {
 
         let cityArray = [];
+        let checkedCasino;
         let wrapperOption = document.createElement('div');
         wrapperOption.classList.add('overflow-y');
 
@@ -152,6 +153,12 @@ const jackpotChooseParticipatingMachines = (function () {
         allCasinos.title = allCasinos.children[0].children[2].innerHTML;
 
         for (let element of data.Value) {
+            if (element.checked) {
+                checkedCasino = 'checked';
+            }
+            else {
+                checkedCasino = '';
+            }
             if (!cityArray.includes(element.City)) {
                 let optionCity = document.createElement('div');
                 optionCity.title = element.City;
@@ -193,12 +200,19 @@ const jackpotChooseParticipatingMachines = (function () {
                 newOptionCityWrapper.classList.add('hidden');
                 newOptionCityWrapper.classList.add('option-casionos-in-city-wrapper');
 
+
                 newOptionCityWrapper.innerHTML = `<div title=${element.Name} data-value=${element.Name} class="option-casino"> 
                                                  <label class="form-checkbox">
-                                                 <input type="checkbox" name="casino-group-${element.City}">
+                                                 <input type="checkbox" name="casino-group-${element.City}" ${checkedCasino}>
                                                  <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                                  </label> </div>`;
+
                 optionCity.appendChild(newOptionCityWrapper);
+
+                if (checkedCasino) {
+                    newOptionCityWrapper.classList.remove('hidden');
+                    newOptionCityWrapper.parentNode.children[0].children[1].children[1].classList.add('opened-arrow')
+                }
 
                 newOptionCityWrapper.children[0].addEventListener('click', function () {
                     if (newOptionCityWrapper.children[0].children[0].children[0].checked) {
@@ -219,12 +233,19 @@ const jackpotChooseParticipatingMachines = (function () {
                         let newOption = document.createElement('div');
                         newOption.title = element.Name;
                         newOption.dataset.value = element.Name;
-                        newOption.classList.add('option-casino')
+                        newOption.classList.add('option-casino');
+
+
 
                         newOption.innerHTML = `<label class="form-checkbox" >
-                                                         <input type="checkbox" name="casino-group-${element.City}">
+                                                         <input type="checkbox" name="casino-group-${element.City}" ${checkedCasino}>
                                                          <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                                          </label>`;
+
+                        if (checkedCasino) {
+                            city.children[1].classList.remove('hidden');
+                            city.children[0].children[1].children[1].classList.add('opened-arrow')
+                        }
                         newOption.addEventListener('click', function () {
                             if (newOption.children[0].children[0].checked) {
                                 newOption.children[0].children[0].checked = false;
@@ -243,7 +264,6 @@ const jackpotChooseParticipatingMachines = (function () {
         }
         div.appendChild(wrapperOption)
     }
-
 
     //search casions in cities
     function searchCasinosAndCities(wrapperOptionAndSearch, data, termin) {

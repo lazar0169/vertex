@@ -16,37 +16,44 @@ let casinoData = {
         {
             Id: 25,
             Name: 'Bolnica c',
-            City: 'Nis'
+            City: 'Nis',
+            checked: true
         },
         {
             Id: 26,
             Name: 'Kalca c',
-            City: 'Nis'
+            City: 'Nis',
+            checked: true
         },
         {
             Id: 27,
             Name: 'Marger c',
-            City: 'Surdulica'
+            City: 'Surdulica',
+            checked: false
         },
         {
             Id: 28,
             Name: 'Durlan c',
-            City: 'Beograd'
+            City: 'Beograd',
+            checked: false
         },
         {
             Id: 29,
             Name: 'Durlan',
-            City: 'Nis'
+            City: 'Nis',
+            checked: false
         },
         {
             Id: 30,
             Name: 'Novi Beograd',
-            City: 'Beograd'
+            City: 'Beograd',
+            checked: false
         },
         {
             Id: 31,
             Name: 'Spin Surdulica',
-            City: 'Surdulica'
+            City: 'Surdulica',
+            checked: true
         },
     ]
 }

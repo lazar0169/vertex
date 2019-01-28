@@ -25,7 +25,12 @@ const dropdownDate = (function () {
         select.appendChild(selected);
         selected.children[0].innerHTML = dataSelect[0];
         selected.title = selected.children[0].innerHTML;
-        selected.dataset.value = dataSelect[0];
+        if (dataSelect[0] === '-' || dataSelect[0] === 'null') {
+            selected.dataset.value = null;
+        }
+        else {
+            selected.dataset.value = dataSelect[0];
+        }
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');
