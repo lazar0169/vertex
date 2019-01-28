@@ -17,7 +17,7 @@ const ticketsFilter = (function () {
     /*********************----Events Listeners------*********************/
 
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
-       filterTicketsTable(true);
+        filterTicketsTable(true);
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
@@ -46,7 +46,7 @@ const ticketsFilter = (function () {
         displayFilters(filters, tableSettings);
     });
     on('tickets/filters/pagination', function (params) {
-       filterTicketsTable();
+        filterTicketsTable();
     });
     on('tickets/filters/sorting', function (params) {
         activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
@@ -59,7 +59,7 @@ const ticketsFilter = (function () {
         tableSettings.activePage = 1;
         filterTicketsTable();
     });
-    on('tickets/filters/filter-table', function(params){
+    on('tickets/filters/filter-table', function (params) {
         filterTicketsTable(params.showFilters);
     });
 
@@ -118,7 +118,7 @@ const ticketsFilter = (function () {
         multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
         let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
         multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
-        console.log('Printed and redeemed',filters.PrintedAndRedeemed);
+        console.log('Printed and redeemed', filters.PrintedAndRedeemed);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
 
@@ -126,7 +126,7 @@ const ticketsFilter = (function () {
         ticketsAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         ticketsAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({name: '-', value: null});
+        hideableColumns.unshift({ name: '-', value: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
         let columns = hideableColumns.map(function (item) {
             item.parsed = true;

@@ -43,7 +43,7 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.getData, {data: data, formSettings: formSettings});
+        trigger(formSettings.getData, { data: data, formSettings: formSettings });
     }
 
     //helper functions
@@ -233,7 +233,7 @@ let form = (function () {
                             }
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
-                        case'default':
+                        case 'default':
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
                     }
@@ -250,7 +250,7 @@ let form = (function () {
         if (valid) {
             submitButton.disabled = 'disabled';
             submitButton.classList.add('loading');
-            trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
+            trigger(formSettings.submitEvent, { data: dataForApi, formSettings: formSettings })
         }
         else {
             return false;
@@ -264,10 +264,10 @@ let form = (function () {
         }
         let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
         let valid = true;
-        for(let i = 0;i<formInputElements.length;i++) {
+        for (let i = 0; i < formInputElements.length; i++) {
             let input = formInputElements[i];
             if (input.vertexValidation !== undefined) {
-                valid =  input.vertexValidation.validate() && valid;
+                valid = input.vertexValidation.validate() && valid;
             }
         }
         return valid;
@@ -386,6 +386,16 @@ let form = (function () {
             });
         }
     }
+    function createCurrencyInputs(formSettings) {
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        for (let i = 0; i < formInputElements.length; i++) {
+            let input = formInputElements[i];
+            if (input.dataset.type === inputTypes.float) {
+                currencyInput.generate(input);
+            }
+        }
+    }
+
 
     function createCurrencyInputs(formSettings) {
         let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
