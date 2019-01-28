@@ -98,6 +98,7 @@
       "components/dropdown.css",
       "main-content.css",
       "preloader.css",
+      "validation.css",
       "table.css",
       "components/datepicker.css",
       "components/timepicker.css",

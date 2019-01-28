@@ -5,8 +5,8 @@ let validation = (function () {
         singleSelect: 'single-select',
         integer: 'int',
         float: 'float',
-        string: 'string',
         email: 'email',
+        string: 'string',
         pattern: 'pattern',
         array: 'array'
     }
@@ -15,20 +15,24 @@ let validation = (function () {
         required: 'required',
         minimum: 'min',
         maximum: 'max',
-        equals: 'equals'
+        equals: 'equals',
+        email: 'email'
     }
 
     const constraintsOperators = {
         required: 'required',
         greaterThan: '>',
         lesserThan: '<',
-        equals: '='
+        equals: '=',
+        email: 'email'
     };
 
     const defaultErrorMessages = {};
     defaultErrorMessages[inputTypes.integer] = 'IntegerValidationErrorMessage';
     defaultErrorMessages[inputTypes.string] = 'StringValidationErrorMessage';
     defaultErrorMessages[inputTypes.float] = 'FloatValidationErrorMessage';
+    defaultErrorMessages[inputTypes.email] = 'EmailFormatValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.email] = 'EmailFormatValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.required] = 'RequiredValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.minimum] = 'LesserThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.maximum] = 'GreaterThanValidationErrorMessage';
@@ -39,8 +43,6 @@ let validation = (function () {
     // b - compared value
     operatorFunctions[constraintsOperators.greaterThan] = function (a, b) {
         a = parseFloat(a.replace(/,/g, ''));
-        console.log('a:', a);
-        console.log('b:', b);
         return a > b;
     };
     operatorFunctions[constraintsOperators.lesserThan] = function (a, b) {
@@ -48,11 +50,17 @@ let validation = (function () {
         return a < b
     };
     operatorFunctions[constraintsOperators.equals] = function (a, b) {
-        return a === b;
+        //unsafe comparison here as html attributes are always parsed as strings
+        return a == b;
     };
     operatorFunctions[constraintsOperators.required] = function (a) {
         return a !== undefined && a !== null && a !== '';
     };
+    operatorFunctions[constraintsOperators.email] = function(a) {
+        console.log('email:',a);
+        return a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        ));
+    }
     //endregion
 
 
@@ -157,8 +165,6 @@ let validation = (function () {
     function hideErrors(validationSettings) {
         while (validationSettings.errorElements.length > 0) {
             let element = validationSettings.errorElements.pop();
-            console.log('error el:',element);
-            console.log('error el parent:',element.parentNode);
             element.parentNode.removeChild(element);
         }
     }
@@ -198,13 +204,14 @@ let validation = (function () {
                             rule.regex = new RegExp('^\\d+$');
                             break;
                         case inputTypes.float:
-                            rule.regex = new RegExp(/^\d{1,3}(,\d{3})*(\.\d+)?$/);
+                            rule.regex = new RegExp(/^[+-]?\d+(\.\d+)?$/);
                             break;
                         case inputTypes.string:
-                            rule.regex = new RegExp('/[A-Z]/g');
+                            rule.regex = new RegExp(/^[A-Za-z]+$/);
                             break;
                         //special case, requires pattern attribute
                         default:
+                            rule.regex = '';
                             break;
                     }
                     settings.rules.set(type, rule);
@@ -218,7 +225,17 @@ let validation = (function () {
             let max = element.getAttribute(constraintAttributes.maximum);
             let equals = element.getAttribute(constraintAttributes.equals);
             let required = element.getAttribute(constraintAttributes.required);
+            let email = element.getAttribute(constraintAttributes.email);
+            //email constraint
 
+            if(!isEmpty(email)) {
+                settings.constraints.set(constraintAttributes.email, {
+                        name: constraintAttributes.email,
+                        operator: constraintsOperators.email,
+                        value: true
+                    }
+                )
+            }
 
             if (!isEmpty(min)) {
                 settings.constraints.set(constraintAttributes.minimum, {
@@ -287,9 +304,12 @@ let validation = (function () {
         let rules = settings.rules;
         let keys = Array.from(rules.keys());
         let valid = true;
+        console.log('value:', value);
         for (let i = 0; i < keys.length; i++) {
             let rule = rules.get(keys[i]);
-            console.log(rule);
+            console.log('rule:',rule);
+            value = parseValue(rule,value);
+            console.log('match:',value.match(rule.regex));
             if (value.match(rule.regex) === null) {
                 valid = false;
                 settings.errors.push(settings.errorMessages.get(rule.type));
@@ -304,13 +324,19 @@ let validation = (function () {
         let valid = true;
         for (let i = 0; i < keys.length; i++) {
             let constraint = constraints.get(keys[i]);
-            console.log(constraint);
             if (!operatorFunctions[constraint.operator](value, constraint.value)) {
                 valid = false;
                 settings.errors.push(settings.errorMessages.get(constraint.name));
             }
         }
         return valid;
+    }
+
+    function parseValue(rule,value) {
+        if (rule.type === inputTypes.float) {
+            return value.replace(/,/g,'');
+        }
+        return value;
     }
 })
 ();
