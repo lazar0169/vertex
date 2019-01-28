@@ -58,6 +58,7 @@
 .element-form-email, .element-form-phone-number {
     display: flex;
     flex-direction: row;
+    flex-wrap:wrap;
 }
 
 #aft-notification-save {

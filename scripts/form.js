@@ -486,7 +486,10 @@ let form = (function () {
         createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
-        initValidation(formSettings);
+        if (isEmpty(formSettings.initValidation)) {
+            formSettings.initValidation = initValidation;
+        }
+        formSettings.initValidation(formSettings);
     }
 
     on('form/add/hiddenField', function (params) {

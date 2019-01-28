@@ -136,19 +136,30 @@ let validation = (function () {
         validationSettings.errors = [];
         validationSettings.input.classList.remove(validationSettings.errorClass);
 
-
-        hideErrors(validationSettings);
+        validationSettings.hideErrors(validationSettings);
         let value = validationSettings.input.value;
         let valid = true;
         valid = validateRules(validationSettings, value) && valid;
         valid = validateConstraints(validationSettings, value) && valid;
         if (!valid) {
             validationSettings.input.classList.add(validationSettings.errorClass);
-            if (validationSettings.showErrors) {
-                showErrors(validationSettings);
+            if (validationSettings.showErrorMessages) {
+                validationSettings.showErrors(validationSettings);
             }
         }
         return valid;
+    }
+
+    function showRepeaterFieldError(validationSettings) {
+        let input = validationSettings.input;
+        for (let i = 0; i < validationSettings.errors.length; i++) {
+            let errorMessage = validationSettings.errors[i];
+            let errorElement = document.createElement(validationSettings.errorElement);
+            errorElement.classList.add('vertex-error-container');
+            errorElement.innerHTML = localization.translateMessage(errorMessage, errorElement);
+            validationSettings.input.parentNode.append(errorElement);
+            validationSettings.errorElements.push(errorElement);
+        }
     }
 
     function showErrors(validationSettings) {
@@ -174,17 +185,26 @@ let validation = (function () {
         settings.input = element;
         //bind functions
         settings.validate = validate;
-        settings.showErrors = showErrors;
         settings.hideErrors = hideErrors;
 
         settings.errors = [];
         settings.errorElements = [];
 
+        if (isEmpty(settings.showErrors)) {
+            console.log(element);
+            if (element.dataset.type !== undefined && element.dataset.type=== inputTypes.array) {
+                settings.showErrors = showRepeaterFieldError;
+            }
+            else {
+                settings.showErrors = showErrors;
+            }
+        }
+
         if (isEmpty(settings.shouldValidate)) {
             settings.shouldValidate = true;
         }
         if (isEmpty(settings.showErrorMessages)) {
-            settings.shouldValidate = true;
+            settings.showErrorMessages = true;
         }
         //set rules from
         if (isEmpty(settings.rules)) {
