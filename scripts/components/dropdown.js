@@ -38,10 +38,6 @@ const dropdown = (function () {
             }
             removeChildren(element);
         }
-
-
-
-
         // wrapper select
         let select = document.createElement('div');
         if (existsId) {

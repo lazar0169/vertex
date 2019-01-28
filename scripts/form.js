@@ -5,15 +5,15 @@ let form = (function () {
     let currentEndpointId;
 
     const inputTypes = {
-        singleSelect : 'single-select',
+        singleSelect: 'single-select',
         integer: 'int',
-        float:'float',
-        string:'string',
-        array:'array'
+        float: 'float',
+        string: 'string',
+        array: 'array'
     }
 
     function prepareFloatValue(value) {
-        value = value.replace(',', '');
+        value = value.replace(/,/g, '');
         return parseFloat(value);
     }
 
@@ -43,7 +43,7 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.getData, {data: data, formSettings: formSettings});
+        trigger(formSettings.getData, { data: data, formSettings: formSettings });
     }
 
     //helper functions
@@ -185,6 +185,9 @@ let form = (function () {
         if (formContainerElement.formSettings === undefined) {
             initFormHandlers(formSettings);
         }
+        if (formSettings.shouldValidate === undefined) {
+            formSettings.shouldValidate = false;
+        }
 
         formContainerElement.formSettings = formSettings;
     }
@@ -208,7 +211,6 @@ let form = (function () {
                         case 'single-select':
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
-                            console.log(formInputElement.dataset);
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }
@@ -216,8 +218,6 @@ let form = (function () {
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {
                                 dataForApi[formInputElement.name] = parseInt(formInputElement.value);
-                            } else {
-                                dataForApi[formInputElement.name] = 5; //todo validation
                             }
                             break;
                         case 'float':
@@ -233,7 +233,7 @@ let form = (function () {
                             }
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
-                        case'default':
+                        case 'default':
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
                     }
@@ -245,12 +245,32 @@ let form = (function () {
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
-        submitButton.disabled = 'disabled';
-        submitButton.classList.add('loading');
-        trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
+        let valid = validate(formSettings);
+
+        if (valid) {
+            submitButton.disabled = 'disabled';
+            submitButton.classList.add('loading');
+            trigger(formSettings.submitEvent, { data: dataForApi, formSettings: formSettings })
+        }
+        else {
+            return false;
+        }
     }
 
     function validate(formSettings) {
+        //skip validation if not required
+        if (formSettings.shouldValidate === false) {
+            return true;
+        }
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        let valid = true;
+        for (let i = 0; i < formInputElements.length; i++) {
+            let input = formInputElements[i];
+            if (input.vertexValidation !== undefined) {
+                valid = input.vertexValidation.validate() && valid;
+            }
+        }
+        return valid;
     }
 
     function error(formSettings) {
@@ -332,7 +352,7 @@ let form = (function () {
     function formatFloatInputHandler() {
         let value = this.value;
         var position = this.selectionStart;
-        value = value.replace(',', '').replace('.', '');
+        value = value.replace(/,/g, '').replace('.', '');
         let number = value.slice(0, value.length - 2);
         let decimal = value.slice(value.length - 2, value.length);
         let float = parseFloat(number + "." + decimal).toFixed(2);
@@ -368,7 +388,18 @@ let form = (function () {
     }
     function createCurrencyInputs(formSettings) {
         let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
-        for (let i = 0;i<formInputElements.length;i++) {
+        for (let i = 0; i < formInputElements.length; i++) {
+            let input = formInputElements[i];
+            if (input.dataset.type === inputTypes.float) {
+                currencyInput.generate(input);
+            }
+        }
+    }
+
+
+    function createCurrencyInputs(formSettings) {
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        for (let i = 0; i < formInputElements.length; i++) {
             let input = formInputElements[i];
             if (input.dataset.type === inputTypes.float) {
                 currencyInput.generate(input);
@@ -379,16 +410,13 @@ let form = (function () {
 
     function addHiddenField(formSettings, name, value) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
-        console.log(formElement);
         let input = document.createElement('input');
         input.type = 'hidden';
         input.name = name;
         input.value = value;
         input.classList.add('element-form-data');
         input.dataset.type = 'string';
-        console.log(input);
         formElement.appendChild(input);
-        console.log(input);
     }
 
     function toggleSection(e) {
@@ -439,6 +467,18 @@ let form = (function () {
         });
     }
 
+    function initValidation(formSettings) {
+        if (formSettings.formContainerElement.getAttribute('novalidate') === undefined ||
+            formSettings.formContainerElement.getAttribute('novalidate') === null ||
+            formSettings.formContainerElement.getAttribute('novalidate') == false) {
+            formSettings.shouldValidate = true;
+            let formInputElementsArray = collectAllFormElements(formSettings);
+            for (let i = 0; i < formInputElementsArray.length; i++) {
+                validation.init(formInputElementsArray[i], {});
+            }
+        }
+    }
+
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
@@ -446,11 +486,11 @@ let form = (function () {
         createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
+        initValidation(formSettings);
     }
 
-    on('form/add/hiddenField', function (params)
-    {
-        addHiddenField(params.formSettings,params.name, params.value);
+    on('form/add/hiddenField', function (params) {
+        addHiddenField(params.formSettings, params.name, params.value);
     });
 
     on('form/init', function (params) {
@@ -463,7 +503,7 @@ let form = (function () {
         getFormData(formSettings);
     });
 
-    on('from/validate', function (params) {
+    on('form/validate', function (params) {
         let formSettings = params.formSettings;
         validate(formSettings);
     });
@@ -474,7 +514,6 @@ let form = (function () {
         submit(formSettings);
     });
 
-    //ToDo: check if this event is necessary
     on('form/complete', function (params) {
         complete(params.formSettings);
     });
@@ -493,7 +532,6 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-        //ToDo: neske
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);

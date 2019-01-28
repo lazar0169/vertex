@@ -28,6 +28,7 @@
       "template-engine.js",
       "mock.js",
       "form.js",
+      "validation.js",
       "localization.js",
       "communication.js",
       "aft/aft.js",

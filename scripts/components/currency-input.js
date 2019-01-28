@@ -5,16 +5,16 @@ const currencyInput = (function () {
     }
 
     function bindHandlers(element) {
-        element.removeEventListener('keypress', onKeyDown);
+        element.removeEventListener('keypress', onKeyPress);
         element.removeEventListener('focus', onFocus);
         element.removeEventListener('blur', onBlur);
 
-        element.addEventListener('keypress', onKeyDown);
+        element.addEventListener('keypress', onKeyPress);
         element.addEventListener('blur', onBlur);
         element.addEventListener('focus', onFocus);
     }
 
-    function onKeyDown(e) {
+    function onKeyPress(e) {
         e = e || window.event;
         let charCode = (e.which === undefined) ? e.keyCode : e.which;
         let charStr = String.fromCharCode(charCode);
@@ -39,7 +39,7 @@ const currencyInput = (function () {
     function onFocus(e) {
         let target = e.target;
         let value = target.value;
-        value = value.replace(',', '');
+        value = value.replace(/,/g, '');
         target.value = value;
     }
 

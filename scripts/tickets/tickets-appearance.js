@@ -63,10 +63,10 @@ const ticketAppearance = (function () {
 
     selectedDateFormat.setAttribute('data-name', 'DateFormat');
     selectedDateFormat.setAttribute('data-type', 'single-select');
-    selectedDateFormat.classList.add('element-form-data');
+
     selectedTimeFormat.setAttribute('data-name', 'TimeFormat');
     selectedTimeFormat.setAttribute('data-type', 'single-select');
-    selectedTimeFormat.classList.add('element-form-data');
+
 
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');

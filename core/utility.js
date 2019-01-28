@@ -16,6 +16,9 @@ if (!Element.prototype.closest) {
     };
 }
 
+function isEmpty(value) {
+    return value === undefined || value === null;
+}
 
 function $$(selector) {
     switch (selector[0]) {
@@ -262,6 +265,8 @@ function formatFloatValue(amount) {
         console.log(e)
     }
 }
+
+
 
 //add and remove class
 
