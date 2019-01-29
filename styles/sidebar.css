@@ -16,9 +16,9 @@
     box-sizing: border-box;
     transition: all 0.1s ease;
     white-space: nowrap;
-    font-family: "OpenSans-Regular", "MyriadPro-Regular", sans-serif;
+    font-family: "Open Sans";
     font-weight: 600;
-    border-right: 0.1rem solid black;
+    border-right: 2px solid black;
 }
 
 #sidebar.collapse {
@@ -82,6 +82,7 @@
 
 #global-search>div {
     transition: all 0.1s ease;
+    padding-left: 0.3em;
 }
 
 #search-link {
@@ -92,10 +93,15 @@
     background-color: transparent;
     border: 0;
     outline: none;
-    border-bottom: 2px solid rgb(30, 155, 227);
+    border-bottom: 2px solid #78909c;
     color: white;
     line-height: initial;
     width: 100%;
+}
+
+.search:focus {
+    border-bottom: 2px solid rgb(30, 155, 227);
+    ;
 }
 
 #sidebar-list {
@@ -198,6 +204,7 @@
     height: 15%;
     transition: all 0.1s ease;
     background: rgb(38, 50, 56);
+    font-size: 15vh;
 }
 
 #navigation-sidebar {

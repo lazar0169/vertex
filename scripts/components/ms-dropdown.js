@@ -16,20 +16,7 @@ const multiDropdown = (function () {
         let options = multipleGroup.children;
         Array.prototype.slice.call(options).forEach(function (option) {
             option.click();
-            /*let checkboxContainer = option.getElementsByClassName("form-checkbox")[0];
-            let checkbox = checkboxContainer.getElementsByTagName("input")[0];
-            checkbox.checked = false;
-            if (selectedValues.indexOf(option.dataset.value) > -1) {
-                checkbox.checked = true;
-                titles.push(option.title);
-                values.push(option.dataset.value);
-            }*/
         });
-        /*let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
-        elementTableFilter.dataset.value = values.join(',');
-        elementTableFilter.title = titles.join(', ');
-        elementTableFilter.innerHTML = titles.join(', ');*/
-
         return element;
     }
 
@@ -56,6 +43,8 @@ const multiDropdown = (function () {
         //wrapper select
         let select = document.createElement('div');
         select.classList.add('default-select');
+        select.classList.add('default-multiselect-select');
+
 
         if (existsId) {
             select.id = existsId;
@@ -66,33 +55,45 @@ const multiDropdown = (function () {
 
         //selected options
         let selected = document.createElement('div');
+        selected.innerHTML = `<div></div>
+                              <span class="closed-arrow">&#9660;</span>`;
+        select.appendChild(selected);
+
         // display no select
         let noSelected = {};
         if (noSelectedData.parsed === true) {
-            selected.innerHTML = noSelectedData.name;
+            selected.children[0].innerHTML = noSelectedData.name;
             noSelected.Name = noSelectedData.name;
             if (noSelectedData.value !== undefined) {
                 noSelected.Value = noSelectedData.value === null ? 'null' : noSelectedData.value;
                 selected.dataset.value = noSelectedData.value;
             } else {
-                selected.dataset.value = noSelectedData.name;
+                selected.children[0].innerHTML = noSelectedData.name;
                 noSelected.Value = noSelectedData.name;
 
             }
         } else {
-            selected.innerHTML = noSelectedData.Name;
-            selected.dataset.value = noSelectedData.Name;
+            selected.children[0].innerHTML = noSelectedData.Name;
+
+            if (noSelectedData.Value === '-' || noSelectedData.Value === 'null' || !noSelected.Value) {
+                selected.dataset.value = null;
+            }
+            else {
+                selected.dataset.value = noSelectedData.Name;
+            }
+
             noSelected.Name = noSelectedData.Name;
             //set null as string as dataset values are always converted to string
             noSelected.Value = 'null';
         }
-        selected.title = selected.innerHTML;
+        selected.title = selected.children[0].innerHTML;
         selected.classList.add('element-table-filters');
+        selected.classList.add('center');
+        selected.classList.add('opened-closed-wrapper');
         //wrapper options group
         let optionGroup = document.createElement('div');
         optionGroup.classList.add('hidden');
         optionGroup.classList.add('multiple-group');
-
         for (let element of dataSelect) {
             //option with functionality
             let option = document.createElement('div');
@@ -141,12 +142,12 @@ const multiDropdown = (function () {
             option.addEventListener('click', function (e) {
                 e.preventDefault();
                 if (option.children[0].children[0].checked === false) {
-                    if (selected.innerHTML === '-') {
+                    if (selected.children[0].innerHTML === '-') {
                         array = [];
                         arrayInner = [];
-                        selected.innerHTML = option.children[0].children[2].innerHTML;
+                        selected.children[0].innerHTML = option.children[0].children[2].innerHTML;
                     } else {
-                        selected.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
+                        selected.children[0].innerHTML += `, ${option.children[0].children[2].innerHTML}`;
                     }
                     array.push(option.dataset.value);
                     arrayInner.push(option.children[0].children[2].innerHTML);
@@ -160,20 +161,20 @@ const multiDropdown = (function () {
                         }
                         i++
                     }
-                    selected.innerHTML = arrayInner;
+                    selected.children[0].innerHTML = arrayInner;
                     option.children[0].children[0].checked = false;
-                    if (selected.innerHTML === '') {
-                        selected.innerHTML = noSelected.Name;
-                        array.push(noSelected.Value);
-                        arrayInner.push(noSelected.Value);
+                    if (selected.children[0].innerHTML === '') {
+                        selected.children[0].innerHTML = noSelected.Name;
+                        array.push('null');
+                        arrayInner.push(noSelected.Name);
                     }
                 }
 
-                selected.title = selected.innerHTML;
+                selected.title = selected.children[0].innerHTML;
                 selected.dataset.value = array;
             });
         }
-        select.appendChild(selected);
+
         select.appendChild(optionGroup);
 
 
@@ -191,6 +192,7 @@ const multiDropdown = (function () {
         for (let selectId of multiSelectArray) {
             if (e.target.parentNode && e.target.parentNode.id === selectId) {
                 $$(`#${selectId}`).classList.toggle('active-multi-select');
+                trigger('opened-arrow', { div: $$(`#${selectId}`).children[0] });
                 $$(`#${selectId}`).children[1].classList.toggle('hidden');
                 $$(`#${selectId}`).parentNode.children[0].classList.add('dropdown-is-active');
             } else {
@@ -199,6 +201,7 @@ const multiDropdown = (function () {
                     $$(`#${selectId}`).children[1].classList.remove('hidden');
                 } else {
                     $$(`#${selectId}`).classList.remove('active-multi-select');
+                    $$(`#${selectId}`).children[0].children[1].classList.remove('opened-arrow');
                     $$(`#${selectId}`).children[1].classList.add('hidden');
                     if ($$(`#${selectId}`).children[0].dataset.value === '-') {
                         $$(`#${selectId}`).parentNode.children[0].classList.remove('dropdown-is-active');
@@ -213,4 +216,4 @@ const multiDropdown = (function () {
         select
     };
 })
-();
+    ();

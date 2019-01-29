@@ -16,37 +16,44 @@ let casinoData = {
         {
             Id: 25,
             Name: 'Bolnica c',
-            City: 'Nis'
+            City: 'Nis',
+            checked: true
         },
         {
             Id: 26,
             Name: 'Kalca c',
-            City: 'Nis'
+            City: 'Nis',
+            checked: true
         },
         {
             Id: 27,
             Name: 'Marger c',
-            City: 'Surdulica'
+            City: 'Surdulica',
+            checked: true
         },
         {
             Id: 28,
             Name: 'Durlan c',
-            City: 'Beograd'
+            City: 'Beograd',
+            checked: true
         },
         {
             Id: 29,
             Name: 'Durlan',
-            City: 'Nis'
+            City: 'Nis',
+            checked: true
         },
         {
             Id: 30,
             Name: 'Novi Beograd',
-            City: 'Beograd'
+            City: 'Beograd',
+            checked: true
         },
         {
             Id: 31,
             Name: 'Spin Surdulica',
-            City: 'Surdulica'
+            City: 'Surdulica',
+            checked: true
         },
     ]
 }
@@ -76,11 +83,11 @@ let roleData = {
                 },
                 {
                     "Name": "Acceptors",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "ResetBillAcceptor",
-                    "Enabled": true
+                    "Enabled": false
                 }
             ]
         },
@@ -112,7 +119,7 @@ let roleData = {
             "MainRoleList": [
                 {
                     "Name": "PreviewJackpot",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Edit",
@@ -120,7 +127,7 @@ let roleData = {
                 },
                 {
                     "Name": "Delete",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Add",
@@ -128,7 +135,7 @@ let roleData = {
                 },
                 {
                     "Name": "History",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Settings",
@@ -136,7 +143,7 @@ let roleData = {
                 },
                 {
                     "Name": "Delete",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "Animation settings",
@@ -150,7 +157,7 @@ let roleData = {
             "MainRoleList": [
                 {
                     "Name": "PreviewAft",
-                    "Enabled": true
+                    "Enabled": false
                 },
                 {
                     "Name": "EnableTransaction",
@@ -158,7 +165,7 @@ let roleData = {
                 },
                 {
                     "Name": "NotificationSettings",
-                    "Enabled": true
+                    "Enabled": false
                 }
             ]
         }

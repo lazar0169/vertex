@@ -8,7 +8,8 @@
     align-items: center;
     height: 5%;
     font-size: 14px;
-    font-family: OpenSans-Bold;
+    font-family: "Open Sans";
+    font-weight: 500;
 }
 
 #top-bar>div {
@@ -26,8 +27,26 @@
     right: 0.5rem;
 }
 
+#top-bar-logout-dropdown-menu {
+    position: absolute;
+    right: 0;
+    background: rgb(55, 71, 79);
+    z-index: 1;
+    box-shadow: 0 0.5em 0.5em rgba(1, 1, 1, 0.5);
+}
+
+#top-bar-logout-dropdown-menu>div:first-child {
+    border-bottom: 1px solid rgb(38, 50, 56);
+}
+
+#top-bar-logout-dropdown-menu>div {
+    padding: 0 0.5em;
+    white-space: nowrap;
+}
+
 #top-bar-logout-user {
     cursor: pointer;
+    display: flex;
 }
 
 .element-cashable-active-tickets-value, .element-promo-active-tickets-value, .color-white {
@@ -36,4 +55,9 @@
 
 .info-box-round>div {
     padding: 0 0.2em;
+}
+
+.logout-is-opened {
+    background: rgb(55, 71, 79);
+    box-shadow: 0 0 0.5em rgba(1, 1, 1, 0.5);
 }

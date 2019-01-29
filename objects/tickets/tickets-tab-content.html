@@ -86,8 +86,9 @@
             </div>
         </div>
         <div id="wrapper-ticket-appearance-advanced">
-            <div class="element-multilanguage text-uppercase" data-translation-key="Tickets.Appearance.Advanced.Title">
-                Advanced settings:
+            <div class=" center opened-closed-wrapper">
+                <div class="element-multilanguage text-uppercase" data-translation-key="Tickets.Appearance.Advanced.Title"></div>
+                <span class="closed-arrow">&#9660;</span>
             </div>
             <div class="hidden">
                 <div>
@@ -115,7 +116,8 @@
                 </div>
                 <div>
                     <div id="tickets-advanced-settings-validation">
-                        <div class="element-multilanguage" data-translation-key="Tickets.Appearance.Advanced.Validation">Validation:
+                        <div class="element-multilanguage"
+                             data-translation-key="Tickets.Appearance.Advanced.Validation">Validation:
                         </div>
                         <input name="Validation" class="form-input element-form-data" data-type="string" type="text" placeholder="Validation" value="Validation">
                     </div>
@@ -146,13 +148,11 @@
             <img id="barcode" class="hidden" src="images/barcode.png" alt="barcode">
         </div>
         <div id="appearance-buttons-wrapper">
-            <a type="button" class="button-link element-form-cancel element-multilanguage" data-translation-key="Cancel">
+            <a type="button" class="button-link element-form-cancel element-multilanguage"
+               data-translation-key="Cancel">
                 Cancel
             </a>
-            <button type="submit" class="primarybutton element-form-submit text-uppercase">
-                <b class="element-multilanguage text-uppercase" data-translation-key="Save">Save</b>
-
-            </button>
+            <button type="submit" class="primarybutton element-form-submit element-multilanguage" data-translation-key="Save">Save</button>
         </div>
     </form>
 </div>
@@ -197,7 +197,7 @@
             <div id="tickets-sms-settings-send-mobile" class="form-section border-bottom tickets-sms-settings">
                 <div class="form-section-content">
                     <label class="form-label element-multilanguage" data-translation-key="Tickets.SmsSettings.Mobile">
-                        >Mobile phone number:
+                        Mobile phone number:
                     </label>
                     <div class="element-form-phone-number form-group d-flex flex-row flex-baseline">
                         <input name="PhoneNumbers" class="form-input element-form-data" data-type="array" type="text" placeholder="xxx-xxx-xxxx">
@@ -217,7 +217,8 @@
             <div class="form-section-content">
                 <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Enable.Email"> Enable
                     email:</label>
-                <figure data-target="#ticket-email-settings" class="element-form-check vertex-form-checkbox">
+                <figure  data-target="#ticket-email-settings"
+                        class="element-form-check vertex-form-checkbox">
                     <div id="tickets-enable-email-mode" class="element-form-mode checkbox-label">Yes</div>
                     <label class="form-switch">
                         <input name="EnableEmail" data-type="int" class="element-form-data" type="checkbox">
@@ -247,8 +248,8 @@
             </div>
         </section>
         <div id="tickets-sms-settings-buttons-wrapper" class="form-buttons-section">
-            <button type="submit" class="primarybutton element-form-submit">
-                <b class="element-multilanguage text-uppercase" data-translation-key="Save">Save</b>
+            <button type="submit" class="primarybutton element-form-submit element-multilanguage" data-translation-key="Save">
+                Save
             </button>
         </div>
     </form>
@@ -278,9 +279,7 @@
             </div>
         </div>
         <div id="tickets-max-value-buttons-wrapper" class="form-buttons-section">
-            <button type="submit" class="primarybutton element-form-submit">
-                <b class="element-multilanguage text-uppercase" data-translation-key="Save">Save</b>
-            </button>
+            <button type="submit" class="primarybutton element-form-submit element-multilanguage" data-translation-key="Save">Save</button>
         </div>
     </form>
 </div>
