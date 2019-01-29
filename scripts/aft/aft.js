@@ -50,7 +50,6 @@ const aft = (function () {
         trigger('aft/tab/notification', { endpointId: tableSettings.endpointId });
     });
 
-
     /*********************----Dom event handlers------*********************/
     window.addEventListener('click', function (e) {
         let selector = '#' + cancelTransactionsPopUpId;

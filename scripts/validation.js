@@ -9,7 +9,7 @@ let validation = (function () {
         string: 'string',
         pattern: 'pattern',
         array: 'array'
-    }
+    };
 
     const constraintAttributes = {
         required: 'required',
@@ -17,7 +17,7 @@ let validation = (function () {
         maximum: 'max',
         equals: 'equals',
         email: 'email'
-    }
+    };
 
     const constraintsOperators = {
         required: 'required',
@@ -226,7 +226,7 @@ let validation = (function () {
                             rule.regex = new RegExp(/^[+-]?\d+(\.\d+)?$/);
                             break;
                         case inputTypes.string:
-                            rule.regex = new RegExp(/^[A-Za-z]+$/);
+                            rule.regex = new RegExp(/^[A-Za-z0-9]+$/);
                             break;
                         //special case, requires pattern attribute
                         default:

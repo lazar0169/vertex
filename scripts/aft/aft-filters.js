@@ -25,7 +25,6 @@ const aftFilters = (function () {
     });
 
 
-
     /*********************----Module Events----************************/
     on('aft/filters/init', function (params) {
         let tableSettings = params.tableSettings;
