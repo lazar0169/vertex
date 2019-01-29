@@ -288,6 +288,10 @@
     pointer-events: none;
 }
 
+.opened-closed-wrapper>div {
+    padding-right: 1em;
+}
+
 .opened-closed-wrapper>span {
     position: absolute;
     right: 0.3rem;

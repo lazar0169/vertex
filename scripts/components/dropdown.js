@@ -137,11 +137,6 @@ const dropdown = (function () {
 
     //TODO THIS PART GENERATES MULTIPLE ERRORS
     window.addEventListener('click', function (e) {
-        // let singeID = $$('.default-single-select');
-        // console.log(singeID);
-
-        // let multi = $$('.default-multiselect-select');
-        // console.log(multi);
         e.preventDefault();
         for (let selectId of singleSelectArray) {
             if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {

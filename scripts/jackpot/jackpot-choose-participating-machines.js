@@ -242,10 +242,7 @@ const jackpotChooseParticipatingMachines = (function () {
                                                          <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                                          </label>`;
 
-                        if (checkedCasino) {
-                            city.children[1].classList.remove('hidden');
-                            city.children[0].children[1].children[1].classList.add('opened-arrow')
-                        }
+
                         newOption.addEventListener('click', function () {
                             if (newOption.children[0].children[0].checked) {
                                 newOption.children[0].children[0].checked = false;
@@ -258,6 +255,11 @@ const jackpotChooseParticipatingMachines = (function () {
                             }
                         });
                         city.children[1].appendChild(newOption);
+                        if (checkedCasino) {
+                            city.children[1].classList.remove('hidden');
+                            city.children[0].children[1].children[1].classList.add('opened-arrow');
+                            checkGroupCasinosCheckbox(city.children[1], city.children[1].children[0].children[0].children[0].name);
+                        }
                     }
                 }
             }
@@ -304,7 +306,8 @@ const jackpotChooseParticipatingMachines = (function () {
 
     function checkGroupCasinosCheckbox(group, groupName) {
         //ovde si stao prosledjujes ime grupe
-        let inputChecked = document.querySelectorAll(`input[name=${groupName}]:checked`);
+        let inputChecked = []
+        inputChecked = group.querySelectorAll(`input[name=${groupName}]:checked`);
         if (group.children.length === inputChecked.length) {
             group.parentNode.children[0].children[0].children[0].children[0].checked = true;
             group.parentNode.children[0].classList.add('color-white');
@@ -318,7 +321,7 @@ const jackpotChooseParticipatingMachines = (function () {
     }
 
     function checkGroupCitiesCheckbox(group, groupName) {
-        let inputChecked = document.querySelectorAll(`input[name=${groupName}]:checked`);
+        let inputChecked = group.querySelectorAll(`input[name=${groupName}]:checked`);
         if (group.children.length - 1 === inputChecked.length) {
             group.children[0].children[0].children[0].checked = true;
         }

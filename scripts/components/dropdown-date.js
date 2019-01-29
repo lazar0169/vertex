@@ -148,7 +148,7 @@ const dropdownDate = (function () {
             }
             current = current.parentNode;
         }
-        //TODO PITAJ LAZARA DA ISPRAVI BAG
+        
         if (found && !pickCustom && e.target.dataset && e.target.dataset.value !== 'Custom' || e.target.parentNode && e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[0].children[1].classList.toggle('opened-arrow');
