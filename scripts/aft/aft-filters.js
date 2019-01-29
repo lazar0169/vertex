@@ -178,7 +178,6 @@ const aftFilters = (function () {
         }
         return listArray;
     }
-
     function prepareAftFiltersForApi(activeTableSettings) {
         if (activeTableSettings === undefined) {
             activeTableSettings = getActiveTableSettings();
