@@ -2,7 +2,7 @@ const aftFilters = (function () {
 
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
-    let clearAdvanceFilter = $$('#aft-advance-table-filter-clear');
+    let clearAdvanceFilter = $$('#aft-advance-table-filter-clear').children[0];
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
@@ -67,6 +67,48 @@ const aftFilters = (function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
         advanceTableFilterActive.classList.toggle('hidden');
     }
+    //display initial filters
+    /*********************----Events Listeners------*********************/
+    aftAdvanceApplyFilters.addEventListener('click', function () {
+        filterAftTable(true);
+    });
+    clearAdvanceFilter.addEventListener('click', removeSelectedFilters);
+    clearAdvanceFilterInfobar.addEventListener('click', clearAftFilters);
+    advanceTableFilter.children[0].addEventListener('click', function () {
+        showAdvanceTableFilter();
+    });
+
+
+    /*********************----Module Events----************************/
+    on('aft/filters/init', function (params) {
+        let tableSettings = params.tableSettings;
+        getFiltersFromAPI(tableSettings);
+    });
+    on('aft/filters/display', function (params) {
+        let apiResponseData = params.data;
+        let tableSettings = params.settingsObject;
+        let filters = apiResponseData.Data;
+
+        filters.MachineNameList = formatAftApiData(filters.MachineNameList);
+        filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
+
+        tableSettings.filtersInitialized = true;
+        displayFilters(filters, tableSettings);
+    });
+    on('aft/filters/pagination', function (params) {
+        filterAftTable();
+    });
+    on('aft/filters/sorting', function (params) {
+        activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
+        if (activeHeadElement !== null && activeHeadElement !== undefined) {
+            filterAftTable();
+        }
+    });
+    on('aft/filters/pageSize', function (params) {
+        let tableSettings = params.tableSettings;
+        tableSettings.activePage = 1;
+        filterAftTable();
+    });
 
     function getActiveTableSettings() {
         return $$('#table-container-aft').tableSettings;
@@ -98,6 +140,41 @@ const aftFilters = (function () {
         console.log('clear filters',tableSettings);
         filterAftTable(true);
     }
+    on('aft/filters/filter-table', function (params) {
+        filterAftTable(params.showFilters);
+    });
+
+    /*********************----Helper functions----*********************/
+
+    function getActiveTableSettings() {
+        return $$('#table-container-aft').tableSettings;
+    }
+
+    function filterAftTable() {
+        let params = {};
+        let tableSettings = getActiveTableSettings();
+        params.tableSettings = tableSettings;
+        params.data = prepareAftFiltersForApi(tableSettings);
+        params.activeFiltersElement = advanceTableFilterActive;
+        params.infobarElement = advanceTableFilterInfobar;
+        trigger('table/filter', params);
+    }
+
+    function removeSelectedFilters() {
+        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+    }
+
+    function clearAftFilters() {
+        removeSelectedFilters();
+        //reset page to 1
+        let tableSettings = getActiveTableSettings();
+        tableSettings.activePage = 1;
+        tableSettings.visibleColumns = [];
+        tableSettings.filters = null;
+        console.log('clear filters', tableSettings);
+        filterAftTable(true);
+    }
+
     function getFiltersFromAPI(tableSettings) {
         let data = {
             'EndpointId': tableSettings.endpointId
@@ -110,6 +187,7 @@ const aftFilters = (function () {
             tableSettings: tableSettingsObject
         });
     }
+
     function displayFilters(filters, tableSettings) {
         //filter elements
         //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
@@ -145,10 +223,13 @@ const aftFilters = (function () {
         dropdown.generate(filters.TypeList.slice(1, filters.TypeList.length), aftAddTransactionType, 'Type');
         dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
     }
+
     function showAdvanceTableFilter() {
-        advanceTableFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        advanceTableFilterActive.classList.toggle('hidden');
     }
+
     function formatAftApiData(listArray) {
         if (listArray !== null && listArray !== undefined) {
             listArray.forEach(function (list) {
@@ -158,6 +239,7 @@ const aftFilters = (function () {
         }
         return listArray;
     }
+
     function prepareAftFiltersForApi(activeTableSettings) {
         if (activeTableSettings === undefined) {
             activeTableSettings = getActiveTableSettings();
@@ -213,6 +295,69 @@ const aftFilters = (function () {
     on('filters/show-selected-filters', function (data) {
         showSelectedFilters(data.active, data.infobar);
     });
+
+
+    aftAdvanceApplyFilters.addEventListener('click', function () {
+
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        let filtersForApi = prepareAftFiltersForApi(currentTableSettingsObject);
+
+        trigger('communicate/aft/previewTransactions', {
+            data: filtersForApi,
+            tableSettings: currentTableSettingsObject
+        });
+        trigger('filters/show-selected-filters', {
+            active: advanceTableFilterActive,
+            infobar: advanceTableFilterInfobar
+        });
+
+    });
+
+    on('aft/filters/pagination', function (params) {
+        let tableSettings = params.tableSettings;
+        let filtersForApi = prepareAftFiltersForApi(tableSettings);
+        trigger('communicate/aft/previewTransactions', {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
+    });
+
+    on('aft/filters/sorting', function (params) {
+        let tableSettings = params.tableSettings;
+        activeHeadElement = currentTableSettingsObject.tableContainerElement.getElementsByClassName('sort-active');
+        if (activeHeadElement !== null && activeHeadElement !== undefined) {
+            let filtersForApi = prepareAftFiltersForApi(tableSettings);
+            filtersForApi.BasicData.SortOrder = params.sorting.SortOrder;
+            filtersForApi.BasicData.SortName = aftSortName[params.sorting.SortName] !== undefined ? aftSortName[params.sorting.SortName] : null;
+            trigger('communicate/aft/previewTransactions', {
+                tableSettings: tableSettings,
+                data: filtersForApi,
+                callbackEvent: 'table/update'
+            });
+        }
+    });
+
+    on('aft/filters/pageSize', function (params) {
+        let tableSettings = params.tableSettings;
+        let filtersForApi = prepareAftFiltersForApi(tableSettings);
+        trigger('communicate/aft/previewTransactions', {
+            tableSettings: tableSettings,
+            data: filtersForApi,
+            callbackEvent: 'table/update'
+        });
+    });
+
+    /* clearAdvanceFilter.addEventListener('click', function () {
+         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+     });*/
+
+    /* clearAdvanceFilterInfobar.addEventListener('click', function () {
+         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+     });*/
+
 
     //close
     transactionTab.addEventListener('click', function () {

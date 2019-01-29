@@ -1,7 +1,7 @@
 const sidebar = (function () {
 
     let menuData;
-    let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
+    let icons = ['icon-Jackpot', 'icon-Tickets', 'icon-AFT', 'icon-Casinos', 'icon-Machines', 'icon-Malfunctions', 'icon-Users'];
 
     let sidebarMenu = $$('#sidebar');
     let listWrapper = $$('#sidebar-list');
@@ -140,8 +140,7 @@ const sidebar = (function () {
             categoryEl.classList.add('center');
 
             let span = document.createElement('span');
-            let mdiClassName = `mdi-${icons[Object.keys(data).indexOf(category)]}`;
-            span.classList.add('mdi');
+            let mdiClassName = `icon-${category}`;
             span.classList.add(mdiClassName);
             span.classList.add('custom-tooltip');
             span.classList.add('center');

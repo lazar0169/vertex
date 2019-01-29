@@ -7,7 +7,6 @@ const jackpotChooseParticipatingMachines = (function () {
     let addNewJackpot = $$('#add-new-jackpot-wrapper');
     let closeChooseMachineButton = $$('#choose-machines-jackpot-header').children[1];
     let chooseMachines = $$('#add-new-jackpot-choose-machines-buttons').children[0]
-
     //for input name
     let filterCount = 0;
 
@@ -44,15 +43,12 @@ const jackpotChooseParticipatingMachines = (function () {
                                     </label> </div>`;
 
         wrapperOption.children[0].addEventListener('click', function () {
-
             if (wrapperOption.children[0].children[0].children[0].checked === true) {
                 wrapperOption.children[0].children[0].children[0].checked = false;
             }
             else {
-
                 wrapperOption.children[0].children[0].children[0].checked = true;
             }
-
 
             if (wrapperOption.children[0].children[0].children[0].checked === true) {
                 for (let check of wrapperOption.children) {
@@ -79,9 +75,8 @@ const jackpotChooseParticipatingMachines = (function () {
                                                     <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                                 </label>`;
                 wrapperOption.appendChild(option);
+
                 option.addEventListener('click', function () {
-
-
                     if (option.children[0].children[0].checked === true) {
                         option.children[0].children[0].checked = false;
                     }
@@ -97,32 +92,48 @@ const jackpotChooseParticipatingMachines = (function () {
                         wrapperOption.children[0].children[0].children[0].checked = false;
                     }
                 });
-
             }
         }
         filterCount++
         return wrapperOption;
     }
+
     //create jackpot filter (by place)
     function createJackpotFilterCasinos(data) {
-        let cityArray = [];
+
         let wrapperOptionAndSearch = document.createElement('div');
         wrapperOptionAndSearch.classList.add('hidden');
-
+        wrapperOptionAndSearch.classList.add('background-dark');
+        wrapperOptionAndSearch.classList.add('cities-wrapper');
 
         wrapperOptionAndSearch.innerHTML = `<div class="center">
-                                    <input id="search-casino" class="element-multilanguage search" type="text" onfocus="value=''" placeholder="search" data-translation-key="search">
+                                    <input class="element-multilanguage search search-casino" type="text" onfocus="value=''" placeholder="search" data-translation-key="search">
                                     </div>`
 
+        wrapperOptionAndSearch.children[0].children[0].addEventListener('keyup', function (e) {
+            let termin = wrapperOptionAndSearch.children[0].children[0].value
+            searchCasinosAndCities(wrapperOptionAndSearch, data, termin);
+        });
+
+
+
+        generateCasinosAndCities(wrapperOptionAndSearch, data);
+
+
+        return wrapperOptionAndSearch;
+    }
+
+    //generating casinos in cities
+    function generateCasinosAndCities(div, data) {
+
+        let cityArray = [];
+        let checkedCasino;
         let wrapperOption = document.createElement('div');
-        wrapperOption.classList.add('overflow-y')
-
-
+        wrapperOption.classList.add('overflow-y');
 
         let allCasinos = document.createElement('div');
-
+        allCasinos.classList.add('option-all')
         allCasinos.addEventListener('click', function () {
-
             if (allCasinos.children[0].children[0].checked) {
                 allCasinos.children[0].children[0].checked = false;
                 selectAllCities(allCasinos.parentNode)
@@ -134,43 +145,54 @@ const jackpotChooseParticipatingMachines = (function () {
         });
 
         allCasinos.innerHTML = `<label class="form-checkbox" >
-                                    <input type="checkbox">
+                                    <input type="checkbox" name='checkbox-group-all-cities'>
                                     <i class="form-icon" data-elementId = "All"></i> <div>All</div>
                                     </label>`;
         wrapperOption.appendChild(allCasinos)
-
         allCasinos.dataset.value = 'all';
         allCasinos.title = allCasinos.children[0].children[2].innerHTML;
 
-
-
         for (let element of data.Value) {
+            if (element.checked) {
+                checkedCasino = 'checked';
+            }
+            else {
+                checkedCasino = '';
+            }
             if (!cityArray.includes(element.City)) {
                 let optionCity = document.createElement('div');
                 optionCity.title = element.City;
                 optionCity.dataset.value = element.City;
+                optionCity.classList.add('border-bottom-cities');
 
                 optionCity.innerHTML = `<div class="option-city"> <div> <label class="form-checkbox" >
-                                    <input type="checkbox">
+                                    <input type="checkbox" name='checkbox-group-cities'>
                                     <i class="form-icon" data-elementId = "${element.City}"></i>
-                                    </label></div> <div>${element.City}</div>
+                                    </label></div> <div class="center opened-closed-wrapper"><div>${element.City}</div>  <span class="closed-arrow">&#9660;</span></div>
                                     </div>`;
-
                 wrapperOption.appendChild(optionCity);
 
                 optionCity.children[0].children[0].addEventListener('click', function () {
                     if (optionCity.children[0].children[0].children[0].children[0].checked) {
                         optionCity.children[0].children[0].children[0].children[0].checked = false;
-                        selectAllCasinosInCity(optionCity.children[1])
-
+                        optionCity.children[0].classList.remove('color-white');
+                        for (let casino of optionCity.children[1].children) {
+                            casino.children[0].children[0].checked = false;
+                        }
+                        checkGroupCitiesCheckbox(optionCity.parentNode, optionCity.children[0].children[0].children[0].children[0].name)
                     }
                     else {
                         optionCity.children[0].children[0].children[0].children[0].checked = true;
-                        selectAllCasinosInCity(optionCity.children[1])
+                        optionCity.children[0].classList.add('color-white');
+                        for (let casino of optionCity.children[1].children) {
+                            casino.children[0].children[0].checked = true;
+                        }
+                        checkGroupCitiesCheckbox(optionCity.parentNode, optionCity.children[0].children[0].children[0].children[0].name)
                     }
                 });
 
                 optionCity.children[0].children[1].addEventListener('click', function () {
+                    trigger('opened-arrow', { div: optionCity.children[0].children[1] });
                     optionCity.children[1].classList.toggle('hidden');
                 });
 
@@ -178,63 +200,134 @@ const jackpotChooseParticipatingMachines = (function () {
                 newOptionCityWrapper.classList.add('hidden');
                 newOptionCityWrapper.classList.add('option-casionos-in-city-wrapper');
 
+
                 newOptionCityWrapper.innerHTML = `<div title=${element.Name} data-value=${element.Name} class="option-casino"> 
                                                  <label class="form-checkbox">
-                                                 <input type="checkbox" name="is-casino-checked-${element.City}">
+                                                 <input type="checkbox" name="casino-group-${element.City}" ${checkedCasino}>
                                                  <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                                  </label> </div>`;
 
                 optionCity.appendChild(newOptionCityWrapper);
+
+                if (checkedCasino) {
+                    newOptionCityWrapper.classList.remove('hidden');
+                    newOptionCityWrapper.parentNode.children[0].children[1].children[1].classList.add('opened-arrow')
+                }
+
                 newOptionCityWrapper.children[0].addEventListener('click', function () {
                     if (newOptionCityWrapper.children[0].children[0].children[0].checked) {
                         newOptionCityWrapper.children[0].children[0].children[0].checked = false;
-                        newOptionCityWrapper.parentNode.children[0].children[0].children[0].children[0].checked = false;
                         newOptionCityWrapper.parentNode.parentNode.children[0].children[0].children[0].checked = false;
-                        newOptionCityWrapper.parentNode.children[0].classList.remove('color-white');
-
+                        checkGroupCasinosCheckbox(newOptionCityWrapper, newOptionCityWrapper.children[0].children[0].children[0].name);
                     }
                     else {
                         newOptionCityWrapper.children[0].children[0].children[0].checked = true;
-                        checkForAllCasinos(newOptionCityWrapper);
+                        checkGroupCasinosCheckbox(newOptionCityWrapper, newOptionCityWrapper.children[0].children[0].children[0].name);
                     }
                 });
                 cityArray.push(element.City);
-
             }
             else {
                 for (let city of wrapperOption.children) {
                     if (city.dataset.value === element.City) {
-
                         let newOption = document.createElement('div');
                         newOption.title = element.Name;
                         newOption.dataset.value = element.Name;
+                        newOption.classList.add('option-casino');
+
+
 
                         newOption.innerHTML = `<label class="form-checkbox" >
-                                                         <input type="checkbox" name="is-casino-checked-${element.City}">
+                                                         <input type="checkbox" name="casino-group-${element.City}" ${checkedCasino}>
                                                          <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
                                                          </label>`;
+
 
                         newOption.addEventListener('click', function () {
                             if (newOption.children[0].children[0].checked) {
                                 newOption.children[0].children[0].checked = false;
-                                newOption.parentNode.parentNode.children[0].children[0].children[0].children[0].checked = false;
-                                newOption.parentNode.parentNode.parentNode.children[0].children[0].children[0].checked = false;
-                                newOption.parentNode.parentNode.children[0].classList.remove('color-white');
+                                checkGroupCasinosCheckbox(newOption.parentNode, newOption.children[0].children[0].name);
                             }
                             else {
                                 newOption.children[0].children[0].checked = true;
 
-
-                                checkForAllCasinos(newOption.parentNode)
+                                checkGroupCasinosCheckbox(newOption.parentNode, newOption.children[0].children[0].name);
                             }
                         });
                         city.children[1].appendChild(newOption);
+                        if (checkedCasino) {
+                            city.children[1].classList.remove('hidden');
+                            city.children[0].children[1].children[1].classList.add('opened-arrow');
+                            checkGroupCasinosCheckbox(city.children[1], city.children[1].children[0].children[0].children[0].name);
+                        }
                     }
                 }
             }
-            wrapperOptionAndSearch.appendChild(wrapperOption)
         }
-        return wrapperOptionAndSearch;
+        div.appendChild(wrapperOption)
+    }
+
+    //search casions in cities
+    function searchCasinosAndCities(wrapperOptionAndSearch, data, termin) {
+        console.log(data.Value);
+        console.log(wrapperOptionAndSearch);
+        let i = 0;
+        let arrayResult = [];
+        for (let value of data.Value) {
+            let valueName = value.Name.toLowerCase();
+            let valueCity = value.City.toLowerCase();
+            let index = valueName.indexOf(termin);
+            let index1 = valueName.indexOf(` ${termin}`);
+            let index2 = valueCity.indexOf(termin);
+            let index3 = valueCity.indexOf(` ${termin}`)
+            if (index === 0 ||
+                index1 !== -1 ||
+                index2 === 0 ||
+                index3 !== -1) {
+                arrayResult[i] = value;
+                i++;
+            }
+        }
+        let newObject = {
+            'List': data.List,
+            'Value': arrayResult
+        };
+        if (newObject.Value.length === 0) {
+            wrapperOptionAndSearch.children[1].innerHTML = 'nema podataka'
+        }
+        else {
+            wrapperOptionAndSearch.children[1].remove();
+            generateCasinosAndCities(wrapperOptionAndSearch, newObject)
+        }
+
+
+    }
+
+
+    function checkGroupCasinosCheckbox(group, groupName) {
+        //ovde si stao prosledjujes ime grupe
+        let inputChecked = []
+        inputChecked = group.querySelectorAll(`input[name=${groupName}]:checked`);
+        if (group.children.length === inputChecked.length) {
+            group.parentNode.children[0].children[0].children[0].children[0].checked = true;
+            group.parentNode.children[0].classList.add('color-white');
+            checkGroupCitiesCheckbox(group.parentNode.parentNode, group.parentNode.children[0].children[0].children[0].children[0].name);
+        }
+        else {
+            group.parentNode.children[0].children[0].children[0].children[0].checked = false;
+            group.parentNode.children[0].classList.remove('color-white');
+            checkGroupCitiesCheckbox(group.parentNode.parentNode, group.parentNode.children[0].children[0].children[0].children[0].name)
+        }
+    }
+
+    function checkGroupCitiesCheckbox(group, groupName) {
+        let inputChecked = group.querySelectorAll(`input[name=${groupName}]:checked`);
+        if (group.children.length - 1 === inputChecked.length) {
+            group.children[0].children[0].children[0].checked = true;
+        }
+        else {
+            group.children[0].children[0].children[0].checked = false;
+        }
     }
 
     function selectAllCities(div) {
@@ -243,67 +336,18 @@ const jackpotChooseParticipatingMachines = (function () {
                 if (div.children[0].children[0].children[0].checked) {
                     city.children[0].children[0].children[0].children[0].checked = true;
                     city.children[0].classList.add('color-white');
-                    selectAllCasinosInCity(city.children[1]);
-
+                    for (let casino of city.children[1].children) {
+                        casino.children[0].children[0].checked = true;
+                    }
                 }
                 else {
                     city.children[0].children[0].children[0].children[0].checked = false;
                     city.children[0].classList.remove('color-white');
-                    selectAllCasinosInCity(city.children[1]);
+                    for (let casino of city.children[1].children) {
+                        casino.children[0].children[0].checked = false;
+                    }
                 }
             }
-        }
-    }
-
-    function selectAllCasinosInCity(div) {
-        for (let casino of div.children) {
-            if (div.parentNode.children[0].children[0].children[0].children[0].checked) {
-                div.parentNode.children[0].classList.add('color-white');
-                casino.children[0].children[0].checked = true;
-
-                if (!div.parentNode.parentNode.children[0].children[0].children[0].checked) {
-                    checkedAllCities(div.parentNode.parentNode)
-                }
-
-            }
-            else {
-                div.parentNode.children[0].classList.remove('color-white');
-                casino.children[0].children[0].checked = false;
-                div.parentNode.parentNode.children[0].children[0].children[0].checked = false;
-
-            }
-        }
-
-    }
-
-    function checkForAllCasinos(div) {
-        // if checked all city check all
-        let count = 0
-        for (let checkedCity of div.children) {
-            if (checkedCity.dataset.value != 'All' && checkedCity.children[0].children[0].checked) {
-                count++
-            }
-        }
-        if (div.children.length === count) {
-            div.parentNode.children[0].children[0].children[0].children[0].checked = true;
-            div.parentNode.children[0].classList.add('color-white')
-            checkedAllCities(div.parentNode.parentNode)
-        }
-    }
-
-    function checkedAllCities(div) {
-        let count = 0
-        for (let checkedCity of div.children) {
-            if (checkedCity.dataset.value != 'all' && checkedCity.children[0].children[0].children[0].children[0].checked) {
-                count++
-            }
-        }
-        if (div.children.length - 1 === count) {
-            div.children[0].children[0].children[0].checked = true;
-
-        }
-        else {
-            div.children[0].children[0].children[0].checked = false;
         }
     }
 
@@ -353,6 +397,5 @@ const jackpotChooseParticipatingMachines = (function () {
 
     return {
         createJackpotFilterCasinos
-
     };
 })();

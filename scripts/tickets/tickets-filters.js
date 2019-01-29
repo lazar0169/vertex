@@ -13,17 +13,31 @@ const ticketsFilter = (function () {
 
     let activeHeadElement;
 
+    function toggleAdvanceTableFilter() {
+        ticketAdvanceFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
+        advanceTableFilterActive.classList.toggle('hidden');
+    }
 
     /*********************----Events Listeners------*********************/
 
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
         filterTicketsTable(true);
+        ticketAdvanceFilterButton.children[1].classList.remove('opened-arrow');
     });
 
-    ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
-    clearAdvanceFilterInfobar.addEventListener('click', clearFilters);
-    ticketAdvanceFilter.addEventListener('click', function () {
-        showAdvanceTableFilter();
+    ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+    });
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+    });
+    ticketAdvanceFilterButton.addEventListener('click', function () {
+        ticketAdvanceFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
+        ticketAdvanceFilter.children[1].classList.toggle('hidden');
     });
     /*********************----Module Events----************************/
 
@@ -118,7 +132,7 @@ const ticketsFilter = (function () {
         multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
         let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
         multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
-        console.log('Printed and redeemed', filters.PrintedAndRedeemed);
+        console.log(filters.PrintedAndRedeemed);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
 
@@ -134,10 +148,11 @@ const ticketsFilter = (function () {
         });
         multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
     }
-    function showAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.add('advance-filter-active');
-        advanceTableFilterActive.classList.remove('hidden');
-    }
+    // function showAdvanceTableFilter() {
+    //     ticketAdvanceFilter.classList.add('advance-filter-active');
+    //     advanceTableFilterActive.classList.remove('hidden');
+
+    // }
     function formatTicketsApiData(filterArray) {
         if (filterArray !== undefined && filterArray !== null) {
             filterArray.forEach(function (filter) {

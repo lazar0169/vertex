@@ -82,7 +82,7 @@ const usersAddNewUser = (function () {
 
                             case 'user-role':
 
-                                if (element.getElementsByClassName('add-new-user-checked-status')[0].dataset.value === 'user-role-manager') {
+                                if (element.getElementsByClassName('add-new-user-checked-status')[0].dataset.value !== 'user-role-custom') {
                                     element.parentNode.parentNode.children[2].children[0].classList.add('hidden');
                                 }
                                 else {
@@ -99,9 +99,6 @@ const usersAddNewUser = (function () {
                                 }
                                 break;
                         }
-
-
-
                     });
                     break;
 

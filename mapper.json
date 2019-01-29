@@ -58,6 +58,7 @@
       "malfunctions/malfunctions.js",
       "users/users-add-new-user.js",
       "users/users.js",
+      "users/users-filters.js",
       "session.js",
       "preloader.js",
       "application.js",
@@ -69,12 +70,12 @@
       "notifications.js"
     ],
     "styles": [
+      "modify-spectre.css",
       "index.css",
       "top-bar.css",
       "user-profile/user-profile-page.css",
       "user-profile/user-info-profile.css",
       "user-profile/user-edit-profile.css",
-      "modify-spectre.css",
       "sidebar.css",
       "common.css",
       "plugins/plugins.css",

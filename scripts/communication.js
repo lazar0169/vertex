@@ -390,8 +390,7 @@ let communication = (function () {
         tableSettings.tableData = formatedData;
 
         //ToDo Neske: Pitati Nikolu šta je ovo
-        //trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue })
-
+        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
         return formatedData;
     }
 
@@ -481,9 +480,9 @@ let communication = (function () {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
         });
     });
 

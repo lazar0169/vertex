@@ -6,7 +6,7 @@
     position: relative;
 }
 
-.default-select>div:first-child:before, .default-date-select>div:first-child:before {
+/* .default-select>div:first-child:before, .default-date-select>div:first-child:before {
     content: "";
     position: absolute;
     right: 3px;
@@ -16,7 +16,7 @@
     border-top: 0.3rem solid rgb(30, 155, 227);
     border-right: 0.15rem solid transparent;
     border-left: 0.15rem solid transparent;
-}
+} */
 
 .default-select>div:first-child, .default-date-select>div:first-child {
     width: 120px;
@@ -29,10 +29,18 @@
     border: 1px solid rgb(55, 71, 79);
 }
 
+.default-select>div:first-child>div:first-child, .default-date-select>div:first-child>div:first-child {
+    padding-right: 0.5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}
+
 .default-select>div:not(:first-child), .option-select-date {
     min-width: 120px;
     max-width: 450px;
-    max-height: 300px;
+    max-height: 250px;
     background: rgb(38, 50, 56);
     position: absolute;
     border: 1px solid rgb(55, 71, 79);
@@ -94,7 +102,6 @@
 .custom-date-buttons-wrapper {
     margin: 0.5rem 0;
 }
-
 
 #tickets-machines-number {
     border-left: none;

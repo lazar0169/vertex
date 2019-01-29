@@ -36,6 +36,7 @@ let table = (function () {
     let currentOffset;
 
     /*-------------------------------EVENTS--------------------------------*/
+    on ('table/show-selected-filters/infobar',showSelectedFilters);
     on('table/before-filter', function (params) {
         trigger(params.tableSettings.filterDataEvent, {
             data: params.data,
