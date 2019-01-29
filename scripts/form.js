@@ -211,26 +211,26 @@ let form = (function () {
                                                         dataForApi[formInputElement.name] = [];
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
-                        case 'single-select':
+                        case inputTypes.singleSelect:
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }
                             break;
-                        case 'int':
+                        case inputTypes.integer:
                             if (parseInt(formInputElement.value) !== undefined) {
                                 dataForApi[formInputElement.name] = parseInt(formInputElement.value);
                             }
                             break;
-                        case 'float':
+                        case inputTypes.float:
                             let value = prepareFloatValue(formInputElement.value);
                             dataForApi[formInputElement.name] = value * valueMultiplier;
                             break;
-                        case 'string':
+                        case inputTypes.string:
                             dataForApi[formInputElement.name] = formInputElement.value;
                             break;
-                        case 'array':
+                        case inputTypes.array:
                             if (dataForApi[formInputElement.name] === undefined) {
                                 dataForApi[formInputElement.name] = [];
                             }

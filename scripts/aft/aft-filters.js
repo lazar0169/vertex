@@ -39,7 +39,6 @@ const aftFilters = (function () {
 
     clearAdvanceFilter.addEventListener('click', removeSelectedFilters);
     clearAdvanceFilterInfobar.addEventListener('click', clearAftFilters);
-    console.log('wrapper: ',advanceTableFilter.children[0]);
     advanceTableFilter.children[0].addEventListener('click', function () {
         showAdvanceTableFilter();
     });
