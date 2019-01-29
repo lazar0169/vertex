@@ -43,7 +43,7 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.getData, { data: data, formSettings: formSettings });
+        trigger(formSettings.getData, {data: data, formSettings: formSettings});
     }
 
     //helper functions
@@ -106,6 +106,9 @@ let form = (function () {
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
                                     newField.classList.add('element-input-additional-array-value');
+                                    console.log('new Field', newField);
+                                    validation.init(newInputElement, {});
+                                    console.log('validation', newField.vertexValidation);
                                     if (addAnotherButton !== null) {
                                         inputsContainer.insertBefore(newField, addAnotherButton);
                                     } else {
@@ -250,9 +253,8 @@ let form = (function () {
         if (valid) {
             submitButton.disabled = 'disabled';
             submitButton.classList.add('loading');
-            trigger(formSettings.submitEvent, { data: dataForApi, formSettings: formSettings })
-        }
-        else {
+            trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
+        } else {
             return false;
         }
     }
@@ -318,27 +320,33 @@ let form = (function () {
             if (targetElements.length < e.currentTarget.dataset.maxNumber) {
 
                 let lastElement = targetElements[targetElements.length - 1];
-                let newField = lastElement.cloneNode(true);
 
-                newField.getElementsByTagName('input')[0].removeAttribute('id');
-                newField.getElementsByTagName('input')[0].value = '';
-                newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
-                newField.classList.add('element-input-additional-array-value');
+                let lastInput = lastElement.getElementsByTagName('input')[0];
+                if (lastInput.vertexValidation.validate()) {
+                    let newField = lastElement.cloneNode(true);
 
-                let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
+                    let newInput = newField.getElementsByTagName('input')[0];
+                    newInput.removeAttribute('id');
+                    newInput.value = '';
+                    newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    newField.classList.add('element-input-additional-array-value');
 
-                lastElement.parentNode.insertBefore(newField, addAnotherButton);
+                    let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
 
-                if (targetElements.length > 1) {
-                    targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    lastElement.parentNode.insertBefore(newField, addAnotherButton);
+                    validation.init(newInput, {});
+
+                    if (targetElements.length > 1) {
+                        targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    }
+
+                    let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
+                    deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
+                    deleteButtonFirstElement.addEventListener('click', deleteFormElement);
+
+                    let deleteButton = newField.getElementsByClassName('button-link')[0];
+                    deleteButton.addEventListener('click', deleteFormElement);
                 }
-
-                let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
-                deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
-                deleteButtonFirstElement.addEventListener('click', deleteFormElement);
-
-                let deleteButton = newField.getElementsByClassName('button-link')[0];
-                deleteButton.addEventListener('click', deleteFormElement);
             }
         }
     }
@@ -386,6 +394,7 @@ let form = (function () {
             });
         }
     }
+
     function createCurrencyInputs(formSettings) {
         let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
         for (let i = 0; i < formInputElements.length; i++) {
@@ -486,7 +495,10 @@ let form = (function () {
         createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
-        initValidation(formSettings);
+        if (isEmpty(formSettings.initValidation)) {
+            formSettings.initValidation = initValidation;
+        }
+        formSettings.initValidation(formSettings);
     }
 
     on('form/add/hiddenField', function (params) {

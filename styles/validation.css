@@ -1,0 +1,9 @@
+.vertex-validation-error {
+    border-color: #f44336 !important;
+}
+.vertex-error-container {
+    color: #f44336 !important;
+    margin-top:10px;
+    font-size: 13px;
+    font-family: "OpenSans-Regular", sans-serif;
+}
