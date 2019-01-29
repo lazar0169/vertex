@@ -204,7 +204,7 @@ const aft = (function () {
 
             },
             status: {
-                pending: e.target.transactionData.pending !== undefined
+pending: e.target.transactionData.pending !== undefined
             }
         });
     }
