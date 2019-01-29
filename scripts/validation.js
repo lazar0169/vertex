@@ -191,7 +191,6 @@ let validation = (function () {
         settings.errorElements = [];
 
         if (isEmpty(settings.showErrors)) {
-            console.log(element);
             if (element.dataset.type !== undefined && element.dataset.type=== inputTypes.array) {
                 settings.showErrors = showRepeaterFieldError;
             }
