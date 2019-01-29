@@ -16,7 +16,6 @@ window.addEventListener('load', function () {
 function setTabListener() {
     for (let tab of tabs) {
         tab.addEventListener('click', function () {
-            table.removeTransactionPopup();
             selectTab(tab.id);
             selectInfoContent(tab.id);
         });
@@ -40,6 +39,7 @@ function selectTab(name) {
 
 //shows content for selected tab
 let previousInfoContSelected;
+
 function selectInfoContent(name) {
     if (previousInfoContSelected) {
         previousInfoContSelected.classList.remove('active-content');
@@ -72,7 +72,7 @@ on('apply-custom-date', function (data) {
 
     }
     else {
-        $$(`#ds-${data.selectId}`).children[0].innerHTML = 'Custom';
+        $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML = 'Custom';
         $$(`#ds-${data.selectId}`).children[0].title = `From: ${tempArray[0]} ${tempArray[1]}:00, To: ${tempArray[2]} ${tempArray[3]}:00`;
         $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}:00, ${tempArray[2]}T${tempArray[3]}:00`;
         data.target.dataset.value = 'Apply custom date'
@@ -98,7 +98,7 @@ on('cancel-custom-date', function (data) {
     timeToMinutes.innerHTML = minutes[0];
     timeToMinutes.dataset.value = minutes[0];
     trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
-    $$(`#ds-${data.selectId}`).children[0].innerHTML = fixedDays[0];
+    $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML = fixedDays[0];
     $$(`#ds-${data.selectId}`).children[0].title = fixedDays[0];
     $$(`#ds-${data.selectId}`).children[0].dataset.value = fixedDays[0];
     delete data.target.dataset.value;
@@ -111,3 +111,24 @@ on('set-date-datepicker', function (data) {
     $$(`#${data.pickerId}`).dataset.value = data.date;
     $$(`#${data.pickerId}`).value = data.date;
 });
+
+
+function openCloseArrow(div) {
+
+    div.children[1].classList.toggle('opened-arrow')
+
+}
+
+on('opened-arrow', function (data) {
+    openCloseArrow(data.div)
+})
+//popups
+function dimissPopUp(target) {
+    if (target === undefined || target === null) {
+        return false;
+    }
+    let popup = target.closest('.element-pop-up');
+    if (popup !== undefined && popup !== null) {
+        popup.parentNode.removeChild(popup);
+    }
+}

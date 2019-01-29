@@ -13,7 +13,6 @@ const toggle = (function () {
         }
         //bind handlers if they are not yet initialized
         else if (settings.element.vertexToggle === undefined) {
-
             let dropdown = {
                 element: settings.element,
                 check: check,
@@ -33,6 +32,8 @@ const toggle = (function () {
             if (checkboxEl === null) {
                 console.error('plugin html is malformed - input checkbox element is missing');
             }
+            //prevent validation as this element cannot be skipped
+            checkboxEl.setAttribute('novalidate','true');
             dropdown.checkboxElement = checkboxEl;
             let statusLabel = settings.element.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
             if (statusLabel === null) {
@@ -99,7 +100,6 @@ const toggle = (function () {
         let settings = target.vertexToggle;
         if (isChecked(target)) {
             uncheck(target);
-
         } else {
             check(target);
 

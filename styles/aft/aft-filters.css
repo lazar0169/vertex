@@ -28,6 +28,7 @@
     cursor: pointer;
     height: 35px;
     background-repeat: no-repeat;
+    padding: 0 0.8rem;
 }
 
 #aft-export-pdf, #tickets-export-pdf {
@@ -36,4 +37,5 @@
 
 #aft-export-xls, #tickets-export-xls {
     background-image: url("/images/xls-export.png");
+
 }

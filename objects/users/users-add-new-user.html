@@ -28,21 +28,18 @@
                 <div class="form-section-content">
                     <div id="add-new-user-account-username" class="form-group">
                         <label class="form-label element-multilanguage" data-translation-key="UserName">User Name</label>
-                        <input name="NewUserName" data-type="string" class="form-input element-form-data" type="text"
-                            placeholder="User Name" value="">
+                        <input name="NewUserName" data-type="string" class="form-input element-form-data" type="text">
                     </div>
 
-                    <div id="add-new-user-account-username" class="form-group">
+                    <div id="add-new-user-account-password" class="form-group">
                         <label class="form-label element-multilanguage" data-translation-key="Password">Password</label>
-                        <input name="Password" data-type="string" class="form-input element-form-data" type="text"
-                            placeholder="User Name" value="">
+                        <input name="Password" data-type="string" class="form-input element-form-data" type="password">
                     </div>
 
-                    <div id="add-new-user-account-username" class="form-group">
+                    <div id="add-new-user-account-password-confirm" class="form-group">
                         <label class="form-label element-multilanguage" data-translation-key="ConfirmPassword">Confirm
                             Password</label>
-                        <input name="ConfirmPassword" data-type="string" class="form-input element-form-data" type="text"
-                            placeholder="User Name" value="">
+                        <input name="ConfirmPassword" data-type="string" class="form-input element-form-data" type="password">
                     </div>
                 </div>
             </div>
@@ -56,7 +53,8 @@
                     <div id="add-new-user-role-radio">
                         <figure class="element-form-radio vertex-form-radio vertex-form-radio-border add-new-user-checked">
                             <label class="form-radio">
-                                <input type="radio" class="add-new-user-checked-status" name="user-role" data-value="user-role-admin">
+                                <input type="radio" class="add-new-user-checked-status" name="user-role" data-value="user-role-admin"
+                                    checked>
                                 <i class="form-icon"></i>
                                 <div class="element-multilanguage" data-translation-key="Admin">Admin</div>
                             </label>
@@ -70,8 +68,7 @@
                         </figure>
                         <figure class="element-form-radio vertex-form-radio vertex-form-radio-border add-new-user-checked">
                             <label class="form-radio">
-                                <input type="radio" class="add-new-user-checked-status" name="user-role" data-value="user-role-service"
-                                    checked>
+                                <input type="radio" class="add-new-user-checked-status" name="user-role" data-value="user-role-service">
                                 <i class="form-icon"></i>
                                 <div class="element-multilanguage" data-translation-key="Service">Service</div>
                             </label>
@@ -86,7 +83,7 @@
                     </div>
 
                     <div id="add-new-user-role-wrapper">
-                        <div id="add-new-user-role-settings"></div>
+                        <div id="add-new-user-role-settings" class="hidden"></div>
                         <div id="add-new-user-role-apply">
                             <label class="form-label element-multilanguage" data-translation-key="ApplyRoleOn">
                                 Apply role on
@@ -124,8 +121,8 @@
             <button type="submit" class="primarybutton element-form-submit element-multilanguage" data-translation-key="Save">
                 Save
             </button>
-            <a type="button" class="button-link element-form-cancel element-multilanguage" data-translation-key="Cancel">
-                Cancel
+            <a type="button" class="button-link element-form-cancel element-multilanguage" data-translation-key="Back">
+                Back
             </a>
         </div>
 

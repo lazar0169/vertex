@@ -4,8 +4,16 @@ let form = (function () {
     let valueMultiplier = 100;
     let currentEndpointId;
 
+    const inputTypes = {
+        singleSelect: 'single-select',
+        integer: 'int',
+        float: 'float',
+        string: 'string',
+        array: 'array'
+    }
+
     function prepareFloatValue(value) {
-        value = value.replace(',', '');
+        value = value.replace(/,/g, '');
         return parseFloat(value);
     }
 
@@ -35,12 +43,12 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.fillEvent, {data: data, formSettings: formSettings});
+        trigger(formSettings.getData, {data: data, formSettings: formSettings});
     }
 
     //helper functions
     function collectAllFormElements(formSettings) {
-        let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
+        let formElement = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
         let formInputElements = formElement.getElementsByClassName('element-form-data');
         return Array.prototype.slice.call(formInputElements);
     }
@@ -98,39 +106,42 @@ let form = (function () {
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
                                     newField.classList.add('element-input-additional-array-value');
+                                    console.log('new Field', newField);
+                                    validation.init(newInputElement, {});
+                                    console.log('validation', newField.vertexValidation);
                                     if (addAnotherButton !== null) {
                                         inputsContainer.insertBefore(newField, addAnotherButton);
                                     } else {
                                         inputsContainer.appendChild(newField);
                                     }
 
-                                    let deleteButtonElement = newField.getElementsByTagName('button')[0];
+                                    let deleteButtonElement = newField.getElementsByClassName('button-link')[0];
                                     deleteButtonElement.classList.remove('hidden');
                                     deleteButtonElement.addEventListener('click', deleteFormElement);
                                 }
                             }
                             //display delete button for first field
                             if (values.length > 1) {
-                                let firstDeleteButton = inputElement.parentNode.getElementsByTagName('button')[0];
+                                let firstDeleteButton = inputElement.parentNode.getElementsByClassName('button-link')[0];
                                 firstDeleteButton.classList.remove('hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
                         } else {
                             switch (inputElement.dataset.type) {
-                                case 'single-select':
+                                case inputTypes.singleSelect:
                                     //inputElement.dataset.value = dataToDisplay[inputName];
                                     dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
                                     break;
-                                case 'int':
+                                case inputTypes.integer:
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
-                                case 'float':
+                                case inputTypes.float:
                                     inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
                                     break;
-                                case 'string':
+                                case inputTypes.string:
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
-                                case 'array':
+                                case inputTypes.array:
                                     if (dataToDisplay[inputName].length === 1) {
                                         inputElement.value = dataToDisplay[inputName][0];
                                     }
@@ -153,15 +164,15 @@ let form = (function () {
     function init(formSettings) {
         let formContainerElement = $$(formSettings.formContainerSelector);
         formSettings.formContainerElement = formContainerElement;
-        if (formSettings.fillEvent !== null) {
-            formSettings.fillEvent = getEvent(formSettings, 'fillEvent');
+        if (formSettings.getData !== null) {
+            formSettings.getData = getEvent(formSettings, 'getData');
         }
         if (formSettings.submitEvent !== null) {
             formSettings.submitEvent = getEvent(formSettings, 'submitEvent');
         }
 
-        if (formSettings.fillFormEvent === undefined) {
-            formSettings.fillFormEvent = 'form/fillFormData';
+        if (formSettings.populateData === undefined) {
+            formSettings.populateData = 'form/fillFormData';
         }
         if (formSettings.submitSuccessEvent === undefined) {
             formSettings.submitSuccessEvent = 'form/submit/success';
@@ -176,6 +187,9 @@ let form = (function () {
 
         if (formContainerElement.formSettings === undefined) {
             initFormHandlers(formSettings);
+        }
+        if (formSettings.shouldValidate === undefined) {
+            formSettings.shouldValidate = false;
         }
 
         formContainerElement.formSettings = formSettings;
@@ -200,7 +214,6 @@ let form = (function () {
                         case 'single-select':
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
-                            console.log(formInputElement.dataset);
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }
@@ -208,8 +221,6 @@ let form = (function () {
                         case 'int':
                             if (parseInt(formInputElement.value) !== undefined) {
                                 dataForApi[formInputElement.name] = parseInt(formInputElement.value);
-                            } else {
-                                dataForApi[formInputElement.name] = 5; //todo validation
                             }
                             break;
                         case 'float':
@@ -225,7 +236,7 @@ let form = (function () {
                             }
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
-                        case'default':
+                        case 'default':
                             dataForApi[formInputElement.name].push(formInputElement.value);
                             break;
                     }
@@ -237,12 +248,31 @@ let form = (function () {
 
     function submit(formSettings, submitButton) {
         let dataForApi = collectAndPrepareFormData(formSettings);
-        submitButton.disabled = 'disabled';
-        submitButton.classList.add('loading');
-        trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings});
+        let valid = validate(formSettings);
+
+        if (valid) {
+            submitButton.disabled = 'disabled';
+            submitButton.classList.add('loading');
+            trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
+        } else {
+            return false;
+        }
     }
 
     function validate(formSettings) {
+        //skip validation if not required
+        if (formSettings.shouldValidate === false) {
+            return true;
+        }
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        let valid = true;
+        for (let i = 0; i < formInputElements.length; i++) {
+            let input = formInputElements[i];
+            if (input.vertexValidation !== undefined) {
+                valid = input.vertexValidation.validate() && valid;
+            }
+        }
+        return valid;
     }
 
     function error(formSettings) {
@@ -256,7 +286,6 @@ let form = (function () {
 
     function complete(formSettings) {
         let submitButtonsArray = collectSubmitButtons(formSettings);
-        console.log(submitButtonsArray);
         submitButtonsArray.forEach(function (submitButton) {
             submitButton.disabled = '';
             submitButton.classList.remove('loading');
@@ -291,27 +320,33 @@ let form = (function () {
             if (targetElements.length < e.currentTarget.dataset.maxNumber) {
 
                 let lastElement = targetElements[targetElements.length - 1];
-                let newField = lastElement.cloneNode(true);
 
-                newField.getElementsByTagName('input')[0].removeAttribute('id');
-                newField.getElementsByTagName('input')[0].value = '';
-                newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
-                newField.classList.add('element-input-additional-array-value');
+                let lastInput = lastElement.getElementsByTagName('input')[0];
+                if (lastInput.vertexValidation.validate()) {
+                    let newField = lastElement.cloneNode(true);
 
-                let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
+                    let newInput = newField.getElementsByTagName('input')[0];
+                    newInput.removeAttribute('id');
+                    newInput.value = '';
+                    newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    newField.classList.add('element-input-additional-array-value');
 
-                lastElement.parentNode.insertBefore(newField, addAnotherButton);
+                    let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
 
-                if (targetElements.length > 1) {
-                    targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    lastElement.parentNode.insertBefore(newField, addAnotherButton);
+                    validation.init(newInput, {});
+
+                    if (targetElements.length > 1) {
+                        targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    }
+
+                    let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
+                    deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
+                    deleteButtonFirstElement.addEventListener('click', deleteFormElement);
+
+                    let deleteButton = newField.getElementsByClassName('button-link')[0];
+                    deleteButton.addEventListener('click', deleteFormElement);
                 }
-
-                let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
-                deleteButtonFirstElement.removeEventListener('click', deleteFormElement);
-                deleteButtonFirstElement.addEventListener('click', deleteFormElement);
-
-                let deleteButton = newField.getElementsByClassName('button-link')[0];
-                deleteButton.addEventListener('click', deleteFormElement);
             }
         }
     }
@@ -325,7 +360,7 @@ let form = (function () {
     function formatFloatInputHandler() {
         let value = this.value;
         var position = this.selectionStart;
-        value = value.replace(',', '').replace('.', '');
+        value = value.replace(/,/g, '').replace('.', '');
         let number = value.slice(0, value.length - 2);
         let decimal = value.slice(value.length - 2, value.length);
         let float = parseFloat(number + "." + decimal).toFixed(2);
@@ -360,18 +395,37 @@ let form = (function () {
         }
     }
 
+    function createCurrencyInputs(formSettings) {
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        for (let i = 0; i < formInputElements.length; i++) {
+            let input = formInputElements[i];
+            if (input.dataset.type === inputTypes.float) {
+                currencyInput.generate(input);
+            }
+        }
+    }
+
+
+    function createCurrencyInputs(formSettings) {
+        let formInputElements = formSettings.formContainerElement.getElementsByClassName('element-form-data');
+        for (let i = 0; i < formInputElements.length; i++) {
+            let input = formInputElements[i];
+            if (input.dataset.type === inputTypes.float) {
+                currencyInput.generate(input);
+            }
+        }
+    }
+
+
     function addHiddenField(formSettings, name, value) {
         let formElement = $$(formSettings.formContainerSelector).getElementsByClassName('element-async-form')[0];
-        console.log(formElement);
         let input = document.createElement('input');
         input.type = 'hidden';
         input.name = name;
         input.value = value;
         input.classList.add('element-form-data');
         input.dataset.type = 'string';
-        console.log(input);
         formElement.appendChild(input);
-        console.log(input);
     }
 
     function toggleSection(e) {
@@ -396,17 +450,6 @@ let form = (function () {
         form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
         form.addEventListener('submit', onSubmit);
     }
-
-    /*    function bindBackButton(formSettings) {
-            let buttons = $$(formSettings.formContainerSelector).getElementsByClassName('action-form-back');
-            if (buttons.length > 0) {
-                let button = buttons[0];
-                button.addEventListener('click', function (e) {
-                    history.back();
-                });
-            }
-            //there should be only one button
-        }*/
 
     function bindAddAnotherClickHandlers(formSettings) {
         let addAnotherFieldButtonsArray = collectAddAnotherFieldButtons(formSettings);
@@ -433,18 +476,33 @@ let form = (function () {
         });
     }
 
+    function initValidation(formSettings) {
+        if (formSettings.formContainerElement.getAttribute('novalidate') === undefined ||
+            formSettings.formContainerElement.getAttribute('novalidate') === null ||
+            formSettings.formContainerElement.getAttribute('novalidate') == false) {
+            formSettings.shouldValidate = true;
+            let formInputElementsArray = collectAllFormElements(formSettings);
+            for (let i = 0; i < formInputElementsArray.length; i++) {
+                validation.init(formInputElementsArray[i], {});
+            }
+        }
+    }
+
     function initFormHandlers(formSettings) {
         bindSubmitButtonClickHandlers(formSettings);
         bindEnableButtonClickHandlers(formSettings);
         bindAddAnotherClickHandlers(formSettings);
-        // bindBackButton(formSettings);
+        createCurrencyInputs(formSettings);
         bindSubmitHandler(formSettings);
         createToggles(formSettings);
+        if (isEmpty(formSettings.initValidation)) {
+            formSettings.initValidation = initValidation;
+        }
+        formSettings.initValidation(formSettings);
     }
 
-    on('form/add/hiddenField', function (params)
-    {
-        addHiddenField(params.formSettings,params.name, params.value);
+    on('form/add/hiddenField', function (params) {
+        addHiddenField(params.formSettings, params.name, params.value);
     });
 
     on('form/init', function (params) {
@@ -457,7 +515,7 @@ let form = (function () {
         getFormData(formSettings);
     });
 
-    on('from/validate', function (params) {
+    on('form/validate', function (params) {
         let formSettings = params.formSettings;
         validate(formSettings);
     });
@@ -468,7 +526,6 @@ let form = (function () {
         submit(formSettings);
     });
 
-    //ToDo: check if this event is necessary
     on('form/complete', function (params) {
         complete(params.formSettings);
     });
@@ -487,11 +544,9 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-        //ToDo: neske
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
-        console.log('error');
         complete(formSettings);
     });
 

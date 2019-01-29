@@ -42,13 +42,12 @@
     height: 15px;
     margin: 0 !important;
     /*proveriti kako da se izbegne important a da im ostane css koji ga prebrisuje */
-    background: rgb(38, 50, 56);
     box-shadow: unset;
     pointer-events: all;
 }
 
 .form-switch input:checked+.form-icon {
-    background: rgb(55, 71, 79);
+    background: black;
     border: none;
 }
 

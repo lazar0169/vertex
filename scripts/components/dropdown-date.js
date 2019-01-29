@@ -19,10 +19,21 @@ const dropdownDate = (function () {
         select.id = `ds-${indexDsId}`;
         //selected option
         let selected = document.createElement('div');
-        selected.innerHTML = dataSelect[0];
-        selected.title = selected.innerHTML;
-        selected.dataset.value = dataSelect[0];
+
+        selected.innerHTML = `<div></div>
+                              <span class="closed-arrow">&#9660;</span>`;
+        select.appendChild(selected);
+        selected.children[0].innerHTML = dataSelect[0];
+        selected.title = selected.children[0].innerHTML;
+        if (dataSelect[0] === '-' || dataSelect[0] === 'null') {
+            selected.dataset.value = null;
+        }
+        else {
+            selected.dataset.value = dataSelect[0];
+        }
         selected.classList.add('element-table-filters');
+        selected.classList.add('center');
+        selected.classList.add('opened-closed-wrapper');
         //wrapper options group
         let optionGroupWrapper = document.createElement('div');
         optionGroupWrapper.classList.add('hidden');
@@ -90,8 +101,8 @@ const dropdownDate = (function () {
                     delete applyCustom.dataset.value;
                 }
                 else {
-                    selected.innerHTML = option.innerHTML;
-                    selected.title = selected.innerHTML;
+                    selected.children[0].innerHTML = option.innerHTML;
+                    selected.title = selected.children[0].innerHTML;
                     selected.dataset.value = option.dataset.value;
                     customDate.classList.add('hidden');
                     pickCustom = false;
@@ -123,7 +134,8 @@ const dropdownDate = (function () {
                     if (current.id != activeSelectId && activeSelectId) {
                         $$(`.active-date-select`)[0].children[1].children[1].classList.add('hidden');
                         $$(`.active-date-select`)[0].children[1].classList.add('hidden');
-                        $$('.active-date-select')[0].classList.toggle('active-date-select');
+                        $$('.active-date-select')[0].children[0].children[1].classList.remove('opened-arrow');
+                        $$('.active-date-select')[0].classList.remove('active-date-select');
                         pickCustom = false;
                     }
                     activeSelectId = selectId;
@@ -136,9 +148,10 @@ const dropdownDate = (function () {
             }
             current = current.parentNode;
         }
-        //TODO PITAJ LAZARA DA ISPRAVI BAG
+        
         if (found && !pickCustom && e.target.dataset && e.target.dataset.value !== 'Custom' || e.target.parentNode && e.target.parentNode.id === activeSelectId || found && pickCustom && e.target.dataset && e.target.dataset.value === 'Apply custom date') {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
+            $$(`#${activeSelectId}`).children[0].children[1].classList.toggle('opened-arrow');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
             if (!$$(`#${activeSelectId}`).classList.contains('active-date-select')) {
@@ -154,6 +167,7 @@ const dropdownDate = (function () {
             if (activeSelectId) {
                 $$(`.active-date-select`)[0].children[1].children[1].classList.add('hidden');
                 $$(`.active-date-select`)[0].children[1].classList.add('hidden');
+                $$(`.active-date-select`)[0].children[0].children[1].classList.remove('opened-arrow');
                 $$('.active-date-select')[0].classList.toggle('active-date-select');
                 activeSelectId = false;
                 pickCustom = false;
@@ -164,14 +178,32 @@ const dropdownDate = (function () {
             $$('.advance-filter-active')[0].children[1].classList.remove('hidden');
             if (e.target.parentNode && e.target.parentNode.classList.contains('apply-advance-filter')) {
                 $$('.advance-filter-active')[0].children[1].classList.add('hidden');
-                $$('.advance-filter-active')[0].classList.remove('advance-filter-active')
+                $$('.advance-filter-active')[0].classList.remove('advance-filter-active');
             }
         }
         else {
             if ($$('.advance-filter-active')[0]) {
                 $$('.advance-filter-active')[0].children[1].classList.add('hidden');
-                $$('.advance-filter-active')[0].classList.remove('advance-filter-active')
+                $$('.advance-filter-active')[0].children[0].children[1].classList.remove('opened-arrow')
+                $$('.advance-filter-active')[0].classList.remove('advance-filter-active');
             }
+        }
+        //this is for table search
+        if (e.target.classList && e.target.classList.contains('advance-filter-tabele-search')) {
+
+            if ($$('.advance-filter-tabele-search-active')[0]) {
+                $$('.advance-filter-tabele-search-active')[0].children[0].classList.add('hidden');
+                $$('.advance-filter-tabele-search-active')[0].classList.remove('advance-filter-tabele-search-active');
+            }
+
+            e.target.children[0].classList.remove('hidden');
+            e.target.classList.add('advance-filter-tabele-search-active');
+            e.target.children[0].children[0].focus();
+        }
+
+        else if ($$('.advance-filter-tabele-search-active')[0] && document.activeElement.classList && !document.activeElement.classList.contains('search')) {
+            $$('.advance-filter-tabele-search-active')[0].children[0].classList.add('hidden');
+            $$('.advance-filter-tabele-search-active')[0].classList.remove('advance-filter-tabele-search-active');
         }
     });
     return {

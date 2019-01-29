@@ -2,16 +2,14 @@ const ticketAppearance = (function () {
 
     let formSettingsAppearance = {};
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
-    formSettingsAppearance.fillEvent = 'communicate/tickets/ticketAppearance';
-    formSettingsAppearance.submitEvent = 'communicate/tickets/saveAppearance';
+    formSettingsAppearance.getData = communication.events.tickets.ticketAppearance;
+    formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
         formSettingsAppearance.endpointId = params.tableSettings.endpointId;
-        trigger('form/init', {formSettings: formSettingsAppearance});
-        trigger('form/getData', {formSettings: formSettingsAppearance});
+        trigger('form/init', { formSettings: formSettingsAppearance });
+        trigger('form/getData', { formSettings: formSettingsAppearance });
     });
-
-
 
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
@@ -22,7 +20,6 @@ const ticketAppearance = (function () {
     let inputChasoutTicket = $$('#wrapper-tickets-appearance-cashable').children[1].children[1];
     let inputExpiringCashout = $$('#wrapper-tickets-appearance-cashable').children[2].children[1];
     let inputExpiringPromo = $$('#wrapper-tickets-appearance-promo').children[2].children[1];
-    let inputPayablePromo = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
     let inputValidation = $$('#tickets-advanced-settings-validation').children[1];
     let inputTicket = $$('#tickets-advanced-settings-ticket').children[1];
     let dateWrapper = $$('#tickets-advanced-settings-date');
@@ -63,10 +60,10 @@ const ticketAppearance = (function () {
 
     selectedDateFormat.setAttribute('data-name', 'DateFormat');
     selectedDateFormat.setAttribute('data-type', 'single-select');
-    selectedDateFormat.classList.add('element-form-data');
+
     selectedTimeFormat.setAttribute('data-name', 'TimeFormat');
     selectedTimeFormat.setAttribute('data-type', 'single-select');
-    selectedTimeFormat.classList.add('element-form-data');
+
 
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');
@@ -259,6 +256,7 @@ const ticketAppearance = (function () {
     });
 
     ticketAppearanceAdvance.addEventListener('click', function () {
+        trigger('opened-arrow', { div: ticketAppearanceAdvance });
         ticketAppearanceAdvanceShow.classList.toggle('hidden');
     });
 
@@ -383,7 +381,7 @@ const ticketAppearance = (function () {
     }
 
     cancelTicketAppearance.addEventListener('click', function () {
-        trigger('form/getData', {formSettings: formSettingsAppearance});
+        trigger('form/getData', { formSettings: formSettingsAppearance });
     });
 
 })();

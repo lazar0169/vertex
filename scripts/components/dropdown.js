@@ -18,7 +18,7 @@ const dropdown = (function () {
             let elementTableFilter = element.getElementsByClassName("element-table-filters")[0];
             elementTableFilter.dataset.value = selectedValue;
             elementTableFilter.title = selectedValue;
-            elementTableFilter.innerText = selectedValue;
+            elementTableFilter.children[0].innerText = selectedValue;
         }
         return element;
     }
@@ -31,27 +31,25 @@ const dropdown = (function () {
             for (let ss of singleSelectArray) {
                 if (ss === element.children[1].id) {
                     existsId = element.children[1].id;
-                    singleSelectArray.splice(i, 1);
+                    //singleSelectArray.splice(i, 1);
                     break;
                 }
                 i++;
             }
             removeChildren(element);
         }
-
-
-
-
         // wrapper select
         let select = document.createElement('div');
         if (existsId) {
-            select.id = indexSsId;
+            select.id = existsId;
         }
         else {
             select.id = `ss-${indexSsId}`;
             indexSsId++;
         }
         select.classList.add('default-select');
+        select.classList.add('default-single-select');
+
         select.classList.add('element-form-data');
         select.dataset.type = 'single-select';
 
@@ -61,8 +59,13 @@ const dropdown = (function () {
 
         //selected option
         let selected = document.createElement('div');
+        selected.classList.add('center');
+        selected.classList.add('opened-closed-wrapper');
+        selected.innerHTML = `<div></div>
+                              <span class="closed-arrow">&#9660;</span>`;
+        select.appendChild(selected);
         if (typeof dataSelect[0] === 'object') {
-            selected.innerHTML = dataSelect[0].Name;
+            selected.children[0].innerHTML = dataSelect[0].Name;
             selected.dataset.value = dataSelect[0].Name;
             if (dataSelect[0].LongId !== undefined && dataSelect[0].LongId !== null && dataSelect[0].LongId !== 0) {
                 selected.dataset.valueLongId = dataSelect[0].LongId;
@@ -70,13 +73,14 @@ const dropdown = (function () {
             }
         }
         else {
-            selected.innerHTML = dataSelect[0];
+            selected.children[0].innerHTML = dataSelect[0];
             selected.dataset.value = dataSelect[0];
         }
-        selected.title = selected.innerHTML;
+        selected.title = selected.children[0].innerHTML;
         selected.classList.add('element-table-filters');
         selected.addEventListener('click', function () {
             optionGroup.classList.toggle('hidden');
+            trigger('opened-arrow', { div: selected });
             select.classList.toggle('active-single-select');
         });
         //wrapper options group
@@ -106,18 +110,18 @@ const dropdown = (function () {
 
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                selected.innerHTML = option.innerHTML;
-                selected.title = selected.innerHTML;
+                selected.children[0].innerHTML = option.innerHTML;
+                trigger('opened-arrow', { div: selected });
+                selected.title = selected.children[0].innerHTML;
                 selected.dataset.value = option.dataset.value;
                 selected.dataset.valueLongId = option.dataset.valueLongId;
                 select.classList.remove('active-single-select');
                 optionGroup.classList.add('hidden');
             });
         }
-        select.appendChild(selected);
+
         select.appendChild(optionGroup);
 
-        indexSsId++;
         singleSelectArray.push(select.id);
 
         if (element) {
@@ -134,6 +138,7 @@ const dropdown = (function () {
             if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
                 if (e.target.parentNode.id !== selectId) {
                     $$(`#${selectId}`).classList.remove('active-single-select');
+                    $$(`#${selectId}`).children[0].children[1].classList.remove('opened-arrow');
                     $$(`#${selectId}`).children[1].classList.add('hidden');
                 }
             }

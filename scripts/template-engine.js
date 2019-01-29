@@ -55,28 +55,25 @@ let template = (function () {
         return newElement;
     }
 
-    function render(templateElementSelector, model, callbackEvent) {
+    function render(templateElementSelector, model, callbackEvent,params) {
         let templateElement = $$(templateElementSelector);
 
         if (templateElement === null || templateElement.length <= 0) {
             console.error('Template element does not exists!');
-        }
-        else if (templateElement.length > 0) {
+        } else if (templateElement.length > 0) {
             templateElement = templateElement[0];
         }
         let newElement = cloneTemplateElement(templateElement);
-        if (typeof model === typeof undefined) { //todo check if this works
+        if ( model !==  undefined) {
             // trigger(callbackEvent, {element: newElement});
-            return newElement;
+            let newElementString = newElement.innerHTML;
+            let placeholders = getPlaceholders(newElementString);
+            let placeholderValues = getPlaceholderValues(placeholders, model);
+            newElement.innerHTML = replaceValueInTemplate(newElementString, placeholderValues);
+
         }
-        let newElementString = newElement.innerHTML;
-        let placeholders = getPlaceholders(newElementString);
-        let placeholderValues = getPlaceholderValues(placeholders, model);
-        let replacedString = replaceValueInTemplate(newElementString, placeholderValues);
-        newElement.innerHTML = replacedString;
-        if (typeof callbackEvent !== typeof undefined) {
-            console.log('new element', newElement);
-            trigger(callbackEvent, {model: model, element: newElement});
+        if (callbackEvent !==  undefined) {
+            trigger(callbackEvent, {model: model, element: newElement,params:params});
         }
 
         return newElement;
@@ -93,14 +90,7 @@ let template = (function () {
     on('template/render', function (params) {
         let templateElementSelector = params.templateElementSelector;
         let model = params.model;
-        let newHtmlElement;
-        if (typeof params.callbackEvent !== typeof undefined) {
-            newHtmlElement = render(templateElementSelector, model, params.callbackEvent);
-        }
-        else {
-            newHtmlElement = render(templateElementSelector, model);
-        }
-        trigger(params.callbackEvent, {element: newHtmlElement, params: params, model: params.model});
+        render(templateElementSelector, model, params.callbackEvent,params);
     });
 
     return {

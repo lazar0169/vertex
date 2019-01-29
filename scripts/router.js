@@ -3,11 +3,6 @@ let router = (function () {
     //Map object with routes
 
     let routes = new Map();
-    /*    routes.set('aft', {
-            page: 'aft',
-            id: '#page-aft',
-            path: '/aft'
-        });*/
     routes.set('aft', {
         page: 'aft',
         id: '#page-aft',
@@ -109,7 +104,6 @@ let router = (function () {
     }
 
     function changePage(pageName, addStateToHistory, url) {
-        // application.checkCurrentUser();
         hideActivePage();
         if (pageName === null || pageName === undefined) {
             pageName = 'home';
@@ -130,13 +124,12 @@ let router = (function () {
         }
         hideActivePage();
         showPage(pageName);
-        let eventName = pageName + "/activated";
+        let eventName = pageName + '/activated';
         //Trigger load event of selected page
         trigger(eventName, { 'params': params });
         //Event name convention: page-PAGENAME-activated
         //ToDo: Trigerovati event sidebar-a da oznaci koji je podmeni aktivan
     }
-
 
     //Functions for working with regular expressions
 
@@ -182,7 +175,6 @@ let router = (function () {
         });
         return pageName;
     }
-
 
     //Functions for working with parameters
 
@@ -262,6 +254,7 @@ let router = (function () {
     }
 
     //Function for manipulating history stack
+
     function pushToHistoryStack(route, params) {
         let currentState = window.history.state,
             currentUrl = createUrlFromRouteAndParams(route, params),
@@ -276,7 +269,6 @@ let router = (function () {
             window.history.pushState(route, null, currentUrl);
         }
     }
-
 
     //Functions for handling links
 
@@ -300,8 +292,8 @@ let router = (function () {
         changePage(pageName, true, url);
     }
 
-
     //Function for initialization
+
     function init() {
         addRegExpToPages();
         let path = window.location.pathname;
@@ -321,7 +313,6 @@ let router = (function () {
         }
         bindNavigationLinkHandlers();
     }
-
 
     //events
 

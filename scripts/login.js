@@ -14,7 +14,7 @@ let login = (function () {
         let passwordField = $$(passwordFieldName)[0];
         let usernameValue = usernameField.value;
         let passwordValue = passwordField.value;
-        trigger('communicate/login', {
+        trigger(communication.events.authorization.login, {
             data: {'UserName': usernameValue, "Password": passwordValue},
             successEvent: 'login/success',
             errorEvent: 'login/error'

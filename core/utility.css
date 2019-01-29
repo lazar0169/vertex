@@ -54,10 +54,6 @@
     padding: 0 0.5rem;
 }
 
-.custom-filter>div:first-child {
-    padding-right: 1rem;
-}
-
 .custom-filter>div:not(:last-child) {
     border-right: 1px solid black;
 }
@@ -76,23 +72,36 @@
     align-items: center;
 }
 
-.custom-filter>div:not(:first-child)>div:not(:first-child) {
-    padding: 0 0.8rem;
+.advance-filter-tabele-search {
+    cursor: pointer;
+}
+
+.advance-filter-tabele-search>div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background: rgb(38, 50, 56);
+}
+
+.advance-filter-tabele-search-active .search {
+    height: 40px !important;
+    width: 600px !important;
 }
 
 .advance-table-filter {
-    cursor: pointer;
     position: relative;
     border-left: 0.5rem solid rgb(38, 50, 56);
     border-top: 0.5rem solid rgb(38, 50, 56);
 }
 
 .advance-table-filter>div:first-child {
-    padding-right: 0.5rem;
     border-bottom: 0.5rem solid transparent;
+    padding-right: 1rem;
+    cursor: pointer;
 }
 
-.advance-table-filter::before {
+/* .advance-table-filter::before {
     content: "";
     position: absolute;
     right: 0.5rem;
@@ -102,7 +111,7 @@
     border-top: 0.4rem solid rgb(30, 155, 227);
     border-right: 0.15rem solid transparent;
     border-left: 0.15rem solid transparent;
-}
+} */
 
 .chosen-info-tab {
     flex: 1;
@@ -140,16 +149,18 @@
     box-shadow: 0 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
-.advance-filter-active>div:not(:first-child)>div {
+.advance-filter-active>div:not(:first-child)>div:not(:last-child) {
     display: inline-flex;
     width: 100%;
-    padding: 0.3rem 0.4rem 0.3rem 0.3rem;
+    padding: 0.3rem 0.4rem 0.3rem 0.8rem;
     white-space: nowrap;
 }
 
 .advance-filter-active>div:not(:first-child)>div:last-child {
     background: rgb(38, 50, 56);
     cursor: default;
+    display: inline-flex;
+    padding: 0.3rem 0rem 0.3rem 0rem;
 }
 
 .advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
@@ -213,7 +224,7 @@
 }
 
 .primarybutton:hover, .secundarybutton:hover {
-    background-color: #2196F3;
+    background: #03A9F4;
 }
 
 .button-link {
@@ -241,4 +252,61 @@
 
 .option-casionos-in-city-wrapper {
     padding: 0 0.5rem;
+}
+
+.border-bottom-cities {
+    border-bottom: 1px solid #37474f;
+}
+
+.background-dark {
+    background: rgb(38, 50, 56);
+    box-shadow: 0 0 10px #000000;
+}
+
+/* .cities-wrapper {
+    max-height: 210px;
+} */
+
+.option-casino:hover label, .option-city:hover, .option-all:hover label {
+    cursor: pointer !important;
+    color: white !important;
+}
+
+.closed-arrow {
+    transform: rotate(0deg);
+    transition: all .15s ease-in;
+    color: rgb(120, 144, 156);
+}
+
+.opened-arrow {
+    transform: rotate(180deg);
+    transition: all .15s ease-in-out;
+    color: white;
+}
+
+.opened-closed-wrapper>div, .opened-closed-wrapper>span {
+    pointer-events: none;
+}
+
+.opened-closed-wrapper>div {
+    padding-right: 1em;
+}
+
+.opened-closed-wrapper>span {
+    position: absolute;
+    right: 0.3rem;
+}
+
+.search-casino {
+    border-bottom: 10px solid rgb(55, 71, 79);
+}
+
+/* videti ovaj deo kako uraditi */
+
+figure label {
+    cursor: pointer;
+}
+
+figure:hover {
+    color: white;
 }

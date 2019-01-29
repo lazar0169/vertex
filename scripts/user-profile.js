@@ -4,7 +4,7 @@ const userEditProfileModule = (function () {
     let userEditProfile = $$('#user-edit-profile');
     let backUserEditProfile = $$('#user-edit-profile-buttons').children[0];
     let saveUserEditProfile = $$('#user-edit-profile-buttons').children[1];
-    let username = $$('#top-bar-logout-user').innerHTML
+    let username = $$('#top-bar-logout-user').children[0].innerHTML;
 
 
     $$('#user-info-profile-username').innerHTML = username;
@@ -15,7 +15,7 @@ const userEditProfileModule = (function () {
     });
 
     logout.addEventListener('click', function () {
-        application.checkCurrentUser();
+        // application.checkCurrentUser();
         trigger('logout');//todo make this trigger work
     });
     backUserEditProfile.addEventListener('click', function () {
