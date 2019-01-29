@@ -1,11 +1,12 @@
 let topBar = (function () {
     let topBarPath = $$('#top-bar').children[0];
-    let openUserProfile = $$('#top-bar-logout-user');
+    let logoutUser = $$('#top-bar-logout-user');
+    let logoutDropdown = $$('#top-bar-logout-dropdown-menu');
     let userProfile = $$('#user-profile');
     let previousTopBar;
 
     if (sessionStorage.token) {
-        openUserProfile.children[0].innerHTML = decodeToken(sessionStorage.token).preferred_username;
+        logoutUser.children[0].innerHTML = decodeToken(sessionStorage.token).preferred_username;
     }
     function showTopBar(value) {
         if (value.category && value.casino) {
@@ -25,10 +26,13 @@ let topBar = (function () {
     }
     function showProfile() {
         $$('#black-area').classList.add('show');
-        userProfile.classList.toggle('hidden');
+        // userProfile.classList.toggle('hidden');
     }
-    openUserProfile.addEventListener('click', function () {
-        showProfile();
+    logoutUser.addEventListener('click', function () {
+        trigger('opened-arrow', { div: logoutUser });
+        $$('#top-bar-logout').classList.toggle('logout-is-opened');
+        logoutDropdown.classList.toggle('hidden');
+        // showProfile();
     });
 
     on('show/app', function () {

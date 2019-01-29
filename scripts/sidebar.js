@@ -141,7 +141,6 @@ const sidebar = (function () {
 
             let span = document.createElement('span');
             let mdiClassName = `icon-${category}`;
-            span.classList.add('mdi');
             span.classList.add(mdiClassName);
             span.classList.add('custom-tooltip');
             span.classList.add('center');

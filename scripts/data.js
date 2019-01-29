@@ -29,25 +29,25 @@ let casinoData = {
             Id: 27,
             Name: 'Marger c',
             City: 'Surdulica',
-            checked: false
+            checked: true
         },
         {
             Id: 28,
             Name: 'Durlan c',
             City: 'Beograd',
-            checked: false
+            checked: true
         },
         {
             Id: 29,
             Name: 'Durlan',
             City: 'Nis',
-            checked: false
+            checked: true
         },
         {
             Id: 30,
             Name: 'Novi Beograd',
             City: 'Beograd',
-            checked: false
+            checked: true
         },
         {
             Id: 31,
