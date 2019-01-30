@@ -4,6 +4,11 @@ let form = (function () {
     let valueMultiplier = 100;
     let currentEndpointId;
 
+    const nodeTypes = {
+        div: 'DIV',
+        input: 'INPUT'
+    };
+
     const inputTypes = {
         singleSelect: 'single-select',
         integer: 'int',
@@ -106,9 +111,7 @@ let form = (function () {
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
                                     newField.classList.add('element-input-additional-array-value');
-                                    console.log('new Field', newField);
                                     validation.init(newInputElement, {});
-                                    console.log('validation', newField.vertexValidation);
                                     if (addAnotherButton !== null) {
                                         inputsContainer.insertBefore(newField, addAnotherButton);
                                     } else {
@@ -129,8 +132,8 @@ let form = (function () {
                         } else {
                             switch (inputElement.dataset.type) {
                                 case inputTypes.singleSelect:
-                                    //inputElement.dataset.value = dataToDisplay[inputName];
-                                    dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
+                                    console.log('dataToDisplay:',dataToDisplay[inputName]);
+                                    dropdown.select(inputElement, dataToDisplay[inputName]);
                                     break;
                                 case inputTypes.integer:
                                     inputElement.value = dataToDisplay[inputName];
@@ -313,6 +316,32 @@ let form = (function () {
         }
     }
 
+    function reset(formSettings) {
+        let inputs = collectAllFormElements(formSettings);
+        for (let i = 0; i < inputs.length; i++) {
+            let input = inputs[i];
+            resetInput(input);
+        }
+    }
+
+    function resetInput(input) {
+        //ToDo: handle all input types as needed
+        let htmlType = input.getAttribute('type');
+        let nodeName = input.nodeName;
+        if (nodeName === nodeTypes.input) {
+            if (!isEmpty(htmlType) && htmlType === 'text') {
+                input.value = '';
+            }
+        }
+        else if (nodeName === nodeTypes.div) {
+            if (input.dataset.type === inputTypes.singleSelect) {
+                console.log('div:', input);
+                dropdown.reset(input);
+            }
+        }
+    }
+
+
     function addAnotherField(e, formSettings) {
         if (e.currentTarget.dataset.maxNumber !== undefined) {
             let targetSelector = e.currentTarget.dataset.targetSelector;
@@ -357,18 +386,7 @@ let form = (function () {
     }
 
     //elements event handlers
-    function formatFloatInputHandler() {
-        let value = this.value;
-        var position = this.selectionStart;
-        value = value.replace(/,/g, '').replace('.', '');
-        let number = value.slice(0, value.length - 2);
-        let decimal = value.slice(value.length - 2, value.length);
-        let float = parseFloat(number + "." + decimal).toFixed(2);
-        this.value = formatFloatValue(float);
-        this.selectionEnd = position;
-    }
-
-    function onSubmit(e) {
+     function onSubmit(e) {
         e.preventDefault();
         return false;
     }
@@ -500,6 +518,11 @@ let form = (function () {
         }
         formSettings.initValidation(formSettings);
     }
+
+    on('form/reset', function (params) {
+        console.log('reset:', params);
+        reset(params.formSettings);
+    });
 
     on('form/add/hiddenField', function (params) {
         addHiddenField(params.formSettings, params.name, params.value);

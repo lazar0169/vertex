@@ -325,8 +325,6 @@ let validation = (function () {
         for (let i = 0; i < keys.length; i++) {
             let rule = rules.get(keys[i]);
             value = parseValue(rule,value);
-            console.log('value:',value);
-            console.log('regex:',rule.regex);
             if (value.match(rule.regex) === null) {
                 valid = false;
                 settings.errors.push(settings.errorMessages.get(rule.type));

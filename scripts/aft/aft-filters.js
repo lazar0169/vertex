@@ -158,7 +158,7 @@ const aftFilters = (function () {
         });
         multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
 
-        dropdown.generate(filters.TypeList.slice(1, filters.TypeList.length), aftAddTransactionType, 'Type');
+        dropdown.generate(types.slice(1, types.length), aftAddTransactionType, 'Type');
         dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
     }
 
@@ -207,6 +207,18 @@ const aftFilters = (function () {
         activeTableSettings.visibleColumns = pageFilters.Columns;
         activeTableSettings.filters = filtersForApi;
         return filtersForApi;
+    }
+
+    function hideAndResetAddTransactionUI() {
+        trigger('show/app');
+        resetAddTransactionUI();
+    }
+
+    function resetAddTransactionUI() {
+        dropdown.reset($$('#add-transaction-type'));
+        dropdown.reset($$('#add-transaction-machine'));
+
+
     }
 
 
