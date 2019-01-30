@@ -14,6 +14,8 @@
 
 #top-bar>div {
     display: inline-flex;
+    padding: 0.5em;
+    font-size: 14px;
 }
 
 /* selektor * */
@@ -25,23 +27,34 @@
 #top-bar-logout {
     position: absolute;
     right: 0.5rem;
+    border-radius: 0.5em 0.5em 0 0;
+    border-top: 1px solid rgb(55, 71, 79);
+    cursor: pointer;
+}
+
+#top-bar-logout>div {
+    pointer-events: none;
 }
 
 #top-bar-logout-dropdown-menu {
     position: absolute;
     right: 0;
-    background: rgb(55, 71, 79);
+    background: rgb(38, 50, 56);
     z-index: 1;
     box-shadow: 0 0.5em 0.5em rgba(1, 1, 1, 0.5);
+    border-radius: 0.5em 0 0.5em 0.5em;
+    padding: 0.5em;
+    min-width: 220px;
+    pointer-events: all;
 }
 
 #top-bar-logout-dropdown-menu>div:first-child {
-    border-bottom: 1px solid rgb(38, 50, 56);
+    border-bottom: 1px solid rgb(55, 71, 79);
 }
 
-#top-bar-logout-dropdown-menu>div {
-    padding: 0 0.5em;
+#top-bar-logout-dropdown-menu>div:first-child {
     white-space: nowrap;
+    padding: 0.5em 0;
 }
 
 #top-bar-logout-user {
@@ -58,6 +71,47 @@
 }
 
 .logout-is-opened {
+    background: rgb(38, 50, 56);
+    border-color: rgba(1, 1, 1, 0.2) !important;
+    box-shadow: 0 0.5em 0.5em rgba(1, 1, 1, 0.5);
+}
+
+.grid-user-info {
+    display: grid;
+    grid-template-areas: 'name-and-surname user-img' 'email user-img';
+    grid-gap: 0.5em;
+}
+
+.name-and-surname-area {
+    grid-area: name-and-surname;
+    font-size: 14px;
+}
+
+.email-area {
+    grid-area: email;
+    font-size: 12px;
+}
+
+.user-img-area {
+    grid-area: user-img;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+#top-bar-edit-and-logout-user {
+    display: grid;
+    white-space: nowrap;
+    padding: 0.5em 0;
+}
+
+#top-bar-edit-and-logout-user>div {
+    cursor: pointer;
+    padding: 0.5em;
+    font-size: 14px;
+}
+
+#top-bar-edit-and-logout-user>div:hover {
     background: rgb(55, 71, 79);
-    box-shadow: 0 0 0.5em rgba(1, 1, 1, 0.5);
+    color: white;
 }
