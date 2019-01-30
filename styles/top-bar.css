@@ -62,6 +62,10 @@
     display: flex;
 }
 
+#top-bar-logout-user>div:first-child {
+    font-weight: bold;
+}
+
 .element-cashable-active-tickets-value, .element-promo-active-tickets-value, .color-white {
     color: white;
 }
@@ -95,8 +99,8 @@
 .user-img-area {
     grid-area: user-img;
     border-radius: 50%;
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
 }
 
 #top-bar-edit-and-logout-user {

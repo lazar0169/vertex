@@ -51,7 +51,7 @@
     display: inline-flex;
     padding: 0;
     height: 100%;
-    padding: 0 0.5rem;
+    padding: 0 0.8em;
 }
 
 .custom-filter>div:not(:last-child) {
@@ -82,6 +82,7 @@
     top: 0;
     z-index: 1;
     background: rgb(38, 50, 56);
+    padding: 0 0.8em;
 }
 
 .advance-filter-tabele-search-active .search {
@@ -310,4 +311,8 @@ figure label {
 
 figure:hover {
     color: white;
+}
+
+.icon-vertex-Search>input {
+    margin-left: 0.5em
 }
