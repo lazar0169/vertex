@@ -137,8 +137,6 @@ const dropdown = (function () {
             });
             items.push(item);
         }
-        console.log('element',element);
-        console.log('items',items);
         select.appendChild(optionGroup);
 
         singleSelectArray.push(select.id);
