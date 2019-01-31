@@ -58,7 +58,7 @@ let localization = (function () {
     function translate(key, translations) {
         let translation = getProperty(key, translations);
 
-        if (translation !== undefined && translation !== '') {
+        if (!isEmpty(translation) && translation !== '') {
             return translation;
         } else {
             // console.error('Translation for ' + key + ' was not found in translations file!');
@@ -141,7 +141,6 @@ let localization = (function () {
         }
         changeLanguage(multiLanguageElementSelector, getActiveLanguage());
     }
-
     init();
 
     return {
