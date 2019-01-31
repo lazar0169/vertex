@@ -57,7 +57,6 @@ let validation = (function () {
         return a !== undefined && a !== null && a !== '';
     };
     operatorFunctions[constraintsOperators.email] = function(a) {
-        console.log('email:',a);
         return a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ));
     }
@@ -223,14 +222,14 @@ let validation = (function () {
                             rule.regex = new RegExp('^\\d+$');
                             break;
                         case inputTypes.float:
-                            rule.regex = new RegExp(/^[+-]?\d+(\.\d+)?$/);
+                            rule.regex = new RegExp(/^[0-9.]*$/);
                             break;
                         case inputTypes.string:
-                            rule.regex = new RegExp(/^[A-Za-z0-9]+$/);
+                            rule.regex = new RegExp('');
                             break;
                         //special case, requires pattern attribute
                         default:
-                            rule.regex = '';
+                            rule.regex = new RegExp('');
                             break;
                     }
                     settings.rules.set(type, rule);
@@ -323,12 +322,11 @@ let validation = (function () {
         let rules = settings.rules;
         let keys = Array.from(rules.keys());
         let valid = true;
-        console.log('value:', value);
         for (let i = 0; i < keys.length; i++) {
             let rule = rules.get(keys[i]);
-            console.log('rule:',rule);
             value = parseValue(rule,value);
-            console.log('match:',value.match(rule.regex));
+            console.log('value:',value);
+            console.log('regex:',rule.regex);
             if (value.match(rule.regex) === null) {
                 valid = false;
                 settings.errors.push(settings.errorMessages.get(rule.type));
