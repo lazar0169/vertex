@@ -65,7 +65,6 @@ const aft = (function () {
     /*********************----Module Events------*********************/
     on('aft/addTransaction/error', function (params) {
 
-        //let messageType = params.message.MessageType;
         trigger('notifications/show', {
             message: params.message.MessageCode,
             type: params.message.MessageType,
@@ -76,7 +75,8 @@ const aft = (function () {
     on('aft/addTransaction/success', function (params) {
         trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
         trigger('aft/filters/filter-table', { showFilters: false });
-        //ToDo: Neske i Nikola - da li isprazniti formu i sakriti pop up koji izadje sa desne strane?
+        trigger('show/app');
+        trigger('form/reset',{formSettings:$$('#aft-tabs-add-transaction-form-wrapper').formSettings});
 
     });
 
