@@ -55,8 +55,7 @@ const multiDropdown = (function () {
 
         //selected options
         let selected = document.createElement('div');
-        selected.innerHTML = `<div></div>
-                              <span class="closed-arrow">&#9660;</span>`;
+        selected.innerHTML = `<div></div><span class="closed-arrow">&#9660;</span>`;
         select.appendChild(selected);
 
         // display no select
@@ -70,7 +69,6 @@ const multiDropdown = (function () {
             } else {
                 selected.children[0].innerHTML = noSelectedData.name;
                 noSelected.Value = noSelectedData.name;
-
             }
         } else {
             selected.children[0].innerHTML = noSelectedData.Name;
@@ -81,7 +79,6 @@ const multiDropdown = (function () {
             else {
                 selected.dataset.value = noSelectedData.Name;
             }
-
             noSelected.Name = noSelectedData.Name;
             //set null as string as dataset values are always converted to string
             noSelected.Value = 'null';
