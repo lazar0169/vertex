@@ -12,7 +12,7 @@ const usersFilter = (function () {
     let filterPrivilegies = $$('#users-advance-table-filter-privilegies');
 
 
-    usersNumber.appendChild(dropdown.generate(machinesNumber));
+    dropdown.generate(machinesNumber,usersNumber);
     filterUsers.appendChild(multiDropdown.generate(machinesVendors));
     filterCasinos.appendChild(multiDropdown.generate(machinesStatus));
     filterPrivilegies.appendChild(multiDropdown.generate(machinesType));
