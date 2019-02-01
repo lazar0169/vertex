@@ -102,18 +102,6 @@
     cursor: pointer;
 }
 
-/* .advance-table-filter::before {
-    content: "";
-    position: absolute;
-    right: 0.5rem;
-    top: 30%;
-    width: 0;
-    height: 0;
-    border-top: 0.4rem solid rgb(30, 155, 227);
-    border-right: 0.15rem solid transparent;
-    border-left: 0.15rem solid transparent;
-} */
-
 .chosen-info-tab {
     flex: 1;
     /* padding: 0 0.5rem 0.5rem 0 !important; */
