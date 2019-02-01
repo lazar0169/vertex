@@ -132,7 +132,6 @@ let form = (function () {
                         } else {
                             switch (inputElement.dataset.type) {
                                 case inputTypes.singleSelect:
-                                    console.log('dataToDisplay:',dataToDisplay[inputName]);
                                     dropdown.select(inputElement, dataToDisplay[inputName]);
                                     break;
                                 case inputTypes.integer:
@@ -335,7 +334,6 @@ let form = (function () {
         }
         else if (nodeName === nodeTypes.div) {
             if (input.dataset.type === inputTypes.singleSelect) {
-                console.log('div:', input);
                 dropdown.reset(input);
             }
         }
@@ -520,7 +518,6 @@ let form = (function () {
     }
 
     on('form/reset', function (params) {
-        console.log('reset:', params);
         reset(params.formSettings);
     });
 
