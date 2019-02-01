@@ -1,9 +1,10 @@
 let topBar = (function () {
-    let topBarPath = $$('#top-bar').children[0];
+    let topBarPath = $$('#top-bar-path');
     let logoutUser = $$('#top-bar-logout');
     let logoutDropdown = $$('#top-bar-logout-dropdown-menu');
     let userProfile = $$('#user-profile');
     let previousTopBar;
+    let previousIcon;
 
     if (sessionStorage.token) {
         $$('#top-bar-logout-user').children[0].innerHTML = decodeToken(sessionStorage.token).preferred_username;
@@ -15,6 +16,20 @@ let topBar = (function () {
         else {
             topBarPath.children[1].innerHTML = `${value.category}`;
         }
+
+        let currenIcon = value.icon;
+        if (previousIcon) {
+            topBarPath.children[0].classList.remove(previousIcon)
+
+        }
+        if (currenIcon) {
+            topBarPath.children[0].classList.add(currenIcon);
+            previousIcon = currenIcon;
+        }
+
+
+
+
         let currentTopBar = $$(`#top-bar-${value.category.toLowerCase()}`);
         if (previousTopBar) {
             previousTopBar.classList.add('hidden');

@@ -20,7 +20,7 @@
 
 .default-select>div:first-child, .default-date-select>div:first-child {
     width: 120px;
-    font-size: 0.6rem;
+    font-size: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

@@ -41,10 +41,12 @@
     -webkit-box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
     box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
     height: 40px;
-    font-family: OpenSans-Regular;
-    font-size: 13px;
+    font-family: 'Open Sans';
+    font-size: 14px;
     margin: 0;
     margin-bottom: 10px;
+    display: inline-flex;
+    position: relative;
 }
 
 .custom-filter>div {
@@ -60,7 +62,8 @@
 
 .custom-right-filter {
     display: inline-flex;
-    float: right;
+    position: absolute;
+    right: 0;
 }
 
 .custom-right-filter>div {
@@ -92,12 +95,9 @@
 
 .advance-table-filter {
     position: relative;
-    border-left: 0.5rem solid rgb(38, 50, 56);
-    border-top: 0.5rem solid rgb(38, 50, 56);
 }
 
 .advance-table-filter>div:first-child {
-    border-bottom: 0.5em solid transparent;
     padding-right: 0.5em;
     cursor: pointer;
 }
@@ -135,6 +135,7 @@
 
 .advance-filter-active {
     background: rgb(55, 71, 79);
+    border-top: 1px solid rgba(1, 1, 1, 0.2);
 }
 
 .advance-filter-active>div:not(:first-child) {

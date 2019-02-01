@@ -26,7 +26,7 @@ const ticketsFilter = (function () {
     ticketAdvanceFilterButton.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
         trigger('opened-arrow', {div: advanceTableFilter.children[0]});
-        advanceTableFilterActive.toggle('hidden');
+        advanceTableFilterActive.classList.toggle('hidden');
     });
     /*********************----Module Events----************************/
 
