@@ -105,7 +105,9 @@ let communication = (function () {
                 saveBasicSettings: 'communicate/aft/saveBasicSettings',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
-                getFilters: 'communicate/aft/getFilters'
+                getFilters: 'communicate/aft/getFilters',
+                exportToPDF: 'communicate/aft/export/pdf',
+                exportToXLS: 'communicate/aft/export/xls'
             },
             data: {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'
@@ -817,6 +819,23 @@ let communication = (function () {
         });
     });
 
+    //ToDo: možda može da se prosledi type i url is table settingsa pa da event bude univerzalan?
+    on(events.aft.transactions.exportToPDF,function(params){
+       console.log('tableSettings in export pdf:',params.tableSettings);
+        let data = {
+            EndpointId: params.transactionData.endpointId,
+            Gmcid: params.transactionData.gmcid,
+            JidtString: params.transactionData.jidtString,
+            EndpointName: params.transactionData.endpointName,
+        };
+        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
+        //sendRequest(route, requestTypes.post, data, table.events.saveExportedFile, 'aft/transactions/canceled/error');
+    });
+
+    on(events.aft.transactions.exportToXLS,function(params){
+        console.log('tableSettings in export xls:',params.tableSettings);
+    });
+
     //parseRemoteData data for aft  page
     on(events.aft.data.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
@@ -824,6 +843,8 @@ let communication = (function () {
         tableSettings.tableData = prepareAftTableData(tableSettings, data);
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
+
+
 
     /*---------------------------------------------------------------------------------------*/
 

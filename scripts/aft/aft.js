@@ -24,6 +24,16 @@ const aft = (function () {
         tableSettings.stickyRow = true;
         tableSettings.onDrawRowCell = 'aft/table/drawCell';
         tableSettings.onAfterCellClick = onTableCellClick;
+        tableSettings.exportTo = {
+            pdf:{
+                value: communication.events.aft.transactions.exportToPDF,
+                type : table.exportTypes.event
+            },
+            xls: {
+                value: communication.events.aft.transactions.exportToXLS,
+                type : table.exportTypes.event
+            }
+        };
 
         table.init(tableSettings); //initializing table, filters and page size
         //initialize add transaction form
