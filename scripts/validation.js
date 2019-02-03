@@ -56,7 +56,7 @@ let validation = (function () {
     operatorFunctions[constraintsOperators.required] = function (a) {
         return a !== undefined && a !== null && a !== '';
     };
-    operatorFunctions[constraintsOperators.email] = function(a) {
+    operatorFunctions[constraintsOperators.email] = function (a) {
         return a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ));
     }
@@ -136,7 +136,8 @@ let validation = (function () {
         validationSettings.input.classList.remove(validationSettings.errorClass);
 
         validationSettings.hideErrors(validationSettings);
-        let value = validationSettings.input.value;
+        //let value = validationSettings.input.value;
+        let value = getInputValue(validationSettings.input);
         let valid = true;
         valid = validateRules(validationSettings, value) && valid;
         valid = validateConstraints(validationSettings, value) && valid;
@@ -190,10 +191,9 @@ let validation = (function () {
         settings.errorElements = [];
 
         if (isEmpty(settings.showErrors)) {
-            if (element.dataset.type !== undefined && element.dataset.type=== inputTypes.array) {
+            if (element.dataset.type !== undefined && element.dataset.type === inputTypes.array) {
                 settings.showErrors = showRepeaterFieldError;
-            }
-            else {
+            } else {
                 settings.showErrors = showErrors;
             }
         }
@@ -246,7 +246,7 @@ let validation = (function () {
             let email = element.getAttribute(constraintAttributes.email);
             //email constraint
 
-            if(!isEmpty(email)) {
+            if (!isEmpty(email)) {
                 settings.constraints.set(constraintAttributes.email, {
                         name: constraintAttributes.email,
                         operator: constraintsOperators.email,
@@ -324,7 +324,6 @@ let validation = (function () {
         let valid = true;
         for (let i = 0; i < keys.length; i++) {
             let rule = rules.get(keys[i]);
-            value = parseValue(rule,value);
             if (value.match(rule.regex) === null) {
                 valid = false;
                 settings.errors.push(settings.errorMessages.get(rule.type));
@@ -347,11 +346,28 @@ let validation = (function () {
         return valid;
     }
 
-    function parseValue(rule,value) {
+    function parseRuleValues(rule, value) {
         if (rule.type === inputTypes.float) {
-            return value.replace(/,/g,'');
+            return value.replace(/,/g, '');
         }
         return value;
     }
+
+    function getInputValue(input) {
+        let type = input.dataset.type;
+        if (isEmpty(type)) {
+            return input.value;
+        }
+        switch (type) {
+            case inputTypes.float:
+                return input.value.replace(/,/g, '');
+            case inputTypes.singleSelect:
+                return dropdown.getValue(input);
+            default:
+                return input.value;
+        }
+
+    }
+
 })
 ();
