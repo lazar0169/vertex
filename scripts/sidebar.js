@@ -175,7 +175,7 @@ const sidebar = (function () {
                     linkSelectedId = undefined;
                     selectCategory(categorySelectedId);
                     selectLink(linkSelectedId);
-                    trigger('topBar/category', { category: categorySelectedId });
+                    trigger('topBar/category', { category: categorySelectedId, icon: `icon-${categorySelectedId}` });
                     saveCategoryAndLink(categorySelectedId, linkSelectedId)
                 }
                 else {
@@ -215,7 +215,7 @@ const sidebar = (function () {
                         linkSelectedId = `${searchCategory}-link-${categoryValue.Id}`;
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
-                        trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name });
+                        trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name, icon: `icon-${tempData[searchCategory].List}` });
                         saveCategoryAndLink(searchCategory, linkSelectedId)
                         // trigger('communicate/category', { category: category }); //todo check if needed
                         navigation.hide();
@@ -271,7 +271,7 @@ const sidebar = (function () {
                                 recentSearch(entry);
                                 selectCategory(categorySelectedId);
                                 selectLink(linkSelectedId);
-                                trigger('topBar/category', { category: value.categoryName, casino: value.Name });
+                                trigger('topBar/category', { category: value.categoryName, casino: value.Name, icon: `icon-${value.categoryName}` });
                                 saveCategoryAndLink(categorySelectedId, linkSelectedId)
                                 trigger('communicate/category', { category: categorySelectedId });
                                 navigation.hide();
@@ -431,7 +431,7 @@ const sidebar = (function () {
         initVariables();
         generateLinks(categorySelectedId);
 
-        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name });
+        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name, icon: `icon-${categorySelectedId}` });
         chosenLink.innerHTML = menuData[categorySelectedId].List;
         if (sessionStorage.categoryAndLink) {
             let categoryAndLink = JSON.parse(sessionStorage.categoryAndLink)

@@ -51,8 +51,10 @@ const ticketAppearance = (function () {
 
     let dateFormatArray = ['dd.MM.yyyy.', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
     let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
-    dateWrapper.appendChild(dropdown.generate(dateFormatArray));
-    timeWrapper.appendChild(dropdown.generate(timeFormatArray));
+    //dateWrapper.appendChild(dropdown.generate(dateFormatArray));
+    dropdown.generate(dateFormatArray,dateWrapper);
+    //timeWrapper.appendChild(dropdown.generate(timeFormatArray));
+    dropdown.generate(timeFormatArray,timeWrapper);
     let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];

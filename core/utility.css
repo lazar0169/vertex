@@ -41,17 +41,19 @@
     -webkit-box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
     box-shadow: 0 0 0.5rem rgba(1, 1, 1, 0.26);
     height: 40px;
-    font-family: OpenSans-Regular;
-    font-size: 13px;
+    font-family: 'Open Sans';
+    font-size: 14px;
     margin: 0;
     margin-bottom: 10px;
+    display: inline-flex;
+    position: relative;
 }
 
 .custom-filter>div {
     display: inline-flex;
     padding: 0;
     height: 100%;
-    padding: 0 0.5rem;
+    padding: 0 0.8em;
 }
 
 .custom-filter>div:not(:last-child) {
@@ -60,7 +62,8 @@
 
 .custom-right-filter {
     display: inline-flex;
-    float: right;
+    position: absolute;
+    right: 0;
 }
 
 .custom-right-filter>div {
@@ -82,6 +85,7 @@
     top: 0;
     z-index: 1;
     background: rgb(38, 50, 56);
+    padding: 0 0.8em;
 }
 
 .advance-filter-tabele-search-active .search {
@@ -91,27 +95,12 @@
 
 .advance-table-filter {
     position: relative;
-    border-left: 0.5rem solid rgb(38, 50, 56);
-    border-top: 0.5rem solid rgb(38, 50, 56);
 }
 
 .advance-table-filter>div:first-child {
-    border-bottom: 0.5rem solid transparent;
-    padding-right: 1rem;
+    padding-right: 0.5em;
     cursor: pointer;
 }
-
-/* .advance-table-filter::before {
-    content: "";
-    position: absolute;
-    right: 0.5rem;
-    top: 30%;
-    width: 0;
-    height: 0;
-    border-top: 0.4rem solid rgb(30, 155, 227);
-    border-right: 0.15rem solid transparent;
-    border-left: 0.15rem solid transparent;
-} */
 
 .chosen-info-tab {
     flex: 1;
@@ -134,6 +123,7 @@
 
 .advance-filter-active {
     background: rgb(55, 71, 79);
+    border-top: 1px solid rgba(1, 1, 1, 0.2);
 }
 
 .advance-filter-active>div:not(:first-child) {
@@ -276,6 +266,7 @@
     transform: rotate(0deg);
     transition: all .15s ease-in;
     color: rgb(120, 144, 156);
+    font-size: 12px
 }
 
 .opened-arrow {
@@ -289,7 +280,7 @@
 }
 
 .opened-closed-wrapper>div {
-    padding-right: 1em;
+    padding-right: 0.5em;
 }
 
 .opened-closed-wrapper>span {
@@ -309,4 +300,8 @@ figure label {
 
 figure:hover {
     color: white;
+}
+
+.icon-vertex-Search>input {
+    margin-left: 0.5em
 }

@@ -26,19 +26,19 @@ const tickets = (function () {
 
         function topBarInfoBoxValue(data) {
             let topBarValueCashable = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-value');
-            topBarValueCashable[0].innerHTML = data.SumCashable;
+            topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable);
             let topBarNumberOfCashableTickets = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-number');
             topBarNumberOfCashableTickets[0].innerHTML = `/${data.NumOfCashable}`;
 
             let topBarInfoPromoValue = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-value');
-            topBarInfoPromoValue[0].innerHTML = data.SumPromo;
+            topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo);
             let topBarnumberOfPromoTickets = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-number');
             topBarnumberOfPromoTickets[0].innerHTML = `/${data.NumOfPromo}`;
         }
 
         on('showing-tickets-top-bar-value', function (data) {
             topBarInfoBoxValue(data.dataItemValue)
-            
+
         });
 
     });
@@ -48,24 +48,24 @@ const tickets = (function () {
     });
     /*********************----Helper functions------*********************/
     function onDrawTableCell(column, cellContent, cell, position, entryData) {
-         if (column === 'issuedBy' || column === 'redeemedBy') {
+        if (column === 'issuedBy' || column === 'redeemedBy') {
             cell.classList.add('flex-column');
             cell.classList.add('justify-content-start');
             cell.classList.add('align-items-start');
         }
-         if (column === 'issuedBy') {
+        if (column === 'issuedBy') {
             cell.innerHTML = `<time class='table-time'>${entryData.data.issuedAt}</time><label>${entryData.rowData.issuedBy}</label>`;
-         }
-         else if (column === 'redeemedBy') {
-             cell.innerHTML = `<time class='table-time'>${entryData.data.redeemedAt}</time><label>${entryData.rowData.redeemedBy}</label>`;
-         }
-         else if (column === 'type') {
-             if (entryData.type === 'CashableTicket') {
-                 cell.innerHTML = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
-             }
-         }
-         else if (column === 'amount'){
-             cell.classList.add('text-right');
-         }
+        }
+        else if (column === 'redeemedBy') {
+            cell.innerHTML = `<time class='table-time'>${entryData.data.redeemedAt}</time><label>${entryData.rowData.redeemedBy}</label>`;
+        }
+        else if (column === 'type') {
+            if (entryData.type === 'CashableTicket') {
+                cell.innerHTML = '<i class="tickets-cashable"></i>' + localization.translateMessage(entry.EntryData.TicketType);
+            }
+        }
+        else if (column === 'amount') {
+            cell.classList.add('text-right');
+        }
     }
 })();
