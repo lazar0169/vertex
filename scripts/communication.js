@@ -309,7 +309,7 @@ let communication = (function () {
                 entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
                 entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
 
-                entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
+                entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + localization.translateMessage(entry.EntryData.Status) + '</div>'
 
                 let cancelIndicator = document.createElement('span');
                 let icon = document.createElement('i');

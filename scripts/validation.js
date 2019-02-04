@@ -152,17 +152,22 @@ let validation = (function () {
 
     function showRepeaterFieldError(validationSettings) {
         let input = validationSettings.input;
+        let errorsContainer = document.createElement('div');
         for (let i = 0; i < validationSettings.errors.length; i++) {
             let errorMessage = validationSettings.errors[i];
             let errorElement = document.createElement(validationSettings.errorElement);
             errorElement.classList.add('vertex-error-container');
             errorElement.innerHTML = localization.translateMessage(errorMessage, errorElement);
-            validationSettings.input.parentNode.append(errorElement);
+            errorsContainer.append(errorElement);
             validationSettings.errorElements.push(errorElement);
         }
+            validationSettings.input.parentNode.append(errorsContainer);
     }
 
     function showErrors(validationSettings) {
+        //if field is required show only that message in first check
+        //if (validationSettings.errors[const])
+
         for (let i = 0; i < validationSettings.errors.length; i++) {
             let errorMessage = validationSettings.errors[i];
             let errorElement = document.createElement(validationSettings.errorElement);

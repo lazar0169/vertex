@@ -1,115 +1,164 @@
 {
     "labels": {
-        "Login": "",
-        "Username": "",
-        "Password": "",
+        "Login": "Uloguj se",
+        "Username": "Коrisničko ime",
+        "Password": "Šifra",
         "LoginScreen": {
-            "Submit": ""
+            "Submit": "Pošalji"
         },
-        "CancelTransaction": "",
-        "Yes": "",
-        "No": "",
-        "Cancel": "",
-        "search": "",
+        "Yes": "Da",
+        "No": "Ne",
+        "Cancel": "Odustani",
+        "search": "Pretraži",
+        "AdvanceTableFilter": "Filteri",
+        "ApplyFilters": "Primeni",
+        "ClearAll": "Obriši",
+        "ExportTo": "Izvezi",
+        "AddTransaction": "Dodaj transakciju",
+        "Created By": "Kreirao",
+        "Finished By": "Završio",
+        "Status": "Status",
+        "Machine Name": "Ime mašine",
+        "Type": "Tip",
+        "Cashable": "Isplativ",
+        "Promo": "Promo",
         "Aft": {
             "Transactions": {
-                "Enable": "",
+                "Enable": "Omogući",
                 "CashableLimit": {
-                    "Handpay": "",
-                    "Normal": ""
+                    "Handpay": "Handpay",
+                    "Normal": "Normalan"
                 },
                 "PromoLimit": {
-                    "Handpay": "",
-                    "Normal": ""
+                    "Handpay": "Handpay",
+                    "Normal": "Normalan"
                 }
             },
             "Notification": {
-                "Enable": "",
+                "Enable": "Omogući",
                 "Cashable": {
-                    "Received": "",
-                    "Paid": ""
+                    "Received": "Primljen",
+                    "Paid": "Isplaćen"
                 },
                 "Promo": {
-                    "Received": "",
-                    "Paid": ""
+                    "Received": "Primljen",
+                    "Paid": "Isplaćen"
                 },
-                "Mobile": "",
+                "Mobile": "Telefon",
                 "Add": {
-                    "Mobile": "",
-                    "Email": ""
+                    "Mobile": "Telefon",
+                    "Email": "Email"
                 },
-                "Email": ""
+                "Email": "Email"
             }
         },
-        "Save": "",
-        "Delete": "",
+        "Save": "Snimi",
+        "Delete": "Obriši",
+        "Your Email": "Vaš Email",
+        "Machine": "Mašina",
+        "Expiration": "Istek",
+        "Code": "Kod",
+        "Issued By": "Izdao",
+        "Redeemed By": "Otkupio",
+        "Amount": "Vrednost",
         "Tickets": {
             "GeneralSettings": {
-                "Title": "",
-                "Casino": "",
-                "Address": "",
-                "City": "",
-                "Currency": ""
+                "Title": "Naziv",
+                "Casino": "Kazino",
+                "Address": "Adresa",
+                "City": "Grad",
+                "Currency": "Valuta"
             },
             "CashableTicket": {
-                "Title": "",
-                "Cashout": "",
-                "Expiring": "",
-                "Void": ""
+                "Title": "Naziv",
+                "Cashout": "Cashout",
+                "Expiring": "Ističe",
+                "Void": "Void"
             },
             "PromoTicket": {
-                "Title": "",
-                "Payable": "",
-                "Expiring": "",
-                "Restricted": ""
+                "Title": "Naziv",
+                "Payable": "Igriv",
+                "Expiring": "Ističe",
+                "Restricted": "Zabranjen"
             },
             "Appearance": {
                 "Advanced": {
-                    "Title": "",
-                    "DateFormat": "",
-                    "TimeFormat": "",
-                    "TicketVoidAfter": "",
-                    "Days": "",
-                    "Validation": "",
-                    "Ticket": "",
-                    "Asset": "",
-                    "AssetNumber": ""
+                    "Title": "Naziv",
+                    "DateFormat": "Format datuma",
+                    "TimeFormat": "Format vremena",
+                    "TicketVoidAfter": "Ticket void after",
+                    "Days": "Dana",
+                    "Validation": "Validacija",
+                    "Ticket": "Tiket",
+                    "Asset": "Asset",
+                    "AssetNumber": "Asset number"
                 }
             },
             "SmsSettings": {
                 "Enable": {
-                    "Sms": "",
-                    "Email": ""
+                    "Sms": "SMS",
+                    "Email": "Email"
                 },
-                "Redeemed": "",
-                "Printed": "",
-                "Mobile": "",
+                "Redeemed": "Otkupljen",
+                "Printed": "Ištampan",
+                "Mobile": "Telefon",
                 "Add": {
-                    "Mobile": "",
-                    "Email": ""
+                    "Mobile": "Telefon",
+                    "Email": "Email"
                 },
-                "Email": ""
+                "Email": "Email"
             },
             "MaxValue": {
-                "Redeemed": "",
-                "Issued": ""
+                "Redeemed": "Otkupljen",
+                "Issued": "Izdat"
             }
         },
-        "First": "",
-        "Prev": "",
-        "Next": "",
-        "Last": "",
-        "Created By": "",
-        "Finished By": "",
-        "Status": "",
-        "Machine Name": "",
-        "Type": "",
-        "Cashable": "",
-        "Promo": ""
+        "AddNewUser": "Novi korisnik",
+        "UserType": "Tip korisnika",
+        "UserName": "Korisničko ime",
+        "ConfirmPassword": "Potvrdi Šifru",
+        "ChoseRole": "Odaberi rolu",
+        "Admin": "Administrator",
+        "Manager": "Menadžer",
+        "Service": "Serviser",
+        "Custom": "Posebno",
+        "ApplyRoleOn": "Primeni za",
+        "AllCasinos": "Sve kazine",
+        "ChooseCasino(s)": "Odaberi kazino",
+        "Back": "Nazad",
+        "First": "Prva",
+        "Prev": "Prethodna",
+        "Next": "Sledeća",
+        "Last": "Poslednja",
+        "DataRange": "",
+        "FinishedBy": "",
+        "Jackpot": "",
+        "ShowColumn": "",
+        "PrintFromTo": "",
+        "RedeemFromTo": "",
+        "Printed": "",
+        "Redeemed": "",
+        "ShowColumns": ""
     },
     "messages": {
+        "switchYesLabel": "",
+        "switchNoLabel": "",
         "MessageCode6": "",
-        "MessageCode1": "",
-        "Tickets": ""
+        "MessageCode4": "",
+        "IntegerValidationErrorMessage": "",
+        "StringValidationErrorMessage": "",
+        "FloatValidationErrorMessage": "",
+        "EmailFormatValidationErrorMessage": "",
+        "RequiredValidationErrorMessage": "",
+        "LesserThanValidationErrorMessage": "",
+        "GreaterThanValidationErrorMessage": "",
+        "EqualsValidationErrorMessage": "",
+        "CancelTransaction": "",
+        "AreYouSure": "",
+        "BonusWinHostToMachine": "",
+        "InHouseHostToMachine": "",
+        "AFTActive": "",
+        "AFTCheck": "",
+        "Komentar - popisati ovde statuse na dalje:": ""
     }
 }

@@ -119,14 +119,14 @@ let form = (function () {
                                     }
 
                                     let deleteButtonElement = newField.getElementsByClassName('button-link')[0];
-                                    deleteButtonElement.classList.remove('hidden');
+                                    deleteButtonElement.classList.remove('visibility-hidden');
                                     deleteButtonElement.addEventListener('click', deleteFormElement);
                                 }
                             }
                             //display delete button for first field
                             if (values.length > 1) {
                                 let firstDeleteButton = inputElement.parentNode.getElementsByClassName('button-link')[0];
-                                firstDeleteButton.classList.remove('hidden');
+                                firstDeleteButton.classList.remove('visibility-hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
                         } else {
@@ -313,7 +313,7 @@ let form = (function () {
         deleteButtonParentNode.remove();
         let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
-            parentNode.getElementsByClassName('button-link')[0].classList.add('hidden');
+            parentNode.getElementsByClassName('button-link')[0].classList.add('visibility-hidden');
         }
     }
 
@@ -357,7 +357,7 @@ let form = (function () {
                     let newInput = newField.getElementsByTagName('input')[0];
                     newInput.removeAttribute('id');
                     newInput.value = '';
-                    newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    newField.getElementsByClassName('button-link')[0].classList.remove('visibility-hidden');
                     newField.classList.add('element-input-additional-array-value');
 
                     let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
@@ -366,7 +366,7 @@ let form = (function () {
                     validation.init(newInput, {});
 
                     if (targetElements.length > 1) {
-                        targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
+                        targetElements[0].getElementsByClassName('button-link')[0].classList.remove('visibility-hidden');
                     }
 
                     let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
