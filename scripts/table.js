@@ -962,10 +962,11 @@ let table = (function () {
 
         if (tableSettings.advancedFiltersContainerElement !== undefined) {
             tableSettings.advancedFiltersContainerElement = $$(tableSettings.advancedFilterContainerSelector);
+
         }
         //set advanced filters container element automatically
         else if (tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter').length > 0) {
-            tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter');
+            tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter')[0];
             tableSettings.advancedFilterContainerSelector = `#${tableSettings.advancedFiltersContainerElement.id}`;
         }
 
@@ -1150,9 +1151,6 @@ let table = (function () {
         }
     }
 
-    function getTableSettingsFromParentSelector(parentSelector) {
-        return $$(parentSelector).tableSettings;
-    }
     function onTableExportButtonClicked(event) {
         let button = event.target;
         let tableSettings = $$(button.dataset.target).tableSettings;
