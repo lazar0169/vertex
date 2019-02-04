@@ -4,6 +4,10 @@ const dropdown = (function () {
     //single select array
     let singleSelectArray = [];
 
+    function getValue(element) {
+        return element.firstChild.dataset.value;
+    }
+
     function reset(element) {
         let option = getFirstOption(element);
         select(element,option.dataset.value);
@@ -166,6 +170,7 @@ const dropdown = (function () {
     return {
         generate,
         select,
-        reset
+        reset,
+        getValue
     };
 })();

@@ -216,6 +216,8 @@ let form = (function () {
                         case inputTypes.singleSelect:
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
+                            dataForApi[formInputElement.dataset.name] = dropdown.getValue(formInputElement);
+
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }

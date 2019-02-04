@@ -78,12 +78,9 @@ const ticketsFilter = (function () {
         let tableSettings = getActiveTableSettings();
         params.tableSettings = tableSettings;
         params.data = prepareTicketsFiltersForApi(tableSettings);
-
         params.activeFiltersElement = advanceTableFilterActive;
         params.infobarElement = advanceTableFilterInfobar;
-
         trigger('table/filter', params);
-
     }
 
     function removeSelectedFilters() {

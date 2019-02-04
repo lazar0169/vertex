@@ -174,13 +174,13 @@
             </div>
         </div>
         <section id="ticket-sms-settings" class="collapsible">
-            <div class="form-section border-bottom">
+            <div class="form-section">
                 <div class="form-section-content">
                     <div id="tickets-sms-settings-max-redemption" class="form-group">
                         <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">
                             Send notification when the value of the printed ticket is higher than:
                         </label>
-                        <input name="RedeemedTicketLimitForNotification" data-type="float" class="form-input element-form-data" type="text" required min="20" placeholder="Max. redemption" value="0.00">
+                        <input name="RedeemedTicketLimitForNotification" data-type="float" class="form-input element-form-data input-number-right" type="text" required min="20" placeholder="Max. redemption" value="0.00">
                     </div>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                         <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Printed">
                             Send notification when the value of the printed ticket is higher than:
                         </label>
-                        <input name="SoldTicketLimitForNotification" class="form-input element-form-data" data-type="float" type="text" placeholder="Max. issuance" value="0.00">
+                        <input name="SoldTicketLimitForNotification" class="form-input element-form-data input-number-right" data-type="float" type="text" placeholder="Max. issuance" value="0.00">
                     </div>
                 </div>
             </div>
@@ -230,11 +230,11 @@
         <section id="ticket-email-settings" class="collapsible">
             <div id="tickets-sms-settings-send-email" class="form-section border-bottom tickets-sms-settings">
                 <div class="form-section-content">
-                    <label class="form-label element-multilanguage" data-translation-key="Tickets.SmsSettings.Email" for="tickets-notification-email-address">
+                    <label class="form-label element-multilanguage" data-translation-key="Tickets.SmsSettings.Email">
                         class=">Email address:
                     </label>
                     <div class="form-group element-form-email d-flex flex-row flex-baseline">
-                        <input name="Emails" class="form-input element-form-data" data-type="array" email="true" type="text" id="notification-email-address" placeholder="Your email">
+                        <input name="Emails" class="form-input element-form-data element-multilanguage" data-translation-key="Your Email" data-type="array" email="true" type="text" id="notification-email-address" placeholder="Your email">
                         <a class=" action-delete-form-element button-link hidden element-multilanguage" data-translation-key="Delete">
                             Delete
                         </a>
@@ -258,13 +258,13 @@
 <div id="tickets-max-value-tab-info" class="chosen-info-tab overflow-content hidden">
     <form class="element-async-form">
         <input name="EndpointId" type="hidden" class="endpointId element-form-data">
-        <div id="tickets-sms-settings-max-value-max-redeemed" class="form-section border-bottom">
+        <div id="tickets-sms-settings-max-value-max-redeemed" class="form-section">
             <div class="form-section-content">
                 <div class="form-group">
                     <label class="element-multilanguage" data-translation-key="Tickets.MaxValue.Redeemed">
                         Maximum value of the redeemed ticket:
                     </label>
-                    <input name="MaxRedeemAmountForPayed" class="form-input element-form-data" data-type="float" type="text" placeholder="Max. value of the redeemed ticket" value="0.00" />
+                    <input name="MaxRedeemAmountForPayed" class="form-input element-form-data input-number-right" data-type="float" type="text" placeholder="Max. value of the redeemed ticket" value="0.00" />
                 </div>
             </div>
         </div>
@@ -274,7 +274,7 @@
                     <label class="element-multilanguage" data-translation-key="Tickets.MaxValue.Issued">
                         Maximum value of the issued ticket:
                     </label>
-                    <input name="MaxSellAmountForPayed" class="form-input element-form-data" data-type="float" type="text" placeholder="" value="0.00" />
+                    <input name="MaxSellAmountForPayed" class="form-input element-form-data input-number-right" data-type="float" type="text" placeholder="" value="0.00" />
                 </div>
             </div>
         </div>
