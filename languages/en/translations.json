@@ -158,6 +158,7 @@
         "InHouseHostToMachine": "In house host to machine",
         "AFTActive": "Aft active",
         "AFTCheck": "Aft check",
-        "Komentar - popisati ovde preostale statuse kod transakcija i tiketa:": ""
+        "Komentar - popisati ovde preostale statuse kod transakcija i tiketa:": "",
+        "Komentar - popisati ovde statuse na dalje:": ""
     }
 }
