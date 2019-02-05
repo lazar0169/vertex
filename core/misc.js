@@ -31,7 +31,6 @@ function selectTab(name) {
     }
     let tabSelected = $$(`#${name}`);
     if (tabSelected) {
-
         tabSelected.classList.add('tab-active');
         previousTabSelected = tabSelected;
     }
