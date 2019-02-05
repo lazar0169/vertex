@@ -398,7 +398,7 @@ let communication = (function () {
                     machine: entry.EntryData.Machine,
                     name: entry.EntryData.Name,
                     type: localization.translateMessage(entry.EntryData.Type),
-                    priority: entry.EntryData.Priority
+                    priority: localization.translateMessage(entry.EntryData.Priority)
                 },
                 data: {
                     endpointId: entry.Properties.EndpointId,
