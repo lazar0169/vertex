@@ -279,11 +279,8 @@ let table = (function () {
                     cell.classList.add('last-cell');
                 }
 
-                console.log('table settings hover:',tableSettings.onHoverRow);
                 if (tableSettings.onHoverRow === undefined) {
-                    console.log('set hover auto');
                     cell.addEventListener('mouseover', function () {
-                        console.log('mouse over hover');
                         hoverRow(rowClassPrefix + rowId, true);
                     }, {passive: false});
                 }

@@ -169,8 +169,6 @@ let communication = (function () {
     };
 
 
-
-
     const xhrStates = {
         unsent: 0,
         opened: 1,
@@ -223,7 +221,7 @@ let communication = (function () {
             refreshToken(data);
         }
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
+            trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
     }
 
@@ -234,7 +232,7 @@ let communication = (function () {
             errorResponse = xhr.responseText;
         }
         //ToDo: refactor to send xhr only
-        let errorData = { 'message': errorResponse, 'xhr': xhr };
+        let errorData = {'message': errorResponse, 'xhr': xhr};
         if (typeof errorEventCallback !== typeof undefined) {
             if (isString(errorEventCallback)) {
                 trigger(errorEventCallback, errorData);
@@ -306,68 +304,39 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entries.forEach(function (entry) {
-            if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
-                entry.EntryData.CreatedBy = '';
-
-            } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
-
+                entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
+                entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
+                formatedData[counter] = {
+                    rowData: {
+                        flag: entry.Properties.FlagList[0],
+                        createdBy: entry.EntryData.CreatedBy,
+                        finishedBy: entry.EntryData.FinishedBy,
+                        status: localization.translateMessage(entry.EntryData.Status),
+                        machineName: entry.EntryData.MachineName,
+                        type: localization.translateMessage(entry.EntryData.Type),
+                        cashable: entry.EntryData.AmountCashable,
+                        promo: entry.EntryData.AmountPromo,
+                        actions: ''
+                    },
+                    data: {
+                        createdTime: formatTimeData(entry.EntryData.CreatedTime),
+                        finishedTime: formatTimeData(entry.EntryData.FinishedTime),
+                        errorCode: localization.translateMessage(entry.Properties.ErrorCode),
+                        isPayoutPossible: entry.Properties.IsPayoutPossible,
+                        gmcid: entry.Properties.Gmcid,
+                        jidtString: entry.Properties.JidtString
+                    }
+                };
+                counter++;
             }
-            if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
-                entry.EntryData.FinishedBy = '';
-
-            } else {
-                entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
-
-            }
-            delete entry.EntryData.CreatedTime;
-            delete entry.EntryData.FinishedTime;
-            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
-            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
-
-            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + entry.EntryData.Status + '</div>'
-
-            let cancelIndicator = document.createElement('span');
-            let icon = document.createElement('i');
-            //ToDo: Ubaciti klasu za font
-            icon.innerHTML = 'X';
-            let text = document.createElement('span');
-            text.innerHTML = localization.translateMessage('Cancel', text);
-            cancelIndicator.classList.add('cancel-indicator');
-            cancelIndicator.appendChild(icon);
-            cancelIndicator.appendChild(text);
-
-            if (!entry.Properties.IsPayoutPossible) {
-                cancelIndicator = '';
-            }
-
-
-            formatedData[counter] = {
-                rowData: {
-                    flag: entry.Properties.FlagList[0],
-                    createdBy: entry.EntryData.CreatedBy,
-                    finishedBy: entry.EntryData.FinishedBy,
-                    status: localization.translateMessage(entry.EntryData.Status),
-                    machineName: entry.EntryData.MachineName,
-                    type: localization.translateMessage(entry.EntryData.Type),
-                    cashable: entry.EntryData.AmountCashable,
-                    promo: entry.EntryData.AmountPromo,
-                    actions: cancelIndicator
-                },
-                data: {
-                    isPayoutPossible: entry.Properties.IsPayoutPossible,
-                    gmcid: entry.Properties.Gmcid,
-                    jidtString: entry.Properties.JidtString
-                }
-            };
-            counter++;
-        }
         );
-
         return formatedData;
     }
 
     function formatTimeData(timeData) {
+        if (isEmpty(timeData)) {
+            return '';
+        }
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
@@ -375,25 +344,11 @@ let communication = (function () {
         let entry = data.Data.Items;
         let formatedData = [];
         let counter = 0;
-
         entry.forEach(function (entry) {
-
-            if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
-                entry.EntryData.CreatedBy = '';
-
-            } else {
-                entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
-
-            }
-
-            if (entry.EntryData.Amount) {
-                entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
-            }
-
             formatedData[counter] = {
                 rowData: {
                     flag: entry.Properties.FlagList[0],
-                    createdBy: entry.EntryData.CreatedBy,
+                    createdBy: isEmpty(entry.EntryData.CreatedBy) ? '' : entry.EntryData.CreatedBy,
                     casino: entry.EntryData.Casino,
                     machine: entry.EntryData.Machine,
                     name: entry.EntryData.Name,
@@ -401,11 +356,11 @@ let communication = (function () {
                     priority: localization.translateMessage(entry.EntryData.Priority)
                 },
                 data: {
+                    //ToDo: ovde proslediti da li je red klikabilan ili ne
+                    createdTime : formatTimeData(entry.EntryData.CreatedTime),
                     endpointId: entry.Properties.EndpointId,
                     id: entry.Properties.Id
-
                 }
-
             };
             counter++;
         });
@@ -423,20 +378,6 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entry.forEach(function (entry) {
-            /* if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
-
-             } else {
-                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
-
-             }
-             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
-
-             } else {
-                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
-
-             }*/
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
 
             formatedData[counter] = {
@@ -459,7 +400,7 @@ let communication = (function () {
         tableSettings.tableData = formatedData;
 
         //ToDo Neske: Pitati Nikolu šta je ovo
-        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
+        trigger('showing-tickets-top-bar-value', {dataItemValue: data.Data.ItemValue});
         return formatedData;
     }
 
@@ -503,7 +444,7 @@ let communication = (function () {
     on('communicate/pagination', function (params) {
         let event = params.event;
         let dataForApi = params.data;
-        trigger(event, { data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent });
+        trigger(event, {data: dataForApi, tableSettings: params.tableSettings, callbackEvent: params.callbackEvent});
     });
 
     //generate events
@@ -705,7 +646,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareTicketsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
+        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
     });
 
     /*-----------------------------------------------------------------------------------------*/
@@ -891,7 +832,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         tableSettings.tableData = prepareAftTableData(tableSettings, data);
-        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
+        trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
     /*---------------------------------------------------------------------------------------*/
@@ -997,7 +938,7 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         prepareMalfunctionsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
+        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
     });
     /*-----------------------------------------------------------------------------------------*/
 
@@ -1305,8 +1246,6 @@ let communication = (function () {
     });
 
     /*-----------------------------------------------------------------------------------------*/
-
-
 
 
     /*------------------------------------ USERS EVENTS ---------------------------------------*/

@@ -29,26 +29,29 @@ const malfunctions = (function () {
         });
     });
 
-    function onDrawTableCell(column, cellContent, cell, position, rowData) {
+    function onDrawTableCell(column, cellContent, cell, position, entryData) {
         if (column === 'flag') {
             if (cellContent !== undefined) {
                 cell.classList.add('row-flag-' + cellContent.toString().trim());
             }
             cell.classList.add('cell-flag');
             cell.innerHTML = '';
-        } else if (column === 'finishedBy' || column === 'createdBy') {
+        } else if (column === 'createdBy') {
             cell.classList.add('flex-column');
             cell.classList.add('justify-content-start');
             cell.classList.add('align-items-start');
+            cell.innerHTML = `<time class='table-time'>${entryData.data.createdTime}</time><label>${entryData.rowData.createdBy}</label>`;
         }
-        if (rowData.data.isPayoutPossible === true) {
+        //ToDo: isPayoutPossible property ne postoji kod malfunciona
+        if (entryData.data.isPayoutPossible === true) {
             cell.classList.add('clickable');
         }
 
     }
 
-    let malfunctionsMachinesNumbers = $$('#malfunctions-number')
-    trigger('preloader/hide');
+    let malfunctionsMachinesNumbers = $$('#malfunctions-number');
+
+    //trigger('preloader/hide');
 
     dropdown.generate(machinesNumber, malfunctionsMachinesNumbers);
 
