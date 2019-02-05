@@ -337,6 +337,11 @@ let communication = (function () {
             cancelIndicator.appendChild(icon);
             cancelIndicator.appendChild(text);
 
+            if (!entry.Properties.IsPayoutPossible) {
+                cancelIndicator = '';
+            }
+
+
             formatedData[counter] = {
                 rowData: {
                     flag: entry.Properties.FlagList[0],

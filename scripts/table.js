@@ -278,8 +278,12 @@ let table = (function () {
                 if (col === colsCount - 1) {
                     cell.classList.add('last-cell');
                 }
+
+                console.log('table settings hover:',tableSettings.onHoverRow);
                 if (tableSettings.onHoverRow === undefined) {
+                    console.log('set hover auto');
                     cell.addEventListener('mouseover', function () {
+                        console.log('mouse over hover');
                         hoverRow(rowClassPrefix + rowId, true);
                     }, {passive: false});
                 }
@@ -291,6 +295,9 @@ let table = (function () {
                 //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
 
                 cell.addEventListener('click', function (e) {
+                    if (!cell.classList.contains('clickable')) {
+                        return ;
+                    }
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
                         tableSettings.onBeforeCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
