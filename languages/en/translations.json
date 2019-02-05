@@ -1,115 +1,163 @@
 {
     "labels": {
-        "Created By": "Created By",
-        "Login": "",
-        "Username": "",
-        "Password": "",
+        "Login": "Login",
+        "Username": "Username",
+        "Password": "Password",
         "LoginScreen": {
-            "Submit": ""
+            "Submit": "Submit"
         },
-        "CancelTransaction": "",
-        "Yes": "",
-        "No": "",
-        "Cancel": "",
-        "search": "",
+        "Yes": "Yes",
+        "No": "No",
+        "Cancel": "Cancel",
+        "search": "search",
+        "AdvanceTableFilter": "Advanced table filter",
+        "ApplyFilters": "Apply filters",
+        "ClearAll": "Clear all",
+        "ExportTo": "Export to",
+        "AddTransaction": "Add transaction",
+        "Created By": "Created By",
+        "Finished By": "Finished By",
+        "Status": "Status",
+        "Machine Name": "Machine Name",
+        "Type": "Type",
+        "Cashable": "Cashable",
+        "Promo": "Promo",
         "Aft": {
             "Transactions": {
-                "Enable": "",
+                "Enable": "Enable",
                 "CashableLimit": {
-                    "Handpay": "",
-                    "Normal": ""
+                    "Handpay": "Handpay",
+                    "Normal": "Normal"
                 },
                 "PromoLimit": {
-                    "Handpay": "",
-                    "Normal": ""
+                    "Handpay": "Handpay",
+                    "Normal": "Normal"
                 }
             },
             "Notification": {
-                "Enable": "",
+                "Enable": "Enable",
                 "Cashable": {
-                    "Received": "",
-                    "Paid": ""
+                    "Received": "Received",
+                    "Paid": "Paid"
                 },
                 "Promo": {
-                    "Received": "",
-                    "Paid": ""
+                    "Received": "Received",
+                    "Paid": "Paid"
                 },
-                "Mobile": "",
+                "Mobile": "Mobile",
                 "Add": {
-                    "Mobile": "",
-                    "Email": ""
+                    "Mobile": "Add another phone number",
+                    "Email": "Add another email"
                 },
-                "Email": ""
+                "Email": "Email"
             }
         },
-        "Save": "",
-        "Delete": "",
+        "Save": "Save",
+        "Delete": "Delete",
+        "Your Email": "Your Email",
+        "Machine": "Machine",
+        "Expiration": "Expiration",
+        "Code": "Code",
+        "Issued By": "Issued By",
+        "Redeemed By": "Redeemed By",
+        "Amount": "Amount",
         "Tickets": {
             "GeneralSettings": {
-                "Title": "",
-                "Casino": "",
-                "Address": "",
-                "City": "",
-                "Currency": ""
+                "Title": "Title",
+                "Casino": "Casino",
+                "Address": "Address",
+                "City": "City",
+                "Currency": "Currency"
             },
             "CashableTicket": {
-                "Title": "",
-                "Cashout": "",
-                "Expiring": "",
-                "Void": ""
+                "Title": "Title",
+                "Cashout": "Cashout",
+                "Expiring": "Expiring",
+                "Void": "Void"
             },
             "PromoTicket": {
-                "Title": "",
-                "Payable": "",
-                "Expiring": "",
-                "Restricted": ""
+                "Title": "Title",
+                "Payable": "Payable",
+                "Expiring": "Expiring",
+                "Restricted": "Restricted"
             },
             "Appearance": {
                 "Advanced": {
-                    "Title": "",
-                    "DateFormat": "",
-                    "TimeFormat": "",
-                    "TicketVoidAfter": "",
-                    "Days": "",
-                    "Validation": "",
-                    "Ticket": "",
-                    "Asset": "",
-                    "AssetNumber": ""
+                    "Title": "Advanced Settings",
+                    "DateFormat": "DateFormat",
+                    "TimeFormat": "TimeFormat",
+                    "TicketVoidAfter": "TicketVoidAfter",
+                    "Days": "Days",
+                    "Validation": "Validation",
+                    "Ticket": "Ticket",
+                    "Asset": "Asset",
+                    "AssetNumber": "Asset Number"
                 }
             },
             "SmsSettings": {
                 "Enable": {
-                    "Sms": "",
-                    "Email": ""
+                    "Sms": "Sms",
+                    "Email": "Email"
                 },
-                "Redeemed": "",
-                "Printed": "",
-                "Mobile": "",
+                "Redeemed": "Redeemed",
+                "Printed": "Printed",
+                "Mobile": "Mobile",
                 "Add": {
-                    "Mobile": "",
-                    "Email": ""
+                    "Mobile": "Add another phone number",
+                    "Email": "Add another email"
                 },
-                "Email": ""
+                "Email": "Email"
             },
             "MaxValue": {
-                "Redeemed": "",
-                "Issued": ""
+                "Redeemed": "Redeemed",
+                "Issued": "Issued"
             }
         },
-        "First": "",
-        "Prev": "",
-        "Next": "",
-        "Last": "",
-        "Finished By": "",
-        "Status": "",
-        "Machine Name": "",
-        "Type": "",
-        "Cashable": "",
-        "Promo": ""
+        "AddNewUser": "AddNewUser",
+        "UserType": "UserType",
+        "UserName": "UserName",
+        "ConfirmPassword": "ConfirmPassword",
+        "ChoseRole": "ChoseRole",
+        "Admin": "Admin",
+        "Manager": "Manager",
+        "Service": "Service",
+        "Custom": "Custom",
+        "ApplyRoleOn": "ApplyRoleOn",
+        "AllCasinos": "AllCasinos",
+        "ChooseCasino(s)": "ChooseCasino",
+        "Back": "Back",
+        "First": "First",
+        "Prev": "Prev",
+        "Next": "Next",
+        "Last": "Last",
+        "DataRange": "Data range",
+        "FinishedBy": "Finished By",
+        "Jackpot": "Jackpot",
+        "PrintFromTo": "Print from/to",
+        "RedeemFromTo": "Redeem from/to",
+        "Printed": "Printed",
+        "Redeemed": "Redeemed",
+        "ShowColumns": "Show columns"
     },
     "messages": {
-        "MessageCode6": "Ok",
-        "MessageCode1": "Ok",
-        "Tickets": ""
+        "switchYesLabel": "Yes",
+        "switchNoLabel": "No",
+        "MessageCode6": "Changes saved successfully",
+        "MessageCode4": "There has been an error",
+        "IntegerValidationErrorMessage": "Integer format is not valid",
+        "StringValidationErrorMessage": "Text format is not valid",
+        "FloatValidationErrorMessage": "Float format is not valid",
+        "EmailFormatValidationErrorMessage": "Email format is not valid",
+        "RequiredValidationErrorMessage": "The field is required",
+        "LesserThanValidationErrorMessage": "The value is lesser then required",
+        "GreaterThanValidationErrorMessage": "The value is greater then required",
+        "EqualsValidationErrorMessage": "The value is not equals to expected value",
+        "CancelTransaction": "CancelTransaction",
+        "AreYouSure": "Are you sure",
+        "BonusWinHostToMachine": "Bonus win host to machine",
+        "InHouseHostToMachine": "In house host to machine",
+        "AFTActive": "Aft active",
+        "AFTCheck": "Aft check",
+        "Komentar - popisati ovde preostale statuse kod transakcija i tiketa:": ""
     }
 }
