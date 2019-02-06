@@ -1,17 +1,40 @@
 <div id="login">
-    <object data-object="language-selector"></object>
-    <section>
-        <header>
-            <h1 class="element-multilanguage" data-translation-key="Login">Prijavljivanje</h1>
-        </header>
-        <form class="form-group">
-            <input type="text" required placeholder="Korisničko ime" class="username-input form-input element-multilanguage"
-                   data-translation-key="Username">
-            <input type="password" required placeholder="Šifra" class="pass-input form-input element-multilanguage"
-                   data-translation-key="Password">
-            <button type="submit" class="form-submit element-multilanguage" data-translation-key="LoginScreen.Submit">
-                Potvrdi
-            </button>
-        </form>
-    </section>
+    <!-- <object data-object="language-selector"></object> -->
+
+
+    <div id="login-wrapper">
+        <div id="login-left-sector">
+
+            <img id="login-logo-vertex" src="images/logo-vertex.png" alt="logo">
+
+
+            <div id="welcome-message">
+                <div>Good afternoon!</div>
+                <div>Welcome back.</div>
+            </div>
+            <div id="login-content">
+                <form class="form-group">
+                    <input type="text" required="" placeholder="Username" class="username-input form-input element-multilanguage"
+                        data-translation-key="Username" autocomplete="off">
+                    <input type="password" required="" placeholder="Password" class="pass-input form-input element-multilanguage"
+                        data-translation-key="Password" autocomplete="off">
+                    <button type="submit" class="form-submit element-multilanguage" data-translation-key="LoginScreen.Submit">Login</button>
+                </form>
+            </div>
+            <footer id="login-footer">
+                <div>1991-2019 FAZI</div>
+                <div>language</div>
+            </footer>
+        </div>
+        <div id="login-right-sector">
+            <div id="firm-message">
+                <div id="firm-message-project-name">Vertex manager CMS</div>
+                <div id="firm-message-moto">EASIEST WAY TO MANAGE YOUR CASINO</div>
+            </div>
+
+
+        </div>
+
+    </div>
+
 </div>
