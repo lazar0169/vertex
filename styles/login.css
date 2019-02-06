@@ -7,14 +7,15 @@
 
 #login-left-sector {
     width: 450px;
-    background-image: url("../../images/bcg-login-top.png");
+    background-image: url("/images/backgroundLeft.png");
     background-position: top;
     background-repeat: no-repeat;
     position: relative;
+    box-shadow: 0 0 10px rgba(1, 1, 1, 0.5);
 }
 
 #login-right-sector {
-    background-image: url("images/login-background.jpg");
+    background-image: url('/images/backgroundRight.jpg');
     width: calc(100% - 450px);
     height: 100%;
     background-repeat: no-repeat;
@@ -49,6 +50,10 @@
     font-size: 32px;
     font-weight: 700;
     font-family: 'Montserrat';
+}
+
+#welcome-message>div:not(:first-child) {
+    margin-top: -10px;
 }
 
 #login-content {
