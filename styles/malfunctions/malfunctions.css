@@ -18,6 +18,9 @@
 
 #malfunction-info-color-wrapper {
     display: inline-flex;
+    font-family: 'Open Sans';
+    font-size: 13px;
+    padding-left: 2px;
 }
 
 #malfunction-info-color-wrapper>div {
@@ -30,7 +33,7 @@
 }
 
 #malfunction-info-color-wrapper>div>div:not(:first-child) {
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
 }
 
 #malfunction-info-color-active {
