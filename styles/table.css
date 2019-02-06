@@ -68,7 +68,6 @@
     justify-content: flex-start;
     font-family: OpenSans-Regular;
     font-size: 13px;
-    pointer-events: none;
 }
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
