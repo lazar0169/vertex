@@ -23,7 +23,8 @@ let communication = (function () {
             ticketAppearance: 'api/tickets/ticketappearance/',
             saveSmsSettings: 'api/tickets/savesmssettings/',
             saveMaxValuesAction: 'api/tickets/savemaxvalues/',
-            saveAppearance: 'api/tickets/saveappearance/'
+            saveAppearance: 'api/tickets/saveappearance/',
+            exportToPDF: 'api/tickets/reports/'
         },
         aft: {
             edit: 'api/aft/',
@@ -98,7 +99,9 @@ let communication = (function () {
             showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
             saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
             ticketAppearance: 'communicate/tickets/ticketAppearance',
-            saveAppearance: 'communicate/tickets/saveAppearance'
+            saveAppearance: 'communicate/tickets/saveAppearance',
+            exportToPDF: 'communicate/tickets/export/pdf',
+            exportToXLS: 'communicate/tickets/export/xls'
         },
         aft: {
             transactions: {
@@ -204,7 +207,7 @@ let communication = (function () {
 
     function success(xhr, callbackEvent, settingsObject) {
         let data = null;
-        console.log(xhr);
+
         if (xhr.responseType === 'arraybuffer') {
             data = xhr.response;
         } else if (xhr.getResponseHeader('content-type').indexOf(contentTypes.json) >= 0) {
@@ -659,6 +662,41 @@ let communication = (function () {
         });
     });
 
+    on(events.tickets.exportToPDF, function (params) {
+        let data = null;
+        if (params.tableSettings.filters !== null) {
+            //clone filters
+            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
+            delete data.BasicData.Page;
+            delete data.BasicData.PageSize;
+            delete data.TokenInfo;
+        } else {
+            data = {
+                EndpointId: params.tableSettings.endpointId,
+                DateFrom: null,
+                DateTo: null,
+                MachineList: [],
+                JackpotList: [],
+                Status: [],
+                Type: [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        }
+
+        data.SelectedColumns = params.selectedColumns;
+        sendRequest(apiRoutes.tickets.exportToPDF, requestTypes.post, data, table.events.saveExportedFile, handleError, {type: table.exportFileTypes.pdf}, [{
+            name: 'responseType',
+            value: 'arraybuffer'
+        }]);
+    });
+
+    on(events.tickets.exportToXLS, function (params) {
+
+    });
+
     //parseRemoteData data for tickets  page
     on(events.tickets.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
@@ -847,7 +885,7 @@ let communication = (function () {
 
     //ToDo: možda može da se prosledi type i url is table settingsa pa da event bude univerzalan?
     on(events.aft.transactions.exportToPDF, function (params) {
-        console.log('params', params);
+
         let data = null;
         if (params.tableSettings.filters !== null) {
             //clone filters
@@ -862,7 +900,7 @@ let communication = (function () {
                 DateTo: null,
                 MachineList: [],
                 JackpotList: [],
-                Status: ['0'],
+                Status: [],
                 Type: [],
                 BasicData: {
                     SortOrder: null,
@@ -871,7 +909,6 @@ let communication = (function () {
             };
         }
         data.SelectedColumns = params.selectedColumns;
-        console.log('data:', data);
         sendRequest(apiRoutes.aft.exportToPDF, requestTypes.post, data, table.events.saveExportedFile, handleError, {type: table.exportFileTypes.pdf}, [{
             name: 'responseType',
             value: 'arraybuffer'
@@ -879,7 +916,7 @@ let communication = (function () {
     });
 
     on(events.aft.transactions.exportToXLS, function (params) {
-        console.log('tableSettings in export xls:', params.tableSettings);
+
     });
 
     //parseRemoteData data for aft  page

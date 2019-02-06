@@ -51,7 +51,6 @@ let table = (function () {
 
     //region MODULE EVENTS
     on(events.saveExportedFile, function (params) {
-        console.log(params);
         let data = params.data;
         let blob = new Blob([data], {type: 'application/pdf'});
         let link = document.createElement('a');
@@ -1042,10 +1041,10 @@ let table = (function () {
                 let header = headers[i];
                 let columnName = header.dataset.columnName;
                 let columnId = header.dataset.columnId;
-                if (isEmpty(columnId)) {
-                    continue;
-                } else if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
-                    ids.push(columnId);
+                if (!isEmpty(columnId)) {
+                    if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
+                        ids.push(columnId);
+                    }
                 }
             }
         }
