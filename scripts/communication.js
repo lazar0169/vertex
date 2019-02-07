@@ -4,6 +4,11 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
+    const contentTypes = {
+        json: 'application/json',
+        textHtml: 'text/html'
+    }
+
     const apiRoutes = {
         authorization: {
             login: 'login/',
@@ -18,7 +23,8 @@ let communication = (function () {
             ticketAppearance: 'api/tickets/ticketappearance/',
             saveSmsSettings: 'api/tickets/savesmssettings/',
             saveMaxValuesAction: 'api/tickets/savemaxvalues/',
-            saveAppearance: 'api/tickets/saveappearance/'
+            saveAppearance: 'api/tickets/saveappearance/',
+            exportToPDF: 'api/tickets/reports/'
         },
         aft: {
             edit: 'api/aft/',
@@ -33,7 +39,8 @@ let communication = (function () {
             getFilters: 'api/transactions/getfilters/',
             addTransaction: 'api/transactions/addtransaction/',
             cancelTransaction: 'api/transactions/canceltransaction/',
-            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/'
+            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/',
+            exportToPDF: 'api/transactions/reports/'
         },
         casinos: {},
         machines: {
@@ -92,7 +99,9 @@ let communication = (function () {
             showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
             saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
             ticketAppearance: 'communicate/tickets/ticketAppearance',
-            saveAppearance: 'communicate/tickets/saveAppearance'
+            saveAppearance: 'communicate/tickets/saveAppearance',
+            exportToPDF: 'communicate/tickets/export/pdf',
+            exportToXLS: 'communicate/tickets/export/xls'
         },
         aft: {
             transactions: {
@@ -152,7 +161,8 @@ let communication = (function () {
             setJackpotSettings: 'communicate/jackpots/setSettings/',
             setJackpotPlasmaSettings: 'communicate/jackpots/setPlasmaSettings/',
             saveJackpot: 'communicate/jackpots/save/'
-        }
+        },
+        module: {}
     };
 
     const xhrStates = {
@@ -196,16 +206,25 @@ let communication = (function () {
     }
 
     function success(xhr, callbackEvent, settingsObject) {
-        let data = tryParseJSON(xhr.responseText);
-        //update token in sessionStorage
-        if (data.TokenInfo !== undefined && data.TokenInfo !== null) {
+        let data = null;
 
-            sessionStorage["token"] = JSON.stringify(data.TokenInfo);
-            refreshToken(data.TokenInfo);
+        if (xhr.responseType === 'arraybuffer') {
+            data = xhr.response;
+        } else if (xhr.getResponseHeader('content-type').indexOf(contentTypes.json) >= 0) {
+            data = tryParseJSON(xhr.responseText);
+            //update token in sessionStorage
+            if (data.TokenInfo !== undefined && data.TokenInfo !== null) {
+
+                sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+                refreshToken(data.TokenInfo);
+            } else {
+                sessionStorage["token"] = JSON.stringify(data);
+                refreshToken(data);
+            }
         } else {
-            sessionStorage["token"] = JSON.stringify(data);
-            refreshToken(data);
+            data = xhr.responseText;
         }
+
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
@@ -228,8 +247,9 @@ let communication = (function () {
         }
     }
 
-    function createRequest(route, requestType, data, successEvent, errorEvent, settingsObject) {
+    function createRequest(route, requestType, data, successEvent, errorEvent, additionalData, properties) {
         let xhr;
+
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
         } else if (requestType === requestTypes.post) {
@@ -237,9 +257,18 @@ let communication = (function () {
         } else if (requestType === requestTypes.delete) {
             xhr = createDeleteRequest(route);
         }
+
+        if (properties === undefined) {
+            properties = [];
+        }
+        for (let i = 0; i < properties.length; i++) {
+            let property = properties[i];
+            xhr[property.name] = property.value;
+        }
+
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                success(xhr, successEvent, settingsObject);
+                success(xhr, successEvent, additionalData);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
@@ -392,12 +421,12 @@ let communication = (function () {
         tableSettings.tableData = formatedData;
 
         //ToDo Neske: Pitati Nikolu šta je ovo
-        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
+        trigger('showing-tickets-top-bar-value', {dataItemValue: data.Data.ItemValue});
         return formatedData;
     }
 
-    function sendRequest(route, type, data, successEvent, errorEvent, additionalData) {
-        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData);
+    function sendRequest(route, type, data, successEvent, errorEvent, additionalData, properties) {
+        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData, properties);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
@@ -633,6 +662,41 @@ let communication = (function () {
         });
     });
 
+    on(events.tickets.exportToPDF, function (params) {
+        let data = null;
+        if (params.tableSettings.filters !== null) {
+            //clone filters
+            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
+            delete data.BasicData.Page;
+            delete data.BasicData.PageSize;
+            delete data.TokenInfo;
+        } else {
+            data = {
+                EndpointId: params.tableSettings.endpointId,
+                DateFrom: null,
+                DateTo: null,
+                MachineList: [],
+                JackpotList: [],
+                Status: [],
+                Type: [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        }
+
+        data.SelectedColumns = params.selectedColumns;
+        sendRequest(apiRoutes.tickets.exportToPDF, requestTypes.post, data, table.events.saveExportedFile, handleError, {type: table.exportFileTypes.pdf}, [{
+            name: 'responseType',
+            value: 'arraybuffer'
+        }]);
+    });
+
+    on(events.tickets.exportToXLS, function (params) {
+
+    });
+
     //parseRemoteData data for tickets  page
     on(events.tickets.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
@@ -820,20 +884,39 @@ let communication = (function () {
     });
 
     //ToDo: možda može da se prosledi type i url is table settingsa pa da event bude univerzalan?
-    on(events.aft.transactions.exportToPDF,function(params){
-       console.log('tableSettings in export pdf:',params.tableSettings);
-        let data = {
-            EndpointId: params.transactionData.endpointId,
-            Gmcid: params.transactionData.gmcid,
-            JidtString: params.transactionData.jidtString,
-            EndpointName: params.transactionData.endpointName,
-        };
-        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
-        //sendRequest(route, requestTypes.post, data, table.events.saveExportedFile, 'aft/transactions/canceled/error');
+    on(events.aft.transactions.exportToPDF, function (params) {
+
+        let data = null;
+        if (params.tableSettings.filters !== null) {
+            //clone filters
+            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
+            delete data.BasicData.Page;
+            delete data.BasicData.PageSize;
+            delete data.TokenInfo;
+        } else {
+            data = {
+                EndpointId: params.tableSettings.endpointId,
+                DateFrom: null,
+                DateTo: null,
+                MachineList: [],
+                JackpotList: [],
+                Status: [],
+                Type: [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        }
+        data.SelectedColumns = params.selectedColumns;
+        sendRequest(apiRoutes.aft.exportToPDF, requestTypes.post, data, table.events.saveExportedFile, handleError, {type: table.exportFileTypes.pdf}, [{
+            name: 'responseType',
+            value: 'arraybuffer'
+        }]);
     });
 
-    on(events.aft.transactions.exportToXLS,function(params){
-        console.log('tableSettings in export xls:',params.tableSettings);
+    on(events.aft.transactions.exportToXLS, function (params) {
+
     });
 
     //parseRemoteData data for aft  page
@@ -843,7 +926,6 @@ let communication = (function () {
         tableSettings.tableData = prepareAftTableData(tableSettings, data);
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
-
 
 
     /*---------------------------------------------------------------------------------------*/

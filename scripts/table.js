@@ -17,6 +17,10 @@ let table = (function () {
     // 'null' as dataset values are always converted to string
     const nullFilterValues = ['-', null, 'null'];
 
+    const exportFileTypes = {
+        pdf: 'application/pdf'
+    }
+
     const exportTypes = {
         event: 'event',
         url: 'url',
@@ -25,7 +29,7 @@ let table = (function () {
 
     const events = {
         saveExportedFile: 'table/export/save-file'
-    }
+    };
 
     const sortOrderEnum = {
         none: 0,
@@ -45,9 +49,14 @@ let table = (function () {
 
     let currentOffset;
 
-   //region MODULE EVENTS
-    on(events.saveExportedFile,function(params) {
-        console.log(params);
+    //region MODULE EVENTS
+    on(events.saveExportedFile, function (params) {
+        let data = params.data;
+        let blob = new Blob([data], {type: 'application/pdf'});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'Report.pdf';
+        link.click();
     });
     on('table/show-selected-filters/infobar', showSelectedFilters);
     on('table/before-filter', function (params) {
@@ -233,9 +242,7 @@ let table = (function () {
                 let cellColumnClass = generateCellClassName(dataKey);
 
                 if (tableSettings.columns.indexOf(dataKey) < 0) {
-                    tableSettings.columns.push({
-                        dataKey
-                    });
+                    tableSettings.columns.push(dataKey);
                 }
 
                 cell.classList.add('cell');
@@ -594,9 +601,9 @@ let table = (function () {
 
     function bindExportToHandlers(tableSettings) {
         let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
-        for (let i = 0;i<exportButtons.length;i++) {
-            exportButtons[i].dataset.target= tableSettings.tableContainerSelector;
-            exportButtons[i].addEventListener('click',onTableExportButtonClicked);
+        for (let i = 0; i < exportButtons.length; i++) {
+            exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
+            exportButtons[i].addEventListener('click', onTableExportButtonClicked);
         }
     }
 
@@ -1010,18 +1017,47 @@ let table = (function () {
         setFiltersPage: setFiltersPage,
         //constants
         exportTypes: exportTypes,
-        events: events
+        events: events,
+        exportFileTypes: exportFileTypes
     };
 
     /*--------------------------------------------------------------------------------------*/
 
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+    function getVisibleColumnIds(tableSettings) {
+        let headers = getHeaders(tableSettings);
+        let ids = [];
+        if (tableSettings.visibleColumns.length === 0) {
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                if (!isEmpty(header.dataset.columnId)) {
+                    ids.push(header.dataset.columnId);
+                }
+
+            }
+        } else {
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                let columnName = header.dataset.columnName;
+                let columnId = header.dataset.columnId;
+                if (!isEmpty(columnId)) {
+                    if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
+                        ids.push(columnId);
+                    }
+                }
+            }
+        }
+        return ids;
+    }
+
+
     function bindHandlers(tableSettings) {
         bindSortingLinkHandlers(tableSettings);
         bindTableViewLinkHandlers(tableSettings);
         bindExportToHandlers(tableSettings);
     }
+
     function showSelectedFilters(params) {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
@@ -1158,16 +1194,14 @@ let table = (function () {
 
         if (tableSettings.exportTo === undefined) {
             console.error(`Table export to settings are not defined.`);
-        }
-        else if(tableSettings.exportTo[fileType] === undefined) {
+        } else if (tableSettings.exportTo[fileType] === undefined) {
             console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
-        }
-        else {
+        } else {
             let exportSettings = tableSettings.exportTo[fileType];
             if (exportSettings.type === exportTypes.event) {
-                console.log('value:',exportSettings.value);
                 trigger(exportSettings.value, {
-                    tableSettings:tableSettings,
+                    tableSettings: tableSettings,
+                    selectedColumns: getVisibleColumnIds(tableSettings)
                 });
             }
             //ToDo: cases where export type value is function or url
