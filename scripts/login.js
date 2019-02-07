@@ -3,20 +3,19 @@ let login = (function () {
     let usernameFieldName = '.username-input';
     let passwordFieldName = '.pass-input';
 
-    let periodMessage = $$('#welcome-message').children[0];
+    let welcomeMessage = $$('#welcome-message').children[0];
 
     window.addEventListener('load', function () {
-        changePeriodMessage()
+        changeWelcomeMessage(new Date());
     });
 
-    function changePeriodMessage() {
-        let date = new Date();
+    function changeWelcomeMessage(date) {
         let hours = date.getHours();
         if (hours < 12) {
-            periodMessage.innerHTML = localization.translateMessage('GoodMorning!');
+            welcomeMessage.innerHTML = localization.translateMessage('GoodMorning!');
         }
         else {
-            periodMessage.innerHTML = localization.translateMessage('GoodAfternoon!');
+            welcomeMessage.innerHTML = localization.translateMessage('GoodAfternoon!');
         }
     }
 
