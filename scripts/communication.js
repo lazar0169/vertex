@@ -81,6 +81,13 @@ let communication = (function () {
             setJackpotSettings: 'api/jackpots/savesettings/',
             setJackpotPlasmaSettings: 'api/jackpots/saveplasmasettings/',
             saveJackpot: 'api/jackpots/save/'
+        },
+        malfunctions: {
+            getMalfunctions: 'api/malfunctions/',
+            previewMalfunctions: 'api/malfunctions/previewmalfunctions/',
+            getFilters: 'api/malfunctions/getfilters/',
+            setServiceMessage: 'api/malfunctions/setmessage/',
+            changeMalfunctionState: 'api/malfunctions/changestate/'
         }
     };
 
@@ -114,9 +121,7 @@ let communication = (function () {
                 saveBasicSettings: 'communicate/aft/saveBasicSettings',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
-                getFilters: 'communicate/aft/getFilters',
-                exportToPDF: 'communicate/aft/export/pdf',
-                exportToXLS: 'communicate/aft/export/xls'
+                getFilters: 'communicate/aft/getFilters'
             },
             data: {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'
@@ -162,8 +167,17 @@ let communication = (function () {
             setJackpotPlasmaSettings: 'communicate/jackpots/setPlasmaSettings/',
             saveJackpot: 'communicate/jackpots/save/'
         },
+        malfunctions: {
+            parseRemoteData: 'communicate/malfunctions/data/parse',
+            getMalfunctions: 'communicate/malfunctions/',
+            previewMalfunctions: 'communicate/malfunctions/previewmalfunctions/',
+            getFilters: 'communicate/malfunctions/getfilters/',
+            setServiceMessage: 'communicate/malfunctions/setmessage/',
+            changeMalfunctionState: 'communicate/malfunctions/changestate/'
+        },
         module: {}
     };
+
 
     const xhrStates = {
         unsent: 0,
@@ -319,22 +333,6 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entries.forEach(function (entry) {
-                if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
-                    entry.EntryData.CreatedBy = '';
-
-                } else {
-                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
-
-                }
-                if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
-                    entry.EntryData.FinishedBy = '';
-
-                } else {
-                    entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
-
-                }
-                delete entry.EntryData.CreatedTime;
-                delete entry.EntryData.FinishedTime;
                 entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
                 entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
 
@@ -360,9 +358,12 @@ let communication = (function () {
                         type: localization.translateMessage(entry.EntryData.Type),
                         cashable: entry.EntryData.AmountCashable,
                         promo: entry.EntryData.AmountPromo,
-                        actions: cancelIndicator
+                        actions: ''
                     },
                     data: {
+                        createdTime: formatTimeData(entry.EntryData.CreatedTime),
+                        finishedTime: formatTimeData(entry.EntryData.FinishedTime),
+                        errorCode: localization.translateMessage(entry.Properties.ErrorCode),
                         isPayoutPossible: entry.Properties.IsPayoutPossible,
                         gmcid: entry.Properties.Gmcid,
                         jidtString: entry.Properties.JidtString
@@ -371,12 +372,46 @@ let communication = (function () {
                 counter++;
             }
         );
-
         return formatedData;
     }
 
     function formatTimeData(timeData) {
+        if (isEmpty(timeData)) {
+            return '';
+        }
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
+    }
+
+    function prepareMalfunctionsTableData(tableSettings, data) {
+        let entry = data.Data.Items;
+        let formatedData = [];
+        let counter = 0;
+        entry.forEach(function (entry) {
+            formatedData[counter] = {
+                rowData: {
+                    flag: entry.Properties.FlagList[0],
+                    createdBy: isEmpty(entry.EntryData.CreatedBy) ? '' : entry.EntryData.CreatedBy,
+                    casino: entry.EntryData.Casino,
+                    machine: entry.EntryData.Machine,
+                    name: entry.EntryData.Name,
+                    type: localization.translateMessage(entry.EntryData.Type),
+                    priority: localization.translateMessage(entry.EntryData.Priority)
+                },
+                data: {
+                    //ToDo: ovde proslediti da li je red klikabilan ili ne
+                    createdTime : formatTimeData(entry.EntryData.CreatedTime),
+                    endpointId: entry.Properties.EndpointId,
+                    id: entry.Properties.Id
+                }
+            };
+            counter++;
+        });
+
+        tableSettings.tableData = formatedData;
+
+        return formatedData;
+
+
     }
 
     //ToDo: refactor in on rowDisplay
@@ -385,20 +420,6 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entry.forEach(function (entry) {
-            /* if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
-
-             } else {
-                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
-
-             }
-             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
-
-             } else {
-                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
-
-             }*/
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
 
             formatedData[counter] = {
@@ -927,7 +948,6 @@ let communication = (function () {
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
-
     /*---------------------------------------------------------------------------------------*/
 
 
@@ -935,6 +955,105 @@ let communication = (function () {
 
 
     /*---------------------------------------------------------------------------------------*/
+    /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
+    // get malfunctions (all)
+    on(events.malfunctions.getMalfunctions, function (params) {
+        let route = apiRoutes.malfunctions.getMalfunctions;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets preview ticket action
+    //tickets pagination sorting and filtering
+    on(events.malfunctions.previewMalfunctions, function (params) {
+        let route = apiRoutes.malfunctions.previewMalfunctions;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets get filter values
+    on(events.malfunctions.getFilters, function (params) {
+        let route = apiRoutes.malfunctions.getFilters;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = params.successEvent;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    // set service message
+    on(events.malfunctions.setServiceMessage, function (params) {
+        let route = apiRoutes.malfunctions.setServiceMessage;
+        let request = requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    // change malfunction state
+    on(events.malfunctions.changeMalfunctionState, function (params) {
+        let route = apiRoutes.malfunctions.changeMalfunctionState;
+        let request = requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    on(events.malfunctions.parseRemoteData, function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        prepareMalfunctionsTableData(tableSettings, data);
+        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
+    });
+    /*-----------------------------------------------------------------------------------------*/
 
 
     /*------------------------------------ MACHINES EVENTS ----------------------------------*/
@@ -1238,11 +1357,6 @@ let communication = (function () {
         xhr = setAuthHeader(xhr);
         send(xhr);
     });
-
-    /*-----------------------------------------------------------------------------------------*/
-
-
-    /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
 
     /*-----------------------------------------------------------------------------------------*/
 

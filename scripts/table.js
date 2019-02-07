@@ -285,6 +285,7 @@ let table = (function () {
                 if (col === colsCount - 1) {
                     cell.classList.add('last-cell');
                 }
+
                 if (tableSettings.onHoverRow === undefined) {
                     cell.addEventListener('mouseover', function () {
                         hoverRow(rowClassPrefix + rowId, true);
@@ -298,6 +299,9 @@ let table = (function () {
                 //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
 
                 cell.addEventListener('click', function (e) {
+                    if (!cell.classList.contains('clickable')) {
+                        return ;
+                    }
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
                         tableSettings.onBeforeCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
