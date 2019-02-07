@@ -76,7 +76,7 @@ const aft = (function () {
     on('aft/addTransaction/error', function (params) {
 
         trigger('notifications/show', {
-            message: params.message.MessageCode,
+            message:localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});

@@ -16,7 +16,8 @@ let validation = (function () {
         minimum: 'min',
         maximum: 'max',
         equals: 'equals',
-        email: 'email'
+        email: 'email',
+        maxLength : 'maxlength'
     };
 
     const constraintsOperators = {
@@ -24,7 +25,8 @@ let validation = (function () {
         greaterThan: '>',
         lesserThan: '<',
         equals: '=',
-        email: 'email'
+        email: 'email',
+        maxLength: 'maxLength'
     };
 
     const defaultErrorMessages = {};
@@ -37,6 +39,7 @@ let validation = (function () {
     defaultErrorMessages[constraintAttributes.minimum] = 'LesserThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.maximum] = 'GreaterThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.equals] = 'EqualsValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.maxLength] = 'MaxLengthValidationErrorMessage';
 
     let operatorFunctions = {};
     // a - input value
@@ -59,7 +62,11 @@ let validation = (function () {
     operatorFunctions[constraintsOperators.email] = function (a) {
         return a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ));
-    }
+    };
+    operatorFunctions[constraintsOperators.maxLength] = function(a,b) {
+        b = parseInt(b);
+        return a.length <= b;
+    };
     //endregion
 
 
@@ -152,17 +159,22 @@ let validation = (function () {
 
     function showRepeaterFieldError(validationSettings) {
         let input = validationSettings.input;
+        let errorsContainer = document.createElement('div');
         for (let i = 0; i < validationSettings.errors.length; i++) {
             let errorMessage = validationSettings.errors[i];
             let errorElement = document.createElement(validationSettings.errorElement);
             errorElement.classList.add('vertex-error-container');
             errorElement.innerHTML = localization.translateMessage(errorMessage, errorElement);
-            validationSettings.input.parentNode.append(errorElement);
+            errorsContainer.append(errorElement);
             validationSettings.errorElements.push(errorElement);
         }
+            validationSettings.input.parentNode.append(errorsContainer);
     }
 
     function showErrors(validationSettings) {
+        //if field is required show only that message in first check
+        //if (validationSettings.errors[const])
+
         for (let i = 0; i < validationSettings.errors.length; i++) {
             let errorMessage = validationSettings.errors[i];
             let errorElement = document.createElement(validationSettings.errorElement);
@@ -244,6 +256,7 @@ let validation = (function () {
             let equals = element.getAttribute(constraintAttributes.equals);
             let required = element.getAttribute(constraintAttributes.required);
             let email = element.getAttribute(constraintAttributes.email);
+            let maxLength = element.getAttribute(constraintAttributes.maxLength);
             //email constraint
 
             if (!isEmpty(email)) {
@@ -286,6 +299,13 @@ let validation = (function () {
                         value: true
                     }
                 )
+            }
+            if (!isEmpty(maxLength)) {
+                settings.constraints.set(constraintAttributes.maxLength, {
+                    name: constraintAttributes.maxLength,
+                    operator: constraintsOperators.maxLength,
+                    value: maxLength
+                });
             }
         }
         if (isEmpty(settings.errorMessages)) {

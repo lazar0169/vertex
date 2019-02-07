@@ -1,6 +1,9 @@
 .hidden {
     display: none !important;
 }
+.visibility-hidden {
+    visibility: hidden;
+}
 
 .center {
     display: flex;

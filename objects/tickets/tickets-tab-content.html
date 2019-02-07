@@ -3,12 +3,12 @@
     <div id="table-container-tickets" class="table table-expanded">
         <div class="element-table-filters-container"></div>
         <div class="tbody">
-            <div class="head cell sortable text-uppercase sticky element-multilanguage" data-column-name="code" data-sort-id="3" data-translation-key="Code"></div>
-            <div class="head cell sortable text-uppercase sticky element-multilanguage" data-column-name="issuedBy" data-sort-id="4" data-translation-key="Issued By"></div>
-            <div class="head cell sortable text-uppercase sticky element-multilanguage" data-column-name="redeemedBy" data-sort-id="5" data-translation-key="Redeemed By"></div>
-            <div class="head cell sortable text-uppercase sticky element-multilanguage" data-column-name="status" data-sort-id="9" data-translation-key="Status"></div>
-            <div class="head cell sortable text-uppercase sticky element-multilanguage" data-column-name="type" data-sort-id="1" data-translation-key="Type"></div>
-            <div class="head cell sortable text-uppercase sticky element-multilanguage text-right last-cell" data-column-name="amount" data-sort-id="2" data-translation-key="Amount"></div>
+            <div class="head cell sortable text-uppercase sticky element-multilanguage"  data-column-id="1" data-column-name="code" data-sort-id="3" data-translation-key="Code"></div>
+            <div class="head cell sortable text-uppercase sticky element-multilanguage"  data-column-id="2" data-column-name="issuedBy" data-sort-id="4" data-translation-key="Issued By"></div>
+            <div class="head cell sortable text-uppercase sticky element-multilanguage"  data-column-id="3" data-column-name="redeemedBy" data-sort-id="5" data-translation-key="Redeemed By"></div>
+            <div class="head cell sortable text-uppercase sticky element-multilanguage"  data-column-id="4" data-column-name="status" data-sort-id="9" data-translation-key="Status"></div>
+            <div class="head cell sortable text-uppercase sticky element-multilanguage"  data-column-id="5" data-column-name="type" data-sort-id="1" data-translation-key="Type"></div>
+            <div class="head cell sortable text-uppercase sticky element-multilanguage text-right last-cell" data-column-id="6" data-column-name="amount" data-sort-id="2" data-translation-key="Amount"></div>
         </div>
     </div>
 </div>
@@ -24,16 +24,16 @@
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.GeneralSettings.Casino">Casino:
                     </div>
-                    <input name="Name" class="form-input element-form-data" data-type="string" type="text" placeholder="Casino" value="Casino">
+                    <input maxlength="40" name="Name" class="form-input element-form-data" data-type="string" type="text" placeholder="Casino" value="Casino">
                 </div>
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.GeneralSettings.Address">Address:
                     </div>
-                    <input name="Address1" class="form-input element-form-data" data-type="string" type="text" placeholder="Address" value="Address">
+                    <input  maxlength="40" name="Address1" class="form-input element-form-data" data-type="string" type="text" placeholder="Address" value="Address">
                 </div>
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.GeneralSettings.City">City:</div>
-                    <input name="Address2" class="form-input element-form-data" data-type="string" type="text" placeholder="City" value="City">
+                    <input  maxlength="40" name="Address2" class="form-input element-form-data" data-type="string" type="text" placeholder="City" value="City">
                 </div>
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.GeneralSettings.Currency">
@@ -50,7 +50,7 @@
                     <div class="element-multilanguage" data-translation-key="Tickets.CashableTicket.Cashout">Cashout
                         ticket
                     </div>
-                    <input name="CashableTicketTitle" data-type="string" class="form-input element-form-data" type="text" placeholder="Cashout ticket" value="Cashout ticket">
+                    <input  maxlength="16" name="CashableTicketTitle" data-type="string" class="form-input element-form-data" type="text" placeholder="Cashout ticket" value="Cashout ticket">
                 </div>
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.CashableTicket.Expiring">Expiring
@@ -70,7 +70,7 @@
                 </div>
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.PromoTicket.Payable">Payable:</div>
-                    <input name="RestrictedTicketTitle" data-type="string" class="form-input element-form-data" type="text" placeholder="PLAYABLE1 ONLY" value="PLAYABLE1 ONLY">
+                    <input  maxlength="16" name="RestrictedTicketTitle" data-type="string" class="form-input element-form-data" type="text" placeholder="PLAYABLE1 ONLY" value="PLAYABLE1 ONLY">
                 </div>
                 <div>
                     <div class="element-multilanguage" data-translation-key="Tickets.PromoTicket.Expiring">Expiring:
@@ -105,13 +105,13 @@
                     <div id="tickets-advanced-settings-void">
                         <div class="element-multilanguage" data-translation-key="Tickets.Appearance.Advanced.TicketVoidAfter">Ticket void after:
                         </div>
-                        <input name="TicketVoid" class="form-input element-form-data" data-type="string" type="text" placeholder="Ticket void after" value="Ticket void after:">
+                        <input  maxlength="20" name="TicketVoid" class="form-input element-form-data" data-type="string" type="text" placeholder="Ticket void after" value="Ticket void after:">
                     </div>
                     <div id="tickets-advanced-settings-days">
                         <div class="element-multilanguage" data-translation-key="Tickets.Appearance.Advanced.Days">
                             Days:
                         </div>
-                        <input name="TicketVoidDays" class="form-input element-form-data" data-type="string" type="text" placeholder="Days" value="days">
+                        <input  maxlength="20" name="TicketVoidDays" class="form-input element-form-data" data-type="string" type="text" placeholder="Days" value="days">
                     </div>
                 </div>
                 <div>
@@ -119,13 +119,13 @@
                         <div class="element-multilanguage"
                              data-translation-key="Tickets.Appearance.Advanced.Validation">Validation:
                         </div>
-                        <input name="Validation" class="form-input element-form-data" data-type="string" type="text" placeholder="Validation" value="Validation">
+                        <input  maxlength="20" name="Validation" class="form-input element-form-data" data-type="string" type="text" placeholder="Validation" value="Validation">
                     </div>
                     <div id="tickets-advanced-settings-ticket">
                         <div class="element-multilanguage" data-translation-key="Tickets.Appearance.Advanced.Ticket">
                             Ticket:
                         </div>
-                        <input name="Ticket" class="form-input element-form-data" data-type="string" type="text" placeholder="Ticket" value="TICKET">
+                        <input maxlength="20" name="Ticket" class="form-input element-form-data" data-type="string" type="text" placeholder="Ticket" value="TICKET">
                     </div>
                 </div>
                 <div>
@@ -133,12 +133,12 @@
                         <div class="element-multilanguage" data-translation-key="Tickets.Appearance.Advanced.Asset">
                             Asset:
                         </div>
-                        <input name="Asset" class="form-input element-form-data" data-type="string" type="text" placeholder="Asset" value="Asset">
+                        <input maxlength="20" name="Asset" class="form-input element-form-data" data-type="string" type="text" placeholder="Asset" value="Asset">
                     </div>
                     <div id="tickets-advanced-settings-asset-number">
                         <div class="element-multilanguage" data-translation-key="Tickets.Appearance.Advanced.AssetNumber">Asset number:
                         </div>
-                        <input name="AssetValue" class="form-input element-form-data" data-type="string" type="text" placeholder="Asset number" value='1'>
+                        <input maxlength="20" name="AssetValue" class="form-input element-form-data" data-type="string" type="text" placeholder="Asset number" value='1'>
                     </div>
                 </div>
             </div>
@@ -200,8 +200,8 @@
                         Mobile phone number:
                     </label>
                     <div class="element-form-phone-number form-group d-flex flex-row flex-baseline">
-                        <input name="PhoneNumbers" class="form-input element-form-data" data-type="array" type="text" placeholder="xxx-xxx-xxxx">
-                        <a class=" action-delete-form-element button-link hidden element-multilanguage" data-translation-key="Delete">
+                        <input maxlength="20" name="PhoneNumbers" class="form-input element-form-data" data-type="array" required type="text" placeholder="xxx-xxx-xxxx">
+                        <a class=" action-delete-form-element button-link visibility-hidden element-multilanguage" data-translation-key="Delete">
                             Delete
                         </a>
                     </div>
@@ -234,8 +234,8 @@
                         class=">Email address:
                     </label>
                     <div class="form-group element-form-email d-flex flex-row flex-baseline">
-                        <input name="Emails" class="form-input element-form-data element-multilanguage" data-translation-key="Your Email" data-type="array" email="true" type="text" id="notification-email-address" placeholder="Your email">
-                        <a class=" action-delete-form-element button-link hidden element-multilanguage" data-translation-key="Delete">
+                        <input maxlength="50" name="Emails" class="form-input element-form-data element-multilanguage" required data-translation-key="Your Email" data-type="array" email="true" type="text" id="notification-email-address" placeholder="Your email">
+                        <a class=" action-delete-form-element button-link visibility-hidden element-multilanguage" data-translation-key="Delete">
                             Delete
                         </a>
                     </div>
