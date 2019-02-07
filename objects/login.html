@@ -1,5 +1,5 @@
 <div id="login">
-    <!-- <object data-object="language-selector"></object> -->
+
 
     <div id="login-wrapper">
         <div id="login-left-sector">
@@ -8,8 +8,8 @@
 
 
             <div id="welcome-message">
-                <div>Good afternoon!</div>
-                <div>Welcome back.</div>
+                <div class="element-multilanguage" data-translation-key="GoodAfternoon!"></div>
+                <div class="element-multilanguage" data-translation-key="WelcomeBack.">Welcome back.</div>
             </div>
             <div id="login-content">
                 <form class="form-group">
@@ -17,18 +17,21 @@
                         data-translation-key="Username" autocomplete="off">
                     <input type="password" required="" placeholder="Password" class="pass-input form-input element-multilanguage"
                         data-translation-key="Password" autocomplete="off">
-                    <button type="submit" class="form-submit element-multilanguage" data-translation-key="LoginScreen.Submit">Login</button>
+                    <button type="submit" class="form-submit element-multilanguage" data-translation-key="Login">Login</button>
                 </form>
             </div>
             <footer id="login-footer">
-                <div>1991-2019 FAZI</div>
-                <div>language</div>
+                <div class="center">1991-2019 FAZI</div>
+                <!-- ToDo: neske selektor nije po dizajnu pa vidi da ga ne prepravljam ja sredi ga ti da ne ispustim nesto -->
+                <object data-object="language-selector"></object>
             </footer>
         </div>
         <div id="login-right-sector">
             <div id="firm-message">
-                <div id="firm-message-project-name">Vertex manager CMS</div>
-                <div id="firm-message-moto">EASIEST WAY TO MANAGE YOUR CASINO</div>
+                <div id="firm-message-project-name" class="element-multilanguage" data-translation-key="VertexManagerCMS">Vertex
+                    manager CMS</div>
+                <div id="firm-message-moto" class="element-multilanguage" data-translation-key="EasiestWayToManageYourCasino">EASIEST
+                    WAY TO MANAGE YOUR CASINO</div>
             </div>
 
 
