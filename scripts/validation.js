@@ -16,7 +16,8 @@ let validation = (function () {
         minimum: 'min',
         maximum: 'max',
         equals: 'equals',
-        email: 'email'
+        email: 'email',
+        maxLength : 'maxlength'
     };
 
     const constraintsOperators = {
@@ -24,7 +25,8 @@ let validation = (function () {
         greaterThan: '>',
         lesserThan: '<',
         equals: '=',
-        email: 'email'
+        email: 'email',
+        maxLength: 'maxLength'
     };
 
     const defaultErrorMessages = {};
@@ -37,6 +39,7 @@ let validation = (function () {
     defaultErrorMessages[constraintAttributes.minimum] = 'LesserThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.maximum] = 'GreaterThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.equals] = 'EqualsValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.maxLength] = 'MaxLengthValidationErrorMessage';
 
     let operatorFunctions = {};
     // a - input value
@@ -56,11 +59,14 @@ let validation = (function () {
     operatorFunctions[constraintsOperators.required] = function (a) {
         return a !== undefined && a !== null && a !== '';
     };
-    operatorFunctions[constraintsOperators.email] = function(a) {
-        console.log('email:',a);
+    operatorFunctions[constraintsOperators.email] = function (a) {
         return a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ));
-    }
+    };
+    operatorFunctions[constraintsOperators.maxLength] = function(a,b) {
+        b = parseInt(b);
+        return a.length <= b;
+    };
     //endregion
 
 
@@ -137,7 +143,8 @@ let validation = (function () {
         validationSettings.input.classList.remove(validationSettings.errorClass);
 
         validationSettings.hideErrors(validationSettings);
-        let value = validationSettings.input.value;
+        //let value = validationSettings.input.value;
+        let value = getInputValue(validationSettings.input);
         let valid = true;
         valid = validateRules(validationSettings, value) && valid;
         valid = validateConstraints(validationSettings, value) && valid;
@@ -152,17 +159,22 @@ let validation = (function () {
 
     function showRepeaterFieldError(validationSettings) {
         let input = validationSettings.input;
+        let errorsContainer = document.createElement('div');
         for (let i = 0; i < validationSettings.errors.length; i++) {
             let errorMessage = validationSettings.errors[i];
             let errorElement = document.createElement(validationSettings.errorElement);
             errorElement.classList.add('vertex-error-container');
             errorElement.innerHTML = localization.translateMessage(errorMessage, errorElement);
-            validationSettings.input.parentNode.append(errorElement);
+            errorsContainer.append(errorElement);
             validationSettings.errorElements.push(errorElement);
         }
+            validationSettings.input.parentNode.append(errorsContainer);
     }
 
     function showErrors(validationSettings) {
+        //if field is required show only that message in first check
+        //if (validationSettings.errors[const])
+
         for (let i = 0; i < validationSettings.errors.length; i++) {
             let errorMessage = validationSettings.errors[i];
             let errorElement = document.createElement(validationSettings.errorElement);
@@ -191,10 +203,9 @@ let validation = (function () {
         settings.errorElements = [];
 
         if (isEmpty(settings.showErrors)) {
-            if (element.dataset.type !== undefined && element.dataset.type=== inputTypes.array) {
+            if (element.dataset.type !== undefined && element.dataset.type === inputTypes.array) {
                 settings.showErrors = showRepeaterFieldError;
-            }
-            else {
+            } else {
                 settings.showErrors = showErrors;
             }
         }
@@ -223,14 +234,14 @@ let validation = (function () {
                             rule.regex = new RegExp('^\\d+$');
                             break;
                         case inputTypes.float:
-                            rule.regex = new RegExp(/^[+-]?\d+(\.\d+)?$/);
+                            rule.regex = new RegExp(/^[0-9.]*$/);
                             break;
                         case inputTypes.string:
-                            rule.regex = new RegExp(/^[A-Za-z0-9]+$/);
+                            rule.regex = new RegExp('');
                             break;
                         //special case, requires pattern attribute
                         default:
-                            rule.regex = '';
+                            rule.regex = new RegExp('');
                             break;
                     }
                     settings.rules.set(type, rule);
@@ -245,9 +256,10 @@ let validation = (function () {
             let equals = element.getAttribute(constraintAttributes.equals);
             let required = element.getAttribute(constraintAttributes.required);
             let email = element.getAttribute(constraintAttributes.email);
+            let maxLength = element.getAttribute(constraintAttributes.maxLength);
             //email constraint
 
-            if(!isEmpty(email)) {
+            if (!isEmpty(email)) {
                 settings.constraints.set(constraintAttributes.email, {
                         name: constraintAttributes.email,
                         operator: constraintsOperators.email,
@@ -288,6 +300,13 @@ let validation = (function () {
                     }
                 )
             }
+            if (!isEmpty(maxLength)) {
+                settings.constraints.set(constraintAttributes.maxLength, {
+                    name: constraintAttributes.maxLength,
+                    operator: constraintsOperators.maxLength,
+                    value: maxLength
+                });
+            }
         }
         if (isEmpty(settings.errorMessages)) {
             settings.errorMessages = new Map();
@@ -323,12 +342,8 @@ let validation = (function () {
         let rules = settings.rules;
         let keys = Array.from(rules.keys());
         let valid = true;
-        console.log('value:', value);
         for (let i = 0; i < keys.length; i++) {
             let rule = rules.get(keys[i]);
-            console.log('rule:',rule);
-            value = parseValue(rule,value);
-            console.log('match:',value.match(rule.regex));
             if (value.match(rule.regex) === null) {
                 valid = false;
                 settings.errors.push(settings.errorMessages.get(rule.type));
@@ -351,11 +366,28 @@ let validation = (function () {
         return valid;
     }
 
-    function parseValue(rule,value) {
+    function parseRuleValues(rule, value) {
         if (rule.type === inputTypes.float) {
-            return value.replace(/,/g,'');
+            return value.replace(/,/g, '');
         }
         return value;
     }
+
+    function getInputValue(input) {
+        let type = input.dataset.type;
+        if (isEmpty(type)) {
+            return input.value;
+        }
+        switch (type) {
+            case inputTypes.float:
+                return input.value.replace(/,/g, '');
+            case inputTypes.singleSelect:
+                return dropdown.getValue(input);
+            default:
+                return input.value;
+        }
+
+    }
+
 })
 ();

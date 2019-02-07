@@ -24,6 +24,16 @@ const aft = (function () {
         tableSettings.stickyRow = true;
         tableSettings.onDrawRowCell = 'aft/table/drawCell';
         tableSettings.onAfterCellClick = onTableCellClick;
+        tableSettings.exportTo = {
+            pdf: {
+                value: communication.events.aft.transactions.exportToPDF,
+                type: table.exportTypes.event
+            },
+            xls: {
+                value: communication.events.aft.transactions.exportToXLS,
+                type: table.exportTypes.event
+            }
+        };
 
         table.init(tableSettings); //initializing table, filters and page size
         //initialize add transaction form
@@ -34,7 +44,7 @@ const aft = (function () {
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
 
-        trigger('form/init', { formSettings: addTransactionFormSettings });
+        trigger('form/init', {formSettings: addTransactionFormSettings});
         let endpointName = '';
         if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
             endpointName = $$('.link-active')[0].dataset.value;
@@ -46,8 +56,8 @@ const aft = (function () {
         });
 
 
-        trigger('aft/tab/transaction', { endpointId: tableSettings.endpointId });
-        trigger('aft/tab/notification', { endpointId: tableSettings.endpointId });
+        trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
+        trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
     });
 
     /*********************----Dom event handlers------*********************/
@@ -65,18 +75,18 @@ const aft = (function () {
     /*********************----Module Events------*********************/
     on('aft/addTransaction/error', function (params) {
 
-        //let messageType = params.message.MessageType;
         trigger('notifications/show', {
-            message: params.message.MessageCode,
+            message:localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
-        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
-        trigger('aft/filters/filter-table', { showFilters: false });
+        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('aft/filters/filter-table', {showFilters: false});
     });
     on('aft/addTransaction/success', function (params) {
-        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
-        trigger('aft/filters/filter-table', { showFilters: false });
-        //ToDo: Neske i Nikola - da li isprazniti formu i sakriti pop up koji izadje sa desne strane?
+        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('aft/filters/filter-table', {showFilters: false});
+        trigger('show/app');
+        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
 
     });
 
@@ -143,7 +153,7 @@ const aft = (function () {
 
 
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
-        trigger('table/disable-scroll', { tableSettings: $$('#table-container-aft').tableSettings });
+        trigger('table/disable-scroll', {tableSettings: $$('#table-container-aft').tableSettings});
         trigger('template/render', {
             templateElementSelector: '#cancel-transaction-template',
             callbackEvent: callbackEvent,
@@ -179,7 +189,7 @@ const aft = (function () {
             displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up', coordinates, parentCell);
         } else {
             deselectHighlightedTransaction();
-            trigger('aft/filters/filter-table', { showFilters: true });
+            trigger('aft/filters/filter-table', {showFilters: true});
         }
     }
 
@@ -202,7 +212,7 @@ const aft = (function () {
         event.stopPropagation();
         dismissCancelTransactionPopUp();
         //remove previous popup
-        trigger('table/disable-scroll', { tableSettings: tableSettings });
+        trigger('table/disable-scroll', {tableSettings: tableSettings});
         let popUpCoordinates = {
             x: event.clientX + 5,
             y: event.clientY + 5
@@ -219,11 +229,12 @@ const aft = (function () {
 
     function deselectHighlightedTransaction() {
         let tableSettings = $$('#table-container-aft').tableSettings;
-        trigger('table/deselect/active-row', { tableSettings: tableSettings });
-        trigger('table/deselect/hover-row', { tableSettings: tableSettings });
+        trigger('table/deselect/active-row', {tableSettings: tableSettings});
+        trigger('table/deselect/hover-row', {tableSettings: tableSettings});
     }
 
-    function onDrawTableCell(column, cellContent, cell, position, rowData) {
+    function onDrawTableCell(column, cellContent, cell, position, entryData) {
+
         if (column === 'flag') {
             if (cellContent !== undefined) {
                 cell.classList.add('row-flag-' + cellContent.toString().trim());
@@ -234,15 +245,35 @@ const aft = (function () {
             cell.classList.add('flex-column');
             cell.classList.add('justify-content-start');
             cell.classList.add('align-items-start');
+            if (column === 'finishedBy') {
+                cell.innerHTML = `<time class='table-time'>${entryData.data.finishedTime}</time><label>${entryData.rowData.finishedBy}</label>`;
+            } else if (column === 'createdBy') {
+                cell.innerHTML = `<time class='table-time'>${entryData.data.createdTime}</time><label>${entryData.rowData.createdBy}</label>`;
+            }
+        } else if (column === 'status') {
+            cell.innerHTML = '<div title="' + entryData.data.errorCode + '">' + entryData.rowData.status + '</div>';
+        } else if (column === 'actions') {
+            if (entryData.data.isPayoutPossible) {
+                let cancelIndicator = document.createElement('span');
+                let icon = document.createElement('i');
+                //ToDo: Ubaciti klasu za font
+                icon.innerHTML = 'X';
+                let text = document.createElement('span');
+                text.innerHTML = localization.translateMessage('Cancel', text);
+                cancelIndicator.classList.add('cancel-indicator');
+                cancelIndicator.appendChild(icon);
+                cancelIndicator.appendChild(text);
+                cell.innerHTML = '';
+                cell.append(cancelIndicator);
+            }
         }
-        if (rowData.data.isPayoutPossible === true) {
+        if (entryData.data.isPayoutPossible === true) {
             cell.classList.add('clickable');
         }
-        let transactionData = {
-            gmcid: rowData.data.gmcid,
-            jidtString: rowData.data.jidtString
+        cell.transactionData = {
+            gmcid: entryData.data.gmcid,
+            jidtString: entryData.data.jidtString
         };
-        cell.transactionData = transactionData;
     }
 
 })();

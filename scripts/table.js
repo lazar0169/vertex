@@ -1,6 +1,7 @@
 let table = (function () {
 
     //html class name constants
+    const exportToButtonsClass = 'element-table-export-to';
     const columnClassPrefix = 'column-';
     const rowClassPrefix = 'row-';
     const cellClassPrefix = 'cell-';
@@ -16,6 +17,19 @@ let table = (function () {
     // 'null' as dataset values are always converted to string
     const nullFilterValues = ['-', null, 'null'];
 
+    const exportFileTypes = {
+        pdf: 'application/pdf'
+    }
+
+    const exportTypes = {
+        event: 'event',
+        url: 'url',
+        callback: 'callback'
+    };
+
+    const events = {
+        saveExportedFile: 'table/export/save-file'
+    };
 
     const sortOrderEnum = {
         none: 0,
@@ -35,7 +49,15 @@ let table = (function () {
 
     let currentOffset;
 
-    /*-------------------------------EVENTS--------------------------------*/
+    //region MODULE EVENTS
+    on(events.saveExportedFile, function (params) {
+        let data = params.data;
+        let blob = new Blob([data], {type: 'application/pdf'});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'Report.pdf';
+        link.click();
+    });
     on('table/show-selected-filters/infobar', showSelectedFilters);
     on('table/before-filter', function (params) {
         trigger(params.tableSettings.filterDataEvent, {
@@ -62,7 +84,7 @@ let table = (function () {
     on('table/deselect/hover-row', function (params) {
         deselectHoverRow(params.tableSettings.tableContainerElement);
     });
-
+    //endregion
 
     /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -220,9 +242,7 @@ let table = (function () {
                 let cellColumnClass = generateCellClassName(dataKey);
 
                 if (tableSettings.columns.indexOf(dataKey) < 0) {
-                    tableSettings.columns.push({
-                        dataKey
-                    });
+                    tableSettings.columns.push(dataKey);
                 }
 
                 cell.classList.add('cell');
@@ -265,6 +285,7 @@ let table = (function () {
                 if (col === colsCount - 1) {
                     cell.classList.add('last-cell');
                 }
+
                 if (tableSettings.onHoverRow === undefined) {
                     cell.addEventListener('mouseover', function () {
                         hoverRow(rowClassPrefix + rowId, true);
@@ -278,6 +299,9 @@ let table = (function () {
                 //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
 
                 cell.addEventListener('click', function (e) {
+                    if (!cell.classList.contains('clickable')) {
+                        return ;
+                    }
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
                         tableSettings.onBeforeCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
@@ -579,6 +603,14 @@ let table = (function () {
         tableSettings.tableContainerElement.classList.add('table-expanded');
     }
 
+    function bindExportToHandlers(tableSettings) {
+        let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
+        for (let i = 0; i < exportButtons.length; i++) {
+            exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
+            exportButtons[i].addEventListener('click', onTableExportButtonClicked);
+        }
+    }
+
     function bindTableViewLinkHandlers(tableSettings) {
         let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
         let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0];
@@ -864,41 +896,6 @@ let table = (function () {
         return null;
     }
 
-    function getColumnNames(tableSettings) {
-        let headers = getHeaders(tableSettings);
-        let columnNames = [];
-        for (let i = 0; i < headers.length; i++) {
-            columnNames.push(getColumnNameFromHeadElement(headers[i]));
-        }
-        return columnNames;
-    }
-
-    function showColumn(tableSettings, columnName) {
-        let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-        let columnElementsArray = Array.prototype.slice.call(columnElements);
-        columnElementsArray.forEach(function (columnElement) {
-            columnElement.classList.remove('hidden-column');
-        });
-        //resize table
-
-    }
-
-    function getColsToShowNames(columnsToShowTitles) {
-        let columnsToShow = [];
-        if (columnsToShow !== undefined) {
-            columnsToShowTitles.forEach(function (columnTitle) {
-                columnsToShow.push(columnClassPrefix + columnTitle.toLowerCase());
-            });
-        }
-        return columnsToShow;
-    }
-
-    function hideAllColumns(tableSettings) {
-        let allCells = tableSettings.tableContainerElement.getElementsByClassName('cell');
-        for (let i = 0; i < allCells.length; i++) {
-            allCells[i].classList.add('hidden-column');
-        }
-    }
 
     /*--------------------------------------------------------------------------------------*/
 
@@ -976,10 +973,11 @@ let table = (function () {
 
         if (tableSettings.advancedFiltersContainerElement !== undefined) {
             tableSettings.advancedFiltersContainerElement = $$(tableSettings.advancedFilterContainerSelector);
+
         }
         //set advanced filters container element automatically
         else if (tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter').length > 0) {
-            tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter');
+            tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter')[0];
             tableSettings.advancedFilterContainerSelector = `#${tableSettings.advancedFiltersContainerElement.id}`;
         }
 
@@ -998,8 +996,7 @@ let table = (function () {
         generatePageSizeDropdown(tableSettings);
         generateNoDataElement(tableSettings);
 
-        bindSortingLinkHandlers(tableSettings);
-        bindTableViewLinkHandlers(tableSettings);
+        bindHandlers(tableSettings);
 
         delete tableSettings.ColumnsToShow;
 
@@ -1021,13 +1018,50 @@ let table = (function () {
         getPageSize: getPageSize,
         parseFilterValues: parseFilterValues,
         getBounds: getBounds,
-        setFiltersPage: setFiltersPage
+        setFiltersPage: setFiltersPage,
+        //constants
+        exportTypes: exportTypes,
+        events: events,
+        exportFileTypes: exportFileTypes
     };
 
     /*--------------------------------------------------------------------------------------*/
 
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+    function getVisibleColumnIds(tableSettings) {
+        let headers = getHeaders(tableSettings);
+        let ids = [];
+        if (tableSettings.visibleColumns.length === 0) {
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                if (!isEmpty(header.dataset.columnId)) {
+                    ids.push(header.dataset.columnId);
+                }
+
+            }
+        } else {
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                let columnName = header.dataset.columnName;
+                let columnId = header.dataset.columnId;
+                if (!isEmpty(columnId)) {
+                    if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
+                        ids.push(columnId);
+                    }
+                }
+            }
+        }
+        return ids;
+    }
+
+
+    function bindHandlers(tableSettings) {
+        bindSortingLinkHandlers(tableSettings);
+        bindTableViewLinkHandlers(tableSettings);
+        bindExportToHandlers(tableSettings);
+    }
+
     function showSelectedFilters(params) {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
@@ -1157,8 +1191,26 @@ let table = (function () {
         }
     }
 
-    function getTableSettingsFromParentSelector(parentSelector) {
-        return $$(parentSelector).tableSettings;
+    function onTableExportButtonClicked(event) {
+        let button = event.target;
+        let tableSettings = $$(button.dataset.target).tableSettings;
+        let fileType = button.dataset.fileType;
+
+        if (tableSettings.exportTo === undefined) {
+            console.error(`Table export to settings are not defined.`);
+        } else if (tableSettings.exportTo[fileType] === undefined) {
+            console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
+        } else {
+            let exportSettings = tableSettings.exportTo[fileType];
+            if (exportSettings.type === exportTypes.event) {
+                trigger(exportSettings.value, {
+                    tableSettings: tableSettings,
+                    selectedColumns: getVisibleColumnIds(tableSettings)
+                });
+            }
+            //ToDo: cases where export type value is function or url
+        }
+
     }
 
     /*-------------------------------PUBLIC HELPER FUNCTIONS--------------------------------*/

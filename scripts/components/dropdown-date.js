@@ -153,6 +153,7 @@ const dropdownDate = (function () {
             $$(`#${activeSelectId}`).children[1].children[1].classList.add('hidden');
             $$(`#${activeSelectId}`).children[1].classList.toggle('hidden');
             $$(`#${activeSelectId}`).classList.toggle('active-date-select');
+            $$(`#${activeSelectId}`).children[0].children[1].classList.toggle('opened-arrow');
             if (!$$(`#${activeSelectId}`).classList.contains('active-date-select')) {
                 activeSelectId = !activeSelectId;
             }
@@ -203,6 +204,18 @@ const dropdownDate = (function () {
         else if ($$('.advance-filter-tabele-search-active')[0] && document.activeElement.classList && !document.activeElement.classList.contains('search')) {
             $$('.advance-filter-tabele-search-active')[0].children[0].classList.add('hidden');
             $$('.advance-filter-tabele-search-active')[0].classList.remove('advance-filter-tabele-search-active');
+        }
+
+        //this is for logout
+        if (e.target.id && e.target.id === 'top-bar-logout') {
+            trigger('opened-arrow', { div: $$('#top-bar-logout-user') });
+            $$('#top-bar-logout').classList.toggle('logout-is-opened');
+            $$('#top-bar-logout-dropdown-menu').classList.toggle('hidden');
+        }
+        else{
+           $$('#top-bar-logout-user').children[1].classList.remove('opened-arrow');
+            $$('#top-bar-logout').classList.remove('logout-is-opened');
+            $$('#top-bar-logout-dropdown-menu').classList.add('hidden');
         }
     });
     return {

@@ -1,8 +1,8 @@
 const ticketsFilter = (function () {
 
-    let ticketAdvanceFilter = $$('#tickets-advance-table-filter');
-    let ticketAdvanceFilterButton = $$('#tickets-advance-table-filter').children[0];
+    let advanceTableFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
+    let ticketAdvanceFilterButton = $$('#tickets-advance-table-filter').children[0];
     let ticketsMachinesNumbers = $$('#tickets-machines-number');
     let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#ticket-advance-table-filter-active-infobar-button').children[0];
@@ -13,31 +13,20 @@ const ticketsFilter = (function () {
 
     let activeHeadElement;
 
-    function toggleAdvanceTableFilter() {
-        ticketAdvanceFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
-        advanceTableFilterActive.classList.toggle('hidden');
-    }
 
     /*********************----Events Listeners------*********************/
 
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
-        filterTicketsTable(true);
-        ticketAdvanceFilterButton.children[1].classList.remove('opened-arrow');
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        filterTicketsTable();
     });
 
-    ticketsAdvanceFilterCancelButton.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
-    });
-    clearAdvanceFilterInfobar.addEventListener('click', function () {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
-    });
+    ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
+    clearAdvanceFilterInfobar.addEventListener('click', clearTicketsFilters);
     ticketAdvanceFilterButton.addEventListener('click', function () {
-        ticketAdvanceFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: ticketAdvanceFilter.children[0] });
-        ticketAdvanceFilter.children[1].classList.toggle('hidden');
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        advanceTableFilterActive.classList.toggle('hidden');
     });
     /*********************----Module Events----************************/
 
@@ -82,32 +71,31 @@ const ticketsFilter = (function () {
         return $$('#table-container-tickets').tableSettings;
 
     }
-    function filterTicketsTable(showFilters) {
-        if (showFilters === undefined) {
-            showFilters = false;
-        }
+
+    function filterTicketsTable() {
+
         let params = {};
         let tableSettings = getActiveTableSettings();
         params.tableSettings = tableSettings;
         params.data = prepareTicketsFiltersForApi(tableSettings);
-        if (showFilters) {
-            params.activeFiltersElement = advanceTableFilterActive;
-            params.infobarElement = advanceTableFilterInfobar;
-        }
+        params.activeFiltersElement = advanceTableFilterActive;
+        params.infobarElement = advanceTableFilterInfobar;
         trigger('table/filter', params);
-
     }
+
     function removeSelectedFilters() {
-
+        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     }
-    function clearFilters() {
+
+    function clearTicketsFilters() {
         removeSelectedFilters();
         let tableSettings = getActiveTableSettings();
         tableSettings.activePage = 1;
         tableSettings.visibleColumns = [];
         tableSettings.filters = null;
-        filterTicketsTable(true);
+        filterTicketsTable();
     }
+
     function getFiltersFromAPI(tableSettings) {
         let data = {
             'EndpointId': tableSettings.endpointId
@@ -120,6 +108,7 @@ const ticketsFilter = (function () {
             tableSettings: tableSettingsObject
         });
     }
+
     function displayFilters(filters, tableSettings) {
         //filter elements
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
@@ -132,7 +121,6 @@ const ticketsFilter = (function () {
         multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
         let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
         multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
-        console.log(filters.PrintedAndRedeemed);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
         multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
 
@@ -140,7 +128,7 @@ const ticketsFilter = (function () {
         ticketsAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         ticketsAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({ name: '-', value: null });
+        hideableColumns.unshift({name: '-', value: null});
         //ToDo Neske: this can be removed when solution for parsed hack is found
         let columns = hideableColumns.map(function (item) {
             item.parsed = true;
@@ -148,11 +136,7 @@ const ticketsFilter = (function () {
         });
         multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
     }
-    // function showAdvanceTableFilter() {
-    //     ticketAdvanceFilter.classList.add('advance-filter-active');
-    //     advanceTableFilterActive.classList.remove('hidden');
 
-    // }
     function formatTicketsApiData(filterArray) {
         if (filterArray !== undefined && filterArray !== null) {
             filterArray.forEach(function (filter) {
@@ -162,6 +146,7 @@ const ticketsFilter = (function () {
             return filterArray;
         }
     }
+
     function prepareTicketsFiltersForApi(activeTableSettings) {
         if (activeTableSettings === undefined) {
             activeTableSettings = getActiveTableSettings();
@@ -175,8 +160,8 @@ const ticketsFilter = (function () {
             'DateTo': pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
             'RedeemDateFrom': pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
             'RedeemDateTo': pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            'PrintedList': preparePrintedListData(pageFilters.Printed),
-            'RedeemList': prepareRedeemListData(pageFilters.Redeemed),
+            'PrintedList': pageFilters.Printed,
+            'RedeemList': pageFilters.Redeemed,
             'Status': pageFilters.Status,
             'Type': pageFilters.TypesList,
             'BasicData': {
@@ -193,40 +178,5 @@ const ticketsFilter = (function () {
         activeTableSettings.filters = filtersForApi;
         return filtersForApi;
     }
-
-    function preparePrintedListData(dataArray) {
-        let preparedPrintedListData = [];
-        if (dataArray !== null && dataArray !== undefined) {
-            dataArray.forEach(function (arrayElement) {
-                let object = {
-                    Name: arrayElement.toString(),
-                    ID: parseInt(arrayElement)
-                };
-                preparedPrintedListData.push(object);
-            });
-        }
-        if (preparedPrintedListData.length === 0) {
-            preparedPrintedListData = null;
-        }
-        return preparedPrintedListData;
-    }
-    function prepareRedeemListData(dataArray) {
-        let preparedRedeemListData = [];
-        if (dataArray !== null && dataArray !== undefined) {
-            dataArray.forEach(function (arrayElement) {
-                let object = {
-                    Name: arrayElement.toString(),
-                    ID: parseInt(arrayElement)
-                };
-                preparedRedeemListData.push(object);
-            });
-        }
-        if (preparedRedeemListData.length === 0) {
-            preparedRedeemListData = null;
-        }
-        return preparedRedeemListData;
-    }
-
-
 })();
 

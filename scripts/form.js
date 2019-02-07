@@ -4,6 +4,11 @@ let form = (function () {
     let valueMultiplier = 100;
     let currentEndpointId;
 
+    const nodeTypes = {
+        div: 'DIV',
+        input: 'INPUT'
+    };
+
     const inputTypes = {
         singleSelect: 'single-select',
         integer: 'int',
@@ -106,9 +111,7 @@ let form = (function () {
                                     newInputElement.removeAttribute('id');
                                     newInputElement.value = values[i];
                                     newField.classList.add('element-input-additional-array-value');
-                                    console.log('new Field', newField);
                                     validation.init(newInputElement, {});
-                                    console.log('validation', newField.vertexValidation);
                                     if (addAnotherButton !== null) {
                                         inputsContainer.insertBefore(newField, addAnotherButton);
                                     } else {
@@ -116,21 +119,20 @@ let form = (function () {
                                     }
 
                                     let deleteButtonElement = newField.getElementsByClassName('button-link')[0];
-                                    deleteButtonElement.classList.remove('hidden');
+                                    deleteButtonElement.classList.remove('visibility-hidden');
                                     deleteButtonElement.addEventListener('click', deleteFormElement);
                                 }
                             }
                             //display delete button for first field
                             if (values.length > 1) {
                                 let firstDeleteButton = inputElement.parentNode.getElementsByClassName('button-link')[0];
-                                firstDeleteButton.classList.remove('hidden');
+                                firstDeleteButton.classList.remove('visibility-hidden');
                                 firstDeleteButton.addEventListener('click', deleteFormElement);
                             }
                         } else {
                             switch (inputElement.dataset.type) {
                                 case inputTypes.singleSelect:
-                                    //inputElement.dataset.value = dataToDisplay[inputName];
-                                    dropdown.select(inputElement.parentNode, dataToDisplay[inputName]);
+                                    dropdown.select(inputElement, dataToDisplay[inputName]);
                                     break;
                                 case inputTypes.integer:
                                     inputElement.value = dataToDisplay[inputName];
@@ -211,26 +213,28 @@ let form = (function () {
                                                         dataForApi[formInputElement.name] = [];
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
-                        case 'single-select':
+                        case inputTypes.singleSelect:
                             let valueElement = formInputElement.firstChild;
                             dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
+                            dataForApi[formInputElement.dataset.name] = dropdown.getValue(formInputElement);
+
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
                             }
                             break;
-                        case 'int':
+                        case inputTypes.integer:
                             if (parseInt(formInputElement.value) !== undefined) {
                                 dataForApi[formInputElement.name] = parseInt(formInputElement.value);
                             }
                             break;
-                        case 'float':
+                        case inputTypes.float:
                             let value = prepareFloatValue(formInputElement.value);
                             dataForApi[formInputElement.name] = value * valueMultiplier;
                             break;
-                        case 'string':
+                        case inputTypes.string:
                             dataForApi[formInputElement.name] = formInputElement.value;
                             break;
-                        case 'array':
+                        case inputTypes.array:
                             if (dataForApi[formInputElement.name] === undefined) {
                                 dataForApi[formInputElement.name] = [];
                             }
@@ -309,9 +313,34 @@ let form = (function () {
         deleteButtonParentNode.remove();
         let childElementCount = parentNode.childElementCount;
         if (childElementCount <= 3) {
-            parentNode.getElementsByClassName('button-link')[0].classList.add('hidden');
+            parentNode.getElementsByClassName('button-link')[0].classList.add('visibility-hidden');
         }
     }
+
+    function reset(formSettings) {
+        let inputs = collectAllFormElements(formSettings);
+        for (let i = 0; i < inputs.length; i++) {
+            let input = inputs[i];
+            resetInput(input);
+        }
+    }
+
+    function resetInput(input) {
+        //ToDo: handle all input types as needed
+        let htmlType = input.getAttribute('type');
+        let nodeName = input.nodeName;
+        if (nodeName === nodeTypes.input) {
+            if (!isEmpty(htmlType) && htmlType === 'text') {
+                input.value = '';
+            }
+        }
+        else if (nodeName === nodeTypes.div) {
+            if (input.dataset.type === inputTypes.singleSelect) {
+                dropdown.reset(input);
+            }
+        }
+    }
+
 
     function addAnotherField(e, formSettings) {
         if (e.currentTarget.dataset.maxNumber !== undefined) {
@@ -328,7 +357,7 @@ let form = (function () {
                     let newInput = newField.getElementsByTagName('input')[0];
                     newInput.removeAttribute('id');
                     newInput.value = '';
-                    newField.getElementsByClassName('button-link')[0].classList.remove('hidden');
+                    newField.getElementsByClassName('button-link')[0].classList.remove('visibility-hidden');
                     newField.classList.add('element-input-additional-array-value');
 
                     let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
@@ -337,7 +366,7 @@ let form = (function () {
                     validation.init(newInput, {});
 
                     if (targetElements.length > 1) {
-                        targetElements[0].getElementsByClassName('button-link')[0].classList.remove('hidden');
+                        targetElements[0].getElementsByClassName('button-link')[0].classList.remove('visibility-hidden');
                     }
 
                     let deleteButtonFirstElement = targetElements[0].getElementsByClassName('button-link')[0];
@@ -357,18 +386,7 @@ let form = (function () {
     }
 
     //elements event handlers
-    function formatFloatInputHandler() {
-        let value = this.value;
-        var position = this.selectionStart;
-        value = value.replace(/,/g, '').replace('.', '');
-        let number = value.slice(0, value.length - 2);
-        let decimal = value.slice(value.length - 2, value.length);
-        let float = parseFloat(number + "." + decimal).toFixed(2);
-        this.value = formatFloatValue(float);
-        this.selectionEnd = position;
-    }
-
-    function onSubmit(e) {
+     function onSubmit(e) {
         e.preventDefault();
         return false;
     }
@@ -500,6 +518,10 @@ let form = (function () {
         }
         formSettings.initValidation(formSettings);
     }
+
+    on('form/reset', function (params) {
+        reset(params.formSettings);
+    });
 
     on('form/add/hiddenField', function (params) {
         addHiddenField(params.formSettings, params.name, params.value);

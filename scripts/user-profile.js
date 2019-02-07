@@ -1,6 +1,6 @@
 const userEditProfileModule = (function () {
     let editYourProfile = $$('#user-info-profile-buttons').children[0];
-    let logout = $$('#user-info-profile-buttons').children[1];
+    let logout = $$('#top-bar-edit-and-logout-user').children[1];
     let userEditProfile = $$('#user-edit-profile');
     let backUserEditProfile = $$('#user-edit-profile-buttons').children[0];
     let saveUserEditProfile = $$('#user-edit-profile-buttons').children[1];

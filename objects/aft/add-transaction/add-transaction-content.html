@@ -1,6 +1,6 @@
 <div>
     <div id="add-transaction-header-element">
-        <div>ADD TRANSACTION</div>
+        <div class="element-multilanguage" data-translation-key="AddTransaction"></div>
         <div>X</div>
     </div>
     <div id="aft-tabs-add-transaction-form-wrapper">
@@ -21,7 +21,7 @@
                                for="add-transaction-cashable-limit">
                             Cashable
                         </label>
-                        <input name="CashableAmount" data-type="float"
+                        <input name="CashableAmount" data-type="float" required
                                class="form-input element-form-data input-number-right"
                                type="text" id="add-transaction-cashable-limit" placeholder="0.00">
                     </div>
@@ -31,7 +31,7 @@
                                for="add-transaction-promo-limit">
                             Promo
                         </label>
-                        <input name="PromoAmount" class="form-input element-form-data input-number-right"
+                        <input name="PromoAmount" class="form-input element-form-data input-number-right" required
                                data-type="float"
                                type="text" id="add-transaction-promo-limit" placeholder="0.00">
                     </div>
@@ -41,16 +41,16 @@
                                for="add-transaction-expiration-limit">
                             Expiration
                         </label>
-                        <input name="ExpirationInDays" class="form-input element-form-data" data-type="float"
+                        <input name="ExpirationInDays" class="form-input element-form-data" data-type="float" required
                                type="text"
                                id="add-transaction-expiration-limit" placeholder="31">
                     </div>
                 </div>
             </div>
             <div id="add-transaction-save-button" class="form-buttons-section">
-                <button class="primarybutton element-form-submit element-multilanguage"
+                <button class="secundarybutton element-form-submit element-multilanguage"
                         data-translation-key="AddTransaction">
-                    ADD TRANSACTION
+                    Add Transaction
                 </button>
             </div>
 
