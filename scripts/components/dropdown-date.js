@@ -212,10 +212,19 @@ const dropdownDate = (function () {
             $$('#top-bar-logout').classList.toggle('logout-is-opened');
             $$('#top-bar-logout-dropdown-menu').classList.toggle('hidden');
         }
-        else{
-           $$('#top-bar-logout-user').children[1].classList.remove('opened-arrow');
+        else {
+            $$('#top-bar-logout-user').children[1].classList.remove('opened-arrow');
             $$('#top-bar-logout').classList.remove('logout-is-opened');
             $$('#top-bar-logout-dropdown-menu').classList.add('hidden');
+        }
+
+        //this is for malfunction details
+        if (e.target.classList && e.target.classList.contains('table-item') && JSON.parse(sessionStorage.categoryAndLink).category === 'Malfunctions') {
+            $$('#malfunctions-details').classList.remove('collapse');
+            trigger('malfunctions-details/machines-history', { target: e.target })
+        }
+        else {
+            $$('#malfunctions-details').classList.add('collapse');
         }
     });
     return {
