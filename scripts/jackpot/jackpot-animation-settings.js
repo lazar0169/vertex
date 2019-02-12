@@ -10,7 +10,8 @@ const jackpotanimationSettings = (function () {
 
 
 
-    jackpotanimationSettingsBackground.appendChild(dropdown.generate(pictureName));
+    dropdownNew.generateNew({ optionValue: pictureName, element: jackpotanimationSettingsBackground })
+    // jackpotanimationSettingsBackground.appendChild(dropdown.generate(pictureName));
     //first
     let topLabelCoordinate1 = {
         x: 535,

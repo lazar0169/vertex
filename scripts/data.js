@@ -1,12 +1,12 @@
 let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
 let fixedDays = ['-', 'Today', 'Yesterday', 'Last 7 Days', 'Last 14 Days', 'This Month', 'Last Month', 'Custom'];
-let columnName = [{ Name: '-' }, { Name: 'Column1' }, { Name: 'Column2' }, { Name: 'Column3' }]
+let columnName = [{ Name: '-', Id: -1 }, { Name: 'Column1', Id: 0 }, { Name: 'Column2', Id: 1 }, { Name: 'Column3', Id: 2 }]
 let machinesNumber = ['50', '25', '10', '5'];
 let pictureName = ['Belgrade', 'New York', 'Surdulica', 'Nis'];
-let machinesVendors = [{ Name: '-' }, { Name: 'Fazi' }, { Name: 'Admiral' }, { Name: 'Favorit' }];
-let machinesStatus = [{ Name: '-' }, { Name: 'Online' }, { Name: 'Offline' }, { Name: 'Disabled' }];
-let machinesType = [{ Name: '-' }, { Name: 'Slot machine' }, { Name: 'Rulet' }];
-let machinesSerial = ['-', 'X00000', 'X11111', 'X22222', 'X33333'];
+let machinesVendors = [{ Name: '-', Id: -1 }, { Name: 'Fazi', Id: 6 }, { Name: 'Admiral', Id: 5 }, { Name: 'Favorit', Id: 3 }];
+let machinesStatus = [{ Name: '-', Id: -1 }, { Name: 'Online', Id: 6 }, { Name: 'Offline', Id: 5 }, { Name: 'Disabled', Id: 1 }];
+let machinesType = [{ Name: '-', Id: -1 }, { Name: 'Slot machine', Id: 5 }, { Name: 'Rulet', Id: 6 }];
+let machinesSerial = ['X00000', 'X11111', 'X22222', 'X33333'];
 let hours = ['-', '00 h', '01 h', '02 h', '03 h', '04 h', '05 h', '06 h', '07 h', '08 h', '09 h', '10 h', '11 h', '12 h', '13 h', '14 h', '15 h', '16 h', '17 h', '18 h', '19 h', '20 h', '21 h', '22 h', '23 h'];
 let minutes = ['-', '00 min', '01 min', '02 min', '03 min', '04 min', '05 min', '06 min', '07 min', '08 min', '09 min', '10 min', '11 min', '12 min', '13 min', '14 min', '15 min', '16 min', '17 min', '18 min', '19 min', '20 min', '21 min', '22 min', '23 min', '24 min', '25 min', '26 min', '27 min', '28 min', '29 min', '30 min', '31 min', '32 min', '33 min', '34 min', '35 min', '36 min', '37 min', '38 min', '39 min', '40 min', '41 min', '42 min', '43 min', '44 min', '45 min', '46 min', '47 min', '48 min', '49 min', '50 min', '51 min', '52 min', '53 min', '54 min', '55 min', '56 min', '57 min', '58 min', '59 min'];
 

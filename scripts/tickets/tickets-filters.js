@@ -9,7 +9,8 @@ const ticketsFilter = (function () {
     let ticketsAdvanceFilterApplyButton = $$('#tickets-advance-table-filter-apply').children[0];
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
-    dropdown.generate(machinesNumber, ticketsMachinesNumbers);
+    dropdownNew.generateNew({ optionValue: machinesNumber, element: ticketsMachinesNumbers })
+    // dropdown.generate(machinesNumber, ticketsMachinesNumbers);
 
     let activeHeadElement;
 
@@ -17,7 +18,7 @@ const ticketsFilter = (function () {
     /*********************----Events Listeners------*********************/
 
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterTicketsTable();
     });
 
@@ -25,7 +26,7 @@ const ticketsFilter = (function () {
     clearAdvanceFilterInfobar.addEventListener('click', clearTicketsFilters);
     ticketAdvanceFilterButton.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     });
     /*********************----Module Events----************************/
@@ -84,7 +85,7 @@ const ticketsFilter = (function () {
     }
 
     function removeSelectedFilters() {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     }
 
     function clearTicketsFilters() {
@@ -118,23 +119,32 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
 
         let states = table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
-        multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
+        dropdownNew.generateNew({ optionValue: states, element: ticketsAdvanceTableFiltersStatus, type: 'multi' });
+
+        // multiDropdown.generate(states, ticketsAdvanceTableFiltersStatus);
         let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
-        multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
-        multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
-        multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
+        dropdownNew.generateNew({ optionValue: types, element: ticketsAdvanceTableFiltersTypes, type: 'multi' });
+        // multiDropdown.generate(types, ticketsAdvanceTableFiltersTypes);
+
+        dropdownNew.generateNew({ optionValue: filters.PrintedAndRedeemed, element: ticketsAdvanceTableFiltersPrinted, type: 'multi' });
+        dropdownNew.generateNew({ optionValue: filters.PrintedAndRedeemed, element: ticketsAdvanceTableFiltersRedeemed, type: 'multi' });
+
+
+        // multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersPrinted);
+        // multiDropdown.generate(filters.PrintedAndRedeemed, ticketsAdvanceTableFiltersRedeemed);
 
         //hide/show columns picker
         ticketsAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         ticketsAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({name: '-', value: null});
+        hideableColumns.unshift({ name: '-', value: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
-        let columns = hideableColumns.map(function (item) {
-            item.parsed = true;
-            return item;
-        });
-        multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
+        // let columns = hideableColumns.map(function (item) {
+        //     item.parsed = true;
+        //     return item;
+        // });
+        dropdownNew.generateNew({ optionValue: hideableColumns, element: ticketsAdvanceTableFilterColumn, type: 'multi' });
+        // multiDropdown.generate(columns, ticketsAdvanceTableFilterColumn);
     }
 
     function formatTicketsApiData(filterArray) {

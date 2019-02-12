@@ -4,8 +4,15 @@ const machinesFilter = (function () {
     let machinesFilterMachineNumber = $$('#machine-filters-number-machines');
 
 
-    machinesFiltersVendors.appendChild(multiDropdown.generate(machinesVendors));
-    machinesFiltersStatus.appendChild(multiDropdown.generate(machinesStatus));
-    machinesFilterMachineNumber.appendChild(dropdown.generate(machinesNumber));
+    dropdownNew.generateNew({ optionValue: machinesNumber, element: machinesFilterMachineNumber });
+
+    dropdownNew.generateNew({ optionValue: machinesVendors, element: machinesFiltersVendors, type: 'multi' });
+    dropdownNew.generateNew({ optionValue: machinesStatus, element: machinesFiltersStatus, type: 'multi' })
+
+
+
+    // machinesFiltersVendors.appendChild(multiDropdown.generate(machinesVendors));
+    // machinesFiltersStatus.appendChild(multiDropdown.generate(machinesStatus));
+
 
 })();

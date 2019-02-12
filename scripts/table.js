@@ -52,7 +52,7 @@ let table = (function () {
     //region MODULE EVENTS
     on(events.saveExportedFile, function (params) {
         let data = params.data;
-        let blob = new Blob([data], {type: 'application/pdf'});
+        let blob = new Blob([data], { type: 'application/pdf' });
         let link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = 'Report.pdf';
@@ -289,18 +289,18 @@ let table = (function () {
                 if (tableSettings.onHoverRow === undefined) {
                     cell.addEventListener('mouseover', function () {
                         hoverRow(rowClassPrefix + rowId, true);
-                    }, {passive: false});
+                    }, { passive: false });
                 }
 
                 cell.addEventListener('mouseout', function () {
                     hoverRow(rowClassPrefix + rowId, false);
-                }, {passive: false});
+                }, { passive: false });
 
                 //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
 
                 cell.addEventListener('click', function (e) {
                     if (!cell.classList.contains('clickable')) {
-                        return ;
+                        return;
                     }
                     //check if there's on beforeCellClick handler
                     if (tableSettings.onBeforeCellClick !== undefined) {
@@ -565,7 +565,7 @@ let table = (function () {
         tableSettings.activePage = parseInt(e.target.dataset.page);
         //ToDo: refactor this to be in table module
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pagination', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/pagination', { tableSettings: tableSettings });
     }
 
     function bindPaginationLinkHandler(element, tableSettings) {
@@ -639,7 +639,7 @@ let table = (function () {
 
     function initFilters(tableSettings) {
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/init', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/init', { tableSettings: tableSettings });
     }
 
     on('table/filter', filterTable);
@@ -660,7 +660,7 @@ let table = (function () {
     });
 
     function initTable(tableSettings) {
-        let data = {EndpointId: tableSettings.endpointId};
+        let data = { EndpointId: tableSettings.endpointId };
         tableSettings.defaultSortColumnSet = false;
 
 
@@ -694,7 +694,9 @@ let table = (function () {
 
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-        dropdown.generate(machinesNumber, pageSizeDropdown);
+        dropdownNew.generateNew({ optionValue: machinesNumber, element: pageSizeDropdown });
+        // dropdown.generate(machinesNumber, pageSizeDropdown);
+
         bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);
     }
 
@@ -712,7 +714,7 @@ let table = (function () {
     function handlePageSizeLinkClick(e, tableSettings) {
         e.preventDefault();
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pageSize', {tableSettings: tableSettings});
+        trigger(moduleName + '/filters/pageSize', { tableSettings: tableSettings });
     }
 
     function bindPageSizeLinkHandler(element, tableSettings) {
@@ -864,7 +866,7 @@ let table = (function () {
         setSortingAttributes(element, tableSettings);
         let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
         let sorting = getSorting(tableSettings);
-        trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
+        trigger(moduleName + '/filters/sorting', { tableSettings: tableSettings, sorting: sorting });
     }
 
     function bindSortingLinkHandler(element) {
@@ -1270,9 +1272,9 @@ let table = (function () {
             } else {
                 name = element.innerText.replace(' ', '');
             }
-            colNames.push({Name: name})
+            colNames.push({ Name: name })
         });
-        colNames.unshift({Name: "-"});
+        colNames.unshift({ Name: "-" });
         return colNames;
     }
 

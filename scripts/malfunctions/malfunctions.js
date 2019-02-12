@@ -53,7 +53,9 @@ const malfunctions = (function () {
 
     //trigger('preloader/hide');
 
-    dropdown.generate(machinesNumber, malfunctionsMachinesNumbers);
+    dropdownNew.generateNew({ optionValue: machinesNumber, element: malfunctionsMachinesNumbers })
+
+    // dropdown.generate(machinesNumber, malfunctionsMachinesNumbers);
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function () {
         if (addMalfunctionMsg.children[0].value) {

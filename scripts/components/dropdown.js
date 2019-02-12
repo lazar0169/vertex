@@ -1,6 +1,6 @@
 const dropdown = (function () {
     //index of single select 
-    let indexSsId = 0;
+    let indexSsId = 10000;
     //single select array
     let singleSelectArray = [];
 
@@ -154,18 +154,18 @@ const dropdown = (function () {
         return select;
     }
 
-    window.addEventListener('click', function (e) {
-        e.preventDefault();
-        for (let selectId of singleSelectArray) {
-            if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
-                if (e.target.parentNode.id !== selectId) {
-                    $$(`#${selectId}`).classList.remove('active-single-select');
-                    $$(`#${selectId}`).children[0].children[1].classList.remove('opened-arrow');
-                    $$(`#${selectId}`).children[1].classList.add('hidden');
-                }
-            }
-        }
-    });
+    // window.addEventListener('click', function (e) {
+    //     e.preventDefault();
+    //     for (let selectId of singleSelectArray) {
+    //         if (e.target.parentNode !== null && $$(`#${selectId}`) !== null) {
+    //             if (e.target.parentNode.id !== selectId) {
+    //                 $$(`#${selectId}`).classList.remove('active-single-select');
+    //                 $$(`#${selectId}`).children[0].children[1].classList.remove('opened-arrow');
+    //                 $$(`#${selectId}`).children[1].classList.add('hidden');
+    //             }
+    //         }
+    //     }
+    // });
 
     return {
         generate,

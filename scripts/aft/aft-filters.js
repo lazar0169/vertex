@@ -16,7 +16,7 @@ const aftFilters = (function () {
     //display initial filters
     /*********************----Events Listeners------*********************/
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterAftTable();
     });
 
@@ -100,7 +100,7 @@ const aftFilters = (function () {
     }
 
     function removeSelectedFilters() {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     }
 
     function clearAftFilters() {
@@ -138,28 +138,37 @@ const aftFilters = (function () {
         let aftAddTransactionMachine = $$('#add-transaction-machine');
 
 
-        multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
-        multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
+        dropdownNew.generateNew({ optionValue: filters.MachineNameList, element: aftAdvanceTableFilterFinished, type: 'multi' });
+        // multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
+        dropdownNew.generateNew({ optionValue: filters.JackpotNameList, element: aftAdvanceTableFilterJackpot, type: 'multi' });
 
-        let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
-        multiDropdown.generate(types, aftAdvanceTableFilterType);
+        // multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
 
-        let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
-        multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
+        dropdownNew.generateNew({ optionValue: filters.TypeList, element: aftAdvanceTableFilterType, type: 'multi' });
+        // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
+        // multiDropdown.generate(types, aftAdvanceTableFilterType);
+
+        dropdownNew.generateNew({ optionValue: filters.StatusList, element: aftAdvanceTableFilterStatus, type: 'multi' });
+        // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
+        // multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
+
         //set up columns selection dropdown
         aftAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         aftAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({name: '-', value: null});
+        hideableColumns.unshift({ Name: '-', Value: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
-        let columns = hideableColumns.map(function (item) {
-            item.parsed = true;
-            return item;
-        });
-        multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
+        // let columns = hideableColumns.map(function (item) {
+        //     item.parsed = true;
+        //     return item;
+        // });
+        dropdownNew.generateNew({ optionValue: hideableColumns, element: aftAdvanceTableFilterColumn, type: 'multi' });
+        // multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
 
-        dropdown.generate(types.slice(1, types.length), aftAddTransactionType, 'Type');
-        dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
+        dropdownNew.generateNew({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), element: aftAddTransactionType, type: 'single' })
+        // dropdown.generate(types.slice(1, types.length), aftAddTransactionType, 'Type');
+        dropdownNew.generateNew({ optionValue: filters.MachineAddTransactionList, element: aftAddTransactionMachine, type: 'single' })
+        // dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
     }
 
     function showAdvanceTableFilter() {

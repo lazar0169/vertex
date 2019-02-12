@@ -6,7 +6,10 @@ const jackpotFilter = (function () {
     let jackpotTab = $$('#jackpot-tab');
 
     //number of machines, dropdown
-    jackpotMachinesNumbers.appendChild(dropdown.generate(machinesNumber));
+
+    dropdownNew.generateNew({ optionValue: machinesNumber, element: jackpotMachinesNumbers, type: 'single' })
+
+
 
     advanceTableFilter.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');

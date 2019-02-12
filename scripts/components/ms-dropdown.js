@@ -1,6 +1,6 @@
 const multiDropdown = (function () {
     //index of multiselect 
-    let indexMsId = 0;
+    let indexMsId = 10000;
     //multiselect array
     let multiSelectArray = [];
 
@@ -12,7 +12,7 @@ const multiDropdown = (function () {
         }
         let titles = [];
         let values = [];
-        let multipleGroup = element.getElementsByClassName("multiple-group")[0];
+        let multipleGroup = element.getElementsByClassName("multi-group")[0];
         let options = multipleGroup.children;
         Array.prototype.slice.call(options).forEach(function (option) {
             option.click();
@@ -43,7 +43,7 @@ const multiDropdown = (function () {
         //wrapper select
         let select = document.createElement('div');
         select.classList.add('default-select');
-        select.classList.add('default-multiselect-select');
+        select.classList.add('default-multi-select');
 
 
         if (existsId) {
@@ -184,29 +184,29 @@ const multiDropdown = (function () {
         return select;
     }
 
-    window.addEventListener('click', function (e) {
-        e.preventDefault();
-        for (let selectId of multiSelectArray) {
-            if (e.target.parentNode && e.target.parentNode.id === selectId) {
-                $$(`#${selectId}`).classList.toggle('active-multi-select');
-                trigger('opened-arrow', { div: $$(`#${selectId}`).children[0] });
-                $$(`#${selectId}`).children[1].classList.toggle('hidden');
-                $$(`#${selectId}`).parentNode.children[0].classList.add('dropdown-is-active');
-            } else {
-                if (e.target.parentNode && e.target.parentNode.parentNode && e.target.parentNode.parentNode.id === selectId) {
-                    $$(`#${selectId}`).classList.add('active-multi-select');
-                    $$(`#${selectId}`).children[1].classList.remove('hidden');
-                } else {
-                    $$(`#${selectId}`).classList.remove('active-multi-select');
-                    $$(`#${selectId}`).children[0].children[1].classList.remove('opened-arrow');
-                    $$(`#${selectId}`).children[1].classList.add('hidden');
-                    if ($$(`#${selectId}`).children[0].dataset.value === '-') {
-                        $$(`#${selectId}`).parentNode.children[0].classList.remove('dropdown-is-active');
-                    }
-                }
-            }
-        }
-    });
+    // window.addEventListener('click', function (e) {
+    //     e.preventDefault();
+    //     for (let selectId of multiSelectArray) {
+    //         if (e.target.parentNode && e.target.parentNode.id === selectId) {
+    //             $$(`#${selectId}`).classList.toggle('active-multi-select');
+    //             trigger('opened-arrow', { div: $$(`#${selectId}`).children[0] });
+    //             $$(`#${selectId}`).children[1].classList.toggle('hidden');
+    //             $$(`#${selectId}`).parentNode.children[0].classList.add('dropdown-is-active');
+    //         } else {
+    //             if (e.target.parentNode && e.target.parentNode.parentNode && e.target.parentNode.parentNode.id === selectId) {
+    //                 $$(`#${selectId}`).classList.add('active-multi-select');
+    //                 $$(`#${selectId}`).children[1].classList.remove('hidden');
+    //             } else {
+    //                 $$(`#${selectId}`).classList.remove('active-multi-select');
+    //                 $$(`#${selectId}`).children[0].children[1].classList.remove('opened-arrow');
+    //                 $$(`#${selectId}`).children[1].classList.add('hidden');
+    //                 if ($$(`#${selectId}`).children[0].dataset.value === '-') {
+    //                     $$(`#${selectId}`).parentNode.children[0].classList.remove('dropdown-is-active');
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
 
     return {
         generate,
