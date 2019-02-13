@@ -386,8 +386,6 @@ let validation = (function () {
             default:
                 return input.value;
         }
-
     }
-
 })
 ();
