@@ -17,7 +17,7 @@ let validation = (function () {
         maximum: 'max',
         equals: 'equals',
         email: 'email',
-        maxLength : 'maxlength'
+        maxLength: 'maxlength'
     };
 
     const constraintsOperators = {
@@ -60,10 +60,10 @@ let validation = (function () {
         return a !== undefined && a !== null && a !== '';
     };
     operatorFunctions[constraintsOperators.email] = function (a) {
-        return a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return a === '' || a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ));
     };
-    operatorFunctions[constraintsOperators.maxLength] = function(a,b) {
+    operatorFunctions[constraintsOperators.maxLength] = function (a, b) {
         b = parseInt(b);
         return a.length <= b;
     };
@@ -71,7 +71,9 @@ let validation = (function () {
 
 
     return {
-        init: init
+        init: init,
+        constraintAttributes: constraintAttributes,
+        constraintsOperators: constraintsOperators
     };
 
     //region event listeners
@@ -168,7 +170,7 @@ let validation = (function () {
             errorsContainer.append(errorElement);
             validationSettings.errorElements.push(errorElement);
         }
-            validationSettings.input.parentNode.append(errorsContainer);
+        validationSettings.input.parentNode.append(errorsContainer);
     }
 
     function showErrors(validationSettings) {
@@ -198,6 +200,9 @@ let validation = (function () {
         //bind functions
         settings.validate = validate;
         settings.hideErrors = hideErrors;
+        settings.addConstraint = addConstraint;
+        settings.removeConstraint = removeConstraint;
+
 
         settings.errors = [];
         settings.errorElements = [];
@@ -364,6 +369,23 @@ let validation = (function () {
             }
         }
         return valid;
+    }
+
+    function addConstraint(constraint, validationSettings) {
+        if (validationSettings === undefined) {
+            validationSettings = this;
+        }
+        validationSettings.constraints.set(constraint.name, constraint);
+        validationSettings.errorMessages.set(constraint.name, defaultErrorMessages[constraint.name]);
+
+    }
+
+    function removeConstraint(constraintName, validationSettings) {
+        if (validationSettings === undefined) {
+            validationSettings = this;
+        }
+        validationSettings.constraints.delete(constraintName);
+        validationSettings.errorMessages.delete(constraintName);
     }
 
     function parseRuleValues(rule, value) {

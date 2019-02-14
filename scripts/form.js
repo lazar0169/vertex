@@ -155,7 +155,7 @@ let form = (function () {
             }
         });
         if (!isEmpty(formSettings.afterDisplayData)) {
-            formSettings.afterDisplayData(formSettings,data);
+            formSettings.afterDisplayData(formSettings, data);
         }
     }
 
@@ -264,8 +264,8 @@ let form = (function () {
         if (valid) {
             submitButton.disabled = 'disabled';
             submitButton.classList.add('loading');
-            if (!isEmpty(formSettings.beforeSubmit)){
-                dataForApi = formSettings.beforeSubmit(formSettings,dataForApi);
+            if (!isEmpty(formSettings.beforeSubmit)) {
+                dataForApi = formSettings.beforeSubmit(formSettings, dataForApi);
             }
 
             trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
@@ -344,8 +344,7 @@ let form = (function () {
             if (!isEmpty(htmlType) && htmlType === 'text') {
                 input.value = '';
             }
-        }
-        else if (nodeName === nodeTypes.div) {
+        } else if (nodeName === nodeTypes.div) {
             if (input.dataset.type === inputTypes.singleSelect) {
                 dropdown.reset(input);
             }
@@ -362,7 +361,19 @@ let form = (function () {
                 let lastElement = targetElements[targetElements.length - 1];
 
                 let lastInput = lastElement.getElementsByTagName('input')[0];
-                if (lastInput.vertexValidation.validate()) {
+
+                //add required rule to check if field is not empty
+                let validationConstraint = {
+                    name:validation.constraintAttributes.required,
+                    operator: validation.constraintsOperators.required,
+                    value: true
+                };
+                lastInput.vertexValidation.addConstraint(validationConstraint);
+                let lastInputValid = lastInput.vertexValidation.validate();
+                //remove required validation
+                lastInput.vertexValidation.removeConstraint(validationConstraint.name);
+
+                if (lastInputValid) {
                     let newField = lastElement.cloneNode(true);
 
                     let newInput = newField.getElementsByTagName('input')[0];
@@ -374,6 +385,8 @@ let form = (function () {
                     let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
 
                     lastElement.parentNode.insertBefore(newField, addAnotherButton);
+
+
                     validation.init(newInput, {});
 
                     if (targetElements.length > 1) {
@@ -397,7 +410,7 @@ let form = (function () {
     }
 
     //elements event handlers
-     function onSubmit(e) {
+    function onSubmit(e) {
         e.preventDefault();
         return false;
     }
