@@ -35,7 +35,6 @@ let ticketsSmsSettings = (function(){
             data.PhoneNumbers = [];
             data.Emails = [];
         }
-
         return data;
     };
 
