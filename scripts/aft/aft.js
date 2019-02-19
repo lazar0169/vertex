@@ -22,7 +22,9 @@ const aft = (function () {
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
         tableSettings.stickyRow = true;
-        tableSettings.onDrawRowCell = 'aft/table/drawCell';
+        //ToDo neske: deprecated - remove
+        //tableSettings.onDrawRowCell = 'aft/table/drawCell';
+
         tableSettings.onAfterCellClick = onTableCellClick;
         tableSettings.exportTo = {
             pdf:{
@@ -73,6 +75,13 @@ const aft = (function () {
     });
 
     /*********************----Module Events------*********************/
+    on (`table/#table-container-aft/cell/clicked/`, function(e){
+        console.log(e);
+        console.log(this);
+        let target = e.target;
+        console.log(target);
+        console.log(target.additionalData);
+    });
     on('aft/addTransaction/error', function (params) {
 
         trigger('notifications/show', {

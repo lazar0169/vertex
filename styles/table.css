@@ -63,12 +63,11 @@
     cursor: default;
     width: 100%;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
     font-family: OpenSans-Regular;
     font-size: 13px;
-    pointer-events: none;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
@@ -95,6 +94,9 @@
     width: 100%;
     font-family: OpenSans-Bold;
     font-size: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .cell.first-cell.cell-flag, .cell-cancel-head.cell.cell-cancel {

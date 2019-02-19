@@ -285,6 +285,7 @@ let communication = (function () {
         xhr.setRequestHeader(header, value);
     }
 
+    //ToDo Neske: deprecated - remove
     function prepareAftTableData(tableSettings, data) {
         let entries = data.Data.Items;
         let formatedData = [];
@@ -350,26 +351,12 @@ let communication = (function () {
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
-    //ToDo: refactor in on rowDisplay
+    //ToDo Neske: deprecated - remove
     function prepareTicketsTableData(tableSettings, data) {
         let entry = data.Data.Items;
         let formatedData = [];
         let counter = 0;
         entry.forEach(function (entry) {
-            /* if (entry.EntryData.CashoutedBy === null || entry.EntryData.CashoutedBy === '') {
-                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.CashoutedBy + '</label>';
-
-             } else {
-                 entry.EntryData.CashoutedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CashoutedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.CashoutedBy + '</label>';
-
-             }
-             if (entry.EntryData.RedeemedBy === null || entry.EntryData.RedeemedBy === '') {
-                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>' + entry.EntryData.RedeemedBy + '</label>';
-
-             } else {
-                 entry.EntryData.RedeemedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.RedeemedTime) + '</time>' + '<br/>' + '<label>by ' + entry.EntryData.RedeemedBy + '</label>';
-
-             }*/
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
 
             formatedData[counter] = {
@@ -388,11 +375,7 @@ let communication = (function () {
             };
             counter++;
         });
-
         tableSettings.tableData = formatedData;
-
-        //ToDo Neske: Pitati Nikolu šta je ovo
-        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
         return formatedData;
     }
 
@@ -637,7 +620,9 @@ let communication = (function () {
     on(events.tickets.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
-        prepareTicketsTableData(tableSettings, data);
+        //prepareTicketsTableData(tableSettings, data);
+        tableSettings.tableData = data.Data.Items;
+        trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
         trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
     });
 
@@ -840,7 +825,9 @@ let communication = (function () {
     on(events.aft.data.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
-        tableSettings.tableData = prepareAftTableData(tableSettings, data);
+        //tableSettings.tableData = prepareAftTableData(tableSettings, data);
+        console.log('data in communication',data.Data.Items);
+        tableSettings.tableData = data.Data.Items;
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
 
