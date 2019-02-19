@@ -53,7 +53,7 @@ const malfunctions = (function () {
 
     //trigger('preloader/hide');
 
-    dropdownNew.generateNew({ optionValue: machinesNumber, element: malfunctionsMachinesNumbers })
+    dropdown.generate({ optionValue: machinesNumber, element: malfunctionsMachinesNumbers })
 
     // dropdown.generate(machinesNumber, malfunctionsMachinesNumbers);
 

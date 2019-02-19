@@ -694,7 +694,7 @@ let table = (function () {
 
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-        dropdownNew.generateNew({ optionValue: machinesNumber, element: pageSizeDropdown });
+        dropdown.generate({ optionValue: machinesNumber, element: pageSizeDropdown });
         // dropdown.generate(machinesNumber, pageSizeDropdown);
 
         bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);
@@ -1248,11 +1248,11 @@ let table = (function () {
             if (element.dataset.alwaysVisible === undefined || element.dataset.alwaysVisible === false) {
                 let item = {};
                 if (element.dataset.columnName === undefined) {
-                    item.value = element.innerText.replace(' ', '');
-                    item.name = element.dataset.translationKey;
+                    item.Name = element.innerText.replace(' ', '');
+                    item.Id = element.dataset.translationKey;
                 } else {
-                    item.name = element.dataset.translationKey;
-                    item.value = element.dataset.columnName;
+                    item.Name = element.dataset.translationKey;
+                    item.Id = element.dataset.columnName;
                 }
                 columns.push(item)
             }

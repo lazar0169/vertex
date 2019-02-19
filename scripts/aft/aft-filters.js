@@ -137,38 +137,29 @@ const aftFilters = (function () {
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
 
+        dropdown.generate({ optionValue: filters.MachineNameList, element: aftAdvanceTableFilterFinished, type: 'multi' })
+        dropdown.generate({ optionValue: filters.JackpotNameList, element: aftAdvanceTableFilterJackpot, type: 'multi' });
 
-        dropdownNew.generateNew({ optionValue: filters.MachineNameList, element: aftAdvanceTableFilterFinished, type: 'multi' });
-        // multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
-        dropdownNew.generateNew({ optionValue: filters.JackpotNameList, element: aftAdvanceTableFilterJackpot, type: 'multi' });
-
-        // multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
-
-        dropdownNew.generateNew({ optionValue: filters.TypeList, element: aftAdvanceTableFilterType, type: 'multi' });
+      
+        dropdown.generate({ optionValue: filters.TypeList, element: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
-        // multiDropdown.generate(types, aftAdvanceTableFilterType);
 
-        dropdownNew.generateNew({ optionValue: filters.StatusList, element: aftAdvanceTableFilterStatus, type: 'multi' });
+        dropdown.generate({ optionValue: filters.StatusList, element: aftAdvanceTableFilterStatus, type: 'multi' });
         // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
-        // multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
-
+  
         //set up columns selection dropdown
         aftAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         aftAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({ Name: '-', Value: null });
+        hideableColumns.unshift({ Name: '-', Id: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
         // let columns = hideableColumns.map(function (item) {
         //     item.parsed = true;
         //     return item;
         // });
-        dropdownNew.generateNew({ optionValue: hideableColumns, element: aftAdvanceTableFilterColumn, type: 'multi' });
-        // multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
-
-        dropdownNew.generateNew({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), element: aftAddTransactionType, type: 'single' })
-        // dropdown.generate(types.slice(1, types.length), aftAddTransactionType, 'Type');
-        dropdownNew.generateNew({ optionValue: filters.MachineAddTransactionList, element: aftAddTransactionMachine, type: 'single' })
-        // dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
+        dropdown.generate({ optionValue: hideableColumns, element: aftAdvanceTableFilterColumn, type: 'multi' });
+        dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), element: aftAddTransactionType, type: 'single' })
+        dropdown.generate({ optionValue: filters.MachineAddTransactionList, element: aftAddTransactionMachine, type: 'single' })
     }
 
     function showAdvanceTableFilter() {

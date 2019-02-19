@@ -1,4 +1,4 @@
-const dropdownNew = (function () {
+const dropdown = (function () {
     //index of single select 
     let indexDropdown = 0;
     //type of dropdowns
@@ -7,13 +7,44 @@ const dropdownNew = (function () {
         'multi': 2,
         "date": 3
     }
+    let array = [];
+    let arrayInner = [];
 
-    function getValue(element) {
-        return element.firstChild.dataset.value;
+    function getValue(dropdown) {
+        return dropdown.firstChild.dataset.value;
     }
+    function setValue(data) {
+        data.dropdown.firstChild.dataset.value = data.optionsId;
+        for (let option of data.dropdown.children[1].children) {
+            for (let setId of data.optionsId) {
+                switch (dropdownType[data.type]) {
+                    case 1:
+                        data.dropdown.firstChild.firstChild.innerHTML = option.innerHTML;
+                        data.dropdown.firstChild.firstChild.title = option.innerHTML;
+                        break;
 
+                    case 2:
+                        if (setId === parseInt(option.dataset.value)) {
+                            if (data.dropdown.firstChild.firstChild.innerHTML === '-') {
+                                data.dropdown.firstChild.firstChild.innerHTML = option.children[0].children[2].innerHTML;
+                            } else {
+                                data.dropdown.firstChild.firstChild.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
+                            }
+                            array.push(option.dataset.value);
+                            arrayInner.push(option.children[0].children[2].innerHTML);
+                            option.children[0].children[0].checked = true;
+                        }
+                        break;
+                }
+            }
+        }
+        return dropdown;
+    }
     //generate single dropdown
-    function generateNew(data) {
+    function generate(data) {
+        let [...optionsArray] = data.optionValue;
+        let [firstOption] = data.optionValue;
+        let noSelectedData = firstOption;
         let type = data.type;
         if (!type) {
             type = 'single';
@@ -59,37 +90,25 @@ const dropdownNew = (function () {
         optionGroup.classList.add('overflow-y');
 
         switch (dropdownType[type]) {
-
+           
             case 2:
-                let array = [];
-                let arrayInner = [];
-                let noSelectedData = data.optionValue.shift();
-
-                selected.children[0].innerHTML = localization.translateMessage(noSelectedData.Name ? noSelectedData.Name : noSelectedData.name);
+                if (firstOption.Id === -1) {
+                    [, ...optionsArray] = optionsArray;
+                }
+                selected.children[0].innerHTML = localization.translateMessage(noSelectedData.Name);
                 selected.dataset.value = null;
                 selected.title = selected.children[0].innerHTML;
                 if (noSelectedData.LongIdValue) {
                     selected.dataset.LongIdValue = noSelectedData.LongIdValue;
                 }
-                for (let element of data.optionValue) {
+                for (let element of optionsArray) {
                     //option with functionality
                     let option = document.createElement('div');
                     let item = {
-                        Name: null,
-                        Value: null,
-                        LongIdValue: null
+                        Name: element.Name,
+                        Value: element.Id || element.Id !== null || element.Id !== undefined ? element.Id : null,
+                        LongId: element.LongId || element.LongId !== null || element.LongId !== undefined ? element.LongId : null
                     };
-
-                    item.Name = localization.translateMessage(element.Name ? element.Name : element.name);
-                    if (element.Id) {
-                        item.Value = element.Id;
-                        if (element.LongId) {
-                            item.LongIdValue = element.LongId;
-                        }
-                    } else {
-                        item.Value = null;
-                        item.LongIdValue = null;
-                    }
                     option.dataset.value = item.Value;
 
                     let label = document.createElement('label');
@@ -131,7 +150,7 @@ const dropdownNew = (function () {
                                 }
                                 i++
                             }
-                            selected.children[0].innerHTML = arrayInner;
+                            selected.children[0].innerHTML = arrayInner.join(', ');
                             option.children[0].children[0].checked = false;
                             if (selected.children[0].innerHTML === '') {
                                 selected.children[0].innerHTML = noSelectedData.Name;
@@ -143,32 +162,17 @@ const dropdownNew = (function () {
                         selected.dataset.value = array;
                     });
                 }
-                data.optionValue.unshift(noSelectedData);
                 break;
 
             default:
-                for (let element of data.optionValue) {
+                for (let element of optionsArray) {
                     let item = {
-                        Name: null,
-                        Value: null,
-                        LongIdValue: null,
+                        Name: element.Name,
+                        Value: element.Id !== -1 ? element.Id : null,
+                        LongId: element.longIdValue ? element.Id : null
                     };
-                    if (typeof element === 'object') {
-                        item.Name = element.Name;
-                        if (element.Id) {
-                            item.Value = element.Id;
-                        } else {
-                            item.Value = null;
-                        }
-                        if (element.LongIdValue) {
-                            item.LongIdValue = element.LongIdValue;
-                        }
-                    } else {
-                        item.Value = element;
-                        item.Name = element;
-                    }
                     if (!selected.dataset.value) {
-                        selected.children[0].innerHTML = localization.translateMessage(item.Name ? item.Name : item.name);
+                        selected.children[0].innerHTML = localization.translateMessage(item.Name);
                         selected.dataset.value = item.Value;
                         selected.title = selected.children[0].innerHTML;
                         if (item.LongIdValue) {
@@ -177,7 +181,7 @@ const dropdownNew = (function () {
                     }
                     let option = document.createElement('div');
                     option.classList.add('single-option');
-                    option.innerHTML = localization.translateMessage(item.Name ? item.Name : item.name);
+                    option.innerHTML = localization.translateMessage(item.Name);
                     option.dataset.value = item.Value;
                     if (item.longIdValue) {
                         option.dataset.LongIdValue = item.LongIdValue;
@@ -211,6 +215,7 @@ const dropdownNew = (function () {
 
     window.addEventListener('click', function (e) {
         e.preventDefault();
+        //this is for single select
         for (let selectId of $$('.default-single-select')) {
             if (e.target.parentNode !== null && $$(`#${selectId.id}`) !== null) {
                 if (e.target.parentNode.id !== selectId.id) {
@@ -233,7 +238,8 @@ const dropdownNew = (function () {
     });
 
     return {
-        generateNew,
-        getValue
+        generate,
+        getValue,
+        setValue
     };
 })();
