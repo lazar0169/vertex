@@ -252,6 +252,22 @@ let table = (function () {
                     }
                 }
 
+                //pages containing field: Tickets,AFR
+                if (tempRow.Status !== undefined) {
+                    tempRow.Status == localization.translateMessage(tempRow.Status);
+                }
+                //pages containing field: Tickets
+                if (tempRow.TicketType !== undefined) {
+                    tempRow.TicketType == localization.translateMessage(tempRow.TicketType);
+                }
+                //pages containing field: AFT,Malfunctions
+                if (tempRow.Type !== undefined) {
+                    tempRow.Type == localization.translateMessage(tempRow.Type);
+                }
+                //pages containing field: Malfunctions
+                if (tempRow.Type !== undefined) {
+                    tempRow.Type == localization.translateMessage(tempRow.Type);
+                }
 
 
                 let columnIndex = 0;
@@ -260,22 +276,21 @@ let table = (function () {
                     let cellColumnClass = generateCellClassName(column);
                     let cell = createCellElement(rowId, column, tableSettings, rowData);
                     let cellData = tempRow[column];
-                    console.log('column:', column);
-                    console.log('cell data:', cellData);
 
                     //set cell to be clickable if criteria are met
                     if (
                         !isEmpty(rowData.Properties.isPayoutPossible //aft
                         )) {
-                        cell.classList.add(clickable);
+                        cell.classList.add('clickable');
                     }
 
                     if (Number.isInteger(cellData)) {
                         cell.innerHTML = formatFloatValue(cellData);
                     } else {
                         cell.innerHTML = cellData;
+                        //ToDo: if language will be changed during application usage, there are attributes that needs to be set up on cell element using following function
+                        //cell.innerHTML = localization.translateMessage(cellData,cell);
                     }
-
 
                     //ToDo neske: proveri jel je neophodno
                     if (tableSettings.columns.indexOf(column) < 0) {

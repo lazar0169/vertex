@@ -231,6 +231,9 @@ function decodeToken(encodedToken) {
 //returns value from an object base on select string -> path='account.createdAt' -> object = user:{account:{createdAt:10/10/2010}}
 //call getProperty("account.createdAt",user);
 function getProperty(path, object) {
+    if (path === undefined) {
+        return '';
+    }
     return path.split('.').reduce(function (prev, curr) {
         return prev ? prev[curr] : null
     }, object || self);
