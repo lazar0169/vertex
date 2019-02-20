@@ -10,10 +10,7 @@ const ticketsFilter = (function () {
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
     dropdown.generate({ optionValue: machinesNumber, element: ticketsMachinesNumbers })
-    // dropdown.generate(machinesNumber, ticketsMachinesNumbers);
-
     let activeHeadElement;
-
 
     /*********************----Events Listeners------*********************/
 

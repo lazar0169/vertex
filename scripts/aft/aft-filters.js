@@ -78,11 +78,7 @@ const aftFilters = (function () {
     on('aft/filters/filter-table', function (params) {
         filterAftTable(params.showFilters);
     });
-
-
     //display initial filters
-
-
     /*********************----Helper functions----*********************/
 
     function getActiveTableSettings() {
@@ -140,13 +136,15 @@ const aftFilters = (function () {
         dropdown.generate({ optionValue: filters.MachineNameList, element: aftAdvanceTableFilterFinished, type: 'multi' })
         dropdown.generate({ optionValue: filters.JackpotNameList, element: aftAdvanceTableFilterJackpot, type: 'multi' });
 
-      
+
         dropdown.generate({ optionValue: filters.TypeList, element: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
 
-        dropdown.generate({ optionValue: filters.StatusList, element: aftAdvanceTableFilterStatus, type: 'multi' });
+        let dropdownStatus = dropdown.generate({ optionValue: filters.StatusList, type: 'multi' });
+        dropdownStatus.set(['1', '3', '5'])
+        aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
         // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
-  
+
         //set up columns selection dropdown
         aftAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         aftAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
@@ -157,7 +155,10 @@ const aftFilters = (function () {
         //     item.parsed = true;
         //     return item;
         // });
-        dropdown.generate({ optionValue: hideableColumns, element: aftAdvanceTableFilterColumn, type: 'multi' });
+        let dropdownColumn = dropdown.generate({ optionValue: hideableColumns, type: 'multi' });
+        dropdownColumn.set(['finishedBy'])
+        aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
+
         dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), element: aftAddTransactionType, type: 'single' })
         dropdown.generate({ optionValue: filters.MachineAddTransactionList, element: aftAddTransactionMachine, type: 'single' })
     }

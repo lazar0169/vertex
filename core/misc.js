@@ -1,5 +1,3 @@
-
-
 let blackArea = $$('#black-area');
 if (typeof blackArea !== 'undefined' && blackArea !== null) {
     $$('#black-area').addEventListener('click', function () {
@@ -84,21 +82,19 @@ on('cancel-custom-date', function (data) {
     let apiString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 
     trigger(`set-date-datepicker`, { pickerId: `datepicker-from-${data.selectId}`, date: apiString });
-    let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0].children[0];
-    timeFromHour.innerHTML = hours[0];
-    timeFromHour.dataset.value = hours[0];
-    let timeFromMinutes = $$(`#time-from-${data.selectId}`).children[1].children[1].children[0];
-    timeFromMinutes.innerHTML = minutes[0];
-    timeFromMinutes.dataset.value = minutes[0];
-    let timeToHour = $$(`#time-to-${data.selectId}`).children[1].children[0].children[0];
-    timeToHour.innerHTML = hours[0];
-    timeToHour.dataset.value = hours[0];
-    let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0];
-    timeToMinutes.innerHTML = minutes[0];
-    timeToMinutes.dataset.value = minutes[0];
+    let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0];
+    timeFromHour.reset();
+    //clearDropdownSelected({ dropdown: timeFromHour, value: hours });
+    let timeFromMinutes = $$(`#time-from-${data.selectId}`).children[1].children[1];
+    timeFromMinutes.reset();
+    let timeToHour = $$(`#time-to-${data.selectId}`).children[1].children[0];
+    timeToHour.reset();
+    let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1];
+    timeToMinutes.reset();
+
     trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
-    $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML = fixedDays[0];
-    $$(`#ds-${data.selectId}`).children[0].title = fixedDays[0];
+    $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML = localization.translateMessage(fixedDays[0].Name);
+    $$(`#ds-${data.selectId}`).children[0].title = $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML;
     $$(`#ds-${data.selectId}`).children[0].dataset.value = fixedDays[0];
     delete data.target.dataset.value;
 });

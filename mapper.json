@@ -36,10 +36,8 @@
       "aft/aft-tab-enable-transaction.js",
       "aft/aft-tab-notification-settings.js",
       "components/currency-input.js",
-      "components/clear-dropdown-filter.js",
       "components/dropdown-date.js",
       "components/dropdown-refactoring.js",
-
       "components/toggle.js",
       "machines/details-bar.js",
       "casino.js",
