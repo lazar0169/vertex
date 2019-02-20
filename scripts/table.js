@@ -17,15 +17,19 @@ let table = (function () {
         // 'null' as dataset values are always converted to string
         const nullFilterValues = ['-', null, 'null'];
 
-        const exportTypes = {
-            event: 'event',
-            url: 'url',
-            callback: 'callback'
-        };
+    const exportFileTypes = {
+        pdf: 'application/pdf'
+    }
 
-        const events = {
-            saveExportedFile: 'table/export/save-file'
-        }
+    const exportTypes = {
+        event: 'event',
+        url: 'url',
+        callback: 'callback'
+    };
+
+    const events = {
+        saveExportedFile: 'table/export/save-file'
+    }
 
         const sortOrderEnum = {
             none: 0,
@@ -44,37 +48,42 @@ let table = (function () {
         };
 
 
-        //region MODULE EVENTS
-        on(events.saveExportedFile, function (params) {
-            console.log(params);
+    //region MODULE EVENTS
+    on(events.saveExportedFile, function (params) {
+        let data = params.data;
+        let blob = new Blob([data], {type: 'application/pdf'});
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'Report.pdf';
+        link.click();
+    });
+    on('table/show-selected-filters/infobar', showSelectedFilters);
+    on('table/before-filter', function (params) {
+        trigger(params.tableSettings.filterDataEvent, {
+            data: params.data,
+            tableSettings: params.tableSettings
         });
-        on('table/show-selected-filters/infobar', showSelectedFilters);
-        on('table/before-filter', function (params) {
-            trigger(params.tableSettings.filterDataEvent, {
-                data: params.data,
-                tableSettings: params.tableSettings
-            });
-            trigger('filters/show-selected-filters', {
-                active: params.activeFiltersContainer,
-                infobar: params.activeFiltersContainer
-            });
+        trigger('filters/show-selected-filters', {
+            active: params.activeFiltersContainer,
+            infobar: params.activeFiltersContainer
         });
-        on('table/dismiss-popup', function (params) {
-            dismissPopup(params.target, params.tableSettings);
-        });
-        on('table/disable-scroll', function (params) {
-            disableScroll(params.tableSettings);
-        });
-        on('table/enable-scroll', function (params) {
-            enableScroll(params.tableSettings);
-        });
-        on('table/deselect/active-row', function (params) {
-            deselectActiveRow(params.tableSettings.tableContainerElement);
-        });
-        on('table/deselect/hover-row', function (params) {
-            deselectHoverRow(params.tableSettings.tableContainerElement);
-        });
-        //endregion
+    });
+    on('table/dismiss-popup', function (params) {
+        dismissPopup(params.target, params.tableSettings);
+    });
+    on('table/disable-scroll', function (params) {
+        disableScroll(params.tableSettings);
+    });
+    on('table/enable-scroll', function (params) {
+        enableScroll(params.tableSettings);
+    });
+    on('table/deselect/active-row', function (params) {
+        deselectActiveRow(params.tableSettings.tableContainerElement);
+    });
+    on('table/deselect/hover-row', function (params) {
+        deselectHoverRow(params.tableSettings.tableContainerElement);
+    });
+    //endregion
 
         /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -562,13 +571,13 @@ let table = (function () {
             tableSettings.tableContainerElement.classList.add('table-expanded');
         }
 
-        function bindExportToHandlers(tableSettings) {
-            let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
-            for (let i = 0; i < exportButtons.length; i++) {
-                exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
-                exportButtons[i].addEventListener('click', onTableExportButtonClicked);
-            }
+    function bindExportToHandlers(tableSettings) {
+        let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
+        for (let i = 0; i < exportButtons.length; i++) {
+            exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
+            exportButtons[i].addEventListener('click', onTableExportButtonClicked);
         }
+    }
 
         function bindTableViewLinkHandlers(tableSettings) {
             let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
@@ -968,53 +977,81 @@ let table = (function () {
             }
         }
 
-        return {
-            init: init,
-            getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
-            getHideableColumns: getHideableColumns,
-            collectFiltersFromPage: collectFiltersFromPage,
-            getSorting: getSorting,
-            getPageSize: getPageSize,
-            parseFilterValues: parseFilterValues,
-            getBounds: getBounds,
-            setFiltersPage: setFiltersPage,
-            //constants
-            exportTypes: exportTypes,
-            events: events
-        };
+    return {
+        init: init,
+        getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
+        getHideableColumns: getHideableColumns,
+        collectFiltersFromPage: collectFiltersFromPage,
+        getSorting: getSorting,
+        getPageSize: getPageSize,
+        parseFilterValues: parseFilterValues,
+        getBounds: getBounds,
+        setFiltersPage: setFiltersPage,
+        //constants
+        exportTypes: exportTypes,
+        events: events,
+        exportFileTypes: exportFileTypes
+    };
 
         /*--------------------------------------------------------------------------------------*/
 
 
-        /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
-        function bindHandlers(tableSettings) {
-            bindSortingLinkHandlers(tableSettings);
-            bindTableViewLinkHandlers(tableSettings);
-            bindExportToHandlers(tableSettings);
-        }
+    /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+    function getVisibleColumnIds(tableSettings) {
+        let headers = getHeaders(tableSettings);
+        let ids = [];
+        if (tableSettings.visibleColumns.length === 0) {
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                if (!isEmpty(header.dataset.columnId)) {
+                    ids.push(header.dataset.columnId);
+                }
 
-        function showSelectedFilters(params) {
-            let filterActive = params.active;
-            let filterInfobar = params.infobar;
-            for (let count = 0; count < filterActive.children.length - 1; count++) {
-                if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
-                    filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
-                    filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
-                    filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
-                    filterInfobar.children[1].children[count].classList.remove('hidden');
-                } else {
-                    filterInfobar.children[1].children[count].classList.add('hidden');
-                }
             }
-            for (let isHidden of filterInfobar.children[1].children) {
-                if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
-                    filterInfobar.classList.remove('hidden');
-                    return;
-                } else {
-                    filterInfobar.classList.add('hidden');
+        } else {
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                let columnName = header.dataset.columnName;
+                let columnId = header.dataset.columnId;
+                if (!isEmpty(columnId)) {
+                    if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
+                        ids.push(columnId);
+                    }
                 }
             }
         }
+        return ids;
+    }
+
+
+    function bindHandlers(tableSettings) {
+        bindSortingLinkHandlers(tableSettings);
+        bindTableViewLinkHandlers(tableSettings);
+        bindExportToHandlers(tableSettings);
+    }
+
+    function showSelectedFilters(params) {
+        let filterActive = params.active;
+        let filterInfobar = params.infobar;
+        for (let count = 0; count < filterActive.children.length - 1; count++) {
+            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
+                filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
+                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
+                filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
+                filterInfobar.children[1].children[count].classList.remove('hidden');
+            } else {
+                filterInfobar.children[1].children[count].classList.add('hidden');
+            }
+        }
+        for (let isHidden of filterInfobar.children[1].children) {
+            if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
+                filterInfobar.classList.remove('hidden');
+                return;
+            } else {
+                filterInfobar.classList.add('hidden');
+            }
+        }
+    }
 
         function dismissPopup(target, tableSettings) {
             dimissPopUp(target);
@@ -1127,20 +1164,20 @@ let table = (function () {
             let tableSettings = $$(button.dataset.target).tableSettings;
             let fileType = button.dataset.fileType;
 
-            if (tableSettings.exportTo === undefined) {
-                console.error(`Table export to settings are not defined.`);
-            } else if (tableSettings.exportTo[fileType] === undefined) {
-                console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
-            } else {
-                let exportSettings = tableSettings.exportTo[fileType];
-                if (exportSettings.type === exportTypes.event) {
-                    console.log('value:', exportSettings.value);
-                    trigger(exportSettings.value, {
-                        tableSettings: tableSettings,
-                    });
-                }
-                //ToDo: cases where export type value is function or url
+        if (tableSettings.exportTo === undefined) {
+            console.error(`Table export to settings are not defined.`);
+        } else if (tableSettings.exportTo[fileType] === undefined) {
+            console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
+        } else {
+            let exportSettings = tableSettings.exportTo[fileType];
+            if (exportSettings.type === exportTypes.event) {
+                trigger(exportSettings.value, {
+                    tableSettings: tableSettings,
+                    selectedColumns: getVisibleColumnIds(tableSettings)
+                });
             }
+            //ToDo: cases where export type value is function or url
+        }
 
         }
 

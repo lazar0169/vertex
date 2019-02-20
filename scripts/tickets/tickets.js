@@ -20,6 +20,17 @@ const tickets = (function () {
         tableSettings.id = '';
         tableSettings.stickyRow = true;
         tableSettings.onDrawRowCell = 'tickets/table/drawCell';
+        tableSettings.exportTo = {
+            pdf:{
+                value: communication.events.tickets.exportToPDF,
+                type : table.exportTypes.event
+            },
+            xls: {
+                value: communication.events.tickets.exportToXLS,
+                type : table.exportTypes.event
+            }
+        };
+
         table.init(tableSettings); //initializing table, filters and page size
 
         trigger('tickets/tab/appearance', {tableSettings: tableSettings});

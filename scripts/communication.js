@@ -4,6 +4,11 @@ let communication = (function () {
 
     const apiUrl = 'https://api.fazigaming.com/';
 
+    const contentTypes = {
+        json: 'application/json',
+        textHtml: 'text/html'
+    }
+
     const apiRoutes = {
         authorization: {
             login: 'login/',
@@ -18,7 +23,8 @@ let communication = (function () {
             ticketAppearance: 'api/tickets/ticketappearance/',
             saveSmsSettings: 'api/tickets/savesmssettings/',
             saveMaxValuesAction: 'api/tickets/savemaxvalues/',
-            saveAppearance: 'api/tickets/saveappearance/'
+            saveAppearance: 'api/tickets/saveappearance/',
+            exportToPDF: 'api/tickets/reports/'
         },
         aft: {
             edit: 'api/aft/',
@@ -33,7 +39,8 @@ let communication = (function () {
             getFilters: 'api/transactions/getfilters/',
             addTransaction: 'api/transactions/addtransaction/',
             cancelTransaction: 'api/transactions/canceltransaction/',
-            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/'
+            cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/',
+            exportToPDF: 'api/transactions/reports/'
         },
         casinos: {},
         machines: {
@@ -74,6 +81,13 @@ let communication = (function () {
             setJackpotSettings: 'api/jackpots/savesettings/',
             setJackpotPlasmaSettings: 'api/jackpots/saveplasmasettings/',
             saveJackpot: 'api/jackpots/save/'
+        },
+        malfunctions: {
+            getMalfunctions: 'api/malfunctions/',
+            previewMalfunctions: 'api/malfunctions/previewmalfunctions/',
+            getFilters: 'api/malfunctions/getfilters/',
+            setServiceMessage: 'api/malfunctions/setmessage/',
+            changeMalfunctionState: 'api/malfunctions/changestate/'
         }
     };
 
@@ -92,7 +106,9 @@ let communication = (function () {
             showMaxValueSettings: 'communicate/tickets/showMaxValueSettings',
             saveMaxValuesAction: 'communicate/tickets/saveMaxValuesAction',
             ticketAppearance: 'communicate/tickets/ticketAppearance',
-            saveAppearance: 'communicate/tickets/saveAppearance'
+            saveAppearance: 'communicate/tickets/saveAppearance',
+            exportToPDF: 'communicate/tickets/export/pdf',
+            exportToXLS: 'communicate/tickets/export/xls'
         },
         aft: {
             transactions: {
@@ -105,9 +121,7 @@ let communication = (function () {
                 saveBasicSettings: 'communicate/aft/saveBasicSettings',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
-                getFilters: 'communicate/aft/getFilters',
-                exportToPDF: 'communicate/aft/export/pdf',
-                exportToXLS: 'communicate/aft/export/xls'
+                getFilters: 'communicate/aft/getFilters'
             },
             data: {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'
@@ -152,8 +166,18 @@ let communication = (function () {
             setJackpotSettings: 'communicate/jackpots/setSettings/',
             setJackpotPlasmaSettings: 'communicate/jackpots/setPlasmaSettings/',
             saveJackpot: 'communicate/jackpots/save/'
-        }
+        },
+        malfunctions: {
+            parseRemoteData: 'communicate/malfunctions/data/parse',
+            getMalfunctions: 'communicate/malfunctions/',
+            previewMalfunctions: 'communicate/malfunctions/previewmalfunctions/',
+            getFilters: 'communicate/malfunctions/getfilters/',
+            setServiceMessage: 'communicate/malfunctions/setmessage/',
+            changeMalfunctionState: 'communicate/malfunctions/changestate/'
+        },
+        module: {}
     };
+
 
     const xhrStates = {
         unsent: 0,
@@ -196,16 +220,25 @@ let communication = (function () {
     }
 
     function success(xhr, callbackEvent, settingsObject) {
-        let data = tryParseJSON(xhr.responseText);
-        //update token in sessionStorage
-        if (data.TokenInfo !== undefined && data.TokenInfo !== null) {
+        let data = null;
 
-            sessionStorage["token"] = JSON.stringify(data.TokenInfo);
-            refreshToken(data.TokenInfo);
+        if (xhr.responseType === 'arraybuffer') {
+            data = xhr.response;
+        } else if (xhr.getResponseHeader('content-type').indexOf(contentTypes.json) >= 0) {
+            data = tryParseJSON(xhr.responseText);
+            //update token in sessionStorage
+            if (data.TokenInfo !== undefined && data.TokenInfo !== null) {
+
+                sessionStorage["token"] = JSON.stringify(data.TokenInfo);
+                refreshToken(data.TokenInfo);
+            } else {
+                sessionStorage["token"] = JSON.stringify(data);
+                refreshToken(data);
+            }
         } else {
-            sessionStorage["token"] = JSON.stringify(data);
-            refreshToken(data);
+            data = xhr.responseText;
         }
+
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
             trigger(callbackEvent, {data: data, settingsObject: settingsObject});
         }
@@ -228,8 +261,9 @@ let communication = (function () {
         }
     }
 
-    function createRequest(route, requestType, data, successEvent, errorEvent, settingsObject) {
+    function createRequest(route, requestType, data, successEvent, errorEvent, additionalData, properties) {
         let xhr;
+
         if (requestType === requestTypes.get) {
             xhr = createGetRequest(route);
         } else if (requestType === requestTypes.post) {
@@ -237,9 +271,18 @@ let communication = (function () {
         } else if (requestType === requestTypes.delete) {
             xhr = createDeleteRequest(route);
         }
+
+        if (properties === undefined) {
+            properties = [];
+        }
+        for (let i = 0; i < properties.length; i++) {
+            let property = properties[i];
+            xhr[property.name] = property.value;
+        }
+
         xhr.onreadystatechange = function (e) {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
-                success(xhr, successEvent, settingsObject);
+                success(xhr, successEvent, additionalData);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 error(xhr, errorEvent);
             }
@@ -291,22 +334,6 @@ let communication = (function () {
         let formatedData = [];
         let counter = 0;
         entries.forEach(function (entry) {
-                if (entry.EntryData.CreatedBy === null || entry.EntryData.CreatedBy === '') {
-                    entry.EntryData.CreatedBy = '';
-
-                } else {
-                    entry.EntryData.CreatedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.CreatedTime) + '</time>' + '<label>by ' + entry.EntryData.CreatedBy + '</label>';
-
-                }
-                if (entry.EntryData.FinishedBy === null || entry.EntryData.FinishedBy === '') {
-                    entry.EntryData.FinishedBy = '';
-
-                } else {
-                    entry.EntryData.FinishedBy = '<time class="table-time">' + formatTimeData(entry.EntryData.FinishedTime) + '</time>' + '<label>by ' + entry.EntryData.FinishedBy + '</label>';
-
-                }
-                delete entry.EntryData.CreatedTime;
-                delete entry.EntryData.FinishedTime;
                 entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
                 entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
 
@@ -332,9 +359,12 @@ let communication = (function () {
                         type: localization.translateMessage(entry.EntryData.Type),
                         cashable: entry.EntryData.AmountCashable,
                         promo: entry.EntryData.AmountPromo,
-                        actions: cancelIndicator
+                        actions: ''
                     },
                     data: {
+                        createdTime: formatTimeData(entry.EntryData.CreatedTime),
+                        finishedTime: formatTimeData(entry.EntryData.FinishedTime),
+                        errorCode: localization.translateMessage(entry.Properties.ErrorCode),
                         isPayoutPossible: entry.Properties.IsPayoutPossible,
                         gmcid: entry.Properties.Gmcid,
                         jidtString: entry.Properties.JidtString
@@ -343,15 +373,49 @@ let communication = (function () {
                 counter++;
             }
         );
-
         return formatedData;
     }
 
     function formatTimeData(timeData) {
+        if (isEmpty(timeData)) {
+            return '';
+        }
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
     }
 
-    //ToDo Neske: deprecated - remove
+    function prepareMalfunctionsTableData(tableSettings, data) {
+        let entry = data.Data.Items;
+        let formatedData = [];
+        let counter = 0;
+        entry.forEach(function (entry) {
+            formatedData[counter] = {
+                rowData: {
+                    flag: entry.Properties.FlagList[0],
+                    createdBy: isEmpty(entry.EntryData.CreatedBy) ? '' : entry.EntryData.CreatedBy,
+                    casino: entry.EntryData.Casino,
+                    machine: entry.EntryData.Machine,
+                    name: entry.EntryData.Name,
+                    type: localization.translateMessage(entry.EntryData.Type),
+                    priority: localization.translateMessage(entry.EntryData.Priority)
+                },
+                data: {
+                    //ToDo: ovde proslediti da li je red klikabilan ili ne
+                    createdTime : formatTimeData(entry.EntryData.CreatedTime),
+                    endpointId: entry.Properties.EndpointId,
+                    id: entry.Properties.Id
+                }
+            };
+            counter++;
+        });
+
+        tableSettings.tableData = formatedData;
+
+        return formatedData;
+
+
+    }
+
+    //ToDo: refactor in on rowDisplay
     function prepareTicketsTableData(tableSettings, data) {
         let entry = data.Data.Items;
         let formatedData = [];
@@ -376,11 +440,14 @@ let communication = (function () {
             counter++;
         });
         tableSettings.tableData = formatedData;
+
+        //ToDo Neske: Pitati Nikolu šta je ovo
+        trigger('showing-tickets-top-bar-value', {dataItemValue: data.Data.ItemValue});
         return formatedData;
     }
 
-    function sendRequest(route, type, data, successEvent, errorEvent, additionalData) {
-        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData);
+    function sendRequest(route, type, data, successEvent, errorEvent, additionalData, properties) {
+        let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData, properties);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);
@@ -616,11 +683,45 @@ let communication = (function () {
         });
     });
 
+    on(events.tickets.exportToPDF, function (params) {
+        let data = null;
+        if (params.tableSettings.filters !== null) {
+            //clone filters
+            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
+            delete data.BasicData.Page;
+            delete data.BasicData.PageSize;
+            delete data.TokenInfo;
+        } else {
+            data = {
+                EndpointId: params.tableSettings.endpointId,
+                DateFrom: null,
+                DateTo: null,
+                MachineList: [],
+                JackpotList: [],
+                Status: [],
+                Type: [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        }
+
+        data.SelectedColumns = params.selectedColumns;
+        sendRequest(apiRoutes.tickets.exportToPDF, requestTypes.post, data, table.events.saveExportedFile, handleError, {type: table.exportFileTypes.pdf}, [{
+            name: 'responseType',
+            value: 'arraybuffer'
+        }]);
+    });
+
+    on(events.tickets.exportToXLS, function (params) {
+
+    });
+
     //parseRemoteData data for tickets  page
     on(events.tickets.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
-        //prepareTicketsTableData(tableSettings, data);
         tableSettings.tableData = data.Data.Items;
         trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
         trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
@@ -805,20 +906,39 @@ let communication = (function () {
     });
 
     //ToDo: možda može da se prosledi type i url is table settingsa pa da event bude univerzalan?
-    on(events.aft.transactions.exportToPDF,function(params){
-       console.log('tableSettings in export pdf:',params.tableSettings);
-        let data = {
-            EndpointId: params.transactionData.endpointId,
-            Gmcid: params.transactionData.gmcid,
-            JidtString: params.transactionData.jidtString,
-            EndpointName: params.transactionData.endpointName,
-        };
-        let route = params.status.pending === true ? apiRoutes.aft.cancelPendingTransaction : apiRoutes.aft.cancelTransaction;
-        //sendRequest(route, requestTypes.post, data, table.events.saveExportedFile, 'aft/transactions/canceled/error');
+    on(events.aft.transactions.exportToPDF, function (params) {
+
+        let data = null;
+        if (params.tableSettings.filters !== null) {
+            //clone filters
+            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
+            delete data.BasicData.Page;
+            delete data.BasicData.PageSize;
+            delete data.TokenInfo;
+        } else {
+            data = {
+                EndpointId: params.tableSettings.endpointId,
+                DateFrom: null,
+                DateTo: null,
+                MachineList: [],
+                JackpotList: [],
+                Status: [],
+                Type: [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        }
+        data.SelectedColumns = params.selectedColumns;
+        sendRequest(apiRoutes.aft.exportToPDF, requestTypes.post, data, table.events.saveExportedFile, handleError, {type: table.exportFileTypes.pdf}, [{
+            name: 'responseType',
+            value: 'arraybuffer'
+        }]);
     });
 
-    on(events.aft.transactions.exportToXLS,function(params){
-        console.log('tableSettings in export xls:',params.tableSettings);
+    on(events.aft.transactions.exportToXLS, function (params) {
+
     });
 
     //parseRemoteData data for aft  page
@@ -826,12 +946,9 @@ let communication = (function () {
         let tableSettings = params.settingsObject;
         let data = params.data;
         //tableSettings.tableData = prepareAftTableData(tableSettings, data);
-        console.log('data in communication',data.Data.Items);
         tableSettings.tableData = data.Data.Items;
         trigger(tableSettings.updateTableEvent, {data: data, settingsObject: tableSettings});
     });
-
-
 
     /*---------------------------------------------------------------------------------------*/
 
@@ -840,6 +957,105 @@ let communication = (function () {
 
 
     /*---------------------------------------------------------------------------------------*/
+    /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
+    // get malfunctions (all)
+    on(events.malfunctions.getMalfunctions, function (params) {
+        let route = apiRoutes.malfunctions.getMalfunctions;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets preview ticket action
+    //tickets pagination sorting and filtering
+    on(events.malfunctions.previewMalfunctions, function (params) {
+        let route = apiRoutes.malfunctions.previewMalfunctions;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets get filter values
+    on(events.malfunctions.getFilters, function (params) {
+        let route = apiRoutes.malfunctions.getFilters;
+        let request = requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = params.successEvent;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    // set service message
+    on(events.malfunctions.setServiceMessage, function (params) {
+        let route = apiRoutes.malfunctions.setServiceMessage;
+        let request = requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    // change malfunction state
+    on(events.malfunctions.changeMalfunctionState, function (params) {
+        let route = apiRoutes.malfunctions.changeMalfunctionState;
+        let request = requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    on(events.malfunctions.parseRemoteData, function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        prepareMalfunctionsTableData(tableSettings, data);
+        trigger(tableSettings.updateEvent, {data: data, settingsObject: tableSettings});
+    });
+    /*-----------------------------------------------------------------------------------------*/
 
 
     /*------------------------------------ MACHINES EVENTS ----------------------------------*/
@@ -1143,11 +1359,6 @@ let communication = (function () {
         xhr = setAuthHeader(xhr);
         send(xhr);
     });
-
-    /*-----------------------------------------------------------------------------------------*/
-
-
-    /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
 
     /*-----------------------------------------------------------------------------------------*/
 
