@@ -7,8 +7,6 @@ const dropdown = (function () {
         'multi': 2
     }
 
-
-
     //generate single dropdown
     function generate(data) {
         let array = [];
@@ -22,12 +20,6 @@ const dropdown = (function () {
         }
         let existsId;
         if (data.element && data.element.children[1]) {
-            for (let dd of $$(`.default-${type}-select`)) {
-                if (dd.id === data.element.children[1].id) {
-                    existsId = data.element.children[1].id;
-                    break;
-                }
-            }
             removeChildren(data.element);
         }
         // wrapper select
@@ -63,7 +55,6 @@ const dropdown = (function () {
         switch (dropdownType[type]) {
 
             case 2:
-
                 selected.children[0].innerHTML = localization.translateMessage(noSelectedData.Name);
                 selected.dataset.value = null;
                 selected.title = selected.children[0].innerHTML;
@@ -83,7 +74,6 @@ const dropdown = (function () {
                         option.dataset.value = null;
                         option.classList.add('hidden')
                     }
-
                     let label = document.createElement('label');
                     label.classList.add('form-checkbox');
                     let checkbox = document.createElement('input');
@@ -135,7 +125,6 @@ const dropdown = (function () {
                         selected.dataset.value = array;
                     });
                 }
-
                 break;
 
             default:
@@ -202,11 +191,11 @@ const dropdown = (function () {
                 for (let setId of params) {
                     switch (dropdownType[type]) {
                         case 1:
-                            if (setId === parseInt(option.dataset.value)) {
+                            if (setId === option.dataset.value) {
                                 selected.firstChild.innerHTML = localization.translateMessage(option.innerHTML);
                                 selected.firstChild.title = option.innerHTML;
-                                break;
                             }
+                            break;
 
                         case 2:
                             if (setId === option.dataset.value) {

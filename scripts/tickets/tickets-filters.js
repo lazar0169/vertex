@@ -9,7 +9,7 @@ const ticketsFilter = (function () {
     let ticketsAdvanceFilterApplyButton = $$('#tickets-advance-table-filter-apply').children[0];
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
-    dropdown.generate({ optionValue: machinesNumber, element: ticketsMachinesNumbers })
+    dropdown.generate({ optionValue: machinesNumber, element: ticketsMachinesNumbers });
     let activeHeadElement;
 
     /*********************----Events Listeners------*********************/

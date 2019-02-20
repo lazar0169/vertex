@@ -10,8 +10,11 @@ const aftFilters = (function () {
     let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
     let transactionTab = $$('#aft-tabs-transaction');
     let closeAddTransaction = $$('#add-transaction-header-element').children[1];
-
     let activeHeadElement;
+    let dropdownStatus;
+    let dropdownColumn;
+
+
 
     //display initial filters
     /*********************----Events Listeners------*********************/
@@ -133,14 +136,19 @@ const aftFilters = (function () {
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
 
+
+
+
         dropdown.generate({ optionValue: filters.MachineNameList, element: aftAdvanceTableFilterFinished, type: 'multi' })
         dropdown.generate({ optionValue: filters.JackpotNameList, element: aftAdvanceTableFilterJackpot, type: 'multi' });
 
 
         dropdown.generate({ optionValue: filters.TypeList, element: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
-
-        let dropdownStatus = dropdown.generate({ optionValue: filters.StatusList, type: 'multi' });
+        if (dropdownStatus) {
+            dropdownStatus.remove();
+        }
+        dropdownStatus = dropdown.generate({ optionValue: filters.StatusList, type: 'multi' });
         dropdownStatus.set(['1', '3', '5'])
         aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
         // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
@@ -155,7 +163,10 @@ const aftFilters = (function () {
         //     item.parsed = true;
         //     return item;
         // });
-        let dropdownColumn = dropdown.generate({ optionValue: hideableColumns, type: 'multi' });
+        if (dropdownColumn) {
+            dropdownColumn.remove();
+        }
+        dropdownColumn = dropdown.generate({ optionValue: hideableColumns, type: 'multi' });
         dropdownColumn.set(['finishedBy'])
         aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
 
