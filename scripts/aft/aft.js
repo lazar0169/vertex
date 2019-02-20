@@ -22,6 +22,7 @@ const aft = (function () {
         tableSettings.endpointId = aftId;
         tableSettings.id = '';
         tableSettings.stickyRow = true;
+
         //ToDo neske: deprecated - remove
         //tableSettings.onDrawRowCell = 'aft/table/drawCell';
 

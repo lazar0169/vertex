@@ -113,10 +113,13 @@ let table = (function () {
 
             let headElements = tbody.getElementsByClassName('head');
 
+            console.log('tableSettings:',tableSettings.tableData);
+            console.trace();
+
             if (headElements !== undefined && headElements !== null && headElements.length > 0) {
                 colsCount = headElements.length;
             } else if (tableSettings.tableData !== undefined && tableSettings.tableData.length > 0) {
-                colsCount = Object.keys(tableSettings.tableData[0].rowData).length;
+                colsCount = Object.keys(tableSettings.tableData[0].EntryData).length;
 
             }
             return colsCount;
@@ -141,42 +144,34 @@ let table = (function () {
             let headers = hasHeaders(tableSettings);
 
             let tbody = getTableBodyElement(tableSettings);
-            if (!headers || tableSettings.forceRemoveHeaders === true) {
-                //ToDo: neske rewrite this part if needed
+            if (!headers) {
+
+                //be sure that tbody is not duplicated
                 if (tbody !== null && tbody !== undefined) {
                     tbody.parentNode.removeChild(tbody);
                 }
                 tbody = document.createElement('div');
                 tbody.className = 'tbody';
 
-                let columnNames = Object.keys(tableSettings.tableData[0].rowData);
-
-                for (let col = 0; col < colsCount; col++) {
-                    let head = document.createElement('div');
-                    head.innerHTML = localization.translateMessage(columnNames[col], head);
-                    head.className = 'head cell';
-                    let columnName = columnNames[col].toLowerCase();
-                    columnName = columnName.replace(/ /g, '-');
-                    head.dataset.sortName = columnName;
-                    head.classList.add('text-uppercase');
-                    head.classList.add(columnClassPrefix + columnName);
-
-                    if (tableSettings.stickyRow === true) {
-                        head.classList.add('sticky');
-                        if (tableSettings.stickyColumn === false) {
-                            head.classList.add('first-cell');
-                        } else {
-                            head.classList.remove('first-cell');
+                if (!isEmpty(tableSettings.tableData)) {
+                    let columnNames = Object.keys(tableSettings.tableData[0].EntryData);
+                    console.log(columnNames);
+                    for (let col = 0; col < colsCount; col++) {
+                        let cell = createHeaderTableCell(tableSettings.stickyRow);
+                        let columnName = columnNames[col];
+                        cell.dataset.column = columnName;
+                        console.log('columnName',columnName);
+                        if (columnName !== 'flag' && columnName !=='actions') {
+                            cell.innerHTML = localization.translateMessage(columnName,cell);
+                            cell.classList.add('sortable');
                         }
+                        tbody.appendChild(cell);
                     }
-                    if (col === colsCount - 1) {
-                        head.classList.add('last-cell');
-                    }
-                    tbody.appendChild(head);
-                }
 
-                let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
-                insertAfter(filterContainerElement, tbody);
+                    //ToDo Neske: skloni ovo
+                    let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
+                    insertAfter(filterContainerElement, tbody);
+                }
             } else {
                 //generate headers sort classes
                 generateHeadersOrderClasses(tableSettings);
@@ -265,8 +260,8 @@ let table = (function () {
                     tempRow.Type == localization.translateMessage(tempRow.Type);
                 }
                 //pages containing field: Malfunctions
-                if (tempRow.Type !== undefined) {
-                    tempRow.Type == localization.translateMessage(tempRow.Type);
+                if (tempRow.Priority !== undefined) {
+                    tempRow.Priority == localization.translateMessage(tempRow.Priority);
                 }
 
 
@@ -274,9 +269,11 @@ let table = (function () {
                 for (let column in tempRow) {
                     // noinspection JSUnfilteredForInLoop
                     let cellColumnClass = generateCellClassName(column);
-                    let cell = createCellElement(rowId, column, tableSettings, rowData);
-                    let cellData = tempRow[column];
+                    let cell = createBodyTableCellElement(rowId, column, tableSettings, rowData);
+                    //add column number class
+                    cell.classList.add(`table-column-${columnIndex + 1}`);
 
+                    let cellData = tempRow[column];
                     //set cell to be clickable if criteria are met
                     if (
                         !isEmpty(rowData.Properties.isPayoutPossible //aft
@@ -288,7 +285,7 @@ let table = (function () {
                         cell.innerHTML = formatFloatValue(cellData);
                     } else {
                         cell.innerHTML = cellData;
-                        //ToDo: if language will be changed during application usage, there are attributes that needs to be set up on cell element using following function
+                        //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
                         //cell.innerHTML = localization.translateMessage(cellData,cell);
                     }
 
@@ -403,18 +400,6 @@ let table = (function () {
                 for (let i = 0; i < columnElements.length; i++) {
                     columnElements[i].classList.add(highlightedColumnElementsClass);
                 }
-            }
-        }
-
-        function selectRow(tableSettings, row) {
-            let selectedTableRowCells = tableSettings.tableContainerElement.getElementsByClassName(activeRowElementsClass);
-            while (selectedTableRowCells.length > 0) {
-                selectedTableRowCells[0].classList.remove(activeRowElementsClass);
-            }
-            let newSelectedRowCells = tableSettings.tableContainerElement.getElementsByClassName(row);
-
-            for (let i = 0; i < newSelectedRowCells.length; i++) {
-                newSelectedRowCells[i].classList.add(activeRowElementsClass);
             }
         }
 
@@ -604,6 +589,7 @@ let table = (function () {
         /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
         function updateTable(tableSettings) {
+            console.log('updateTable',tableSettings);
             generateTableHeaders(tableSettings);
             generateTableRows(tableSettings);
             if (tableSettings.showPreloader) {
@@ -975,10 +961,9 @@ let table = (function () {
             delete tableSettings.ColumnsToShow;
 
             if (tableSettings.tableData === undefined) {
-                //generateTableHeaders(tableSettings);
-                setTableDimensions(tableSettings, getColsCount(tableSettings), getTableBodyElement(tableSettings));
                 initTable(tableSettings);
-            } else {
+            }
+            else {
                 updateTable(tableSettings);
             }
         }
@@ -1244,7 +1229,18 @@ let table = (function () {
 
         /** HTML helper function **/
 
-        function createCellElement(rowId, column, tableSettings, rowData) {
+        function createHeaderTableCell(sticky) {
+            let cell = document.createElement('div');
+            cell.classList.add('head');
+            cell.classList.add('cell');
+            cell.classList.add('text-uppercase');
+            if (sticky) {
+                cell.classList.add('sticky');
+            }
+            return cell;
+        }
+
+        function createBodyTableCellElement(rowId, column, tableSettings, rowData) {
             let cellColumnClass = generateCellClassName(column);
             let cell = document.createElement('div');
             cell.classList.add('cell');
@@ -1266,7 +1262,7 @@ let table = (function () {
             let tableSelector = tableSettings.tableContainerSelector;
             cell.addEventListener('click', function (e) {
                 //check if there's on beforeCellClick handler
-                trigger(`table/${tableSelector}/cell/clicked/`, {event: e,target:cell});
+                trigger(`table/${tableSelector}/cell/clicked/`, {event: e, target: cell});
             });
             return cell;
         }
@@ -1285,8 +1281,6 @@ let table = (function () {
             time.innerHTML = content;
             return time;
         }
-
-
     }
 
 )();
