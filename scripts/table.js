@@ -204,7 +204,6 @@ let table = (function () {
 
             let visibleColumns = tableSettings.visibleColumns.length > 0 ? tableSettings.visibleColumns : [];
             let visibleColumnsClasses = [];
-
             if (visibleColumns.length > 0) {
                 for (let i = 0; i < visibleColumns.length; i++) {
                     visibleColumnsClasses.push(generateCellClassName(visibleColumns[i]));
