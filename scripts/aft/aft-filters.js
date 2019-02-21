@@ -64,11 +64,8 @@ const aftFilters = (function () {
         filterAftTable();
 
     });
-    on('aft/filters/sorting', function (params) {
-        activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
-        if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            filterAftTable();
-        }
+    on('aft/filters/sorting', function () {
+        filterAftTable();
     });
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
@@ -164,7 +161,7 @@ const aftFilters = (function () {
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
@@ -177,6 +174,7 @@ const aftFilters = (function () {
         }
         return listArray;
     }
+
     function prepareAftFiltersForApi(activeTableSettings) {
         if (activeTableSettings === undefined) {
             activeTableSettings = getActiveTableSettings();

@@ -17,19 +17,19 @@ let table = (function () {
         // 'null' as dataset values are always converted to string
         const nullFilterValues = ['-', null, 'null'];
 
-    const exportFileTypes = {
-        pdf: 'application/pdf'
-    }
+        const exportFileTypes = {
+            pdf: 'application/pdf'
+        }
 
-    const exportTypes = {
-        event: 'event',
-        url: 'url',
-        callback: 'callback'
-    };
+        const exportTypes = {
+            event: 'event',
+            url: 'url',
+            callback: 'callback'
+        };
 
-    const events = {
-        saveExportedFile: 'table/export/save-file'
-    }
+        const events = {
+            saveExportedFile: 'table/export/save-file'
+        }
 
         const sortOrderEnum = {
             none: 0,
@@ -48,42 +48,42 @@ let table = (function () {
         };
 
 
-    //region MODULE EVENTS
-    on(events.saveExportedFile, function (params) {
-        let data = params.data;
-        let blob = new Blob([data], {type: 'application/pdf'});
-        let link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'Report.pdf';
-        link.click();
-    });
-    on('table/show-selected-filters/infobar', showSelectedFilters);
-    on('table/before-filter', function (params) {
-        trigger(params.tableSettings.filterDataEvent, {
-            data: params.data,
-            tableSettings: params.tableSettings
+        //region MODULE EVENTS
+        on(events.saveExportedFile, function (params) {
+            let data = params.data;
+            let blob = new Blob([data], {type: 'application/pdf'});
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'Report.pdf';
+            link.click();
         });
-        trigger('filters/show-selected-filters', {
-            active: params.activeFiltersContainer,
-            infobar: params.activeFiltersContainer
+        on('table/show-selected-filters/infobar', showSelectedFilters);
+        on('table/before-filter', function (params) {
+            trigger(params.tableSettings.filterDataEvent, {
+                data: params.data,
+                tableSettings: params.tableSettings
+            });
+            trigger('filters/show-selected-filters', {
+                active: params.activeFiltersContainer,
+                infobar: params.activeFiltersContainer
+            });
         });
-    });
-    on('table/dismiss-popup', function (params) {
-        dismissPopup(params.target, params.tableSettings);
-    });
-    on('table/disable-scroll', function (params) {
-        disableScroll(params.tableSettings);
-    });
-    on('table/enable-scroll', function (params) {
-        enableScroll(params.tableSettings);
-    });
-    on('table/deselect/active-row', function (params) {
-        deselectActiveRow(params.tableSettings.tableContainerElement);
-    });
-    on('table/deselect/hover-row', function (params) {
-        deselectHoverRow(params.tableSettings.tableContainerElement);
-    });
-    //endregion
+        on('table/dismiss-popup', function (params) {
+            dismissPopup(params.target, params.tableSelector);
+        });
+        on('table/disable-scroll', function (params) {
+            disableScroll(params.tableSelector);
+        });
+        on('table/enable-scroll', function (params) {
+            enableScroll(params.tableSelector);
+        });
+        on('table/deselect/active-row', function (params) {
+            deselectActiveRow(params.tableSettings.tableContainerElement);
+        });
+        on('table/deselect/hover-row', function (params) {
+            deselectHoverRow(params.tableSettings.tableContainerElement);
+        });
+        //endregion
 
         /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
 
@@ -122,9 +122,6 @@ let table = (function () {
 
             let headElements = tbody.getElementsByClassName('head');
 
-            console.log('tableSettings:',tableSettings.tableData);
-            console.trace();
-
             if (headElements !== undefined && headElements !== null && headElements.length > 0) {
                 colsCount = headElements.length;
             } else if (tableSettings.tableData !== undefined && tableSettings.tableData.length > 0) {
@@ -149,44 +146,44 @@ let table = (function () {
         }
 
         function generateTableHeaders(tableSettings) {
-            let colsCount = getCountOfAllColumns(tableSettings);
-            let headers = hasHeaders(tableSettings);
 
             let tbody = getTableBodyElement(tableSettings);
-            if (!headers) {
+            //be sure that tbody is not duplicated
+            if (tbody !== null && tbody !== undefined) {
+                tbody.parentNode.removeChild(tbody);
+            }
+            tbody = document.createElement('div');
+            tbody.className = 'tbody';
 
-                //be sure that tbody is not duplicated
-                if (tbody !== null && tbody !== undefined) {
-                    tbody.parentNode.removeChild(tbody);
-                }
-                tbody = document.createElement('div');
-                tbody.className = 'tbody';
 
-                if (!isEmpty(tableSettings.tableData)) {
-                    let columnNames = Object.keys(tableSettings.tableData[0].EntryData);
-                    console.log(columnNames);
-                    for (let col = 0; col < colsCount; col++) {
-                        let cell = createHeaderTableCell(tableSettings.stickyRow);
-                        let columnName = columnNames[col];
-                        cell.dataset.column = columnName;
-                        console.log('columnName',columnName);
-                        if (columnName !== 'flag' && columnName !=='actions') {
-                            cell.innerHTML = localization.translateMessage(columnName,cell);
-                            cell.classList.add('sortable');
-                        }
-                        tbody.appendChild(cell);
+            if (!isEmpty(tableSettings.tableData)) {
+                let columnNames = Object.keys(tableSettings.tableData[0].EntryData);
+                for (let col = 0; col < columnNames.length; col++) {
+                    let cell = createHeaderTableCell(tableSettings.stickyRow);
+                    let columnName = columnNames[col];
+                    cell.dataset.column = columnName;
+                    let cellColumnClass = generateCellClassName(columnName);
+                    cell.classList.add(cellColumnClass);
+
+                    if (columnName !== 'flag' && columnName !== 'actions') {
+                        cell.innerHTML = localization.translateMessage(columnName, cell);
+                        cell.classList.add('sortable');
                     }
-
-                    //ToDo Neske: skloni ovo
-                    let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
-                    insertAfter(filterContainerElement, tbody);
+                    tbody.appendChild(cell);
                 }
+
+                //ToDo Neske: skloni ovo
+                let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
+                insertAfter(filterContainerElement, tbody);
+                generateTablePagination(tableSettings);
+                generatePageSizeDropdown(tableSettings);
+                generateNoDataElement(tableSettings);
+                bindHandlers(tableSettings);
             } else {
-                //generate headers sort classes
-                generateHeadersOrderClasses(tableSettings);
-                setTableDimensions(tableSettings, colsCount, tbody);
+                console.error('could not generate table headers without data');
             }
         }
+
 
         function generateTableRows(tableSettings) {
             let colsCount = getCountOfAllColumns(tableSettings);
@@ -257,21 +254,20 @@ let table = (function () {
 
                 //pages containing field: Tickets,AFR
                 if (tempRow.Status !== undefined) {
-                    tempRow.Status == localization.translateMessage(tempRow.Status);
+                    tempRow.Status = localization.translateMessage(tempRow.Status);
                 }
                 //pages containing field: Tickets
                 if (tempRow.TicketType !== undefined) {
-                    tempRow.TicketType == localization.translateMessage(tempRow.TicketType);
+                    tempRow.TicketType = localization.translateMessage(tempRow.TicketType);
                 }
                 //pages containing field: AFT,Malfunctions
                 if (tempRow.Type !== undefined) {
-                    tempRow.Type == localization.translateMessage(tempRow.Type);
+                    tempRow.Type = localization.translateMessage(tempRow.Type);
                 }
                 //pages containing field: Malfunctions
                 if (tempRow.Priority !== undefined) {
-                    tempRow.Priority == localization.translateMessage(tempRow.Priority);
+                    tempRow.Priority = localization.translateMessage(tempRow.Priority);
                 }
-
 
                 let columnIndex = 0;
                 for (let column in tempRow) {
@@ -284,8 +280,8 @@ let table = (function () {
                     let cellData = tempRow[column];
                     //set cell to be clickable if criteria are met
                     if (
-                        !isEmpty(rowData.Properties.isPayoutPossible //aft
-                        )) {
+                        !isEmpty(rowData.Properties.IsPayoutPossible) && rowData.Properties.IsPayoutPossible //aft
+                        ) {
                         cell.classList.add('clickable');
                     }
 
@@ -570,13 +566,13 @@ let table = (function () {
             tableSettings.tableContainerElement.classList.add('table-expanded');
         }
 
-    function bindExportToHandlers(tableSettings) {
-        let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
-        for (let i = 0; i < exportButtons.length; i++) {
-            exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
-            exportButtons[i].addEventListener('click', onTableExportButtonClicked);
+        function bindExportToHandlers(tableSettings) {
+            let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
+            for (let i = 0; i < exportButtons.length; i++) {
+                exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
+                exportButtons[i].addEventListener('click', onTableExportButtonClicked);
+            }
         }
-    }
 
         function bindTableViewLinkHandlers(tableSettings) {
             let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
@@ -597,8 +593,11 @@ let table = (function () {
         /*---------------------------------- UPDATING TABLE -----------------------------------*/
 
         function updateTable(tableSettings) {
-            console.log('updateTable',tableSettings);
-            generateTableHeaders(tableSettings);
+
+            if (!hasHeaders(tableSettings)) {
+                generateTableHeaders(tableSettings);
+            }
+
             generateTableRows(tableSettings);
             if (tableSettings.showPreloader) {
                 trigger('preloader/hide');
@@ -627,7 +626,7 @@ let table = (function () {
             updateTable(tableSettings);
         });
 
-        function initTable(tableSettings) {
+        function createTable(tableSettings) {
             let data = {EndpointId: tableSettings.endpointId};
             tableSettings.defaultSortColumnSet = false;
 
@@ -787,7 +786,7 @@ let table = (function () {
             }
         }
 
-        function getSorting(tableSettings) {
+        function setSorting(tableSettings) {
             tableSettings.sort = {
                 sortDirection: null,
                 sortName: null,
@@ -796,7 +795,7 @@ let table = (function () {
             let activeHeader = getSortedHeader(tableSettings);
 
             if (activeHeader !== undefined) {
-                tableSettings.sort.sortName = parseInt(activeHeader.dataset.sortId);
+                tableSettings.sort.sortName = activeHeader.dataset.column;
                 if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
                     tableSettings.sort.sortDirection = sortOrderEnum.ascending;
                 } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
@@ -806,8 +805,6 @@ let table = (function () {
                 tableSettings.sort.sortName = null;
                 tableSettings.sort.sortDirection = null;
             }
-
-            return tableSettings.sort;
         }
 
         function setSortActiveColumn(tableSettings) {
@@ -831,8 +828,8 @@ let table = (function () {
             e.preventDefault();
             setSortingAttributes(element, tableSettings);
             let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-            let sorting = getSorting(tableSettings);
-            trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings, sorting: sorting});
+            setSorting(tableSettings);
+            trigger(moduleName + '/filters/sorting', {tableSettings: tableSettings});
         }
 
         function bindSortingLinkHandler(element) {
@@ -926,6 +923,15 @@ let table = (function () {
 
         /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
+
+        function init2(tableSettings) {
+            let table = document.createElement('div');
+            table.classList.add('table');
+            table.classList.add('vertex-table');
+            table.classList.add('table-expanded');
+
+        }
+
         function init(tableSettings) {
 
             let tableContainerElement = $$(tableSettings.tableContainerSelector);
@@ -960,110 +966,104 @@ let table = (function () {
             setDefaultSettings(tableSettings);
             checkTableSettings(tableSettings);
 
-            generateTablePagination(tableSettings);
-            generatePageSizeDropdown(tableSettings);
-            generateNoDataElement(tableSettings);
-
-            bindHandlers(tableSettings);
 
             delete tableSettings.ColumnsToShow;
 
             if (tableSettings.tableData === undefined) {
-                initTable(tableSettings);
-            }
-            else {
+                createTable(tableSettings);
+            } else {
                 updateTable(tableSettings);
             }
         }
 
-    return {
-        init: init,
-        getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
-        getHideableColumns: getHideableColumns,
-        collectFiltersFromPage: collectFiltersFromPage,
-        getSorting: getSorting,
-        getPageSize: getPageSize,
-        parseFilterValues: parseFilterValues,
-        getBounds: getBounds,
-        setFiltersPage: setFiltersPage,
-        //constants
-        exportTypes: exportTypes,
-        events: events,
-        exportFileTypes: exportFileTypes
-    };
+        return {
+            init: init,
+            getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
+            getHideableColumns: getHideableColumns,
+            collectFiltersFromPage: collectFiltersFromPage,
+            getSorting: setSorting,
+            getPageSize: getPageSize,
+            parseFilterValues: parseFilterValues,
+            getBounds: getBounds,
+            setFiltersPage: setFiltersPage,
+            //constants
+            exportTypes: exportTypes,
+            events: events,
+            exportFileTypes: exportFileTypes
+        };
 
         /*--------------------------------------------------------------------------------------*/
 
 
-    /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
-    function getVisibleColumnIds(tableSettings) {
-        let headers = getHeaders(tableSettings);
-        let ids = [];
-        if (tableSettings.visibleColumns.length === 0) {
-            for (let i = 0; i < headers.length; i++) {
-                let header = headers[i];
-                if (!isEmpty(header.dataset.columnId)) {
-                    ids.push(header.dataset.columnId);
-                }
+        /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+        function getVisibleColumnIds(tableSettings) {
+            let headers = getHeaders(tableSettings);
+            let ids = [];
+            if (tableSettings.visibleColumns.length === 0) {
+                for (let i = 0; i < headers.length; i++) {
+                    let header = headers[i];
+                    if (!isEmpty(header.dataset.columnId)) {
+                        ids.push(header.dataset.columnId);
+                    }
 
-            }
-        } else {
-            for (let i = 0; i < headers.length; i++) {
-                let header = headers[i];
-                let columnName = header.dataset.columnName;
-                let columnId = header.dataset.columnId;
-                if (!isEmpty(columnId)) {
-                    if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
-                        ids.push(columnId);
+                }
+            } else {
+                for (let i = 0; i < headers.length; i++) {
+                    let header = headers[i];
+                    let columnName = header.dataset.columnName;
+                    let columnId = header.dataset.columnId;
+                    if (!isEmpty(columnId)) {
+                        if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
+                            ids.push(columnId);
+                        }
                     }
                 }
             }
+            return ids;
         }
-        return ids;
-    }
 
 
-    function bindHandlers(tableSettings) {
-        bindSortingLinkHandlers(tableSettings);
-        bindTableViewLinkHandlers(tableSettings);
-        bindExportToHandlers(tableSettings);
-    }
+        function bindHandlers(tableSettings) {
+            bindSortingLinkHandlers(tableSettings);
+            bindTableViewLinkHandlers(tableSettings);
+            bindExportToHandlers(tableSettings);
+        }
 
-    function showSelectedFilters(params) {
-        let filterActive = params.active;
-        let filterInfobar = params.infobar;
-        for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
-                filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
-                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].classList.remove('hidden');
-            } else {
-                filterInfobar.children[1].children[count].classList.add('hidden');
+        function showSelectedFilters(params) {
+            let filterActive = params.active;
+            let filterInfobar = params.infobar;
+            for (let count = 0; count < filterActive.children.length - 1; count++) {
+                if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
+                    filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
+                    filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].classList.remove('hidden');
+                } else {
+                    filterInfobar.children[1].children[count].classList.add('hidden');
+                }
+            }
+            for (let isHidden of filterInfobar.children[1].children) {
+                if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
+                    filterInfobar.classList.remove('hidden');
+                    return;
+                } else {
+                    filterInfobar.classList.add('hidden');
+                }
             }
         }
-        for (let isHidden of filterInfobar.children[1].children) {
-            if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
-                filterInfobar.classList.remove('hidden');
-                return;
-            } else {
-                filterInfobar.classList.add('hidden');
-            }
-        }
-    }
 
-        function dismissPopup(target, tableSettings) {
+        function dismissPopup(target, tableSelector) {
             dimissPopUp(target);
-            enableScroll(tableSettings);
+            enableScroll(tableSelector);
         }
 
-        function disableScroll(tableSettings) {
-            let tbody = getTableBodyElement(tableSettings);
+        function disableScroll(tableSelector) {
+            let tbody = $$(tableSelector).getElementsByClassName('tbody')[0];
             tbody.classList.add('no-scroll');
         }
 
-        function enableScroll(tableSettings) {
-            let tbody = getTableBodyElement(tableSettings);
+        function enableScroll(tableSelector) {
+            let tbody = $$(tableSelector).getElementsByClassName('tbody')[0];
             tbody.classList.remove('no-scroll');
         }
 
@@ -1163,20 +1163,20 @@ let table = (function () {
             let tableSettings = $$(button.dataset.target).tableSettings;
             let fileType = button.dataset.fileType;
 
-        if (tableSettings.exportTo === undefined) {
-            console.error(`Table export to settings are not defined.`);
-        } else if (tableSettings.exportTo[fileType] === undefined) {
-            console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
-        } else {
-            let exportSettings = tableSettings.exportTo[fileType];
-            if (exportSettings.type === exportTypes.event) {
-                trigger(exportSettings.value, {
-                    tableSettings: tableSettings,
-                    selectedColumns: getVisibleColumnIds(tableSettings)
-                });
+            if (tableSettings.exportTo === undefined) {
+                console.error(`Table export to settings are not defined.`);
+            } else if (tableSettings.exportTo[fileType] === undefined) {
+                console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
+            } else {
+                let exportSettings = tableSettings.exportTo[fileType];
+                if (exportSettings.type === exportTypes.event) {
+                    trigger(exportSettings.value, {
+                        tableSettings: tableSettings,
+                        selectedColumns: getVisibleColumnIds(tableSettings)
+                    });
+                }
+                //ToDo: cases where export type value is function or url
             }
-            //ToDo: cases where export type value is function or url
-        }
 
         }
 

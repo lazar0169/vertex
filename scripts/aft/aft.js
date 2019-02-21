@@ -1,6 +1,8 @@
 const aft = (function () {
 
     const cancelTransactionsPopUpId = 'aft-cancel-transaction-popup';
+    const aftTableSelector = '#table-container-aft';
+
     let endpointId;
 
     on('aft/activated', function (params) {
@@ -25,8 +27,9 @@ const aft = (function () {
 
         //ToDo neske: deprecated - remove
         //tableSettings.onDrawRowCell = 'aft/table/drawCell';
-
+        //ToDo neske: deprecated - remove
         tableSettings.onAfterCellClick = onTableCellClick;
+
         tableSettings.exportTo = {
             pdf: {
                 value: communication.events.aft.transactions.exportToPDF,
@@ -76,27 +79,33 @@ const aft = (function () {
     });
 
     /*********************----Module Events------*********************/
-    on (`table/#table-container-aft/cell/clicked/`, function(e){
-        console.log(e);
-        console.log(this);
-        let target = e.target;
-        console.log(target);
-        console.log(target.additionalData);
+    on('table/#table-container-aft/cell/clicked/', function (params) {
+        let event = params.event;
+        let target = params.target;
+        if (target.additionalData.Properties.IsPayoutPossible) {
+            onTableCellClick(event, target);
+        }
     });
+
     on('aft/addTransaction/error', function (params) {
 
         trigger('notifications/show', {
-            message:localization.translateMessage(params.message.MessageCode),
+            message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('aft/filters/filter-table', {showFilters: false});
     });
     on('aft/addTransaction/success', function (params) {
+        console.log('params', params);
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('aft/filters/filter-table', {showFilters: false});
         trigger('show/app');
         trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode.toString()),
+            type: params.data.MessageType
+        });
 
     });
 
@@ -106,6 +115,7 @@ const aft = (function () {
         deselectHighlightedTransaction();
     });
     on('aft/transactions/canceled', transactionCanceled);
+    //ToDo Neske: remove this
     on('aft/table/drawCell', function (params) {
         onDrawTableCell(params.key, params.value, params.element, params.position, params.rowData);
     });
@@ -153,7 +163,10 @@ const aft = (function () {
         yesButton.addEventListener('click', confirmCallback);
         //pass transaction data from cell to button to avoid dom manipulation in handler
         //clone object with new reference
-        yesButton.transactionData = JSON.parse(JSON.stringify(parentElement.transactionData));
+        yesButton.transactionData = {
+            gmcid: parentElement.additionalData.Properties.Gmcid,
+            jidtString: parentElement.additionalData.Properties.JidtString
+        };
 
         noButton.addEventListener('click', cancelCallback);
 
@@ -163,7 +176,7 @@ const aft = (function () {
 
 
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
-        trigger('table/disable-scroll', {tableSettings: $$('#table-container-aft').tableSettings});
+        trigger('table/disable-scroll', {tableSelector: aftTableSelector});
         trigger('template/render', {
             templateElementSelector: '#cancel-transaction-template',
             callbackEvent: callbackEvent,
@@ -218,11 +231,11 @@ const aft = (function () {
         });
     }
 
-    function onTableCellClick(event, dataKey, cellContent, cell, col, data, rowId, cellColumnClass, tableSettings) {
+    function onTableCellClick(event, cell) {
         event.stopPropagation();
         dismissCancelTransactionPopUp();
         //remove previous popup
-        trigger('table/disable-scroll', {tableSettings: tableSettings});
+        trigger('table/disable-scroll', {tableSelector: aftTableSelector});
         let popUpCoordinates = {
             x: event.clientX + 5,
             y: event.clientY + 5
@@ -233,7 +246,7 @@ const aft = (function () {
     function dismissCancelTransactionPopUp() {
         trigger('table/dismiss-popup', {
             target: $$('#' + cancelTransactionsPopUpId),
-            tableSettings: $$('#table-container-aft').tableSettings
+            tableSelector: aftTableSelector
         });
     }
 
