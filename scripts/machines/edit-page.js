@@ -5,9 +5,9 @@ const editMachine = (function () {
     let backMachineEdit = $$('#machine-edit-back');
     let machineEditMode = $$('#machine-edit-mode');
 
-    dropdown.generate({ optionValue: machinesVendors, element: machineEditVendor, type: 'multi' });
-    dropdown.generate({ optionValue: machinesType, element: machineEditType, type: 'multi' });
-    dropdown.generate({ optionValue: machinesSerial, element: machineEditSerialSelect });
+    dropdown.generate({ optionValue: machinesVendors, parent: machineEditVendor, type: 'multi' });
+    dropdown.generate({ optionValue: machinesType, parent: machineEditType, type: 'multi' });
+    dropdown.generate({ optionValue: machinesSerial, parent: machineEditSerialSelect });
 
     backMachineEdit.addEventListener('click', function () {
         machineEditMode.classList.add('collapse');

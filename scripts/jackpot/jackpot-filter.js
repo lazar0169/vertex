@@ -7,7 +7,7 @@ const jackpotFilter = (function () {
 
     //number of machines, dropdown
 
-    dropdown.generate({ optionValue: machinesNumber, element: jackpotMachinesNumbers, type: 'single' })
+    dropdown.generate({ optionValue: machinesNumber, parent: jackpotMachinesNumbers, type: 'single' })
 
 
 

@@ -139,11 +139,11 @@ const aftFilters = (function () {
 
 
 
-        dropdown.generate({ optionValue: filters.MachineNameList, element: aftAdvanceTableFilterFinished, type: 'multi' })
-        dropdown.generate({ optionValue: filters.JackpotNameList, element: aftAdvanceTableFilterJackpot, type: 'multi' });
+        dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi' })
+        dropdown.generate({ optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
 
 
-        dropdown.generate({ optionValue: filters.TypeList, element: aftAdvanceTableFilterType, type: 'multi' });
+        dropdown.generate({ optionValue: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
         if (dropdownStatus) {
             dropdownStatus.remove();
@@ -170,8 +170,8 @@ const aftFilters = (function () {
         dropdownColumn.set(['finishedBy'])
         aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
 
-        dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), element: aftAddTransactionType, type: 'single' })
-        dropdown.generate({ optionValue: filters.MachineAddTransactionList, element: aftAddTransactionMachine, type: 'single' })
+        dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single' })
+        dropdown.generate({ optionValue: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single' })
     }
 
     function showAdvanceTableFilter() {

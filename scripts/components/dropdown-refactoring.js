@@ -19,8 +19,8 @@ const dropdown = (function () {
             type = 'single';
         }
         let existsId;
-        if (data.element && data.element.children[1]) {
-            removeChildren(data.element);
+        if (data.parent && data.parent.children[1]) {
+            removeChildren(data.parent);
         }
         // wrapper select
         let select = document.createElement('div');
@@ -216,9 +216,9 @@ const dropdown = (function () {
             return selected;
         }
 
-        if (data.element) {
-            data.element.appendChild(select);
-            return data.element;
+        if (data.parent) {
+            data.parent.appendChild(select);
+            return data.parent;
         }
         return select;
     }

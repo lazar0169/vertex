@@ -53,9 +53,7 @@ const malfunctions = (function () {
 
     //trigger('preloader/hide');
 
-    dropdown.generate({ optionValue: machinesNumber, element: malfunctionsMachinesNumbers })
-
-    // dropdown.generate(machinesNumber, malfunctionsMachinesNumbers);
+    dropdown.generate({ optionValue: machinesNumber, parent: malfunctionsMachinesNumbers })
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function () {
         if (addMalfunctionMsg.children[0].value) {
@@ -69,4 +67,133 @@ const malfunctions = (function () {
         addMalfunctionMsg.children[0].value = "";
         addMalfunctionMsg.children[1].classList.add('hidden');
     });
+
+    /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
+    // get malfunctions (all)
+    on(communication.events.malfunctions.getMalfunctions, function (params) {
+        let route = communication.apiRoutes.malfunctions.getMalfunctions;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets preview ticket action
+    //tickets pagination sorting and filtering
+    on(communication.events.malfunctions.previewMalfunctions, function (params) {
+        let route = communication.apiRoutes.malfunctions.previewMalfunctions;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            settingsObject: tableSettings
+        });
+    });
+
+    //tickets get filter values
+    on(communication.events.malfunctions.getFilters, function (params) {
+        let route = communication.apiRoutes.malfunctions.getFilters;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = params.successEvent;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    // set service message
+    on(communication.events.malfunctions.setServiceMessage, function (params) {
+        let route = communication.apiRoutes.malfunctions.setServiceMessage;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    // change malfunction state
+    on(communication.events.malfunctions.changeMalfunctionState, function (params) {
+        let route = communication.apiRoutes.malfunctions.changeMalfunctionState;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    on(communication.events.malfunctions.parseRemoteData, function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        prepareMalfunctionsTableData(tableSettings, data);
+        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
+    });
+    /*-----------------------------------------------------------------------------------------*/
+
+    function prepareMalfunctionsTableData(tableSettings, data) {
+        let entry = data.Data.Items;
+        let formatedData = [];
+        let counter = 0;
+        entry.forEach(function (entry) {
+            formatedData[counter] = {
+                rowData: {
+                    flag: entry.Properties.FlagList[0],
+                    createdBy: entry.EntryData.CreatedBy.Name ? entry.EntryData.CreatedBy.Name : '',
+                    casino: entry.EntryData.Casino,
+                    machine: entry.EntryData.Machine,
+                    name: entry.EntryData.Name,
+                    type: localization.translateMessage(entry.EntryData.Type),
+                    priority: localization.translateMessage(entry.EntryData.Priority)
+                },
+                data: {
+                    //ToDo: ovde proslediti da li je red klikabilan ili ne
+                    createdTime: formatTimeData(entry.EntryData.CreatedBy.Time),
+                    endpointId: entry.Properties.EndpointId,
+                    id: entry.Properties.Id
+                }
+            };
+            counter++;
+        });
+        tableSettings.tableData = formatedData;
+        return formatedData;
+    }
+
 })();

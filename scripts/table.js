@@ -694,7 +694,7 @@ let table = (function () {
 
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-        dropdown.generate({ optionValue: machinesNumber, element: pageSizeDropdown });
+        dropdown.generate({ optionValue: machinesNumber, parent: pageSizeDropdown });
         // dropdown.generate(machinesNumber, pageSizeDropdown);
 
         bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);

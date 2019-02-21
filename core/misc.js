@@ -80,11 +80,9 @@ on('apply-custom-date', function (data) {
 on('cancel-custom-date', function (data) {
     let date = new Date();
     let apiString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-
     trigger(`set-date-datepicker`, { pickerId: `datepicker-from-${data.selectId}`, date: apiString });
     let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0];
     timeFromHour.reset();
-    //clearDropdownSelected({ dropdown: timeFromHour, value: hours });
     let timeFromMinutes = $$(`#time-from-${data.selectId}`).children[1].children[1];
     timeFromMinutes.reset();
     let timeToHour = $$(`#time-to-${data.selectId}`).children[1].children[0];
