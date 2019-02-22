@@ -1,14 +1,15 @@
 let table = (function () {
 
         //html class name constants
-        const exportToButtonsClass = 'element-table-export-to';
         const columnClassPrefix = 'column';
         const rowClassPrefix = 'row-';
         const cellClassPrefix = 'cell-';
+        const flagCellClassPrefix = 'row-flag-';
+        const exportToButtonsClass = 'element-table-export-to';
         const highlightedColumnElementsClass = 'active-column';
+        const emptyTableElementClass = 'table-element-no-data';
         const activeRowElementsClass = 'row-chosen';
         const hiddenCellClassName = 'hidden';
-        const emptyTableElementClass = 'table-element-no-data';
         const sortOrderClassPrefix = 'table-sort-order-id';
         const defaultPageSize = 50;
         const defaultPage = 1;
@@ -46,6 +47,15 @@ let table = (function () {
             ascending: 'asc',
             descending: 'desc'
         };
+
+        const tableActions = {
+            0: createEditMachineAction(),
+            1: createCancelTransactionAction(),
+            2: createEditJackpotAction(),
+            3: createEditMalfunctionAction(),
+            4: createEditUserAction(),
+            5: createDeleteUserAction()
+        }
 
 
         //region MODULE EVENTS
@@ -156,6 +166,7 @@ let table = (function () {
             tbody.className = 'tbody';
 
 
+            console.log('table data:', tableSettings.tableData);
             if (!isEmpty(tableSettings.tableData)) {
                 let columnNames = Object.keys(tableSettings.tableData[0].EntryData);
                 for (let col = 0; col < columnNames.length; col++) {
@@ -165,7 +176,9 @@ let table = (function () {
                     let cellColumnClass = generateCellClassName(columnName);
                     cell.classList.add(cellColumnClass);
 
-                    if (columnName !== 'flag' && columnName !== 'actions') {
+                    console.log(columnName);
+
+                    if (columnName !== 'FlagList' && columnName !== 'ActionList') {
                         cell.innerHTML = localization.translateMessage(columnName, cell);
                         cell.classList.add('sortable');
                     }
@@ -252,7 +265,24 @@ let table = (function () {
                     }
                 }
 
-                //pages containing field: Tickets,AFR
+                //pages containing field: AFT,Malfunctions
+                if (tempRow.FlagList !== undefined) {
+                    let flagElement = document.createElement('div');
+                    flagElement.classList.add('flag-element');
+                    flagElement.classList.add(`flag-${tempRow.FlagList[0]}`);
+                    tempRow.FlagList = flagElement.outerHTML;
+                }
+                //pages containing field: Malfunctions,Users,AFT
+                if (tempRow.ActionList !== undefined) {
+                    let cellHTML = '';
+                    for (let i = 0; i < tempRow.ActionList.length; i++) {
+                        console.log(tempRow.ActionList[i]);
+                        cellHTML += tableActions[tempRow.ActionList[i]].outerHTML;
+                    }
+                    tempRow.ActionList = cellHTML;
+                }
+
+                //pages containing field: Tickets,AFT
                 if (tempRow.Status !== undefined) {
                     tempRow.Status = localization.translateMessage(tempRow.Status);
                 }
@@ -662,7 +692,9 @@ let table = (function () {
 
         function generatePageSizeDropdown(tableSettings) {
             let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-            dropdown.generate(machinesNumber, pageSizeDropdown);
+            //dropdown.generate(machinesNumber, pageSizeDropdown);
+            dropdown.generate({optionValue: machinesNumber, parent: pageSizeDropdown});
+
             bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);
         }
 
@@ -842,7 +874,9 @@ let table = (function () {
             let headElements = getHeaders(tableSettings);
             for (let i = 0; i < headElements.length; i++) {
                 let headElement = headElements[i];
-                bindSortingLinkHandler(headElement);
+                if (headElement.classList.contains('sortable')) {
+                    bindSortingLinkHandler(headElement);
+                }
             }
         }
 
@@ -928,6 +962,7 @@ let table = (function () {
             table.classList.add('table');
             table.classList.add('vertex-table');
             table.classList.add('table-expanded');
+            table.setAttribute('id', settings.id);
             setDefaultSettings(settings);
             table.settings = settings;
 
@@ -943,12 +978,14 @@ let table = (function () {
             if (!isEmpty(settings.data)) {
                 table.update(settings.data);
             }
-
             return table;
         }
 
         function update(data) {
             let table = this;
+            if (isEmpty(data)) {
+                return table;
+            }
             console.log(this);
             console.log(this.settings);
             if (data.length <= 0) {
@@ -958,9 +995,9 @@ let table = (function () {
                 table.elements.body.classList.remove('d-hide');
                 table.elements.body.noDataElement.classList.add('d-hide');
                 if (!hasHeaders2(table)) {
-                    generateHeaders(data);
+                    generateHeaders(table,data);
                 }
-                generateTableRows();
+                generateTableRows(table,data);
             }
             /*if (!hasHeaders(tableSettings)) {
                 generateTableHeaders(tableSettings);
@@ -972,12 +1009,39 @@ let table = (function () {
             }*/
         }
 
-        function generateHeaders(data) {
+        function generateHeaders(table,data) {
+            let tbody = table.elements.body;
+
+            if (!isEmpty(data)) {
+                let columnNames = Object.keys(data[0].EntryData);
+                for (let col = 0; col < columnNames.length; col++) {
+                    let cell = createHeaderTableCell(table.settings.stickyRow);
+                    let columnName = columnNames[col];
+                    cell.dataset.column = columnName;
+                    let cellColumnClass = generateCellClassName(columnName);
+                    cell.classList.add(cellColumnClass);
+
+                    if (columnName !== 'FlagList' && columnName !== 'ActionList') {
+                        cell.innerHTML = localization.translateMessage(columnName, cell);
+                        cell.classList.add('sortable');
+                    }
+                    tbody.appendChild(cell);
+                }
+
+                //ToDo Neske: skloni ovo
+                generateTablePagination(tableSettings);
+                generatePageSizeDropdown(tableSettings);
+                generateNoDataElement(tableSettings);
+                bindHandlers(tableSettings);
+            } else {
+                console.error('could not generate table headers without data');
+            }
         }
 
         function generateRows(data) {
         }
 
+        // region generate elements helper functions
         function generateTableBody() {
             let tbody = document.createElement('div');
             tbody.className = 'tbody';
@@ -992,6 +1056,37 @@ let table = (function () {
             return noDataElement;
         }
 
+        function createEditMachineAction() {
+        }
+
+        function createCancelTransactionAction() {
+            let cancelIndicator = document.createElement('span');
+            let icon = document.createElement('i');
+            //ToDo: Ubaciti klasu za font
+            icon.innerHTML = 'X';
+            let text = document.createElement('span');
+            text.innerHTML = localization.translateMessage('Cancel', text);
+            cancelIndicator.classList.add('cancel-indicator');
+            cancelIndicator.appendChild(icon);
+            cancelIndicator.appendChild(text);
+            return cancelIndicator;
+        }
+
+        function createEditJackpotAction() {
+        }
+
+        function createEditMalfunctionAction() {
+        }
+
+        function createEditUserAction() {
+        }
+
+        function createDeleteUserAction() {
+        }
+
+        //endregion
+
+        //region helper functions
         function getHeaders2(table) {
             return table.getElementsByClassName('head');
         }
@@ -999,6 +1094,8 @@ let table = (function () {
         function hasHeaders2(table) {
             return getHeaders2(table).length > 0;
         }
+
+        //endregion
 
         //endregion
 

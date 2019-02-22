@@ -115,22 +115,16 @@ const aft = (function () {
         });
 
     });
-
     on('aft/transactions/canceled/error', function (params) {
         trigger('communication/error/', params);
         dismissCancelTransactionPopUp();
         deselectHighlightedTransaction();
     });
     on('aft/transactions/canceled', transactionCanceled);
-    //ToDo Neske: remove this
-    on('aft/table/drawCell', function (params) {
-        onDrawTableCell(params.key, params.value, params.element, params.position, params.rowData);
-    });
     on('aft/table/show/cancel-pop-up', function (params) {
         beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, onCancelPopUpAction,
             params.params.containerCell, $$('#table-container-aft'));
     });
-
     //code executed before popup is added to dom and
     on('aft/table/show/cancel-pending-pop-up', function (params) {
         let containerCell = params.params.containerCell;
@@ -521,7 +515,8 @@ const aft = (function () {
     on(communication.events.aft.data.parseRemoteData, function (params) {
         let tableSettings = params.settingsObject;
         let data = params.data;
-        tableSettings.tableData = prepareAftTableData(tableSettings, data);
+        console.log(data);
+        tableSettings.tableData = data.Data.Items;
         trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
     });
 

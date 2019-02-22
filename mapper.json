@@ -20,6 +20,7 @@
   "main": {
     "scripts": [
       "config.js",
+      "localization.js",
       "table.js",
       "data.js",
       "top-bar.js",
@@ -29,7 +30,6 @@
       "mock.js",
       "form.js",
       "validation.js",
-      "localization.js",
       "communication.js",
       "aft/aft.js",
       "aft/aft-filters.js",
