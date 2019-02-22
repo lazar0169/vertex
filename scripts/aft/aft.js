@@ -1,7 +1,8 @@
 const aft = (function () {
 
     const cancelTransactionsPopUpId = 'aft-cancel-transaction-popup';
-    const aftTableSelector = '#table-container-aft';
+    const aftTableId = 'table-container-aft';
+    const aftTableSelector = `#${aftTableId}`;
 
     let endpointId;
 
@@ -64,6 +65,10 @@ const aft = (function () {
 
         trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
+
+        let table2 = table.init2({id:aftTableId});
+        table2.update();
+
     });
 
     /*********************----Dom event handlers------*********************/

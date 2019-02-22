@@ -281,7 +281,7 @@ let table = (function () {
                     //set cell to be clickable if criteria are met
                     if (
                         !isEmpty(rowData.Properties.IsPayoutPossible) && rowData.Properties.IsPayoutPossible //aft
-                        ) {
+                    ) {
                         cell.classList.add('clickable');
                     }
 
@@ -642,6 +642,7 @@ let table = (function () {
 
         /*--------------------------------------------------------------------------------------*/
 
+
         function generateNoDataElement(tableSettings) {
             let noData = tableSettings.tableContainerElement.getElementsByClassName(emptyTableElementClass);
             if (noData.length <= 0) {
@@ -921,16 +922,88 @@ let table = (function () {
 
         /*--------------------------------------------------------------------------------------*/
 
-        /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
-
-
-        function init2(tableSettings) {
+        //region refactored functions
+        function init2(settings) {
             let table = document.createElement('div');
             table.classList.add('table');
             table.classList.add('vertex-table');
             table.classList.add('table-expanded');
+            setDefaultSettings(settings);
+            table.settings = settings;
 
+            table.elements = {
+                body: generateTableBody(),
+                noDataElement: generateNoDataElement2()
+            }
+
+            table.appendChild(table.elements.body);
+            table.appendChild(table.elements.noDataElement);
+            table.update = update;
+
+            if (!isEmpty(settings.data)) {
+                table.update(settings.data);
+            }
+
+            return table;
         }
+
+        function update(data) {
+            let table = this;
+            console.log(this);
+            console.log(this.settings);
+            if (data.length <= 0) {
+                table.elements.body.classList.add('d-hide');
+                table.elements.body.noDataElement.classList.remove('d-hide');
+            } else {
+                table.elements.body.classList.remove('d-hide');
+                table.elements.body.noDataElement.classList.add('d-hide');
+                if (!hasHeaders2(table)) {
+                    generateHeaders(data);
+                }
+                generateTableRows();
+            }
+            /*if (!hasHeaders(tableSettings)) {
+                generateTableHeaders(tableSettings);
+            }
+
+            generateTableRows(tableSettings);
+            if (tableSettings.showPreloader) {
+                trigger('preloader/hide');
+            }*/
+        }
+
+        function generateHeaders(data) {
+        }
+
+        function generateRows(data) {
+        }
+
+        function generateTableBody() {
+            let tbody = document.createElement('div');
+            tbody.className = 'tbody';
+            return tbody;
+        }
+
+        function generateNoDataElement2() {
+            let noDataElement = document.createElement('div');
+            noDataElement.classList.add(emptyTableElementClass);
+            noDataElement.classList.add('d-hide');
+            noDataElement.innerText = 'No data to display...';
+            return noDataElement;
+        }
+
+        function getHeaders2(table) {
+            return table.getElementsByClassName('head');
+        }
+
+        function hasHeaders2(table) {
+            return getHeaders2(table).length > 0;
+        }
+
+        //endregion
+
+        /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
+
 
         function init(tableSettings) {
 
@@ -989,7 +1062,8 @@ let table = (function () {
             //constants
             exportTypes: exportTypes,
             events: events,
-            exportFileTypes: exportFileTypes
+            exportFileTypes: exportFileTypes,
+            init2: init2
         };
 
         /*--------------------------------------------------------------------------------------*/
@@ -1105,8 +1179,6 @@ let table = (function () {
             if (tableSettings.showPreloader === undefined) {
                 tableSettings.showPreloader = true;
             }
-
-
         }
 
         function checkTableSettings(tableSettings) {
