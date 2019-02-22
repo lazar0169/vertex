@@ -49,6 +49,7 @@
       "tickets/tickets-appearance.js",
       "tickets/tickets-sms-settings.js",
       "tickets/tickets-max-value.js",
+      "jackpot/jackpot.js",
       "jackpot/jackpot-filter.js",
       "jackpot/add-new-jackpot.js",
       "jackpot/jackpot-animation-settings.js",

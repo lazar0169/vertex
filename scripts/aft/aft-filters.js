@@ -149,7 +149,6 @@ const aftFilters = (function () {
             dropdownStatus.remove();
         }
         dropdownStatus = dropdown.generate({ optionValue: filters.StatusList, type: 'multi' });
-        dropdownStatus.set(['1', '3', '5'])
         aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
         // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
 
@@ -167,7 +166,6 @@ const aftFilters = (function () {
             dropdownColumn.remove();
         }
         dropdownColumn = dropdown.generate({ optionValue: hideableColumns, type: 'multi' });
-        dropdownColumn.set(['finishedBy'])
         aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
 
         dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single' })

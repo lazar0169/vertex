@@ -5,6 +5,9 @@ const jackpotFilter = (function () {
     let addNewJackpot = $$('#add-new-jackpot-wrapper');
     let jackpotTab = $$('#jackpot-tab');
 
+
+    
+
     //number of machines, dropdown
 
     dropdown.generate({ optionValue: machinesNumber, parent: jackpotMachinesNumbers, type: 'single' })

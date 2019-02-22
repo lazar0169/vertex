@@ -312,8 +312,6 @@ const tickets = (function () {
         });
 
         tableSettings.tableData = formatedData;
-
-        //ToDo Neske: Pitati Nikolu šta je ovo
         trigger('showing-tickets-top-bar-value', { dataItemValue: data.Data.ItemValue });
         return formatedData;
     }

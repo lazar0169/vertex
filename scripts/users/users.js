@@ -5,7 +5,6 @@ const users = (function () {
     trigger('preloader/hide');
 
     addNewUserButton.children[0].addEventListener('click', function () {
-        // alert('otvori formu za dodavanje novog korisnika');
         addNewUserButton.children[0].classList.add('add-new-user-active');
         addNewUserWrapper.classList.remove('hidden');
     });
