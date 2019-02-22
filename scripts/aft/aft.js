@@ -518,7 +518,7 @@ const aft = (function () {
 
             formatedData[counter] = {
                 rowData: {
-                    flag: entry.Properties.FlagList[0],
+                    flag: entry.EntryData.FlagList[0],
                     createdBy: entry.EntryData.CreatedBy.Name,
                     finishedBy: entry.EntryData.FinishedBy.Name,
                     status: localization.translateMessage(entry.EntryData.Status),

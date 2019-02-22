@@ -55,6 +55,7 @@
       "jackpot/jackpot-animation-settings.js",
       "jackpot/jackpot-choose-participating-machines.js",
       "malfunctions/malfunctions.js",
+      "malfunctions/malfunctions-filters.js",
       "malfunctions/malfunctions-details.js",
       "users/users-add-new-user.js",
       "users/users.js",

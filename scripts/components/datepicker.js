@@ -6,9 +6,15 @@ let datepicker = function () {
         let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
         let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
         let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+        let malfunctionsAdvanceTableFilterDateRange = $$('#malfunctions-advance-table-filter-date-range');
+
+
         dropdownDate.generate(fixedDays, aftAdvanceTableFilterDateRange);
         dropdownDate.generate(fixedDays, ticketsAdvanceTableFiltersPrintDate);
         dropdownDate.generate(fixedDays, ticketsAdvanceTableFiltersRedeemDate);
+        dropdownDate.generate(fixedDays, malfunctionsAdvanceTableFilterDateRange);
+
+
 
         for (let picker of $$('.datepicker')) {
             new Pikaday({

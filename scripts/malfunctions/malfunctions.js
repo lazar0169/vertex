@@ -4,6 +4,24 @@ const malfunctions = (function () {
     /*********************----Module Events------*********************/
     on('malfunctions/activated', function (params) {
 
+        on('malfunctions/filters/init', function (params) {
+            let tableSettings = params.tableSettings;
+            getFiltersFromAPI(tableSettings);
+        });
+
+        function getFiltersFromAPI(tableSettings) {
+            let data = {
+                'EndpointId': tableSettings.endpointId
+            };
+            let tableSettingsObject = tableSettings;
+            let successEvent = 'malfunctions/filters/display';
+            trigger(communication.events.malfunctions.getFilters, {
+                data: data,
+                successEvent: successEvent,
+                tableSettings: tableSettingsObject
+            });
+        }
+
         let malfunctionsId = 0;
 
         // selectTab();
@@ -47,11 +65,7 @@ const malfunctions = (function () {
         }
     }
 
-    let malfunctionsMachinesNumbers = $$('#malfunctions-number');
 
-    //trigger('preloader/hide');
-
-    dropdown.generate({ optionValue: machinesNumber, parent: malfunctionsMachinesNumbers })
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function () {
         if (addMalfunctionMsg.children[0].value) {
@@ -65,6 +79,8 @@ const malfunctions = (function () {
         addMalfunctionMsg.children[0].value = "";
         addMalfunctionMsg.children[1].classList.add('hidden');
     });
+
+
 
     /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
     // get malfunctions (all)
@@ -84,9 +100,7 @@ const malfunctions = (function () {
             settingsObject: tableSettings
         });
     });
-
-    //tickets preview ticket action
-    //tickets pagination sorting and filtering
+    //get preview malfunctions
     on(communication.events.malfunctions.previewMalfunctions, function (params) {
         let route = communication.apiRoutes.malfunctions.previewMalfunctions;
         let request = communication.requestTypes.post;
@@ -104,7 +118,7 @@ const malfunctions = (function () {
         });
     });
 
-    //tickets get filter values
+    // get filters
     on(communication.events.malfunctions.getFilters, function (params) {
         let route = communication.apiRoutes.malfunctions.getFilters;
         let request = communication.requestTypes.post;
@@ -173,7 +187,7 @@ const malfunctions = (function () {
         entry.forEach(function (entry) {
             formatedData[counter] = {
                 rowData: {
-                    flag: entry.Properties.FlagList[0],
+                    flag: entry.EntryData.FlagList[0],
                     createdBy: entry.EntryData.CreatedBy.Name ? entry.EntryData.CreatedBy.Name : '',
                     casino: entry.EntryData.Casino,
                     machine: entry.EntryData.Machine,
