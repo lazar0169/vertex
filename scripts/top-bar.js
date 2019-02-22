@@ -1,7 +1,5 @@
 let topBar = (function () {
     let topBarPath = $$('#top-bar-path');
-    let logoutUser = $$('#top-bar-logout');
-    let logoutDropdown = $$('#top-bar-logout-dropdown-menu');
     let userProfile = $$('#user-profile');
     let previousTopBar;
     let previousIcon;
@@ -27,9 +25,6 @@ let topBar = (function () {
             previousIcon = currenIcon;
         }
 
-
-
-
         let currentTopBar = $$(`#top-bar-${value.category.toLowerCase()}`);
         if (previousTopBar) {
             previousTopBar.classList.add('hidden');
@@ -39,16 +34,6 @@ let topBar = (function () {
             previousTopBar = currentTopBar;
         }
     }
-    function showProfile() {
-        $$('#black-area').classList.add('show');
-        // userProfile.classList.toggle('hidden');
-    }
-    // logoutUser.addEventListener('click', function () {
-    //     trigger('opened-arrow', { div: $$('#top-bar-logout-user') });
-    //     logoutUser.classList.toggle('logout-is-opened');
-    //     logoutDropdown.classList.toggle('hidden');
-    //     // showProfile();
-    // });
 
     on('show/app', function () {
         userProfile.classList.add('hidden');

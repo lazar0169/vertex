@@ -33,9 +33,9 @@ const tickets = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
 
-        trigger('tickets/tab/appearance', { tableSettings: tableSettings });
-        trigger('tickets/tab/maxValue', { tableSettings: tableSettings });
-        trigger('tickets/tab/smsSettings', { tableSettings: tableSettings });
+        trigger('tickets/tab/appearance', {endpointId: tableSettings.endpointId});
+        trigger('tickets/tab/maxValue', {tableSettings: tableSettings});
+        trigger('tickets/tab/smsSettings', {tableSettings: tableSettings});
     });
     on('tickets/table/drawCell', function (params) {
         onDrawTableCell(params.key, params.value, params.element, params.position, params.rowData);
@@ -293,7 +293,6 @@ const tickets = (function () {
         let counter = 0;
         entry.forEach(function (entry) {
             entry.EntryData.Amount = formatFloatValue(entry.EntryData.Amount / 100);
-
             formatedData[counter] = {
                 rowData: {
                     code: entry.EntryData.FullTicketValIdationNumber,

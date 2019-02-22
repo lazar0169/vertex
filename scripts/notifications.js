@@ -1,5 +1,4 @@
 let notifications = function () {
-
     const messageTypes = {
         ok: 0,
         warning: 1,

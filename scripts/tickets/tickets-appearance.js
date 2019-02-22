@@ -1,12 +1,11 @@
 const ticketAppearance = (function () {
-
     let formSettingsAppearance = {};
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
     formSettingsAppearance.getData = communication.events.tickets.ticketAppearance;
     formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
-        formSettingsAppearance.endpointId = params.tableSettings.endpointId;
+        formSettingsAppearance.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsAppearance });
         trigger('form/getData', { formSettings: formSettingsAppearance });
     });
@@ -56,13 +55,6 @@ const ticketAppearance = (function () {
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
     let setTimeFormat = $$('#tickets-advanced-settings-time').children[1];
-
-    selectedDateFormat.setAttribute('data-name', 'DateFormat');
-    selectedDateFormat.setAttribute('data-type', 'single-select');
-
-    selectedTimeFormat.setAttribute('data-name', 'TimeFormat');
-    selectedTimeFormat.setAttribute('data-type', 'single-select');
-
 
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');
@@ -382,5 +374,4 @@ const ticketAppearance = (function () {
     cancelTicketAppearance.addEventListener('click', function () {
         trigger('form/getData', { formSettings: formSettingsAppearance });
     });
-
 })();

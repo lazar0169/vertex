@@ -5,31 +5,21 @@ const userEditProfileModule = (function () {
     let backUserEditProfile = $$('#user-edit-profile-buttons').children[0];
     let saveUserEditProfile = $$('#user-edit-profile-buttons').children[1];
 
-
-
-
-
-
     editYourProfile.addEventListener('click', function () {
         userEditProfile.classList.remove('hidden');
     });
 
     logout.addEventListener('click', function () {
-        // application.checkCurrentUser();
-        trigger('logout');//todo make this trigger work
+        trigger('logout'); //todo make this trigger work
     });
     backUserEditProfile.addEventListener('click', function () {
         trigger('show/app');
     });
     saveUserEditProfile.addEventListener('click', function () {
-        //alert('Save changes');
         saveUserEditProfile.classList.add('loading');
         setTimeout(function () {
             saveUserEditProfile.classList.remove('loading');
         }, 4000);
-
-
-        //trigger('show/app');
     });
 
     on('show/app', function () {

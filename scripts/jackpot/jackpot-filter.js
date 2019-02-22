@@ -5,15 +5,9 @@ const jackpotFilter = (function () {
     let addNewJackpot = $$('#add-new-jackpot-wrapper');
     let jackpotTab = $$('#jackpot-tab');
 
-
-    
-
     //number of machines, dropdown
-
     dropdown.generate({ optionValue: machinesNumber, parent: jackpotMachinesNumbers, type: 'single' })
-
-
-
+    
     advanceTableFilter.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });

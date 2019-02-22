@@ -38,7 +38,6 @@ const ticketsFilter = (function () {
         let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
 
-
         filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
         filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
         filters.TypesList = formatTicketsApiData(filters.TypesList);
@@ -67,11 +66,9 @@ const ticketsFilter = (function () {
     /*********************----Helper functions----*********************/
     function getActiveTableSettings() {
         return $$('#table-container-tickets').tableSettings;
-
     }
 
     function filterTicketsTable() {
-
         let params = {};
         let tableSettings = getActiveTableSettings();
         params.tableSettings = tableSettings;

@@ -1,5 +1,4 @@
 const aft = (function () {
-
     const cancelTransactionsPopUpId = 'aft-cancel-transaction-popup';
     let endpointId;
 

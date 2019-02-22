@@ -1,7 +1,6 @@
 const malfunctions = (function () {
     let addMalfunctionMsg = $$('#malfunctions-add-message');
 
-
     /*********************----Module Events------*********************/
     on('malfunctions/activated', function (params) {
 
@@ -46,7 +45,6 @@ const malfunctions = (function () {
         if (entryData.data.isPayoutPossible === true) {
             cell.classList.add('clickable');
         }
-
     }
 
     let malfunctionsMachinesNumbers = $$('#malfunctions-number');

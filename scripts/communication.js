@@ -197,9 +197,6 @@ let communication = (function () {
 
     let timeout = null;
 
-    /*-----------------------------------------------------------------------------------------*/
-
-
     /*--------------------------------------- FUNCTIONS ---------------------------------------*/
 
     function createGetRequest(route) {
@@ -330,13 +327,6 @@ let communication = (function () {
         xhr.setRequestHeader(header, value);
     }
 
-    // function formatTimeData(timeData) {
-    //     if (isEmpty(timeData)) {
-    //         return '';
-    //     }
-    //     return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
-    // }
-
     function sendRequest(route, type, data, successEvent, errorEvent, additionalData, properties) {
         let xhr = createRequest(route, type, data, successEvent, errorEvent, additionalData, properties);
         xhr = setDefaultHeaders(xhr);
@@ -361,9 +351,7 @@ let communication = (function () {
         }
     }
 
-    /*----------------------------------------------------------------------------------------*/
     /*---------------------------------------- EVENTS ----------------------------------------*/
-    /*----------------------------------------------------------------------------------------*/
 
     //create and send xhr
     on('communicate/createAndSendXhr', function (params) {
@@ -385,9 +373,7 @@ let communication = (function () {
         trigger(`communicate/${params.category.toLowerCase()}`);
     });
 
-    /*----------------------------------------------------------------------------------------*/
-
-    /*--------------------------------- AUTHORISATION EVENTS ---------------------------------*/
+    /*--------------------------------- AUTHORIZATION EVENTS ---------------------------------*/
 
     //login
     on(events.authorization.login, function (params) {
@@ -399,26 +385,6 @@ let communication = (function () {
         xhr = setDefaultHeaders(xhr);
         send(xhr);
     });
-
-    /*----------------------------------------------------------------------------------------*/
-
-
-    /*------------------------------------- JACKPOTS EVENTS -----------------------------------*/
-
-
-    /*-----------------------------------------------------------------------------------------*/
-
-
-    /*----------------------------------- CASINOS EVENTS ------------------------------------*/
-
-
-    /*---------------------------------------------------------------------------------------*/
-
-
-    /*------------------------------------ USERS EVENTS ---------------------------------------*/
-
-    /*-----------------------------------------------------------------------------------------*/
-
 
     /*----------------------------------- REFRESH TOKEN ---------------------------------------*/
 
@@ -439,7 +405,6 @@ let communication = (function () {
     });
 
     /*----------------------------------------------------------------------------------------*/
-
 
     return {
         apiRoutes: apiRoutes,

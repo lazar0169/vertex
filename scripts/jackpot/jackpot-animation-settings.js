@@ -8,8 +8,6 @@ const jackpotanimationSettings = (function () {
     let infoLineCheckbox = $$('#jackpot-animation-general-settings-infoline');
     let applyInfoLineText = $$('#jackpot-animation-general-settings-infoline-text').children[1];
 
-
-
     dropdown.generate({ optionValue: pictureName, parent: jackpotanimationSettingsBackground })
     //first
     let topLabelCoordinate1 = {

@@ -1,5 +1,4 @@
 const aftFilters = (function () {
-
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear').children[0];
@@ -13,8 +12,6 @@ const aftFilters = (function () {
     let activeHeadElement;
     let dropdownStatus;
     let dropdownColumn;
-
-
 
     //display initial filters
     /*********************----Events Listeners------*********************/
@@ -136,12 +133,8 @@ const aftFilters = (function () {
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
 
-
-
-
         dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi' })
         dropdown.generate({ optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
-
 
         dropdown.generate({ optionValue: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
@@ -218,19 +211,6 @@ const aftFilters = (function () {
         activeTableSettings.filters = filtersForApi;
         return filtersForApi;
     }
-
-    function hideAndResetAddTransactionUI() {
-        trigger('show/app');
-        resetAddTransactionUI();
-    }
-
-    function resetAddTransactionUI() {
-        dropdown.reset($$('#add-transaction-type'));
-        dropdown.reset($$('#add-transaction-machine'));
-
-
-    }
-
 
     on('show/app', function () {
         aftAddTransactionWrapper.classList.add('hidden');
