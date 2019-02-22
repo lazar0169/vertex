@@ -11,11 +11,10 @@ const usersFilter = (function () {
     let filterCasinos = $$('#users-advance-table-filter-casinos');
     let filterPrivilegies = $$('#users-advance-table-filter-privilegies');
 
-
-    dropdown.generate(machinesNumber,usersNumber);
-    filterUsers.appendChild(multiDropdown.generate(machinesVendors));
-    filterCasinos.appendChild(multiDropdown.generate(machinesStatus));
-    filterPrivilegies.appendChild(multiDropdown.generate(machinesType));
+    dropdown.generate({ optionValue: machinesNumber, parent: usersNumber });
+    dropdown.generate({ optionValue: machinesVendors, parent: filterUsers, type: 'multi' });
+    dropdown.generate({ optionValue: machinesStatus, parent: filterCasinos, type: 'multi' });
+    dropdown.generate({ optionValue: machinesType, parent: filterPrivilegies, type: 'multi' });
 
     advanceTableFilterButton.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');

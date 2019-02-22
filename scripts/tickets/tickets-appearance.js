@@ -1,5 +1,4 @@
 const ticketAppearance = (function () {
-
     let formSettingsAppearance = {};
     formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
     formSettingsAppearance.getData = communication.events.tickets.ticketAppearance;
@@ -49,12 +48,9 @@ const ticketAppearance = (function () {
     let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
-    let dateFormatArray = ['dd.MM.yyyy.', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
-    let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
-    //dateWrapper.appendChild(dropdown.generate(dateFormatArray));
-    dropdown.generate(dateFormatArray,dateWrapper,'DateFormat');
-    //timeWrapper.appendChild(dropdown.generate(timeFormatArray));
-    dropdown.generate(timeFormatArray,timeWrapper,'TimeFormat');
+    dropdown.generate({ optionValue: dateFormatArray, parent: dateWrapper });
+    dropdown.generate({ optionValue: timeFormatArray, parent: timeWrapper });
+     
     let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
@@ -378,5 +374,4 @@ const ticketAppearance = (function () {
     cancelTicketAppearance.addEventListener('click', function () {
         trigger('form/getData', { formSettings: formSettingsAppearance });
     });
-
 })();

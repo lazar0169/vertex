@@ -1,5 +1,4 @@
 let ticketsSmsSettings = (function(){
-
     let formSettingsSmsSettings = {};
     formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
     formSettingsSmsSettings.getData = communication.events.tickets.showSmsSettings;
@@ -43,5 +42,4 @@ let ticketsSmsSettings = (function(){
         trigger('form/init', {formSettings: formSettingsSmsSettings});
         trigger('form/getData', {formSettings: formSettingsSmsSettings});
     });
-
 })();

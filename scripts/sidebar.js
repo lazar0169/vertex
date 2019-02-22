@@ -89,16 +89,12 @@ const sidebar = (function () {
         }
     });
 
-
-
-
     on('show/app', function () {
         navigation.hide();
     });
 
     globalSearch.addEventListener('click', function () {
         editMode.classList.add('collapse');
-        //ToDo: proveriti ovo:
         chosenLink.innerHTML = localization.translateMessage('Search', chosenLink);
 
         searchCategory = undefined;

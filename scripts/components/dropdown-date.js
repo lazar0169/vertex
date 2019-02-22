@@ -23,13 +23,13 @@ const dropdownDate = (function () {
         selected.innerHTML = `<div></div>
                               <span class="closed-arrow">&#9660;</span>`;
         select.appendChild(selected);
-        selected.children[0].innerHTML = dataSelect[0];
+        selected.children[0].innerHTML = dataSelect[0].Name;
         selected.title = selected.children[0].innerHTML;
-        if (dataSelect[0] === '-' || dataSelect[0] === 'null') {
+        if (dataSelect[0].Name === '-' || dataSelect[0].name === 'null') {
             selected.dataset.value = null;
         }
         else {
-            selected.dataset.value = dataSelect[0];
+            selected.dataset.value = dataSelect[0].Id;
         }
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
@@ -88,14 +88,14 @@ const dropdownDate = (function () {
             //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
-            option.innerHTML = element;
+            option.innerHTML = element.Name;
             option.title = option.innerHTML;
-            option.dataset.value = element;
-            option.dataset.translationKey = element;
+            option.dataset.value = element.Id !== -1 ? element.Id : null;
+            option.dataset.translationKey = element.Name ? element.Name : element.name;;
             optionGroup.appendChild(option);
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (option.dataset.value === 'Custom') {
+                if (option.dataset.value === '5') {
                     customDate.classList.toggle('hidden');
                     pickCustom = !pickCustom;
                     delete applyCustom.dataset.value;
@@ -212,8 +212,8 @@ const dropdownDate = (function () {
             $$('#top-bar-logout').classList.toggle('logout-is-opened');
             $$('#top-bar-logout-dropdown-menu').classList.toggle('hidden');
         }
-        else{
-           $$('#top-bar-logout-user').children[1].classList.remove('opened-arrow');
+        else {
+            $$('#top-bar-logout-user').children[1].classList.remove('opened-arrow');
             $$('#top-bar-logout').classList.remove('logout-is-opened');
             $$('#top-bar-logout-dropdown-menu').classList.add('hidden');
         }

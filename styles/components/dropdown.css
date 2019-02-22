@@ -55,14 +55,11 @@
 
 .default-select label {
     cursor: pointer;
+    pointer-events: none !important
 }
 
 .default-select>div:not(:first-child)>div:hover, .default-date-select>div:not(:first-child)>div:first-child>div:hover {
     background: rgb(55, 71, 79);
-}
-
-.multiple-group>div>label>div, .multiple-group>div>label>i, .multiple-group>div>label {
-    pointer-events: none !important;
 }
 
 .option-select-date, .timepicker {

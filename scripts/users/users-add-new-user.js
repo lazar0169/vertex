@@ -3,9 +3,7 @@ const usersAddNewUser = (function () {
 
     function generateRole(roleData) {
         let addNewUserRoleSettings = $$('#add-new-user-role-settings');
-
         for (let count = 0; count < roleData.RoleList.length; count++) {
-
             let roleWrapper = document.createElement('div');
             roleWrapper.classList.add('form-section');
             roleWrapper.classList.add('border-bottom-role');
@@ -70,18 +68,12 @@ const usersAddNewUser = (function () {
         let checkbox = $$('.add-new-user-checked');
 
         for (let element of checkbox) {
-
             switch (element.getElementsByClassName('add-new-user-checked-status')[0].type) {
-
                 case 'radio':
                     element.addEventListener('click', function () {
                         element.getElementsByClassName('add-new-user-checked-status')[0].checked = true;
-
-
                         switch (element.getElementsByClassName('add-new-user-checked-status')[0].name) {
-
                             case 'user-role':
-
                                 if (element.getElementsByClassName('add-new-user-checked-status')[0].dataset.value !== 'user-role-custom') {
                                     element.parentNode.parentNode.children[2].children[0].classList.add('hidden');
                                 }
@@ -89,7 +81,6 @@ const usersAddNewUser = (function () {
                                     element.parentNode.parentNode.children[2].children[0].classList.remove('hidden');
                                 }
                                 break;
-
                             case 'apply-role-on':
                                 if (element.getElementsByClassName('add-new-user-checked-status')[0].dataset.value === 'chooseCasino') {
                                     element.parentNode.children[3].classList.remove('hidden');
@@ -129,7 +120,6 @@ const usersAddNewUser = (function () {
                             for (let checkedElement of element.parentNode.parentNode.children[1].getElementsByClassName('add-new-user-checked-status')) {
                                 checkedElement.checked = true;
                             }
-
                         });
                     }
                     break;
@@ -139,11 +129,7 @@ const usersAddNewUser = (function () {
 
     on('users/generate-role', function (data) {
         generateRole(data.role);
-
         $$('#add-new-user-role-apply').appendChild(jackpotChooseParticipatingMachines.createJackpotFilterCasinos(casinoData));
-
-
-
         setClickAndChangeCheckedStatus();
     })
 })();
