@@ -58,7 +58,6 @@ const toggle = (function () {
             } else {
                 dropdown.statusLabelElement.innerHTML = localization.translateMessage('switchNoLabel', dropdown.statusLabelElement);
             }
-
         }
     }
 

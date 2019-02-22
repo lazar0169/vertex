@@ -1,12 +1,9 @@
 let preloader = (function () {
-
-
     function showPreloader() {
         let preloaderElement = $$('#preloader');
         preloaderElement.showCount++;
         preloaderElement.classList.remove('hide');
         preloaderElement.classList.remove('fade-out');
-
     }
 
     function hidePreloader() {

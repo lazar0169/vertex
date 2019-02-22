@@ -1,5 +1,4 @@
 let ticketsMaxValue = (function () {
-
     let formSettingsMaxValue = {};
     formSettingsMaxValue.formContainerSelector = '#tickets-max-value-tab-info';
     formSettingsMaxValue.getData = communication.events.tickets.showMaxValueSettings;
@@ -10,5 +9,4 @@ let ticketsMaxValue = (function () {
         trigger('form/init', {formSettings: formSettingsMaxValue});
         trigger('form/getData', {formSettings: formSettingsMaxValue});
     });
-
 })();
