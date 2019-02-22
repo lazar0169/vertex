@@ -6,7 +6,7 @@ const ticketAppearance = (function () {
     formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
-        formSettingsAppearance.endpointId = params.tableSettings.endpointId;
+        formSettingsAppearance.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsAppearance });
         trigger('form/getData', { formSettings: formSettingsAppearance });
     });
@@ -52,20 +52,13 @@ const ticketAppearance = (function () {
     let dateFormatArray = ['dd.MM.yyyy.', 'dd/MM/yyyy', 'yyyy-MM-dd', 'dd-MM-yyyy', 'MM/dd/yyyy'];
     let timeFormatArray = ['hh:mm', 'hh:mm:ss', 'HH:mm', 'HH:mm:ss'];
     //dateWrapper.appendChild(dropdown.generate(dateFormatArray));
-    dropdown.generate(dateFormatArray,dateWrapper);
+    dropdown.generate(dateFormatArray,dateWrapper,'DateFormat');
     //timeWrapper.appendChild(dropdown.generate(timeFormatArray));
-    dropdown.generate(timeFormatArray,timeWrapper);
+    dropdown.generate(timeFormatArray,timeWrapper,'TimeFormat');
     let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
     let setTimeFormat = $$('#tickets-advanced-settings-time').children[1];
-
-    selectedDateFormat.setAttribute('data-name', 'DateFormat');
-    selectedDateFormat.setAttribute('data-type', 'single-select');
-
-    selectedTimeFormat.setAttribute('data-name', 'TimeFormat');
-    selectedTimeFormat.setAttribute('data-type', 'single-select');
-
 
     chasableTicket.addEventListener('click', function () {
         promoTicket.classList.remove('tab-active');

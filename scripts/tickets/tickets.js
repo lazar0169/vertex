@@ -33,7 +33,7 @@ const tickets = (function () {
 
         table.init(tableSettings); //initializing table, filters and page size
 
-        trigger('tickets/tab/appearance', {tableSettings: tableSettings});
+        trigger('tickets/tab/appearance', {endpointId: tableSettings.endpointId});
         trigger('tickets/tab/maxValue', {tableSettings: tableSettings});
         trigger('tickets/tab/smsSettings', {tableSettings: tableSettings});
     });
