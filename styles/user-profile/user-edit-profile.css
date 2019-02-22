@@ -39,3 +39,11 @@
 #user-edit-profile-buttons {
     padding: 1rem;
 }
+
+.user-profile-picture {
+    width: 15vh;
+    height: 15vh;
+    border-radius: 50%;
+    background: rgb(120, 144, 156);
+    color: white;
+}

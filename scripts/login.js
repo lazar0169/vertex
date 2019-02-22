@@ -1,5 +1,4 @@
 let login = (function () {
-
     let usernameFieldName = '.username-input';
     let passwordFieldName = '.pass-input';
 
@@ -56,11 +55,4 @@ let login = (function () {
         let message = localization.translateMessage(messageCode.toString());
         trigger('notifications/show', { message: message, type: messageType });
     });
-
-    /*    on('login/logout', function(){
-            alert('login/logout');
-            sessionStorage.clear();
-            window.location.pathname = "/login";
-        });*/
-
 })();

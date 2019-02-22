@@ -95,10 +95,7 @@
                 }
             },
             "SmsSettings": {
-                "Enable": {
-                    "Sms": "Sms",
-                    "Email": "Email"
-                },
+                "Enable": "Enable",
                 "Redeemed": "Redeemed",
                 "Printed": "Printed",
                 "Mobile": "Mobile",

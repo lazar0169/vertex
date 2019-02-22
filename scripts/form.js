@@ -29,7 +29,7 @@ let form = (function () {
         } else if (formSettings.formContainerElement.dataset[eventToCheck] !== undefined) {
             event = formSettings.formContainerElement.dataset[eventToCheck];
         } else {
-            console.info('Event ' + eventToCheck + ' doesn\'t exist!');
+            error(`Event ${eventToCheck} in form ${formSettings.formContainerSelector} doesn\'t exist!`);
         }
         return event;
     }
@@ -68,12 +68,10 @@ let form = (function () {
         return Array.prototype.slice.call(enableButtons);
     }
 
-    function fillData(formSettings, data) {
+    function displayData(formSettings, data) {
         let dataToDisplay = data.Data;
         //remove elements which were created previously beacuse API value was array
-
         let multipleValueInputContainers = Array.prototype.slice.call(formSettings.formContainerElement.getElementsByClassName('element-input-additional-array-value'));
-
         for (let counter = 0; counter < multipleValueInputContainers.length; counter++) {
             multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
         }
@@ -156,6 +154,9 @@ let form = (function () {
                 }
             }
         });
+        if (!isEmpty(formSettings.afterDisplayData)) {
+            formSettings.afterDisplayData(formSettings, data);
+        }
     }
 
     //ToDo: dokumentovati form settings
@@ -184,6 +185,12 @@ let form = (function () {
         }
         if (formSettings.validateEvent === undefined) {
             formSettings.validateEvent = 'form/validate';
+        }
+        if (isEmpty(formSettings.beforeSubmit)) {
+            formSettings.beforeSubmit = null;
+        }
+        if (isEmpty(formSettings.afterDisplayData)) {
+            formSettings.afterDisplayData = null;
         }
         setEndpointId(formSettings);
 
@@ -257,6 +264,10 @@ let form = (function () {
         if (valid) {
             submitButton.disabled = 'disabled';
             submitButton.classList.add('loading');
+            if (!isEmpty(formSettings.beforeSubmit)) {
+                dataForApi = formSettings.beforeSubmit(formSettings, dataForApi);
+            }
+
             trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
         } else {
             return false;
@@ -333,8 +344,7 @@ let form = (function () {
             if (!isEmpty(htmlType) && htmlType === 'text') {
                 input.value = '';
             }
-        }
-        else if (nodeName === nodeTypes.div) {
+        } else if (nodeName === nodeTypes.div) {
             if (input.dataset.type === inputTypes.singleSelect) {
                 dropdown.reset(input);
             }
@@ -351,7 +361,19 @@ let form = (function () {
                 let lastElement = targetElements[targetElements.length - 1];
 
                 let lastInput = lastElement.getElementsByTagName('input')[0];
-                if (lastInput.vertexValidation.validate()) {
+
+                //add required rule to check if field is not empty
+                let validationConstraint = {
+                    name:validation.constraintAttributes.required,
+                    operator: validation.constraintsOperators.required,
+                    value: true
+                };
+                lastInput.vertexValidation.addConstraint(validationConstraint);
+                let lastInputValid = lastInput.vertexValidation.validate();
+                //remove required validation
+                lastInput.vertexValidation.removeConstraint(validationConstraint.name);
+
+                if (lastInputValid) {
                     let newField = lastElement.cloneNode(true);
 
                     let newInput = newField.getElementsByTagName('input')[0];
@@ -363,6 +385,8 @@ let form = (function () {
                     let addAnotherButton = lastElement.parentNode.getElementsByClassName('action-add-another-field')[0].parentNode;
 
                     lastElement.parentNode.insertBefore(newField, addAnotherButton);
+
+
                     validation.init(newInput, {});
 
                     if (targetElements.length > 1) {
@@ -386,7 +410,7 @@ let form = (function () {
     }
 
     //elements event handlers
-     function onSubmit(e) {
+    function onSubmit(e) {
         e.preventDefault();
         return false;
     }
@@ -490,7 +514,6 @@ let form = (function () {
                     enableMode.innerHTML = localization.translateMessage('switchYesLabel', enableMode);
                 }
             });
-
         });
     }
 
@@ -555,7 +578,7 @@ let form = (function () {
     on('form/fillFormData', function (params) {
         let formSettings = params.settingsObject;
         let apiResponseData = params.data;
-        fillData(formSettings, apiResponseData);
+        displayData(formSettings, apiResponseData);
     });
 
     on('form/submit/success', function (params) {

@@ -3,9 +3,7 @@ const machinesFilter = (function () {
     let machinesFiltersStatus = $$('#machine-filters-status');
     let machinesFilterMachineNumber = $$('#machine-filters-number-machines');
 
-
-    machinesFiltersVendors.appendChild(multiDropdown.generate(machinesVendors));
-    machinesFiltersStatus.appendChild(multiDropdown.generate(machinesStatus));
-    machinesFilterMachineNumber.appendChild(dropdown.generate(machinesNumber));
-
+    dropdown.generate({ optionValue: machinesNumber, parent: machinesFilterMachineNumber });
+    dropdown.generate({ optionValue: machinesVendors, parent: machinesFiltersVendors, type: 'multi' });
+    dropdown.generate({ optionValue: machinesStatus, parent: machinesFiltersStatus, type: 'multi' })
 })();

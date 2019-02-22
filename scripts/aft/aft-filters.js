@@ -1,5 +1,4 @@
 const aftFilters = (function () {
-
     let advanceTableFilter = $$('#aft-advance-table-filter');
     let advanceTableFilterActive = $$('#aft-advance-table-filter-active');
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear').children[0];
@@ -10,13 +9,14 @@ const aftFilters = (function () {
     let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
     let transactionTab = $$('#aft-tabs-transaction');
     let closeAddTransaction = $$('#add-transaction-header-element').children[1];
-
     let activeHeadElement;
+    let dropdownStatus;
+    let dropdownColumn;
 
     //display initial filters
     /*********************----Events Listeners------*********************/
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterAftTable();
     });
 
@@ -75,11 +75,7 @@ const aftFilters = (function () {
     on('aft/filters/filter-table', function (params) {
         filterAftTable(params.showFilters);
     });
-
-
     //display initial filters
-
-
     /*********************----Helper functions----*********************/
 
     function getActiveTableSettings() {
@@ -97,7 +93,7 @@ const aftFilters = (function () {
     }
 
     function removeSelectedFilters() {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     }
 
     function clearAftFilters() {
@@ -134,29 +130,36 @@ const aftFilters = (function () {
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
 
+        dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi' })
+        dropdown.generate({ optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
 
-        multiDropdown.generate(filters.MachineNameList, aftAdvanceTableFilterFinished);
-        multiDropdown.generate(filters.JackpotNameList, aftAdvanceTableFilterJackpot);
+        dropdown.generate({ optionValue: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
+        // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
+        if (dropdownStatus) {
+            dropdownStatus.remove();
+        }
+        dropdownStatus = dropdown.generate({ optionValue: filters.StatusList, type: 'multi' });
+        aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
+        // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
 
-        let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
-        multiDropdown.generate(types, aftAdvanceTableFilterType);
-
-        let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
-        multiDropdown.generate(statuses, aftAdvanceTableFilterStatus);
         //set up columns selection dropdown
         aftAdvanceTableFilterColumn.classList.add('table-element-select-columns');
         aftAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
         let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({name: '-', value: null});
+        hideableColumns.unshift({ Name: '-', Id: null });
         //ToDo Neske: this can be removed when solution for parsed hack is found
-        let columns = hideableColumns.map(function (item) {
-            item.parsed = true;
-            return item;
-        });
-        multiDropdown.generate(columns, aftAdvanceTableFilterColumn);
+        // let columns = hideableColumns.map(function (item) {
+        //     item.parsed = true;
+        //     return item;
+        // });
+        if (dropdownColumn) {
+            dropdownColumn.remove();
+        }
+        dropdownColumn = dropdown.generate({ optionValue: hideableColumns, type: 'multi' });
+        aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
 
-        dropdown.generate(types.slice(1, types.length), aftAddTransactionType, 'Type');
-        dropdown.generate(filters.MachineAddTransactionList, aftAddTransactionMachine, 'MachineName');
+        dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single' })
+        dropdown.generate({ optionValue: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single' })
     }
 
     function showAdvanceTableFilter() {
@@ -206,19 +209,6 @@ const aftFilters = (function () {
         activeTableSettings.filters = filtersForApi;
         return filtersForApi;
     }
-
-    function hideAndResetAddTransactionUI() {
-        trigger('show/app');
-        resetAddTransactionUI();
-    }
-
-    function resetAddTransactionUI() {
-        dropdown.reset($$('#add-transaction-type'));
-        dropdown.reset($$('#add-transaction-machine'));
-
-
-    }
-
 
     on('show/app', function () {
         aftAddTransactionWrapper.classList.add('hidden');

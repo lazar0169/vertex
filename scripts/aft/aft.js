@@ -1,5 +1,4 @@
 const aft = (function () {
-
     const cancelTransactionsPopUpId = 'aft-cancel-transaction-popup';
     const aftTableId = 'table-container-aft';
     const aftTableSelector = `#${aftTableId}`;
@@ -51,7 +50,7 @@ const aft = (function () {
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
 
-        trigger('form/init', {formSettings: addTransactionFormSettings});
+        trigger('form/init', { formSettings: addTransactionFormSettings });
         let endpointName = '';
         if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
             endpointName = $$('.link-active')[0].dataset.value;
@@ -98,14 +97,17 @@ const aft = (function () {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
-        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('aft/filters/filter-table', {showFilters: false});
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
+        trigger('aft/filters/filter-table', { showFilters: false });
     });
     on('aft/addTransaction/success', function (params) {
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
+        trigger('aft/filters/filter-table', { showFilters: false });
         console.log('params', params);
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('aft/filters/filter-table', {showFilters: false});
         trigger('show/app');
+        trigger('form/reset', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
         trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode.toString()),
@@ -217,7 +219,7 @@ const aft = (function () {
             displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up', coordinates, parentCell);
         } else {
             deselectHighlightedTransaction();
-            trigger('aft/filters/filter-table', {showFilters: true});
+            trigger('aft/filters/filter-table', { showFilters: true });
         }
     }
 
@@ -257,8 +259,8 @@ const aft = (function () {
 
     function deselectHighlightedTransaction() {
         let tableSettings = $$('#table-container-aft').tableSettings;
-        trigger('table/deselect/active-row', {tableSettings: tableSettings});
-        trigger('table/deselect/hover-row', {tableSettings: tableSettings});
+        trigger('table/deselect/active-row', { tableSettings: tableSettings });
+        trigger('table/deselect/hover-row', { tableSettings: tableSettings });
     }
 
     function onDrawTableCell(column, cellContent, cell, position, entryData) {
@@ -302,6 +304,274 @@ const aft = (function () {
             gmcid: entryData.data.gmcid,
             jidtString: entryData.data.jidtString
         };
+    }
+
+    /*-------------------------------------- AFT EVENTS ---------------------------------------*/
+
+    //aft get transactions
+    on(communication.events.aft.transactions.getTransactions, function (params) {
+        let route = communication.apiRoutes.aft.getTransactions;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft pagination filtering sorting
+    //aft preview transactions
+    on(communication.events.aft.transactions.previewTransactions, function (params) {
+        let route = communication.apiRoutes.aft.previewTransactions;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = tableSettings.processRemoteData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft cancel transaction
+    on(communication.events.aft.transactions.cancelTransaction, function (params) {
+        let data = {
+            EndpointId: params.transactionData.endpointId,
+            Gmcid: params.transactionData.gmcid,
+            JidtString: params.transactionData.jidtString,
+            EndpointName: params.transactionData.endpointName,
+        };
+        let route = params.status.pending === true ? communication.apiRoutes.aft.cancelPendingTransaction : communication.apiRoutes.aft.cancelTransaction;
+        communication.sendRequest(route, communication.requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
+    });
+
+    //aft add transaction
+    on(communication.events.aft.transactions.addTransaction, function (params) {
+        let route = communication.apiRoutes.aft.addTransaction;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let successEvent = params.formSettings.submitSuccessEvent;
+        let errorEvent = params.formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft cancel pending transaction
+    on(communication.events.aft.transactions.cancelPendingTransaction, function (params) {
+        let route = communication.apiRoutes.aft.cancelPendingTransaction;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = ''; //todo see which event goes here
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft get basic settings
+    on(communication.events.aft.transactions.getBasicSettings, function (params) {
+        let route = communication.apiRoutes.aft.getBasicSettings;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.populateData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft save basic settings
+    on(communication.events.aft.transactions.saveBasicSettings, function (params) {
+        let route = communication.apiRoutes.aft.saveBasicSettings;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            settingsObject: formSettings,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft get notification settings
+    on(communication.events.aft.transactions.getNotificationSettings, function (params) {
+        let route = communication.apiRoutes.aft.getNotificationSettings;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.populateData;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft save notification settings
+    on(communication.events.aft.transactions.saveNotificationSettings, function (params) {
+        let route = communication.apiRoutes.aft.saveNotificationSettings;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let formSettings = params.formSettings;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: formSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //aft get filters
+    on(communication.events.aft.transactions.getFilters, function (params) {
+        let route = communication.apiRoutes.aft.getFilters;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let tableSettings = params.tableSettings;
+        let successEvent = params.successEvent;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            settingsObject: tableSettings,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //ToDo: možda može da se prosledi type i url is table settingsa pa da event bude univerzalan?
+    on(communication.events.aft.transactions.exportToPDF, function (params) {
+
+        let data = null;
+        if (params.tableSettings.filters !== null) {
+            //clone filters
+            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
+            delete data.BasicData.Page;
+            delete data.BasicData.PageSize;
+            delete data.TokenInfo;
+        } else {
+            data = {
+                EndpointId: params.tableSettings.endpointId,
+                DateFrom: null,
+                DateTo: null,
+                MachineList: [],
+                JackpotList: [],
+                Status: [],
+                Type: [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        }
+        data.SelectedColumns = params.selectedColumns;
+        communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data, table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf }, [{
+            name: 'responseType',
+            value: 'arraybuffer'
+        }]);
+    });
+
+    on(communication.events.aft.transactions.exportToXLS, function (params) {
+
+    });
+
+    //parseRemoteData data for aft  page
+    on(communication.events.aft.data.parseRemoteData, function (params) {
+        let tableSettings = params.settingsObject;
+        let data = params.data;
+        tableSettings.tableData = prepareAftTableData(tableSettings, data);
+        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
+    });
+
+    /*---------------------------------------------------------------------------------------*/
+
+    function prepareAftTableData(tableSettings, data) {
+        let entries = data.Data.Items;
+        let formatedData = [];
+        let counter = 0;
+        entries.forEach(function (entry) {
+            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
+            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
+
+            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + localization.translateMessage(entry.EntryData.Status) + '</div>'
+
+            let cancelIndicator = document.createElement('span');
+            let icon = document.createElement('i');
+            //ToDo: Ubaciti klasu za font
+            icon.innerHTML = 'X';
+            let text = document.createElement('span');
+            text.innerHTML = localization.translateMessage('Cancel', text);
+            cancelIndicator.classList.add('cancel-indicator');
+            cancelIndicator.appendChild(icon);
+            cancelIndicator.appendChild(text);
+
+            formatedData[counter] = {
+                rowData: {
+                    flag: entry.Properties.FlagList[0],
+                    createdBy: entry.EntryData.CreatedBy.Name,
+                    finishedBy: entry.EntryData.FinishedBy.Name,
+                    status: localization.translateMessage(entry.EntryData.Status),
+                    machineName: entry.EntryData.MachineName,
+                    type: localization.translateMessage(entry.EntryData.Type),
+                    cashable: entry.EntryData.AmountCashable,
+                    promo: entry.EntryData.AmountPromo,
+                    actions: ''
+                },
+                data: {
+                    createdTime: formatTimeData(entry.EntryData.CreatedBy.Time),
+                    finishedTime: formatTimeData(entry.EntryData.FinishedBy.Time ? entry.EntryData.FinishedBy.Time : ''),
+                    errorCode: localization.translateMessage(entry.Properties.ErrorCode),
+                    isPayoutPossible: entry.Properties.IsPayoutPossible,
+                    gmcid: entry.Properties.Gmcid,
+                    jidtString: entry.Properties.JidtString
+                }
+            };
+            counter++;
+        }
+        );
+        return formatedData;
     }
 
 })();

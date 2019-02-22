@@ -1,14 +1,144 @@
-let nekiniz6 = ['-', 'Column1', 'Column2', 'Column3', 'Column4', 'Column5'];
-let fixedDays = ['-', 'Today', 'Yesterday', 'Last 7 Days', 'Last 14 Days', 'This Month', 'Last Month', 'Custom'];
-let columnName = [{ Name: '-' }, { Name: 'Column1' }, { Name: 'Column2' }, { Name: 'Column3' }]
-let machinesNumber = ['50', '25', '10', '5'];
-let pictureName = ['Belgrade', 'New York', 'Surdulica', 'Nis'];
-let machinesVendors = [{ Name: '-' }, { Name: 'Fazi' }, { Name: 'Admiral' }, { Name: 'Favorit' }];
-let machinesStatus = [{ Name: '-' }, { Name: 'Online' }, { Name: 'Offline' }, { Name: 'Disabled' }];
-let machinesType = [{ Name: '-' }, { Name: 'Slot machine' }, { Name: 'Rulet' }];
-let machinesSerial = ['-', 'X00000', 'X11111', 'X22222', 'X33333'];
-let hours = ['-', '00 h', '01 h', '02 h', '03 h', '04 h', '05 h', '06 h', '07 h', '08 h', '09 h', '10 h', '11 h', '12 h', '13 h', '14 h', '15 h', '16 h', '17 h', '18 h', '19 h', '20 h', '21 h', '22 h', '23 h'];
-let minutes = ['-', '00 min', '01 min', '02 min', '03 min', '04 min', '05 min', '06 min', '07 min', '08 min', '09 min', '10 min', '11 min', '12 min', '13 min', '14 min', '15 min', '16 min', '17 min', '18 min', '19 min', '20 min', '21 min', '22 min', '23 min', '24 min', '25 min', '26 min', '27 min', '28 min', '29 min', '30 min', '31 min', '32 min', '33 min', '34 min', '35 min', '36 min', '37 min', '38 min', '39 min', '40 min', '41 min', '42 min', '43 min', '44 min', '45 min', '46 min', '47 min', '48 min', '49 min', '50 min', '51 min', '52 min', '53 min', '54 min', '55 min', '56 min', '57 min', '58 min', '59 min'];
+let fixedDays = [{ Name: '-', Id: -1 },
+{ Name: 'Today', Id: 0 },
+{ Name: 'Yesterday', Id: 1 },
+{ Name: 'Last 7 Days', Id: 2 },
+{ Name: 'Last 14 Days', Id: 3 },
+{ Name: 'This Month', Id: 4 },
+{ Name: 'Custom', Id: 5 }];
+
+let columnName = [{ Name: '-', Id: -1 },
+{ Name: 'Column1', Id: 0 },
+{ Name: 'Column2', Id: 1 },
+{ Name: 'Column3', Id: 2 }];
+
+let machinesNumber = [{ Name: '50', Id: 50 },
+{ Name: '25', Id: 25 },
+{ Name: '10', Id: 10 },
+{ Name: '5', Id: 5 }];
+
+let pictureName = [{ Name: 'Belgrade', Id: 0 },
+{ Name: 'New York', Id: 1 },
+{ Name: 'Surdulica', Id: 2 },
+{ Name: 'Nis', Id: 3 }];
+
+let machinesVendors = [{ Name: '-', Id: -1 },
+{ Name: 'Fazi', Id: 6 },
+{ Name: 'Admiral', Id: 5 },
+{ Name: 'Favorit', Id: 3 }];
+
+let machinesStatus = [{ Name: '-', Id: -1 },
+{ Name: 'Online', Id: 6 },
+{ Name: 'Offline', Id: 5 },
+{ Name: 'Disabled', Id: 1 }];
+
+let machinesType = [{ Name: '-', Id: -1 },
+{ Name: 'Slot machine', Id: 5 },
+{ Name: 'Rulet', Id: 6 }];
+
+let dateFormatArray = [{ Name: 'dd.MM.yyyy.', Id: 0 },
+{ Name: 'dd/MM/yyyy', Id: 1 },
+{ Name: 'yyyy-MM-dd', Id: 2 },
+{ Name: 'dd-MM-yyyy', Id: 3 },
+{ Name: 'MM/dd/yyyy', Id: 4 }];
+
+let timeFormatArray = [{ Name: 'hh:mm', Id: 0 },
+{ Name: 'hh:mm:ss', Id: 1 },
+{ Name: 'HH:mm', Id: 2 },
+{ Name: 'HH:mm:ss', Id: 3 }
+];
+
+let machinesSerial = [{ Name: 'X00000', Id: 0 },
+{ Name: 'X11111', Id: 1 },
+{ Name: 'X22222', Id: 2 },
+{ Name: 'X33333', Id: 3 }];
+
+let hours = [{ Name: '-', Id: -1 },
+{ Name: '00 h', Id: 0 },
+{ Name: '01 h', Id: 1 },
+{ Name: '02 h', Id: 2 },
+{ Name: '03 h', Id: 3 },
+{ Name: '04 h', Id: 4 },
+{ Name: '05 h', Id: 5 },
+{ Name: '06 h', Id: 6 },
+{ Name: '07 h', Id: 7 },
+{ Name: '08 h', Id: 8 },
+{ Name: '09 h', Id: 9 },
+{ Name: '10 h', Id: 10 },
+{ Name: '11 h', Id: 11 },
+{ Name: '12 h', Id: 12 },
+{ Name: '13 h', Id: 13 },
+{ Name: '14 h', Id: 14 },
+{ Name: '15 h', Id: 15 },
+{ Name: '16 h', Id: 16 },
+{ Name: '17 h', Id: 17 },
+{ Name: '18 h', Id: 18 },
+{ Name: '19 h', Id: 19 },
+{ Name: '20 h', Id: 20 },
+{ Name: '21 h', Id: 21 },
+{ Name: '22 h', Id: 22 },
+{ Name: '23 h', Id: 23 }];
+
+let minutes = [{ Name: '-', Id: -1 },
+{ Name: '00 min', Id: 0 },
+{ Name: '01 min', Id: 1 },
+{ Name: '02 min', Id: 2 },
+{ Name: '03 min', Id: 3 },
+{ Name: '04 min', Id: 4 },
+{ Name: '05 min', Id: 5 },
+{ Name: '06 min', Id: 6 },
+{ Name: '07 min', Id: 7 },
+{ Name: '08 min', Id: 8 },
+{ Name: '09 min', Id: 9 },
+{ Name: '10 min', Id: 10 },
+{ Name: '11 min', Id: 11 },
+{ Name: '12 min', Id: 12 },
+{ Name: '13 min', Id: 13 },
+{ Name: '14 min', Id: 14 },
+{ Name: '15 min', Id: 15 },
+{ Name: '16 min', Id: 16 },
+{ Name: '17 min', Id: 17 },
+{ Name: '18 min', Id: 18 },
+{ Name: '19 min', Id: 19 },
+{ Name: '20 min', Id: 20 },
+{ Name: '21 min', Id: 21 },
+{ Name: '22 min', Id: 22 },
+{ Name: '23 min', Id: 23 },
+{ Name: '24 min', Id: 24 },
+{ Name: '25 min', Id: 25 },
+{ Name: '26 min', Id: 26 },
+{ Name: '27 min', Id: 27 },
+{ Name: '28 min', Id: 28 },
+{ Name: '29 min', Id: 29 },
+{ Name: '30 min', Id: 30 },
+{ Name: '31 min', Id: 31 },
+{ Name: '32 min', Id: 32 },
+{ Name: '33 min', Id: 33 },
+{ Name: '34 min', Id: 34 },
+{ Name: '35 min', Id: 35 },
+{ Name: '36 min', Id: 36 },
+{ Name: '37 min', Id: 37 },
+{ Name: '38 min', Id: 38 },
+{ Name: '39 min', Id: 39 },
+{ Name: '40 min', Id: 40 },
+{ Name: '41 min', Id: 41 },
+{ Name: '42 min', Id: 42 },
+{ Name: '43 min', Id: 43 },
+{ Name: '44 min', Id: 44 },
+{ Name: '45 min', Id: 45 },
+{ Name: '46 min', Id: 46 },
+{ Name: '47 min', Id: 47 },
+{ Name: '48 min', Id: 48 },
+{ Name: '49 min', Id: 49 },
+{ Name: '50 min', Id: 50 },
+{ Name: '51 min', Id: 51 },
+{ Name: '52 min', Id: 52 },
+{ Name: '53 min', Id: 53 },
+{ Name: '54 min', Id: 54 },
+{ Name: '55 min', Id: 55 },
+{ Name: '56 min', Id: 56 },
+{ Name: '57 min', Id: 57 },
+{ Name: '58 min', Id: 58 },
+{ Name: '59 min', Id: 59 }];
 
 let casinoData = {
     List: 'Casino',
@@ -57,10 +187,6 @@ let casinoData = {
         },
     ]
 }
-/*
-let icons = ['poker-chip', 'currency-usd', 'ticket', 'bank', 'gamepad-variant', 'file-document', 'account', 'wrench'];
-*/
-
 
 let roleData = {
     "UserType": "1",
