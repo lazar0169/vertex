@@ -1,5 +1,10 @@
 const malfunctionsFilter = (function () {
     let advanceTableFilter = $$('#malfunctions-advance-table-filter');
+    let advanceTableFilterActive = $$('#malfunctions-advance-table-filter-active');
+    let clearAdvanceFilter = $$('#malfunctions-advance-table-filter-clear').children[0];
+    let malfunctionsAdvanceApplyFilters = $$('#malfunctions-advance-table-filter-apply').children[0];
+    let advanceTableFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar');
+    let clearAdvanceFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar-button').children[0];
 
 
     let malfunctionsMachinesNumbers = $$('#malfunctions-number');
@@ -31,4 +36,18 @@ const malfunctionsFilter = (function () {
         dropdown.generate({ optionValue: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
 
     }
+    //ToDo: test for malfunction filter infobar
+    malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
+        trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+    });
+
+    clearAdvanceFilter.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+    });
+
+    clearAdvanceFilterInfobar.addEventListener('click', function () {
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+    });
+
 })();
