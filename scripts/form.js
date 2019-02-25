@@ -48,7 +48,8 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        trigger(formSettings.getData, {data: data, formSettings: formSettings});
+        console.log('get data trigered:',formSettings.getData);
+        trigger(formSettings.getData, {data: data, additionalData: formSettings});
     }
 
     //helper functions
@@ -71,6 +72,7 @@ let form = (function () {
     function displayData(formSettings, data) {
         let dataToDisplay = data.Data;
         //remove elements which were created previously beacuse API value was array
+        console.log('formSettings:',formSettings);
         let multipleValueInputContainers = Array.prototype.slice.call(formSettings.formContainerElement.getElementsByClassName('element-input-additional-array-value'));
         for (let counter = 0; counter < multipleValueInputContainers.length; counter++) {
             multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
@@ -576,20 +578,25 @@ let form = (function () {
     });
 
     on('form/fillFormData', function (params) {
-        let formSettings = params.settingsObject;
+        console.log('params in fill form data:',params);
+        let formSettings = params.additionalData;
         let apiResponseData = params.data;
         displayData(formSettings, apiResponseData);
     });
 
     on('form/submit/success', function (params) {
-        let formSettings = params.settingsObject;
+        console.log('params in  form submit success:',params);
+
+        let formSettings = params.additionalData;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
     });
 
     on('form/submit/error', function (params) {
-        let formSettings = params.settingsObject;
+        console.log('params in form submit error:',params);
+
+        let formSettings = params.additionalData;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);

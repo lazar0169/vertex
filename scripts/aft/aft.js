@@ -1,47 +1,26 @@
 const aft = (function () {
     const cancelTransactionsPopUpId = 'aft-cancel-transaction-popup';
     const aftTableId = 'table-container-aft';
-    const aftTableSelector = `#${aftTableId}`;
+    const aftTableSelector = '#table-container-aft';
 
+    let aftTable = null;
     let endpointId;
+
+    const events = {
+        getTransactions: 'aft/transactions/get',
+        previewTransactions: 'aft/transactions/preview',
+    };
 
     on('aft/activated', function (params) {
         let aftId = params.params[0].value;
-        endpointId = aftId;
+
 
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
 
-        let tableSettings = {};
-        tableSettings.pageSelectorId = '#page-aft';
-        tableSettings.tableContainerSelector = '#table-container-aft';
-        tableSettings.filtersContainerSelector = '#aft-filter';
-        //tableSettings.advancedFilterContainerSelector = '#aft-advance-table-filter-active';
-        tableSettings.getDataEvent = communication.events.aft.transactions.getTransactions;
-        tableSettings.filterDataEvent = communication.events.aft.transactions.previewTransactions;
-        tableSettings.updateTableEvent = 'table/update';
-        tableSettings.processRemoteData = communication.events.aft.data.parseRemoteData;
-        tableSettings.endpointId = aftId;
-        tableSettings.id = '';
-        tableSettings.stickyRow = true;
+        trigger(communication.events.aft.transactions.getTransactions,{endpointId:aftId});
 
-        //ToDo neske: deprecated - remove
-        //tableSettings.onDrawRowCell = 'aft/table/drawCell';
-        //ToDo neske: deprecated - remove
-        tableSettings.onAfterCellClick = onTableCellClick;
 
-        tableSettings.exportTo = {
-            pdf: {
-                value: communication.events.aft.transactions.exportToPDF,
-                type: table.exportTypes.event
-            },
-            xls: {
-                value: communication.events.aft.transactions.exportToXLS,
-                type: table.exportTypes.event
-            }
-        };
-
-        table.init(tableSettings); //initializing table, filters and page size
         //initialize add transaction form
         let addTransactionFormSettings = {};
         addTransactionFormSettings.formContainerSelector = '#aft-tabs-add-transaction-form-wrapper';
@@ -62,13 +41,10 @@ const aft = (function () {
         });
 
 
-        trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
-        trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
+        trigger('aft/tab/transaction', {endpointId: aftId});
+        trigger('aft/tab/notification', {endpointId: aftId});
 
-        console.log('test');
-        let table2 = table.init2({id:aftTableId});
-        console.log('table2',table2);
-        table2.update();
+
 
     });
 
@@ -85,12 +61,35 @@ const aft = (function () {
     });
 
     /*********************----Module Events------*********************/
-    on('table/#table-container-aft/cell/clicked/', function (params) {
+    on(table.events.rowClick(aftTableId),function(params){
         let event = params.event;
         let target = params.target;
         if (target.additionalData.Properties.IsPayoutPossible) {
             onTableCellClick(event, target);
         }
+    });
+    on(table.events.pageSize(aftTableId),function(params){
+        console.log('page size');
+    });
+    on(table.events.sort(aftTableId),function(params){
+        console.log('sort');
+    });
+    on(table.events.pagination(aftTableId),function(params){
+        console.log('pagination');
+    });
+
+
+    on(events.getTransactions,function(params){
+        if (aftTable !== null) {
+            aftTable.destroy();
+        }
+        aftTable = table.init({id:aftTableId,pageSizeContainer:'#aft-machines-number'},params.data.Data);
+        console.log('table2',aftTable);
+        $$('#aft-tabs-transaction-info').appendChild(aftTable);
+
+    });
+    on(events.previewTransactions,function(params){
+
     });
 
     on('aft/addTransaction/error', function (params) {
@@ -259,48 +258,6 @@ const aft = (function () {
         trigger('table/deselect/hover-row', { tableSettings: tableSettings });
     }
 
-    function onDrawTableCell(column, cellContent, cell, position, entryData) {
-
-        if (column === 'flag') {
-            if (cellContent !== undefined) {
-                cell.classList.add('row-flag-' + cellContent.toString().trim());
-            }
-            cell.classList.add('cell-flag');
-            cell.innerHTML = '';
-        } else if (column === 'finishedBy' || column === 'createdBy') {
-            cell.classList.add('flex-column');
-            cell.classList.add('justify-content-start');
-            cell.classList.add('align-items-start');
-            if (column === 'finishedBy') {
-                cell.innerHTML = `<time class='table-time'>${entryData.data.finishedTime}</time><label>${entryData.rowData.finishedBy}</label>`;
-            } else if (column === 'createdBy') {
-                cell.innerHTML = `<time class='table-time'>${entryData.data.createdTime}</time><label>${entryData.rowData.createdBy}</label>`;
-            }
-        } else if (column === 'status') {
-            cell.innerHTML = '<div title="' + entryData.data.errorCode + '">' + entryData.rowData.status + '</div>';
-        } else if (column === 'actions') {
-            if (entryData.data.isPayoutPossible) {
-                let cancelIndicator = document.createElement('span');
-                let icon = document.createElement('i');
-                //ToDo: Ubaciti klasu za font
-                icon.innerHTML = 'X';
-                let text = document.createElement('span');
-                text.innerHTML = localization.translateMessage('Cancel', text);
-                cancelIndicator.classList.add('cancel-indicator');
-                cancelIndicator.appendChild(icon);
-                cancelIndicator.appendChild(text);
-                cell.innerHTML = '';
-                cell.append(cancelIndicator);
-            }
-        }
-        if (entryData.data.isPayoutPossible === true) {
-            cell.classList.add('clickable');
-        }
-        cell.transactionData = {
-            gmcid: entryData.data.gmcid,
-            jidtString: entryData.data.jidtString
-        };
-    }
 
     /*-------------------------------------- AFT EVENTS ---------------------------------------*/
 
@@ -308,15 +265,16 @@ const aft = (function () {
     on(communication.events.aft.transactions.getTransactions, function (params) {
         let route = communication.apiRoutes.aft.getTransactions;
         let request = communication.requestTypes.post;
-        let data = params.data;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
+        let data = {
+           'EndpointId': params.endpointId
+        }
+        let successEvent = events.getTransactions;
         let errorEvent = '';
+
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -335,7 +293,6 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -381,7 +338,7 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
+            additionalData: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -392,14 +349,14 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.getBasicSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
+        let formSettings = params.additionalData;
         let successEvent = formSettings.populateData;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: formSettings,
+            additionalData: formSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -418,7 +375,7 @@ const aft = (function () {
             requestType: request,
             data: data,
             successEvent: successEvent,
-            settingsObject: formSettings,
+            additionalData: formSettings,
             errorEvent: errorEvent
         });
     });
@@ -428,14 +385,14 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.getNotificationSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
+        let formSettings = params.additionalData;
         let successEvent = formSettings.populateData;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: formSettings,
+            additionalData: formSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -453,7 +410,7 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: formSettings,
+            additionalData: formSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -471,7 +428,7 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
+            additionalData: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

@@ -218,7 +218,9 @@ let communication = (function () {
         return xhr;
     }
 
-    function success(xhr, callbackEvent, settingsObject) {
+    function success(xhr, callbackEvent, additionalData) {
+        console.log('callback event',callbackEvent);
+        console.log('communication success:',additionalData);
         let data = null;
 
         if (xhr.responseType === 'arraybuffer') {
@@ -239,7 +241,7 @@ let communication = (function () {
         }
 
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
+            trigger(callbackEvent, { data: data, additionalData: additionalData });
         }
     }
 
@@ -355,7 +357,7 @@ let communication = (function () {
 
     //create and send xhr
     on('communicate/createAndSendXhr', function (params) {
-        let xhr = createRequest(params.route, params.requestType, params.data, params.successEvent, params.errorEvent, params.settingsObject);
+        let xhr = createRequest(params.route, params.requestType, params.data, params.successEvent, params.errorEvent, params.additionalData);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);

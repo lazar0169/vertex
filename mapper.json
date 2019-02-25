@@ -21,8 +21,9 @@
     "scripts": [
       "config.js",
       "localization.js",
-      "table.js",
       "data.js",
+      "components/dropdown.js",
+      "table.js",
       "top-bar.js",
       "user-profile.js",
       "sidebar.js",
@@ -37,7 +38,6 @@
       "aft/aft-tab-notification-settings.js",
       "components/currency-input.js",
       "components/dropdown-date.js",
-      "components/dropdown.js",
       "components/toggle.js",
       "casino.js",
       "machines/details-bar.js",

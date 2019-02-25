@@ -151,7 +151,8 @@
     left: 0;
 }
 
-.head.active-column {
+.head.active-column,
+.cell.active-column {
     background: #2F3B41;
     color: white;
 }
