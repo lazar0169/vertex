@@ -6,7 +6,7 @@ let table = (function () {
         const cellClassPrefix = 'cell-';
         const flagCellClassPrefix = 'row-flag-';
         const exportToButtonsClass = 'element-table-export-to';
-        const highlightedColumnElementsClass = 'active-column';
+        const activeColumnElementsClass = 'active-column';
         const emptyTableElementClass = 'table-element-no-data';
         const activeRowElementsClass = 'row-chosen';
         const hiddenCellClassName = 'hidden';
@@ -43,7 +43,7 @@ let table = (function () {
             descending: 'sort-desc'
         };
 
-        const sortingDataAtt = {
+        const sortDirections = {
             ascending: 'asc',
             descending: 'desc'
         };
@@ -55,8 +55,7 @@ let table = (function () {
             3: createEditMalfunctionAction(),
             4: createEditUserAction(),
             5: createDeleteUserAction()
-        }
-
+        };
 
         //region MODULE EVENTS
         on(events.saveExportedFile, function (params) {
@@ -165,8 +164,6 @@ let table = (function () {
             tbody = document.createElement('div');
             tbody.className = 'tbody';
 
-
-            console.log('table data:', tableSettings.tableData);
             if (!isEmpty(tableSettings.tableData)) {
                 let columnNames = Object.keys(tableSettings.tableData[0].EntryData);
                 for (let col = 0; col < columnNames.length; col++) {
@@ -175,8 +172,6 @@ let table = (function () {
                     cell.dataset.column = columnName;
                     let cellColumnClass = generateCellClassName(columnName);
                     cell.classList.add(cellColumnClass);
-
-                    console.log(columnName);
 
                     if (columnName !== 'FlagList' && columnName !== 'ActionList') {
                         cell.innerHTML = localization.translateMessage(columnName, cell);
@@ -276,7 +271,6 @@ let table = (function () {
                 if (tempRow.ActionList !== undefined) {
                     let cellHTML = '';
                     for (let i = 0; i < tempRow.ActionList.length; i++) {
-                        console.log(tempRow.ActionList[i]);
                         cellHTML += tableActions[tempRow.ActionList[i]].outerHTML;
                     }
                     tempRow.ActionList = cellHTML;
@@ -427,12 +421,12 @@ let table = (function () {
         function highlightSortedColumn(tableSettings) {
             let activeHeader = getSortedHeaderByAPIdata(tableSettings);
             if (activeHeader !== undefined && activeHeader !== null) {
-                activeHeader.classList.add(highlightedColumnElementsClass);
+                activeHeader.classList.add(activeColumnElementsClass);
                 setSortDirectionOnHeader(activeHeader, tableSettings.sort.sortDirection);
                 let columnClass = getColumnNameFromHeadElement(activeHeader);
                 let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnClass);
                 for (let i = 0; i < columnElements.length; i++) {
-                    columnElements[i].classList.add(highlightedColumnElementsClass);
+                    columnElements[i].classList.add(activeColumnElementsClass);
                 }
             }
         }
@@ -649,7 +643,7 @@ let table = (function () {
                 showNormalTable(tableSettings);
             }
             //update sorting data from API
-            tableSettings.sort = {
+            tableSettings.onSort = {
                 sortDirection: params.data.Data.ItemValue.SortDirection,
                 sortName: params.data.Data.ItemValue.SortedBy,
             };
@@ -762,7 +756,7 @@ let table = (function () {
             if (columnName !== null) {
                 let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
                 for (let j = 0; j < columnElements.length; j++) {
-                    columnElements[j].classList.add(highlightedColumnElementsClass);
+                    columnElements[j].classList.add(activeColumnElementsClass);
                 }
             }
         }
@@ -776,7 +770,7 @@ let table = (function () {
                     headers[i].classList.remove('sort-active');
                     headers[i].classList.remove('sort-asc');
                     headers[i].classList.remove('sort-desc');
-                    headers[i].classList.remove(highlightedColumnElementsClass);
+                    headers[i].classList.remove(activeColumnElementsClass);
                     delete headers[i].dataset.direction;
                 }
             }
@@ -790,15 +784,15 @@ let table = (function () {
         function toggleSortDirectionClasses(header) {
             if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
                 header.classList.add(sortingClass.ascending);
-                header.dataset.direction = sortingDataAtt.ascending;
+                header.dataset.direction = sortDirections.ascending;
             } else if (header.classList.contains(sortingClass.descending)) {
                 header.classList.remove(sortingClass.descending);
                 header.classList.add(sortingClass.ascending);
-                header.dataset.direction = sortingDataAtt.ascending;
+                header.dataset.direction = sortDirections.ascending;
             } else {
                 header.classList.remove(sortingClass.ascending);
                 header.classList.add(sortingClass.descending);
-                header.dataset.direction = sortingDataAtt.descending;
+                header.dataset.direction = sortDirections.descending;
             }
         }
 
@@ -809,12 +803,12 @@ let table = (function () {
             if (sortDirection === sortOrderEnum.ascending) {
                 header.classList.add('sort-active');
                 header.classList.add(sortingClass.ascending);
-                header.dataset.direction = sortingDataAtt.ascending;
+                header.dataset.direction = sortDirections.ascending;
 
             } else if (sortDirection === sortOrderEnum.descending) {
                 header.classList.add('sort-active');
                 header.classList.add(sortingClass.descending);
-                header.dataset.direction = sortingDataAtt.descending;
+                header.dataset.direction = sortDirections.descending;
 
             }
         }
@@ -829,9 +823,9 @@ let table = (function () {
 
             if (activeHeader !== undefined) {
                 tableSettings.sort.sortName = activeHeader.dataset.column;
-                if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
+                if (activeHeader.dataset.direction === sortDirections.ascending) {
                     tableSettings.sort.sortDirection = sortOrderEnum.ascending;
-                } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
+                } else if (activeHeader.dataset.direction === sortDirections.descending) {
                     tableSettings.sort.sortDirection = sortOrderEnum.descending;
                 }
             } else {
@@ -968,26 +962,32 @@ let table = (function () {
 
             table.elements = {
                 body: generateTableBody(),
-                noDataElement: generateNoDataElement2()
+                noDataElement: generateNoDataElement2(),
+                pagination: generatePagination()
             }
 
             table.appendChild(table.elements.body);
             table.appendChild(table.elements.noDataElement);
+            table.appendChild(table.elements.pagination);
+            //bind functions
             table.update = update;
+            table.sort = sort;
 
             if (!isEmpty(settings.data)) {
                 table.update(settings.data);
             }
+
+            //bindHandlers();
+
             return table;
         }
 
         function update(data) {
             let table = this;
+            let settings = table.settings;
             if (isEmpty(data)) {
                 return table;
             }
-            console.log(this);
-            console.log(this.settings);
             if (data.length <= 0) {
                 table.elements.body.classList.add('d-hide');
                 table.elements.body.noDataElement.classList.remove('d-hide');
@@ -995,23 +995,35 @@ let table = (function () {
                 table.elements.body.classList.remove('d-hide');
                 table.elements.body.noDataElement.classList.add('d-hide');
                 if (!hasHeaders2(table)) {
-                    generateHeaders(table,data);
+                    generateHeaders(table, data);
                 }
-                generateTableRows(table,data);
+                generateRows(table, data);
             }
-            /*if (!hasHeaders(tableSettings)) {
-                generateTableHeaders(tableSettings);
-            }
-
-            generateTableRows(tableSettings);
-            if (tableSettings.showPreloader) {
+            if (table.settings.showPreloader) {
                 trigger('preloader/hide');
-            }*/
+            }
         }
 
-        function generateHeaders(table,data) {
-            let tbody = table.elements.body;
+        function sort(column) {
+            let table = this;
+            let settings = table.settings;
+            if (settings.sort.name === column) {
+                if (settings.sort.direction === sortDirections.ascending) {
+                    settings.sort.direction = sortDirections.descending;
+                }
+                if (settings.sort.direction === sortDirections.descending) {
+                    settings.sort.direction = sortDirections.ascending;
+                }
+            } else {
+                settings.sort.name = column;
+                settings.sort.direction = settings.defaultSortDirection
+            }
+            trigger(`table/${table.settings.id}/sort`, {table: table});
+        }
 
+        function generateHeaders(table, data) {
+            let tbody = table.elements.body;
+            let settings = table.settings;
             if (!isEmpty(data)) {
                 let columnNames = Object.keys(data[0].EntryData);
                 for (let col = 0; col < columnNames.length; col++) {
@@ -1021,9 +1033,21 @@ let table = (function () {
                     let cellColumnClass = generateCellClassName(columnName);
                     cell.classList.add(cellColumnClass);
 
+                    settings.columns[columnName] = {
+                        column: columnName,
+                        visible: true,
+                        class: cellColumnClass,
+                        width: '1fr'
+                    };
+
+                    if (columnName === 'FlagList') {
+                        settings.columns[columnName].width = '25px';
+                    }
+
                     if (columnName !== 'FlagList' && columnName !== 'ActionList') {
                         cell.innerHTML = localization.translateMessage(columnName, cell);
                         cell.classList.add('sortable');
+                        cell.addEventListener('click', onSort);
                     }
                     tbody.appendChild(cell);
                 }
@@ -1031,17 +1055,163 @@ let table = (function () {
                 //ToDo Neske: skloni ovo
                 generateTablePagination(tableSettings);
                 generatePageSizeDropdown(tableSettings);
-                generateNoDataElement(tableSettings);
                 bindHandlers(tableSettings);
             } else {
                 console.error('could not generate table headers without data');
             }
         }
 
-        function generateRows(data) {
+        function generateRows(table, data) {
+            let settings = table.settings;
+            let tbody = table.elements.body;
+
+            let tableItems = tbody.getElementsByClassName('table-item');
+            //remove displayed rows
+            if (tableItems !== undefined && tableItems != null) {
+                while (tableItems.length > 0) {
+                    let item = tableItems[0];
+                    item.parentNode.removeChild(item);
+                }
+            }
+
+            let rowsCount = data.length;
+            for (let row = 0; row < rowsCount; row++) {
+                let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+
+                while (rows.includes(rowId)) {
+                    rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+                }
+
+                let rowData = data[row];
+                let tempRow = JSON.parse(JSON.stringify(rowData.EntryData));
+
+                //parse data
+
+                //pages containing field: AFT
+                if (tempRow.CreatedBy !== undefined) {
+                    if (!isEmpty(tempRow.CreatedBy.Time) && !isEmpty(tempRow.CreatedBy.Name)) {
+                        tempRow.CreatedBy = createTimeUserCellHTML(formatTimeData(tempRow.CreatedBy.Time), tempRow.CreatedBy.Name);
+                    } else {
+                        tempRow.CreatedBy = '';
+                    }
+                }
+                //pages containing field: AFT
+                if (tempRow.FinishedBy !== undefined) {
+                    if (!isEmpty(tempRow.FinishedBy.Time) && !isEmpty(tempRow.FinishedBy.Name)) {
+                        tempRow.FinishedBy = createTimeUserCellHTML(formatTimeData(tempRow.FinishedBy.Time), tempRow.FinishedBy.Name);
+                    } else {
+                        tempRow.FinishedBy = '';
+                    }
+                }
+                //pages containing field: Tickets
+                if (tempRow.IssuedBy !== undefined) {
+                    if (!isEmpty(tempRow.IssuedBy.Time) && !isEmpty(tempRow.IssuedBy.Name)) {
+                        tempRow.IssuedBy = createTimeUserCellHTML(formatTimeData(tempRow.IssuedBy.Time), tempRow.IssuedBy.Name);
+                    } else {
+                        tempRow.FinishedBy = '';
+                    }
+                }
+                //pages containing field: Tickets
+                if (tempRow.RedeemedBy !== undefined) {
+                    if (!isEmpty(tempRow.RedeemedBy.Time) && !isEmpty(tempRow.RedeemedBy.Name)) {
+                        tempRow.RedeemedBy = createTimeUserCellHTML(formatTimeData(tempRow.RedeemedBy.Time), tempRow.RedeemedBy.Name);
+                    } else {
+                        tempRow.RedeemedBy = '';
+                    }
+                }
+
+                //pages containing field: AFT,Malfunctions
+                if (tempRow.FlagList !== undefined) {
+                    let flagElement = document.createElement('div');
+                    flagElement.classList.add('flag-element');
+                    flagElement.classList.add(`flag-${tempRow.FlagList[0]}`);
+                    tempRow.FlagList = flagElement.outerHTML;
+                }
+                //pages containing field: Malfunctions,Users,AFT
+                if (tempRow.ActionList !== undefined) {
+                    let cellHTML = '';
+                    for (let i = 0; i < tempRow.ActionList.length; i++) {
+                        cellHTML += tableActions[tempRow.ActionList[i]].outerHTML;
+                    }
+                    tempRow.ActionList = cellHTML;
+                }
+
+                //pages containing field: Tickets,AFT
+                if (tempRow.Status !== undefined) {
+                    tempRow.Status = localization.translateMessage(tempRow.Status);
+                }
+                //pages containing field: Tickets
+                if (tempRow.TicketType !== undefined) {
+                    tempRow.TicketType = localization.translateMessage(tempRow.TicketType);
+                }
+                //pages containing field: AFT,Malfunctions
+                if (tempRow.Type !== undefined) {
+                    tempRow.Type = localization.translateMessage(tempRow.Type);
+                }
+                //pages containing field: Malfunctions
+                if (tempRow.Priority !== undefined) {
+                    tempRow.Priority = localization.translateMessage(tempRow.Priority);
+                }
+
+                let columnIndex = 0;
+                for (let column in tempRow) {
+                    // noinspection JSUnfilteredForInLoop
+                    let cellColumnClass = generateCellClassName(column);
+                    let cell = generateBodyTableCellElement2(rowId, column, settings, rowData);
+                    //add column number class
+                    cell.classList.add(`table-column-${columnIndex + 1}`);
+
+                    let cellData = tempRow[column];
+                    //set cell to be clickable if criteria are met
+                    if (
+                        !isEmpty(rowData.Properties.IsPayoutPossible) && rowData.Properties.IsPayoutPossible //aft
+                    ) {
+                        cell.classList.add('clickable');
+                    }
+
+                    if (Number.isInteger(cellData)) {
+                        cell.innerHTML = formatFloatValue(cellData);
+                    } else {
+                        cell.innerHTML = cellData;
+                        //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
+                        //cell.innerHTML = localization.translateMessage(cellData,cell);
+                    }
+
+                    //hide hidden columns
+                    let columnData = settings.columns[column];
+                    if (columnData.visible === true) {
+                        cell.classList.add(hiddenCellClassName);
+                    }
+
+                    //set first column sticky if needed
+                    if (tableSettings.stickyColumn === true && columnIndex === 0) {
+                        cell.classList.add('sticky');
+                    }
+                    columnIndex++;
+                    tbody.appendChild(cell);
+                }
+            }
+            if (rowsCount > 0) {
+                //highlight sorted column if there is one
+                markActiveColumnRows(tableSettings);
+                updateTablePagination(tableSettings);
+                //highlight after response from API is received
+                deselectActiveColumn(tableSettings);
+                highlightSortedColumn(tableSettings);
+                tbody.classList.remove('d-hide');
+                tableSettings.noDataElement.classList.add('d-hide');
+                setTableDimensions(tableSettings, colsCount, tbody);
+            } else {
+                hidePagination(tableSettings);
+                tableSettings.noDataElement.classList.remove('d-hide');
+                tbody.classList.add('d-hide');
+                setTableDimensions(tableSettings, 1, tbody);
+            }
+            return tbody;
         }
 
-        // region generate elements helper functions
+
+// region generate elements helper functions
         function generateTableBody() {
             let tbody = document.createElement('div');
             tbody.className = 'tbody';
@@ -1054,6 +1224,10 @@ let table = (function () {
             noDataElement.classList.add('d-hide');
             noDataElement.innerText = 'No data to display...';
             return noDataElement;
+        }
+
+        function generatePagination() {
+            return template.render('#pagination', {});
         }
 
         function createEditMachineAction() {
@@ -1084,9 +1258,36 @@ let table = (function () {
         function createDeleteUserAction() {
         }
 
-        //endregion
+        function generateBodyTableCellElement2(rowId, column, settings, rowData) {
+            let cellColumnClass = generateCellClassName(column);
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.classList.add('table-item');
+            cell.classList.add(rowClassPrefix + rowId);
+            cell.classList.add(cellColumnClass);
+            if (column === 'actions') {
+                cell.classList.add('table-actions-column');
+            }
+            cell.additionalData = rowData;
 
-        //region helper functions
+            //set handlers
+            cell.addEventListener('mouseover', function () {
+                hoverRow(rowClassPrefix + rowId, true);
+            }, {passive: false});
+            cell.addEventListener('mouseout', function () {
+                hoverRow(rowClassPrefix + rowId, false);
+            }, {passive: false});
+            cell.addEventListener('click', function (e) {
+                //check if there's on beforeCellClick handler
+                trigger(`table/${settings.id}/cell/clicked/`, {event: e, target: cell});
+            });
+            return cell;
+        }
+
+
+//endregion
+
+//region helper functions
         function getHeaders2(table) {
             return table.getElementsByClassName('head');
         }
@@ -1095,9 +1296,51 @@ let table = (function () {
             return getHeaders2(table).length > 0;
         }
 
-        //endregion
+        function bindHandlers2(table) {
+            bindTableViewLinkHandlers(tableSettings);
+            //bindExportToHandlers(tableSettings);
+        }
 
-        //endregion
+        function highightSortedColumn(table, column, direction) {
+            let settings = table.settings;
+            if (column === undefined) {
+                column = settings.sort.name;
+            }
+            if (direction === undefined) {
+                direction = settings.sort.direction;
+            }
+            let headers = getHeaders2(table);
+            for (let header in headers) {
+                let headerColumn = header.dataset.column;
+                header.classList.remove(activeColumnElementsClass, sortingClass.ascending, sortingClass.descending);
+                if (column === headerColumn) {
+                    let directionClass = direction === sortDirections.ascending ? sortingClass.ascending : sortingClass.descending;
+                    header.classList.add(directionClass);
+                    header.classList.add(activeColumnElementsClass);
+                }
+            }
+            //ToDo:
+            let columnItems = ''
+        }
+
+
+//endregion
+
+//region event handlers
+        function onSort(e) {
+            //get clicked header
+            e.preventDefault();
+            let element = e.target;
+            let table = element.parentNode.parentNode;
+            let settings = table.settings;
+            settings.page = 1;
+            let column = element.dataset('column');
+            table.sort(column);
+        }
+
+//endregion
+
+//endregion
 
         /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
@@ -1238,43 +1481,46 @@ let table = (function () {
             tbody.classList.remove('no-scroll');
         }
 
-        function setDefaultSettings(tableSettings) {
-            if (tableSettings.filters === undefined) {
-                tableSettings.filters = null;
+        function setDefaultSettings(settings) {
+            if (settings.filters === undefined) {
+                settings.filters = null;
             }
-            if (tableSettings.visibleColumns === undefined) {
-                tableSettings.visibleColumns = [];
+            if (settings.visibleColumns === undefined) {
+                settings.visibleColumns = [];
             }
-            if (tableSettings.columns === undefined) {
-                tableSettings.columns = [];
+            if (settings.columns === undefined) {
+                settings.columns = {};
             }
             //set default fort values
-            if (tableSettings.sort === undefined) {
-                tableSettings.sort = {};
+            if (settings.defaultSortDirection === undefined) {
+                settings.defaultSortDirection = sortDirections.ascending;
             }
-            if (tableSettings.sort.sortDirection === undefined) {
-                tableSettings.sort.sortDirection = null;
+            if (settings.sort === undefined) {
+                settings.sort = {};
             }
-            if (tableSettings.sort.sortName === undefined) {
-                tableSettings.sort.sortName = null;
+            if (settings.sort.direction === undefined) {
+                settings.sort.direction = null;
             }
-            if (tableSettings.stickyColumn === undefined) {
-                tableSettings.stickyColumn = false;
+            if (settings.sort.name === undefined) {
+                settings.sort.name = null;
             }
-            if (tableSettings.filtersInitialized === undefined) {
-                tableSettings.filtersInitialized = false;
+            if (settings.stickyColumn === undefined) {
+                settings.stickyColumn = false;
             }
-            if (tableSettings.forceRemoveHeaders === undefined) {
-                tableSettings.forceRemoveHeaders = false;
+            if (settings.filtersInitialized === undefined) {
+                settings.filtersInitialized = false;
             }
-            if (tableSettings.PageSize === undefined) {
-                tableSettings.PageSize = defaultPageSize;
+            if (settings.forceRemoveHeaders === undefined) {
+                settings.forceRemoveHeaders = false;
             }
-            if (tableSettings.activePage === undefined) {
-                tableSettings.activePage = defaultPage;
+            if (settings.PageSize === undefined) {
+                settings.PageSize = defaultPageSize;
             }
-            if (tableSettings.showPreloader === undefined) {
-                tableSettings.showPreloader = true;
+            if (settings.page === undefined) {
+                settings.page = defaultPage;
+            }
+            if (settings.showPreloader === undefined) {
+                settings.showPreloader = true;
             }
         }
 
@@ -1306,9 +1552,9 @@ let table = (function () {
         }
 
         function deselectActiveColumn(tableSettings) {
-            let activeElements = tableSettings.tableContainerElement.getElementsByClassName(highlightedColumnElementsClass);
+            let activeElements = tableSettings.tableContainerElement.getElementsByClassName(activeColumnElementsClass);
             while (activeElements.length > 0) {
-                activeElements[0].classList.remove(highlightedColumnElementsClass);
+                activeElements[0].classList.remove(activeColumnElementsClass);
             }
         }
 
@@ -1432,7 +1678,7 @@ let table = (function () {
             });
         }
 
-        /** HTML helper function **/
+        /** HTML generating helper function **/
 
         function createHeaderTableCell(sticky) {
             let cell = document.createElement('div');
@@ -1445,7 +1691,7 @@ let table = (function () {
             return cell;
         }
 
-        function createBodyTableCellElement(rowId, column, tableSettings, rowData) {
+        function createBodyTableCellElement(rowId, column, settings, rowData) {
             let cellColumnClass = generateCellClassName(column);
             let cell = document.createElement('div');
             cell.classList.add('cell');
@@ -1464,7 +1710,7 @@ let table = (function () {
             cell.addEventListener('mouseout', function () {
                 hoverRow(rowClassPrefix + rowId, false);
             }, {passive: false});
-            let tableSelector = tableSettings.tableContainerSelector;
+            let tableSelector = settings.tableContainerSelector;
             cell.addEventListener('click', function (e) {
                 //check if there's on beforeCellClick handler
                 trigger(`table/${tableSelector}/cell/clicked/`, {event: e, target: cell});
@@ -1488,4 +1734,5 @@ let table = (function () {
         }
     }
 
-)();
+)
+();

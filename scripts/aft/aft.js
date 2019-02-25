@@ -65,7 +65,9 @@ const aft = (function () {
         trigger('aft/tab/transaction', {endpointId: tableSettings.endpointId});
         trigger('aft/tab/notification', {endpointId: tableSettings.endpointId});
 
+        console.log('test');
         let table2 = table.init2({id:aftTableId});
+        console.log('table2',table2);
         table2.update();
 
     });
