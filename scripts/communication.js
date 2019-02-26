@@ -220,7 +220,7 @@ let communication = (function () {
 
     function success(xhr, callbackEvent, additionalData) {
         console.log('callback event',callbackEvent);
-        console.log('communication success:',additionalData);
+        console.log('communication success:',xhr.responseURL);
         let data = null;
 
         if (xhr.responseType === 'arraybuffer') {

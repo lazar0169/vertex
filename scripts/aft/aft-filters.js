@@ -74,10 +74,9 @@ const aftFilters = (function () {
     /*********************----Helper functions----*********************/
 
     function filterAftTable() {
-        let aftTable = $$('#table-container-aft');
-
         let filters = prepareAftFilters();
-
+        trigger('preloader/show');
+        trigger(communication.events.aft.transactions.previewTransactions,{data:filters});
     }
 
     function removeSelectedFilters() {
@@ -124,12 +123,15 @@ const aftFilters = (function () {
 
         //set up columns selection dropdown
         let aftTable = $$('#table-container-aft');
-        console.log($$('#table-container-aft'));
-        console.log(aftTable.settings.columns);
+
         let columns = [];
+        //add no select element
+        columns.push({
+            Name:'-',
+            Id: -1
+        });
         for (let columnKey in aftTable.settings.columns) {
             let column = aftTable.settings.columns[columnKey];
-            console.log(column);
             if (column.hideable === true) {
                 columns.push({
                     Id: column.column,
@@ -162,7 +164,6 @@ const aftFilters = (function () {
 
     function prepareAftFilters() {
         let table = $$('#table-container-aft');
-
         let date = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value;
         let dateFrom = null;
         let dateTo = null;
@@ -170,51 +171,31 @@ const aftFilters = (function () {
             dateFrom = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[0];
             dateTo = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[1];
         }
+        let machineList = $$('#aft-advance-table-filter-finished').children[1].get();
+        let jackpotList = $$('#aft-advance-table-filter-jackpot').children[1].get();
+        let statusesList = $$('#aft-advance-table-filter-status').children[1].get();
+        let typesList = $$('#aft-advance-table-filter-type').children[1].get();
 
         let filters = {
             'EndpointId': table.settings.endpointId,
             'DateFrom': dateFrom,
             'DateTo': dateTo,
-            'MachineList': $$('#aft-advance-table-filter-finished').children[1].get().split(','),
-            'JackpotList': $$('#aft-advance-table-filter-jackpot').children[1].get().split(','),
-            'Status': $$('#aft-advance-table-filter-status').children[1].get().split(','),
-            'Type': $$('#aft-advance-table-filter-type').children[1].get().split(',')
-        }
-         filters = table.getFilters(filters);
-
-        console.log('filters',filters);
-    }
-
-    function prepareAftFiltersForApi(activeTableSettings) {
-        if (activeTableSettings === undefined) {
-            activeTableSettings = getActiveTableSettings();
-        }
-        let pageFilters = table.collectFiltersFromPage(activeTableSettings);
-        let sortDirection = activeTableSettings.sort.sortDirection;
-        let sortName = activeTableSettings.sort.sortName;
-
-        let filtersForApi = {
-            'EndpointId': activeTableSettings.endpointId,
-            'DateFrom': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            'DateTo': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            'MachineList': pageFilters.MachineList,
-            'JackpotList': pageFilters.JackpotList,
-            'Status': pageFilters.Status,
-            'Type': pageFilters.Type,
-            'BasicData': {
-                'Page': activeTableSettings.activePage,
-                'PageSize': table.getPageSize(activeTableSettings),
-                'SortOrder': sortDirection,
-                'SortName': sortName
-            },
-            'TokenInfo': sessionStorage.token
+            'MachineList': machineList === 'null' ? null : machineList.split(','),
+            'JackpotList': jackpotList === 'null' ? null : jackpotList.split(','),
+            'Status': statusesList === 'null' ? null : statusesList.split(','),
+            'Type': typesList === 'null' ? null : typesList.split(','),
         };
-        //reset to page 1 if filters are changed
-        table.setFiltersPage(activeTableSettings, filtersForApi);
-        //Set visible columns for tableSettings object
-        activeTableSettings.visibleColumns = pageFilters.Columns;
-        activeTableSettings.filters = filtersForApi;
-        return filtersForApi;
+        console.log('filters in prepareAftFilters',filters);
+        filters = table.getFilters(filters);
+        //mark hidden columns
+        let visibleColumns = $$('#aft-advance-table-filter-column').children[1].get();
+        if (visibleColumns === 'null') {
+            visibleColumns = [];
+        }
+        table.setVisibleColumns(visibleColumns);
+
+
+        return filters;
     }
 
     on('show/app', function () {

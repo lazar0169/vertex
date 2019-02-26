@@ -132,6 +132,9 @@
     margin-left: 5px;
     visibility: visible;
 }
+.head.cell.active-column:after {
+    visibility: visible;
+}
 .vertex-table .head.cell.sort-asc:after {
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");

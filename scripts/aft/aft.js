@@ -12,9 +12,11 @@ const aft = (function () {
     };
 
     on('aft/activated', function (params) {
+
         let aftId = params.params[0].value;
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
+
         trigger('preloader/show');
         trigger(communication.events.aft.transactions.getTransactions,{endpointId:aftId});
 
@@ -78,18 +80,20 @@ const aft = (function () {
     });
 
 
-    on(events.getTransactions,function(params){
-        console.log('params in get', params);
+    on(events.getTransactions,function(params) {
         if (aftTable !== null) {
             aftTable.destroy();
         }
         aftTable = table.init({endpointId:params.additionalData,id:aftTableId,pageSizeContainer:'#aft-machines-number'},params.data.Data);
         trigger('aft/filters/init',{endpointId:params.additionalData});
         $$('#aft-tabs-transaction-info').appendChild(aftTable);
-
     });
-    on(events.previewTransactions,function(params){
 
+    on(events.previewTransactions,function(params){
+        let data = params.data.Data;
+        console.log(data);
+        $$(aftTableSelector).update(data);
+        //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide iz filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
     on('aft/addTransaction/error', function (params) {
@@ -103,7 +107,6 @@ const aft = (function () {
     on('aft/addTransaction/success', function (params) {
         trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
         trigger('aft/filters/filter-table', { showFilters: false });
-        console.log('params', params);
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('aft/filters/filter-table', {showFilters: false});
         trigger('show/app');
@@ -123,7 +126,7 @@ const aft = (function () {
     on('aft/transactions/canceled', transactionCanceled);
     on('aft/table/show/cancel-pop-up', function (params) {
         beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, onCancelPopUpAction,
-            params.params.containerCell, $$('#table-container-aft'));
+            params.params.containerCell, $$(aftTableSelector));
     });
     //code executed before popup is added to dom and
     on('aft/table/show/cancel-pending-pop-up', function (params) {
@@ -135,7 +138,7 @@ const aft = (function () {
             containerCell.transactionData.pending = true;
         }
         beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, onCancelPopUpAction,
-            containerCell, $$('#table-container-aft'));
+            containerCell, $$(aftTableSelector));
         //remove transaction flag so that user can initiate whole process again - flag is saved in YES button in popup
         if (containerCell.transactionData.pending !== undefined) {
             delete containerCell.transactionData.pending;
@@ -252,7 +255,7 @@ const aft = (function () {
     }
 
     function deselectHighlightedTransaction() {
-        let tableSettings = $$('#table-container-aft').tableSettings;
+        let tableSettings = $$(aftTableSelector).tableSettings;
         trigger('table/deselect/active-row', { tableSettings: tableSettings });
         trigger('table/deselect/hover-row', { tableSettings: tableSettings });
     }
@@ -286,8 +289,7 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.previewTransactions;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
+        let successEvent = events.previewTransactions;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -469,63 +471,4 @@ const aft = (function () {
     on(communication.events.aft.transactions.exportToXLS, function (params) {
 
     });
-
-    //parseRemoteData data for aft  page
-    on(communication.events.aft.data.parseRemoteData, function (params) {
-        let tableSettings = params.settingsObject;
-        let data = params.data;
-        console.log(data);
-        tableSettings.tableData = data.Data.Items;
-        trigger(tableSettings.updateTableEvent, { data: data, settingsObject: tableSettings });
-    });
-
-    /*---------------------------------------------------------------------------------------*/
-
-    function prepareAftTableData(tableSettings, data) {
-        let entries = data.Data.Items;
-        let formatedData = [];
-        let counter = 0;
-        entries.forEach(function (entry) {
-            entry.EntryData.AmountCashable = formatFloatValue(entry.EntryData.AmountCashable / 100);
-            entry.EntryData.AmountPromo = formatFloatValue(entry.EntryData.AmountPromo / 100);
-
-            entry.EntryData.Status = '<div title="' + localization.translateMessage(entry.Properties.ErrorCode) + '">' + localization.translateMessage(entry.EntryData.Status) + '</div>'
-
-            let cancelIndicator = document.createElement('span');
-            let icon = document.createElement('i');
-            //ToDo: Ubaciti klasu za font
-            icon.innerHTML = 'X';
-            let text = document.createElement('span');
-            text.innerHTML = localization.translateMessage('Cancel', text);
-            cancelIndicator.classList.add('cancel-indicator');
-            cancelIndicator.appendChild(icon);
-            cancelIndicator.appendChild(text);
-
-            formatedData[counter] = {
-                rowData: {
-                    flag: entry.Properties.FlagList[0],
-                    createdBy: entry.EntryData.CreatedBy.Name,
-                    finishedBy: entry.EntryData.FinishedBy.Name,
-                    status: localization.translateMessage(entry.EntryData.Status),
-                    machineName: entry.EntryData.MachineName,
-                    type: localization.translateMessage(entry.EntryData.Type),
-                    cashable: entry.EntryData.AmountCashable,
-                    promo: entry.EntryData.AmountPromo,
-                    actions: ''
-                },
-                data: {
-                    createdTime: formatTimeData(entry.EntryData.CreatedBy.Time),
-                    finishedTime: formatTimeData(entry.EntryData.FinishedBy.Time ? entry.EntryData.FinishedBy.Time : ''),
-                    errorCode: localization.translateMessage(entry.Properties.ErrorCode),
-                    isPayoutPossible: entry.Properties.IsPayoutPossible,
-                    gmcid: entry.Properties.Gmcid,
-                    jidtString: entry.Properties.JidtString
-                }
-            };
-            counter++;
-        }
-        );
-        return formatedData;
-    }
-
 })();

@@ -15,12 +15,9 @@ let table = (function () {
         const defaultPage = 1;
         let rows = [];
 
-        // 'null' as dataset values are always converted to string
-        const nullFilterValues = ['-', null, 'null'];
-
         const exportFileTypes = {
             pdf: 'application/pdf'
-        }
+        };
 
         const exportTypes = {
             event: 'event',
@@ -35,7 +32,7 @@ let table = (function () {
             pagination: getPaginationEvent,
             sort: getSortEvent
 
-        }
+        };
 
         const sortDirections = {
             none: 0,
@@ -57,7 +54,7 @@ let table = (function () {
             5: createDeleteUserAction()
         };
 
-        //region MODULE EVENTS
+        //region module events
         on(events.saveExportedFile, function (params) {
             let data = params.data;
             let blob = new Blob([data], {type: 'application/pdf'});
@@ -67,16 +64,7 @@ let table = (function () {
             link.click();
         });
         on('table/show-selected-filters/infobar', showSelectedFilters);
-        on('table/before-filter', function (params) {
-            trigger(params.tableSettings.filterDataEvent, {
-                data: params.data,
-                tableSettings: params.tableSettings
-            });
-            trigger('filters/show-selected-filters', {
-                active: params.activeFiltersContainer,
-                infobar: params.activeFiltersContainer
-            });
-        });
+
 
         on('table/dismiss-popup', function (params) {
             dismissPopup(params.target, params.tableSelector);
@@ -93,9 +81,9 @@ let table = (function () {
         on('table/deselect/hover-row', function (params) {
             deselectHoverRow(params.tableSettings.tableContainerElement);
         });
+
         //endregion
 
-        /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
         function createColumnClassName(propertyName) {
             return columnClassPrefix + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
         }
@@ -106,10 +94,6 @@ let table = (function () {
             }
         }
 
-        /*--------------------------------------------------------------------------------------*/
-
-
-        /*---------------------------CONDENSED / EXPANDED TABLE VIEW----------------------------*/
 
         function resetTableView(tableSettings) {
             tableSettings.tableContainerElement.classList.remove('table-condensed');
@@ -148,95 +132,6 @@ let table = (function () {
             });
         }
 
-
-        /*--------------------------------------------------------------------------------------*/
-
-
-        /*-------------------------------------- SORTING --------------------------------------*/
-
-
-        function getSortedHeader(tableSettings) {
-            return tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
-        }
-
-        function getSortedHeaderByAPIdata(tableSettings) {
-            return tableSettings.tableContainerElement.getElementsByClassName(`${sortOrderClassPrefix}-${tableSettings.sort.sortName}`)[0];
-        }
-
-        function markActiveColumnRows(tableSettings) {
-            let headers = getHeaders(tableSettings);
-            let columnName = null;
-            for (let i = 0; i < headers.length; i++) {
-                let header = headers[i];
-                if (header.classList.contains('active-column')) {
-                    columnName = getColumnNameFromHeadElement(header);
-                }
-            }
-            if (columnName !== null) {
-                let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-                for (let j = 0; j < columnElements.length; j++) {
-                    columnElements[j].classList.add(activeColumnElementsClass);
-                }
-            }
-        }
-
-        function setSortingAttributes(header, tableSettings) {
-            let headers = getHeaders(tableSettings);
-
-            //be sure that there's only one active header
-            for (let i = 0; i < headers.length; i++) {
-                if (headers[i] !== header) {
-                    headers[i].classList.remove('sort-active');
-                    headers[i].classList.remove('sort-asc');
-                    headers[i].classList.remove('sort-desc');
-                    headers[i].classList.remove(activeColumnElementsClass);
-                    delete headers[i].dataset.direction;
-                }
-            }
-            if (header !== undefined) {
-                header.classList.add('sort-active');
-                // header.classList.add(activeColumnElementsClass);
-                toggleSortDirectionClasses(header);
-            }
-        }
-
-        function toggleSortDirectionClasses(header) {
-            if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
-                header.classList.add(sortingClass.ascending);
-                header.dataset.direction = sortDirections.ascending;
-            } else if (header.classList.contains(sortingClass.descending)) {
-                header.classList.remove(sortingClass.descending);
-                header.classList.add(sortingClass.ascending);
-                header.dataset.direction = sortDirections.ascending;
-            } else {
-                header.classList.remove(sortingClass.ascending);
-                header.classList.add(sortingClass.descending);
-                header.dataset.direction = sortDirections.descending;
-            }
-        }
-
-        function setSorting(tableSettings) {
-            tableSettings.sort = {
-                sortDirection: null,
-                sortName: null,
-            };
-
-            let activeHeader = getSortedHeader(tableSettings);
-
-            if (activeHeader !== undefined) {
-                tableSettings.sort.sortName = activeHeader.dataset.column;
-                if (activeHeader.dataset.direction === sortDirections.ascending) {
-                    tableSettings.sort.sortDirection = sortDirections.ascending;
-                } else if (activeHeader.dataset.direction === sortDirections.descending) {
-                    tableSettings.sort.sortDirection = sortDirections.descending;
-                }
-            } else {
-                tableSettings.sort.sortName = null;
-                tableSettings.sort.sortDirection = null;
-            }
-        }
-
-
         //region refactored functions
         function init(settings, data) {
             let table = document.createElement('div');
@@ -248,7 +143,7 @@ let table = (function () {
 
             table.elements = {
                 body: generateTableBody(),
-                noDataElement: generateNoDataElement2(),
+                noDataElement: generateNoDataElement(),
                 pagination: generatePagination(),
                 pageSize: generatePageSize(table)
             };
@@ -265,6 +160,7 @@ let table = (function () {
             table.destroy = destroy;
             table.getFilters = getFilters;
             table.resetFilters = resetFilters;
+            table.setVisibleColumns = setVisibleColumns;
 
             if (!isEmpty(data)) {
                 table.update(data);
@@ -306,8 +202,7 @@ let table = (function () {
             if (settings.sort.name === column) {
                 if (settings.sort.direction === sortDirections.ascending) {
                     settings.sort.direction = sortDirections.descending;
-                }
-                if (settings.sort.direction === sortDirections.descending) {
+                } else if (settings.sort.direction === sortDirections.descending) {
                     settings.sort.direction = sortDirections.ascending;
                 }
             } else {
@@ -328,7 +223,7 @@ let table = (function () {
             let settings = table.settings;
 
             let basicData = {
-                'Page': compareFilters(table, filters) ? settings.page : 1,
+                'Page': settings.page,
                 'PageSize': settings.pageSize,
                 'SortOrder': settings.sort.direction,
                 'SortName': settings.sort.name
@@ -338,7 +233,12 @@ let table = (function () {
             filters.BasicData = basicData;
             filters.TokenInfo = tokenInfo;
 
+            let page = compareFilters(table, filters) ? settings.page : 1;
+
+            settings.page = page;
+            filters.BasicData.Page = page;
             settings.filters = filters;
+
 
             return filters;
         }
@@ -351,9 +251,36 @@ let table = (function () {
                 direction: null,
                 name: null
             }
+            for (let column in settings.columns){
+                settings.columns[column].visible = true;
+            }
+        }
+
+        function setVisibleColumns(visibleColumns) {
+            let table = this;
+            let columns = table.settings.columns;
+            if (visibleColumns.length <=0) {
+                for (let column in columns){
+                    columns[column].visible = true;
+                }
+            }
+            else {
+                for (let columnName in columns){
+                    if (visibleColumns.indexOf(columnName) >=0) {
+                        columns[columnName].visible = true;
+                    }
+                    else {
+                        let column = columns[columnName];
+                        if (column.hideable === true) {
+                            column.visible = false;
+                        }
+                    }
+                }
+            }
         }
 
 
+// region generate elements helper functions
         function generateHeaders(table) {
             let tbody = table.elements.body;
             let settings = table.settings;
@@ -535,18 +462,16 @@ let table = (function () {
             return table;
         }
 
-
-// region generate elements helper functions
         function generateTableBody() {
             let tbody = document.createElement('div');
             tbody.className = 'tbody';
             return tbody;
         }
 
-        function generateNoDataElement2() {
+        function generateNoDataElement() {
             let noDataElement = document.createElement('div');
             noDataElement.classList.add(emptyTableElementClass);
-            noDataElement.classList.add('d-hide');
+            noDataElement.classList.add(hiddenClass);
             noDataElement.innerText = 'No data to display...';
             return noDataElement;
         }
@@ -628,6 +553,32 @@ let table = (function () {
             return cell;
         }
 
+        function createHeaderTableCell(sticky) {
+            let cell = document.createElement('div');
+            cell.classList.add('head');
+            cell.classList.add('cell');
+            cell.classList.add('text-uppercase');
+            if (sticky) {
+                cell.classList.add('sticky');
+            }
+            return cell;
+        }
+
+        function createTimeUserCellHTML(time, user) {
+            let timeElement = createTableTimeElement(time);
+            let userElement = document.createElement('label');
+            userElement.innerHTML = user;
+
+            return timeElement.outerHTML + userElement.outerHTML;
+        }
+
+        function createTableTimeElement(content) {
+            let time = document.createElement('time');
+            time.classList.add('table-time');
+            time.innerHTML = content;
+            return time;
+        }
+
 
 //endregion
 
@@ -679,6 +630,8 @@ let table = (function () {
             if (table.data.items.length <= 0 || lastPage === 1) {
                 pagination.classList.add('hidden');
             } else {
+                pagination.classList.remove('hidden');
+
                 let paginationFirstPage = pagination.getElementsByClassName('pagination-first-page')[0];
                 let paginationPreviousPage = pagination.getElementsByClassName('pagination-previous-page')[0];
                 let paginationNextPage = pagination.getElementsByClassName('pagination-next-page')[0];
@@ -711,9 +664,9 @@ let table = (function () {
                         paginationArray = [activePage - 1, activePage, activePage + 1];
                     }
                 } else if (lastPage === 2) {
-                    paginationArray = ['1', '2'];
+                    paginationArray = [1, 2];
                 } else {
-                    paginationArray = ['1'];
+                    paginationArray = [1];
                 }
 
                 let paginationButtons = pagination.getElementsByClassName('element-pagination-page-button');
@@ -721,6 +674,8 @@ let table = (function () {
                 for (let i = 0; i < paginationButtons.length; i++) {
                     let button = paginationButtons[i];
                     button.classList.remove('active');
+                    button.classList.remove('hidden');
+
                     button.dataset.page = paginationArray[i];
                     button.innerHTML = paginationArray[i];
                     if (paginationArray[i] === activePage) {
@@ -772,7 +727,7 @@ let table = (function () {
         function onPagination(e) {
             let target = e.target;
             let table = target.parentNode.parentNode.parentNode;
-            table.settings.page = target.dataset.page;
+            table.settings.page = parseInt(target.dataset.page);
             //ToDo: ovde mozemo trigerovati i filter jer se na paginaciji poziva filtriranje  s api-ja
             trigger(events.pagination(table.settings.id), {table: table});
         }
@@ -783,8 +738,7 @@ let table = (function () {
                 let option = options[i];
                 option.addEventListener('click', function (e) {
                     let target = e.target;
-                    console.log(target);
-                    table.settings.pageSize = target.dataset.value;
+                    table.settings.pageSize = parseInt(target.dataset.value);
                     trigger(events.pageSize(table.settings.id), {table: table});
                     //ToDo: ovde takodje mozemo da zovemo filter posto page size inicira filtriranje
                 });
@@ -794,8 +748,6 @@ let table = (function () {
 //endregion
 
 //endregion
-
-        /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
 
 
         return {
@@ -810,32 +762,8 @@ let table = (function () {
 
 
         /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
-        function getVisibleColumnIds(tableSettings) {
-            let headers = getHeaders(tableSettings);
-            let ids = [];
-            if (tableSettings.visibleColumns.length === 0) {
-                for (let i = 0; i < headers.length; i++) {
-                    let header = headers[i];
-                    if (!isEmpty(header.dataset.columnId)) {
-                        ids.push(header.dataset.columnId);
-                    }
 
-                }
-            } else {
-                for (let i = 0; i < headers.length; i++) {
-                    let header = headers[i];
-                    let columnName = header.dataset.columnName;
-                    let columnId = header.dataset.columnId;
-                    if (!isEmpty(columnId)) {
-                        if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
-                            ids.push(columnId);
-                        }
-                    }
-                }
-            }
-            return ids;
-        }
-
+        //ToDo: sta je ovo?
         function showSelectedFilters(params) {
             let filterActive = params.active;
             let filterInfobar = params.infobar;
@@ -898,6 +826,9 @@ let table = (function () {
             if (settings.stickyColumn === undefined) {
                 settings.stickyColumn = false;
             }
+            if (settings.stickyRow === undefined) {
+                settings.stickyRow = true;
+            }
 
             if (settings.pageSize === undefined) {
                 settings.pageSize = defaultPageSize;
@@ -921,13 +852,6 @@ let table = (function () {
             table.settings = settings;
         }
 
-
-        function deselectActiveColumn(tableSettings) {
-            let activeElements = tableSettings.tableContainerElement.getElementsByClassName(activeColumnElementsClass);
-            while (activeElements.length > 0) {
-                activeElements[0].classList.remove(activeColumnElementsClass);
-            }
-        }
 
         function deselectActiveRow(table) {
             let activeElements = table.getElementsByClassName(activeRowElementsClass);
@@ -977,34 +901,20 @@ let table = (function () {
             let tableFilters = JSON.parse(JSON.stringify(settings.filters));
 
             //delete pages as that data will differ from old and new filters data
-            delete clonedFilters.BasicData.Page;
-            delete clonedFilters.TokenInfo;
+            if (clonedFilters.BasicData !== undefined) {
+                if (clonedFilters.BasicData.Page !== undefined) {
+                    delete clonedFilters.BasicData.Page;
+                }
+            }
+            if (clonedFilters.TokenInfo !== undefined) {
+                delete clonedFilters.TokenInfo;
+            }
+
             delete tableFilters.BasicData.Page;
             delete tableFilters.TokenInfo;
             return compareObjects(clonedFilters, tableFilters);
 
         }
-
-        function setFiltersPage(currentTableSettingsObject, filtersForApi) {
-
-            if (currentTableSettingsObject.filters !== null) {
-                if (currentTableSettingsObject.filters.BasicData !== undefined) {
-                    let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
-                    let clonedExistingFilters = JSON.parse(JSON.stringify(currentTableSettingsObject.filters));
-
-                    //delete pages as that data will differ from old and new filters data
-                    delete clonedFilters.BasicData.Page;
-                    delete clonedFilters.TokenInfo;
-                    delete clonedExistingFilters.BasicData.Page;
-                    delete clonedExistingFilters.TokenInfo;
-                    if (!compareObjects(clonedFilters, clonedExistingFilters)) {
-                        currentTableSettingsObject.activePage = 1;
-                        filtersForApi.BasicData.Page = 1;
-                    }
-                }
-            }
-        }
-
 
         function getRowClickEvent(tableId) {
             return `table/${tableId}/cell/clicked/`;
@@ -1025,34 +935,7 @@ let table = (function () {
 
 //endregion
 
-        /** HTML generating helper function **/
 
-        function createHeaderTableCell(sticky) {
-            let cell = document.createElement('div');
-            cell.classList.add('head');
-            cell.classList.add('cell');
-            cell.classList.add('text-uppercase');
-            if (sticky) {
-                cell.classList.add('sticky');
-            }
-            return cell;
-        }
-
-
-        function createTimeUserCellHTML(time, user) {
-            let timeElement = createTableTimeElement(time);
-            let userElement = document.createElement('label');
-            userElement.innerHTML = user;
-
-            return timeElement.outerHTML + userElement.outerHTML;
-        }
-
-        function createTableTimeElement(content) {
-            let time = document.createElement('time');
-            time.classList.add('table-time');
-            time.innerHTML = content;
-            return time;
-        }
     }
 
 )

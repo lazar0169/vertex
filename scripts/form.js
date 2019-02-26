@@ -48,7 +48,7 @@ let form = (function () {
         let data = {
             EndpointId: parseInt(formSettings.endpointId)
         };
-        //console.log('get data trigered:',formSettings.getData);
+
         trigger(formSettings.getData, {data: data, additionalData: formSettings});
     }
 
@@ -72,7 +72,6 @@ let form = (function () {
     function displayData(formSettings, data) {
         let dataToDisplay = data.Data;
         //remove elements which were created previously beacuse API value was array
-        //console.log('formSettings:',formSettings);
         let multipleValueInputContainers = Array.prototype.slice.call(formSettings.formContainerElement.getElementsByClassName('element-input-additional-array-value'));
         for (let counter = 0; counter < multipleValueInputContainers.length; counter++) {
             multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
@@ -224,8 +223,11 @@ let form = (function () {
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case inputTypes.singleSelect:
                             let valueElement = formInputElement.firstChild;
-                            dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
-                            dataForApi[formInputElement.dataset.name] = dropdown.getValue(formInputElement);
+                            console.log(formInputElement.get);
+                            console.log(valueElement.get);
+                            //dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
+                            //dataForApi[formInputElement.dataset.name] = dropdown.getValue(formInputElement);
+                            dataForApi[formInputElement.dataset.name] = formInputElement.get();
 
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();
@@ -270,7 +272,7 @@ let form = (function () {
                 dataForApi = formSettings.beforeSubmit(formSettings, dataForApi);
             }
 
-            trigger(formSettings.submitEvent, {data: dataForApi, formSettings: formSettings})
+            trigger(formSettings.submitEvent, {data: dataForApi, additionalData: formSettings})
         } else {
             return false;
         }
@@ -578,7 +580,8 @@ let form = (function () {
     });
 
     on('form/fillFormData', function (params) {
-        //console.log('params in fill form data:',params);
+        console.log('params in fill form data:',params);
+
         let formSettings = params.additionalData;
         let apiResponseData = params.data;
         displayData(formSettings, apiResponseData);

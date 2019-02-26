@@ -3,16 +3,16 @@ const ticketsFilter = (function () {
     let advanceTableFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketAdvanceFilterButton = $$('#tickets-advance-table-filter').children[0];
-    let ticketsMachinesNumbers = $$('#tickets-machines-number');
     let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#ticket-advance-table-filter-active-infobar-button').children[0];
     let ticketsAdvanceFilterApplyButton = $$('#tickets-advance-table-filter-apply').children[0];
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
-    dropdown.generate({ optionValue: machinesNumber, parent: ticketsMachinesNumbers });
-    let activeHeadElement;
+    //let ticketsMachinesNumbers = $$('#tickets-machines-number');
+    //dropdown.generate({ optionValue: machinesNumber, parent: ticketsMachinesNumbers });
 
-    /*********************----Events Listeners------*********************/
+
+
 
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
@@ -26,7 +26,7 @@ const ticketsFilter = (function () {
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     });
-    /*********************----Module Events----************************/
+
 
     on('tickets/filters/init', function (params) {
         let tableSettings = params.tableSettings;
@@ -45,37 +45,17 @@ const ticketsFilter = (function () {
         tableSettings.filtersInitialized = true;
         displayFilters(filters, tableSettings);
     });
-    on('tickets/filters/pagination', function (params) {
-        filterTicketsTable();
-    });
-    on('tickets/filters/sorting', function (params) {
-        activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
-        if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            filterTicketsTable();
-        }
-    });
-    on('tickets/filters/pageSize', function (params) {
-        let tableSettings = params.tableSettings;
-        tableSettings.activePage = 1;
-        filterTicketsTable();
-    });
     on('tickets/filters/filter-table', function (params) {
-        filterTicketsTable(params.showFilters);
+        filterTicketsTable();
     });
 
-    /*********************----Helper functions----*********************/
-    function getActiveTableSettings() {
-        return $$('#table-container-tickets').tableSettings;
-    }
+
+
 
     function filterTicketsTable() {
-        let params = {};
-        let tableSettings = getActiveTableSettings();
-        params.tableSettings = tableSettings;
-        params.data = prepareTicketsFiltersForApi(tableSettings);
-        params.activeFiltersElement = advanceTableFilterActive;
-        params.infobarElement = advanceTableFilterInfobar;
-        trigger('table/filter', params);
+        let filters = prepareTicketFilters();
+        trigger('preloader/show');
+        trigger(communication.events.tickets.previewTickets,{data:filters});
     }
 
     function removeSelectedFilters() {
@@ -84,10 +64,7 @@ const ticketsFilter = (function () {
 
     function clearTicketsFilters() {
         removeSelectedFilters();
-        let tableSettings = getActiveTableSettings();
-        tableSettings.activePage = 1;
-        tableSettings.visibleColumns = [];
-        tableSettings.filters = null;
+        $$('#table-container-tickets').resetFilters();
         filterTicketsTable();
     }
 
@@ -131,14 +108,40 @@ const ticketsFilter = (function () {
         dropdown.generate({ optionValue: hideableColumns, parent: ticketsAdvanceTableFilterColumn, type: 'multi' });
     }
 
-    function formatTicketsApiData(filterArray) {
-        if (filterArray !== undefined && filterArray !== null) {
-            filterArray.forEach(function (filter) {
-                filter.Name = localization.translateMessage(filter.Name);
-                filter.Value = filter.Name;
-            });
-            return filterArray;
+    function prepareTicketFilters() {
+        let table = $$('#table-container-aft');
+        let date = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value;
+        let dateFrom = null;
+        let dateTo = null;
+        if (date !== 'null') {
+            dateFrom = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[0];
+            dateTo = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[1];
         }
+        let machineList = $$('#aft-advance-table-filter-finished').children[1].get();
+        let jackpotList = $$('#aft-advance-table-filter-jackpot').children[1].get();
+        let statusesList = $$('#aft-advance-table-filter-status').children[1].get();
+        let typesList = $$('#aft-advance-table-filter-type').children[1].get();
+
+        let filters = {
+            'EndpointId': table.settings.endpointId,
+            'DateFrom': dateFrom,
+            'DateTo': dateTo,
+            'MachineList': machineList === 'null' ? null : machineList.split(','),
+            'JackpotList': jackpotList === 'null' ? null : jackpotList.split(','),
+            'Status': statusesList === 'null' ? null : statusesList.split(','),
+            'Type': typesList === 'null' ? null : typesList.split(','),
+        };
+        console.log('filters in prepareAftFilters',filters);
+        filters = table.getFilters(filters);
+        //mark hidden columns
+        let visibleColumns = $$('#ticket-advance-table-filter-column').children[1].get();
+        if (visibleColumns === 'null') {
+            visibleColumns = [];
+        }
+        table.setVisibleColumns(visibleColumns);
+
+
+        return filters;
     }
 
     function prepareTicketsFiltersForApi(activeTableSettings) {
