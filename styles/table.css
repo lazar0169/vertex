@@ -114,17 +114,25 @@
     cursor: pointer;
 }
 
+.head.cell.sortable:after {
+    content: '';
+    height: 13px;
+    width: 8px;
+    top: 27%;
+    margin-left: 5px;
+    visibility: hidden;
+}
+
 .head.cell.sortable:hover:after {
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px
+    margin-left: 5px;
+    visibility: visible;
 }
 .vertex-table .head.cell.sort-asc:after {
-    /*    position: absolute;
-        display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
@@ -138,8 +146,6 @@
 }
 
 .vertex-table .head.cell.sortable.sort-desc:after {
-    /*    position: absolute;
-        display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-down-table-sorting.png");
     height: 13px;

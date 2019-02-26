@@ -13,13 +13,10 @@ const aft = (function () {
 
     on('aft/activated', function (params) {
         let aftId = params.params[0].value;
-
-
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
-
+        trigger('preloader/show');
         trigger(communication.events.aft.transactions.getTransactions,{endpointId:aftId});
-
 
         //initialize add transaction form
         let addTransactionFormSettings = {};
@@ -39,7 +36,6 @@ const aft = (function () {
             name: 'EndpointName',
             value: endpointName
         });
-
 
         trigger('aft/tab/transaction', {endpointId: aftId});
         trigger('aft/tab/notification', {endpointId: aftId});
@@ -69,22 +65,26 @@ const aft = (function () {
         }
     });
     on(table.events.pageSize(aftTableId),function(params){
-        console.log('page size');
+        trigger('aft/filters/filter-table');
+
     });
     on(table.events.sort(aftTableId),function(params){
-        console.log('sort');
+        trigger('aft/filters/filter-table');
+
     });
     on(table.events.pagination(aftTableId),function(params){
-        console.log('pagination');
+        trigger('aft/filters/filter-table');
+
     });
 
 
     on(events.getTransactions,function(params){
+        console.log('params in get', params);
         if (aftTable !== null) {
             aftTable.destroy();
         }
-        aftTable = table.init({id:aftTableId,pageSizeContainer:'#aft-machines-number'},params.data.Data);
-        console.log('table2',aftTable);
+        aftTable = table.init({endpointId:params.additionalData,id:aftTableId,pageSizeContainer:'#aft-machines-number'},params.data.Data);
+        trigger('aft/filters/init',{endpointId:params.additionalData});
         $$('#aft-tabs-transaction-info').appendChild(aftTable);
 
     });
@@ -93,7 +93,6 @@ const aft = (function () {
     });
 
     on('aft/addTransaction/error', function (params) {
-
         trigger('notifications/show', {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
@@ -214,7 +213,7 @@ const aft = (function () {
             displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up', coordinates, parentCell);
         } else {
             deselectHighlightedTransaction();
-            trigger('aft/filters/filter-table', { showFilters: true });
+            trigger('aft/filters/filter-table');
         }
     }
 
@@ -275,6 +274,7 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
+            additionalData: params.endpointId,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

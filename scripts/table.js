@@ -215,23 +215,6 @@ let table = (function () {
             }
         }
 
-        function setSortDirectionOnHeader(header, sortDirection) {
-            header.classList.remove(sortingClass.ascending);
-            header.classList.remove(sortingClass.descending);
-            header.dataset.direction = null;
-            if (sortDirection === sortDirections.ascending) {
-                header.classList.add('sort-active');
-                header.classList.add(sortingClass.ascending);
-                header.dataset.direction = sortDirections.ascending;
-
-            } else if (sortDirection === sortDirections.descending) {
-                header.classList.add('sort-active');
-                header.classList.add(sortingClass.descending);
-                header.dataset.direction = sortDirections.descending;
-
-            }
-        }
-
         function setSorting(tableSettings) {
             tableSettings.sort = {
                 sortDirection: null,
@@ -251,51 +234,6 @@ let table = (function () {
                 tableSettings.sort.sortName = null;
                 tableSettings.sort.sortDirection = null;
             }
-        }
-
-        function setSortActiveColumn(tableSettings) {
-            let headers = getHeaders(tableSettings);
-            for (let header of headers) {
-                if (header.classList.contains(columnClassPrefix + tableSettings.sortActiveColumn)) {
-                    setSortingAttributes(header, tableSettings);
-                }
-            }
-        }
-
-        /*------------------------------------ FILTERING ------------------------------------*/
-
-        function collectAllFilterContainers(tableSettings) {
-            let filterElements;
-            if (tableSettings.pageSelectorId !== undefined) {
-                filterElements = $$(tableSettings.pageSelectorId).getElementsByClassName('select-container');
-            } else if (tableSettings.advancedFilterContainerSelector !== undefined) {
-                filterElements = $$(tableSettings.advancedFilterContainerSelector).getElementsByClassName('select-container');
-            } else {
-                filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('select-container'));
-            }
-            return filterElements;
-        }
-
-        function collectFiltersFromPage(tableSettings) {
-            //tableSettings.filters = {};
-            let filterContainers = collectAllFilterContainers(tableSettings);
-
-            let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
-                let name = element.dataset.name;
-                let filterElement = element.getElementsByClassName('element-table-filters')[0];
-                //proveriti s Nikolom ovo
-                //accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
-                if (filterElement !== undefined) {
-                    accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
-                } else {
-                    accumulated[name] = null;
-                }
-                return accumulated;
-            }, {});
-            if (filters.Columns === undefined || filters.Columns === null) {
-                filters.Columns = [];
-            }
-            return filters;
         }
 
 
@@ -325,8 +263,8 @@ let table = (function () {
             table.update = update;
             table.sort = sort;
             table.destroy = destroy;
-
-            //ToDo: set up page size
+            table.getFilters = getFilters;
+            table.resetFilters = resetFilters;
 
             if (!isEmpty(data)) {
                 table.update(data);
@@ -385,10 +323,34 @@ let table = (function () {
             table.parentNode.removeChild(table);
         }
 
-        function setSort(table, column, direction) {
+        function getFilters(filters) {
+            let table = this;
             let settings = table.settings;
-            settings.sort.name = column;
-            settings.sort.direction = direction;
+
+            let basicData = {
+                'Page': compareFilters(table, filters) ? settings.page : 1,
+                'PageSize': settings.pageSize,
+                'SortOrder': settings.sort.direction,
+                'SortName': settings.sort.name
+            };
+            let tokenInfo = sessionStorage.token;
+
+            filters.BasicData = basicData;
+            filters.TokenInfo = tokenInfo;
+
+            settings.filters = filters;
+
+            return filters;
+        }
+
+        function resetFilters() {
+            let settings = this.settings;
+            settings.filters = null;
+            settings.page = 1;
+            settings.sort = {
+                direction: null,
+                name: null
+            }
         }
 
 
@@ -410,10 +372,14 @@ let table = (function () {
                         class: cellColumnClass,
                         width: '1fr',
                         //header containts reference to the header node (element)
-                        header: null
+                        header: null,
+                        hideable: true
                     };
                     if (columnName === 'FlagList') {
-                        settings.columns[columnName].width = '25px';
+                        settings.columns[columnName].width = '50px';
+                        settings.columns[columnName].hideable = false;
+                    } else if (columnName === 'ActionList') {
+                        settings.columns[columnName].hideable = false;
                     }
 
                     if (columnName !== 'FlagList' && columnName !== 'ActionList') {
@@ -563,11 +529,9 @@ let table = (function () {
                     tbody.appendChild(cell);
                 }
             }
-
-            highightSortedColumn(table);
+            highlightSortedColumn(table);
             updatePagination(table);
             setDimensions(table);
-
             return table;
         }
 
@@ -676,7 +640,7 @@ let table = (function () {
             return getHeaders(table).length > 0;
         }
 
-        function highightSortedColumn(table, column, direction) {
+        function highlightSortedColumn(table, column, direction) {
             let settings = table.settings;
             if (column === undefined) {
                 column = settings.sort.name;
@@ -768,6 +732,12 @@ let table = (function () {
             }
         }
 
+        function setSort(table, column, direction) {
+            let settings = table.settings;
+            settings.sort.name = column;
+            settings.sort.direction = direction;
+        }
+
         function setDimensions(table) {
             let tbody = table.elements.body;
 
@@ -801,7 +771,6 @@ let table = (function () {
 
         function onPagination(e) {
             let target = e.target;
-            console.log('target in pagination:', target);
             let table = target.parentNode.parentNode.parentNode;
             table.settings.page = target.dataset.page;
             //ToDo: ovde mozemo trigerovati i filter jer se na paginaciji poziva filtriranje  s api-ja
@@ -831,11 +800,6 @@ let table = (function () {
 
         return {
             init: init,
-
-            collectFiltersFromPage: collectFiltersFromPage,
-            getSorting: setSorting,
-            getBounds: getBounds,
-            setFiltersPage: setFiltersPage,
             //constants
             exportTypes: exportTypes,
             events: events,
@@ -1003,6 +967,24 @@ let table = (function () {
         }
 
 //region public helper functions
+
+        function compareFilters(table, filters) {
+            let settings = table.settings;
+            if (settings.filters === null) {
+                return false;
+            }
+            let clonedFilters = JSON.parse(JSON.stringify(filters));
+            let tableFilters = JSON.parse(JSON.stringify(settings.filters));
+
+            //delete pages as that data will differ from old and new filters data
+            delete clonedFilters.BasicData.Page;
+            delete clonedFilters.TokenInfo;
+            delete tableFilters.BasicData.Page;
+            delete tableFilters.TokenInfo;
+            return compareObjects(clonedFilters, tableFilters);
+
+        }
+
         function setFiltersPage(currentTableSettingsObject, filtersForApi) {
 
             if (currentTableSettingsObject.filters !== null) {
@@ -1023,9 +1005,6 @@ let table = (function () {
             }
         }
 
-        function getBounds(tableSettings) {
-            return tableSettings.tableContainerElement.getBoundingClientRect();
-        }
 
         function getRowClickEvent(tableId) {
             return `table/${tableId}/cell/clicked/`;
@@ -1034,9 +1013,11 @@ let table = (function () {
         function getPageSizeEvent(tableId) {
             return `table/${tableId}/page-size/`;
         }
+
         function getPaginationEvent(tableId) {
             return `table/${tableId}/pagination/`;
         }
+
         function getSortEvent(tableId) {
             return `table/${tableId.id}/sort`;
         }
