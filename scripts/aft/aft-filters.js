@@ -102,7 +102,6 @@ const aftFilters = (function () {
 
     function displayFilters(filters) {
         //filter elements
-        //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
         let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
         let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
@@ -140,8 +139,8 @@ const aftFilters = (function () {
             }
         }
 
-        dropdownColumn = dropdown.generate({optionValue: columns, type: 'multi'});
-        aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
+        dropdown.generate({optionValue: columns,parent:aftAdvanceTableFilterColumn, type: 'multi'});
+
 
         dropdown.generate({
             optionValue: filters.TypeList.slice(1, filters.TypeList.lenght),
@@ -185,7 +184,6 @@ const aftFilters = (function () {
             'Status': statusesList === 'null' ? null : statusesList.split(','),
             'Type': typesList === 'null' ? null : typesList.split(','),
         };
-        console.log('filters in prepareAftFilters',filters);
         filters = table.getFilters(filters);
         //mark hidden columns
         let visibleColumns = $$('#aft-advance-table-filter-column').children[1].get();

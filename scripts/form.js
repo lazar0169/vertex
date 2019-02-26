@@ -223,8 +223,6 @@ let form = (function () {
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case inputTypes.singleSelect:
                             let valueElement = formInputElement.firstChild;
-                            console.log(formInputElement.get);
-                            console.log(valueElement.get);
                             //dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
                             //dataForApi[formInputElement.dataset.name] = dropdown.getValue(formInputElement);
                             dataForApi[formInputElement.dataset.name] = formInputElement.get();
@@ -580,7 +578,7 @@ let form = (function () {
     });
 
     on('form/fillFormData', function (params) {
-        console.log('params in fill form data:',params);
+
 
         let formSettings = params.additionalData;
         let apiResponseData = params.data;

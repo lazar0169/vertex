@@ -16,7 +16,8 @@ let table = (function () {
         let rows = [];
 
         const exportFileTypes = {
-            pdf: 'application/pdf'
+            pdf: 'application/pdf',
+            excel: 'application/xls'
         };
 
         const exportTypes = {
@@ -30,7 +31,8 @@ let table = (function () {
             rowClick: getRowClickEvent,
             pageSize: getPageSizeEvent,
             pagination: getPaginationEvent,
-            sort: getSortEvent
+            sort: getSortEvent,
+            export: getExportEvent
 
         };
 
@@ -138,6 +140,19 @@ let table = (function () {
             table.classList.add('table');
             table.classList.add('vertex-table');
             table.classList.add('table-expanded');
+
+            //check required parameters
+            if (settings.id === undefined) {
+                console.error('table settings object must have id');
+                return undefined;
+            }
+
+            if (settings.endpointId === undefined) {
+                console.error('table settings endpointId is required');
+                return undefined;
+            }
+
+
             table.setAttribute('id', settings.id);
             setDefaults(settings, table);
 
@@ -145,7 +160,10 @@ let table = (function () {
                 body: generateTableBody(),
                 noDataElement: generateNoDataElement(),
                 pagination: generatePagination(),
-                pageSize: generatePageSize(table)
+                pageSize: generatePageSize(table),
+                appearance: generateAppearanceButtons(table),
+                export: generateExportButtons(table)
+
             };
 
             table.appendChild(table.elements.body);
@@ -154,6 +172,14 @@ let table = (function () {
             if (table.settings.pageSizeContainer !== null) {
                 $$(table.settings.pageSizeContainer).appendChild(table.elements.pageSize);
             }
+            if (table.settings.exportButtonsContainer !== null) {
+                $$(table.settings.exportButtonsContainer).appendChild(table.elements.pageSize);
+            }
+            if (table.settings.pageSizeContainer !== null) {
+                $$(table.settings.pageSizeContainer).appendChild(table.elements.pageSize);
+            }
+
+
             //bind functions
             table.update = update;
             table.sort = sort;
@@ -496,8 +522,16 @@ let table = (function () {
                 bindPageSizeLinkHandlers(dd, table);
                 return dd;
             }
+        }
+
+        function generateExportButtons(table){
 
         }
+
+        function generateAppearanceButtons(table) {
+
+        }
+
 
         function createEditMachineAction() {
         }
@@ -842,6 +876,16 @@ let table = (function () {
             if (settings.pageSizeContainer === undefined) {
                 settings.pageSizeContainer = null;
             }
+            if (settings.exportButtonsContainer === undefined) {
+                settings.exportButtonsContainer = null;
+            }
+            if (settings.appearanceButtonsContainer === undefined) {
+                settings.appearanceButtonsContainer = null;
+            }
+            if (settings.exportTo === undefined) {
+                settings.exportTo = [exportFileTypes.pdf,exportFileTypes.excel]
+            }
+
             if (table.data === undefined) {
                 table.data = {
                     totalItems: 0,
@@ -853,20 +897,6 @@ let table = (function () {
         }
 
 
-        function deselectActiveRow(table) {
-            let activeElements = table.getElementsByClassName(activeRowElementsClass);
-
-            while (activeElements.length > 0) {
-                activeElements[0].classList.remove(activeRowElementsClass);
-            }
-        }
-
-        function deselectHoverRow(table) {
-            let elements = table.getElementsByClassName('hover');
-            while (elements.length > 0) {
-                elements[0].classList.remove('hover');
-            }
-        }
 
         function onTableExportButtonClicked(event) {
             let button = event.target;
@@ -929,7 +959,10 @@ let table = (function () {
         }
 
         function getSortEvent(tableId) {
-            return `table/${tableId.id}/sort`;
+            return `table/${tableId}/sort`;
+        }
+        function getExportEvent(tableId) {
+            return `table/${tableId}/export`;
         }
 
 

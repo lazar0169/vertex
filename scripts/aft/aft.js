@@ -18,7 +18,7 @@ const aft = (function () {
         selectInfoContent('aft-tabs-transaction');
 
         trigger('preloader/show');
-        trigger(communication.events.aft.transactions.getTransactions,{endpointId:aftId});
+        trigger(communication.events.aft.transactions.getTransactions, {endpointId: aftId});
 
         //initialize add transaction form
         let addTransactionFormSettings = {};
@@ -28,7 +28,7 @@ const aft = (function () {
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
 
-        trigger('form/init', { formSettings: addTransactionFormSettings });
+        trigger('form/init', {formSettings: addTransactionFormSettings});
         let endpointName = '';
         if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
             endpointName = $$('.link-active')[0].dataset.value;
@@ -41,7 +41,6 @@ const aft = (function () {
 
         trigger('aft/tab/transaction', {endpointId: aftId});
         trigger('aft/tab/notification', {endpointId: aftId});
-
 
 
     });
@@ -59,41 +58,46 @@ const aft = (function () {
     });
 
     /*********************----Module Events------*********************/
-    on(table.events.rowClick(aftTableId),function(params){
+    on(table.events.rowClick(aftTableId), function (params) {
         let event = params.event;
         let target = params.target;
         if (target.additionalData.Properties.IsPayoutPossible) {
             onTableCellClick(event, target);
         }
     });
-    on(table.events.pageSize(aftTableId),function(params){
+    on(table.events.pageSize(aftTableId), function (params) {
         trigger('aft/filters/filter-table');
 
     });
-    on(table.events.sort(aftTableId),function(params){
+    on(table.events.sort(aftTableId), function (params) {
         trigger('aft/filters/filter-table');
 
     });
-    on(table.events.pagination(aftTableId),function(params){
+    on(table.events.pagination(aftTableId), function (params) {
         trigger('aft/filters/filter-table');
 
     });
 
 
-    on(events.getTransactions,function(params) {
+    on(events.getTransactions, function (params) {
         if (aftTable !== null) {
             aftTable.destroy();
         }
-        aftTable = table.init({endpointId:params.additionalData,id:aftTableId,pageSizeContainer:'#aft-machines-number'},params.data.Data);
-        trigger('aft/filters/init',{endpointId:params.additionalData});
+        aftTable = table.init({
+            endpointId: params.additionalData,
+            id: aftTableId,
+            pageSizeContainer: '#aft-machines-number',
+            exportButtonsContainer: '#wrapper-aft-export-to',
+            appearanceButtonsContainer: ''
+        }, params.data.Data);
+        trigger('aft/filters/init', {endpointId: params.additionalData});
         $$('#aft-tabs-transaction-info').appendChild(aftTable);
     });
 
-    on(events.previewTransactions,function(params){
+    on(events.previewTransactions, function (params) {
         let data = params.data.Data;
-        console.log(data);
         $$(aftTableSelector).update(data);
-        //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide iz filtera, samo treba da se trigeruje nešto ako se ne varam.
+        //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
     on('aft/addTransaction/error', function (params) {
@@ -101,16 +105,16 @@ const aft = (function () {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
-        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
-        trigger('aft/filters/filter-table', { showFilters: false });
+        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('aft/filters/filter-table', {showFilters: false});
     });
     on('aft/addTransaction/success', function (params) {
-        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
-        trigger('aft/filters/filter-table', { showFilters: false });
+        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('aft/filters/filter-table', {showFilters: false});
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('aft/filters/filter-table', {showFilters: false});
         trigger('show/app');
-        trigger('form/reset', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
+        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode.toString()),
@@ -256,8 +260,8 @@ const aft = (function () {
 
     function deselectHighlightedTransaction() {
         let tableSettings = $$(aftTableSelector).tableSettings;
-        trigger('table/deselect/active-row', { tableSettings: tableSettings });
-        trigger('table/deselect/hover-row', { tableSettings: tableSettings });
+        trigger('table/deselect/active-row', {tableSettings: tableSettings});
+        trigger('table/deselect/hover-row', {tableSettings: tableSettings});
     }
 
 
@@ -268,7 +272,7 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.getTransactions;
         let request = communication.requestTypes.post;
         let data = {
-           'EndpointId': params.endpointId
+            'EndpointId': params.endpointId
         }
         let successEvent = events.getTransactions;
         let errorEvent = '';
@@ -462,7 +466,7 @@ const aft = (function () {
             };
         }
         data.SelectedColumns = params.selectedColumns;
-        communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data, table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf }, [{
+        communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data, table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf}, [{
             name: 'responseType',
             value: 'arraybuffer'
         }]);

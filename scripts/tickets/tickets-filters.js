@@ -29,21 +29,14 @@ const ticketsFilter = (function () {
 
 
     on('tickets/filters/init', function (params) {
-        let tableSettings = params.tableSettings;
-        getFiltersFromAPI(tableSettings);
+        let endpointId = params.endpointId;
+        getFiltersFromAPI(endpointId);
     });
 
     on('tickets/filters/display', function (params) {
         let apiResponseData = params.data;
-        let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
-
-        filters.PrintedAndRedeemed = formatTicketsApiData(filters.PrintedAndRedeemed);
-        filters.TicketStateList = formatTicketsApiData(filters.TicketStateList);
-        filters.TypesList = formatTicketsApiData(filters.TypesList);
-
-        tableSettings.filtersInitialized = true;
-        displayFilters(filters, tableSettings);
+        displayFilters(filters);
     });
     on('tickets/filters/filter-table', function (params) {
         filterTicketsTable();
@@ -68,16 +61,14 @@ const ticketsFilter = (function () {
         filterTicketsTable();
     }
 
-    function getFiltersFromAPI(tableSettings) {
+    function getFiltersFromAPI(endpointId) {
         let data = {
-            'EndpointId': tableSettings.endpointId
+            'EndpointId': endpointId
         };
-        let tableSettingsObject = tableSettings;
         let successEvent = 'tickets/filters/display';
         trigger(communication.events.tickets.getFilters, {
             data: data,
             successEvent: successEvent,
-            tableSettings: tableSettingsObject
         });
     }
 
@@ -89,91 +80,77 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFiltersRedeemed = $$('#tickets-advance-table-filter-redeemed');
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
 
-        // let states = table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
         dropdown.generate({ optionValue: filters.TicketStateList, parent: ticketsAdvanceTableFiltersStatus, type: 'multi' });
-        // let types = table.parseFilterValues(filters.TypesList, 'Name', 'Id', -1);
         dropdown.generate({ optionValue: filters.TypesList, parent: ticketsAdvanceTableFiltersTypes, type: 'multi' });
         dropdown.generate({ optionValue: filters.PrintedAndRedeemed, parent: ticketsAdvanceTableFiltersPrinted, type: 'multi' });
         dropdown.generate({ optionValue: filters.PrintedAndRedeemed, parent: ticketsAdvanceTableFiltersRedeemed, type: 'multi' });
+
         //hide/show columns picker
-        ticketsAdvanceTableFilterColumn.classList.add('table-element-select-columns');
-        ticketsAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
-        let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({ Name: '-', Id: null });
-        //ToDo Neske: this can be removed when solution for parsed hack is found
-        // let columns = hideableColumns.map(function (item) {
-        //     item.parsed = true;
-        //     return item;
-        // });
-        dropdown.generate({ optionValue: hideableColumns, parent: ticketsAdvanceTableFilterColumn, type: 'multi' });
+        let ticketsTable = $$('#table-container-tickets');
+        let columns = [];
+        //add no select element
+        columns.push({
+            Name:'-',
+            Id: -1
+        });
+        for (let columnKey in ticketsTable.settings.columns) {
+            let column = ticketsTable.settings.columns[columnKey];
+            if (column.hideable === true) {
+                columns.push({
+                    Id: column.column,
+                    Name: column.column
+                })
+            }
+        }
+
+        dropdown.generate({optionValue: columns,parent:ticketsAdvanceTableFilterColumn, type: 'multi'});
+
     }
 
     function prepareTicketFilters() {
-        let table = $$('#table-container-aft');
-        let date = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value;
-        let dateFrom = null;
-        let dateTo = null;
-        if (date !== 'null') {
-            dateFrom = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[0];
-            dateTo = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[1];
+        let table = $$('#table-container-tickets');
+        let printDate = $$('#tickets-advance-table-filter-print-date').children[1].children[0].dataset.value;
+        let printDateFrom = null;
+        let printDateTo = null;
+        if (printDate !== 'null') {
+            printDateFrom = $$('#tickets-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[0];
+            printDateTo = $$('#tickets-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[1];
         }
-        let machineList = $$('#aft-advance-table-filter-finished').children[1].get();
-        let jackpotList = $$('#aft-advance-table-filter-jackpot').children[1].get();
-        let statusesList = $$('#aft-advance-table-filter-status').children[1].get();
-        let typesList = $$('#aft-advance-table-filter-type').children[1].get();
+
+        let redeemedDate = $$('#tickets-advance-table-filter-redeem-date').children[1].children[0].dataset.value;
+        let redeemedDateFrom = null;
+        let redeemedDateTo = null;
+        if (redeemedDate !== 'null') {
+            redeemedDateFrom = $$('#tickets-advance-table-filter-redeem-date').children[1].children[0].dataset.value.split(',')[0];
+            redeemedDateTo = $$('#tickets-advance-table-filter-redeem-date').children[1].children[0].dataset.value.split(',')[1];
+        }
+
+
+        let statuses = $$('#tickets-advance-table-filter-status').children[1].get();
+        let types = $$('#tickets-advance-table-filter-types').children[1].get();
+        let printed = $$('#tickets-advance-table-filter-printed').children[1].get();
+        let redeemed = $$('#tickets-advance-table-filter-redeemed').children[1].get();
 
         let filters = {
             'EndpointId': table.settings.endpointId,
-            'DateFrom': dateFrom,
-            'DateTo': dateTo,
-            'MachineList': machineList === 'null' ? null : machineList.split(','),
-            'JackpotList': jackpotList === 'null' ? null : jackpotList.split(','),
-            'Status': statusesList === 'null' ? null : statusesList.split(','),
-            'Type': typesList === 'null' ? null : typesList.split(','),
+            'DateFrom': printDateFrom,
+            'DateTo': printDateTo,
+            'RedeemDateFrom': redeemedDateFrom,
+            'RedeemDateTo': redeemedDateTo,
+            'PrintedList': printed,
+            'RedeemList': redeemed,
+            'Status': statuses,
+            'Type': types,
         };
-        console.log('filters in prepareAftFilters',filters);
+
         filters = table.getFilters(filters);
         //mark hidden columns
-        let visibleColumns = $$('#ticket-advance-table-filter-column').children[1].get();
+        let visibleColumns = $$('#tickets-advance-table-filter-column').children[1].get();
         if (visibleColumns === 'null') {
             visibleColumns = [];
         }
         table.setVisibleColumns(visibleColumns);
-
-
         return filters;
-    }
-
-    function prepareTicketsFiltersForApi(activeTableSettings) {
-        if (activeTableSettings === undefined) {
-            activeTableSettings = getActiveTableSettings();
-        }
-        let pageFilters = table.collectFiltersFromPage(activeTableSettings);
-        let sortDirection = activeTableSettings.sort.sortDirection;
-        let sortName = activeTableSettings.sort.sortName;
-        let filtersForApi = {
-            'EndpointId': activeTableSettings.endpointId,
-            'DateFrom': pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
-            'DateTo': pageFilters.PrintDate !== null ? pageFilters.PrintDate[0] : pageFilters.PrintDate,
-            'RedeemDateFrom': pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            'RedeemDateTo': pageFilters.RedeemDate !== null ? pageFilters.RedeemDate[0] : pageFilters.RedeemDate,
-            'PrintedList': pageFilters.Printed,
-            'RedeemList': pageFilters.Redeemed,
-            'Status': pageFilters.Status,
-            'Type': pageFilters.TypesList,
-            'BasicData': {
-                'Page': activeTableSettings.activePage,
-                'PageSize': parseInt(pageFilters.PageSize),
-                'SortOrder': sortDirection,
-                'SortName': sortName
-            },
-            'TokenInfo': sessionStorage.token
-        };
-        table.setFiltersPage(activeTableSettings, filtersForApi);
-        //Set visible columns for tableSettings object
-        activeTableSettings.visibleColumns = pageFilters.Columns;
-        activeTableSettings.filters = filtersForApi;
-        return filtersForApi;
     }
 })();
 

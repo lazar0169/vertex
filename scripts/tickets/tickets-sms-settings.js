@@ -5,7 +5,6 @@ let ticketsSmsSettings = (function(){
     formSettingsSmsSettings.submitEvent = communication.events.tickets.saveSmsSettings;
 
     formSettingsSmsSettings.afterDisplayData = function(formSettings,data) {
-        console.log('after display',data);
         let enableSMS = data.Data.EnableSms === true;
         let enableEmail = data.Data.EnableEmail === true;
 

@@ -29,11 +29,13 @@ const tickets = (function () {
             ticketsTable.destroy();
         }
         ticketsTable = table.init({endpointId:params.additionalData,id:ticketTableId,pageSizeContainer:'#tickets-machines-number'},params.data.Data);
-        trigger('aft/filters/init',{endpointId:params.additionalData});
+        trigger('tickets/filters/init',{endpointId:params.additionalData});
         $$('#tickets-tab-info').appendChild(ticketsTable);
     });
     on(events.previewTickets, function (params) {
-
+        let data = params.data.Data;
+        $$(`#${ticketTableId}`).update(data);
+        //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
     on(table.events.pageSize(ticketTableId),function(){
@@ -93,14 +95,12 @@ const tickets = (function () {
         let route = communication.apiRoutes.tickets.previewTickets;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
+        let successEvent = events.previewTickets;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -125,14 +125,12 @@ const tickets = (function () {
 
     //tickets getting values for show sms settings
     on(communication.events.tickets.showSmsSettings, function (params) {
-        console.log('show sms settings:',params);
         let route = communication.apiRoutes.tickets.showSmsSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
         let formSettings = params.additionalData;
         let successEvent = formSettings.populateData;
         let errorEvent = '';
-        console.log(formSettings.populateData);
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
