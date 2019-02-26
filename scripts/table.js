@@ -16,15 +16,16 @@ let table = (function () {
         let rows = [];
 
         const exportFileTypes = {
-            pdf: 'application/pdf',
-            excel: 'application/xls'
+            pdf: {
+                type: 'application/pdf',
+                name: 'pdf'
+            },
+            excel: {
+                type: 'application/xls',
+                name: 'xls'
+            }
         };
 
-        const exportTypes = {
-            event: 'event',
-            url: 'url',
-            callback: 'callback'
-        };
 
         const events = {
             saveExportedFile: 'table/export/save-file',
@@ -64,24 +65,6 @@ let table = (function () {
             link.href = window.URL.createObjectURL(blob);
             link.download = 'Report.pdf';
             link.click();
-        });
-        on('table/show-selected-filters/infobar', showSelectedFilters);
-
-
-        on('table/dismiss-popup', function (params) {
-            dismissPopup(params.target, params.tableSelector);
-        });
-        on('table/disable-scroll', function (params) {
-            disableScroll(params.tableSelector);
-        });
-        on('table/enable-scroll', function (params) {
-            enableScroll(params.tableSelector);
-        });
-        on('table/deselect/active-row', function (params) {
-            deselectActiveRow(params.tableSettings.tableContainerElement);
-        });
-        on('table/deselect/hover-row', function (params) {
-            deselectHoverRow(params.tableSettings.tableContainerElement);
         });
 
         //endregion
@@ -148,7 +131,7 @@ let table = (function () {
             }
 
             if (settings.endpointId === undefined) {
-                console.error('table settings endpointId is required');
+                console.error(`table ${settings.id} settings endpointId is required`);
                 return undefined;
             }
 
@@ -169,14 +152,34 @@ let table = (function () {
             table.appendChild(table.elements.body);
             table.appendChild(table.elements.noDataElement);
             table.appendChild(table.elements.pagination);
+
             if (table.settings.pageSizeContainer !== null) {
-                $$(table.settings.pageSizeContainer).appendChild(table.elements.pageSize);
+                if ($$(table.settings.pageSizeContainer) === null) {
+                    console.error(`table ${settings.id} page size container selector cannot find any element`)
+                } else {
+                    $$(table.settings.pageSizeContainer).appendChild(table.elements.pageSize);
+                }
             }
+
             if (table.settings.exportButtonsContainer !== null) {
-                $$(table.settings.exportButtonsContainer).appendChild(table.elements.pageSize);
+                let container = $$(table.settings.exportButtonsContainer);
+                if (container === null) {
+                    console.error(`table ${settings.id} export buttons  container selector cannot find any element`)
+                } else {
+                    for (let key in table.elements.export) {
+                        container.appendChild(table.elements.export[key]);
+                        container.classList.remove(hiddenClass);
+                    }
+                }
             }
-            if (table.settings.pageSizeContainer !== null) {
-                $$(table.settings.pageSizeContainer).appendChild(table.elements.pageSize);
+            if (table.settings.appearanceButtonsContainer !== null) {
+                if ($$(table.settings.appearanceButtonsContainer) === null) {
+                    console.error(`table ${settings.id} appearance buttons ontainer selector cannot find any element`)
+                } else {
+                    for (let key in table.elements.appearance) {
+                        $$(table.settings.appearanceButtonsContainer).appendChild(table.elements.appearance[key]);
+                    }
+                }
             }
 
 
@@ -240,7 +243,22 @@ let table = (function () {
 
         function destroy() {
             let table = this;
-            table.elements.pageSize.parentNode.removeChild(table.elements.pageSize);
+            if (table.settings.pageSizeContainer !== null && $$(table.settings.pageSizeContainer) !== null) {
+                $$(table.settings.pageSizeContainer).removeChild(table.elements.pageSize);
+            }
+            if (table.settings.exportButtonsContainer !== null && $$(table.settings.exportButtonsContainer) !== null) {
+                let container = $$(table.settings.exportButtonsContainer);
+                for (let key in table.elements.export) {
+                    container.removeChild(table.elements.export[key]);
+                    container.classList.add(hiddenClass);
+                }
+            }
+            if (table.settings.appearanceButtonsContainer !== null && $$(table.settings.appearanceButtonsContainer) !== null) {
+                for (let key in table.elements.appearance) {
+                    $$(table.settings.appearanceButtonsContainer).removeChild(table.elements.appearance[key]);
+                }
+            }
+
             table.parentNode.removeChild(table);
         }
 
@@ -277,7 +295,7 @@ let table = (function () {
                 direction: null,
                 name: null
             }
-            for (let column in settings.columns){
+            for (let column in settings.columns) {
                 settings.columns[column].visible = true;
             }
         }
@@ -285,17 +303,15 @@ let table = (function () {
         function setVisibleColumns(visibleColumns) {
             let table = this;
             let columns = table.settings.columns;
-            if (visibleColumns.length <=0) {
-                for (let column in columns){
+            if (visibleColumns.length <= 0) {
+                for (let column in columns) {
                     columns[column].visible = true;
                 }
-            }
-            else {
-                for (let columnName in columns){
-                    if (visibleColumns.indexOf(columnName) >=0) {
+            } else {
+                for (let columnName in columns) {
+                    if (visibleColumns.indexOf(columnName) >= 0) {
                         columns[columnName].visible = true;
-                    }
-                    else {
+                    } else {
                         let column = columns[columnName];
                         if (column.hideable === true) {
                             column.visible = false;
@@ -524,12 +540,48 @@ let table = (function () {
             }
         }
 
-        function generateExportButtons(table){
-
+        function generateExportButtons(table) {
+            let settings = table.settings;
+            let buttons = [];
+            for (let i = 0; i < settings.exportTo.length; i++) {
+                let exportType = settings.exportTo[i];
+                let element = document.createElement('div');
+                element.classList.add(`table-export-${exportType.name}`);
+                element.classList.add('table-export');
+                element.dataset.fileType = exportType.type;
+                element.dataset.fileTypeName = exportType.name;
+                element.addEventListener('click', function () {
+                    trigger(getExportEvent(settings.id), {table: table, type: exportType});
+                });
+                buttons.push(element);
+            }
+            return buttons;
         }
 
         function generateAppearanceButtons(table) {
+            let expand = document.createElement('span');
+            expand.classList.add('mdi', 'show-space');
+            expand.classList.add('mdi-view-sequential', 'show-table-expanded', 'show-space-active');
 
+            let condense = document.createElement('span');
+            condense.classList.add('mdi', 'show-space');
+            condense.classList.add('mdi-view-headline', 'show-table-condensed');
+
+
+            expand.addEventListener('click', function () {
+                table.classList.remove('table-condensed');
+                table.classList.add('table-expanded');
+                expand.classList.add('show-space-active');
+                condense.classList.remove('show-space-active');
+            });
+
+            condense.addEventListener('click', function () {
+                table.classList.add('table-condensed');
+                table.classList.remove('table-expanded');
+                expand.classList.remove('show-space-active');
+                condense.classList.add('show-space-active');
+            });
+            return [expand, condense];
         }
 
 
@@ -787,7 +839,6 @@ let table = (function () {
         return {
             init: init,
             //constants
-            exportTypes: exportTypes,
             events: events,
             exportFileTypes: exportFileTypes,
         };
@@ -797,7 +848,7 @@ let table = (function () {
 
         /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
 
-        //ToDo: sta je ovo?
+//ToDo: sta je ovo?
         function showSelectedFilters(params) {
             let filterActive = params.active;
             let filterInfobar = params.infobar;
@@ -883,8 +934,8 @@ let table = (function () {
                 settings.appearanceButtonsContainer = null;
             }
             if (settings.exportTo === undefined) {
-                settings.exportTo = [exportFileTypes.pdf,exportFileTypes.excel]
-            }
+                settings.exportTo = [exportFileTypes.pdf, exportFileTypes.excel]
+            }//ToDo: ovde moze da se ispita da clanovi prosledjenog niza exportTo poticu iz exportFileTypes
 
             if (table.data === undefined) {
                 table.data = {
@@ -895,7 +946,6 @@ let table = (function () {
 
             table.settings = settings;
         }
-
 
 
         function onTableExportButtonClicked(event) {
@@ -961,6 +1011,7 @@ let table = (function () {
         function getSortEvent(tableId) {
             return `table/${tableId}/sort`;
         }
+
         function getExportEvent(tableId) {
             return `table/${tableId}/export`;
         }

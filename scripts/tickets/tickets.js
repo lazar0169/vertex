@@ -28,8 +28,14 @@ const tickets = (function () {
         if (ticketsTable !== null) {
             ticketsTable.destroy();
         }
-        ticketsTable = table.init({endpointId:params.additionalData,id:ticketTableId,pageSizeContainer:'#tickets-machines-number'},params.data.Data);
-        trigger('tickets/filters/init',{endpointId:params.additionalData});
+        ticketsTable = table.init({
+                endpointId: params.additionalData,
+                id: ticketTableId, pageSizeContainer: '#tickets-machines-number',
+                exportButtonsContainer: '#wrapper-tickets-export-to',
+                appearanceButtonsContainer: '#tickets-show-space'
+            },
+            params.data.Data);
+        trigger('tickets/filters/init', {endpointId: params.additionalData});
         $$('#tickets-tab-info').appendChild(ticketsTable);
     });
     on(events.previewTickets, function (params) {
@@ -38,15 +44,15 @@ const tickets = (function () {
         //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
-    on(table.events.pageSize(ticketTableId),function(){
+    on(table.events.pageSize(ticketTableId), function () {
         trigger('tickets/filters/filter-table');
 
     });
-    on(table.events.sort(ticketTableId),function(){
+    on(table.events.sort(ticketTableId), function () {
         trigger('tickets/filters/filter-table');
 
     });
-    on(table.events.pagination(ticketTableId),function(){
+    on(table.events.pagination(ticketTableId), function () {
         trigger('tickets/filters/filter-table');
 
     });
@@ -143,7 +149,7 @@ const tickets = (function () {
 
     //tickets SaveTitoSmsAction
     on(communication.events.tickets.saveSmsSettings, function (params) {
-        console.log('params:',params);
+        console.log('params:', params);
         let route = communication.apiRoutes.tickets.saveSmsSettings;
         let request = communication.requestTypes.post;
         let data = params.data;

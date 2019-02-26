@@ -88,7 +88,7 @@ const aft = (function () {
             id: aftTableId,
             pageSizeContainer: '#aft-machines-number',
             exportButtonsContainer: '#wrapper-aft-export-to',
-            appearanceButtonsContainer: ''
+            appearanceButtonsContainer: '#aft-show-space'
         }, params.data.Data);
         trigger('aft/filters/init', {endpointId: params.additionalData});
         $$('#aft-tabs-transaction-info').appendChild(aftTable);
