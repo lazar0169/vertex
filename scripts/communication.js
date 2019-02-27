@@ -122,7 +122,9 @@ let communication = (function () {
                 saveBasicSettings: 'communicate/aft/saveBasicSettings',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
-                getFilters: 'communicate/aft/getFilters'
+                getFilters: 'communicate/aft/getFilters',
+                exportToPDF: 'communicate/aft/export/pdf',
+                exportToXLS: 'communicate/aft/export/xls'
             },
             data: {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'

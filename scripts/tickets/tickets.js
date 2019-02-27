@@ -56,6 +56,51 @@ const tickets = (function () {
         trigger('tickets/filters/filter-table');
 
     });
+    on(table.events.export(ticketTableId), function (params) {
+        console.log(params);
+
+        trigger('preloader/show');
+
+        let ticketsTable = params.table;
+
+        let filters = null;
+
+        if (ticketsTable.settings.filters === null) {
+            filters = {
+                'EndpointId': ticketsTable.settings.endpointId,
+                'DateFrom': null,
+                'DateTo': null,
+                'RedeemDateFrom': null,
+                'RedeemDateTo': null,
+                'PrintedList': [],
+                'RedeemList': [],
+                'Status': [],
+                'Type': [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        } else {
+            //clone table filters;
+            filters = ticketsTable.cloneFiltersForExport();
+        }
+
+        filters.selectedColumns = ticketsTable.getVisibleColumns();
+        let event = null;
+        switch (params.type.name) {
+            case table.exportFileTypes.pdf.name:
+                event = communication.events.tickets.exportToPDF;
+                break;
+            case table.exportFileTypes.excel.name:
+                event = communication.events.aft.tickets.exportToXLS;
+                break;
+            default:
+                console.error('unsuported export type');
+                break;
+        }
+        trigger(event, {data: filters});
+    });
 
 
     //endregion
@@ -239,37 +284,15 @@ const tickets = (function () {
     });
 
     on(communication.events.tickets.exportToPDF, function (params) {
-        let data = null;
-        if (params.tableSettings.filters !== null) {
-            //clone filters
-            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
-            delete data.BasicData.Page;
-            delete data.BasicData.PageSize;
-            delete data.TokenInfo;
-        } else {
-            data = {
-                EndpointId: params.tableSettings.endpointId,
-                DateFrom: null,
-                DateTo: null,
-                MachineList: [],
-                JackpotList: [],
-                Status: [],
-                Type: [],
-                BasicData: {
-                    SortOrder: null,
-                    SortName: null
-                },
-            };
-        }
-
-        data.SelectedColumns = params.selectedColumns;
-        communication.sendRequest(communication.apiRoutes.tickets.exportToPDF, communication.requestTypes.post, data, table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf}, [{
-            name: 'responseType',
-            value: 'arraybuffer'
-        }]);
+        let data = params.data;
+        communication.sendRequest(communication.apiRoutes.tickets.exportToPDF, communication.requestTypes.post, data,
+            table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf.type}, [{
+                name: 'responseType',
+                value: 'arraybuffer'
+            }]);
     });
 
     on(communication.events.tickets.exportToXLS, function (params) {
-
+        //ToDo
     });
 })();

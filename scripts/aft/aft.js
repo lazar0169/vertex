@@ -78,6 +78,49 @@ const aft = (function () {
 
     });
 
+    on(table.events.export(aftTableId), function (params) {
+        console.log(params);
+
+        trigger('preloader/show');
+
+        let aftTable = params.table;
+
+        let filters = null;
+
+        if (aftTable.settings.filters === null) {
+            filters = {
+                'EndpointId': aftTable.settings.endpointId,
+                'DateFrom': null,
+                'DateTo': null,
+                'MachineList': [],
+                'JackpotList': [],
+                'Status': [],
+                'Type': [],
+                BasicData: {
+                    SortOrder: null,
+                    SortName: null
+                },
+            };
+        } else {
+            //clone table filters;
+           filters = aftTable.cloneFiltersForExport();
+        }
+        filters.selectedColumns = aftTable.getVisibleColumns();
+        let event = null;
+        switch (params.type.name) {
+            case table.exportFileTypes.pdf.name:
+                event = communication.events.aft.transactions.exportToPDF;
+                break;
+            case table.exportFileTypes.excel.name:
+                event = communication.events.aft.transactions.exportToXLS;
+                break;
+            default:
+                console.error('unsuported export type');
+                break;
+        }
+        trigger(event,{data:filters});
+    });
+
 
     on(events.getTransactions, function (params) {
         if (aftTable !== null) {
@@ -440,39 +483,16 @@ const aft = (function () {
         });
     });
 
-    //ToDo: možda može da se prosledi type i url is table settingsa pa da event bude univerzalan?
     on(communication.events.aft.transactions.exportToPDF, function (params) {
-
-        let data = null;
-        if (params.tableSettings.filters !== null) {
-            //clone filters
-            data = JSON.parse(JSON.stringify(params.tableSettings.filters));
-            delete data.BasicData.Page;
-            delete data.BasicData.PageSize;
-            delete data.TokenInfo;
-        } else {
-            data = {
-                EndpointId: params.tableSettings.endpointId,
-                DateFrom: null,
-                DateTo: null,
-                MachineList: [],
-                JackpotList: [],
-                Status: [],
-                Type: [],
-                BasicData: {
-                    SortOrder: null,
-                    SortName: null
-                },
-            };
-        }
-        data.SelectedColumns = params.selectedColumns;
-        communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data, table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf}, [{
+        let data = params.data;
+        communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data,
+            table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf.type}, [{
             name: 'responseType',
             value: 'arraybuffer'
         }]);
     });
 
     on(communication.events.aft.transactions.exportToXLS, function (params) {
-
+        //ToDo
     });
 })();

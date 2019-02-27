@@ -65,6 +65,7 @@ let table = (function () {
             link.href = window.URL.createObjectURL(blob);
             link.download = 'Report.pdf';
             link.click();
+            trigger('preloader/hide');
         });
 
         //endregion
@@ -93,31 +94,9 @@ let table = (function () {
             tableSettings.tableContainerElement.classList.add('table-expanded');
         }
 
-        function bindExportToHandlers(tableSettings) {
-            let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
-            for (let i = 0; i < exportButtons.length; i++) {
-                exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
-                exportButtons[i].addEventListener('click', onTableExportButtonClicked);
-            }
-        }
 
-        function bindTableViewLinkHandlers(tableSettings) {
-            let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
-            let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0];
+        //region public functions
 
-            tableCondensedButton.addEventListener('click', function () {
-                resetTableView(tableSettings);
-                tableSettings.tableContainerElement.classList.add('table-condensed');
-                tableCondensedButton.classList.add('show-space-active');
-            });
-            tableThickButton.addEventListener('click', function () {
-                resetTableView(tableSettings);
-                tableSettings.tableContainerElement.classList.add('table-expanded');
-                tableThickButton.classList.add('show-space-active');
-            });
-        }
-
-        //region refactored functions
         function init(settings, data) {
             let table = document.createElement('div');
             table.classList.add('table');
@@ -172,6 +151,7 @@ let table = (function () {
                     }
                 }
             }
+
             if (table.settings.appearanceButtonsContainer !== null) {
                 if ($$(table.settings.appearanceButtonsContainer) === null) {
                     console.error(`table ${settings.id} appearance buttons ontainer selector cannot find any element`)
@@ -182,7 +162,6 @@ let table = (function () {
                 }
             }
 
-
             //bind functions
             table.update = update;
             table.sort = sort;
@@ -190,6 +169,8 @@ let table = (function () {
             table.getFilters = getFilters;
             table.resetFilters = resetFilters;
             table.setVisibleColumns = setVisibleColumns;
+            table.getVisibleColumns = getVisibleColumns;
+            table.cloneFiltersForExport = cloneFiltersForExport;
 
             if (!isEmpty(data)) {
                 table.update(data);
@@ -321,8 +302,43 @@ let table = (function () {
             }
         }
 
+        function getVisibleColumns(onlyHideable) {
+            if (onlyHideable === undefined) {
+                onlyHideable = true;
+            }
 
-// region generate elements helper functions
+            let settings = this.settings;
+            let columns = [];
+            for (let columnName in settings.columns) {
+                let column = settings.columns[columnName];
+                if (onlyHideable) {
+                    if (column.visible === true && column.hideable === true) {
+                        columns.push(columnName);
+                    }
+                }
+                else {
+                    if (column.visible === true){
+                        columns.push(columnName);
+                    }
+                }
+            }
+            return columns;
+        }
+
+        function cloneFiltersForExport() {
+            let table = this;
+            let filters = JSON.parse(JSON.stringify(table.settings.filters));
+            if (filters.BasicData !== undefined) {
+                delete filters.BasicData.Page;
+                delete filters.BasicData.PageSize;
+                delete filters.TokenInfo;
+            }
+            return filters;
+        }
+
+        //endregion
+
+        //region generate elements helper functions
         function generateHeaders(table) {
             let tbody = table.elements.body;
             let settings = table.settings;
@@ -461,7 +477,7 @@ let table = (function () {
                 let columnIndex = 0;
                 for (let column in tempRow) {
                     // noinspection JSUnfilteredForInLoop
-                    let cell = generateRowCell(rowId, column, settings, rowData);
+                    let cell = createRowCell(rowId, column, settings, rowData);
                     //add column number class
                     cell.classList.add(`table-column-${columnIndex + 1}`);
 
@@ -586,6 +602,7 @@ let table = (function () {
 
 
         function createEditMachineAction() {
+            //ToDo:
         }
 
         function createCancelTransactionAction() {
@@ -602,18 +619,22 @@ let table = (function () {
         }
 
         function createEditJackpotAction() {
+            //ToDo:
         }
 
         function createEditMalfunctionAction() {
+            //ToDo:
         }
 
         function createEditUserAction() {
+            //ToDo:
         }
 
         function createDeleteUserAction() {
+            //ToDo:
         }
 
-        function generateRowCell(rowId, column, settings, rowData) {
+        function createRowCell(rowId, column, settings, rowData) {
             let cellColumnClass = createColumnClassName(column);
             let cell = document.createElement('div');
             cell.classList.add('cell');
@@ -664,7 +685,6 @@ let table = (function () {
             time.innerHTML = content;
             return time;
         }
-
 
 //endregion
 
@@ -833,9 +853,6 @@ let table = (function () {
 
 //endregion
 
-//endregion
-
-
         return {
             init: init,
             //constants
@@ -870,21 +887,6 @@ let table = (function () {
                     filterInfobar.classList.add('hidden');
                 }
             }
-        }
-
-        function dismissPopup(target, tableSelector) {
-            dimissPopUp(target);
-            enableScroll(tableSelector);
-        }
-
-        function disableScroll(tableSelector) {
-            let tbody = $$(tableSelector).getElementsByClassName('tbody')[0];
-            tbody.classList.add('no-scroll');
-        }
-
-        function enableScroll(tableSelector) {
-            let tbody = $$(tableSelector).getElementsByClassName('tbody')[0];
-            tbody.classList.remove('no-scroll');
         }
 
         function setDefaults(settings, table) {
@@ -945,29 +947,6 @@ let table = (function () {
             }
 
             table.settings = settings;
-        }
-
-
-        function onTableExportButtonClicked(event) {
-            let button = event.target;
-            let tableSettings = $$(button.dataset.target).tableSettings;
-            let fileType = button.dataset.fileType;
-
-            if (tableSettings.exportTo === undefined) {
-                console.error(`Table export to settings are not defined.`);
-            } else if (tableSettings.exportTo[fileType] === undefined) {
-                console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
-            } else {
-                let exportSettings = tableSettings.exportTo[fileType];
-                if (exportSettings.type === exportTypes.event) {
-                    trigger(exportSettings.value, {
-                        tableSettings: tableSettings,
-                        selectedColumns: getVisibleColumnIds(tableSettings)
-                    });
-                }
-                //ToDo: cases where export type value is function or url
-            }
-
         }
 
 //region public helper functions
