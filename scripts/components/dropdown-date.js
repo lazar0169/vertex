@@ -25,12 +25,8 @@ const dropdownDate = (function () {
         select.appendChild(selected);
         selected.children[0].innerHTML = dataSelect[0].Name;
         selected.title = selected.children[0].innerHTML;
-        if (dataSelect[0].Name === '-' || dataSelect[0].name === 'null') {
-            selected.dataset.value = null;
-        }
-        else {
-            selected.dataset.value = dataSelect[0].Id;
-        }
+        selected.dataset.id = dataSelect[0].Id;
+        selected.dataset.value = dataSelect[0].Name;
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');
@@ -63,9 +59,8 @@ const dropdownDate = (function () {
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
         buttonsCustomDate.classList.add('button-wrapper');
         buttonsCustomDate.classList.add('center');
-
+        
         let applyCustom = document.createElement('button');
-
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
         applyCustom.addEventListener('click', function () {
@@ -90,13 +85,20 @@ const dropdownDate = (function () {
             option.classList.add('single-option');
             option.innerHTML = element.Name;
             option.title = option.innerHTML;
-            option.dataset.value = element.Id !== -1 ? element.Id : null;
+            option.dataset.value = element.Name;
+            option.dataset.id = element.Id !== -1 ? element.Id : null;
             option.dataset.translationKey = element.Name ? element.Name : element.name;;
             optionGroup.appendChild(option);
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (option.dataset.value === '5') {
+                selected.dataset.id = option.dataset.id;
+                if (option.dataset.value === 'Custom') {
                     customDate.classList.toggle('hidden');
+                    if (customDate.classList.contains('hidden')) {
+                        selected.dataset.id = optionGroup.children[0].dataset.id;
+                        selected.dataset.value = optionGroup.children[0].dataset.value;
+                        selected.children[0].innerHTML = optionGroup.children[0].innerHTML;
+                    }
                     pickCustom = !pickCustom;
                     delete applyCustom.dataset.value;
                 }
@@ -111,11 +113,19 @@ const dropdownDate = (function () {
         }
         optionGroupWrapper.appendChild(optionGroup);
         optionGroupWrapper.appendChild(customDate);
+        if (customDate.getElementsByClassName('timepicker').length !== 0) {
+            for (let picker of customDate.getElementsByClassName('timepicker')) {
+                dropdown.generate({ optionValue: hours, parent: picker });
+                picker.appendChild(dropdown.generate({ optionValue: minutes }));
+            }
+        }
+
         select.appendChild(selected);
         select.appendChild(optionGroupWrapper);
 
         indexDsId++;
         dateSelectArray.push(select.id);
+        datepicker.generate({ dropdownDate: select })
         if (element) {
             element.appendChild(select);
             return element;

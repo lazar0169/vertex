@@ -13,6 +13,7 @@ const aftFilters = (function () {
     let dropdownStatus;
     let dropdownColumn;
 
+
     //display initial filters
     /*********************----Events Listeners------*********************/
     aftAdvanceApplyFilters.addEventListener('click', function () {
@@ -132,10 +133,11 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
+        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
 
+        dropdownDate.generate(filters.PeriodList, aftAdvanceTableFilterDateRange);
         dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi' })
         dropdown.generate({ optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
-
         dropdown.generate({ optionValue: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
         if (dropdownStatus) {
@@ -160,7 +162,6 @@ const aftFilters = (function () {
         }
         dropdownColumn = dropdown.generate({ optionValue: hideableColumns, type: 'multi' });
         aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
-
         dropdown.generate({ optionValue: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single' })
         dropdown.generate({ optionValue: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single' })
     }
@@ -211,7 +212,6 @@ const aftFilters = (function () {
         activeTableSettings.filters = filtersForApi;
         return filtersForApi;
     }
-
     on('show/app', function () {
         aftAddTransactionWrapper.classList.add('hidden');
     });

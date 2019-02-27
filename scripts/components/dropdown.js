@@ -6,7 +6,6 @@ const dropdown = (function () {
         'single': 1,
         'multi': 2
     }
-
     //generate single dropdown
     function generate(data) {
         let array = [];
@@ -66,12 +65,14 @@ const dropdown = (function () {
                     let option = document.createElement('div');
                     let item = {
                         Name: element.Name,
-                        Value: element.Id || element.Id !== null || element.Id !== undefined ? element.Id : null,
+                        Id: element.Id || element.Id !== null || element.Id !== undefined ? element.Id : null,
+                        Value: element.Name,
                         LongId: element.LongId || element.LongId !== null || element.LongId !== undefined ? element.LongId : null
                     };
                     option.dataset.value = item.Value;
-                    if (option.dataset.value === 'null' || option.dataset.value === '-1') {
-                        option.dataset.value = null;
+                    option.dataset.id = item.Id;
+                    if (option.dataset.id === 'null' || option.dataset.id === '-1') {
+                        option.dataset.id = null;
                         option.classList.add('hidden')
                     }
                     let label = document.createElement('label');
@@ -80,7 +81,7 @@ const dropdown = (function () {
                     checkbox.type = 'checkbox';
                     let icon = document.createElement('icon');
                     icon.classList.add('form-icon');
-                    icon.dataset.elementId = item.value;
+                    icon.dataset.elementId = item.Id;
                     let text = document.createElement('div');
                     text.innerHTML = item.Name;
 
@@ -101,13 +102,13 @@ const dropdown = (function () {
                             } else {
                                 selected.children[0].innerHTML += `, ${option.children[0].children[2].innerHTML}`;
                             }
-                            array.push(option.dataset.value);
+                            array.push(option.dataset.id);
                             arrayInner.push(option.children[0].children[2].innerHTML);
                             option.children[0].children[0].checked = true;
                         } else {
                             let i = 0;
                             for (let elem of array) {
-                                if (elem === option.dataset.value) {
+                                if (elem === option.dataset.id) {
                                     array.splice(i, 1);
                                     arrayInner.splice(i, 1);
                                 }
@@ -122,7 +123,8 @@ const dropdown = (function () {
                             }
                         }
                         selected.title = selected.children[0].innerHTML;
-                        selected.dataset.value = array;
+                        selected.dataset.value = arrayInner;
+                        selected.dataset.id = array;
                     });
                 }
                 break;
@@ -131,12 +133,14 @@ const dropdown = (function () {
                 for (let element of optionsArray) {
                     let item = {
                         Name: element.Name,
-                        Value: element.Id !== -1 ? element.Id : null,
+                        Id: element.Id !== -1 ? element.Id : null,
+                        Value: element.Name,
                         LongId: element.longIdValue ? element.Id : null
                     };
-                    if (!selected.dataset.value) {
+                    if (!selected.dataset.id) {
                         selected.children[0].innerHTML = localization.translateMessage(item.Name);
                         selected.dataset.value = item.Value;
+                        selected.dataset.id = item.Id;
                         selected.title = selected.children[0].innerHTML;
                         if (item.LongIdValue) {
                             selected.dataset.LongIdValue = item.LongIdValue;
@@ -146,6 +150,7 @@ const dropdown = (function () {
                     option.classList.add('single-option');
                     option.innerHTML = localization.translateMessage(item.Name);
                     option.dataset.value = item.Value;
+                    option.dataset.id = item.Id;
                     if (item.longIdValue) {
                         option.dataset.LongIdValue = item.LongIdValue;
                     }
@@ -159,6 +164,7 @@ const dropdown = (function () {
                         trigger('opened-arrow', { div: selected });
                         selected.title = selected.children[0].innerHTML;
                         selected.dataset.value = option.dataset.value;
+                        selected.dataset.id = option.dataset.id;
                         if (option.dataset.valueLongId) {
                             selected.dataset.valueLongId = option.dataset.valueLongId;
                         }
@@ -170,11 +176,12 @@ const dropdown = (function () {
         select.appendChild(optionGroup);
 
         select.get = function () {
-            return selected.dataset.value;
+            return selected.dataset.id;
         }
 
         select.reset = function () {
-            selected.dataset.value = optionsArray[0].Id !== -1 ? optionsArray[0].Id : null;
+            selected.dataset.id = optionsArray[0].Id !== -1 ? optionsArray[0].Id : null;
+            selected.dataset.value = optionsArray[0].Name;
             selected.children[0].innerHTML = localization.translateMessage(optionsArray[0].Name);
             selected.title = selected.children[0].innerHTML;
             if (dropdownType[type] == 2) {
@@ -186,25 +193,25 @@ const dropdown = (function () {
         }
 
         select.set = function (params) {
-            selected.dataset.value = params;
+            selected.dataset.id = params;
             for (let option of optionGroup.children) {
                 for (let setId of params) {
                     switch (dropdownType[type]) {
                         case 1:
-                            if (setId === option.dataset.value) {
+                            if (setId === option.dataset.id) {
                                 selected.firstChild.innerHTML = localization.translateMessage(option.innerHTML);
                                 selected.firstChild.title = option.innerHTML;
                             }
                             break;
 
                         case 2:
-                            if (setId === option.dataset.value) {
+                            if (setId === option.dataset.id) {
                                 if (selected.firstChild.innerHTML === '-') {
                                     selected.firstChild.innerHTML = option.children[0].children[2].innerHTML;
                                 } else {
                                     selected.firstChild.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
                                 }
-                                array.push(option.dataset.value);
+                                array.push(option.dataset.id);
                                 arrayInner.push(option.children[0].children[2].innerHTML);
                                 selected.title = selected.firstChild.innerHTML;
                                 option.children[0].children[0].checked = true;
@@ -255,9 +262,9 @@ const dropdown = (function () {
 
     function clearAllDropdownDate(div) {
         for (let element of div.getElementsByClassName('default-date-select')) {
-            element.children[0].children[0].innerHTML = '-';
+            element.children[0].children[0].innerHTML = element.children[1].children[0].children[0].innerHTML;
             element.children[0].title = element.children[0].children[0].innerHTML;
-            element.children[0].dataset.value = null;
+            element.children[0].dataset.value = element.children[1].children[0].children[0].dataset.value;
             if (element.children[1].classList.contains('multiple-group')) {
                 for (let check of element.children[1].children) {
                     check.children[0].children[0].checked = false;

@@ -73,7 +73,6 @@ const aft = (function () {
 
     /*********************----Module Events------*********************/
     on('aft/addTransaction/error', function (params) {
-
         trigger('notifications/show', {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
@@ -88,7 +87,6 @@ const aft = (function () {
         trigger('form/reset', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
 
     });
-
     on('aft/transactions/canceled/error', function (params) {
         trigger('communication/error/', params);
         dismissCancelTransactionPopUp();
@@ -102,7 +100,6 @@ const aft = (function () {
         beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, onCancelPopUpAction,
             params.params.containerCell, $$('#table-container-aft'));
     });
-
     //code executed before popup is added to dom and
     on('aft/table/show/cancel-pending-pop-up', function (params) {
         let containerCell = params.params.containerCell;
@@ -149,7 +146,6 @@ const aft = (function () {
         parentElement.append(element);
         keepAbsoluteChildInParent(boundsContainer, $$('#' + cancelTransactionsPopUpId));
     }
-
 
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
         trigger('table/disable-scroll', { tableSettings: $$('#table-container-aft').tableSettings });
@@ -199,7 +195,6 @@ const aft = (function () {
                 gmcid: e.target.transactionData.gmcid,
                 jidtString: e.target.transactionData.jidtString,
                 endpointId: endpointId,
-
             },
             status: {
                 pending: e.target.transactionData.pending !== undefined
@@ -233,7 +228,6 @@ const aft = (function () {
     }
 
     function onDrawTableCell(column, cellContent, cell, position, entryData) {
-
         if (column === 'flag') {
             if (cellContent !== undefined) {
                 cell.classList.add('row-flag-' + cellContent.toString().trim());
@@ -518,7 +512,7 @@ const aft = (function () {
 
             formatedData[counter] = {
                 rowData: {
-                    flag: entry.Properties.FlagList[0],
+                    flag: entry.EntryData.FlagList[0],
                     createdBy: entry.EntryData.CreatedBy.Name,
                     finishedBy: entry.EntryData.FinishedBy.Name,
                     status: localization.translateMessage(entry.EntryData.Status),
