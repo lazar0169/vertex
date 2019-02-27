@@ -25,9 +25,7 @@ const dropdownDate = (function () {
         select.appendChild(selected);
         selected.children[0].innerHTML = dataSelect[0].Name;
         selected.title = selected.children[0].innerHTML;
-
         selected.dataset.id = dataSelect[0].Id;
-
         selected.dataset.value = dataSelect[0].Name;
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
@@ -61,9 +59,8 @@ const dropdownDate = (function () {
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
         buttonsCustomDate.classList.add('button-wrapper');
         buttonsCustomDate.classList.add('center');
-
+        
         let applyCustom = document.createElement('button');
-
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
         applyCustom.addEventListener('click', function () {

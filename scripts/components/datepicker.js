@@ -1,7 +1,6 @@
 let datepicker = function () {
     // Initialize all date pickers
     function generate(data) {
-
         for (let picker of data.dropdownDate.getElementsByClassName('datepicker')) {
             new Pikaday({
                 field: picker,

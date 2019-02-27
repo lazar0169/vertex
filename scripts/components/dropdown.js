@@ -6,7 +6,6 @@ const dropdown = (function () {
         'single': 1,
         'multi': 2
     }
-
     //generate single dropdown
     function generate(data) {
         let array = [];
