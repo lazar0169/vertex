@@ -1,6 +1,6 @@
 #malfunctions-details {
     position: absolute;
-    width: 450px;
+    width: 750px;
     height: 100%;
     right: 0;
     top: 0;
@@ -10,6 +10,7 @@
     font-family: 'Open Sans';
     transition: all 0.2s ease;
     transform: translateX(0);
+    z-index: 1;
 }
 
 #malfunctions-details.collapse {
@@ -27,7 +28,7 @@
     right: 0;
     top: 0;
     height: 100%;
-    width: 10%;
+    width: 5%;
     cursor: pointer;
 }
 
@@ -43,4 +44,8 @@
 #malfucntion-details-name {
     font-size: 14px;
     color: white;
+}
+
+#malfunction-details-table {
+    max-height: 90%;
 }

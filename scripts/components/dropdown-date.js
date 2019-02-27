@@ -221,10 +221,8 @@ const dropdownDate = (function () {
         //this is for malfunction details
         if (e.target.classList && e.target.classList.contains('table-item') && JSON.parse(sessionStorage.categoryAndLink).category === 'Malfunctions') {
             $$('#malfunctions-details').classList.remove('collapse');
-            trigger('malfunctions-details/machines-history', { target: e.target })
-        }
-        else {
-            $$('#malfunctions-details').classList.add('collapse');
+            $$('#black-area').classList.add('show');
+            trigger('malfunctions-details/machines-history', { target: e.target });
         }
     });
     return {

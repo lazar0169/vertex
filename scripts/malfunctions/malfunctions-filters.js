@@ -11,10 +11,10 @@ const malfunctionsFilter = (function () {
 
     dropdown.generate({ optionValue: machinesNumber, parent: malfunctionsMachinesNumbers })
 
-    advanceTableFilter.addEventListener('click', function () {
-        advanceTableFilter.classList.add('advance-filter-active');
-        // trigger('opened-arrow', { div: advanceTableFilter.children[0] });
-        // advanceTableFilter.children[1].classList.remove('hidden');
+    advanceTableFilter.children[0].addEventListener('click', function () {
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        advanceTableFilterActive.classList.toggle('hidden');
     });
 
     on('malfunctions/filters/display', function (params) {
@@ -39,6 +39,7 @@ const malfunctionsFilter = (function () {
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
         trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
     });
 
     clearAdvanceFilter.addEventListener('click', function () {
