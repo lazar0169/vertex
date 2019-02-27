@@ -1,16 +1,8 @@
 let datepicker = function () {
     // Initialize all date pickers
-    on('load', function () {
+    function generate(data) {
 
-        //ToDo: razmisliti kako srediti ovo
-        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
-        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
-        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
-        dropdownDate.generate(fixedDays, aftAdvanceTableFilterDateRange);
-        dropdownDate.generate(fixedDays, ticketsAdvanceTableFiltersPrintDate);
-        dropdownDate.generate(fixedDays, ticketsAdvanceTableFiltersRedeemDate);
-
-        for (let picker of $$('.datepicker')) {
+        for (let picker of data.dropdownDate.getElementsByClassName('datepicker')) {
             new Pikaday({
                 field: picker,
                 firstDay: 1,
@@ -38,6 +30,8 @@ let datepicker = function () {
             let apiString = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
             trigger(`set-date-datepicker`, { pickerId: picker.id, date: apiString });
         }
-    });
-
+    }
+    return {
+        generate
+    }
 }();

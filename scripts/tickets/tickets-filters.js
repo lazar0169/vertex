@@ -9,6 +9,7 @@ const ticketsFilter = (function () {
     let ticketsAdvanceFilterApplyButton = $$('#tickets-advance-table-filter-apply').children[0];
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
+
     dropdown.generate({ optionValue: machinesNumber, parent: ticketsMachinesNumbers });
     let activeHeadElement;
 
@@ -111,6 +112,11 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFiltersPrinted = $$('#tickets-advance-table-filter-printed');
         let ticketsAdvanceTableFiltersRedeemed = $$('#tickets-advance-table-filter-redeemed');
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
+        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
+        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
+
+        dropdownDate.generate(filters.PeriodList, ticketsAdvanceTableFiltersPrintDate);
+        dropdownDate.generate(filters.PeriodList, ticketsAdvanceTableFiltersRedeemDate);
 
         // let states = table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
         dropdown.generate({ optionValue: filters.TicketStateList, parent: ticketsAdvanceTableFiltersStatus, type: 'multi' });

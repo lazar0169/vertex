@@ -173,7 +173,7 @@ const malfunctions = (function () {
         entry.forEach(function (entry) {
             formatedData[counter] = {
                 rowData: {
-                    flag: entry.Properties.FlagList[0],
+                    flag: entry.EntryData.FlagList[0],
                     createdBy: entry.EntryData.CreatedBy.Name ? entry.EntryData.CreatedBy.Name : '',
                     casino: entry.EntryData.Casino,
                     machine: entry.EntryData.Machine,

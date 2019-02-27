@@ -13,6 +13,7 @@ const aftFilters = (function () {
     let dropdownStatus;
     let dropdownColumn;
 
+
     //display initial filters
     /*********************----Events Listeners------*********************/
     aftAdvanceApplyFilters.addEventListener('click', function () {
@@ -132,6 +133,9 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
+        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
+
+        dropdownDate.generate(filters.PeriodList, aftAdvanceTableFilterDateRange);
 
         dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi' })
         dropdown.generate({ optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
