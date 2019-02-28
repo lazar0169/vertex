@@ -9,7 +9,7 @@ const dropdownDate = (function () {
     let pickCustom = false;
     //generate single dropdown
     function generate(data) {
-        let optionValue = data.optionValue;
+        let values = data.values;
         let parent = data.parent
         if (parent) {
             removeChildren(parent);
@@ -25,10 +25,10 @@ const dropdownDate = (function () {
         selected.innerHTML = `<div></div>
                               <span class="closed-arrow">&#9660;</span>`;
         select.appendChild(selected);
-        selected.children[0].innerHTML = optionValue[0].Name;
+        selected.children[0].innerHTML = values[0].Name;
         selected.title = selected.children[0].innerHTML;
-        selected.dataset.id = optionValue[0].Id !== -1 ? optionValue[0].Id : null;
-        selected.dataset.value = optionValue[0].Name;
+        selected.dataset.id = values[0].Id !== -1 ? values[0].Id : null;
+        selected.dataset.value = values[0].Name;
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');
@@ -92,7 +92,7 @@ const dropdownDate = (function () {
 
 
         customDate.classList.add('hidden');
-        for (let element of optionValue) {
+        for (let element of values) {
             //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
@@ -128,8 +128,8 @@ const dropdownDate = (function () {
         optionGroupWrapper.appendChild(customDate);
         if (customDate.getElementsByClassName('timepicker').length !== 0) {
             for (let picker of customDate.getElementsByClassName('timepicker')) {
-                dropdown.generate({ optionValue: hours, parent: picker });
-                picker.appendChild(dropdown.generate({ optionValue: minutes }));
+                dropdown.generate({ values: hours, parent: picker });
+                picker.appendChild(dropdown.generate({ values: minutes }));
             }
         }
 
@@ -156,9 +156,9 @@ const dropdownDate = (function () {
             }
         }
         select.reset = function () {
-            selected.dataset.id = optionValue[0].Id !== -1 ? optionValue[0].Id : null;
-            selected.dataset.value = optionValue[0].Name;
-            selected.children[0].innerHTML = localization.translateMessage(optionValue[0].Name);
+            selected.dataset.id = values[0].Id !== -1 ? values[0].Id : null;
+            selected.dataset.value = values[0].Name;
+            selected.children[0].innerHTML = localization.translateMessage(values[0].Name);
             selected.title = selected.children[0].innerHTML;
             return selected;
         }
