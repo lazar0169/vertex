@@ -64,7 +64,7 @@ const dropdownDate = (function () {
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
         buttonsCustomDate.classList.add('button-wrapper');
         buttonsCustomDate.classList.add('center');
-
+        
         let applyCustom = document.createElement('button');
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
