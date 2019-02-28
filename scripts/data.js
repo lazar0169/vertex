@@ -1,11 +1,3 @@
-let fixedDays = [{ Name: '-', Id: -1 },
-{ Name: 'Today', Id: 0 },
-{ Name: 'Yesterday', Id: 1 },
-{ Name: 'Last 7 Days', Id: 2 },
-{ Name: 'Last 14 Days', Id: 3 },
-{ Name: 'This Month', Id: 4 },
-{ Name: 'Custom', Id: 5 }];
-
 let columnName = [{ Name: '-', Id: -1 },
 { Name: 'Column1', Id: 0 },
 { Name: 'Column2', Id: 1 },

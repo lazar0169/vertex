@@ -9,7 +9,7 @@ const malfunctionsFilter = (function () {
 
     let malfunctionsMachinesNumbers = $$('#malfunctions-number');
 
-    dropdown.generate({ optionValue: machinesNumber, parent: malfunctionsMachinesNumbers })
+    dropdown.generate({ values: machinesNumber, parent: malfunctionsMachinesNumbers })
 
     advanceTableFilter.children[0].addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
@@ -25,15 +25,18 @@ const malfunctionsFilter = (function () {
 
     function displayFilters(filters, tableSettings) {
 
+        let malfunctionsAdvanceTableFilterDate = $$('#malfunctions-advance-table-filter-date-range');
         let malfunctionsAdvanceTableFilterCasino = $$('#malfunctions-advance-table-filter-casino');
         let malfunctionsAdvanceTableFilterPriority = $$('#malfunctions-advance-table-filter-priority');
         let malfunctionsAdvanceTableFilterStatus = $$('#malfunctions-advance-table-filter-status');
         let malfunctionsAdvanceTableFilterType = $$('#malfunctions-advance-table-filter-type');
 
-        dropdown.generate({ optionValue: filters.CasinoList, parent: malfunctionsAdvanceTableFilterCasino, type: 'multi' });
-        dropdown.generate({ optionValue: filters.PriorityList, parent: malfunctionsAdvanceTableFilterPriority, type: 'multi' });
-        dropdown.generate({ optionValue: filters.StatusList, parent: malfunctionsAdvanceTableFilterStatus, type: 'multi' });
-        dropdown.generate({ optionValue: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
+        dropdownDate.generate({ values: [{ Name: '-', Id: 0 }, { Name: 'Custom', Id: 7 }], parent: malfunctionsAdvanceTableFilterDate })
+
+        dropdown.generate({ values: filters.CasinoList, parent: malfunctionsAdvanceTableFilterCasino, type: 'multi' });
+        dropdown.generate({ values: filters.PriorityList, parent: malfunctionsAdvanceTableFilterPriority, type: 'multi' });
+        dropdown.generate({ values: filters.StatusList, parent: malfunctionsAdvanceTableFilterStatus, type: 'multi' });
+        dropdown.generate({ values: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
 
     }
     //ToDo: test for malfunction filter infobar

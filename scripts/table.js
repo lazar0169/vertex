@@ -694,7 +694,7 @@ let table = (function () {
 
     function generatePageSizeDropdown(tableSettings) {
         let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-        dropdown.generate({ optionValue: machinesNumber, parent: pageSizeDropdown });
+        dropdown.generate({ values: machinesNumber, parent: pageSizeDropdown });
         // dropdown.generate(machinesNumber, pageSizeDropdown);
 
         bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);
@@ -1068,7 +1068,7 @@ let table = (function () {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
         for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
+            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
                 filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
                 filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
                 filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
