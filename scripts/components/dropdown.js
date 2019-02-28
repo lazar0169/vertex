@@ -10,14 +10,13 @@ const dropdown = (function () {
     function generate(data) {
         let array = [];
         let arrayInner = [];
-        let [...optionsArray] = data.optionValue;
-        let [firstOption] = data.optionValue;
+        let [...optionsArray] = data.values;
+        let [firstOption] = data.values;
         let noSelectedData = firstOption;
         let type = data.type;
         if (!type) {
             type = 'single';
         }
-        let existsId;
         if (data.parent && data.parent.children[1]) {
             removeChildren(data.parent);
         }
@@ -28,17 +27,17 @@ const dropdown = (function () {
         select.classList.add('element-form-data');
         select.dataset.type = `${type}-select`;
 
-        if (existsId) {
-            select.id = existsId;
-        } else {
-            select.id = `${type}-${indexDropdown}`;
-            indexDropdown++;
-        }
+        select.id = `${type}-${indexDropdown}`;
+        indexDropdown++;
+
         //selected option
         let selected = document.createElement('div');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');
         selected.innerHTML = `<div></div><span class="closed-arrow">&#9660;</span>`;
+        if (data.name) {
+            selected.dataset.name = data.name;
+        }
         select.appendChild(selected);
         selected.classList.add('element-table-filters');
         selected.addEventListener('click', function () {
@@ -55,7 +54,8 @@ const dropdown = (function () {
 
             case 2:
                 selected.children[0].innerHTML = localization.translateMessage(noSelectedData.Name);
-                selected.dataset.value = null;
+                selected.dataset.value = noSelectedData.Name;
+                selected.dataset.id = noSelectedData.Id !== -1 ? noSelectedData.Id : null;
                 selected.title = selected.children[0].innerHTML;
                 if (noSelectedData.LongIdValue) {
                     selected.dataset.LongIdValue = noSelectedData.LongIdValue;
@@ -262,14 +262,7 @@ const dropdown = (function () {
 
     function clearAllDropdownDate(div) {
         for (let element of div.getElementsByClassName('default-date-select')) {
-            element.children[0].children[0].innerHTML = element.children[1].children[0].children[0].innerHTML;
-            element.children[0].title = element.children[0].children[0].innerHTML;
-            element.children[0].dataset.value = element.children[1].children[0].children[0].dataset.value;
-            if (element.children[1].classList.contains('multiple-group')) {
-                for (let check of element.children[1].children) {
-                    check.children[0].children[0].checked = false;
-                }
-            }
+            element.reset();
         }
     }
 
