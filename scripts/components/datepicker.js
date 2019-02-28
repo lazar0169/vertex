@@ -24,10 +24,6 @@ let datepicker = function () {
                     trigger(`set-date-datepicker`, { pickerId: picker.id, date: apiString });
                 }
             });
-            //set current date
-            let dateArray = picker.value.toString().split('.');
-            let apiString = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
-            trigger(`set-date-datepicker`, { pickerId: picker.id, date: apiString });
         }
     }
     return {

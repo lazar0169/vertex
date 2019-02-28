@@ -64,7 +64,7 @@ const dropdownDate = (function () {
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
         buttonsCustomDate.classList.add('button-wrapper');
         buttonsCustomDate.classList.add('center');
-        
+
         let applyCustom = document.createElement('button');
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
@@ -82,6 +82,14 @@ const dropdownDate = (function () {
         buttonsCustomDate.appendChild(applyCustom);
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
+        let setDatePicker = customDate.getElementsByClassName('datepicker');
+
+        for (let picker of setDatePicker) {
+            picker.dataset.value = new Date().toISOString().split('T')[0];
+            picker.value = new Date().toISOString().split('T')[0];
+            console.log(picker)
+        }
+
 
         customDate.classList.add('hidden');
         for (let element of optionValue) {
