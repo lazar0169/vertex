@@ -87,7 +87,6 @@ const dropdownDate = (function () {
         for (let picker of setDatePicker) {
             picker.dataset.value = new Date().toISOString().split('T')[0];
             picker.value = new Date().toISOString().split('T')[0];
-            console.log(picker)
         }
 
 
