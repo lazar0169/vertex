@@ -135,8 +135,8 @@ const aftFilters = (function () {
         let aftAddTransactionMachine = $$('#add-transaction-machine');
         let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
 
-        dropdownDate.generate(filters.PeriodList, aftAdvanceTableFilterDateRange);
-        dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi' })
+        dropdownDate.generate({ optionValue: filters.PeriodList, parent: aftAdvanceTableFilterDateRange, name: 'PeriodList' });
+        dropdown.generate({ optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi', name: 'MachineList' })
         dropdown.generate({ optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
         dropdown.generate({ optionValue: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
         // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);

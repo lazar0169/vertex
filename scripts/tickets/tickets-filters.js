@@ -115,8 +115,8 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
         let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
 
-        dropdownDate.generate(filters.PeriodList, ticketsAdvanceTableFiltersPrintDate);
-        dropdownDate.generate(filters.PeriodList, ticketsAdvanceTableFiltersRedeemDate);
+        dropdownDate.generate({ optionValue: filters.PeriodList, parent: ticketsAdvanceTableFiltersPrintDate, name: 'PeriodList' });
+        dropdownDate.generate({ optionValue: filters.PeriodList, parent: ticketsAdvanceTableFiltersRedeemDate, name: 'PeriodList' });
 
         // let states = table.parseFilterValues(filters.TicketStateList, 'Name', 'Id', -1);
         dropdown.generate({ optionValue: filters.TicketStateList, parent: ticketsAdvanceTableFiltersStatus, type: 'multi' });

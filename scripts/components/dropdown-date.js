@@ -8,9 +8,11 @@ const dropdownDate = (function () {
     //indicate custom option
     let pickCustom = false;
     //generate single dropdown
-    function generate(dataSelect, element) {
-        if (element) {
-            removeChildren(element);
+    function generate(data) {
+        let optionValue = data.optionValue;
+        let parent = data.parent
+        if (parent) {
+            removeChildren(parent);
         }
         // wrapper select
         let select = document.createElement('div');
@@ -23,13 +25,16 @@ const dropdownDate = (function () {
         selected.innerHTML = `<div></div>
                               <span class="closed-arrow">&#9660;</span>`;
         select.appendChild(selected);
-        selected.children[0].innerHTML = dataSelect[0].Name;
+        selected.children[0].innerHTML = optionValue[0].Name;
         selected.title = selected.children[0].innerHTML;
-        selected.dataset.id = dataSelect[0].Id;
-        selected.dataset.value = dataSelect[0].Name;
+        selected.dataset.id = optionValue[0].Id !== -1 ? optionValue[0].Id : null;
+        selected.dataset.value = optionValue[0].Name;
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');
+        if (data.name) {
+            selected.dataset.name = data.name;
+        }
         //wrapper options group
         let optionGroupWrapper = document.createElement('div');
         optionGroupWrapper.classList.add('hidden');
@@ -59,7 +64,7 @@ const dropdownDate = (function () {
         buttonsCustomDate.classList.add('custom-date-buttons-wrapper');
         buttonsCustomDate.classList.add('button-wrapper');
         buttonsCustomDate.classList.add('center');
-        
+
         let applyCustom = document.createElement('button');
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
@@ -79,7 +84,7 @@ const dropdownDate = (function () {
         customDate.appendChild(buttonsCustomDate);
 
         customDate.classList.add('hidden');
-        for (let element of dataSelect) {
+        for (let element of optionValue) {
             //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
@@ -126,9 +131,30 @@ const dropdownDate = (function () {
         indexDsId++;
         dateSelectArray.push(select.id);
         datepicker.generate({ dropdownDate: select })
-        if (element) {
-            element.appendChild(select);
-            return element;
+
+
+        select.get = function () {
+            return selected.dataset.id;
+        }
+        select.reset = function () {
+            selected.dataset.id = optionValue[0].Id !== -1 ? optionValue[0].Id : null;
+            selected.dataset.value = optionValue[0].Name;
+            selected.children[0].innerHTML = localization.translateMessage(optionValue[0].Name);
+            selected.title = selected.children[0].innerHTML;
+            return selected;
+        }
+
+        select.set = function (params) {
+            selected.dataset.id = params;
+
+            return selected;
+        }
+
+
+
+        if (parent) {
+            parent.appendChild(select);
+            return parent;
         }
         return select;
     }
