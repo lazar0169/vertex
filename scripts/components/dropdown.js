@@ -10,8 +10,8 @@ const dropdown = (function () {
     function generate(data) {
         let array = [];
         let arrayInner = [];
-        let [...optionsArray] = data.optionValue;
-        let [firstOption] = data.optionValue;
+        let [...optionsArray] = data.values;
+        let [firstOption] = data.values;
         let noSelectedData = firstOption;
         let type = data.type;
         if (!type) {
