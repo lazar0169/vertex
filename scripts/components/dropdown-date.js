@@ -134,7 +134,18 @@ const dropdownDate = (function () {
 
 
         select.get = function () {
-            return selected.dataset.id;
+            let dateFromTo = selected.dataset.value.split(', ');
+            let selectedId = selected.dataset.id
+            if (dateFromTo.length < 2) {
+                dateFromTo = [null, null];
+            }
+            let dateFrom = dateFromTo[0];
+            let dateTo = dateFromTo[1];
+            return {
+                dateFrom,
+                dateTo,
+                selectedId
+            }
         }
         select.reset = function () {
             selected.dataset.id = optionValue[0].Id !== -1 ? optionValue[0].Id : null;
@@ -145,8 +156,14 @@ const dropdownDate = (function () {
         }
 
         select.set = function (params) {
-            selected.dataset.id = params;
-
+            for (let option of optionGroup.children) {
+                if (params === option.dataset.id && option.dataset.value !== 'Custom') {
+                    selected.dataset.id = params;
+                    selected.dataset.value = option.dataset.value;
+                    selected.children[0].innerHTML = option.innerHTML;
+                    selected.title = selected.children[0].innerHTML;
+                }
+            }
             return selected;
         }
 
