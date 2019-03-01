@@ -285,7 +285,13 @@ let communication = (function () {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
                 success(xhr, successEvent, additionalData);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
-                error(xhr, errorEvent);
+                if (xhr.status >= 500){
+                    trigger('notifications/show', {
+                        message: localization.translateMessage('InternalServerError'),
+                        type: notifications.messageTypes.error
+                    });
+                }
+                    error(xhr, errorEvent);
             }
         };
         return xhr;

@@ -171,6 +171,8 @@ let table = (function () {
             table.setVisibleColumns = setVisibleColumns;
             table.getVisibleColumns = getVisibleColumns;
             table.cloneFiltersForExport = cloneFiltersForExport;
+            table.enableScroll = enableScroll;
+            table.disableScroll = disableScroll;
 
             if (!isEmpty(data)) {
                 table.update(data);
@@ -338,6 +340,15 @@ let table = (function () {
                 delete filters.TokenInfo;
             }
             return filters;
+        }
+
+        function enableScroll() {
+            let table = this;
+            table.elements.body.classList.remove('no-scroll');
+        }
+        function disableScroll() {
+            let table = this;
+            table.elements.body.classList.add('no-scroll');
         }
 
         //endregion

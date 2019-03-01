@@ -149,7 +149,7 @@ const aftFilters = (function () {
         //transaction type select in add transaction form
         dropdown.generate({values: filters.TypeList.slice(1, filters.TypeList.lenght),parent: aftAddTransactionType,type: 'single',name:'Type'});
         //machine select in add transaction form
-        dropdown.generate({values: filters.MachineAddTransactionList,parent: aftAddTransactionMachine,type: 'single',name:'MachineName'});
+        dropdown.generate({values: filters.MachineAddTransactionList,parent: aftAddTransactionMachine,type: 'single',name:'Gmcid'});
     }
 
     function showAdvanceTableFilter() {

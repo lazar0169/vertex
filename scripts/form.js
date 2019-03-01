@@ -351,7 +351,7 @@ let form = (function () {
             }
         } else if (nodeName === nodeTypes.div) {
             if (input.dataset.type === inputTypes.singleSelect) {
-                dropdown.reset(input);
+                input.reset();
             }
         }
     }

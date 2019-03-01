@@ -20,8 +20,7 @@ const aft = (function () {
         let popup = $$(selector);
         if (popup !== null) {
             if (e.target.closest(selector) === null) {
-                dismissCancelTransactionPopUp();
-                deselectHighlightedTransaction();
+                removeTransactionPopUp();
             }
         }
     });
@@ -153,7 +152,6 @@ const aft = (function () {
         //ToDo: da li se ovde resetuju filteri ili ne?
         trigger(events.filterTable);
 
-
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode.toString()),
             type: params.data.MessageType
@@ -168,34 +166,23 @@ const aft = (function () {
     });
     on('aft/transactions/canceled', transactionCanceled);
     on('aft/table/show/cancel-pop-up', function (params) {
-        beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, onCancelPopUpAction,
+        delete params.params.containerCell.cancelationPending;
+        beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, removeTransactionPopUp,
             params.params.containerCell, $$(aftTableSelector));
     });
     //code executed before popup is added to dom and
     on('aft/table/show/cancel-pending-pop-up', function (params) {
         let containerCell = params.params.containerCell;
-        if (containerCell.transactionData === undefined) {
-            console.error('there`s no transaction data on targeted cell!');
-            return false;
-        } else {
-            containerCell.transactionData.pending = true;
-        }
-        beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, onCancelPopUpAction,
+        containerCell.cancelationPending = true;
+        beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, removeTransactionPopUp,
             containerCell, $$(aftTableSelector));
-        //remove transaction flag so that user can initiate whole process again - flag is saved in YES button in popup
-        if (containerCell.transactionData.pending !== undefined) {
-            delete containerCell.transactionData.pending;
-        }
+        delete containerCell.cancelationPending;
+
     });
 
     //endregion
 
-    //region helper functions
-    function onCancelPopUpAction(e) {
-        e.stopPropagation();
-        dismissCancelTransactionPopUp();
-        deselectHighlightedTransaction();
-    }
+
 
     function beforeShowPopUp(coordinates, element, confirmCallback, cancelCallback, parentElement, boundsContainer) {
         element.setAttribute('id', cancelTransactionsPopUpId);
@@ -214,8 +201,9 @@ const aft = (function () {
         //clone object with new reference
         yesButton.transactionData = {
             gmcid: parentElement.additionalData.Properties.Gmcid,
-            jidtString: parentElement.additionalData.Properties.JidtString
+            jidtString: parentElement.additionalData.Properties.JidtString,
         };
+        yesButton.cancelationPending =  parentElement.cancelationPending !== undefined;
 
         noButton.addEventListener('click', cancelCallback);
 
@@ -224,7 +212,9 @@ const aft = (function () {
     }
 
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
-        trigger('table/disable-scroll', {tableSelector: aftTableSelector});
+       removeTransactionPopUp();
+        $$(aftTableSelector).disableScroll();
+
         trigger('template/render', {
             templateElementSelector: '#cancel-transaction-template',
             callbackEvent: callbackEvent,
@@ -234,6 +224,18 @@ const aft = (function () {
                 title: localization.translateMessage(title)
             }
         });
+    }
+
+    function removeTransactionPopUp(e) {
+        if (e !== undefined) {
+            e.stopPropagation();
+        }
+        let selector = '#' + cancelTransactionsPopUpId;
+        let popup = $$(selector);
+        if (popup !== null) {
+            popup.parentElement.removeChild(popup);
+            $$(aftTableSelector).enableScroll();
+        }
     }
 
     function transactionCanceled(params) {
@@ -253,13 +255,13 @@ const aft = (function () {
             message: localization.translateMessage(data.MessageCode.toString())
         });
 
-        dismissCancelTransactionPopUp();
+        removeTransactionPopUp();
 
         if (additionalData !== undefined && additionalData !== null &&
             additionalData.DisplayEscrowedDeleteDialog !== undefined && additionalData.DisplayEscrowedDeleteDialog === 'true') {
+
             displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up', coordinates, parentCell);
         } else {
-            deselectHighlightedTransaction();
             trigger(events.filterTable);
         }
     }
@@ -270,19 +272,17 @@ const aft = (function () {
             transactionData: {
                 gmcid: e.target.transactionData.gmcid,
                 jidtString: e.target.transactionData.jidtString,
-                endpointId: endpointId,
+                endpointId: $$(aftTableSelector).settings.endpointId,
             },
             status: {
-                pending: e.target.transactionData.pending !== undefined
+                pending: e.target.cancelationPending !== undefined && e.target.cancelationPending === true
             }
         });
     }
 
     function onTableCellClick(event, cell) {
         event.stopPropagation();
-        dismissCancelTransactionPopUp();
         //remove previous popup
-        trigger('table/disable-scroll', {tableSelector: aftTableSelector});
         let popUpCoordinates = {
             x: event.clientX + 5,
             y: event.clientY + 5
@@ -290,12 +290,6 @@ const aft = (function () {
         displayTransactionPopUp('CancelTransaction', 'aft/table/show/cancel-pop-up', popUpCoordinates, cell);
     }
 
-    function dismissCancelTransactionPopUp() {
-        trigger('table/dismiss-popup', {
-            target: $$('#' + cancelTransactionsPopUpId),
-            tableSelector: aftTableSelector
-        });
-    }
 
     function deselectHighlightedTransaction() {
         let tableSettings = $$(aftTableSelector).tableSettings;
@@ -350,6 +344,7 @@ const aft = (function () {
             Gmcid: params.transactionData.gmcid,
             JidtString: params.transactionData.jidtString,
         };
+
         let route = params.status.pending === true ? communication.apiRoutes.aft.cancelPendingTransaction : communication.apiRoutes.aft.cancelTransaction;
         communication.sendRequest(route, communication.requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
     });
