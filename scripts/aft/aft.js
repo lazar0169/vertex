@@ -225,7 +225,6 @@ const aft = (function () {
         keepAbsoluteChildInParent(boundsContainer, $$('#' + cancelTransactionsPopUpId));
     }
 
-
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
         trigger('table/disable-scroll', {tableSelector: aftTableSelector});
         trigger('template/render', {
@@ -274,7 +273,6 @@ const aft = (function () {
                 gmcid: e.target.transactionData.gmcid,
                 jidtString: e.target.transactionData.jidtString,
                 endpointId: endpointId,
-
             },
             status: {
                 pending: e.target.transactionData.pending !== undefined

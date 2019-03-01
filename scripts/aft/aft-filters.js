@@ -13,6 +13,7 @@ const aftFilters = (function () {
     let dropdownColumn;
     let endpointId = null;
 
+
     //display initial filters
     //region event listeners
     aftAdvanceApplyFilters.addEventListener('click', function () {
@@ -109,11 +110,13 @@ const aftFilters = (function () {
         let aftAdvanceTableFilterColumn = $$('#aft-advance-table-filter-column');
         let aftAddTransactionType = $$('#add-transaction-type');
         let aftAddTransactionMachine = $$('#add-transaction-machine');
+        let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
 
-        dropdown.generate({optionValue: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi'});
-        dropdown.generate({optionValue: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi'});
-
-        dropdown.generate({optionValue: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi'});
+        dropdownDate.generate({ values: filters.PeriodList, parent: aftAdvanceTableFilterDateRange, name: 'PeriodList' });
+        dropdown.generate({ values: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi', name: 'MachineList' })
+        dropdown.generate({ values: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
+        dropdown.generate({ values: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
+        // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
         if (dropdownStatus) {
             dropdownStatus.remove();
         }
@@ -170,10 +173,9 @@ const aftFilters = (function () {
             dateFrom = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[0];
             dateTo = $$('#aft-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[1];
         }
-        let machineList = $$('#aft-advance-table-filter-finished').children[1].get();
-        let jackpotList = $$('#aft-advance-table-filter-jackpot').children[1].get();
-        let statusesList = $$('#aft-advance-table-filter-status').children[1].get();
-        let typesList = $$('#aft-advance-table-filter-type').children[1].get();
+        let pageFilters = table.collectFiltersFromPage(activeTableSettings);
+        let sortDirection = activeTableSettings.sort.sortDirection;
+        let sortName = activeTableSettings.sort.sortName;
 
         let filters = {
             'EndpointId': table.settings.endpointId,
@@ -195,7 +197,6 @@ const aftFilters = (function () {
 
         return filters;
     }
-
     on('show/app', function () {
         aftAddTransactionWrapper.classList.add('hidden');
     });

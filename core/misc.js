@@ -72,6 +72,7 @@ on('apply-custom-date', function (data) {
         $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML = 'Custom';
         $$(`#ds-${data.selectId}`).children[0].title = `From: ${tempArray[0]} ${tempArray[1]}:00, To: ${tempArray[2]} ${tempArray[3]}:00`;
         $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}:00, ${tempArray[2]}T${tempArray[3]}:00`;
+        $$(`#ds-${data.selectId}`).children[0].dataset.value
         data.target.dataset.value = 'Apply custom date'
         let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).children[0].dataset.value);
         console.log(jsonCustomDate);
@@ -101,8 +102,10 @@ on('set-date-datepicker', function (data) {
     if (data.isCancel) {
         console.log('ukloni is-selected na td, i isti postavi na danasnji datum');
     }
-    $$(`#${data.pickerId}`).dataset.value = data.date;
-    $$(`#${data.pickerId}`).value = data.date;
+    if ($$(`#${data.pickerId}`)) {
+        $$(`#${data.pickerId}`).dataset.value = data.date;
+        $$(`#${data.pickerId}`).value = data.date;
+    }
 });
 
 

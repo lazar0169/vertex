@@ -79,6 +79,11 @@ const ticketsFilter = (function () {
         let ticketsAdvanceTableFiltersPrinted = $$('#tickets-advance-table-filter-printed');
         let ticketsAdvanceTableFiltersRedeemed = $$('#tickets-advance-table-filter-redeemed');
         let ticketsAdvanceTableFilterColumn = $$('#tickets-advance-table-filter-column');
+        let ticketsAdvanceTableFiltersPrintDate = $$('#tickets-advance-table-filter-print-date');
+        let ticketsAdvanceTableFiltersRedeemDate = $$('#tickets-advance-table-filter-redeem-date');
+
+        dropdownDate.generate({ values: filters.PeriodList, parent: ticketsAdvanceTableFiltersPrintDate, name: 'PeriodList' });
+        dropdownDate.generate({ values: filters.PeriodList, parent: ticketsAdvanceTableFiltersRedeemDate, name: 'PeriodList' });
 
         dropdown.generate({ optionValue: filters.TicketStateList, parent: ticketsAdvanceTableFiltersStatus, type: 'multi' });
         dropdown.generate({ optionValue: filters.TypesList, parent: ticketsAdvanceTableFiltersTypes, type: 'multi' });

@@ -51,7 +51,7 @@ const malfunctions = (function () {
 
     //trigger('preloader/hide');
 
-    dropdown.generate({ optionValue: machinesNumber, parent: malfunctionsMachinesNumbers })
+    dropdown.generate({ values: machinesNumber, parent: malfunctionsMachinesNumbers })
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function () {
         if (addMalfunctionMsg.children[0].value) {
@@ -173,7 +173,7 @@ const malfunctions = (function () {
         entry.forEach(function (entry) {
             formatedData[counter] = {
                 rowData: {
-                    flag: entry.Properties.FlagList[0],
+                    flag: entry.EntryData.FlagList[0],
                     createdBy: entry.EntryData.CreatedBy.Name ? entry.EntryData.CreatedBy.Name : '',
                     casino: entry.EntryData.Casino,
                     machine: entry.EntryData.Machine,

@@ -8,9 +8,11 @@ const dropdownDate = (function () {
     //indicate custom option
     let pickCustom = false;
     //generate single dropdown
-    function generate(dataSelect, element) {
-        if (element) {
-            removeChildren(element);
+    function generate(data) {
+        let values = data.values;
+        let parent = data.parent
+        if (parent) {
+            removeChildren(parent);
         }
         // wrapper select
         let select = document.createElement('div');
@@ -23,17 +25,16 @@ const dropdownDate = (function () {
         selected.innerHTML = `<div></div>
                               <span class="closed-arrow">&#9660;</span>`;
         select.appendChild(selected);
-        selected.children[0].innerHTML = dataSelect[0].Name;
+        selected.children[0].innerHTML = values[0].Name;
         selected.title = selected.children[0].innerHTML;
-        if (dataSelect[0].Name === '-' || dataSelect[0].name === 'null') {
-            selected.dataset.value = null;
-        }
-        else {
-            selected.dataset.value = dataSelect[0].Id;
-        }
+        selected.dataset.id = values[0].Id !== -1 ? values[0].Id : null;
+        selected.dataset.value = values[0].Name;
         selected.classList.add('element-table-filters');
         selected.classList.add('center');
         selected.classList.add('opened-closed-wrapper');
+        if (data.name) {
+            selected.dataset.name = data.name;
+        }
         //wrapper options group
         let optionGroupWrapper = document.createElement('div');
         optionGroupWrapper.classList.add('hidden');
@@ -65,7 +66,6 @@ const dropdownDate = (function () {
         buttonsCustomDate.classList.add('center');
 
         let applyCustom = document.createElement('button');
-
         applyCustom.classList.add('secundarybutton');
         applyCustom.innerHTML = 'Apply';
         applyCustom.addEventListener('click', function () {
@@ -82,21 +82,35 @@ const dropdownDate = (function () {
         buttonsCustomDate.appendChild(applyCustom);
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
+        let setDatePicker = customDate.getElementsByClassName('datepicker');
+
+        for (let picker of setDatePicker) {
+            picker.dataset.value = new Date().toISOString().split('T')[0];
+            picker.value = new Date().toISOString().split('T')[0];
+        }
+
 
         customDate.classList.add('hidden');
-        for (let element of dataSelect) {
+        for (let element of values) {
             //option with functionality
             let option = document.createElement('div');
             option.classList.add('single-option');
             option.innerHTML = element.Name;
             option.title = option.innerHTML;
-            option.dataset.value = element.Id !== -1 ? element.Id : null;
+            option.dataset.value = element.Name;
+            option.dataset.id = element.Id !== -1 ? element.Id : null;
             option.dataset.translationKey = element.Name ? element.Name : element.name;;
             optionGroup.appendChild(option);
             option.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (option.dataset.value === '5') {
+                selected.dataset.id = option.dataset.id;
+                if (option.dataset.value === 'Custom') {
                     customDate.classList.toggle('hidden');
+                    if (customDate.classList.contains('hidden')) {
+                        selected.dataset.id = optionGroup.children[0].dataset.id;
+                        selected.dataset.value = optionGroup.children[0].dataset.value;
+                        selected.children[0].innerHTML = optionGroup.children[0].innerHTML;
+                    }
                     pickCustom = !pickCustom;
                     delete applyCustom.dataset.value;
                 }
@@ -111,14 +125,60 @@ const dropdownDate = (function () {
         }
         optionGroupWrapper.appendChild(optionGroup);
         optionGroupWrapper.appendChild(customDate);
+        if (customDate.getElementsByClassName('timepicker').length !== 0) {
+            for (let picker of customDate.getElementsByClassName('timepicker')) {
+                dropdown.generate({ values: hours, parent: picker });
+                picker.appendChild(dropdown.generate({ values: minutes }));
+            }
+        }
+
         select.appendChild(selected);
         select.appendChild(optionGroupWrapper);
 
         indexDsId++;
         dateSelectArray.push(select.id);
-        if (element) {
-            element.appendChild(select);
-            return element;
+        datepicker.generate({ dropdownDate: select })
+
+
+        select.get = function () {
+            let dateFromTo = selected.dataset.value.split(', ');
+            let selectedId = selected.dataset.id
+            if (dateFromTo.length < 2) {
+                dateFromTo = [null, null];
+            }
+            let dateFrom = dateFromTo[0];
+            let dateTo = dateFromTo[1];
+            return {
+                dateFrom,
+                dateTo,
+                selectedId
+            }
+        }
+        select.reset = function () {
+            selected.dataset.id = values[0].Id !== -1 ? values[0].Id : null;
+            selected.dataset.value = values[0].Name;
+            selected.children[0].innerHTML = localization.translateMessage(values[0].Name);
+            selected.title = selected.children[0].innerHTML;
+            return selected;
+        }
+
+        select.set = function (params) {
+            for (let option of optionGroup.children) {
+                if (params === option.dataset.id && option.dataset.value !== 'Custom') {
+                    selected.dataset.id = params;
+                    selected.dataset.value = option.dataset.value;
+                    selected.children[0].innerHTML = option.innerHTML;
+                    selected.title = selected.children[0].innerHTML;
+                }
+            }
+            return selected;
+        }
+
+
+
+        if (parent) {
+            parent.appendChild(select);
+            return parent;
         }
         return select;
     }
