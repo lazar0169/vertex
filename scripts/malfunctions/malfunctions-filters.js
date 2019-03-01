@@ -6,7 +6,6 @@ const malfunctionsFilter = (function () {
     let advanceTableFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar-button').children[0];
 
-
     let malfunctionsMachinesNumbers = $$('#malfunctions-number');
 
     dropdown.generate({ values: machinesNumber, parent: malfunctionsMachinesNumbers })
@@ -31,13 +30,11 @@ const malfunctionsFilter = (function () {
         let malfunctionsAdvanceTableFilterStatus = $$('#malfunctions-advance-table-filter-status');
         let malfunctionsAdvanceTableFilterType = $$('#malfunctions-advance-table-filter-type');
 
-        dropdownDate.generate({ values: [{ Name: '-', Id: 0 }, { Name: 'Custom', Id: 7 }], parent: malfunctionsAdvanceTableFilterDate })
-
+        dropdownDate.generate({ values: filters.PeriodList, parent: malfunctionsAdvanceTableFilterDate })
         dropdown.generate({ values: filters.CasinoList, parent: malfunctionsAdvanceTableFilterCasino, type: 'multi' });
         dropdown.generate({ values: filters.PriorityList, parent: malfunctionsAdvanceTableFilterPriority, type: 'multi' });
         dropdown.generate({ values: filters.StatusList, parent: malfunctionsAdvanceTableFilterStatus, type: 'multi' });
         dropdown.generate({ values: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
-
     }
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {

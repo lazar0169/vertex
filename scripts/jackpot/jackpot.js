@@ -6,7 +6,6 @@ const jackpots = (function () {
         }, 2000);
         selectTab('jackpot-tab');
         selectInfoContent('jackpot-tab');
-
     });
 
 })();

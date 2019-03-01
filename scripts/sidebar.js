@@ -405,7 +405,11 @@ const sidebar = (function () {
 
     //helper functions
     function initVariables() {
-        categorySelectedId = Object.keys(menuData)[0];
+        let category;
+        if (sessionStorage.categoryAndLink) {
+            category = JSON.parse(sessionStorage.categoryAndLink).category
+        }
+        categorySelectedId = category ? category : Object.keys(menuData)[0];
         linkSelectedId = `${categorySelectedId}-link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
     }
 

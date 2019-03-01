@@ -1,6 +1,7 @@
 .hidden {
     display: none !important;
 }
+
 .visibility-hidden {
     visibility: hidden;
 }
@@ -122,6 +123,7 @@
 
 .advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:last-child {
     width: 200px;
+    margin: 0 0.5em;
 }
 
 .advance-filter-active {

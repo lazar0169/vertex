@@ -1,23 +1,47 @@
-<div id="machines-filter">
-    <div id="machine-search" class="mdi mdi-gamepad-variant"></div>
-    <div id="machine-filters-content">
-        <div>Filters:</div>
-        <div id="machine-filters-player">
-            <label class="form-checkbox">
-                <input type="checkbox">
-                <i class="form-icon"></i>
-                <div>Machines with a player</div>
-            </label>
-        </div>
-        <div id="machine-filters-vendors">
-            <div>Vendors:</div>
-
-        </div>
-        <div id="machine-filters-status">
-            <div>Status:</div>
+<div id="machines-filter" class="custom-filter">
+    <div class='icon-vertex-Search center advance-filter-tabele-search'>
+        <div class="hidden icon-vertex-Search center">
+            <input class="element-multilanguage search" type="text" onfocus="value=''" placeholder="Search"
+                data-translation-key="search">
         </div>
     </div>
-    <div class="machine-filters-right">
+    <div id="machines-advance-table-filter" class="advance-table-filter center">
+        <div class="center opened-closed-wrapper">
+            <div class="element-multilanguage" data-translation-key="AdvanceTableFilter">Advance table filter</div>
+            <span class="closed-arrow">&#9660;</span>
+        </div>
+        <div id="machines-advance-table-filter-active" class="hidden advance-table-filter-active">
+
+            <div id="machine-filters-player">
+                <div class="element-multilanguage" data-translation-key="Machines">Machines:</div>
+                <div>
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="MachinesWithAPlayer">Machines with a player</div>
+                    </label>
+                </div>
+            </div>
+            <div id="machines-advance-table-filter-vendors" data-name="Vendros" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="Vendros">Vendros:</div>
+            </div>
+            <div id="machines-advance-table-filter-status" data-name="Status" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="Status">Status:</div>
+            </div>
+
+            <div class="button-wrapper">
+                <div id="machines-advance-table-filter-apply" class="center apply-advance-filter">
+                    <button class="secundarybutton element-multilanguage" data-translation-key="ApplyFilters">Apply
+                        Filters</button>
+                </div>
+                <div id="machines-advance-table-filter-clear" class="center">
+                    <a class="button-link element-multilanguage" data-translation-key="ClearAll">Clear all</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-right-filter center">
         <div id="auto-select-status-details">
             <div class="center">
                 <div>Auto select:</div>
@@ -25,8 +49,8 @@
             </div>
         </div>
         <div id="machine-filters-show-space" class="center">
-            <span class="mdi mdi-view-sequential "></span>
-            <span class="mdi mdi-view-headline machine-filters-show-space-active"></span>
+            <span class="mdi mdi-view-sequential show-space show-table-expanded show-space-active"></span>
+            <span class="mdi mdi-view-headline show-space show-table-condensed"></span>
         </div>
         <div id="machine-filters-number-machines" class="center">
             <div class="hidden"></div>
