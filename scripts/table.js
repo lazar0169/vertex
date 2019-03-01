@@ -70,30 +70,6 @@ let table = (function () {
 
         //endregion
 
-        function createColumnClassName(propertyName) {
-            return columnClassPrefix + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-        }
-
-        function hoverRow(elements, highlight = false) {
-            for (let element of document.getElementsByClassName(elements)) {
-                element.classList[highlight ? "add" : "remove"]('hover');
-            }
-        }
-
-
-        function resetTableView(tableSettings) {
-            tableSettings.tableContainerElement.classList.remove('table-condensed');
-            tableSettings.tableContainerElement.classList.remove('table-expanded');
-            $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0].classList.remove('show-space-active');
-            $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.remove('show-space-active');
-        }
-
-        function showNormalTable(tableSettings) {
-            resetTableView(tableSettings);
-            $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.add('show-space-active');
-            tableSettings.tableContainerElement.classList.add('table-expanded');
-        }
-
 
         //region public functions
 
@@ -704,6 +680,16 @@ let table = (function () {
 //endregion
 
 //region helper functions
+        function createColumnClassName(propertyName) {
+            return columnClassPrefix + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+        }
+
+        function hoverRow(elements, highlight = false) {
+            for (let element of document.getElementsByClassName(elements)) {
+                element.classList[highlight ? "add" : "remove"]('hover');
+            }
+        }
+
         function getHeaders(table) {
             return table.getElementsByClassName('head');
         }
