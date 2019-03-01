@@ -80,7 +80,8 @@ let form = (function () {
         let formInputElementsArray = collectAllFormElements(formSettings);
 
         formInputElementsArray.forEach(function (inputElement) {
-            let inputName = inputElement.name === undefined ? inputElement.dataset.name : inputElement.name;
+            //get name for regular input or dropdown
+            let inputName = inputElement.name === undefined ? inputElement.children[0].dataset.name : inputElement.name;
             if (inputName !== undefined && dataToDisplay[inputName] !== undefined) {
                 if (inputElement.type === 'checkbox') {
                     let checkbox = inputElement.parentNode.parentNode;
@@ -131,7 +132,7 @@ let form = (function () {
                         } else {
                             switch (inputElement.dataset.type) {
                                 case inputTypes.singleSelect:
-                                    dropdown.select(inputElement, dataToDisplay[inputName]);
+                                    inputElement.set(dataToDisplay[inputName]);
                                     break;
                                 case inputTypes.integer:
                                     inputElement.value = dataToDisplay[inputName];
@@ -216,16 +217,18 @@ let form = (function () {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
                 } else {
                     switch (formInputElement.dataset.type) {
+                        //ToDo: get values of multi select
                         /*                        case 'multiple-select':
                                                     if (dataForApi[formInputElement.name] === undefined) {
                                                         dataForApi[formInputElement.name] = [];
                                                     }
                                                     dataForApi[formInputElement.name].push(formInputElement.value);*/
                         case inputTypes.singleSelect:
+                            //ToDO: naci nacin kako da se iz single selecta koji dostavlja dve vrednosti dobije ime i vrednost drugog parametra
+                            //Na primer, pri dodavanju transakcije u jednom selectu biramo i ime i id masine
                             let valueElement = formInputElement.firstChild;
-                            //dataForApi[formInputElement.dataset.name] = valueElement.dataset.value.toString();
-                            //dataForApi[formInputElement.dataset.name] = dropdown.getValue(formInputElement);
-                            dataForApi[formInputElement.dataset.name] = formInputElement.get();
+
+                            dataForApi[formInputElement.children[0].dataset.name] = formInputElement.get();
 
                             if (formInputElement.dataset.nameLongId !== undefined && valueElement.dataset.valueLongId !== undefined) {
                                 dataForApi[formInputElement.dataset.nameLongId] = valueElement.dataset.valueLongId.toString();

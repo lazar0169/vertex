@@ -1,33 +1,31 @@
 const ticketsFilter = (function () {
-
     let advanceTableFilter = $$('#tickets-advance-table-filter');
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketAdvanceFilterButton = $$('#tickets-advance-table-filter').children[0];
     let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
+    //ToDo:Nikola vidi cemu sluzi ovo
     let clearAdvanceFilterInfobar = $$('#ticket-advance-table-filter-active-infobar-button').children[0];
     let ticketsAdvanceFilterApplyButton = $$('#tickets-advance-table-filter-apply').children[0];
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];
 
-    //let ticketsMachinesNumbers = $$('#tickets-machines-number');
-    //dropdown.generate({ optionValue: machinesNumber, parent: ticketsMachinesNumbers });
-
-
-
-
+    //region event listeners
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterTicketsTable();
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
+
     clearAdvanceFilterInfobar.addEventListener('click', clearTicketsFilters);
+
     ticketAdvanceFilterButton.addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     });
+    //endregion
 
-
+    //region module events
     on('tickets/filters/init', function (params) {
         let endpointId = params.endpointId;
         getFiltersFromAPI(endpointId);
@@ -38,13 +36,12 @@ const ticketsFilter = (function () {
         let filters = apiResponseData.Data;
         displayFilters(filters);
     });
-    on('tickets/filters/filter-table', function (params) {
+    on('tickets/table/filter', function (params) {
         filterTicketsTable();
     });
+    //endregion
 
-
-
-
+    //region helper functions
     function filterTicketsTable() {
         let filters = prepareTicketFilters();
         trigger('preloader/show');
@@ -72,7 +69,7 @@ const ticketsFilter = (function () {
         });
     }
 
-    function displayFilters(filters, tableSettings) {
+    function displayFilters(filters) {
         //filter elements
         let ticketsAdvanceTableFiltersStatus = $$('#tickets-advance-table-filter-status');
         let ticketsAdvanceTableFiltersTypes = $$('#tickets-advance-table-filter-types');
@@ -85,10 +82,10 @@ const ticketsFilter = (function () {
         dropdownDate.generate({ values: filters.PeriodList, parent: ticketsAdvanceTableFiltersPrintDate, name: 'PeriodList' });
         dropdownDate.generate({ values: filters.PeriodList, parent: ticketsAdvanceTableFiltersRedeemDate, name: 'PeriodList' });
 
-        dropdown.generate({ optionValue: filters.TicketStateList, parent: ticketsAdvanceTableFiltersStatus, type: 'multi' });
-        dropdown.generate({ optionValue: filters.TypesList, parent: ticketsAdvanceTableFiltersTypes, type: 'multi' });
-        dropdown.generate({ optionValue: filters.PrintedAndRedeemed, parent: ticketsAdvanceTableFiltersPrinted, type: 'multi' });
-        dropdown.generate({ optionValue: filters.PrintedAndRedeemed, parent: ticketsAdvanceTableFiltersRedeemed, type: 'multi' });
+        dropdown.generate({ values: filters.TicketStateList, parent: ticketsAdvanceTableFiltersStatus, type: 'multi' });
+        dropdown.generate({ values: filters.TypesList, parent: ticketsAdvanceTableFiltersTypes, type: 'multi' });
+        dropdown.generate({ values: filters.PrintedAndRedeemed, parent: ticketsAdvanceTableFiltersPrinted, type: 'multi' });
+        dropdown.generate({ values: filters.PrintedAndRedeemed, parent: ticketsAdvanceTableFiltersRedeemed, type: 'multi' });
 
         //hide/show columns picker
         let ticketsTable = $$('#table-container-tickets');
@@ -108,28 +105,11 @@ const ticketsFilter = (function () {
             }
         }
 
-        dropdown.generate({optionValue: columns,parent:ticketsAdvanceTableFilterColumn, type: 'multi'});
-
+        dropdown.generate({values: columns,parent:ticketsAdvanceTableFilterColumn, type: 'multi'});
     }
 
     function prepareTicketFilters() {
         let table = $$('#table-container-tickets');
-        let printDate = $$('#tickets-advance-table-filter-print-date').children[1].children[0].dataset.value;
-        let printDateFrom = null;
-        let printDateTo = null;
-        if (printDate !== 'null') {
-            printDateFrom = $$('#tickets-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[0];
-            printDateTo = $$('#tickets-advance-table-filter-date-range').children[1].children[0].dataset.value.split(',')[1];
-        }
-
-        let redeemedDate = $$('#tickets-advance-table-filter-redeem-date').children[1].children[0].dataset.value;
-        let redeemedDateFrom = null;
-        let redeemedDateTo = null;
-        if (redeemedDate !== 'null') {
-            redeemedDateFrom = $$('#tickets-advance-table-filter-redeem-date').children[1].children[0].dataset.value.split(',')[0];
-            redeemedDateTo = $$('#tickets-advance-table-filter-redeem-date').children[1].children[0].dataset.value.split(',')[1];
-        }
-
 
         let statuses = $$('#tickets-advance-table-filter-status').children[1].get();
         let types = $$('#tickets-advance-table-filter-types').children[1].get();
@@ -138,10 +118,8 @@ const ticketsFilter = (function () {
 
         let filters = {
             'EndpointId': table.settings.endpointId,
-            'DateFrom': printDateFrom,
-            'DateTo': printDateTo,
-            'RedeemDateFrom': redeemedDateFrom,
-            'RedeemDateTo': redeemedDateTo,
+            'SelectedPeriod': $$('#tickets-advance-table-filter-print-date').children[1].get(),
+            'SelectedPeriodRedeemed': $$('#tickets-advance-table-filter-redeem-date').children[1].get(),
             'PrintedList': printed,
             'RedeemList': redeemed,
             'Status': statuses,
@@ -151,9 +129,6 @@ const ticketsFilter = (function () {
         filters = table.getFilters(filters);
         //mark hidden columns
         let visibleColumns = $$('#tickets-advance-table-filter-column').children[1].get();
-        if (visibleColumns === 'null') {
-            visibleColumns = [];
-        }
         table.setVisibleColumns(visibleColumns);
         return filters;
     }

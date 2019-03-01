@@ -7,12 +7,28 @@ const aft = (function () {
     let endpointId;
 
     const events = {
+        activated: 'aft/activated',
         getTransactions: 'aft/transactions/get',
         previewTransactions: 'aft/transactions/preview',
+        filterTable: 'aft/table/filter'
     };
 
-    on('aft/activated', function (params) {
 
+    //region event handlers
+    window.addEventListener('click', function (e) {
+        let selector = '#' + cancelTransactionsPopUpId;
+        let popup = $$(selector);
+        if (popup !== null) {
+            if (e.target.closest(selector) === null) {
+                dismissCancelTransactionPopUp();
+                deselectHighlightedTransaction();
+            }
+        }
+    });
+    //endregion
+
+    //region module events
+    on(events.activated, function (params) {
         let aftId = params.params[0].value;
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
@@ -29,35 +45,12 @@ const aft = (function () {
         addTransactionFormSettings.endpointId = aftId;
 
         trigger('form/init', {formSettings: addTransactionFormSettings});
-        let endpointName = '';
-        if ($$('.link-active') !== undefined && $$('.link-active')[0] !== undefined) {
-            endpointName = $$('.link-active')[0].dataset.value;
-        }
-        trigger('form/add/hiddenField', {
-            formSettings: addTransactionFormSettings,
-            name: 'EndpointName',
-            value: endpointName
-        });
+
 
         trigger('aft/tab/transaction', {endpointId: aftId});
         trigger('aft/tab/notification', {endpointId: aftId});
-
-
     });
 
-    /*********************----Dom event handlers------*********************/
-    window.addEventListener('click', function (e) {
-        let selector = '#' + cancelTransactionsPopUpId;
-        let popup = $$(selector);
-        if (popup !== null) {
-            if (e.target.closest(selector) === null) {
-                dismissCancelTransactionPopUp();
-                deselectHighlightedTransaction();
-            }
-        }
-    });
-
-    /*********************----Module Events------*********************/
     on(table.events.rowClick(aftTableId), function (params) {
         let event = params.event;
         let target = params.target;
@@ -65,22 +58,23 @@ const aft = (function () {
             onTableCellClick(event, target);
         }
     });
+
     on(table.events.pageSize(aftTableId), function (params) {
-        trigger('aft/filters/filter-table');
+        trigger(events.filterTable);
 
     });
+
     on(table.events.sort(aftTableId), function (params) {
-        trigger('aft/filters/filter-table');
+        trigger(events.filterTable);
 
     });
+
     on(table.events.pagination(aftTableId), function (params) {
-        trigger('aft/filters/filter-table');
+        trigger(events.filterTable);
 
     });
 
     on(table.events.export(aftTableId), function (params) {
-        console.log(params);
-
         trigger('preloader/show');
 
         let aftTable = params.table;
@@ -90,8 +84,8 @@ const aft = (function () {
         if (aftTable.settings.filters === null) {
             filters = {
                 'EndpointId': aftTable.settings.endpointId,
-                'DateFrom': null,
-                'DateTo': null,
+                //ToDo: uneti default vrednost za Period paramter - nije dokumentovano
+                'Period': null,
                 'MachineList': [],
                 'JackpotList': [],
                 'Status': [],
@@ -121,7 +115,6 @@ const aft = (function () {
         trigger(event,{data:filters});
     });
 
-
     on(events.getTransactions, function (params) {
         if (aftTable !== null) {
             aftTable.destroy();
@@ -143,28 +136,31 @@ const aft = (function () {
         //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
+    //ToDo: prebaciti evente u enum
+
     on('aft/addTransaction/error', function (params) {
         trigger('notifications/show', {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('aft/filters/filter-table', {showFilters: false});
     });
+
     on('aft/addTransaction/success', function (params) {
         trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('aft/filters/filter-table', {showFilters: false});
-        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('aft/filters/filter-table', {showFilters: false});
+        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
         trigger('show/app');
-        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        //ToDo: da li se ovde resetuju filteri ili ne?
+        trigger(events.filterTable);
+
+
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode.toString()),
             type: params.data.MessageType
         });
 
     });
+
     on('aft/transactions/canceled/error', function (params) {
         trigger('communication/error/', params);
         dismissCancelTransactionPopUp();
@@ -192,7 +188,9 @@ const aft = (function () {
         }
     });
 
-    /*********************----Helper functions------*********************/
+    //endregion
+
+    //region helper functions
     function onCancelPopUpAction(e) {
         e.stopPropagation();
         dismissCancelTransactionPopUp();
@@ -241,7 +239,7 @@ const aft = (function () {
     function transactionCanceled(params) {
         let data = params.data;
         let additionalData = data.Data;
-        //get popup coordinates if following popup should be displayed
+        //get popup coordinates if the next popup should be displayed
         let popUp = $$(`#${cancelTransactionsPopUpId}`);
         let parentCell = popUp.closest('.cell');
         let boundingRect = popUp.getBoundingClientRect();
@@ -262,7 +260,7 @@ const aft = (function () {
             displayTransactionPopUp('AreYouSure', 'aft/table/show/cancel-pending-pop-up', coordinates, parentCell);
         } else {
             deselectHighlightedTransaction();
-            trigger('aft/filters/filter-table');
+            trigger(events.filterTable);
         }
     }
 
@@ -304,9 +302,9 @@ const aft = (function () {
         trigger('table/deselect/active-row', {tableSettings: tableSettings});
         trigger('table/deselect/hover-row', {tableSettings: tableSettings});
     }
+    //endregion
 
-
-    /*-------------------------------------- AFT EVENTS ---------------------------------------*/
+    //region AFT communication events
 
     //aft get transactions
     on(communication.events.aft.transactions.getTransactions, function (params) {
@@ -314,7 +312,7 @@ const aft = (function () {
         let request = communication.requestTypes.post;
         let data = {
             'EndpointId': params.endpointId
-        }
+        };
         let successEvent = events.getTransactions;
         let errorEvent = '';
 
@@ -351,7 +349,6 @@ const aft = (function () {
             EndpointId: params.transactionData.endpointId,
             Gmcid: params.transactionData.gmcid,
             JidtString: params.transactionData.jidtString,
-            EndpointName: params.transactionData.endpointName,
         };
         let route = params.status.pending === true ? communication.apiRoutes.aft.cancelPendingTransaction : communication.apiRoutes.aft.cancelTransaction;
         communication.sendRequest(route, communication.requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
@@ -362,8 +359,8 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.addTransaction;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let successEvent = params.formSettings.submitSuccessEvent;
-        let errorEvent = params.formSettings.submitErrorEvent;
+        let successEvent = params.additionalData.submitSuccessEvent;
+        let errorEvent = params.additionalData.submitErrorEvent;
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
@@ -414,7 +411,7 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.saveBasicSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
+        let formSettings = params.additionalData;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
         trigger('communicate/createAndSendXhr', {
@@ -450,7 +447,7 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.saveNotificationSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.formSettings;
+        let formSettings = params.additionalData;
         let successEvent = formSettings.submitSuccessEvent;
         let errorEvent = formSettings.submitErrorEvent;
         trigger('communicate/createAndSendXhr', {

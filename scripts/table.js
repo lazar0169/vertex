@@ -282,6 +282,10 @@ let table = (function () {
         }
 
         function setVisibleColumns(visibleColumns) {
+            //dropdown returns "null" string instead of empty array
+            if (visibleColumns === 'null') {
+                visibleColumns = [];
+            }
             let table = this;
             let columns = table.settings.columns;
             if (visibleColumns.length <= 0) {
@@ -550,7 +554,7 @@ let table = (function () {
             if (settings.pageSizeContainer === null) {
                 return null;
             } else {
-                let dd = dropdown.generate({optionValue: machinesNumber});
+                let dd = dropdown.generate({values: machinesNumber});
                 bindPageSizeLinkHandlers(dd, table);
                 return dd;
             }

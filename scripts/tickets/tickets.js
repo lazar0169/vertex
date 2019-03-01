@@ -1,16 +1,17 @@
 const tickets = (function () {
 
     const events = {
+        activated: 'tickets/activated',
         getTickets: 'tickets/get',
         previewTickets: 'tickets/preview',
+        filterTable: 'tickets/table/filter'
     };
-
-    let ticketsTable = null;
     const ticketTableId = 'table-container-tickets';
 
+    let ticketsTable = null;
 
     //region module events
-    on('tickets/activated', function (params) {
+    on(events.activated, function (params) {
         let ticketId = params.params[0].value;
 
         selectTab('tickets-tab');
@@ -22,7 +23,6 @@ const tickets = (function () {
         trigger('tickets/tab/maxValue', {endpointId: ticketId});
         trigger('tickets/tab/smsSettings', {endpointId: ticketId});
     });
-
 
     on(events.getTickets, function (params) {
         if (ticketsTable !== null) {
@@ -38,6 +38,7 @@ const tickets = (function () {
         trigger('tickets/filters/init', {endpointId: params.additionalData});
         $$('#tickets-tab-info').appendChild(ticketsTable);
     });
+
     on(events.previewTickets, function (params) {
         let data = params.data.Data;
         $$(`#${ticketTableId}`).update(data);
@@ -45,26 +46,22 @@ const tickets = (function () {
     });
 
     on(table.events.pageSize(ticketTableId), function () {
-        trigger('tickets/filters/filter-table');
+        trigger(events.filterTable);
 
     });
     on(table.events.sort(ticketTableId), function () {
-        trigger('tickets/filters/filter-table');
+        trigger(events.filterTable);
 
     });
     on(table.events.pagination(ticketTableId), function () {
-        trigger('tickets/filters/filter-table');
+        trigger(events.filterTable);
 
     });
+
     on(table.events.export(ticketTableId), function (params) {
-        console.log(params);
-
         trigger('preloader/show');
-
         let ticketsTable = params.table;
-
         let filters = null;
-
         if (ticketsTable.settings.filters === null) {
             filters = {
                 'EndpointId': ticketsTable.settings.endpointId,
@@ -102,13 +99,13 @@ const tickets = (function () {
         trigger(event, {data: filters});
     });
 
-
-    //endregion
-
+    //ToDo:: ubaciti u events enum, nisam siguran cemu sluzi
     on('showing-tickets-top-bar-value', function (data) {
         topBarInfoBoxValue(data.dataItemValue)
     });
+    //endregion
 
+    //region helper functions
     function topBarInfoBoxValue(data) {
         let topBarValueCashable = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-value');
         topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable);
@@ -120,8 +117,9 @@ const tickets = (function () {
         let topBarnumberOfPromoTickets = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-number');
         topBarnumberOfPromoTickets[0].innerHTML = `/${data.NumOfPromo}`;
     }
+    //endregion
 
-
+    //region Tickets communication events
     //tickets get tickets
     on(communication.events.tickets.getTickets, function (params) {
         let route = communication.apiRoutes.tickets.getTickets;
@@ -140,7 +138,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
 
     on(communication.events.tickets.previewTickets, function (params) {
         let route = communication.apiRoutes.tickets.previewTickets;
@@ -173,7 +170,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
     //tickets getting values for show sms settings
     on(communication.events.tickets.showSmsSettings, function (params) {
         let route = communication.apiRoutes.tickets.showSmsSettings;
@@ -191,7 +187,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
     //tickets SaveTitoSmsAction
     on(communication.events.tickets.saveSmsSettings, function (params) {
         console.log('params:', params);
@@ -210,7 +205,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
     //tickets ShowTitoMaxValueSettings
     on(communication.events.tickets.showMaxValueSettings, function (params) {
         let route = communication.apiRoutes.tickets.showMaxValueSettings;
@@ -228,7 +222,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
     //tickets SaveTitoMaxValuesAction
     on(communication.events.tickets.saveMaxValuesAction, function (params) {
         let route = communication.apiRoutes.tickets.saveMaxValuesAction;
@@ -246,7 +239,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
     //ShowTicketAppearanceSettings
     on(communication.events.tickets.ticketAppearance, function (params) {
         let route = communication.apiRoutes.tickets.ticketAppearance;
@@ -264,7 +256,6 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
     //SaveTicketAppearanceAction
     on(communication.events.tickets.saveAppearance, function (params) {
         let route = communication.apiRoutes.tickets.saveAppearance;
@@ -295,4 +286,5 @@ const tickets = (function () {
     on(communication.events.tickets.exportToXLS, function (params) {
         //ToDo
     });
+    //endregion
 })();
