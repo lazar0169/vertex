@@ -1,5 +1,6 @@
 let table = (function () {
 
+
     //html class name constants
     const columnClassPrefix = 'column';
     const rowClassPrefix = 'row-';
@@ -66,6 +67,9 @@ let table = (function () {
         link.download = 'Report.pdf';
         link.click();
         trigger('preloader/hide');
+    });
+    on('filters/show-selected-filters', function (params) {
+        showSelectedFilters(params)
     });
 
     //endregion
@@ -396,25 +400,7 @@ let table = (function () {
             let rowData = items[row];
             let tempRow = JSON.parse(JSON.stringify(rowData.EntryData));
 
-            for (let cellData in tempRow) {
-                if (tempRow[cellData]) {
-                    let proba = tempRow[cellData]
-                    if (proba instanceof  Object) {
-                        if (proba instanceof Array) {
-                            console.log('ovo je kljuc;' + cellData + 'ovo je niz:' + tempRow[cellData])
-                        }
-                        else{
 
-                            console.log('ovo je kljuc;' + cellData + 'ovo je objekat:' + tempRow[cellData])
-                        }
-                    }
-                    else {
-                        console.log('ovo nije objekat')
-
-                    }
-
-                }
-            }
 
             // /** Data parsing **/
             // //region parsing data
@@ -467,7 +453,6 @@ let table = (function () {
             // if (tempRow.Priority !== undefined) {
             //     tempRow.Priority = localization.translateMessage(tempRow.Priority);
             // }
-
             // //pages containing field: AFT,Malfunctions
             // if (tempRow.FlagList !== undefined) {
             //     let flagElement = document.createElement('div');
@@ -491,22 +476,31 @@ let table = (function () {
                 let cell = createRowCell(rowId, column, settings, rowData);
                 //add column number class
                 cell.classList.add(`table-column-${columnIndex + 1}`);
+                let cellData;
+                if (tempRow[column] instanceof Object) {
+                    if (tempRow[column] instanceof Array) {
+                        cellData = createCellFromArray({ name: column, array: tempRow[column] });
+                    }
+                    else {
+                        cellData = createTimeUserCellHTML(formatTimeData(tempRow[column].Time), tempRow[column].Name)
+                    }
+                }
+                else {
+                    cellData = tempRow[column];
+                }
 
-                let cellData = tempRow[column];
                 //set cell to be clickable if criteria are met
                 //ToDo: Add criteria for other pages
-                if (
-                    !isEmpty(rowData.Properties.IsPayoutPossible) && rowData.Properties.IsPayoutPossible //aft
-                ) {
+                if (!isEmpty(tempRow.ActionList) && tempRow.ActionList.length > 0) {
                     cell.classList.add('clickable');
                 }
 
-                if (Number.isInteger(cellData)) {
+                if (Number.isInteger(cellData) && column !== 'Code') {
                     cell.innerHTML = formatFloatValue(cellData);
                 } else {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
-                    //cell.innerHTML = localization.translateMessage(cellData,cell);
+                   // cell.innerHTML = localization.translateMessage(cellData,cell);
                 }
 
                 //hide hidden columns
@@ -681,13 +675,26 @@ let table = (function () {
         }
         return cell;
     }
+    //ToDo: ovo ako je niz koji se treba prikaze u celiju
+    function createCellFromArray(data) {
+        name = data.name.toLowerCase()
+        let tempWrapper = document.createElement('div')
+        for (let element of data.array) {
+            tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}"></div>`;
+        }
+        return tempWrapper.innerHTML;
+    }
 
     function createTimeUserCellHTML(time, user) {
-        let timeElement = createTableTimeElement(time);
-        let userElement = document.createElement('label');
-        userElement.innerHTML = user;
-
-        return timeElement.outerHTML + userElement.outerHTML;
+        if (time && user) {
+            let timeElement = createTableTimeElement(time);
+            let userElement = document.createElement('label');
+            userElement.innerHTML = user;
+            return timeElement.outerHTML + userElement.outerHTML;
+        }
+        else {
+            return '';
+        }
     }
 
     function createTableTimeElement(content) {
@@ -891,7 +898,7 @@ let table = (function () {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
         for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
+            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
                 filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
                 filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
                 filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
@@ -909,6 +916,7 @@ let table = (function () {
             }
         }
     }
+
 
     function setDefaults(settings, table) {
         if (settings.filters === undefined) {
@@ -970,6 +978,7 @@ let table = (function () {
         table.settings = settings;
     }
 
+
     //region public helper functions
 
     function compareFilters(table, filters) {
@@ -1020,7 +1029,4 @@ let table = (function () {
     //endregion
 
 
-}
-
-)
-    ();
+})();

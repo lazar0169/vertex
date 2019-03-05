@@ -50,6 +50,7 @@
     overflow: auto;
     max-height: 80%;
 }
+
 .vertex-table .tbody.no-scroll {
     overflow: hidden !important;
 }
@@ -63,19 +64,26 @@
     cursor: default;
     width: 100%;
     display: flex;
-    font-family: OpenSans-Regular;
+    font-family: "Open Sans";
     font-size: 13px;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
 }
+
+.vertex-table .column-flag-list {
+    padding: 0;
+}
+
 .vertex-table .cell.column-action-list {
     flex-direction: row;
     justify-content: flex-end;
 }
+
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
 }
+
 .cell.hover {
     background-color: #2F3B41;
     color: white;
@@ -96,7 +104,8 @@
     top: 0;
     transition: 0.2s background-color;
     width: 100%;
-    font-family: OpenSans-Bold;
+    font-family: "Open Sans";
+    font-weight: bold;
     font-size: 12px;
     flex-direction: row;
     align-items: center;
@@ -132,9 +141,11 @@
     margin-left: 5px;
     visibility: visible;
 }
+
 .head.cell.active-column:after {
     visibility: visible;
 }
+
 .vertex-table .head.cell.sort-asc:after {
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
@@ -156,12 +167,12 @@
     top: 27%;
     margin-left: 5px
 }
+
 .head.cell:nth-child(1) {
     left: 0;
 }
 
-.head.active-column,
-.cell.active-column {
+.head.active-column, .cell.active-column {
     background: #2F3B41;
     color: white;
 }
@@ -258,10 +269,10 @@ textarea {
 
 /** FLAGS **/
 
-.head.cell.cell-flag,
-.table-item.cell.cell-flag{
-    width:25px;
+.head.cell.cell-flag, .table-item.cell.cell-flag {
+    width: 25px;
 }
+
 .cell-flag.row-flag-1 {
     border-left: 7px solid lawngreen;
 }
@@ -273,70 +284,76 @@ textarea {
 .cell-flag.row-flag-3 {
     border-left: 7px solid orange;
 }
-.cell .flag-element {
-    width:7px;
-    height:100%;
-    /* cell has 0.5em left padding*/
-    left: -0.5em;
-    position: relative;
+
+.cell .flaglist-element {
+    width: 7px;
+    height: 100%;
 }
-.cell .flag-element.flag-1 {
-background-color:lawngreen;
+
+.cell .flaglist-element.flaglist-1 {
+    background-color: lawngreen;
 }
-.cell .flag-element.flag-2 {
-background-color:#F3413A;
+
+.cell .flaglist-element.flaglist-2 {
+    background-color: #F3413A;
 }
-.cell .flag-element.flag-3 {
-background-color:orange;
+
+.cell .flaglist-element.flaglist-3 {
+    background-color: orange;
 }
 
 .table-condensed .cell {
     height: 44px;
 }
 
-.vertex-table .cancel-indicator {
-}
+.vertex-table .cancel-indicator {}
 
 .vertex-table .hover .cancel-indicator {
-    display:flex;
+    display: flex;
 }
 
 .vertex-table .table-actions-column {
-    width:49px;
-    padding:0 !important;
-}
-.vertex-table.table-condensed .table-actions-column {
-    width:44px;
+    width: 49px;
+    padding: 0 !important;
 }
 
+.vertex-table.table-condensed .table-actions-column {
+    width: 44px;
+}
 
 .vertex-table .cancel-indicator {
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     max-width: 49px;
-    display:none;
+    display: none;
     flex-direction: column;
     background: rgb(30, 155, 227);
     justify-content: center;
     align-items: center;
 }
+
 .vertex-table .cancel-indicator span {
-    font-size:12px;
-    color:white;
+    font-size: 12px;
+    color: white;
 }
+
 .vertex-table .cell.flex-column {
     flex-direction: column;
 }
+
 .vertex-table .cell.justify-content-start {
     justify-content: flex-start;
 }
+
 .vertex-table .cell.align-items-start {
     align-items: flex-start;
 }
+
 .vertex-table .cell.text-right {
     justify-content: flex-end;
     text-align: right;
 }
+
 .table-condensed .cell .table-time {
     font-size: 11px !important;
 }
@@ -410,5 +427,3 @@ background-color:orange;
     cursor: pointer;
     pointer-events: auto;
 }
-
-

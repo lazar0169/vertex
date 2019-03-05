@@ -12,6 +12,7 @@ const ticketsFilter = (function () {
     ticketsAdvanceFilterApplyButton.addEventListener('click', function () {
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterTicketsTable();
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
     ticketsAdvanceFilterCancelButton.addEventListener('click', removeSelectedFilters);
@@ -45,11 +46,12 @@ const ticketsFilter = (function () {
     function filterTicketsTable() {
         let filters = prepareTicketFilters();
         trigger('preloader/show');
-        trigger(communication.events.tickets.previewTickets,{data:filters});
+        trigger(communication.events.tickets.previewTickets, { data: filters });
     }
 
     function removeSelectedFilters() {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
 
     function clearTicketsFilters() {
@@ -92,7 +94,7 @@ const ticketsFilter = (function () {
         let columns = [];
         //add no select element
         columns.push({
-            Name:'-',
+            Name: '-',
             Id: -1
         });
         for (let columnKey in ticketsTable.settings.columns) {
@@ -105,7 +107,7 @@ const ticketsFilter = (function () {
             }
         }
 
-        dropdown.generate({values: columns,parent:ticketsAdvanceTableFilterColumn, type: 'multi'});
+        dropdown.generate({ values: columns, parent: ticketsAdvanceTableFilterColumn, type: 'multi' });
     }
 
     function prepareTicketFilters() {
@@ -120,10 +122,10 @@ const ticketsFilter = (function () {
             'EndpointId': table.settings.endpointId,
             'SelectedPeriod': $$('#tickets-advance-table-filter-print-date').children[1].get(),
             'SelectedPeriodRedeemed': $$('#tickets-advance-table-filter-redeem-date').children[1].get(),
-            'PrintedList': printed,
-            'RedeemList': redeemed,
-            'Status': statuses,
-            'Type': types,
+            'PrintedList': printed === 'null' ? null : printed.split(','),
+            'RedeemList': redeemed === 'null' ? null : redeemed.split(','),
+            'Status': statuses === 'null' ? null : statuses.split(','),
+            'Type': types === 'null' ? null : types.split(','),
         };
 
         filters = table.getFilters(filters);
