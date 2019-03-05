@@ -1,16 +1,10 @@
 let table = (function () {
-
     //html class name constants
     const columnClassPrefix = 'column';
     const rowClassPrefix = 'row-';
-    const cellClassPrefix = 'cell-';
-    const flagCellClassPrefix = 'row-flag-';
-    const exportToButtonsClass = 'element-table-export-to';
     const activeColumnElementsClass = 'active-column';
     const emptyTableElementClass = 'table-element-no-data';
-    const activeRowElementsClass = 'row-chosen';
     const hiddenClass = 'hidden';
-    const sortOrderClassPrefix = 'table-sort-order-id';
     const defaultPageSize = 50;
     const defaultPage = 1;
     let rows = [];
@@ -70,30 +64,23 @@ let table = (function () {
     on('filters/show-selected-filters', function (params) {
         showSelectedFilters(params)
     });
-
     //endregion
 
-
     //region public functions
-
     function init(settings, data) {
         let table = document.createElement('div');
         table.classList.add('table');
         table.classList.add('vertex-table');
         table.classList.add('table-expanded');
-
         //check required parameters
         if (settings.id === undefined) {
             console.error('table settings object must have id');
             return undefined;
         }
-
         if (settings.endpointId === undefined) {
             console.error(`table ${settings.id} settings endpointId is required`);
             return undefined;
         }
-
-
         table.setAttribute('id', settings.id);
         setDefaults(settings, table);
 
@@ -104,7 +91,6 @@ let table = (function () {
             pageSize: generatePageSize(table),
             appearance: generateAppearanceButtons(table),
             export: generateExportButtons(table)
-
         };
 
         table.appendChild(table.elements.body);
@@ -140,7 +126,6 @@ let table = (function () {
                 }
             }
         }
-
         //bind functions
         table.update = update;
         table.sort = sort;
@@ -161,7 +146,6 @@ let table = (function () {
 
     function update(data) {
         let table = this;
-
         //ToDo: parse data here
         table.data.items = data.Items;
         table.data.totalItems = data.NumOfItems;
@@ -227,7 +211,6 @@ let table = (function () {
     function getFilters(filters) {
         let table = this;
         let settings = table.settings;
-
         let basicData = {
             'Page': settings.page,
             'PageSize': settings.pageSize,
@@ -244,7 +227,6 @@ let table = (function () {
         settings.page = page;
         filters.BasicData.Page = page;
         settings.filters = filters;
-
 
         return filters;
     }
@@ -329,7 +311,6 @@ let table = (function () {
         let table = this;
         table.elements.body.classList.add('no-scroll');
     }
-
     //endregion
 
     //region generate elements helper functions
@@ -395,81 +376,10 @@ let table = (function () {
             while (rows.includes(rowId)) {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             }
-
             let rowData = items[row];
             let tempRow = JSON.parse(JSON.stringify(rowData.EntryData));
-
-
-
-            // /** Data parsing **/
-            // //region parsing data
-
-            // //pages containing field: AFT
-            // if (tempRow.CreatedBy !== undefined) {
-            //     if (!isEmpty(tempRow.CreatedBy.Time) && !isEmpty(tempRow.CreatedBy.Name)) {
-            //         tempRow.CreatedBy = createTimeUserCellHTML(formatTimeData(tempRow.CreatedBy.Time), tempRow.CreatedBy.Name);
-            //     } else {
-            //         tempRow.CreatedBy = '';
-            //     }
-            // }
-            // //pages containing field: AFT
-            // if (tempRow.FinishedBy !== undefined) {
-            //     if (!isEmpty(tempRow.FinishedBy.Time) && !isEmpty(tempRow.FinishedBy.Name)) {
-            //         tempRow.FinishedBy = createTimeUserCellHTML(formatTimeData(tempRow.FinishedBy.Time), tempRow.FinishedBy.Name);
-            //     } else {
-            //         tempRow.FinishedBy = '';
-            //     }
-            // }
-            // //pages containing field: Tickets
-            // if (tempRow.IssuedBy !== undefined) {
-            //     if (!isEmpty(tempRow.IssuedBy.Time) && !isEmpty(tempRow.IssuedBy.Name)) {
-            //         tempRow.IssuedBy = createTimeUserCellHTML(formatTimeData(tempRow.IssuedBy.Time), tempRow.IssuedBy.Name);
-            //     } else {
-            //         tempRow.FinishedBy = '';
-            //     }
-            // }
-            // //pages containing field: Tickets
-            // if (tempRow.RedeemedBy !== undefined) {
-            //     if (!isEmpty(tempRow.RedeemedBy.Time) && !isEmpty(tempRow.RedeemedBy.Name)) {
-            //         tempRow.RedeemedBy = createTimeUserCellHTML(formatTimeData(tempRow.RedeemedBy.Time), tempRow.RedeemedBy.Name);
-            //     } else {
-            //         tempRow.RedeemedBy = '';
-            //     }
-            // }
-            // //pages containing field: Tickets,AFT
-            // if (tempRow.Status !== undefined) {
-            //     tempRow.Status = localization.translateMessage(tempRow.Status);
-            // }
-            // //pages containing field: Tickets
-            // if (tempRow.TicketType !== undefined) {
-            //     tempRow.TicketType = localization.translateMessage(tempRow.TicketType);
-            // }
-            // //pages containing field: AFT,Malfunctions
-            // if (tempRow.Type !== undefined) {
-            //     tempRow.Type = localization.translateMessage(tempRow.Type);
-            // }
-            // //pages containing field: Malfunctions
-            // if (tempRow.Priority !== undefined) {
-            //     tempRow.Priority = localization.translateMessage(tempRow.Priority);
-            // }
-            // //pages containing field: AFT,Malfunctions
-            // if (tempRow.FlagList !== undefined) {
-            //     let flagElement = document.createElement('div');
-            //     flagElement.classList.add('flag-element');
-            //     flagElement.classList.add(`flag-${tempRow.FlagList[0]}`);
-            //     tempRow.FlagList = flagElement.outerHTML;
-            // }
-            // //pages containing field: Malfunctions,Users,AFT
-            // if (tempRow.ActionList !== undefined) {
-            //     let cellHTML = '';
-            //     for (let i = 0; i < tempRow.ActionList.length; i++) {
-            //         cellHTML += tableActions[tempRow.ActionList[i]].outerHTML;
-            //     }
-            //     tempRow.ActionList = cellHTML;
-            // }
-            //endregion
-
             let columnIndex = 0;
+
             for (let column in tempRow) {
                 // noinspection JSUnfilteredForInLoop
                 let cell = createRowCell(rowId, column, settings, rowData);
@@ -487,7 +397,6 @@ let table = (function () {
                 else {
                     cellData = tempRow[column];
                 }
-
                 //set cell to be clickable if criteria are met
                 //ToDo: Add criteria for other pages
                 if (!isEmpty(tempRow.ActionList) && tempRow.ActionList.length > 0) {
@@ -501,7 +410,6 @@ let table = (function () {
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
                    // cell.innerHTML = localization.translateMessage(cellData,cell);
                 }
-
                 //hide hidden columns
                 let columnData = settings.columns[column];
                 if (columnData.visible === false) {
@@ -540,7 +448,6 @@ let table = (function () {
 
     function generatePagination() {
         let pagination = template.render('#pagination', {});
-
         let pages = pagination.getElementsByClassName('element-pagination-link');
         for (let i = 0; i < pages.length; i++) {
             let page = pages[i];
@@ -587,7 +494,6 @@ let table = (function () {
         condense.classList.add('mdi', 'show-space');
         condense.classList.add('mdi-view-headline', 'show-table-condensed');
 
-
         expand.addEventListener('click', function () {
             table.classList.remove('table-condensed');
             table.classList.add('table-expanded');
@@ -603,7 +509,6 @@ let table = (function () {
         });
         return [expand, condense];
     }
-
 
     function createEditMachineAction() {
         //ToDo:
@@ -702,7 +607,6 @@ let table = (function () {
         time.innerHTML = content;
         return time;
     }
-
     //endregion
 
     //region helper functions
@@ -743,9 +647,9 @@ let table = (function () {
                 header.classList.add(activeColumnElementsClass);
             }
         }
-
         let columnClass = createColumnClassName(column);
         let columnItems = table.elements.body.getElementsByClassName(columnClass);
+
         for (let i = 0; i < columnItems.length; i++) {
             let cell = columnItems[i];
             cell.classList.add(activeColumnElementsClass);
@@ -808,9 +712,9 @@ let table = (function () {
                 let button = paginationButtons[i];
                 button.classList.remove('active');
                 button.classList.remove('hidden');
-
                 button.dataset.page = paginationArray[i];
                 button.innerHTML = paginationArray[i];
+
                 if (paginationArray[i] === activePage) {
                     button.classList.add('active');
                 } else if (paginationArray[i] === undefined) {
@@ -828,7 +732,6 @@ let table = (function () {
 
     function setDimensions(table) {
         let tbody = table.elements.body;
-
         tbody.style.gridTemplateRows = `repeat(${table.data.items.length}, 1fr)`;
 
         let templateColumn = '';
@@ -841,8 +744,6 @@ let table = (function () {
         templateColumn = templateColumn.trim();
         tbody.style.gridTemplateColumns = templateColumn;
     }
-
-
     //endregion
 
     //region event handlers
@@ -877,7 +778,6 @@ let table = (function () {
             });
         }
     }
-
     //endregion
 
     return {
@@ -892,7 +792,6 @@ let table = (function () {
 
     /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
 
-    //ToDo: sta je ovo?
     function showSelectedFilters(params) {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
@@ -915,7 +814,6 @@ let table = (function () {
             }
         }
     }
-
 
     function setDefaults(settings, table) {
         if (settings.filters === undefined) {
@@ -973,10 +871,8 @@ let table = (function () {
                 items: []
             }
         }
-
         table.settings = settings;
     }
-
 
     //region public helper functions
 
@@ -987,7 +883,6 @@ let table = (function () {
         }
         let clonedFilters = JSON.parse(JSON.stringify(filters));
         let tableFilters = JSON.parse(JSON.stringify(settings.filters));
-
         //delete pages as that data will differ from old and new filters data
         if (clonedFilters.BasicData !== undefined) {
             if (clonedFilters.BasicData.Page !== undefined) {
@@ -997,7 +892,6 @@ let table = (function () {
         if (clonedFilters.TokenInfo !== undefined) {
             delete clonedFilters.TokenInfo;
         }
-
         delete tableFilters.BasicData.Page;
         delete tableFilters.TokenInfo;
         return compareObjects(clonedFilters, tableFilters);
@@ -1023,9 +917,5 @@ let table = (function () {
     function getExportEvent(tableId) {
         return `table/${tableId}/export`;
     }
-
-
     //endregion
-
-
 })();
