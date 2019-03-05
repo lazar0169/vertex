@@ -1,6 +1,5 @@
 let table = (function () {
 
-
     //html class name constants
     const columnClassPrefix = 'column';
     const rowClassPrefix = 'row-';
