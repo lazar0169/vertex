@@ -274,15 +274,15 @@ textarea {
 }
 
 .cell-flag.row-flag-1 {
-    border-left: 7px solid lawngreen;
+    border-left: 7px solid rgb(0, 150, 136);
 }
 
 .cell-flag.row-flag-2 {
-    border-left: 7px solid #F3413A;
+    border-left: 7px solid rgb(244, 67, 54);
 }
 
 .cell-flag.row-flag-3 {
-    border-left: 7px solid orange;
+    border-left: 7px solid rgb(255, 152, 0);
 }
 
 .cell .flaglist-element {
@@ -291,15 +291,15 @@ textarea {
 }
 
 .cell .flaglist-element.flaglist-1 {
-    background-color: lawngreen;
+    background-color: rgb(0, 150, 136);
 }
 
 .cell .flaglist-element.flaglist-2 {
-    background-color: #F3413A;
+    background-color: rgb(244, 67, 54);
 }
 
 .cell .flaglist-element.flaglist-3 {
-    background-color: orange;
+    background-color: rgb(255, 152, 0);
 }
 
 .table-condensed .cell {
