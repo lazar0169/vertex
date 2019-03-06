@@ -54,7 +54,7 @@
     overflow: hidden !important;
 }
 
-.cell {
+.vertex-table .cell {
     background-color: rgb(38, 50, 56);
     padding-left: 0.5em;
     border-bottom: 1px solid #37454C;
@@ -63,11 +63,15 @@
     cursor: default;
     width: 100%;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
     font-family: OpenSans-Regular;
     font-size: 13px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.vertex-table .cell.column-action-list {
+    flex-direction: row;
+    justify-content: flex-end;
 }
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
@@ -94,6 +98,9 @@
     width: 100%;
     font-family: OpenSans-Bold;
     font-size: 12px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .cell.first-cell.cell-flag, .cell-cancel-head.cell.cell-cancel {
@@ -107,17 +114,28 @@
     cursor: pointer;
 }
 
+.head.cell.sortable:after {
+    content: '';
+    height: 13px;
+    width: 8px;
+    top: 27%;
+    margin-left: 5px;
+    visibility: hidden;
+}
+
 .head.cell.sortable:hover:after {
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px
+    margin-left: 5px;
+    visibility: visible;
+}
+.head.cell.active-column:after {
+    visibility: visible;
 }
 .vertex-table .head.cell.sort-asc:after {
-    /*    position: absolute;
-        display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-up-table-sorting.png");
     height: 13px;
@@ -131,8 +149,6 @@
 }
 
 .vertex-table .head.cell.sortable.sort-desc:after {
-    /*    position: absolute;
-        display: inline-block;*/
     content: '';
     background-image: url("/images/arrow-down-table-sorting.png");
     height: 13px;
@@ -144,7 +160,8 @@
     left: 0;
 }
 
-.head.active-column {
+.head.active-column,
+.cell.active-column {
     background: #2F3B41;
     color: white;
 }
@@ -255,6 +272,22 @@ textarea {
 
 .cell-flag.row-flag-3 {
     border-left: 7px solid orange;
+}
+.cell .flag-element {
+    width:7px;
+    height:100%;
+    /* cell has 0.5em left padding*/
+    left: -0.5em;
+    position: relative;
+}
+.cell .flag-element.flag-1 {
+background-color:lawngreen;
+}
+.cell .flag-element.flag-2 {
+background-color:#F3413A;
+}
+.cell .flag-element.flag-3 {
+background-color:orange;
 }
 
 .table-condensed .cell {

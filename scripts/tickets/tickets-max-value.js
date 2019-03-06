@@ -5,7 +5,7 @@ let ticketsMaxValue = (function () {
     formSettingsMaxValue.submitEvent = communication.events.tickets.saveMaxValuesAction;
 
     on('tickets/tab/maxValue', function (params) {
-        formSettingsMaxValue.endpointId = params.tableSettings.endpointId;
+        formSettingsMaxValue.endpointId = params.endpointId;
         trigger('form/init', {formSettings: formSettingsMaxValue});
         trigger('form/getData', {formSettings: formSettingsMaxValue});
     });

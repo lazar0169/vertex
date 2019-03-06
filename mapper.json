@@ -20,8 +20,10 @@
   "main": {
     "scripts": [
       "config.js",
-      "table.js",
+      "localization.js",
       "data.js",
+      "components/dropdown.js",
+      "table.js",
       "top-bar.js",
       "user-profile.js",
       "sidebar.js",
@@ -29,7 +31,6 @@
       "mock.js",
       "form.js",
       "validation.js",
-      "localization.js",
       "communication.js",
       "aft/aft.js",
       "aft/aft-filters.js",
@@ -38,7 +39,6 @@
       "components/datepicker.js",
       "components/currency-input.js",
       "components/dropdown-date.js",
-      "components/dropdown.js",
       "components/toggle.js",
       "casino.js",
       "machines/details-bar.js",

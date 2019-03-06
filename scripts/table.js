@@ -1,1300 +1,1006 @@
 let table = (function () {
 
-    //html class name constants
-    const exportToButtonsClass = 'element-table-export-to';
-    const columnClassPrefix = 'column-';
-    const rowClassPrefix = 'row-';
-    const cellClassPrefix = 'cell-';
-    const highlightedColumnElementsClass = 'active-column';
-    const activeRowElementsClass = 'row-chosen';
-    const hiddenCellClassName = 'hidden';
-    const emptyTableElementClass = 'table-element-no-data';
-    const sortOrderClassPrefix = 'table-sort-order-id';
-    const defaultPageSize = 50;
-    const defaultPage = 1;
-    let rows = [];
+        //html class name constants
+        const columnClassPrefix = 'column';
+        const rowClassPrefix = 'row-';
+        const cellClassPrefix = 'cell-';
+        const flagCellClassPrefix = 'row-flag-';
+        const exportToButtonsClass = 'element-table-export-to';
+        const activeColumnElementsClass = 'active-column';
+        const emptyTableElementClass = 'table-element-no-data';
+        const activeRowElementsClass = 'row-chosen';
+        const hiddenClass = 'hidden';
+        const sortOrderClassPrefix = 'table-sort-order-id';
+        const defaultPageSize = 50;
+        const defaultPage = 1;
+        let rows = [];
 
-    // 'null' as dataset values are always converted to string
-    const nullFilterValues = ['-', null, 'null'];
-
-    const exportFileTypes = {
-        pdf: 'application/pdf'
-    }
-
-    const exportTypes = {
-        event: 'event',
-        url: 'url',
-        callback: 'callback'
-    };
-
-    const events = {
-        saveExportedFile: 'table/export/save-file'
-    };
-
-    const sortOrderEnum = {
-        none: 0,
-        ascending: 1,
-        descending: 2
-    };
-
-    const sortingClass = {
-        ascending: 'sort-asc',
-        descending: 'sort-desc'
-    };
-
-    const sortingDataAtt = {
-        ascending: 'asc',
-        descending: 'desc'
-    };
-
-    let currentOffset;
-
-    //region MODULE EVENTS
-    on(events.saveExportedFile, function (params) {
-        let data = params.data;
-        let blob = new Blob([data], { type: 'application/pdf' });
-        let link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'Report.pdf';
-        link.click();
-    });
-    on('table/show-selected-filters/infobar', showSelectedFilters);
-    on('table/before-filter', function (params) {
-        trigger(params.tableSettings.filterDataEvent, {
-            data: params.data,
-            tableSettings: params.tableSettings
-        });
-        trigger('filters/show-selected-filters', {
-            active: params.activeFiltersContainer,
-            infobar: params.activeFiltersContainer
-        });
-    });
-    on('table/dismiss-popup', function (params) {
-        dismissPopup(params.target, params.tableSettings);
-    });
-    on('table/disable-scroll', function (params) {
-        disableScroll(params.tableSettings);
-    });
-    on('table/enable-scroll', function (params) {
-        enableScroll(params.tableSettings);
-    });
-    on('table/deselect/active-row', function (params) {
-        deselectActiveRow(params.tableSettings.tableContainerElement);
-    });
-    on('table/deselect/hover-row', function (params) {
-        deselectHoverRow(params.tableSettings.tableContainerElement);
-    });
-    //endregion
-
-    /*---------------------------- FUNCTIONS FOR GENERATING TABLE ----------------------------*/
-
-    function makeColumnTitle(columnName) {
-        let columnTitle = columnName.replace(/([a-z](?=[A-Z]))/g, '$1 ');
-        /*        let columnTitle = columnName.match(/([a-z])([A-Z])+/g);
-                columnTitle = columnTitle.join(' ');*/
-        return columnTitle;
-    }
-
-    function insertAfter(referenceNode, newNode) {
-        return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-    }
-
-    function getEvent(tableSettings) {
-        let event;
-
-        if (tableSettings.getDataEvent !== undefined) {
-            event = tableSettings.getDataEvent;
-        } else if (tableSettings.tableContainerElement.dataset.getDataEvent !== undefined) {
-            event = tableSettings.tableContainerElement.dataset.getDataEvent;
-        } else {
-            console.error('getDataEvent Event doesn\'t exist!');
-        }
-        return event;
-    }
-
-
-    function getTableBodyElement(tableSettings) {
-        return tableSettings.tableContainerElement.getElementsByClassName('tbody')[0];
-    }
-
-    function getCountOfAllColumns(tableSettings) {
-        let colsCount = 0;
-        let tbody = getTableBodyElement(tableSettings);
-
-        let headElements = tbody.getElementsByClassName('head');
-
-        if (headElements !== undefined && headElements !== null && headElements.length > 0) {
-            colsCount = headElements.length;
-        } else if (tableSettings.tableData !== undefined && tableSettings.tableData.length > 0) {
-            colsCount = Object.keys(tableSettings.tableData[0].rowData).length;
-
-        }
-        return colsCount;
-    }
-
-    function getColsCount(tableSettings) {
-        let colsCount;
-        if (tableSettings.ColumnsToShow === undefined || tableSettings.ColumnsToShow === null || tableSettings.ColumnsToShow.length === 0) {
-            colsCount = getCountOfAllColumns(tableSettings);
-        } else {
-            colsCount = tableSettings.ColumnsToShow.length;
-        }
-        return colsCount;
-    }
-
-    function hasHeaders(tableSettings) {
-        return tableSettings.tableContainerElement.getElementsByClassName('head').length > 0;
-    }
-
-    function generateTableHeaders(tableSettings) {
-        let colsCount = getCountOfAllColumns(tableSettings);
-        let headers = hasHeaders(tableSettings);
-
-        let tbody = getTableBodyElement(tableSettings);
-        if (!headers || tableSettings.forceRemoveHeaders === true) {
-            //ToDo: neske rewrite this part if needed
-            if (tbody !== null && tbody !== undefined) {
-                tbody.parentNode.removeChild(tbody);
+        const exportFileTypes = {
+            pdf: {
+                type: 'application/pdf',
+                name: 'pdf'
+            },
+            excel: {
+                type: 'application/xls',
+                name: 'xls'
             }
-            tbody = document.createElement('div');
-            tbody.className = 'tbody';
-
-            let columnNames = Object.keys(tableSettings.tableData[0].rowData);
-
-            for (let col = 0; col < colsCount; col++) {
-                let head = document.createElement('div');
-                head.innerHTML = localization.translateMessage(columnNames[col], head);
-                head.className = 'head cell';
-                let columnName = columnNames[col].toLowerCase();
-                columnName = columnName.replace(/ /g, '-');
-                head.dataset.sortName = columnName;
-                head.classList.add('text-uppercase');
-                head.classList.add(columnClassPrefix + columnName);
-
-                if (tableSettings.stickyRow === true) {
-                    head.classList.add('sticky');
-                    if (tableSettings.stickyColumn === false) {
-                        head.classList.add('first-cell');
-                    } else {
-                        head.classList.remove('first-cell');
-                    }
-                }
-                if (col === colsCount - 1) {
-                    head.classList.add('last-cell');
-                }
-                tbody.appendChild(head);
-            }
-
-            let filterContainerElement = tableSettings.tableContainerElement.getElementsByClassName('element-table-filters-container')[0];
-            insertAfter(filterContainerElement, tbody);
-        } else {
-            //generate headers sort classes
-            generateHeadersOrderClasses(tableSettings);
-            setTableDimensions(tableSettings, colsCount, tbody);
-        }
-    }
-
-    function generateTableRows(tableSettings) {
-        let colsCount = getCountOfAllColumns(tableSettings);
-        let tbody = getTableBodyElement(tableSettings);
-        let tableItems = tbody.getElementsByClassName('table-item');
-        //remove displayed rows
-        if (tableItems !== undefined && tableItems != null) {
-            while (tableItems.length > 0) {
-                let item = tableItems[0];
-                item.parentNode.removeChild(item);
-            }
-        }
-
-        let rowsCount = tableSettings.tableData.length;
-
-        let visibleColumns = tableSettings.visibleColumns.length > 0 ? tableSettings.visibleColumns : [];
-        let visibleColumnsClasses = [];
-
-        if (visibleColumns.length > 0) {
-            for (let i = 0; i < visibleColumns.length; i++) {
-                visibleColumnsClasses.push(generateCellClassName(visibleColumns[i]));
-            }
-        }
-
-        for (let row = 0; row < rowsCount; row++) {
-            let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            while (rows.includes(rowId)) {
-                rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
-            }
-
-            let rowKeys = Object.keys(tableSettings.tableData[row].rowData);
-
-            for (let col = 0; col < colsCount; col++) {
-                let cell = document.createElement('div');
-                let rowData = tableSettings.tableData[row].rowData;
-                let dataKey = rowKeys[col];
-
-                let cellContent = rowData[dataKey];
-
-                //handle case if cellContent is html element
-                if (isElement(cellContent) || isNode(cellContent)) {
-                    cell.appendChild(cellContent);
-                } else {
-                    cell.innerHTML = cellContent;
-                }
-
-                let cellColumnClass = generateCellClassName(dataKey);
-
-                if (tableSettings.columns.indexOf(dataKey) < 0) {
-                    tableSettings.columns.push(dataKey);
-                }
-
-                cell.classList.add('cell');
-                cell.classList.add('table-item');
-                cell.classList.add(rowClassPrefix + rowId);
-                cell.classList.add(cellColumnClass);
-                //ToDo: Document this
-                if (dataKey === 'actions') {
-                    cell.classList.add('table-actions-column');
-                }
-
-                let headers = getHeaders(tableSettings);
-                let header = headers[col];
-                //add column class to the headers first time that rows are generated
-                if (!header.classList.contains(cellColumnClass)) {
-                    header.classList.add(cellColumnClass);
-                }
-
-                //display or hide column cells if there are hidden columns
-                //do not hide columns that are marked as always visible
-                if (header.dataset.alwaysVisible === undefined || header.dataset.alwaysVisible === false) {
-                    if (visibleColumnsClasses.length > 0) {
-                        if (visibleColumnsClasses.indexOf(cellColumnClass) > -1) {
-                            cell.classList.remove(hiddenCellClassName);
-                            header.classList.remove(hiddenCellClassName);
-                        } else {
-                            cell.classList.add(hiddenCellClassName);
-                            header.classList.add(hiddenCellClassName);
-                        }
-                    } else {
-                        cell.classList.remove(hiddenCellClassName);
-                        header.classList.remove(hiddenCellClassName);
-                    }
-                }
-
-                //ToDo: test if 0 or 1
-                if (tableSettings.stickyColumn === true && col === 1) {
-                    cell.classList.add('sticky');
-                }
-                if (col === colsCount - 1) {
-                    cell.classList.add('last-cell');
-                }
-
-                if (tableSettings.onHoverRow === undefined) {
-                    cell.addEventListener('mouseover', function () {
-                        hoverRow(rowClassPrefix + rowId, true);
-                    }, { passive: false });
-                }
-
-                cell.addEventListener('mouseout', function () {
-                    hoverRow(rowClassPrefix + rowId, false);
-                }, { passive: false });
-
-                //There are 3 callbacks - before click on cell,after click on cell and override for click on cell
-
-                cell.addEventListener('click', function (e) {
-                    if (!cell.classList.contains('clickable')) {
-                        return;
-                    }
-                    //check if there's on beforeCellClick handler
-                    if (tableSettings.onBeforeCellClick !== undefined) {
-                        tableSettings.onBeforeCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings)
-                    }
-                    currentOffset = cell.getClientRects()[0];
-                    //check if there's custom on cell click hadler
-                    if (tableSettings.onCellClick === undefined) {
-                        selectRow(tableSettings, rowClassPrefix + rowId);
-                    } else {
-                        tableSettings.onCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
-
-                    }
-                    if (tableSettings.onAfterCellClick !== undefined) {
-                        tableSettings.onAfterCellClick(e, dataKey, cellContent, cell, col, tableSettings.tableData[row], rowId, cellColumnClass, tableSettings);
-                    }
-                });
-
-                tbody.appendChild(cell);
-
-                //parameters:
-                // column - name of the property/column
-                // cellContent - formatted data
-                // cell - cell html element
-                // position - position of the column from the left border of the table (0,1,2...)
-                // row data - remote row data
-                if (tableSettings.onDrawRowCell !== null) {
-                    if (isFunction(tableSettings.onDrawRowCell)) {
-                        tableSettings.onDrawRowCell(dataKey, cellContent, cell, col, tableSettings.tableData[row]);
-                    } else if (isString(tableSettings.onDrawRowCell)) {
-                        trigger(tableSettings.onDrawRowCell, {
-                            key: dataKey,
-                            value: cellContent,
-                            element: cell,
-                            position: col,
-                            rowData: tableSettings.tableData[row]
-                        });
-                    }
-                }
-            }
-        }
-
-        if (rowsCount > 0) {
-            //highlight sorted column if there is one
-            markActiveColumnRows(tableSettings);
-            updateTablePagination(tableSettings);
-            //highlight after response from API is received
-            deselectActiveColumn(tableSettings);
-            highlightSortedColumn(tableSettings);
-            tbody.classList.remove('d-hide');
-            tableSettings.noDataElement.classList.add('d-hide');
-            setTableDimensions(tableSettings, colsCount, tbody);
-        } else {
-            hidePagination(tableSettings);
-            tableSettings.noDataElement.classList.remove('d-hide');
-            tbody.classList.add('d-hide');
-            setTableDimensions(tableSettings, 1, tbody);
-        }
-        //callback when table rows finished drawing
-        if (tableSettings.onAfterDrawRows !== null) {
-            if (isFunction(tableSettings.onAfterDrawRows)) {
-                tableSettings.onAfterDrawRows(tableSettings);
-            } else if (isString(tableSettings.onAfterDrawRows)) {
-                trigger(tableSettings.onAfterDrawRows, {
-                    tableSettings: tableSettings
-                });
-            }
-        }
-    }
-
-    function generateCellClassName(propertyName) {
-        return columnClassPrefix + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
-    }
-
-    function hoverRow(elements, highlight = false) {
-        for (let element of document.getElementsByClassName(elements)) {
-            element.classList[highlight ? "add" : "remove"]('hover');
-        }
-    }
-
-    function setTableDimensions(tableSettings, colsCount, tbody) {
-        tbody.style.gridTemplateColumns = null;
-        tbody.style.gridTemplateRows = null;
-        let tableSettingsData = tableSettings.tableData;
-        if (tableSettingsData !== undefined && tableSettingsData !== null && tableSettingsData.length > 0) {
-            tbody.style.gridTemplateRows = `repeat(${tableSettingsData.length}, 1fr)`;
-        }
-        let headers = getHeaders(tableSettings);
-        if (headers !== undefined && headers.length > 0) {
-            let style = '';
-            for (let i = 0; i < headers.length; i++) {
-                let header = headers[i];
-                if (!header.classList.contains('hidden')) {
-                    if (header.classList.contains('fixed-width')) {
-                        style += " " + header.offsetWidth + 'px';
-                    } else {
-                        style += " 1fr";
-                    }
-                }
-            }
-            tbody.style.gridTemplateColumns = style.trim();
-
-        } else {
-            tbody.style.gridTemplateColumns = `repeat(${colsCount}, 1fr)`;
-        }
-    }
-
-    function generateHeadersOrderClasses(tableSettings) {
-        let headers = getHeaders(tableSettings);
-        for (let i = 0; i < headers.length; i++) {
-            let header = headers[i];
-            if (header.dataset.sortId !== undefined && header.dataset.sortId !== null
-                && header.dataset.sortId !== '') {
-                header.classList.add(`${sortOrderClassPrefix}-${header.dataset.sortId}`)
-            }
-        }
-    }
-
-    function highlightSortedColumn(tableSettings) {
-        let activeHeader = getSortedHeaderByAPIdata(tableSettings);
-        if (activeHeader !== undefined && activeHeader !== null) {
-            activeHeader.classList.add(highlightedColumnElementsClass);
-            setSortDirectionOnHeader(activeHeader, tableSettings.sort.sortDirection);
-            let columnClass = getColumnNameFromHeadElement(activeHeader);
-            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnClass);
-            for (let i = 0; i < columnElements.length; i++) {
-                columnElements[i].classList.add(highlightedColumnElementsClass);
-            }
-        }
-    }
-
-    function selectRow(tableSettings, row) {
-        let selectedTableRowCells = tableSettings.tableContainerElement.getElementsByClassName(activeRowElementsClass);
-        while (selectedTableRowCells.length > 0) {
-            selectedTableRowCells[0].classList.remove(activeRowElementsClass);
-        }
-        let newSelectedRowCells = tableSettings.tableContainerElement.getElementsByClassName(row);
-
-        for (let i = 0; i < newSelectedRowCells.length; i++) {
-            newSelectedRowCells[i].classList.add(activeRowElementsClass);
-        }
-    }
-
-    /*--------------------------------------------------------------------------------------*/
-
-    /*-------------------------------------- PAGINATION ---------------------------------------*/
-
-    function hidePagination(tableSettings) {
-        let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
-        paginationElement.classList.add('hidden');
-    }
-
-    function generateTablePagination(tableSettings) {
-        let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
-        if (paginationElement !== undefined) {
-            paginationElement.parentNode.removeChild(paginationElement);
-        }
-        let callbackEvent = 'table/pagination/display';
-        trigger('template/render', {
-            templateElementSelector: '#pagination',
-            callbackEvent: callbackEvent,
-            tableSettings: tableSettings
-        });
-    }
-
-    on('table/pagination/display', function (params) {
-        let paginationElement = params.element;
-        let tableSettings = params.params.tableSettings;
-        let tableBodyElement = getTableBodyElement(tableSettings);
-        insertAfter(tableBodyElement, paginationElement);
-        bindPaginationLinkHandlers(tableSettings);
-    });
-
-    function updateTablePagination(tableSettings) {
-        let paginationElement = tableSettings.tableContainerElement.getElementsByClassName('pagination')[0];
-        paginationElement.classList.remove('hidden');
-        let activePage = tableSettings.activePage;
-        activePage = parseInt(activePage);
-        let pageSize = tableSettings.filters && tableSettings.filters.BasicData && tableSettings.filters.BasicData.PageSize !== undefined ? tableSettings.filters.BasicData.PageSize : 50;
-        pageSize = parseInt(pageSize);
-        let numOfItems = tableSettings.TotalNumberOfItems;
-        numOfItems = parseInt(numOfItems);
-        let lastPage = Math.ceil(numOfItems / pageSize);
-
-        // let rowNumber = 1; //todo
-
-        if (lastPage === 1) {
-            hidePagination(tableSettings);
-        } else {
-            let paginationFirstPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-first-page')[0];
-            let paginationPreviousPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-previous-page')[0];
-            let paginationNextPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-next-page')[0];
-            let paginationLastPage = tableSettings.tableContainerElement.getElementsByClassName('pagination-last-page')[0];
-
-            paginationFirstPage.dataset.page = '1';
-            if (activePage - 1 > 0) {
-                let previousPage = activePage - 1;
-                paginationPreviousPage.dataset.page = previousPage.toString();
-            } else {
-                paginationPreviousPage.dataset.page = '1';
-            }
-
-            if (activePage !== lastPage) {
-                let nextPage = activePage + 1;
-                paginationNextPage.dataset.page = nextPage.toString();
-            } else {
-                paginationNextPage.dataset.page = lastPage.toString();
-            }
-
-            paginationLastPage.dataset.page = lastPage.toString();
-
-            let paginationArray = [];
-
-            if (lastPage >= 3) {
-                if (activePage === lastPage) {
-                    paginationArray = [activePage - 2, activePage - 1, activePage];
-                } else if (activePage === 1) {
-                    paginationArray = [activePage, activePage + 1, activePage + 2];
-                } else {
-                    paginationArray = [activePage - 1, activePage, activePage + 1];
-                }
-            } else if (lastPage === 2) {
-                paginationArray = ['1', '2'];
-            } else {
-                paginationArray = ['1'];
-            }
-
-            let paginationButtons = tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button');
-
-            for (let i = 0; i < paginationButtons.length; i++) {
-                paginationButtons[i].classList.remove('active');
-            }
-
-            for (let i = 0; i < paginationButtons.length; i++) {
-                paginationButtons[i].dataset.page = paginationArray[i];
-                paginationButtons[i].innerHTML = paginationArray[i];
-                if (paginationButtons[i].innerHTML === activePage.toString()) {
-                    paginationButtons[i].classList.add('active');
-                } else if (paginationArray[i] === undefined) {
-                    paginationButtons[i].classList.add('hidden');
-                }
-            }
-        }
-    }
-
-    function resetPaginationActiveButtons(tableSettings) {
-        let paginationButtons = Array.prototype.slice.call(tableSettings.tableContainerElement.getElementsByClassName('element-pagination-page-button'));
-        paginationButtons.forEach(function (paginationButton) {
-            paginationButton.classList.remove('active');
-        });
-    }
-
-    /*--------------------------------------------------------------------------------------*/
-
-
-    /*-------------------------- PAGINATION LINK CLICK HANDLERS ---------------------------*/
-
-    function handlePaginationLinkClick(e, tableSettings) {
-        e.preventDefault();
-        resetPaginationActiveButtons(tableSettings);
-        e.target.classList.add('active');
-        tableSettings.activePage = parseInt(e.target.dataset.page);
-        //ToDo: refactor this to be in table module
-        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pagination', { tableSettings: tableSettings });
-    }
-
-    function bindPaginationLinkHandler(element, tableSettings) {
-        element.removeEventListener('click', function (e, tableSettings) {
-            handlePaginationLinkClick(e, tableSettings);
-        });
-        element.addEventListener('click', function (e) {
-            handlePaginationLinkClick(e, tableSettings);
-        });
-    }
-
-    function bindPaginationLinkHandlers(tableSettings) {
-        let paginationElements = $$('.element-pagination-link');
-        for (let i = 0; i < paginationElements.length; i++) {
-            let paginationElement = paginationElements[i];
-            bindPaginationLinkHandler(paginationElement, tableSettings);
-        }
-    }
-
-    /*--------------------------------------------------------------------------------------*/
-
-
-    /*---------------------------CONDENSED / EXPANDED TABLE VIEW----------------------------*/
-
-    function resetTableView(tableSettings) {
-        tableSettings.tableContainerElement.classList.remove('table-condensed');
-        tableSettings.tableContainerElement.classList.remove('table-expanded');
-        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0].classList.remove('show-space-active');
-        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.remove('show-space-active');
-    }
-
-    function showNormalTable(tableSettings) {
-        resetTableView(tableSettings);
-        $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0].classList.add('show-space-active');
-        tableSettings.tableContainerElement.classList.add('table-expanded');
-    }
-
-    function bindExportToHandlers(tableSettings) {
-        let exportButtons = tableSettings.filtersContainerElement.getElementsByClassName(exportToButtonsClass);
-        for (let i = 0; i < exportButtons.length; i++) {
-            exportButtons[i].dataset.target = tableSettings.tableContainerSelector;
-            exportButtons[i].addEventListener('click', onTableExportButtonClicked);
-        }
-    }
-
-    function bindTableViewLinkHandlers(tableSettings) {
-        let tableCondensedButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-condensed')[0];
-        let tableThickButton = $$(tableSettings.pageSelectorId).getElementsByClassName('show-table-expanded')[0];
-
-        tableCondensedButton.addEventListener('click', function () {
-            resetTableView(tableSettings);
-            tableSettings.tableContainerElement.classList.add('table-condensed');
-            tableCondensedButton.classList.add('show-space-active');
-        });
-        tableThickButton.addEventListener('click', function () {
-            resetTableView(tableSettings);
-            tableSettings.tableContainerElement.classList.add('table-expanded');
-            tableThickButton.classList.add('show-space-active');
-        });
-    }
-
-    /*---------------------------------- UPDATING TABLE -----------------------------------*/
-
-    function updateTable(tableSettings) {
-        generateTableHeaders(tableSettings);
-        generateTableRows(tableSettings);
-        if (tableSettings.showPreloader) {
-            trigger('preloader/hide');
-        }
-    }
-
-    function initFilters(tableSettings) {
-        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/init', { tableSettings: tableSettings });
-    }
-
-    on('table/filter', filterTable);
-
-    on('table/update', function (params) {
-        let tableSettings = params.settingsObject;
-        tableSettings.TotalNumberOfItems = params.data.Data.NumOfItems;
-        if (tableSettings.filtersInitialized === undefined || tableSettings.filtersInitialized === false) {
-            initFilters(tableSettings);
-            showNormalTable(tableSettings);
-        }
-        //update sorting data from API
-        tableSettings.sort = {
-            sortDirection: params.data.Data.ItemValue.SortDirection,
-            sortName: params.data.Data.ItemValue.SortedBy,
         };
-        updateTable(tableSettings);
-    });
-
-    function initTable(tableSettings) {
-        let data = { EndpointId: tableSettings.endpointId };
-        tableSettings.defaultSortColumnSet = false;
 
 
-        if (tableSettings.showPreloader) {
-            trigger('preloader/show')
-        }
-        trigger(tableSettings.getDataEvent, {
-            data: data,
-            tableSettings: tableSettings
+        const events = {
+            saveExportedFile: 'table/export/save-file',
+            rowClick: getRowClickEvent,
+            pageSize: getPageSizeEvent,
+            pagination: getPaginationEvent,
+            sort: getSortEvent,
+            export: getExportEvent
+
+        };
+
+        const sortDirections = {
+            none: 0,
+            ascending: 1,
+            descending: 2
+        };
+
+        const sortingClass = {
+            ascending: 'sort-asc',
+            descending: 'sort-desc'
+        };
+
+        const tableActions = {
+            0: createEditMachineAction(),
+            1: createCancelTransactionAction(),
+            2: createEditJackpotAction(),
+            3: createEditMalfunctionAction(),
+            4: createEditUserAction(),
+            5: createDeleteUserAction()
+        };
+
+        //region module events
+        on(events.saveExportedFile, function (params) {
+            let data = params.data;
+            let blob = new Blob([data], {type: 'application/pdf'});
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'Report.pdf';
+            link.click();
+            trigger('preloader/hide');
         });
-    }
 
-    /*--------------------------------------------------------------------------------------*/
+        //endregion
 
-    function generateNoDataElement(tableSettings) {
-        let noData = tableSettings.tableContainerElement.getElementsByClassName(emptyTableElementClass);
-        if (noData.length <= 0) {
+
+        //region public functions
+
+        function init(settings, data) {
+            let table = document.createElement('div');
+            table.classList.add('table');
+            table.classList.add('vertex-table');
+            table.classList.add('table-expanded');
+
+            //check required parameters
+            if (settings.id === undefined) {
+                console.error('table settings object must have id');
+                return undefined;
+            }
+
+            if (settings.endpointId === undefined) {
+                console.error(`table ${settings.id} settings endpointId is required`);
+                return undefined;
+            }
+
+
+            table.setAttribute('id', settings.id);
+            setDefaults(settings, table);
+
+            table.elements = {
+                body: generateTableBody(),
+                noDataElement: generateNoDataElement(),
+                pagination: generatePagination(),
+                pageSize: generatePageSize(table),
+                appearance: generateAppearanceButtons(table),
+                export: generateExportButtons(table)
+
+            };
+
+            table.appendChild(table.elements.body);
+            table.appendChild(table.elements.noDataElement);
+            table.appendChild(table.elements.pagination);
+
+            if (table.settings.pageSizeContainer !== null) {
+                if ($$(table.settings.pageSizeContainer) === null) {
+                    console.error(`table ${settings.id} page size container selector cannot find any element`)
+                } else {
+                    $$(table.settings.pageSizeContainer).appendChild(table.elements.pageSize);
+                }
+            }
+
+            if (table.settings.exportButtonsContainer !== null) {
+                let container = $$(table.settings.exportButtonsContainer);
+                if (container === null) {
+                    console.error(`table ${settings.id} export buttons  container selector cannot find any element`)
+                } else {
+                    for (let key in table.elements.export) {
+                        container.appendChild(table.elements.export[key]);
+                        container.classList.remove(hiddenClass);
+                    }
+                }
+            }
+
+            if (table.settings.appearanceButtonsContainer !== null) {
+                if ($$(table.settings.appearanceButtonsContainer) === null) {
+                    console.error(`table ${settings.id} appearance buttons ontainer selector cannot find any element`)
+                } else {
+                    for (let key in table.elements.appearance) {
+                        $$(table.settings.appearanceButtonsContainer).appendChild(table.elements.appearance[key]);
+                    }
+                }
+            }
+
+            //bind functions
+            table.update = update;
+            table.sort = sort;
+            table.destroy = destroy;
+            table.getFilters = getFilters;
+            table.resetFilters = resetFilters;
+            table.setVisibleColumns = setVisibleColumns;
+            table.getVisibleColumns = getVisibleColumns;
+            table.cloneFiltersForExport = cloneFiltersForExport;
+            table.enableScroll = enableScroll;
+            table.disableScroll = disableScroll;
+
+            if (!isEmpty(data)) {
+                table.update(data);
+            }
+            return table;
+        }
+
+        function update(data) {
+            let table = this;
+
+            //ToDo: parse data here
+            table.data.items = data.Items;
+            table.data.totalItems = data.NumOfItems;
+            //update sorting from data received by server
+            setSort(table, data.ItemValue.SortedBy, data.ItemValue.SortDirection);
+
+            if (isEmpty(data)) {
+                return table;
+            }
+            if (table.data.items.length <= 0) {
+                table.elements.body.classList.add(hiddenClass);
+                table.elements.noDataElement.classList.remove(hiddenClass);
+            } else {
+                table.elements.body.classList.remove(hiddenClass);
+                table.elements.noDataElement.classList.add(hiddenClass);
+                if (!hasHeaders(table)) {
+                    generateHeaders(table);
+                }
+                generateRows(table);
+            }
+            if (table.settings.showPreloader) {
+                trigger('preloader/hide');
+            }
+        }
+
+        function sort(column) {
+            let table = this;
+            let settings = table.settings;
+            if (settings.sort.name === column) {
+                if (settings.sort.direction === sortDirections.ascending) {
+                    settings.sort.direction = sortDirections.descending;
+                } else if (settings.sort.direction === sortDirections.descending) {
+                    settings.sort.direction = sortDirections.ascending;
+                }
+            } else {
+                settings.sort.name = column;
+                settings.sort.direction = settings.defaultSortDirection
+            }
+            trigger(events.sort(settings.id), {table: table});
+        }
+
+        function destroy() {
+            let table = this;
+            if (table.settings.pageSizeContainer !== null && $$(table.settings.pageSizeContainer) !== null) {
+                $$(table.settings.pageSizeContainer).removeChild(table.elements.pageSize);
+            }
+            if (table.settings.exportButtonsContainer !== null && $$(table.settings.exportButtonsContainer) !== null) {
+                let container = $$(table.settings.exportButtonsContainer);
+                for (let key in table.elements.export) {
+                    container.removeChild(table.elements.export[key]);
+                    container.classList.add(hiddenClass);
+                }
+            }
+            if (table.settings.appearanceButtonsContainer !== null && $$(table.settings.appearanceButtonsContainer) !== null) {
+                for (let key in table.elements.appearance) {
+                    $$(table.settings.appearanceButtonsContainer).removeChild(table.elements.appearance[key]);
+                }
+            }
+
+            table.parentNode.removeChild(table);
+        }
+
+        function getFilters(filters) {
+            let table = this;
+            let settings = table.settings;
+
+            let basicData = {
+                'Page': settings.page,
+                'PageSize': settings.pageSize,
+                'SortOrder': settings.sort.direction,
+                'SortName': settings.sort.name
+            };
+            let tokenInfo = sessionStorage.token;
+
+            filters.BasicData = basicData;
+            filters.TokenInfo = tokenInfo;
+
+            let page = compareFilters(table, filters) ? settings.page : 1;
+
+            settings.page = page;
+            filters.BasicData.Page = page;
+            settings.filters = filters;
+
+
+            return filters;
+        }
+
+        function resetFilters() {
+            let settings = this.settings;
+            settings.filters = null;
+            settings.page = 1;
+            settings.sort = {
+                direction: null,
+                name: null
+            }
+            for (let column in settings.columns) {
+                settings.columns[column].visible = true;
+            }
+        }
+
+        function setVisibleColumns(visibleColumns) {
+            //dropdown returns "null" string instead of empty array
+            if (visibleColumns === 'null') {
+                visibleColumns = [];
+            }
+            let table = this;
+            let columns = table.settings.columns;
+            if (visibleColumns.length <= 0) {
+                for (let column in columns) {
+                    columns[column].visible = true;
+                }
+            } else {
+                for (let columnName in columns) {
+                    if (visibleColumns.indexOf(columnName) >= 0) {
+                        columns[columnName].visible = true;
+                    } else {
+                        let column = columns[columnName];
+                        if (column.hideable === true) {
+                            column.visible = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        function getVisibleColumns(onlyHideable) {
+            if (onlyHideable === undefined) {
+                onlyHideable = true;
+            }
+
+            let settings = this.settings;
+            let columns = [];
+            for (let columnName in settings.columns) {
+                let column = settings.columns[columnName];
+                if (onlyHideable) {
+                    if (column.visible === true && column.hideable === true) {
+                        columns.push(columnName);
+                    }
+                }
+                else {
+                    if (column.visible === true){
+                        columns.push(columnName);
+                    }
+                }
+            }
+            return columns;
+        }
+
+        function cloneFiltersForExport() {
+            let table = this;
+            let filters = JSON.parse(JSON.stringify(table.settings.filters));
+            if (filters.BasicData !== undefined) {
+                delete filters.BasicData.Page;
+                delete filters.BasicData.PageSize;
+                delete filters.TokenInfo;
+            }
+            return filters;
+        }
+
+        function enableScroll() {
+            let table = this;
+            table.elements.body.classList.remove('no-scroll');
+        }
+        function disableScroll() {
+            let table = this;
+            table.elements.body.classList.add('no-scroll');
+        }
+
+        //endregion
+
+        //region generate elements helper functions
+        function generateHeaders(table) {
+            let tbody = table.elements.body;
+            let settings = table.settings;
+            let items = table.data.items;
+            if (!isEmpty(items)) {
+                let columnNames = Object.keys(items[0].EntryData);
+                for (let col = 0; col < columnNames.length; col++) {
+                    let cell = createHeaderTableCell(table.settings.stickyRow);
+                    let columnName = columnNames[col];
+                    cell.dataset.column = columnName;
+                    let cellColumnClass = createColumnClassName(columnName);
+                    cell.classList.add(cellColumnClass);
+                    settings.columns[columnName] = {
+                        column: columnName,
+                        visible: true,
+                        class: cellColumnClass,
+                        width: '1fr',
+                        //header containts reference to the header node (element)
+                        header: null,
+                        hideable: true
+                    };
+                    if (columnName === 'FlagList') {
+                        settings.columns[columnName].width = '50px';
+                        settings.columns[columnName].hideable = false;
+                    } else if (columnName === 'ActionList') {
+                        settings.columns[columnName].hideable = false;
+                    }
+
+                    if (columnName !== 'FlagList' && columnName !== 'ActionList') {
+                        cell.innerHTML = localization.translateMessage(columnName, cell);
+                        cell.classList.add('sortable');
+                        cell.addEventListener('click', onSort);
+                    }
+                    settings.columns[columnName].header = cell;
+                    tbody.appendChild(cell);
+                }
+            } else {
+                console.error('could not generate table headers without data');
+            }
+        }
+
+        function generateRows(table) {
+            let settings = table.settings;
+            let tbody = table.elements.body;
+            let items = table.data.items;
+
+            let tableItems = tbody.getElementsByClassName('table-item');
+            //remove displayed rows
+            if (tableItems !== undefined && tableItems != null) {
+                while (tableItems.length > 0) {
+                    let item = tableItems[0];
+                    item.parentNode.removeChild(item);
+                }
+            }
+
+            let rowsCount = items.length;
+            for (let row = 0; row < rowsCount; row++) {
+                let rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+
+                while (rows.includes(rowId)) {
+                    rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
+                }
+
+                let rowData = items[row];
+                let tempRow = JSON.parse(JSON.stringify(rowData.EntryData));
+
+                /** Data parsing **/
+                //region parsing data
+
+                //pages containing field: AFT
+                if (tempRow.CreatedBy !== undefined) {
+                    if (!isEmpty(tempRow.CreatedBy.Time) && !isEmpty(tempRow.CreatedBy.Name)) {
+                        tempRow.CreatedBy = createTimeUserCellHTML(formatTimeData(tempRow.CreatedBy.Time), tempRow.CreatedBy.Name);
+                    } else {
+                        tempRow.CreatedBy = '';
+                    }
+                }
+                //pages containing field: AFT
+                if (tempRow.FinishedBy !== undefined) {
+                    if (!isEmpty(tempRow.FinishedBy.Time) && !isEmpty(tempRow.FinishedBy.Name)) {
+                        tempRow.FinishedBy = createTimeUserCellHTML(formatTimeData(tempRow.FinishedBy.Time), tempRow.FinishedBy.Name);
+                    } else {
+                        tempRow.FinishedBy = '';
+                    }
+                }
+                //pages containing field: Tickets
+                if (tempRow.IssuedBy !== undefined) {
+                    if (!isEmpty(tempRow.IssuedBy.Time) && !isEmpty(tempRow.IssuedBy.Name)) {
+                        tempRow.IssuedBy = createTimeUserCellHTML(formatTimeData(tempRow.IssuedBy.Time), tempRow.IssuedBy.Name);
+                    } else {
+                        tempRow.FinishedBy = '';
+                    }
+                }
+                //pages containing field: Tickets
+                if (tempRow.RedeemedBy !== undefined) {
+                    if (!isEmpty(tempRow.RedeemedBy.Time) && !isEmpty(tempRow.RedeemedBy.Name)) {
+                        tempRow.RedeemedBy = createTimeUserCellHTML(formatTimeData(tempRow.RedeemedBy.Time), tempRow.RedeemedBy.Name);
+                    } else {
+                        tempRow.RedeemedBy = '';
+                    }
+                }
+                //pages containing field: Tickets,AFT
+                if (tempRow.Status !== undefined) {
+                    tempRow.Status = localization.translateMessage(tempRow.Status);
+                }
+                //pages containing field: Tickets
+                if (tempRow.TicketType !== undefined) {
+                    tempRow.TicketType = localization.translateMessage(tempRow.TicketType);
+                }
+                //pages containing field: AFT,Malfunctions
+                if (tempRow.Type !== undefined) {
+                    tempRow.Type = localization.translateMessage(tempRow.Type);
+                }
+                //pages containing field: Malfunctions
+                if (tempRow.Priority !== undefined) {
+                    tempRow.Priority = localization.translateMessage(tempRow.Priority);
+                }
+
+                //pages containing field: AFT,Malfunctions
+                if (tempRow.FlagList !== undefined) {
+                    let flagElement = document.createElement('div');
+                    flagElement.classList.add('flag-element');
+                    flagElement.classList.add(`flag-${tempRow.FlagList[0]}`);
+                    tempRow.FlagList = flagElement.outerHTML;
+                }
+                //pages containing field: Malfunctions,Users,AFT
+                if (tempRow.ActionList !== undefined) {
+                    let cellHTML = '';
+                    for (let i = 0; i < tempRow.ActionList.length; i++) {
+                        cellHTML += tableActions[tempRow.ActionList[i]].outerHTML;
+                    }
+                    tempRow.ActionList = cellHTML;
+                }
+                //endregion
+
+                let columnIndex = 0;
+                for (let column in tempRow) {
+                    // noinspection JSUnfilteredForInLoop
+                    let cell = createRowCell(rowId, column, settings, rowData);
+                    //add column number class
+                    cell.classList.add(`table-column-${columnIndex + 1}`);
+
+                    let cellData = tempRow[column];
+                    //set cell to be clickable if criteria are met
+                    //ToDo: Add criteria for other pages
+                    if (
+                        !isEmpty(rowData.Properties.IsPayoutPossible) && rowData.Properties.IsPayoutPossible //aft
+                    ) {
+                        cell.classList.add('clickable');
+                    }
+
+                    if (Number.isInteger(cellData)) {
+                        cell.innerHTML = formatFloatValue(cellData);
+                    } else {
+                        cell.innerHTML = cellData;
+                        //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
+                        //cell.innerHTML = localization.translateMessage(cellData,cell);
+                    }
+
+                    //hide hidden columns
+                    let columnData = settings.columns[column];
+                    if (columnData.visible === false) {
+                        cell.classList.add(hiddenClass);
+                        columnData.header.classList.add(hiddenClass);
+                    } else {
+                        columnData.header.classList.remove(hiddenClass);
+                    }
+                    //set first column sticky if needed
+                    if (settings.stickyColumn === true && columnIndex === 0) {
+                        cell.classList.add('sticky');
+                    }
+                    columnIndex++;
+                    tbody.appendChild(cell);
+                }
+            }
+            highlightSortedColumn(table);
+            updatePagination(table);
+            setDimensions(table);
+            return table;
+        }
+
+        function generateTableBody() {
+            let tbody = document.createElement('div');
+            tbody.className = 'tbody';
+            return tbody;
+        }
+
+        function generateNoDataElement() {
             let noDataElement = document.createElement('div');
             noDataElement.classList.add(emptyTableElementClass);
-            noDataElement.classList.add('d-hide');
+            noDataElement.classList.add(hiddenClass);
             noDataElement.innerText = 'No data to display...';
-            tableSettings.tableContainerElement.appendChild(noDataElement);
-            tableSettings.noDataElement = noDataElement;
-        } else {
-            tableSettings.noDataElement = noData[0];
+            return noDataElement;
         }
-    }
 
-    /*-------------------------------------- PAGE SIZE -------------------------------------*/
+        function generatePagination() {
+            let pagination = template.render('#pagination', {});
 
-
-    function generatePageSizeDropdown(tableSettings) {
-        let pageSizeDropdown = tableSettings.filtersContainerElement.getElementsByClassName('page-size')[0];
-        dropdown.generate({ values: machinesNumber, parent: pageSizeDropdown });
-        // dropdown.generate(machinesNumber, pageSizeDropdown);
-
-        bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings);
-    }
-
-    function getPageSize(tableSettings) {
-        let pageSizeElement = $$(tableSettings.pageSelectorId).getElementsByClassName('page-size')[0];
-        if (pageSizeElement !== undefined && pageSizeElement !== null) {
-            let choosenOption = pageSizeElement.getElementsByClassName('element-table-filters')[0];
-            let pageSizeValue = choosenOption.dataset.value;
-            pageSizeValue = parseInt(pageSizeValue);
-            tableSettings.PageSize = pageSizeValue;
-            return pageSizeValue;
-        }
-    }
-
-    function handlePageSizeLinkClick(e, tableSettings) {
-        e.preventDefault();
-        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        trigger(moduleName + '/filters/pageSize', { tableSettings: tableSettings });
-    }
-
-    function bindPageSizeLinkHandler(element, tableSettings) {
-        element.removeEventListener('click', function (e, tableSettings) {
-            handlePageSizeLinkClick(e, tableSettings);
-        });
-        element.addEventListener('click', function (e) {
-            handlePageSizeLinkClick(e, tableSettings);
-        });
-    }
-
-    function bindPageSizeLinkHandlers(pageSizeDropdown, tableSettings) {
-        if (pageSizeDropdown !== undefined && pageSizeDropdown !== null) {
-            let pageSizeOptions = pageSizeDropdown.getElementsByClassName('single-option');
-            for (let i = 0; i < pageSizeOptions.length; i++) {
-                bindPageSizeLinkHandler(pageSizeOptions[i], tableSettings);
+            let pages = pagination.getElementsByClassName('element-pagination-link');
+            for (let i = 0; i < pages.length; i++) {
+                let page = pages[i];
+                page.addEventListener('click', onPagination);
             }
-        }
-    }
-
-    /*--------------------------------------------------------------------------------------*/
-
-
-    /*-------------------------------------- SORTING --------------------------------------*/
-
-    function getHeaders(tableSettings) {
-        return tableSettings.tableContainerElement.getElementsByClassName('head');
-    }
-
-    function getSortedHeader(tableSettings) {
-        return tableSettings.tableContainerElement.getElementsByClassName('sort-active')[0];
-    }
-
-    function getSortedHeaderByAPIdata(tableSettings) {
-        return tableSettings.tableContainerElement.getElementsByClassName(`${sortOrderClassPrefix}-${tableSettings.sort.sortName}`)[0];
-    }
-
-    function markActiveColumnRows(tableSettings) {
-        let headers = getHeaders(tableSettings);
-        let columnName = null;
-        for (let i = 0; i < headers.length; i++) {
-            let header = headers[i];
-            if (header.classList.contains('active-column')) {
-                columnName = getColumnNameFromHeadElement(header);
-            }
-        }
-        if (columnName !== null) {
-            let columnElements = tableSettings.tableContainerElement.getElementsByClassName(columnName);
-            for (let j = 0; j < columnElements.length; j++) {
-                columnElements[j].classList.add(highlightedColumnElementsClass);
-            }
-        }
-    }
-
-    function setSortingAttributes(header, tableSettings) {
-        let headers = getHeaders(tableSettings);
-
-        //be sure that there's only one active header
-        for (let i = 0; i < headers.length; i++) {
-            if (headers[i] !== header) {
-                headers[i].classList.remove('sort-active');
-                headers[i].classList.remove('sort-asc');
-                headers[i].classList.remove('sort-desc');
-                headers[i].classList.remove(highlightedColumnElementsClass);
-                delete headers[i].dataset.direction;
-            }
-        }
-        if (header !== undefined) {
-            header.classList.add('sort-active');
-            // header.classList.add(activeColumnElementsClass);
-            toggleSortDirectionClasses(header);
-        }
-    }
-
-    function toggleSortDirectionClasses(header) {
-        if (!header.classList.contains(sortingClass.ascending) && !header.classList.contains(sortingClass.descending) && !header.dataset.direction) {
-            header.classList.add(sortingClass.ascending);
-            header.dataset.direction = sortingDataAtt.ascending;
-        } else if (header.classList.contains(sortingClass.descending)) {
-            header.classList.remove(sortingClass.descending);
-            header.classList.add(sortingClass.ascending);
-            header.dataset.direction = sortingDataAtt.ascending;
-        } else {
-            header.classList.remove(sortingClass.ascending);
-            header.classList.add(sortingClass.descending);
-            header.dataset.direction = sortingDataAtt.descending;
-        }
-    }
-
-    function setSortDirectionOnHeader(header, sortDirection) {
-        header.classList.remove(sortingClass.ascending);
-        header.classList.remove(sortingClass.descending);
-        header.dataset.direction = null;
-        if (sortDirection === sortOrderEnum.ascending) {
-            header.classList.add('sort-active');
-            header.classList.add(sortingClass.ascending);
-            header.dataset.direction = sortingDataAtt.ascending;
-
-        } else if (sortDirection === sortOrderEnum.descending) {
-            header.classList.add('sort-active');
-            header.classList.add(sortingClass.descending);
-            header.dataset.direction = sortingDataAtt.descending;
-
-        }
-    }
-
-    function getSorting(tableSettings) {
-        tableSettings.sort = {
-            sortDirection: null,
-            sortName: null,
-        };
-
-        let activeHeader = getSortedHeader(tableSettings);
-
-        if (activeHeader !== undefined) {
-            tableSettings.sort.sortName = parseInt(activeHeader.dataset.sortId);
-            if (activeHeader.dataset.direction === sortingDataAtt.ascending) {
-                tableSettings.sort.sortDirection = sortOrderEnum.ascending;
-            } else if (activeHeader.dataset.direction === sortingDataAtt.descending) {
-                tableSettings.sort.sortDirection = sortOrderEnum.descending;
-            }
-        } else {
-            tableSettings.sort.sortName = null;
-            tableSettings.sort.sortDirection = null;
+            return pagination;
         }
 
-        return tableSettings.sort;
-    }
-
-    function setSortActiveColumn(tableSettings) {
-        let headers = getHeaders(tableSettings);
-        for (let header of headers) {
-            if (header.classList.contains(columnClassPrefix + tableSettings.sortActiveColumn)) {
-                setSortingAttributes(header, tableSettings);
-            }
-        }
-    }
-
-    /*--------------------------------------------------------------------------------------*/
-
-
-    /*--------------------------- SORTING LINK CLICK HANDLERS ----------------------------*/
-    function handleSortingLinkClick(e) {
-        let element = e.target;
-        let table = element.parentNode.parentNode;
-        let tableSettings = table.tableSettings;
-        tableSettings.activePage = 1;
-        e.preventDefault();
-        setSortingAttributes(element, tableSettings);
-        let moduleName = tableSettings.pageSelectorId.replace('#page-', '');
-        let sorting = getSorting(tableSettings);
-        trigger(moduleName + '/filters/sorting', { tableSettings: tableSettings, sorting: sorting });
-    }
-
-    function bindSortingLinkHandler(element) {
-        element.removeEventListener('click', handleSortingLinkClick);
-        element.addEventListener('click', handleSortingLinkClick);
-    }
-
-    function bindSortingLinkHandlers(tableSettings) {
-        let headElements = getHeaders(tableSettings);
-        for (let i = 0; i < headElements.length; i++) {
-            let headElement = headElements[i];
-            bindSortingLinkHandler(headElement);
-        }
-    }
-
-    /*--------------------------------------------------------------------------------------*/
-
-
-    /*------------------------------- SHOWING/HIDING COLUMNS -------------------------------*/
-
-    function getColumnNameFromHeadElement(headElement) {
-        let classList = headElement.classList;
-        for (let i = 0; i < classList.length; i++) {
-            let className = classList[i];
-            if (className.indexOf(columnClassPrefix) === 0) {
-                return className;
-            }
-        }
-        return null;
-    }
-
-
-    /*--------------------------------------------------------------------------------------*/
-
-
-    /*------------------------------------ FILTERING ------------------------------------*/
-
-    function collectAllFilterContainers(tableSettings) {
-        let filterElements;
-        if (tableSettings.pageSelectorId !== undefined) {
-            filterElements = $$(tableSettings.pageSelectorId).getElementsByClassName('select-container');
-        } else if (tableSettings.advancedFilterContainerSelector !== undefined) {
-            filterElements = $$(tableSettings.advancedFilterContainerSelector).getElementsByClassName('select-container');
-        } else {
-            filterElements = $$(tableSettings.tableContainerElement.getElementsByClassName('select-container'));
-        }
-        return filterElements;
-    }
-
-    function collectFiltersFromPage(tableSettings) {
-        //tableSettings.filters = {};
-        let filterContainers = collectAllFilterContainers(tableSettings);
-
-        let filters = Array.prototype.slice.apply(filterContainers).reduce(function (accumulated, element) {
-            let name = element.dataset.name;
-            let filterElement = element.getElementsByClassName('element-table-filters')[0];
-            //proveriti s Nikolom ovo
-            //accumulated[name] = filterElement.dataset.value !== '-' ? filterElement.dataset.value.split(',') : null;
-            if (filterElement !== undefined) {
-                accumulated[name] = nullFilterValues.indexOf(filterElement.dataset.value) < 0 ? filterElement.dataset.value.split(',') : null;
+        function generatePageSize(table) {
+            let settings = table.settings;
+            if (settings.pageSizeContainer === null) {
+                return null;
             } else {
-                accumulated[name] = null;
+                let dd = dropdown.generate({values: machinesNumber});
+                bindPageSizeLinkHandlers(dd, table);
+                return dd;
             }
-            return accumulated;
-        }, {});
-        if (filters.Columns === undefined || filters.Columns === null) {
-            filters.Columns = [];
         }
-        return filters;
-    }
 
-    function filterTable(params) {
-        let tableSettings = params.tableSettings;
-        if (tableSettings.showPreloader) {
-            trigger('preloader/show');
+        function generateExportButtons(table) {
+            let settings = table.settings;
+            let buttons = [];
+            for (let i = 0; i < settings.exportTo.length; i++) {
+                let exportType = settings.exportTo[i];
+                let element = document.createElement('div');
+                element.classList.add(`table-export-${exportType.name}`);
+                element.classList.add('table-export');
+                element.dataset.fileType = exportType.type;
+                element.dataset.fileTypeName = exportType.name;
+                element.addEventListener('click', function () {
+                    trigger(getExportEvent(settings.id), {table: table, type: exportType});
+                });
+                buttons.push(element);
+            }
+            return buttons;
         }
-        trigger(tableSettings.filterDataEvent, {
-            tableSettings: tableSettings,
-            data: params.data,
-        });
-        if (params.activeFiltersElement !== undefined &&
-            params.infobarElement !== undefined) {
-            showSelectedFilters({
-                active: params.activeFiltersElement,
-                infobar: params.infobarElement
+
+        function generateAppearanceButtons(table) {
+            let expand = document.createElement('span');
+            expand.classList.add('mdi', 'show-space');
+            expand.classList.add('mdi-view-sequential', 'show-table-expanded', 'show-space-active');
+
+            let condense = document.createElement('span');
+            condense.classList.add('mdi', 'show-space');
+            condense.classList.add('mdi-view-headline', 'show-table-condensed');
+
+
+            expand.addEventListener('click', function () {
+                table.classList.remove('table-condensed');
+                table.classList.add('table-expanded');
+                expand.classList.add('show-space-active');
+                condense.classList.remove('show-space-active');
             });
-        }
-    }
 
-    /*--------------------------------------------------------------------------------------*/
-
-    /*--------------------------------- INITIALIZING TABLE ---------------------------------*/
-
-    function init(tableSettings) {
-
-        let tableContainerElement = $$(tableSettings.tableContainerSelector);
-        //remove reference on previous table settings
-        if (tableContainerElement.tableSettings !== undefined) {
-            delete tableContainerElement.tableSettings;
+            condense.addEventListener('click', function () {
+                table.classList.add('table-condensed');
+                table.classList.remove('table-expanded');
+                expand.classList.remove('show-space-active');
+                condense.classList.add('show-space-active');
+            });
+            return [expand, condense];
         }
 
-        //cache table and filters containers in table settings
-        tableSettings.tableContainerElement = tableContainerElement;
-        tableSettings.filtersContainerElement = $$(tableSettings.filtersContainerSelector);
 
-
-        if (tableSettings.advancedFiltersContainerElement !== undefined) {
-            tableSettings.advancedFiltersContainerElement = $$(tableSettings.advancedFilterContainerSelector);
-
-        }
-        //set advanced filters container element automatically
-        else if (tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter').length > 0) {
-            tableSettings.advancedFiltersContainerElement = tableSettings.filtersContainerElement.getElementsByClassName('advance-table-filter')[0];
-            tableSettings.advancedFilterContainerSelector = `#${tableSettings.advancedFiltersContainerElement.id}`;
+        function createEditMachineAction() {
+            //ToDo:
         }
 
-        tableSettings.tableContainerElement.classList.add('vertex-table');
-
-        tableContainerElement.tableSettings = tableSettings;
-
-        if (tableSettings.getDataEvent !== null) {
-            tableSettings.getDataEvent = getEvent(tableSettings);
+        function createCancelTransactionAction() {
+            let cancelIndicator = document.createElement('span');
+            let icon = document.createElement('i');
+            //ToDo: Ubaciti klasu za font
+            icon.innerHTML = 'X';
+            let text = document.createElement('span');
+            text.innerHTML = localization.translateMessage('Cancel', text);
+            cancelIndicator.classList.add('cancel-indicator');
+            cancelIndicator.appendChild(icon);
+            cancelIndicator.appendChild(text);
+            return cancelIndicator;
         }
 
-        setDefaultSettings(tableSettings);
-        checkTableSettings(tableSettings);
-
-        generateTablePagination(tableSettings);
-        generatePageSizeDropdown(tableSettings);
-        generateNoDataElement(tableSettings);
-
-        bindHandlers(tableSettings);
-
-        delete tableSettings.ColumnsToShow;
-
-        if (tableSettings.tableData === undefined) {
-            //generateTableHeaders(tableSettings);
-            setTableDimensions(tableSettings, getColsCount(tableSettings), getTableBodyElement(tableSettings));
-            initTable(tableSettings);
-        } else {
-            updateTable(tableSettings);
+        function createEditJackpotAction() {
+            //ToDo:
         }
-    }
 
-    return {
-        init: init,
-        getColNamesOfDisplayedTable: getColNamesOfDisplayedTable,
-        getHideableColumns: getHideableColumns,
-        collectFiltersFromPage: collectFiltersFromPage,
-        getSorting: getSorting,
-        getPageSize: getPageSize,
-        parseFilterValues: parseFilterValues,
-        getBounds: getBounds,
-        setFiltersPage: setFiltersPage,
-        //constants
-        exportTypes: exportTypes,
-        events: events,
-        exportFileTypes: exportFileTypes
-    };
+        function createEditMalfunctionAction() {
+            //ToDo:
+        }
 
-    /*--------------------------------------------------------------------------------------*/
+        function createEditUserAction() {
+            //ToDo:
+        }
 
+        function createDeleteUserAction() {
+            //ToDo:
+        }
 
-    /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
-    function getVisibleColumnIds(tableSettings) {
-        let headers = getHeaders(tableSettings);
-        let ids = [];
-        if (tableSettings.visibleColumns.length === 0) {
+        function createRowCell(rowId, column, settings, rowData) {
+            let cellColumnClass = createColumnClassName(column);
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.classList.add('table-item');
+            cell.classList.add(rowClassPrefix + rowId);
+            cell.classList.add(cellColumnClass);
+            if (column === 'actions') {
+                cell.classList.add('table-actions-column');
+            }
+            cell.additionalData = rowData;
+
+            //set handlers
+            cell.addEventListener('mouseover', function () {
+                hoverRow(rowClassPrefix + rowId, true);
+            }, {passive: false});
+            cell.addEventListener('mouseout', function () {
+                hoverRow(rowClassPrefix + rowId, false);
+            }, {passive: false});
+            cell.addEventListener('click', function (e) {
+                //check if there's on beforeCellClick handler
+                trigger(events.rowClick(settings.id), {event: e, target: cell});
+            });
+            return cell;
+        }
+
+        function createHeaderTableCell(sticky) {
+            let cell = document.createElement('div');
+            cell.classList.add('head');
+            cell.classList.add('cell');
+            cell.classList.add('text-uppercase');
+            if (sticky) {
+                cell.classList.add('sticky');
+            }
+            return cell;
+        }
+
+        function createTimeUserCellHTML(time, user) {
+            let timeElement = createTableTimeElement(time);
+            let userElement = document.createElement('label');
+            userElement.innerHTML = user;
+
+            return timeElement.outerHTML + userElement.outerHTML;
+        }
+
+        function createTableTimeElement(content) {
+            let time = document.createElement('time');
+            time.classList.add('table-time');
+            time.innerHTML = content;
+            return time;
+        }
+
+//endregion
+
+//region helper functions
+        function createColumnClassName(propertyName) {
+            return columnClassPrefix + propertyName.replace(/([A-Z])/g, (g) => `-${g[0].toLowerCase()}`);
+        }
+
+        function hoverRow(elements, highlight = false) {
+            for (let element of document.getElementsByClassName(elements)) {
+                element.classList[highlight ? "add" : "remove"]('hover');
+            }
+        }
+
+        function getHeaders(table) {
+            return table.getElementsByClassName('head');
+        }
+
+        function hasHeaders(table) {
+            return getHeaders(table).length > 0;
+        }
+
+        function highlightSortedColumn(table, column, direction) {
+            let settings = table.settings;
+            if (column === undefined) {
+                column = settings.sort.name;
+            }
+            if (direction === undefined) {
+                direction = settings.sort.direction;
+            }
+            let headers = getHeaders(table);
             for (let i = 0; i < headers.length; i++) {
                 let header = headers[i];
-                if (!isEmpty(header.dataset.columnId)) {
-                    ids.push(header.dataset.columnId);
+                let headerColumn = header.dataset.column;
+                header.classList.remove(activeColumnElementsClass, sortingClass.ascending, sortingClass.descending);
+                if (column === headerColumn) {
+                    let directionClass = direction === sortDirections.ascending ? sortingClass.ascending : sortingClass.descending;
+                    header.classList.add(directionClass);
+                    header.classList.add(activeColumnElementsClass);
+                }
+            }
+
+            let columnClass = createColumnClassName(column);
+            let columnItems = table.elements.body.getElementsByClassName(columnClass);
+            for (let i = 0; i < columnItems.length; i++) {
+                let cell = columnItems[i];
+                cell.classList.add(activeColumnElementsClass);
+            }
+        }
+
+        function updatePagination(table) {
+            let pagination = table.elements.pagination;
+            let pageSize = table.settings.pageSize;
+            let activePage = table.settings.page;
+
+            let totalItems = table.data.totalItems;
+            let lastPage = Math.ceil(totalItems / pageSize);
+
+            if (table.data.items.length <= 0 || lastPage === 1) {
+                pagination.classList.add('hidden');
+            } else {
+                pagination.classList.remove('hidden');
+
+                let paginationFirstPage = pagination.getElementsByClassName('pagination-first-page')[0];
+                let paginationPreviousPage = pagination.getElementsByClassName('pagination-previous-page')[0];
+                let paginationNextPage = pagination.getElementsByClassName('pagination-next-page')[0];
+                let paginationLastPage = pagination.getElementsByClassName('pagination-last-page')[0];
+
+                paginationFirstPage.dataset.page = '1';
+                if (activePage - 1 > 0) {
+                    let previousPage = activePage - 1;
+                    paginationPreviousPage.dataset.page = previousPage.toString();
+                } else {
+                    paginationPreviousPage.dataset.page = '1';
                 }
 
-            }
-        } else {
-            for (let i = 0; i < headers.length; i++) {
-                let header = headers[i];
-                let columnName = header.dataset.columnName;
-                let columnId = header.dataset.columnId;
-                if (!isEmpty(columnId)) {
-                    if (tableSettings.visibleColumns.indexOf(columnName) >= 0) {
-                        ids.push(columnId);
+                if (activePage !== lastPage) {
+                    let nextPage = activePage + 1;
+                    paginationNextPage.dataset.page = nextPage.toString();
+                } else {
+                    paginationNextPage.dataset.page = lastPage.toString();
+                }
+                paginationLastPage.dataset.page = lastPage.toString();
+
+                let paginationArray = [];
+
+                if (lastPage >= 3) {
+                    if (activePage === lastPage) {
+                        paginationArray = [activePage - 2, activePage - 1, activePage];
+                    } else if (activePage === 1) {
+                        paginationArray = [activePage, activePage + 1, activePage + 2];
+                    } else {
+                        paginationArray = [activePage - 1, activePage, activePage + 1];
+                    }
+                } else if (lastPage === 2) {
+                    paginationArray = [1, 2];
+                } else {
+                    paginationArray = [1];
+                }
+
+                let paginationButtons = pagination.getElementsByClassName('element-pagination-page-button');
+
+                for (let i = 0; i < paginationButtons.length; i++) {
+                    let button = paginationButtons[i];
+                    button.classList.remove('active');
+                    button.classList.remove('hidden');
+
+                    button.dataset.page = paginationArray[i];
+                    button.innerHTML = paginationArray[i];
+                    if (paginationArray[i] === activePage) {
+                        button.classList.add('active');
+                    } else if (paginationArray[i] === undefined) {
+                        button.classList.add('hidden');
                     }
                 }
             }
         }
-        return ids;
-    }
 
+        function setSort(table, column, direction) {
+            let settings = table.settings;
+            settings.sort.name = column;
+            settings.sort.direction = direction;
+        }
 
-    function bindHandlers(tableSettings) {
-        bindSortingLinkHandlers(tableSettings);
-        bindTableViewLinkHandlers(tableSettings);
-        bindExportToHandlers(tableSettings);
-    }
+        function setDimensions(table) {
+            let tbody = table.elements.body;
 
-    function showSelectedFilters(params) {
-        let filterActive = params.active;
-        let filterInfobar = params.infobar;
-        for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
-                filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
-                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].classList.remove('hidden');
-            } else {
-                filterInfobar.children[1].children[count].classList.add('hidden');
+            tbody.style.gridTemplateRows = `repeat(${table.data.items.length}, 1fr)`;
+
+            let templateColumn = '';
+            for (let key in table.settings.columns) {
+                let column = table.settings.columns[key];
+                if (column.visible === true) {
+                    templateColumn += `${column.width} `;
+                }
             }
-        }
-        for (let isHidden of filterInfobar.children[1].children) {
-            if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
-                filterInfobar.classList.remove('hidden');
-                return;
-            } else {
-                filterInfobar.classList.add('hidden');
-            }
-        }
-    }
-
-    function dismissPopup(target, tableSettings) {
-        dimissPopUp(target);
-        enableScroll(tableSettings);
-    }
-
-    function disableScroll(tableSettings) {
-        let tbody = getTableBodyElement(tableSettings);
-        tbody.classList.add('no-scroll');
-    }
-
-    function enableScroll(tableSettings) {
-        let tbody = getTableBodyElement(tableSettings);
-        tbody.classList.remove('no-scroll');
-    }
-
-    function setDefaultSettings(tableSettings) {
-        if (tableSettings.filters === undefined) {
-            tableSettings.filters = null;
-        }
-        if (tableSettings.visibleColumns === undefined) {
-            tableSettings.visibleColumns = [];
-        }
-        if (tableSettings.columns === undefined) {
-            tableSettings.columns = [];
-        }
-        //set default fort values
-        if (tableSettings.sort === undefined) {
-            tableSettings.sort = {};
-        }
-        if (tableSettings.sort.sortDirection === undefined) {
-            tableSettings.sort.sortDirection = null;
-        }
-        if (tableSettings.sort.sortName === undefined) {
-            tableSettings.sort.sortName = null;
-        }
-        if (tableSettings.stickyColumn === undefined) {
-            tableSettings.stickyColumn = false;
-        }
-        if (tableSettings.filtersInitialized === undefined) {
-            tableSettings.filtersInitialized = false;
-        }
-        if (tableSettings.forceRemoveHeaders === undefined) {
-            tableSettings.forceRemoveHeaders = false;
-        }
-        if (tableSettings.PageSize === undefined) {
-            tableSettings.PageSize = defaultPageSize;
-        }
-        if (tableSettings.activePage === undefined) {
-            tableSettings.activePage = defaultPage;
-        }
-        if (tableSettings.showPreloader === undefined) {
-            tableSettings.showPreloader = true;
+            templateColumn = templateColumn.trim();
+            tbody.style.gridTemplateColumns = templateColumn;
         }
 
 
-    }
+//endregion
 
-    function checkTableSettings(tableSettings) {
-        //check if all settings argument are set correctly
-        //check callback functions - allow either function or a string - name of the event to be triggered
-        if (tableSettings.onAfterDrawRows !== undefined &&
-            !isFunction(tableSettings.onAfterDrawRows) &&
-            !isString(tableSettings.onAfterDrawRows)) {
-            console.error('onBeforeCellClick callback is not a function or event trigger');
+//region event handlers
+        function onSort(e) {
+            //get clicked header
+            e.preventDefault();
+            let element = e.target;
+            let table = element.parentNode.parentNode;
+            let settings = table.settings;
+            settings.page = 1;
+            let column = element.dataset.column;
+            table.sort(column);
         }
-        if (tableSettings.onDrawRowCell !== undefined &&
-            !isFunction(tableSettings.onDrawRowCell) &&
-            !isString(tableSettings.onDrawRowCell)) {
-            console.error('onDrawRowCell callback is not a function or event trigger');
-        }
-        if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
-            console.error('onBeforeCellClick callback is not a function');
-        }
-        if (tableSettings.onBeforeCellClick !== undefined && !isFunction(tableSettings.onBeforeCellClick)) {
-            console.error('onBeforeCellClick callback is not a function');
-        }
-        if (tableSettings.onCellClick !== undefined && !isFunction(tableSettings.onCellClick)) {
-            console.error('onCellClick callback is not a function');
-        }
-        if (tableSettings.onAfterCellClick !== undefined && !isFunction(tableSettings.onAfterCellClick)) {
-            console.error('onAfterCellClick callback is not a function');
-        }
-    }
 
-    function deselectActiveColumn(tableSettings) {
-        let activeElements = tableSettings.tableContainerElement.getElementsByClassName(highlightedColumnElementsClass);
-        while (activeElements.length > 0) {
-            activeElements[0].classList.remove(highlightedColumnElementsClass);
+        function onPagination(e) {
+            let target = e.target;
+            let table = target.parentNode.parentNode.parentNode;
+            table.settings.page = parseInt(target.dataset.page);
+            //ToDo: ovde mozemo trigerovati i filter jer se na paginaciji poziva filtriranje  s api-ja
+            trigger(events.pagination(table.settings.id), {table: table});
         }
-    }
 
-    function deselectActiveRow(table) {
-        let activeElements = table.getElementsByClassName(activeRowElementsClass);
-
-        while (activeElements.length > 0) {
-            activeElements[0].classList.remove(activeRowElementsClass);
-        }
-    }
-
-    function deselectHoverRow(table) {
-        let elements = table.getElementsByClassName('hover');
-        while (elements.length > 0) {
-            elements[0].classList.remove('hover');
-        }
-    }
-
-    function onTableExportButtonClicked(event) {
-        let button = event.target;
-        let tableSettings = $$(button.dataset.target).tableSettings;
-        let fileType = button.dataset.fileType;
-
-        if (tableSettings.exportTo === undefined) {
-            console.error(`Table export to settings are not defined.`);
-        } else if (tableSettings.exportTo[fileType] === undefined) {
-            console.error(`Export to ${fileType} settings are not set in tableSettings.exportTo`);
-        } else {
-            let exportSettings = tableSettings.exportTo[fileType];
-            if (exportSettings.type === exportTypes.event) {
-                trigger(exportSettings.value, {
-                    tableSettings: tableSettings,
-                    selectedColumns: getVisibleColumnIds(tableSettings)
+        function bindPageSizeLinkHandlers(dropdown, table) {
+            let options = dropdown.getElementsByClassName('single-option');
+            for (let i = 0; i < options.length; i++) {
+                let option = options[i];
+                option.addEventListener('click', function (e) {
+                    let target = e.target;
+                    table.settings.pageSize = parseInt(target.dataset.value);
+                    trigger(events.pageSize(table.settings.id), {table: table});
+                    //ToDo: ovde takodje mozemo da zovemo filter posto page size inicira filtriranje
                 });
             }
-            //ToDo: cases where export type value is function or url
         }
 
-    }
+//endregion
 
-    /*-------------------------------PUBLIC HELPER FUNCTIONS--------------------------------*/
-    function setFiltersPage(currentTableSettingsObject, filtersForApi) {
+        return {
+            init: init,
+            //constants
+            events: events,
+            exportFileTypes: exportFileTypes,
+        };
 
-        if (currentTableSettingsObject.filters !== null) {
-            if (currentTableSettingsObject.filters.BasicData !== undefined) {
-                let clonedFilters = JSON.parse(JSON.stringify(filtersForApi));
-                let clonedExistingFilters = JSON.parse(JSON.stringify(currentTableSettingsObject.filters));
+        /*--------------------------------------------------------------------------------------*/
 
-                //delete pages as that data will differ from old and new filters data
-                delete clonedFilters.BasicData.Page;
+
+        /*--------------------------------------------HELPER FUNCTIONS--------------------------*/
+
+//ToDo: sta je ovo?
+        function showSelectedFilters(params) {
+            let filterActive = params.active;
+            let filterInfobar = params.infobar;
+            for (let count = 0; count < filterActive.children.length - 1; count++) {
+                if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== 'null') {
+                    filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
+                    filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].classList.remove('hidden');
+                } else {
+                    filterInfobar.children[1].children[count].classList.add('hidden');
+                }
+            }
+            for (let isHidden of filterInfobar.children[1].children) {
+                if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
+                    filterInfobar.classList.remove('hidden');
+                    return;
+                } else {
+                    filterInfobar.classList.add('hidden');
+                }
+            }
+        }
+
+        function setDefaults(settings, table) {
+            if (settings.filters === undefined) {
+                settings.filters = null;
+            }
+
+            if (settings.columns === undefined) {
+                settings.columns = {};
+            }
+            //set default fort values
+            if (settings.defaultSortDirection === undefined) {
+                settings.defaultSortDirection = sortDirections.ascending;
+            }
+            if (settings.sort === undefined) {
+                settings.sort = {};
+            }
+            if (settings.sort.direction === undefined) {
+                settings.sort.direction = null;
+            }
+            if (settings.sort.name === undefined) {
+                settings.sort.name = null;
+            }
+            if (settings.stickyColumn === undefined) {
+                settings.stickyColumn = false;
+            }
+            if (settings.stickyRow === undefined) {
+                settings.stickyRow = true;
+            }
+
+            if (settings.pageSize === undefined) {
+                settings.pageSize = defaultPageSize;
+            }
+            if (settings.page === undefined) {
+                settings.page = defaultPage;
+            }
+            if (settings.showPreloader === undefined) {
+                settings.showPreloader = true;
+            }
+            if (settings.pageSizeContainer === undefined) {
+                settings.pageSizeContainer = null;
+            }
+            if (settings.exportButtonsContainer === undefined) {
+                settings.exportButtonsContainer = null;
+            }
+            if (settings.appearanceButtonsContainer === undefined) {
+                settings.appearanceButtonsContainer = null;
+            }
+            if (settings.exportTo === undefined) {
+                settings.exportTo = [exportFileTypes.pdf, exportFileTypes.excel]
+            }//ToDo: ovde moze da se ispita da clanovi prosledjenog niza exportTo poticu iz exportFileTypes
+
+            if (table.data === undefined) {
+                table.data = {
+                    totalItems: 0,
+                    items: []
+                }
+            }
+
+            table.settings = settings;
+        }
+
+//region public helper functions
+
+        function compareFilters(table, filters) {
+            let settings = table.settings;
+            if (settings.filters === null) {
+                return false;
+            }
+            let clonedFilters = JSON.parse(JSON.stringify(filters));
+            let tableFilters = JSON.parse(JSON.stringify(settings.filters));
+
+            //delete pages as that data will differ from old and new filters data
+            if (clonedFilters.BasicData !== undefined) {
+                if (clonedFilters.BasicData.Page !== undefined) {
+                    delete clonedFilters.BasicData.Page;
+                }
+            }
+            if (clonedFilters.TokenInfo !== undefined) {
                 delete clonedFilters.TokenInfo;
-                delete clonedExistingFilters.BasicData.Page;
-                delete clonedExistingFilters.TokenInfo;
-                if (!compareObjects(clonedFilters, clonedExistingFilters)) {
-                    currentTableSettingsObject.activePage = 1;
-                    filtersForApi.BasicData.Page = 1;
-                }
             }
+
+            delete tableFilters.BasicData.Page;
+            delete tableFilters.TokenInfo;
+            return compareObjects(clonedFilters, tableFilters);
+
         }
+
+        function getRowClickEvent(tableId) {
+            return `table/${tableId}/cell/clicked/`;
+        }
+
+        function getPageSizeEvent(tableId) {
+            return `table/${tableId}/page-size/`;
+        }
+
+        function getPaginationEvent(tableId) {
+            return `table/${tableId}/pagination/`;
+        }
+
+        function getSortEvent(tableId) {
+            return `table/${tableId}/sort`;
+        }
+
+        function getExportEvent(tableId) {
+            return `table/${tableId}/export`;
+        }
+
+
+//endregion
+
+
     }
 
-    function getBounds(tableSettings) {
-        return tableSettings.tableContainerElement.getBoundingClientRect();
-    }
-
-    function getHideableColumns(tableSettings) {
-        let headers = Array.from(getHeaders(tableSettings));
-        let columns = [];
-
-        headers.forEach(function (element) {
-            if (element.dataset.alwaysVisible === undefined || element.dataset.alwaysVisible === false) {
-                let item = {};
-                if (element.dataset.columnName === undefined) {
-                    item.Name = element.innerText.replace(' ', '');
-                    item.Id = element.dataset.translationKey;
-                } else {
-                    item.Name = element.dataset.translationKey;
-                    item.Id = element.dataset.columnName;
-                }
-                columns.push(item)
-            }
-        });
-        return columns;
-
-    }
-
-    function getColNamesOfDisplayedTable(tableSettings) {
-        let colNames = [];
-        let tbody = getTableBodyElement(tableSettings);
-        let headElements = Array.from(tbody.getElementsByClassName('head'));
-        headElements.forEach(function (element) {
-            let name = '';
-            if (element.dataset.columnName === 'undefined') {
-                name = element.dataset.columnName;
-            } else {
-                name = element.innerText.replace(' ', '');
-            }
-            colNames.push({ Name: name })
-        });
-        colNames.unshift({ Name: "-" });
-        return colNames;
-    }
-
-    function parseFilterValues(array, nameProperty, valueProperty, nullValue) {
-        return array.map(function (elem) {
-            let item = {};
-            item.name = elem[nameProperty];
-            if (nullValue === 'undefined') {
-                item.value = elem[valueProperty];
-            } else {
-                //unsafe comparison needed here as all results from api are handled as string
-                if (elem[valueProperty] == nullValue) {
-                    item.value = null;
-                } else {
-                    item.value = elem[valueProperty];
-                }
-            }
-            //hack to avoid conflicts with current dropdowns
-            item.parsed = true;
-            return item;
-        });
-    }
-})();
+)
+();

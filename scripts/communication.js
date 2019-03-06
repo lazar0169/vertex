@@ -122,7 +122,9 @@ let communication = (function () {
                 saveBasicSettings: 'communicate/aft/saveBasicSettings',
                 getNotificationSettings: 'communicate/aft/getNotificationSettings',
                 saveNotificationSettings: 'communicate/aft/saveNotificationSettings',
-                getFilters: 'communicate/aft/getFilters'
+                getFilters: 'communicate/aft/getFilters',
+                exportToPDF: 'communicate/aft/export/pdf',
+                exportToXLS: 'communicate/aft/export/xls'
             },
             data: {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'
@@ -218,7 +220,7 @@ let communication = (function () {
         return xhr;
     }
 
-    function success(xhr, callbackEvent, settingsObject) {
+    function success(xhr, callbackEvent, additionalData) {
         let data = null;
 
         if (xhr.responseType === 'arraybuffer') {
@@ -239,7 +241,7 @@ let communication = (function () {
         }
 
         if (typeof callbackEvent !== typeof undefined && callbackEvent !== null) {
-            trigger(callbackEvent, { data: data, settingsObject: settingsObject });
+            trigger(callbackEvent, { data: data, additionalData: additionalData });
         }
     }
 
@@ -283,7 +285,13 @@ let communication = (function () {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
                 success(xhr, successEvent, additionalData);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
-                error(xhr, errorEvent);
+                if (xhr.status >= 500){
+                    trigger('notifications/show', {
+                        message: localization.translateMessage('InternalServerError'),
+                        type: notifications.messageTypes.error
+                    });
+                }
+                    error(xhr, errorEvent);
             }
         };
         return xhr;
@@ -310,8 +318,8 @@ let communication = (function () {
     }
 
     function setDefaultHeaders(xhr) {
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.setRequestHeader("Accept", "application/json");
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('Accept', 'application/json');
         return xhr;
     }
 
@@ -355,7 +363,7 @@ let communication = (function () {
 
     //create and send xhr
     on('communicate/createAndSendXhr', function (params) {
-        let xhr = createRequest(params.route, params.requestType, params.data, params.successEvent, params.errorEvent, params.settingsObject);
+        let xhr = createRequest(params.route, params.requestType, params.data, params.successEvent, params.errorEvent, params.additionalData);
         xhr = setDefaultHeaders(xhr);
         xhr = setAuthHeader(xhr);
         send(xhr);

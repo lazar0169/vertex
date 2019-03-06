@@ -470,25 +470,8 @@ let home = (function () {
 
         setTimeout(function () {
             trigger('preloader/hide');
-        }, 2000);
+        }, 1);
 
-/*        let tableSettings = {};
-        tableSettings.tableData = testDataTableHome;
-        tableSettings.forceRemoveHeaders = true;
-        tableSettings.tableContainerSelector = '#table-container-home';
-        tableSettings.stickyRow = true;
-        tableSettings.stickyColumn = true;
-        tableSettings.dataEvent = 'mock/data';
-        tableSettings.id = '';
-
-        table.init(tableSettings);*/
-
-        /*TESTING*/
-        // table.generateTableContent(tableSettings);
-        // trigger('communicate/table/data', {tableSettings: tableSettings, callbackEvent: 'table/generate/new-data'});
-        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData});
-        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData2});
-        // trigger('table/generate/new-data', {tableSettings: tableSettings, newTableData: newTestData3});
     });
 
 })();

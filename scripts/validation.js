@@ -404,7 +404,7 @@ let validation = (function () {
             case inputTypes.float:
                 return input.value.replace(/,/g, '');
             case inputTypes.singleSelect:
-                return dropdown.getValue(input);
+                return input.get();
             default:
                 return input.value;
         }

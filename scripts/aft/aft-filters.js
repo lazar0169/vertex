@@ -4,20 +4,18 @@ const aftFilters = (function () {
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear').children[0];
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
+    //ToDo Nikola: vidi cemu sluzi ovaj advanceTableFilterInfobar
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
     let aftAddTransactionButton = $$('#aft-add-transaction').children[0];
     let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
     let transactionTab = $$('#aft-tabs-transaction');
     let closeAddTransaction = $$('#add-transaction-header-element').children[1];
-    let activeHeadElement;
     let dropdownStatus;
-    let dropdownColumn;
+    let endpointId = null;
 
-
-    //display initial filters
-    /*********************----Events Listeners------*********************/
+    //region event listeners
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
         filterAftTable();
     });
 
@@ -43,89 +41,72 @@ const aftFilters = (function () {
     advanceTableFilter.children[0].addEventListener('click', function () {
         showAdvanceTableFilter();
     });
+    //endregion
 
-
-    /*********************----Module Events----************************/
+    //region module events
     on('aft/filters/init', function (params) {
-        let tableSettings = params.tableSettings;
-        getFiltersFromAPI(tableSettings);
+        endpointId = params.endpointId;
+        getFiltersFromAPI(endpointId);
     });
+
     on('aft/filters/display', function (params) {
         let apiResponseData = params.data;
-        let tableSettings = params.settingsObject;
         let filters = apiResponseData.Data;
-
-        filters.MachineNameList = formatAftApiData(filters.MachineNameList);
-        filters.JackpotNameList = formatAftApiData(filters.JackpotNameList);
-
-        tableSettings.filtersInitialized = true;
-        displayFilters(filters, tableSettings);
+        displayFilters(filters);
     });
     on('aft/filters/pagination', function (params) {
         filterAftTable();
 
     });
-    on('aft/filters/sorting', function (params) {
-        activeHeadElement = getActiveTableSettings().tableContainerElement.getElementsByClassName('sort-active');
-        if (activeHeadElement !== null && activeHeadElement !== undefined) {
-            filterAftTable();
-        }
+    on('aft/filters/sorting', function () {
+        filterAftTable();
     });
     on('aft/filters/pageSize', function (params) {
         let tableSettings = params.tableSettings;
         tableSettings.activePage = 1;
         filterAftTable();
     });
-    on('aft/filters/filter-table', function (params) {
-        filterAftTable(params.showFilters);
+    on('aft/table/filter', function (params) {
+        filterAftTable();
     });
-    //display initial filters
-    /*********************----Helper functions----*********************/
+    on('show/app', function () {
+        aftAddTransactionWrapper.classList.add('hidden');
+    });
+    closeAddTransaction.addEventListener('click', function () {
+        trigger('show/app');
+    });
+    //endregion
 
-    function getActiveTableSettings() {
-        return $$('#table-container-aft').tableSettings;
-    }
-
+    //region helper functions
     function filterAftTable() {
-        let params = {};
-        let tableSettings = getActiveTableSettings();
-        params.tableSettings = tableSettings;
-        params.data = prepareAftFiltersForApi(tableSettings);
-        params.activeFiltersElement = advanceTableFilterActive;
-        params.infobarElement = advanceTableFilterInfobar;
-        trigger('table/filter', params);
+        let filters = prepareAftFilters();
+        trigger('preloader/show');
+        trigger(communication.events.aft.transactions.previewTransactions,{data:filters});
     }
 
     function removeSelectedFilters() {
-        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
     }
 
     function clearAftFilters() {
         removeSelectedFilters();
-        //reset page to 1
-        let tableSettings = getActiveTableSettings();
-        tableSettings.activePage = 1;
-        tableSettings.visibleColumns = [];
-        tableSettings.filters = null;
+        $$('#table-container-aft').resetFilters();
         filterAftTable();
     }
 
-    function getFiltersFromAPI(tableSettings) {
+    function getFiltersFromAPI(endpointId) {
         let data = {
-            'EndpointId': tableSettings.endpointId
+            'EndpointId': endpointId
         };
-        let tableSettingsObject = tableSettings;
         let successEvent = 'aft/filters/display';
         trigger(communication.events.aft.transactions.getFilters, {
             data: data,
             successEvent: successEvent,
-            tableSettings: tableSettingsObject
         });
     }
 
-    function displayFilters(filters, tableSettings) {
+    function displayFilters(filters) {
         //filter elements
-        //let aftAdvanceTableFilterDateRange = $$('#aft-advance-table-filter-date-range');
         let aftAdvanceTableFilterFinished = $$('#aft-advance-table-filter-finished');
         let aftAdvanceTableFilterJackpot = $$('#aft-advance-table-filter-jackpot');
         let aftAdvanceTableFilterType = $$('#aft-advance-table-filter-type');
@@ -139,85 +120,68 @@ const aftFilters = (function () {
         dropdown.generate({ values: filters.MachineNameList, parent: aftAdvanceTableFilterFinished, type: 'multi', name: 'MachineList' })
         dropdown.generate({ values: filters.JackpotNameList, parent: aftAdvanceTableFilterJackpot, type: 'multi' });
         dropdown.generate({ values: filters.TypeList, parent: aftAdvanceTableFilterType, type: 'multi' });
-        // let types = table.parseFilterValues(filters.TypeList, 'Name', 'Id', -1);
+
         if (dropdownStatus) {
             dropdownStatus.remove();
         }
-        dropdownStatus = dropdown.generate({ values: filters.StatusList, type: 'multi' });
+        dropdownStatus = dropdown.generate({values: filters.StatusList, type: 'multi'});
         aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
-        // let statuses = table.parseFilterValues(filters.StatusList, 'Name', 'Id', -1);
 
         //set up columns selection dropdown
-        aftAdvanceTableFilterColumn.classList.add('table-element-select-columns');
-        aftAdvanceTableFilterColumn.dataset.target = tableSettings.tableContainerSelector;
-        let hideableColumns = table.getHideableColumns(tableSettings);
-        hideableColumns.unshift({ Name: '-', Id: null });
-        //ToDo Neske: this can be removed when solution for parsed hack is found
-        // let columns = hideableColumns.map(function (item) {
-        //     item.parsed = true;
-        //     return item;
-        // });
-        if (dropdownColumn) {
-            dropdownColumn.remove();
+        let aftTable = $$('#table-container-aft');
+        let columns = [];
+        //add no select element
+        columns.push({
+            Name:'-',
+            Id: -1
+        });
+        for (let columnKey in aftTable.settings.columns) {
+            let column = aftTable.settings.columns[columnKey];
+            if (column.hideable === true) {
+                columns.push({
+                    Id: column.column,
+                    Name: column.column
+                })
+            }
         }
-        dropdownColumn = dropdown.generate({ values: hideableColumns, type: 'multi' });
-        aftAdvanceTableFilterColumn.appendChild(dropdownColumn);
-        dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single' })
-        dropdown.generate({ values: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single' })
+        dropdown.generate({values: columns,parent:aftAdvanceTableFilterColumn, type: 'multi'});
+
+        //transaction type select in add transaction form
+        dropdown.generate({values: filters.TypeList.slice(1, filters.TypeList.lenght),parent: aftAddTransactionType,type: 'single',name:'Type'});
+        //machine select in add transaction form
+        dropdown.generate({values: filters.MachineAddTransactionList,parent: aftAddTransactionMachine,type: 'single',name:'Gmcid'});
     }
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
-    function formatAftApiData(listArray) {
-        if (listArray !== null && listArray !== undefined) {
-            listArray.forEach(function (list) {
-                list.Name = localization.translateMessage(list.Name);
-                list.Value = list.Name;
-            });
-        }
-        return listArray;
-    }
-    function prepareAftFiltersForApi(activeTableSettings) {
-        if (activeTableSettings === undefined) {
-            activeTableSettings = getActiveTableSettings();
-        }
-        let pageFilters = table.collectFiltersFromPage(activeTableSettings);
-        let sortDirection = activeTableSettings.sort.sortDirection;
-        let sortName = activeTableSettings.sort.sortName;
+    function prepareAftFilters() {
+        let table = $$('#table-container-aft');
 
-        let filtersForApi = {
-            'EndpointId': activeTableSettings.endpointId,
-            'DateFrom': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            'DateTo': pageFilters.DateRange !== null ? pageFilters.DateRange[0] : pageFilters.DateRange,
-            'MachineList': pageFilters.MachineList,
-            'JackpotList': pageFilters.JackpotList,
-            'Status': pageFilters.Status,
-            'Type': pageFilters.Type,
-            'BasicData': {
-                'Page': activeTableSettings.activePage,
-                'PageSize': table.getPageSize(activeTableSettings),
-                'SortOrder': sortDirection,
-                'SortName': sortName
-            },
-            'TokenInfo': sessionStorage.token
+        let machineList = $$('#aft-advance-table-filter-finished').children[1].get();
+        let jackpotList = $$('#aft-advance-table-filter-jackpot').children[1].get();
+        let statusesList = $$('#aft-advance-table-filter-status').children[1].get();
+        let typesList = $$('#aft-advance-table-filter-type').children[1].get();
+
+        let filters = {
+            'EndpointId': table.settings.endpointId,
+            'SelectedPeriod': $$('#aft-advance-table-filter-date-range').children[1].get(),
+            'MachineList': machineList === 'null' ? null : machineList.split(','),
+            'JackpotList': jackpotList === 'null' ? null : jackpotList.split(','),
+            'Status': statusesList === 'null' ? null : statusesList.split(','),
+            'Type': typesList === 'null' ? null : typesList.split(','),
         };
-        //reset to page 1 if filters are changed
-        table.setFiltersPage(activeTableSettings, filtersForApi);
-        //Set visible columns for tableSettings object
-        activeTableSettings.visibleColumns = pageFilters.Columns;
-        activeTableSettings.filters = filtersForApi;
-        return filtersForApi;
+        filters = table.getFilters(filters);
+        //mark hidden columns
+        let visibleColumns = $$('#aft-advance-table-filter-column').children[1].get();
+        if (visibleColumns === 'null') {
+            visibleColumns = [];
+        }
+        table.setVisibleColumns(visibleColumns);
+        return filters;
     }
-    on('show/app', function () {
-        aftAddTransactionWrapper.classList.add('hidden');
-    });
-
-    closeAddTransaction.addEventListener('click', function () {
-        trigger('show/app');
-    });
-
+    //endregion
 })();
