@@ -408,7 +408,7 @@ let table = (function () {
                 } else {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
-                   // cell.innerHTML = localization.translateMessage(cellData,cell);
+                    // cell.innerHTML = localization.translateMessage(cellData,cell);
                 }
                 //hide hidden columns
                 let columnData = settings.columns[column];
@@ -584,7 +584,12 @@ let table = (function () {
         name = data.name.toLowerCase()
         let tempWrapper = document.createElement('div')
         for (let element of data.array) {
-            tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}"></div>`;
+            if (name === 'flaglist' || name === 'actionlist') {
+                tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}"></div>`;
+            } else {
+                tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}">${element}</div>`;
+            }
+
         }
         return tempWrapper.innerHTML;
     }
