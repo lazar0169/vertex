@@ -149,9 +149,9 @@ const dropdownDate = (function () {
             let dateFrom = dateFromTo[0];
             let dateTo = dateFromTo[1];
             return {
-                dateFrom,
-                dateTo,
-                selectedId
+                DateFrom: dateFrom,
+                DateTo: dateTo,
+                Period: selectedId
             }
         }
         select.reset = function () {

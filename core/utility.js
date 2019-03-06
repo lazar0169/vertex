@@ -5,7 +5,7 @@ if (!Element.prototype.matches) {
 }
 
 if (!Element.prototype.closest) {
-    Element.prototype.closest = function(s) {
+    Element.prototype.closest = function (s) {
         var el = this;
         if (!document.documentElement.contains(el)) return null;
         do {
@@ -49,10 +49,10 @@ function expandElement(element) {
     if (sectionHeight !== 0) {
         element.style.height = sectionHeight + 'px';
     }
-    element.addEventListener("webkittransitionEnd", expandTransitionEnd,false);
-    element.addEventListener("transitionend", expandTransitionEnd,false);
-    element.addEventListener("otransitionend", expandTransitionEnd,false);
-    element.addEventListener("MSAnimationEnd", expandTransitionEnd,false);
+    element.addEventListener("webkittransitionEnd", expandTransitionEnd, false);
+    element.addEventListener("transitionend", expandTransitionEnd, false);
+    element.addEventListener("otransitionend", expandTransitionEnd, false);
+    element.addEventListener("MSAnimationEnd", expandTransitionEnd, false);
 }
 //remove fixed height on elements after they are expanded
 function expandTransitionEnd(e) {
@@ -246,7 +246,9 @@ function removeChildren(element) {
     }
 }
 function formatTimeData(timeData) {
-    return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
+    if (timeData) {
+        return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');
+    }
 }
 
 //formats number 2000.53 into 2,000.53

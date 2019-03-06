@@ -132,7 +132,6 @@ const aft = (function () {
     on(events.previewTransactions, function (params) {
         let data = params.data.Data;
         $$(aftTableSelector).update(data);
-        //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
     //ToDo: prebaciti evente u enum

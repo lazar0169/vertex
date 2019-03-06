@@ -17,6 +17,7 @@ const aftFilters = (function () {
     aftAdvanceApplyFilters.addEventListener('click', function () {
         trigger('opened-arrow', {div: advanceTableFilter.children[0]});
         filterAftTable();
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
 
     //close
@@ -81,11 +82,12 @@ const aftFilters = (function () {
     function filterAftTable() {
         let filters = prepareAftFilters();
         trigger('preloader/show');
-        trigger(communication.events.aft.transactions.previewTransactions,{data:filters});
+        trigger(communication.events.aft.transactions.previewTransactions, { data: filters });
     }
 
     function removeSelectedFilters() {
-        trigger('clear/dropdown/filter', {data: advanceTableFilterActive});
+        trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
 
     function clearAftFilters() {
@@ -132,7 +134,7 @@ const aftFilters = (function () {
         let columns = [];
         //add no select element
         columns.push({
-            Name:'-',
+            Name: '-',
             Id: -1
         });
         for (let columnKey in aftTable.settings.columns) {
@@ -144,12 +146,12 @@ const aftFilters = (function () {
                 })
             }
         }
-        dropdown.generate({values: columns,parent:aftAdvanceTableFilterColumn, type: 'multi'});
+        dropdown.generate({ values: columns, parent: aftAdvanceTableFilterColumn, type: 'multi' });
 
         //transaction type select in add transaction form
-        dropdown.generate({values: filters.TypeList.slice(1, filters.TypeList.lenght),parent: aftAddTransactionType,type: 'single',name:'Type'});
+        dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single', name: 'Type' });
         //machine select in add transaction form
-        dropdown.generate({values: filters.MachineAddTransactionList,parent: aftAddTransactionMachine,type: 'single',name:'Gmcid'});
+        dropdown.generate({ values: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single', name: 'Gmcid' });
     }
 
     function showAdvanceTableFilter() {

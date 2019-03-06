@@ -17,11 +17,11 @@ const tickets = (function () {
         selectTab('tickets-tab');
         selectInfoContent('tickets-tab');
 
-        trigger(communication.events.tickets.getTickets, {endpointId: ticketId});
+        trigger(communication.events.tickets.getTickets, { endpointId: ticketId });
 
-        trigger('tickets/tab/appearance', {endpointId: ticketId});
-        trigger('tickets/tab/maxValue', {endpointId: ticketId});
-        trigger('tickets/tab/smsSettings', {endpointId: ticketId});
+        trigger('tickets/tab/appearance', { endpointId: ticketId });
+        trigger('tickets/tab/maxValue', { endpointId: ticketId });
+        trigger('tickets/tab/smsSettings', { endpointId: ticketId });
     });
 
     on(events.getTickets, function (params) {
@@ -29,13 +29,14 @@ const tickets = (function () {
             ticketsTable.destroy();
         }
         ticketsTable = table.init({
-                endpointId: params.additionalData,
-                id: ticketTableId, pageSizeContainer: '#tickets-machines-number',
-                exportButtonsContainer: '#wrapper-tickets-export-to',
-                appearanceButtonsContainer: '#tickets-show-space'
-            },
+            endpointId: params.additionalData,
+            id: ticketTableId,
+            pageSizeContainer: '#tickets-machines-number',
+            exportButtonsContainer: '#wrapper-tickets-export-to',
+            appearanceButtonsContainer: '#tickets-show-space'
+        },
             params.data.Data);
-        trigger('tickets/filters/init', {endpointId: params.additionalData});
+        trigger('tickets/filters/init', { endpointId: params.additionalData });
         $$('#tickets-tab-info').appendChild(ticketsTable);
     });
 
@@ -96,7 +97,7 @@ const tickets = (function () {
                 console.error('unsuported export type');
                 break;
         }
-        trigger(event, {data: filters});
+        trigger(event, { data: filters });
     });
 
     //ToDo:: ubaciti u events enum, nisam siguran cemu sluzi
@@ -277,7 +278,7 @@ const tickets = (function () {
     on(communication.events.tickets.exportToPDF, function (params) {
         let data = params.data;
         communication.sendRequest(communication.apiRoutes.tickets.exportToPDF, communication.requestTypes.post, data,
-            table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf.type}, [{
+            table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf.type }, [{
                 name: 'responseType',
                 value: 'arraybuffer'
             }]);
