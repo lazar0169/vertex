@@ -81,7 +81,8 @@ let communication = (function () {
             getJackpotPlasmaSettings: 'api/jackpots/getplasmasettings/',
             setJackpotSettings: 'api/jackpots/savesettings/',
             setJackpotPlasmaSettings: 'api/jackpots/saveplasmasettings/',
-            saveJackpot: 'api/jackpots/save/'
+            saveJackpot: 'api/jackpots/save/',
+            reportsJackpot: 'api/jackpots/reports/'
         },
         malfunctions: {
             getMalfunctions: 'api/malfunctions/',
@@ -167,7 +168,8 @@ let communication = (function () {
             getJackpotPlasmaSettings: 'communicate/jackpots/getPlasmaSettings/',
             setJackpotSettings: 'communicate/jackpots/setSettings/',
             setJackpotPlasmaSettings: 'communicate/jackpots/setPlasmaSettings/',
-            saveJackpot: 'communicate/jackpots/save/'
+            saveJackpot: 'communicate/jackpots/save/',
+            reportsJackpot: 'communicate/jackpots/reports/'
         },
         malfunctions: {
             parseRemoteData: 'communicate/malfunctions/data/parse',
