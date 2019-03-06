@@ -1,4 +1,12 @@
 const users = (function () {
+
+    on('users/activated', function (params) {
+        setTimeout(function () {
+            trigger('preloader/hide');
+        }, 2000);
+
+
+    });
     let addNewUserButton = $$('#users-add-new-user-button');
     let addNewUserWrapper = $$('#users-add-new-user');
     let addNewUserActionButtonsWrapper = $$('#add-new-user-buttons-wrapper');

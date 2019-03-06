@@ -39,6 +39,7 @@ const malfunctionsFilter = (function () {
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
         trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+        filterMalfunctionsTable()
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
     });
 
@@ -50,5 +51,34 @@ const malfunctionsFilter = (function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
         trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
+
+    function filterMalfunctionsTable() {
+        let filters = prepareMalfunctionsFilters();
+        trigger('preloader/show');
+        trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
+    }
+
+
+    function prepareMalfunctionsFilters() {
+        let table = $$('#table-container-malfunctions');
+
+        let casinoList = $$('#malfunctions-advance-table-filter-casino').children[1].get();
+        let priorityList = $$('#malfunctions-advance-table-filter-priority').children[1].get();
+        let statusesList = $$('#malfunctions-advance-table-filter-status').children[1].get();
+        let typesList = $$('#malfunctions-advance-table-filter-type').children[1].get();
+
+        let filters = {
+            'EndpointId': table.settings.endpointId,
+            'SelectedPeriod': $$('#malfunctions-advance-table-filter-date-range').children[1].get(),
+            'CasinoList': casinoList === 'null' ? null : casinoList.split(','),
+            'Prioroty': priorityList === 'null' ? null : priorityList.split(','),
+            'Status': statusesList === 'null' ? null : statusesList.split(','),
+            'Type': typesList === 'null' ? null : typesList.split(','),
+        };
+        filters = table.getFilters(filters);
+        //mark hidden columns
+
+        return filters;
+    }
 
 })();

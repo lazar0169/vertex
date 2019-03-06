@@ -1,88 +1,43 @@
 const malfunctions = (function () {
     let addMalfunctionMsg = $$('#malfunctions-add-message');
+    const events = {
+        activated: 'malfunctions/activated',
+        getMalfunctions: 'malfunctions/get',
+        previewMalfunctions: 'malfunctions/preview',
+        filterTable: 'malfunctions/table/filter'
+    };
+    const malfunctionsTableId = 'table-container-malfunctions';
+
+    let malfunctionsTable = null;
+
 
     /*********************----Module Events------*********************/
-    on('malfunctions/activated', function (params) {
+    on(events.activated, function (params) {
+        trigger(communication.events.malfunctions.getMalfunctions, { endpointId: 0 });
 
-        let malfunctionsId = 0;
-
-        // selectTab();
-        // selectInfoContent();
-
-        let tableSettings = {};
-        tableSettings.pageSelectorId = '#page-malfunctions';
-        tableSettings.tableContainerSelector = '#table-container-malfunctions';
-        tableSettings.filtersContainerSelector = '#malfunctions-filter';
-        tableSettings.getDataEvent = communication.events.malfunctions.getMalfunctions;
-        tableSettings.filterDataEvent = communication.events.malfunctions.previewMalfunctions;
-        tableSettings.updateEvent = 'table/update';
-        tableSettings.processRemoteData = communication.events.malfunctions.parseRemoteData;
-        tableSettings.endpointId = malfunctionsId;
-        tableSettings.id = '';
-        tableSettings.stickyRow = true;
-        tableSettings.onDrawRowCell = 'malfunctions/table/drawCell';
-        tableSettings.Action = tableActionOnClick;
-        table.init(tableSettings); //initializing table, filters and page size
     });
-    on('malfunctions/table/drawCell', function (params) {
-        onDrawTableCell(params.key, params.value, params.element, params.position, params.rowData);
-    });
-    function malfunctionsServiceMessage(data) {
-        addMalfunctionMsg.children[0].value = data;
-        if (addMalfunctionMsg.children[0].value) {
-            addMalfunctionMsg.children[1].classList.remove('hidden')
+    on(events.getMalfunctions, function (params) {
+        malfunctionsServiceMessage(params.data.Data.ItemValue.ServiceMessage)
+        if (malfunctionsTable !== null) {
+            malfunctionsTable.destroy();
         }
-        else {
-            addMalfunctionMsg.children[1].classList.add('hidden')
-        }
-        addMalfunctionMsg.children[1].innerHTML = '&#10006;';
-        addMalfunctionMsg.children[1].dataset.value = 'remove';
-        addMalfunctionMsg.children[1].title = localization.translateMessage(addMalfunctionMsg.children[1].dataset.value);
-    }
-    function getFiltersFromAPI(tableSettings) {
-        let data = {
-            'EndpointId': tableSettings.endpointId
-        };
-        let tableSettingsObject = tableSettings;
-        let successEvent = 'malfunctions/filters/display';
-        trigger(communication.events.malfunctions.getFilters, {
-            data: data,
-            successEvent: successEvent,
-            tableSettings: tableSettingsObject
-        });
-    }
-    on('malfunctions/filters/init', function (params) {
-        let tableSettings = params.tableSettings;
-        getFiltersFromAPI(tableSettings);
+        malfunctionsTable = table.init({
+            endpointId: params.additionalData,
+            id: malfunctionsTableId,
+            pageSizeContainer: '#malfunctions-number',
+            appearanceButtonsContainer: '#malfunctions-show-space'
+        },
+            params.data.Data);
+        trigger('malfunctions/filters/init', { endpointId: params.additionalData });
+        $$('#malfunctions-info').appendChild(malfunctionsTable);
     });
 
-
-    function tableActionOnClick(data) {
-        console.log(data);
-    }
-
-    function onDrawTableCell(column, cellContent, cell, position, entryData) {
-        if (column === 'flag') {
-            if (cellContent !== undefined) {
-                cell.classList.add('row-flag-' + cellContent.toString().trim());
-            }
-            cell.classList.add('cell-flag');
-            cell.innerHTML = '';
-        } else if (column === 'createdBy') {
-            cell.classList.add('flex-column');
-            cell.classList.add('justify-content-start');
-            cell.classList.add('align-items-start');
-            cell.innerHTML = `<time class='table-time'>${entryData.data.createdTime}</time><label>${entryData.rowData.createdBy}</label>`;
-        }
-        //ToDo: isPayoutPossible property ne postoji kod malfunciona
-        if (entryData.rowData.actions) {
-            cell.classList.add('clickable');
-        }
-    }
-
+    on(events.previewMalfunctions, function (params) {
+        let data = params.data.Data;
+        $$(`#${malfunctionsTableId}`).update(data);
+    });
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function (event) {
-
         if (addMalfunctionMsg.children[0].value) {
             addMalfunctionMsg.children[1].classList.remove('hidden')
         }
@@ -122,6 +77,36 @@ const malfunctions = (function () {
         });
     });
 
+    ///////proveri ovo
+    function malfunctionsServiceMessage(data) {
+        addMalfunctionMsg.children[0].value = data;
+        if (addMalfunctionMsg.children[0].value) {
+            addMalfunctionMsg.children[1].classList.remove('hidden')
+        }
+        else {
+            addMalfunctionMsg.children[1].classList.add('hidden')
+        }
+        addMalfunctionMsg.children[1].innerHTML = '&#10006;';
+        addMalfunctionMsg.children[1].dataset.value = 'remove';
+        addMalfunctionMsg.children[1].title = localization.translateMessage(addMalfunctionMsg.children[1].dataset.value);
+    }
+    function getFiltersFromAPI(endpointId) {
+        let data = {
+            'EndpointId': endpointId
+        };
+        let successEvent = 'malfunctions/filters/display';
+        trigger(communication.events.malfunctions.getFilters, {
+            data: data,
+            successEvent: successEvent,
+        });
+    }
+
+
+
+    on('malfunctions/filters/init', function (params) {
+        getFiltersFromAPI(params.endpointId);
+    });
+
 
 
     /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
@@ -129,9 +114,10 @@ const malfunctions = (function () {
     on(communication.events.malfunctions.getMalfunctions, function (params) {
         let route = communication.apiRoutes.malfunctions.getMalfunctions;
         let request = communication.requestTypes.post;
-        let data = params.data;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
+        let data = {
+            'EndpointId': params.data
+        };
+        let successEvent = events.getMalfunctions;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -139,7 +125,7 @@ const malfunctions = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+            additionalData: params.endpointId
         });
     });
     //get preview malfunctions
@@ -147,8 +133,7 @@ const malfunctions = (function () {
         let route = communication.apiRoutes.malfunctions.previewMalfunctions;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.processRemoteData;
+        let successEvent = events.previewMalfunctions;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -156,7 +141,8 @@ const malfunctions = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            settingsObject: tableSettings
+
+
         });
     });
 
@@ -165,14 +151,12 @@ const malfunctions = (function () {
         let route = communication.apiRoutes.malfunctions.getFilters;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let tableSettings = params.tableSettings;
         let successEvent = params.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -207,44 +191,6 @@ const malfunctions = (function () {
             errorEvent: errorEvent
         });
     });
-
-    on(communication.events.malfunctions.parseRemoteData, function (params) {
-        malfunctionsServiceMessage(params.data.Data.ItemValue.ServiceMessage)
-        let tableSettings = params.settingsObject;
-        let data = params.data;
-        prepareMalfunctionsTableData(tableSettings, data);
-        trigger(tableSettings.updateEvent, { data: data, settingsObject: tableSettings });
-    });
     /*-----------------------------------------------------------------------------------------*/
-
-    function prepareMalfunctionsTableData(tableSettings, data) {
-        let entry = data.Data.Items;
-        let formatedData = [];
-        let counter = 0;
-        entry.forEach(function (entry) {
-            formatedData[counter] = {
-                rowData: {
-                    flag: entry.EntryData.FlagList[0],
-                    createdBy: entry.EntryData.CreatedBy.Name ? entry.EntryData.CreatedBy.Name : '',
-                    casino: entry.EntryData.Casino,
-                    machine: entry.EntryData.Machine,
-                    name: entry.EntryData.Name,
-                    type: localization.translateMessage(entry.EntryData.Type),
-                    priority: localization.translateMessage(entry.EntryData.Priority),
-                    actions: entry.EntryData.ActionList[0]
-                },
-                data: {
-                    //ToDo: ovde proslediti da li je red klikabilan ili ne
-                    createdTime: formatTimeData(entry.EntryData.CreatedBy.Time),
-                    endpointId: entry.Properties.EndpointId,
-                    id: entry.Properties.Id,
-                    malfunctionsList: entry.Properties.ReportList
-                }
-            };
-            counter++;
-        });
-        tableSettings.tableData = formatedData;
-        return formatedData;
-    }
 
 })();

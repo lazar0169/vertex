@@ -3,8 +3,8 @@ let ticketsSmsSettings = (function(){
     formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
     formSettingsSmsSettings.getData = communication.events.tickets.showSmsSettings;
     formSettingsSmsSettings.submitEvent = communication.events.tickets.saveSmsSettings;
+
     formSettingsSmsSettings.afterDisplayData = function(formSettings,data) {
-        console.log('data',data);
         let enableSMS = data.Data.EnableSms === true;
         let enableEmail = data.Data.EnableEmail === true;
 
@@ -38,7 +38,7 @@ let ticketsSmsSettings = (function(){
     };
 
     on('tickets/tab/smsSettings', function(params){
-        formSettingsSmsSettings.endpointId = params.tableSettings.endpointId;
+        formSettingsSmsSettings.endpointId = params.endpointId;
         trigger('form/init', {formSettings: formSettingsSmsSettings});
         trigger('form/getData', {formSettings: formSettingsSmsSettings});
     });

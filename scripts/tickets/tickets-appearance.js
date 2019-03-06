@@ -48,8 +48,8 @@ const ticketAppearance = (function () {
     let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
-    dropdown.generate({ values: dateFormatArray, parent: dateWrapper });
-    dropdown.generate({ values: timeFormatArray, parent: timeWrapper });
+    dropdown.generate({ values: dateFormatArray, parent: dateWrapper,name:'DateFormat' });
+    dropdown.generate({ values: timeFormatArray, parent: timeWrapper,name:'TimeFormat'});
      
     let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];

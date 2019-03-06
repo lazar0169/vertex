@@ -65,12 +65,10 @@ let template = (function () {
         }
         let newElement = cloneTemplateElement(templateElement);
         if ( model !==  undefined) {
-            // trigger(callbackEvent, {element: newElement});
             let newElementString = newElement.innerHTML;
             let placeholders = getPlaceholders(newElementString);
             let placeholderValues = getPlaceholderValues(placeholders, model);
             newElement.innerHTML = replaceValueInTemplate(newElementString, placeholderValues);
-
         }
         if (callbackEvent !==  undefined) {
             trigger(callbackEvent, {model: model, element: newElement,params:params});
@@ -94,7 +92,8 @@ let template = (function () {
     });
 
     return {
-        replaceText: replaceText
+        replaceText: replaceText,
+        render: render
     };
 
 })();
