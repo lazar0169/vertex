@@ -27,8 +27,8 @@
     "pretty": "^2.0.0"
   },
   "dependencies": {
-    "eslint": "^5.12.1",
-    "node-html-parser": "^1.1.11",
-    "npm": "^6.6.0"
+    "eslint": "^5.15.1",
+    "node-html-parser": "^1.1.12",
+    "npm": "^6.8.0"
   }
 }

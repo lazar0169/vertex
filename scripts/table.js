@@ -266,8 +266,8 @@ let table = (function () {
                     }
                 }
             }
+            }
         }
-    }
 
     function getVisibleColumns(onlyHideable) {
         if (onlyHideable === undefined) {

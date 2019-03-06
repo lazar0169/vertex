@@ -141,6 +141,9 @@
     margin-left: 5px;
     visibility: visible;
 }
+.head.cell.active-column:after {
+    visibility: visible;
+}
 
 .head.cell.active-column:after {
     visibility: visible;
@@ -301,6 +304,7 @@ textarea {
 .cell .flaglist-element.flaglist-3 {
     background-color: rgb(255, 152, 0);
 }
+
 
 .table-condensed .cell {
     height: 44px;

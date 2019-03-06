@@ -15,7 +15,7 @@ const aftFilters = (function () {
 
     //region event listeners
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
         filterAftTable();
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
@@ -126,7 +126,7 @@ const aftFilters = (function () {
         if (dropdownStatus) {
             dropdownStatus.remove();
         }
-        dropdownStatus = dropdown.generate({ values: filters.StatusList, type: 'multi' });
+        dropdownStatus = dropdown.generate({values: filters.StatusList, type: 'multi'});
         aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
 
         //set up columns selection dropdown
@@ -156,7 +156,7 @@ const aftFilters = (function () {
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
