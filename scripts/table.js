@@ -77,10 +77,10 @@ let table = (function () {
             console.error('table settings object must have id');
             return undefined;
         }
-        if (settings.endpointId === undefined) {
-            console.error(`table ${settings.id} settings endpointId is required`);
-            return undefined;
-        }
+        // if (settings.endpointId === undefined) {
+        //     console.error(`table ${settings.id} settings endpointId is required`);
+        //     return undefined;
+        // }
         table.setAttribute('id', settings.id);
         setDefaults(settings, table);
 
@@ -150,7 +150,9 @@ let table = (function () {
         table.data.items = data.Items;
         table.data.totalItems = data.NumOfItems;
         //update sorting from data received by server
-        setSort(table, data.ItemValue.SortedBy, data.ItemValue.SortDirection);
+        if (data.ItemValue && data.ItemValue.SortedBy || data.ItemValue && data.ItemValue.SortDirection) {
+            setSort(table, data.ItemValue.SortedBy, data.ItemValue.SortDirection);
+        }
 
         if (isEmpty(data)) {
             return table;
@@ -266,8 +268,8 @@ let table = (function () {
                     }
                 }
             }
-            }
         }
+    }
 
     function getVisibleColumns(onlyHideable) {
         if (onlyHideable === undefined) {
@@ -319,7 +321,7 @@ let table = (function () {
         let settings = table.settings;
         let items = table.data.items;
         if (!isEmpty(items)) {
-            let columnNames = Object.keys(items[0].EntryData);
+            let columnNames = Object.keys(items[0].EntryData ? items[0].EntryData : items[0]);
             for (let col = 0; col < columnNames.length; col++) {
                 let cell = createHeaderTableCell(table.settings.stickyRow);
                 let columnName = columnNames[col];
@@ -344,8 +346,10 @@ let table = (function () {
 
                 if (columnName !== 'FlagList' && columnName !== 'ActionList') {
                     cell.innerHTML = localization.translateMessage(columnName, cell);
-                    cell.classList.add('sortable');
-                    cell.addEventListener('click', onSort);
+                    if (table.id !== 'table-container-malfunctions-details') {
+                        cell.classList.add('sortable');
+                        cell.addEventListener('click', onSort);
+                    }
                 }
                 settings.columns[columnName].header = cell;
                 tbody.appendChild(cell);
@@ -377,7 +381,7 @@ let table = (function () {
                 rowId = Math.round(Math.random() * Number.MAX_SAFE_INTEGER);
             }
             let rowData = items[row];
-            let tempRow = JSON.parse(JSON.stringify(rowData.EntryData));
+            let tempRow = JSON.parse(JSON.stringify(rowData.EntryData ? rowData.EntryData : rowData));
             let columnIndex = 0;
 
             for (let column in tempRow) {
@@ -634,30 +638,32 @@ let table = (function () {
     }
 
     function highlightSortedColumn(table, column, direction) {
-        let settings = table.settings;
-        if (column === undefined) {
-            column = settings.sort.name;
-        }
-        if (direction === undefined) {
-            direction = settings.sort.direction;
-        }
-        let headers = getHeaders(table);
-        for (let i = 0; i < headers.length; i++) {
-            let header = headers[i];
-            let headerColumn = header.dataset.column;
-            header.classList.remove(activeColumnElementsClass, sortingClass.ascending, sortingClass.descending);
-            if (column === headerColumn) {
-                let directionClass = direction === sortDirections.ascending ? sortingClass.ascending : sortingClass.descending;
-                header.classList.add(directionClass);
-                header.classList.add(activeColumnElementsClass);
+        if (column) {
+            let settings = table.settings;
+            if (column === undefined) {
+                column = settings.sort.name;
             }
-        }
-        let columnClass = createColumnClassName(column);
-        let columnItems = table.elements.body.getElementsByClassName(columnClass);
+            if (direction === undefined) {
+                direction = settings.sort.direction;
+            }
+            let headers = getHeaders(table);
+            for (let i = 0; i < headers.length; i++) {
+                let header = headers[i];
+                let headerColumn = header.dataset.column;
+                header.classList.remove(activeColumnElementsClass, sortingClass.ascending, sortingClass.descending);
+                if (column === headerColumn) {
+                    let directionClass = direction === sortDirections.ascending ? sortingClass.ascending : sortingClass.descending;
+                    header.classList.add(directionClass);
+                    header.classList.add(activeColumnElementsClass);
+                }
+            }
+            let columnClass = createColumnClassName(column);
+            let columnItems = table.elements.body.getElementsByClassName(columnClass);
 
-        for (let i = 0; i < columnItems.length; i++) {
-            let cell = columnItems[i];
-            cell.classList.add(activeColumnElementsClass);
+            for (let i = 0; i < columnItems.length; i++) {
+                let cell = columnItems[i];
+                cell.classList.add(activeColumnElementsClass);
+            }
         }
     }
 

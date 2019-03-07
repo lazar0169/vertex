@@ -14,8 +14,8 @@ const malfunctions = (function () {
     /*********************----Module Events------*********************/
     on(events.activated, function (params) {
         trigger(communication.events.malfunctions.getMalfunctions, { endpointId: 0 });
-
     });
+
     on(events.getMalfunctions, function (params) {
         malfunctionsServiceMessage(params.data.Data.ItemValue.ServiceMessage)
         if (malfunctionsTable !== null) {
@@ -36,6 +36,22 @@ const malfunctions = (function () {
         let data = params.data.Data;
         $$(`#${malfunctionsTableId}`).update(data);
     });
+    /*------------------akcija za prikaz istorije kvara--------------------------*/
+
+    on(table.events.rowClick(malfunctionsTableId), function (params) {
+        $$('#malfunctions-details').classList.remove('collapse');
+        $$('#black-area').classList.add('show');
+        trigger('malfunctions-details/machines-history', params.target.additionalData);
+
+    });
+
+
+
+
+
+    /*--------------------------------------------*/
+
+
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function (event) {
         if (addMalfunctionMsg.children[0].value) {
@@ -56,6 +72,9 @@ const malfunctions = (function () {
                 }
             });
         }
+    });
+    on(table.events.sort(malfunctionsTableId), function () {
+        trigger(events.filterTable);
 
     });
     addMalfunctionMsg.children[1].addEventListener('click', function () {
@@ -178,15 +197,12 @@ const malfunctions = (function () {
     on(communication.events.malfunctions.changeMalfunctionState, function (params) {
         let route = communication.apiRoutes.malfunctions.changeMalfunctionState;
         let request = communication.requestTypes.post;
-        let data = params.data;
-        let formSettings = params.formSettings;
-        let successEvent = formSettings.submitSuccessEvent;
-        let errorEvent = formSettings.submitErrorEvent;
+        let successEvent = events.previewMalfunctions;
+        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
-            data: data,
-            settingsObject: formSettings,
+            data: params.data,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

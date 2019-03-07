@@ -80,6 +80,11 @@
     justify-content: flex-end;
 }
 
+.actionlist-element {
+    width: 40px;
+    height: 100%;
+}
+
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
 }
