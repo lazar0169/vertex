@@ -62,7 +62,7 @@
 }
 
 #malfunction-details-textarea>textarea {
-    width: 100% !important;
+    width: 60% !important;
     height: 200px !important;
     background: rgb(55, 71, 79);
     border: 1px solid rgb(55, 71, 79);

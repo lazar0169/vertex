@@ -49,10 +49,10 @@ const malfunctionsDetails = (function () {
 
     malfunctionSaveButton.addEventListener('click', function () {
         let data = {
-            EndpointId: parseInt($$('#malfunction-details-table').dataset.endpointId),
+            EndpointId: 0,
             Id: parseInt($$('#malfunction-details-table').dataset.id),
-            Status: $$("#malfunction-details-change-status").children[1].get(),
-            Type: $$("#malfunction-details-change-type").children[1].get() ,
+            Status: parseInt($$("#malfunction-details-change-status").children[1].get()),
+            ResolvedType: $$("#malfunction-details-change-type").children[1].get() === 'null' ? -1 : parseInt($$("#malfunction-details-change-type").children[1].get()),
             Description: $$('#malfunction-details-textarea').children[0].value
         }
 

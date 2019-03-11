@@ -4,7 +4,8 @@ const malfunctions = (function () {
         activated: 'malfunctions/activated',
         getMalfunctions: 'malfunctions/get',
         previewMalfunctions: 'malfunctions/preview',
-        filterTable: 'malfunctions/table/filter'
+        filterTable: 'malfunctions/table/filter',
+        showChangeStateMalfunctionMessage: 'malfunction/changeState'
     };
     const malfunctionsTableId = 'table-container-malfunctions';
 
@@ -17,7 +18,11 @@ const malfunctions = (function () {
     });
 
     on(events.getMalfunctions, function (params) {
-        malfunctionsServiceMessage(params.data.Data.ItemValue.ServiceMessage)
+        let malfunctionsDetailsStatus = $$('#malfunction-details-change-status');
+        let malfunctionsDetailsProblemType = $$('#malfunction-details-change-type');
+        dropdown.generate({ values: params.data.Data.ItemValue.ChangeStateList, parent: malfunctionsDetailsStatus });
+        dropdown.generate({ values: params.data.Data.ItemValue.ProblemTypeList, parent: malfunctionsDetailsProblemType })
+        malfunctionsServiceMessage(params.data.Data.ItemValue.ServiceMessage);
         if (malfunctionsTable !== null) {
             malfunctionsTable.destroy();
         }
@@ -35,6 +40,18 @@ const malfunctions = (function () {
     on(events.previewMalfunctions, function (params) {
         let data = params.data.Data;
         $$(`#${malfunctionsTableId}`).update(data);
+    });
+
+    on(events.showChangeStateMalfunctionMessage, function (params) {
+        console.log(params);
+        trigger('show/app');
+        $$('#malfunctions-details-change-state').classList.add('hidden');
+        $$('#malfunctions-details').classList.add('collapse');
+
+        let filters = malfunctionsFilter.prepareMalfunctionsFilters();
+        trigger('preloader/show');
+        trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
+
     });
     /*------------------akcija za prikaz istorije kvara--------------------------*/
 
@@ -107,7 +124,7 @@ const malfunctions = (function () {
         }
         addMalfunctionMsg.children[1].innerHTML = '&#10006;';
         addMalfunctionMsg.children[1].dataset.value = 'remove';
-        addMalfunctionMsg.children[1].title = localization.translateMessage(addMalfunctionMsg.children[1].dataset.value);
+        addMalfunctionMsg.children[1].title = addMalfunctionMsg.children[1].dataset.value;
     }
     function getFiltersFromAPI(endpointId) {
         let data = {
@@ -197,7 +214,7 @@ const malfunctions = (function () {
     on(communication.events.malfunctions.changeMalfunctionState, function (params) {
         let route = communication.apiRoutes.malfunctions.changeMalfunctionState;
         let request = communication.requestTypes.post;
-        let successEvent = events.previewMalfunctions;
+        let successEvent = events.showChangeStateMalfunctionMessage;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,

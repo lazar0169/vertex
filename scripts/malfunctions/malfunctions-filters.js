@@ -5,13 +5,15 @@ const malfunctionsFilter = (function () {
     let malfunctionsAdvanceApplyFilters = $$('#malfunctions-advance-table-filter-apply').children[0];
     let advanceTableFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar');
     let clearAdvanceFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar-button').children[0];
+    let malfunctionServiceMessage = $$('#malfunctions-add-message').children[0];
 
+    malfunctionServiceMessage.placeholder = localization.translateMessage('SetMessage', malfunctionServiceMessage),
 
-    advanceTableFilter.children[0].addEventListener('click', function () {
-        advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
-        advanceTableFilterActive.classList.toggle('hidden');
-    });
+        advanceTableFilter.children[0].addEventListener('click', function () {
+            advanceTableFilter.classList.toggle('advance-filter-active');
+            trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+            advanceTableFilterActive.classList.toggle('hidden');
+        });
 
     on('malfunctions/filters/display', function (params) {
         let filters = params.data.Data;
@@ -22,7 +24,6 @@ const malfunctionsFilter = (function () {
         filterMalfunctionsTable();
     });
 
-
     function displayFilters(filters) {
 
         let malfunctionsAdvanceTableFilterDate = $$('#malfunctions-advance-table-filter-date-range');
@@ -30,8 +31,7 @@ const malfunctionsFilter = (function () {
         let malfunctionsAdvanceTableFilterPriority = $$('#malfunctions-advance-table-filter-priority');
         let malfunctionsAdvanceTableFilterStatus = $$('#malfunctions-advance-table-filter-status');
         let malfunctionsAdvanceTableFilterType = $$('#malfunctions-advance-table-filter-type');
-        let malfunctionsDetailsStatus = $$('#malfunction-details-change-status');
-        let malfunctionsDetailsProblemType = $$('#malfunction-details-change-type');
+
 
         dropdownDate.generate({ values: filters.PeriodList, parent: malfunctionsAdvanceTableFilterDate })
         dropdown.generate({ values: filters.CasinoList, parent: malfunctionsAdvanceTableFilterCasino, type: 'multi' });
@@ -39,8 +39,7 @@ const malfunctionsFilter = (function () {
         dropdown.generate({ values: filters.StatusList, parent: malfunctionsAdvanceTableFilterStatus, type: 'multi' });
         dropdown.generate({ values: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
 
-        dropdown.generate({ values: filters.StatusList, parent: malfunctionsDetailsStatus });
-        dropdown.generate({ values: filters.TypeList, parent: malfunctionsDetailsProblemType })
+
     }
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
@@ -85,6 +84,9 @@ const malfunctionsFilter = (function () {
         //mark hidden columns
 
         return filters;
+    }
+    return {
+        prepareMalfunctionsFilters
     }
 
 })();
