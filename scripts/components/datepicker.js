@@ -2,7 +2,7 @@ let datepicker = function () {
     // Initialize all date pickers
     function generate(data) {
         for (let picker of data.dropdownDate.getElementsByClassName('datepicker')) {
-            new Pikaday({
+            let datePicker = new Pikaday({
                 field: picker,
                 firstDay: 1,
                 minDate: new Date(2010, 1, 31),
@@ -14,16 +14,15 @@ let datepicker = function () {
                     const day = date.getDate();
                     const month = date.getMonth() + 1;
                     const year = date.getFullYear();
-                    return `${day}.${month}.${year}`;
+                    return `${year}-${month}-${day}`;
                 },
                 setDefaultDate: true,
                 defaultDate: new Date(),
-                onSelect: function () {
-                    let dateArray = this.toString().split('.');
-                    let apiString = `${dateArray[2]}-${dateArray[1]}-${dateArray[0]}`;
-                    trigger(`set-date-datepicker`, { pickerId: picker.id, date: apiString });
-                }
             });
+
+            picker.setToday = function () {
+                datePicker.setDate(new Date());
+            }
         }
     }
     return {

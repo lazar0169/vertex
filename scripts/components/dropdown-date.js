@@ -21,7 +21,6 @@ const dropdownDate = (function () {
         select.id = `ds-${indexDsId}`;
         //selected option
         let selected = document.createElement('div');
-
         selected.innerHTML = `<div></div>
                               <span class="closed-arrow">&#9660;</span>`;
         select.appendChild(selected);
@@ -82,13 +81,6 @@ const dropdownDate = (function () {
         buttonsCustomDate.appendChild(applyCustom);
         buttonsCustomDate.appendChild(cancelCustom);
         customDate.appendChild(buttonsCustomDate);
-        let setDatePicker = customDate.getElementsByClassName('datepicker');
-
-        for (let picker of setDatePicker) {
-            picker.dataset.value = new Date().toISOString().split('T')[0];
-            picker.value = new Date().toISOString().split('T')[0];
-        }
-
 
         customDate.classList.add('hidden');
         for (let element of values) {
@@ -139,7 +131,6 @@ const dropdownDate = (function () {
         dateSelectArray.push(select.id);
         datepicker.generate({ dropdownDate: select })
 
-
         select.get = function () {
             let dateFromTo = selected.dataset.value.split(', ');
             let selectedId = selected.dataset.id
@@ -174,7 +165,11 @@ const dropdownDate = (function () {
             return selected;
         }
 
-
+        let setDatePicker = customDate.getElementsByClassName('datepicker');
+        for (let picker of setDatePicker) {
+            picker.dataset.value = new Date().toISOString().split('T')[0];
+            picker.value = new Date().toISOString().split('T')[0];
+        }
 
         if (parent) {
             parent.appendChild(select);

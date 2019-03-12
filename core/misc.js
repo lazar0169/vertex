@@ -33,7 +33,6 @@ function selectTab(name) {
         previousTabSelected = tabSelected;
     }
 }
-
 //shows content for selected tab
 let previousInfoContSelected;
 
@@ -53,12 +52,11 @@ function selectInfoContent(name) {
 
 // custom date 
 on('apply-custom-date', function (data) {
-    let dateFrom = $$(`#datepicker-from-${data.selectId}`).dataset.value;
-
+    let dateFrom = $$(`#datepicker-from-${data.selectId}`).value;
     let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0].children[0].dataset.value.slice(0, 2);
     let timeFromMinutes = $$(`#time-from-${data.selectId}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
 
-    let dateTo = $$(`#datepicker-to-${data.selectId}`).dataset.value;
+    let dateTo = $$(`#datepicker-to-${data.selectId}`).value;
     let timeToHour = $$(`#time-to-${data.selectId}`).children[1].children[0].children[0].dataset.value.slice(0, 2);
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1].children[0].dataset.value.slice(0, 2);
 
@@ -66,22 +64,17 @@ on('apply-custom-date', function (data) {
     if (timeFromHour === '-' || timeFromMinutes === '-' || timeToHour === '-' || timeToMinutes === '-') {
         alert('Wrong parameters, please check parameters.');
         delete data.target.dataset.value;
-
     }
     else {
         $$(`#ds-${data.selectId}`).children[0].children[0].innerHTML = 'Custom';
         $$(`#ds-${data.selectId}`).children[0].title = `From: ${tempArray[0]} ${tempArray[1]}:00, To: ${tempArray[2]} ${tempArray[3]}:00`;
         $$(`#ds-${data.selectId}`).children[0].dataset.value = `${tempArray[0]}T${tempArray[1]}:00, ${tempArray[2]}T${tempArray[3]}:00`;
-        $$(`#ds-${data.selectId}`).children[0].dataset.value
         data.target.dataset.value = 'Apply custom date'
-        let jsonCustomDate = JSON.stringify($$(`#ds-${data.selectId}`).children[0].dataset.value);
-        console.log(jsonCustomDate);
     }
 });
+
 on('cancel-custom-date', function (data) {
-    let date = new Date();
-    let apiString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    trigger(`set-date-datepicker`, { pickerId: `datepicker-from-${data.selectId}`, date: apiString });
+    $$(`#datepicker-from-${data.selectId}`).setToday();
     let timeFromHour = $$(`#time-from-${data.selectId}`).children[1].children[0];
     timeFromHour.reset();
     let timeFromMinutes = $$(`#time-from-${data.selectId}`).children[1].children[1];
@@ -90,31 +83,17 @@ on('cancel-custom-date', function (data) {
     timeToHour.reset();
     let timeToMinutes = $$(`#time-to-${data.selectId}`).children[1].children[1];
     timeToMinutes.reset();
-
-    trigger(`set-date-datepicker`, { pickerId: `datepicker-to-${data.selectId}`, date: apiString, isCancel: true });
-    delete data.target.dataset.value;
+    $$(`#datepicker-to-${data.selectId}`).setToday();
 });
-
-on('set-date-datepicker', function (data) {
-    if (data.isCancel) {
-        console.log('ukloni is-selected na td, i isti postavi na danasnji datum');
-    }
-    if ($$(`#${data.pickerId}`)) {
-        $$(`#${data.pickerId}`).dataset.value = data.date;
-        $$(`#${data.pickerId}`).value = data.date;
-    }
-});
-
 
 function openCloseArrow(div) {
-
     div.children[1].classList.toggle('opened-arrow')
-
 }
 
 on('opened-arrow', function (data) {
     openCloseArrow(data.div)
 })
+
 //popups
 function dimissPopUp(target) {
     if (target === undefined || target === null) {
