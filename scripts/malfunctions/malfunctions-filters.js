@@ -7,13 +7,13 @@ const malfunctionsFilter = (function () {
     let clearAdvanceFilterInfobar = $$('#malfunctions-advance-table-filter-active-infobar-button').children[0];
     let malfunctionServiceMessage = $$('#malfunctions-add-message').children[0];
 
-    malfunctionServiceMessage.placeholder = localization.translateMessage('SetMessage', malfunctionServiceMessage),
+    malfunctionServiceMessage.placeholder = localization.translateMessage('SetMessage', malfunctionServiceMessage);
 
-        advanceTableFilter.children[0].addEventListener('click', function () {
-            advanceTableFilter.classList.toggle('advance-filter-active');
-            trigger('opened-arrow', { div: advanceTableFilter.children[0] });
-            advanceTableFilterActive.classList.toggle('hidden');
-        });
+    advanceTableFilter.children[0].addEventListener('click', function () {
+        advanceTableFilter.classList.toggle('advance-filter-active');
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
+        advanceTableFilterActive.classList.toggle('hidden');
+    });
 
     on('malfunctions/filters/display', function (params) {
         let filters = params.data.Data;

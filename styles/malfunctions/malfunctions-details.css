@@ -39,6 +39,11 @@
 .malfunction-machine-general-info {
     display: flex;
     font-size: 12px;
+    align-items: center;
+}
+
+.malfunction-machine-general-info>div {
+    margin-right: 0.5em;
 }
 
 .malfunction-details-name {
@@ -55,8 +60,6 @@
 }
 
 #malfunction-details-change-dropdowns {
-    display: flex;
-    flex-direction: row;
     width: 100%;
     font-size: 14px;
 }

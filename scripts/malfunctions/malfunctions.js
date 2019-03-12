@@ -1,5 +1,7 @@
 const malfunctions = (function () {
     let addMalfunctionMsg = $$('#malfunctions-add-message');
+    let malfunctionsDetailsStatus = $$('#malfunction-details-change-status');
+    let malfunctionsDetailsProblemType = $$('#malfunction-details-change-type');
     const events = {
         activated: 'malfunctions/activated',
         getMalfunctions: 'malfunctions/get',
@@ -18,10 +20,17 @@ const malfunctions = (function () {
     });
 
     on(events.getMalfunctions, function (params) {
-        let malfunctionsDetailsStatus = $$('#malfunction-details-change-status');
-        let malfunctionsDetailsProblemType = $$('#malfunction-details-change-type');
         dropdown.generate({ values: params.data.Data.ItemValue.ChangeStateList, parent: malfunctionsDetailsStatus });
-        dropdown.generate({ values: params.data.Data.ItemValue.ProblemTypeList, parent: malfunctionsDetailsProblemType })
+        dropdown.generate({ values: params.data.Data.ItemValue.ProblemTypeList, parent: malfunctionsDetailsProblemType });
+        malfunctionsDetailsStatus.children[1].addEventListener('click', function (e) {
+            if (e.target.dataset.id === '3') {
+                malfunctionsDetailsProblemType.classList.remove('hidden');
+            }
+            else {
+                malfunctionsDetailsProblemType.classList.add('hidden');
+            }
+        })
+
         malfunctionsServiceMessage(params.data.Data.ItemValue.ServiceMessage);
         if (malfunctionsTable !== null) {
             malfunctionsTable.destroy();
@@ -48,6 +57,9 @@ const malfunctions = (function () {
         $$('#malfunctions-details-change-state').classList.add('hidden');
         $$('#malfunctions-details').classList.add('collapse');
 
+        malfunctionsDetailsStatus.children[1].reset();
+        malfunctionsDetailsProblemType.children[1].reset();
+
         let filters = malfunctionsFilter.prepareMalfunctionsFilters();
         trigger('preloader/show');
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
@@ -61,11 +73,6 @@ const malfunctions = (function () {
         trigger('malfunctions-details/machines-history', params.target.additionalData);
 
     });
-
-
-
-
-
     /*--------------------------------------------*/
 
 

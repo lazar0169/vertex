@@ -3,16 +3,24 @@ const malfunctionsDetails = (function () {
     const malfunctionsDetailsTableId = 'table-container-malfunctions-details';
     let malfunctionChangeStateButton = $$('#malfunction-details-change-state-button').children[0];
     let malfunctionSaveButton = $$('#malfunctions-details-save-button').children[0];
-
-
-
+    let malfunctionMachineHistoryGeneralInfo = $$('#malfunctions-details-history').getElementsByClassName("malfunction-machine-general-info")[0];
+    let malfunctionMachineChangeStateGeneralInfo = $$('#malfunctions-details-change-state').getElementsByClassName("malfunction-machine-general-info")[0];
 
     let malfunctionChangeState = $$('#malfunctions-details-change-state');
 
     let malfunctionsDetailsTable = null;
 
     on('malfunctions-details/machines-history', function (params) {
-        console.log(params)
+        malfunctionMachineHistoryGeneralInfo.children[0].className = '';
+        malfunctionMachineHistoryGeneralInfo.children[0].classList.add('malfunction-details-info-flag');
+        malfunctionMachineHistoryGeneralInfo.children[0].classList.add(`malfunction-details-info-flag-color-${params.EntryData.FlagList[0]}`);
+        malfunctionMachineHistoryGeneralInfo.children[1].innerHTML = `${params.EntryData.Casino}, ${params.EntryData.Machine}, ${params.EntryData.Type}`;
+
+        malfunctionMachineChangeStateGeneralInfo.children[0].className = '';
+        malfunctionMachineChangeStateGeneralInfo.children[0].classList.add('malfunction-details-info-flag');
+        malfunctionMachineChangeStateGeneralInfo.children[0].classList.add(`malfunction-details-info-flag-color-${params.EntryData.FlagList[0]}`);
+        malfunctionMachineChangeStateGeneralInfo.children[1].innerHTML = `${params.EntryData.Casino}, ${params.EntryData.Machine}, ${params.EntryData.Type}`;
+
         $$('#malfunction-details-table').dataset.endpointId = params.Properties.EndpointId;
         $$('#malfunction-details-table').dataset.id = params.Properties.Id;
         if (malfunctionsDetailsTable !== null) {
@@ -55,10 +63,6 @@ const malfunctionsDetails = (function () {
             ResolvedType: $$("#malfunction-details-change-type").children[1].get() === 'null' ? -1 : parseInt($$("#malfunction-details-change-type").children[1].get()),
             Description: $$('#malfunction-details-textarea').children[0].value
         }
-
-        console.log(
-            data
-        )
         trigger(communication.events.malfunctions.changeMalfunctionState, { data })
     })
 })();
