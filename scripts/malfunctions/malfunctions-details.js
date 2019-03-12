@@ -38,9 +38,13 @@ const malfunctionsDetails = (function () {
         malfunctionChangeState.classList.add('hidden');
         let malfunctionsDetailsStatus = $$('#malfunction-details-change-status');
         let malfunctionsDetailsProblemType = $$('#malfunction-details-change-type');
-        malfunctionsDetailsStatus.children[1].reset();
-        malfunctionsDetailsProblemType.children[1].reset();
-        malfunctionsDetailsProblemType.classList.add('hidden');
+        if (malfunctionsDetailsStatus.children[1]) {
+            malfunctionsDetailsStatus.children[1].reset();
+        }
+        if (malfunctionsDetailsProblemType.children[1]) {
+            malfunctionsDetailsProblemType.children[1].reset();
+            malfunctionsDetailsProblemType.classList.add('hidden');
+        }
         $$('#malfunction-details-textarea').children[0].value = '';
 
     });
