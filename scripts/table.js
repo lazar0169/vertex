@@ -638,8 +638,10 @@ let table = (function () {
     }
 
     function highlightSortedColumn(table, column, direction) {
-        if (column) {
-            let settings = table.settings;
+
+        let settings = table.settings;
+        if (settings.sort.name) {
+
             if (column === undefined) {
                 column = settings.sort.name;
             }

@@ -52,20 +52,20 @@ const malfunctions = (function () {
     });
 
     on(events.showChangeStateMalfunctionMessage, function (params) {
-        console.log(params);
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
         trigger('show/app');
         $$('#malfunctions-details-change-state').classList.add('hidden');
         $$('#malfunctions-details').classList.add('collapse');
-
-        malfunctionsDetailsStatus.children[1].reset();
-        malfunctionsDetailsProblemType.children[1].reset();
 
         let filters = malfunctionsFilter.prepareMalfunctionsFilters();
         trigger('preloader/show');
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
 
     });
-    /*------------------akcija za prikaz istorije kvara--------------------------*/
+    /*------------------Show malfunction details--------------------------*/
 
     on(table.events.rowClick(malfunctionsTableId), function (params) {
         $$('#malfunctions-details').classList.remove('collapse');
@@ -73,7 +73,7 @@ const malfunctions = (function () {
         trigger('malfunctions-details/machines-history', params.target.additionalData);
 
     });
-    /*--------------------------------------------*/
+    /*------------------------------------------------------------------*/
 
 
 

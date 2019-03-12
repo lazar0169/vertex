@@ -43,7 +43,7 @@ const malfunctionsFilter = (function () {
     }
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
         filterMalfunctionsTable();
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
     });
@@ -54,7 +54,9 @@ const malfunctionsFilter = (function () {
 
     clearAdvanceFilterInfobar.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
-        trigger('table/show-selected-filters/infobar', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
+        $$('#table-container-malfunctions').resetFilters();
+        filterMalfunctionsTable();
     });
 
     function filterMalfunctionsTable() {

@@ -51,12 +51,8 @@
     color: white;
 }
 
-#malfunction-details-table {
-    max-height: 90%;
-}
-
 .malfunction-details-wrapper>div {
-    padding: 0.5em 1em;
+    margin-bottom: 0.5em;
 }
 
 #malfunction-details-change-dropdowns {
