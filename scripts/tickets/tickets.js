@@ -36,6 +36,7 @@ const tickets = (function () {
             appearanceButtonsContainer: '#tickets-show-space'
         },
             params.data.Data);
+        trigger('showing-tickets-top-bar-value', { ItemValue: params.data.Data.ItemValue })
         trigger('tickets/filters/init', { endpointId: params.additionalData });
         $$('#tickets-tab-info').appendChild(ticketsTable);
     });
@@ -102,19 +103,19 @@ const tickets = (function () {
 
     //ToDo:: ubaciti u events enum, nisam siguran cemu sluzi
     on('showing-tickets-top-bar-value', function (data) {
-        topBarInfoBoxValue(data.dataItemValue)
+        topBarInfoBoxValue(data.ItemValue)
     });
     //endregion
 
     //region helper functions
     function topBarInfoBoxValue(data) {
         let topBarValueCashable = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-value');
-        topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable/100);
+        topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable / 100);
         let topBarNumberOfCashableTickets = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-number');
         topBarNumberOfCashableTickets[0].innerHTML = `/${data.NumOfCashable}`;
 
         let topBarInfoPromoValue = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-value');
-        topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo/100);
+        topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo / 100);
         let topBarnumberOfPromoTickets = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-number');
         topBarnumberOfPromoTickets[0].innerHTML = `/${data.NumOfPromo}`;
     }
