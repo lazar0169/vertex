@@ -29,6 +29,6 @@
   "dependencies": {
     "eslint": "^5.15.1",
     "node-html-parser": "^1.1.12",
-    "npm": "^6.8.0"
+    "npm": "^6.9.0"
   }
 }
