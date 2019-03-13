@@ -1,27 +1,82 @@
 <div id="malfunctions-filter" class="custom-filter">
-    <div class='icon-vertex-Search center advance-filter-tabele-search'>
+    <!-- <div class='icon-vertex-Search center advance-filter-tabele-search'>
         <div class="hidden icon-vertex-Search center ">
             <input class="element-multilanguage search" type="text" onfocus="value=''" placeholder="Search"
                 data-translation-key="search">
         </div>
-    </div>
+    </div> -->
     <div id="malfunctions-advance-table-filter" class="advance-table-filter center">
         <div class="center opened-closed-wrapper">
             <div data-translation-key="AdvanceTableFilter">Advance table filter</div>
             <span class="closed-arrow">&#9660;</span>
         </div>
+        <div id="malfunctions-advance-table-filter-active" class="hidden advance-table-filter-active">
+            <div id="malfunctions-advance-table-filter-date-range" data-name="DateRange" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="DataRange">Data range:</div>
+            </div>
+            <div id="malfunctions-advance-table-filter-casino" data-name="MachineList" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="Casino">Casino</div>
+            </div>
+            <div id="malfunctions-advance-table-filter-priority" data-name="JackpotList" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="Priority">Priority:</div>
+            </div>
+            <div id="malfunctions-advance-table-filter-status" data-name="Status" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="Status">Status:</div>
+            </div>
+            <div id="malfunctions-advance-table-filter-type" data-name="Type" class="select-container advance-table-filter-select">
+                <div class="element-multilanguage" data-translation-key="Type">Type:</div>
+            </div>
+
+            <div class="button-wrapper">
+                <div id="malfunctions-advance-table-filter-apply" class="center apply-advance-filter">
+                    <button class="secundarybutton element-multilanguage" data-translation-key="ApplyFilters">Apply
+                        Filters</button>
+                </div>
+                <div id="malfunctions-advance-table-filter-clear" class="center">
+                    <a class="button-link element-multilanguage" data-translation-key="ClearAll">Clear all</a>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="center">
         <div id="malfunctions-add-message" class="center">
             <input type="text" placeholder="Unesite poruku">
-            <div class="hidden center">X</div>
+            <div class="hidden center"></div>
         </div>
     </div>
-    <div id="malfunction-right-filter" class="custom-right-filter center">
+    <div id="malfunctions-right-filter" class="custom-right-filter center">
         <div id="malfunctions-show-space">
         </div>
         <div id="malfunctions-number">
             <div class='hidden'></div>
         </div>
+    </div>
+</div>
+<div id="malfunctions-advance-table-filter-active-infobar" class="advance-table-filter-active-infobar hidden">
+    <div>ikona</div>
+    <div>
+        <div id="malfunctions-advance-table-filter-date-range-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="malfunctions-advance-table-filter-casino-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="malfunctions-advance-table-filter-priority-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="malfunctions-advance-table-filter-status-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="malfunctions-advance-table-filter-type-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div id="malfunctions-advance-table-filter-active-infobar-button">
+        <a class="button-link" data-translation-key="ClearAll">Clear all</a>
     </div>
 </div>

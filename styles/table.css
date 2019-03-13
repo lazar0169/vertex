@@ -80,6 +80,11 @@
     justify-content: flex-end;
 }
 
+.actionlist-element {
+    width: 40px;
+    height: 100%;
+}
+
 .vertex-table .cell.row-chosen {
     background-color: #2F3B41;
 }
@@ -141,6 +146,7 @@
     margin-left: 5px;
     visibility: visible;
 }
+
 .head.cell.active-column:after {
     visibility: visible;
 }
@@ -155,7 +161,7 @@
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px
+    margin-left: 5px;
 }
 
 .vertex-table .head.cell.sortable.sort-desc {
@@ -276,16 +282,16 @@ textarea {
     width: 25px;
 }
 
-.cell-flag.row-flag-1 {
-    border-left: 7px solid rgb(0, 150, 136);
-}
-
-.cell-flag.row-flag-2 {
+.cell-flag.row-flag-0 {
     border-left: 7px solid rgb(244, 67, 54);
 }
 
-.cell-flag.row-flag-3 {
+.cell-flag.row-flag-1 {
     border-left: 7px solid rgb(255, 152, 0);
+}
+
+.cell-flag.row-flag-2 {
+    border-left: 7px solid rgb(0, 150, 136);
 }
 
 .cell .flaglist-element {
@@ -293,18 +299,17 @@ textarea {
     height: 100%;
 }
 
-.cell .flaglist-element.flaglist-1 {
-    background-color: rgb(0, 150, 136);
-}
-
-.cell .flaglist-element.flaglist-2 {
+.cell .flaglist-element.flaglist-0 {
     background-color: rgb(244, 67, 54);
 }
 
-.cell .flaglist-element.flaglist-3 {
+.cell .flaglist-element.flaglist-1 {
     background-color: rgb(255, 152, 0);
 }
 
+.cell .flaglist-element.flaglist-2 {
+    background-color: rgb(0, 150, 136);
+}
 
 .table-condensed .cell {
     height: 44px;

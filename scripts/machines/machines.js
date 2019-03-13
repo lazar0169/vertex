@@ -1,13 +1,15 @@
 let machines = (function () {
-
-    on('machines/activated', function () {
+    let endpointId;
+    on('machines/activated', function (params) {
+        let machinesId = params.params[0].value;
+        endpointId = machinesId;
         setTimeout(function () {
             trigger('preloader/hide');
-            trigger('communicate/casinos/getAllMachines', {})
         }, 2000);
-    });
+        let tableSettings = {};
+        tableSettings.successEvent = "machines/display-machine-info/"
 
-    on('machines/display-machine-info/', function (e) {
+        trigger(communication.events.machines.getMachines, { data: { EndpointId: machinesId }, tableSettings })
     });
 
     on('machines/display-machine-info/error', function (e) {
@@ -15,21 +17,17 @@ let machines = (function () {
         alert('An error occurred.');
     });
 
-    function topBarInfoBoxValue(data) {
-        let topBarValueCashable = $$('#top-bar-machines').getElementsByClassName('element-topbar-active-machines');
-        topBarValueCashable[0].innerHTML = data.NumberOfActiveMachines;
-        let topBarNumberOfCashableTickets = $$('#top-bar-machines').getElementsByClassName('element-topbar-all-machines');
-        topBarNumberOfCashableTickets[0].innerHTML = `/${data.NumberOfMachines}`;
+    on('machines/display-machine-info/', function (params) {
+        let machinesFiltersVendors = $$('#machines-advance-table-filter-vendors');
+        let machinesFiltersStatus = $$('#machines-advance-table-filter-status');
 
-        let topBarInfoPromoValue = $$('#top-bar-machines').getElementsByClassName('element-topbar-total-bet-machines');
-        topBarInfoPromoValue[0].innerHTML = data.TotalBet;
+        let machinesVendors = params.data.Data.ItemValue.VendorList;
+        let machinesStatus = params.data.Data.ItemValue.StatusList;
 
-        let topBarnumberOfPromoTickets = $$('#top-bar-machines').getElementsByClassName('element-topbar-total-current-credits-machines');
-        topBarnumberOfPromoTickets[0].innerHTML = data.TotalCurrentCredits;
-    }
+        dropdown.generate({ values: machinesVendors, parent: machinesFiltersVendors, type: 'multi' });
+        dropdown.generate({ values: machinesStatus, parent: machinesFiltersStatus, type: 'multi' });
 
-    on('showing-machines-top-bar-value', function (data) {
-        topBarInfoBoxValue(data.dataItemValue)
+        trigger('showing-machines-top-bar-value', params)
 
     });
 
@@ -41,12 +39,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -59,12 +57,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -77,12 +75,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -95,12 +93,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -113,12 +111,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -131,12 +129,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -149,12 +147,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -167,12 +165,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -185,12 +183,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -203,12 +201,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -221,12 +219,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -239,12 +237,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -257,12 +255,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -275,12 +273,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -293,12 +291,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -311,12 +309,12 @@ let machines = (function () {
         let data = params.data;
         let request = communication.requestTypes.post;
         let tableSettings = params.tableSettings;
-        let successEvent = params.successEvent;
+        let successEvent = tableSettings.successEvent;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
-            request: request,
+            requestType: request,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -326,7 +324,7 @@ let machines = (function () {
     //machines info
     on(communication.events.machines.machineInfo, function (params) {
         let machineId = params.machineId;
-        let callbackEventName = params.successEvent;
+        let callbackEventName = tableSettings.successEvent;
         let route = "machine/" + machineId;
         let data = typeof params.data === typeof undefined ? null : params.data;
         let xhr = createRequest(route, requestTypes.get, data, callbackEventName);
@@ -336,6 +334,4 @@ let machines = (function () {
     });
 
     /*-----------------------------------------------------------------------------------------*/
-
-
 })();

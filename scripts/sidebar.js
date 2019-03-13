@@ -1,8 +1,6 @@
 const sidebar = (function () {
 
     let menuData;
-    let icons = ['icon-Jackpot', 'icon-Tickets', 'icon-AFT', 'icon-Casinos', 'icon-Machines', 'icon-Malfunctions', 'icon-Users'];
-
     let sidebarMenu = $$('#sidebar');
     let listWrapper = $$('#sidebar-list');
     let collapseButton = $$('#icon-collapse');
@@ -405,8 +403,13 @@ const sidebar = (function () {
 
     //helper functions
     function initVariables() {
-        categorySelectedId = Object.keys(menuData)[0];
-        linkSelectedId = `${categorySelectedId}-link-${menuData[categorySelectedId]['Value'][0]['Id']}`;
+        let category;
+        if (sessionStorage.categoryAndLink) {
+            category = JSON.parse(sessionStorage.categoryAndLink).category
+        }
+        categorySelectedId = category ? category : Object.keys(menuData)[0];
+
+        linkSelectedId = menuData[categorySelectedId]['Value'][0] ? `${categorySelectedId}-link-${menuData[categorySelectedId]['Value'][0]['Id']}` : undefined;
     }
 
     //save category and link id in localStorage
@@ -427,7 +430,7 @@ const sidebar = (function () {
         initVariables();
         generateLinks(categorySelectedId);
 
-        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0].Name, icon: `icon-${categorySelectedId}` });
+        trigger('topBar/category', { category: categorySelectedId, casino: menuData[categorySelectedId].Value[0] ? menuData[categorySelectedId].Value[0].Name : undefined, icon: `icon-${categorySelectedId}` });
         chosenLink.innerHTML = menuData[categorySelectedId].List;
         if (sessionStorage.categoryAndLink) {
             let categoryAndLink = JSON.parse(sessionStorage.categoryAndLink)

@@ -1,6 +1,7 @@
 .hidden {
     display: none !important;
 }
+
 .visibility-hidden {
     visibility: hidden;
 }
@@ -47,7 +48,6 @@
     font-family: 'Open Sans';
     font-size: 14px;
     margin: 0;
-    margin-bottom: 10px;
     display: inline-flex;
     position: relative;
 }
@@ -122,6 +122,7 @@
 
 .advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:last-child {
     width: 200px;
+    margin: 0 0.5em;
 }
 
 .advance-filter-active {

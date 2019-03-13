@@ -22,7 +22,6 @@ const aftFilters = (function () {
 
     //close
     transactionTab.addEventListener('click', function () {
-        $$('#black-area').classList.remove('show');
         aftAddTransactionWrapper.classList.add('hidden');
     });
     //show

@@ -27,31 +27,31 @@
     color: rgb(120, 144, 156);
 }
 
-#malfunction-info-color-wrapper>div>div:first-child {
-    width: 0.5rem;
-    height: 0.5rem;
+#malfunction-info-color-wrapper>div>div:first-child, .malfunction-details-info-flag {
+    width: 0.7em;
+    height: 0.7em;
 }
 
 #malfunction-info-color-wrapper>div>div:not(:first-child) {
     padding: 0 0.5em;
 }
 
-#malfunction-info-color-active {
-    background: rgb(244, 67, 54);
+#malfunction-info-color-active, .malfunction-details-info-flag-color-0 {
+    background-color: rgb(244, 67, 54);
     /* border-left: 0.5rem solid rgb(244,67,54);  */
 }
 
-#malfunction-info-color-received {
-    background: rgb(255, 152, 0);
+#malfunction-info-color-received, .malfunction-details-info-flag-color-1 {
+    background-color: rgb(255, 152, 0);
     /* border-left: 0.5rem solid rgb(255,152,0);  */
 }
 
-#malfunction-info-color-inprogress {
-    background: rgb(0, 150, 136);
+#malfunction-info-color-inprogress, .malfunction-details-info-flag-color-2 {
+    background-color: rgb(0, 150, 136);
     /* border-left: 0.5rem solid rgb(0,150,136);  */
 }
 
-#malfunction-info-color-solved {
+#malfunction-info-color-solved, .malfunction-details-info-flag-color-3 {
     background: rgb(139, 195, 74);
     /* border-left: 0.5rem solid rgb(139,195,74);  */
 }
@@ -74,10 +74,11 @@
     background: rgb(55, 71, 79);
 }
 
+/* 
 .div-is-focused {
     border: 5px solid red;
 }
 
 .div-is-focused-element {
     background: yellowgreen;
-}
+} */

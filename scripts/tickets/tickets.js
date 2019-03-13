@@ -109,12 +109,12 @@ const tickets = (function () {
     //region helper functions
     function topBarInfoBoxValue(data) {
         let topBarValueCashable = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-value');
-        topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable);
+        topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable/100);
         let topBarNumberOfCashableTickets = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-number');
         topBarNumberOfCashableTickets[0].innerHTML = `/${data.NumOfCashable}`;
 
         let topBarInfoPromoValue = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-value');
-        topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo);
+        topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo/100);
         let topBarnumberOfPromoTickets = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-number');
         topBarnumberOfPromoTickets[0].innerHTML = `/${data.NumOfPromo}`;
     }
