@@ -18,8 +18,9 @@ const tickets = (function () {
         selectInfoContent('tickets-tab');
 
         trigger(communication.events.tickets.getTickets, { endpointId: ticketId });
+        trigger(communication.events.tickets.ticketAppearance, { data: { EndpointId: ticketId } });
 
-        trigger('tickets/tab/appearance', { endpointId: ticketId });
+        // trigger('tickets/tab/appearance', { endpointId: ticketId });
         trigger('tickets/tab/maxValue', { endpointId: ticketId });
         trigger('tickets/tab/smsSettings', { endpointId: ticketId });
     });
@@ -247,7 +248,7 @@ const tickets = (function () {
         let request = communication.requestTypes.post;
         let data = params.data;
         let formSettings = params.additionalData;
-        let successEvent = formSettings.populateData;
+        let successEvent = 'tickets/tab/appearance';
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,

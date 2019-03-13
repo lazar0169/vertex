@@ -5,35 +5,91 @@ const ticketAppearance = (function () {
     formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
-        formSettingsAppearance.endpointId = params.endpointId;
-        trigger('form/init', { formSettings: formSettingsAppearance });
-        trigger('form/getData', { formSettings: formSettingsAppearance });
-    });
+        // formSettingsAppearance.endpointId = params.endpointId;
+        // trigger('form/init', { formSettings: formSettingsAppearance });
+        // trigger('form/getData', { formSettings: formSettingsAppearance });
 
+        fillInput(params.data.Data)
+    });
+    let ticketAppearanceTab = $$('#tickets-appearance-tab-info');
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
+
+    //kazino podatak Name
     let inputCasino = $$('#wrapper-tickets-appearance-general-settings').children[1].children[1];
+
+    // adresa podatak Address1 / adresa kazina
     let inputAddress = $$('#wrapper-tickets-appearance-general-settings').children[2].children[1];
+
+    //grad podatak Address2 /grad kazina
     let inputCity = $$('#wrapper-tickets-appearance-general-settings').children[3].children[1];
+
+    //valuta podatak Valute
     let inputCurrency = $$('#wrapper-tickets-appearance-general-settings').children[4].children[1];
+
+    //naziv kesabilnog tiketa podatak CashableTicketTitle
     let inputChasoutTicket = $$('#wrapper-tickets-appearance-cashable').children[1].children[1];
+
+    // vreme isticanja kesabilnog tiketa podatak CashableTicketExpirationDays 
     let inputExpiringCashout = $$('#wrapper-tickets-appearance-cashable').children[2].children[1];
+
+    // vreme isticanja promo tiketa podatak RestrictedTicketExpirationDays 
     let inputExpiringPromo = $$('#wrapper-tickets-appearance-promo').children[2].children[1];
+
+    //validacija podatak Validation
     let inputValidation = $$('#tickets-advanced-settings-validation').children[1];
+
+    //ime tiketa podatak Ticket 
     let inputTicket = $$('#tickets-advanced-settings-ticket').children[1];
+
+    //format datuma podatak DateFormat
     let dateWrapper = $$('#tickets-advanced-settings-date');
-    // let dateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
+
+    //format vremena podatak TimeFormat
     let timeWrapper = $$('#tickets-advanced-settings-time');
-    // let timeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
+
+    // tiket istice nakon podatak TicketVoidDays  
     let inputTicketVoid = $$('#tickets-advanced-settings-void').children[1];
+
+    // vreme trajanja tiketa podatak TicketVoidValue  
     let inputTicketVoidDays = $$('#tickets-advanced-settings-days').children[1];
+
+    //asset podatak Asset
     let inputAsset = $$('#tickets-advanced-settings-asset').children[1];
+
+    //asset vrednost podatak AssetValue
     let inputAssetNumber = $$('#tickets-advanced-settings-asset-number').children[1];
+
+    //naziv promo tiketa podatak RestrictedTicketTitle
+    let inputPromoTicket = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
+
     let chasableTicket = $$('#wrapper-tickets-appearance-cashable').children[0];
     let promoTicket = $$('#wrapper-tickets-appearance-promo').children[0];
-    let inputPromoTicket = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
     let cancelTicketAppearance = $$('#appearance-buttons-wrapper').children[0];
     let saveTicketAppearance = $$('#appearance-buttons-wrapper').children[1];
+
+    function fillInput(data) {
+        inputCasino.value = data.Name;
+        inputAddress.value = data.Address1;
+        inputCity.value = data.Address2;
+        inputCurrency.value = data.Valute;
+        inputChasoutTicket.value = data.CashableTicketTitle;
+        inputExpiringCashout.value = data.CashableTicketExpirationDays;
+        inputExpiringPromo.value = data.RestrictedTicketExpirationDays;
+        inputValidation.value = data.Validation;
+        inputTicket.value = data.Ticket;
+        inputTicketVoid.value = data.TicketVoidDays;
+        inputTicketVoidDays.value = data.TicketVoidValue;
+        inputAsset.value = data.Asset;
+        inputAssetNumber.value = data.AssetValue;
+        inputPromoTicket.value = data.RestrictedTicketTitle;
+        ticketAppearanceTab.dataset.endpointId = data.EndpointId;
+        dateWrapper.children[1].set(data.DateFormat);
+        timeWrapper.children[1].set(data.TimeFormat);
+
+        drowImage();
+    }
+
 
     let dd = '16';
     let MM = '10';
@@ -48,9 +104,9 @@ const ticketAppearance = (function () {
     let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
-    dropdown.generate({ values: dateFormatArray, parent: dateWrapper,name:'DateFormat' });
-    dropdown.generate({ values: timeFormatArray, parent: timeWrapper,name:'TimeFormat'});
-     
+    dropdown.generate({ values: dateFormatArray, parent: dateWrapper, name: 'DateFormat' });
+    dropdown.generate({ values: timeFormatArray, parent: timeWrapper, name: 'TimeFormat' });
+
     let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
@@ -215,7 +271,7 @@ const ticketAppearance = (function () {
         h: 30
     }
 
-    window.addEventListener('load', function () {
+    function drowImage() {
         drawPicture();
         drawStatic(insertSideRightCoordinate, insertSide);
         drawStatic(insertSideLeftCoordinate, insertSide);
@@ -244,7 +300,7 @@ const ticketAppearance = (function () {
         draw(assetCoordinateNumberCoordinate, inputAssetNumber.value);
 
 
-    });
+    };
 
     ticketAppearanceAdvance.addEventListener('click', function () {
         trigger('opened-arrow', { div: ticketAppearanceAdvance });
