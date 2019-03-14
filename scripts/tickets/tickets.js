@@ -19,9 +19,11 @@ const tickets = (function () {
 
         trigger(communication.events.tickets.getTickets, { endpointId: ticketId });
         trigger(communication.events.tickets.ticketAppearance, { data: { EndpointId: ticketId } });
+        trigger(communication.events.tickets.showMaxValueSettings, { data: { EndpointId: ticketId } });
+
 
         // trigger('tickets/tab/appearance', { endpointId: ticketId });
-        trigger('tickets/tab/maxValue', { endpointId: ticketId });
+        //trigger('tickets/tab/maxValue', { endpointId: ticketId });
         trigger('tickets/tab/smsSettings', { endpointId: ticketId });
     });
 
@@ -213,14 +215,14 @@ const tickets = (function () {
         let route = communication.apiRoutes.tickets.showMaxValueSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.additionalData;
-        let successEvent = formSettings.populateData;
+        let endpointId = params.data;
+        let successEvent = 'tickets/tab/maxValue';
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            additionalData: formSettings,
+            additionalData: endpointId,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
@@ -247,14 +249,14 @@ const tickets = (function () {
         let route = communication.apiRoutes.tickets.ticketAppearance;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.additionalData;
+        let endpointId = params.data;
         let successEvent = 'tickets/tab/appearance';
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            additionalData: formSettings,
+            additionalData: endpointId,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

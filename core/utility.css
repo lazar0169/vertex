@@ -107,10 +107,10 @@
 
 .chosen-info-tab {
     flex: 1;
-    /* padding: 0 0.5rem 0.5rem 0 !important; */
     background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
     position: relative;
+    padding: 0.5rem;
 }
 
 .advance-filter-active>div:not(:first-child)>div:not(:last-child)>div:first-child {
@@ -309,4 +309,16 @@ figure:hover {
 
 .icon-vertex-Search>input {
     margin-left: 0.5em
+}
+
+label {
+    font-size: 13px;
+}
+
+#tickets-tab-info, #aft-tabs-transaction-info, #malfunctions-info, #user-info {
+    padding: 0 !important;
+}
+
+.form-input {
+    width: 320px;
 }

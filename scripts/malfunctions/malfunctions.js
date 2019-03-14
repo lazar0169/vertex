@@ -88,7 +88,7 @@ const malfunctions = (function () {
         addMalfunctionMsg.children[1].dataset.value = 'save';
         addMalfunctionMsg.children[1].title = localization.translateMessage(addMalfunctionMsg.children[1].dataset.value);
         if (event.keyCode === 13) {
-
+            addMalfunctionMsg.children[1].innerHTML = '&#10006;';
             trigger(communication.events.malfunctions.setServiceMessage, {
                 data: {
                     'EndpointId': 0,

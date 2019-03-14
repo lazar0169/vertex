@@ -1,65 +1,49 @@
 const ticketAppearance = (function () {
-    let formSettingsAppearance = {};
-    formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
-    formSettingsAppearance.getData = communication.events.tickets.ticketAppearance;
-    formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
+    // let formSettingsAppearance = {};
+    // formSettingsAppearance.formContainerSelector = '#tickets-appearance-tab-info';
+    // formSettingsAppearance.getData = communication.events.tickets.ticketAppearance;
+    // formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
         // formSettingsAppearance.endpointId = params.endpointId;
         // trigger('form/init', { formSettings: formSettingsAppearance });
         // trigger('form/getData', { formSettings: formSettingsAppearance });
 
-        fillInput(params.data.Data)
+        fillInput(params.data.Data, params.additionalData.EndpointId)
     });
     let ticketAppearanceTab = $$('#tickets-appearance-tab-info');
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
-
     //kazino podatak Name
     let inputCasino = $$('#wrapper-tickets-appearance-general-settings').children[1].children[1];
-
     // adresa podatak Address1 / adresa kazina
     let inputAddress = $$('#wrapper-tickets-appearance-general-settings').children[2].children[1];
-
     //grad podatak Address2 /grad kazina
     let inputCity = $$('#wrapper-tickets-appearance-general-settings').children[3].children[1];
-
     //valuta podatak Valute
     let inputCurrency = $$('#wrapper-tickets-appearance-general-settings').children[4].children[1];
-
     //naziv kesabilnog tiketa podatak CashableTicketTitle
     let inputChasoutTicket = $$('#wrapper-tickets-appearance-cashable').children[1].children[1];
-
     // vreme isticanja kesabilnog tiketa podatak CashableTicketExpirationDays 
     let inputExpiringCashout = $$('#wrapper-tickets-appearance-cashable').children[2].children[1];
-
     // vreme isticanja promo tiketa podatak RestrictedTicketExpirationDays 
     let inputExpiringPromo = $$('#wrapper-tickets-appearance-promo').children[2].children[1];
-
     //validacija podatak Validation
     let inputValidation = $$('#tickets-advanced-settings-validation').children[1];
-
     //ime tiketa podatak Ticket 
     let inputTicket = $$('#tickets-advanced-settings-ticket').children[1];
-
     //format datuma podatak DateFormat
     let dateWrapper = $$('#tickets-advanced-settings-date');
-
     //format vremena podatak TimeFormat
     let timeWrapper = $$('#tickets-advanced-settings-time');
-
-    // tiket istice nakon podatak TicketVoidDays  
+    // tiket istice nakon podatak TicketVoid 
     let inputTicketVoid = $$('#tickets-advanced-settings-void').children[1];
-
-    // vreme trajanja tiketa podatak TicketVoidValue  
+    // vreme trajanja tiketa podatak TicketVoidDays  
     let inputTicketVoidDays = $$('#tickets-advanced-settings-days').children[1];
-
     //asset podatak Asset
     let inputAsset = $$('#tickets-advanced-settings-asset').children[1];
-
     //asset vrednost podatak AssetValue
     let inputAssetNumber = $$('#tickets-advanced-settings-asset-number').children[1];
-
     //naziv promo tiketa podatak RestrictedTicketTitle
     let inputPromoTicket = $$('#wrapper-tickets-appearance-promo').children[1].children[1];
 
@@ -68,7 +52,7 @@ const ticketAppearance = (function () {
     let cancelTicketAppearance = $$('#appearance-buttons-wrapper').children[0];
     let saveTicketAppearance = $$('#appearance-buttons-wrapper').children[1];
 
-    function fillInput(data) {
+    function fillInput(data, endpointId) {
         inputCasino.value = data.Name;
         inputAddress.value = data.Address1;
         inputCity.value = data.Address2;
@@ -78,18 +62,17 @@ const ticketAppearance = (function () {
         inputExpiringPromo.value = data.RestrictedTicketExpirationDays;
         inputValidation.value = data.Validation;
         inputTicket.value = data.Ticket;
-        inputTicketVoid.value = data.TicketVoidDays;
-        inputTicketVoidDays.value = data.TicketVoidValue;
+        inputTicketVoid.value = data.TicketVoid;
+        inputTicketVoidDays.value = data.TicketVoidDays;
         inputAsset.value = data.Asset;
         inputAssetNumber.value = data.AssetValue;
         inputPromoTicket.value = data.RestrictedTicketTitle;
-        ticketAppearanceTab.dataset.endpointId = data.EndpointId;
         dateWrapper.children[1].set(data.DateFormat);
         timeWrapper.children[1].set(data.TimeFormat);
+        ticketAppearanceTab.dataset.endpointId = endpointId;
 
         drowImage();
     }
-
 
     let dd = '16';
     let MM = '10';
@@ -292,7 +275,7 @@ const ticketAppearance = (function () {
         draw(ticketVoidAfterCoordinate, inputTicketVoid.value);
         draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
         if (!isNaN(inputExpiringCashout.value)) {
-            draw(ticketVoidAfterDaysCoordinate, inputCurrency.value);
+            draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         } else {
             draw(ticketVoidAfterDaysCoordinate, '');
         }
@@ -428,6 +411,10 @@ const ticketAppearance = (function () {
     }
 
     cancelTicketAppearance.addEventListener('click', function () {
-        trigger('form/getData', { formSettings: formSettingsAppearance });
+        trigger(communication.events.tickets.ticketAppearance, { data: { EndpointId: parseInt(ticketAppearanceTab.dataset.endpointId) } });
+    });
+
+    saveTicketAppearance.addEventListener('click', function () {
+        alert('povezi da posaljes vrednosti iz input polja na server')
     });
 })();

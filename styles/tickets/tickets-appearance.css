@@ -5,29 +5,39 @@
 
 #wrapper-ticket-appearance-settings>div {
     width: 33.33%;
-    padding: 0 0.5rem;
+    padding-right: 0.5em;
     min-width: 300px;
+}
+
+#wrapper-ticket-appearance-settings>div:last-child {
+    padding-right: 0;
 }
 
 #wrapper-ticket-appearance-settings>div>div:first-child {
     font-weight: bold;
-    border-bottom: 2px solid transparent;
+    border-bottom: 3px solid transparent;
+    font-size: 14px
 }
 
 #wrapper-ticket-appearance-advanced>div:first-child {
     font-weight: bold;
     width: 200px;
     cursor: pointer;
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
     position: relative;
+    font-size: 14px;
 }
 
 #wrapper-ticket-appearance-settings>div>div:last-child {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.5em;
 }
 
-#wrapper-ticket-appearance-settings>div>div {
-    margin-top: 0.5rem;
+#wrapper-ticket-appearance-settings>div>div:not(:first-child) {
+    margin-top: 0.5em;
+}
+
+#tickets-appearance-tab-info .form-input {
+    width: 100%;
 }
 
 #wrapper-ticket-appearance-advanced {
@@ -41,18 +51,18 @@
 
 #wrapper-ticket-appearance-advanced>div:not(:first-child)>div {
     width: 25%;
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
     min-width: 200px;
 }
 
 #wrapper-canvas {
     width: 100%;
-    padding: 1rem;
+    padding: 1em;
 }
 
 #wrapper-canvas {
     background: rgb(55, 71, 79);
-    margin-top: 0.5rem;
+    margin-top: 0.5em;
 }
 
 #wrapper-canvas>canvas {
@@ -70,6 +80,6 @@
 
 #appearance-buttons-wrapper {
     position: absolute;
-    right: 0.5rem;
-    margin: 0.5rem 0;
+    right: 0.5em;
+    margin: 0.5em 0;
 }
