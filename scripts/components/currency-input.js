@@ -1,6 +1,7 @@
 const currencyInput = (function () {
 
     function generate(element) {
+        validation.init(element, {});
         bindHandlers(element);
     }
 
@@ -34,6 +35,7 @@ const currencyInput = (function () {
         let value = target.value;
         let parsedValue = formatFloatValue(value);
         target.value = parsedValue;
+        target.dataset.value = parsedValue.replace(/,/g, '').replace('.', '');
     }
 
     function onFocus(e) {
@@ -41,6 +43,7 @@ const currencyInput = (function () {
         let value = target.value;
         value = value.replace(/,/g, '');
         target.value = value;
+        target.dataset.value = value.replace('.', '');
     }
 
     return {

@@ -7,7 +7,7 @@ let ticketsMaxValue = (function () {
     let maxSell = $$('#tickets-sms-settings-max-value-max-sell');
     let maxValueTab = $$('#tickets-max-value-tab-info');
     let maxValueSave = $$('#tickets-max-value-buttons-wrapper').children[0];
-    let validationNumber = $$('.validation-number');
+
 
     on('tickets/tab/maxValue', function (params) {
         // formSettingsMaxValue.endpointId = params.endpointId;
@@ -24,33 +24,21 @@ let ticketsMaxValue = (function () {
         console.log(params)
     });
 
-    for (let validate of validationNumber) {
-       
-            currencyInput.generate(validate);
-  
-    }
-
-
-
-
+   
     function fillInput(data, endpointId) {
         maxRedeemed.children[1].value = formatFloatValue(data.MaxRedeemAmountForPayed / 100);
+        maxRedeemed.children[1].dataset.value = data.MaxRedeemAmountForPayed;
         maxSell.children[1].value = formatFloatValue(data.MaxSellAmountForPayed / 100);
+        maxSell.children[1].dataset.value = data.MaxSellAmountForPayed;
         maxValueTab.dataset.endpointId = endpointId;
     }
 
-
     maxValueSave.addEventListener('click', function () {
-
         let data = {
             EndpointId: parseInt(maxValueTab.dataset.endpointId),
-            MaxRedeemAmountForPayed: maxRedeemed.children[1].value,
-            MaxSellAmountForPayed: maxSell.children[1].value
+            MaxRedeemAmountForPayed: parseInt(maxRedeemed.children[1].dataset.value),
+            MaxSellAmountForPayed: parseInt(maxSell.children[1].dataset.value)
         }
-
         trigger(communication.events.tickets.saveMaxValuesAction, { data });
-        // alert('pokupi polja i posalji serveru')
     });
-
-
 })();

@@ -5,6 +5,19 @@ if (typeof blackArea !== 'undefined' && blackArea !== null) {
     });
 }
 
+//currency input fields
+let validationNumber = $$('.validation-number');
+window.addEventListener('load', function () {
+    generateCurrencyInput();
+});
+
+function generateCurrencyInput() {
+    for (let validate of validationNumber) {
+        currencyInput.generate(validate);
+    }
+}
+
+
 // tab listener
 let tabs = $$('.tabs');
 window.addEventListener('load', function () {

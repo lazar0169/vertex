@@ -16,6 +16,7 @@ const malfunctions = (function () {
 
     /*********************----Module Events------*********************/
     on(events.activated, function (params) {
+        trigger('preloader/show');
         trigger(communication.events.malfunctions.getMalfunctions, { endpointId: 0 });
     });
 
@@ -65,6 +66,7 @@ const malfunctions = (function () {
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
 
     });
+    
     /*------------------Show malfunction details--------------------------*/
 
     on(table.events.rowClick(malfunctionsTableId), function (params) {

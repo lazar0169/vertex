@@ -13,6 +13,7 @@ const tickets = (function () {
     //region module events
     on(events.activated, function (params) {
         let ticketId = params.params[0].value;
+        trigger('preloader/show');
 
         selectTab('tickets-tab');
         selectInfoContent('tickets-tab');
@@ -20,8 +21,6 @@ const tickets = (function () {
         trigger(communication.events.tickets.getTickets, { endpointId: ticketId });
         trigger(communication.events.tickets.ticketAppearance, { data: { EndpointId: ticketId } });
         trigger(communication.events.tickets.showMaxValueSettings, { data: { EndpointId: ticketId } });
-
-
         // trigger('tickets/tab/appearance', { endpointId: ticketId });
         //trigger('tickets/tab/maxValue', { endpointId: ticketId });
         trigger('tickets/tab/smsSettings', { endpointId: ticketId });
