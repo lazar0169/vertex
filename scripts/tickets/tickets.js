@@ -232,14 +232,14 @@ const tickets = (function () {
         let route = communication.apiRoutes.tickets.saveMaxValuesAction;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.additionalData;
-        let successEvent = formSettings.submitSuccessEvent;
-        let errorEvent = formSettings.submitErrorEvent;
+        let endpointId = params.data.EndpointId;
+        let successEvent = 'save/max-value';
+        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            additionalData: formSettings,
+            additionalData: endpointId,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

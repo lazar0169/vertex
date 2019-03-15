@@ -69,8 +69,7 @@ const ticketAppearance = (function () {
         inputPromoTicket.value = data.RestrictedTicketTitle;
         dateWrapper.children[1].set(data.DateFormat);
         timeWrapper.children[1].set(data.TimeFormat);
-        ticketAppearanceTab.dataset.endpointId = endpointId;
-
+        ticketAppearanceTab.dataset.endpointId = endpointId
         drowImage();
     }
 
