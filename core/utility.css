@@ -105,7 +105,7 @@
     cursor: pointer;
 }
 
-.chosen-info-tab {
+.chosen-info-tab, #users-add-new-user {
     flex: 1;
     background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
@@ -315,7 +315,7 @@ label {
     font-size: 13px;
 }
 
-#tickets-tab-info, #aft-tabs-transaction-info, #malfunctions-info, #user-info {
+#tickets-tab-info, #aft-tabs-transaction-info, #malfunctions-info, #user-info, #jackpot-tab-info {
     padding: 0 !important;
 }
 

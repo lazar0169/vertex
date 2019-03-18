@@ -66,7 +66,7 @@ const malfunctions = (function () {
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
 
     });
-    
+
     /*------------------Show malfunction details--------------------------*/
 
     on(table.events.rowClick(malfunctionsTableId), function (params) {
@@ -103,6 +103,16 @@ const malfunctions = (function () {
         trigger(events.filterTable);
 
     });
+
+    on(table.events.pageSize(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+
+    });
+
+    on(table.events.pagination(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
+
     addMalfunctionMsg.children[1].addEventListener('click', function () {
         if (addMalfunctionMsg.children[1].dataset.value === 'remove') {
             addMalfunctionMsg.children[0].value = "";
@@ -121,6 +131,7 @@ const malfunctions = (function () {
             }
         });
     });
+
 
     ///////proveri ovo
     function malfunctionsServiceMessage(data) {
@@ -151,6 +162,7 @@ const malfunctions = (function () {
     on('malfunctions/filters/init', function (params) {
         getFiltersFromAPI(params.endpointId);
     });
+
 
 
 

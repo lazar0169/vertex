@@ -56,7 +56,6 @@ const aftFilters = (function () {
     });
     on('aft/filters/pagination', function (params) {
         filterAftTable();
-
     });
     on('aft/filters/sorting', function () {
         filterAftTable();

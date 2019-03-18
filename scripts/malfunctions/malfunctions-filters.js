@@ -69,7 +69,7 @@ const malfunctionsFilter = (function () {
     function prepareMalfunctionsFilters() {
         let table = $$('#table-container-malfunctions');
 
-        let casinoList = $$('#malfunctions-advance-table-filter-casino').children[1].get();
+        let casinoList = $$('#malfunctions-advance-table-filter-casino').children[1].children[0].dataset.value;
         let priorityList = $$('#malfunctions-advance-table-filter-priority').children[1].get();
         let statusesList = $$('#malfunctions-advance-table-filter-status').children[1].get();
         let typesList = $$('#malfunctions-advance-table-filter-type').children[1].get();
@@ -77,8 +77,8 @@ const malfunctionsFilter = (function () {
         let filters = {
             'EndpointId': table.settings.endpointId,
             'SelectedPeriod': $$('#malfunctions-advance-table-filter-date-range').children[1].get(),
-            'CasinoList': casinoList === 'null' ? null : casinoList.split(','),
-            'Prioroty': priorityList === 'null' ? null : priorityList.split(','),
+            'CasinoList': casinoList === '-' ? null : casinoList.split(','),
+            'Priority': priorityList === 'null' ? null : (priorityList.split(',')).map(Number),
             'Status': statusesList === 'null' ? null : statusesList.split(','),
             'Type': typesList === 'null' ? null : typesList.split(','),
         };

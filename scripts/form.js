@@ -49,7 +49,7 @@ let form = (function () {
             EndpointId: parseInt(formSettings.endpointId)
         };
 
-        trigger(formSettings.getData, {data: data, additionalData: formSettings});
+        trigger(formSettings.getData, { data: data, additionalData: formSettings });
     }
 
     //helper functions
@@ -273,7 +273,7 @@ let form = (function () {
                 dataForApi = formSettings.beforeSubmit(formSettings, dataForApi);
             }
 
-            trigger(formSettings.submitEvent, {data: dataForApi, additionalData: formSettings})
+            trigger(formSettings.submitEvent, { data: dataForApi, additionalData: formSettings })
         } else {
             return false;
         }
@@ -369,7 +369,7 @@ let form = (function () {
 
                 //add required rule to check if field is not empty
                 let validationConstraint = {
-                    name:validation.constraintAttributes.required,
+                    name: validation.constraintAttributes.required,
                     operator: validation.constraintsOperators.required,
                     value: true
                 };
@@ -430,8 +430,10 @@ let form = (function () {
     }
 
     function createToggles(formSettings) {
-        form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
-        let checkboxes = form.getElementsByClassName('vertex-form-checkbox');
+        // form = formSettings.formContainerElement.getElementsByClassName('element-async-form')[0];
+        // let checkboxes = form.getElementsByClassName('vertex-form-checkbox');
+        let checkboxes = document.getElementsByClassName('vertex-form-checkbox');
+
         for (let i = 0; i < checkboxes.length; i++) {
             let cb = checkboxes[i];
             toggle.generate({
@@ -598,7 +600,7 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-       // console.log('params in form submit error:',params);
+        // console.log('params in form submit error:',params);
 
         let formSettings = params.additionalData;
         let apiResponseData = params.data;

@@ -59,7 +59,6 @@ const tickets = (function () {
     });
     on(table.events.pagination(ticketTableId), function () {
         trigger(events.filterTable);
-
     });
 
     on(table.events.export(ticketTableId), function (params) {
