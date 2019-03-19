@@ -282,15 +282,15 @@ textarea {
     width: 25px;
 }
 
-.cell-flag.row-flag-0 {
+.cell-flag.row-flag-1 {
     border-left: 7px solid rgb(244, 67, 54);
 }
 
-.cell-flag.row-flag-1 {
+.cell-flag.row-flag-2 {
     border-left: 7px solid rgb(255, 152, 0);
 }
 
-.cell-flag.row-flag-2 {
+.cell-flag.row-flag-3 {
     border-left: 7px solid rgb(0, 150, 136);
 }
 
@@ -299,15 +299,15 @@ textarea {
     height: 100%;
 }
 
-.cell .flaglist-element.flaglist-0 {
+.cell .flaglist-element.flaglist-1 {
     background-color: rgb(244, 67, 54);
 }
 
-.cell .flaglist-element.flaglist-1 {
+.cell .flaglist-element.flaglist-2 {
     background-color: rgb(255, 152, 0);
 }
 
-.cell .flaglist-element.flaglist-2 {
+.cell .flaglist-element.flaglist-3 {
     background-color: rgb(0, 150, 136);
 }
 
