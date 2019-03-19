@@ -23,7 +23,7 @@ const tickets = (function () {
         trigger(communication.events.tickets.showMaxValueSettings, { data: { EndpointId: ticketId } });
         // trigger('tickets/tab/appearance', { endpointId: ticketId });
         //trigger('tickets/tab/maxValue', { endpointId: ticketId });
-        trigger('tickets/tab/smsSettings', { endpointId: ticketId });
+        trigger(communication.events.tickets.showSmsSettings, { data: { EndpointId: ticketId } });
     });
 
     on(events.getTickets, function (params) {
@@ -178,14 +178,13 @@ const tickets = (function () {
         let route = communication.apiRoutes.tickets.showSmsSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let formSettings = params.additionalData;
-        let successEvent = formSettings.populateData;
+        let successEvent = 'tickets/tab/smsSettings';
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
             data: data,
-            additionalData: formSettings,
+            additionalData: params.data,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

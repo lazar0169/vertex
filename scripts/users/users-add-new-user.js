@@ -21,7 +21,7 @@ const usersAddNewUser = (function () {
                 hidden = 'hidden';
             }
             roleWrapper.innerHTML = `<div class="form-section-content switch-and-select-all" >
-                <figure class="element-form-check vertex-form-checkbox add-new-user-checked" data-target="${roleData.RoleList[count].MainRoleName}-role">
+                <figure class="element-form-check vertex-form-checkbox add-new-user-checked" data-target="#${roleData.RoleList[count].MainRoleName}-role">
                     <label class="form-switch">
                         <input name="${roleData.RoleList[count].MainRoleName}-role" data-type="int" class="element-form-data add-new-user-checked-status" type="checkbox" ${checkedSwitch}>
                         <i class="form-icon"></i>
@@ -32,7 +32,7 @@ const usersAddNewUser = (function () {
                 <a class="button-link ${hidden} role-select-all-button">Select all</a>
             </div>
             
-            <div class="add-new-user-role-list form-section-content hidden">
+            <div id='${roleData.RoleList[count].MainRoleName}-role' class="add-new-user-role-list form-section-content">
             
             </div>  
             `
@@ -94,34 +94,34 @@ const usersAddNewUser = (function () {
                     break;
 
                 case 'checkbox':
-                    element.addEventListener('click', function (e) {
-                        if (element.getElementsByClassName('add-new-user-checked-status')[0].checked) {
-                            element.getElementsByClassName('add-new-user-checked-status')[0].checked = false;
-                            if (element.getElementsByClassName('form-switch')[0]) {
-                                for (let checkedElement of element.parentNode.parentNode.children[1].getElementsByClassName('add-new-user-checked-status')) {
-                                    checkedElement.checked = false;
-                                }
-                                element.parentNode.children[1].classList.add('hidden');
-                                element.parentNode.parentNode.children[1].classList.add('hidden');
-                                element.children[2].innerHTML = "Off";
-                            }
-                        }
-                        else {
-                            element.getElementsByClassName('add-new-user-checked-status')[0].checked = true;
-                            if (element.getElementsByClassName('form-switch')[0]) {
-                                element.parentNode.parentNode.children[1].classList.remove('hidden');
-                                element.parentNode.children[1].classList.remove('hidden');
-                                element.children[2].innerHTML = "On";
-                            }
-                        }
-                    });
-                    if (element.getElementsByClassName('form-switch')[0]) {
-                        element.parentNode.children[1].addEventListener('click', function () {
-                            for (let checkedElement of element.parentNode.parentNode.children[1].getElementsByClassName('add-new-user-checked-status')) {
-                                checkedElement.checked = true;
-                            }
-                        });
-                    }
+                    // element.addEventListener('click', function (e) {
+                    //     if (element.getElementsByClassName('add-new-user-checked-status')[0].checked) {
+                    //         element.getElementsByClassName('add-new-user-checked-status')[0].checked = false;
+                    //         if (element.getElementsByClassName('form-switch')[0]) {
+                    //             for (let checkedElement of element.parentNode.parentNode.children[1].getElementsByClassName('add-new-user-checked-status')) {
+                    //                 checkedElement.checked = false;
+                    //             }
+                    //             element.parentNode.children[1].classList.add('hidden');
+                    //             element.parentNode.parentNode.children[1].classList.add('hidden');
+                    //             element.children[2].innerHTML = "Off";
+                    //         }
+                    //     }
+                    //     else {
+                    //         element.getElementsByClassName('add-new-user-checked-status')[0].checked = true;
+                    //         if (element.getElementsByClassName('form-switch')[0]) {
+                    //             element.parentNode.parentNode.children[1].classList.remove('hidden');
+                    //             element.parentNode.children[1].classList.remove('hidden');
+                    //             element.children[2].innerHTML = "On";
+                    //         }
+                    //     }
+                    // });
+                    // if (element.getElementsByClassName('form-switch')[0]) {
+                    //     element.parentNode.children[1].addEventListener('click', function () {
+                    //         for (let checkedElement of element.parentNode.parentNode.children[1].getElementsByClassName('add-new-user-checked-status')) {
+                    //             checkedElement.checked = true;
+                    //         }
+                    //     });
+                    // }
                     break;
             }
         }

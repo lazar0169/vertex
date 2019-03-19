@@ -183,7 +183,7 @@
         <section id="ticket-notification-settings" class="collapsible">
             <div class="form-section">
                 <div class="form-section-content">
-                    <div id="tickets-sms-settings-max-redemption" class="form-group">
+                    <div id="tickets-sms-settings-max-redemption">
                         <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">
                             Send notification when the value of the printed ticket is higher than:
                         </label>
@@ -194,7 +194,7 @@
             </div>
             <div class="form-section border-bottom">
                 <div class="form-section-content">
-                    <div class="form-group" id="tickets-sms-settings-max-issuance">
+                    <div  id="tickets-sms-settings-max-issuance">
                         <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Printed">
                             Send notification when the value of the printed ticket is higher than:
                         </label>
@@ -208,7 +208,7 @@
                     <label class=" element-multilanguage" data-translation-key="Tickets.SmsSettings.Mobile">
                         Mobile phone number:
                     </label>
-                    <div class="element-form-phone-number form-group d-flex flex-row flex-baseline">
+                    <div class="element-form-phone-number">
                         <input maxlength="20" name="PhoneNumbers" class="form-input element-form-data" data-type="array"
                             type="text" placeholder="xxx-xxx-xxxx">
                         <a class=" action-delete-form-element button-link visibility-hidden element-multilanguage"
@@ -228,9 +228,9 @@
             <div id="tickets-sms-settings-send-email" class="form-section border-bottom tickets-sms-settings">
                 <div class="form-section-content">
                     <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Email">
-                        class=">Email address:
+                        Email address:
                     </label>
-                    <div class="form-group element-form-email d-flex flex-row flex-baseline">
+                    <div class="element-form-email ">
                         <input maxlength="50" name="Emails" class="form-input element-form-data element-multilanguage"
                             data-translation-key="Your Email" data-type="array" email="true" type="text" id="notification-email-address"
                             placeholder="Your email">

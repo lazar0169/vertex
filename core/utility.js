@@ -32,27 +32,37 @@ function $$(selector) {
 }
 
 function collapseElement(element) {
-    let sectionHeight = element.scrollHeight;
-    let elementTransition = element.style.transition;
-    element.style.transition = '';
-    requestAnimationFrame(function () {
-        element.style.height = sectionHeight + 'px';
-        element.style.transition = elementTransition;
-        requestAnimationFrame(function () {
-            element.style.height = 0 + 'px';
-        });
-    });
+    element.classList.add('hidden');
+    if (element.parentNode.children[0].children[1]) {
+        element.parentNode.children[0].children[1].classList.add('hidden');
+    }
+
+    // let sectionHeight = element.scrollHeight;
+    // let elementTransition = element.style.transition;
+    // element.style.transition = '';
+    // requestAnimationFrame(function () {
+    //     element.style.height = sectionHeight + 'px';
+    //     element.style.transition = elementTransition;
+    //     requestAnimationFrame(function () {
+    //         element.style.height = 0 + 'px';
+    //     });
+    // });
 }
 
 function expandElement(element) {
-    let sectionHeight = element.scrollHeight;
-    if (sectionHeight !== 0) {
-        element.style.height = sectionHeight + 'px';
+    element.classList.remove('hidden');
+    if (element.parentNode.children[0].children[1]) {
+        element.parentNode.children[0].children[1].classList.remove('hidden');
     }
-    element.addEventListener("webkittransitionEnd", expandTransitionEnd, false);
-    element.addEventListener("transitionend", expandTransitionEnd, false);
-    element.addEventListener("otransitionend", expandTransitionEnd, false);
-    element.addEventListener("MSAnimationEnd", expandTransitionEnd, false);
+
+    // let sectionHeight = element.scrollHeight;
+    // if (sectionHeight !== 0) {
+    //     element.style.height = sectionHeight + 'px';
+    // }
+    // element.addEventListener("webkittransitionEnd", expandTransitionEnd, false);
+    // element.addEventListener("transitionend", expandTransitionEnd, false);
+    // element.addEventListener("otransitionend", expandTransitionEnd, false);
+    // element.addEventListener("MSAnimationEnd", expandTransitionEnd, false);
 }
 //remove fixed height on elements after they are expanded
 function expandTransitionEnd(e) {

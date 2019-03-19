@@ -1,7 +1,7 @@
 const currencyInput = (function () {
 
     function generate(element) {
-        validation.init(element, {});
+        // validation.init(element, {});
         bindHandlers(element);
     }
 

@@ -1,4 +1,36 @@
 const toggle = (function () {
+    //----------uzeto iz forme-----------------------//
+
+    window.addEventListener('load', function () {
+        let slideCheckbox = $$('.vertex-form-checkbox');
+        for (let check of slideCheckbox) {
+            toggle.generate({
+                element: check,
+                onUncheck: toggleSection,
+                onCheck: toggleSection
+            })
+        }
+    });
+
+    function toggleSection(e) {
+        if (e === undefined) {
+            e = this['element'];
+        }
+        let targetSelector = e.dataset.target;
+        let checked = e.vertexToggle.getState(e);
+        if (targetSelector !== undefined) {
+            let targetElement = $$(targetSelector);
+            if (targetElement !== undefined && targetElement !== null) {
+                if (checked === false) {
+                    collapseElement(targetElement);
+                } else {
+                    expandElement(targetElement);
+                }
+            }
+        }
+    }
+    //------------------------------------------------------//
+
     //index of single select 
 
     function generate(settings) {
@@ -33,7 +65,7 @@ const toggle = (function () {
                 console.error('plugin html is malformed - input checkbox element is missing');
             }
             //prevent validation as this element cannot be skipped
-            checkboxEl.setAttribute('novalidate','true');
+            checkboxEl.setAttribute('novalidate', 'true');
             dropdown.checkboxElement = checkboxEl;
             let statusLabel = settings.element.parentElement.parentElement.getElementsByClassName('element-form-mode')[0];
             if (statusLabel === null) {
