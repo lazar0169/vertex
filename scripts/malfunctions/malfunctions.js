@@ -74,7 +74,17 @@ const malfunctions = (function () {
 
     });
     /*------------------------------------------------------------------*/
+    on(table.events.sort(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
 
+    on(table.events.pageSize(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
+
+    on(table.events.pagination(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
 
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function (event) {
@@ -88,22 +98,21 @@ const malfunctions = (function () {
         addMalfunctionMsg.children[1].dataset.value = 'save';
         addMalfunctionMsg.children[1].title = localization.translateMessage(addMalfunctionMsg.children[1].dataset.value);
         if (event.keyCode === 13) {
-
+            addMalfunctionMsg.children[1].innerHTML = '&#10006;';
             trigger(communication.events.malfunctions.setServiceMessage, {
                 data: {
                     'EndpointId': 0,
                     'Message': addMalfunctionMsg.children[0].value
                 }
             });
+            addMalfunctionMsg.children[0].blur();
         }
     });
-    on(table.events.sort(malfunctionsTableId), function () {
-        trigger(events.filterTable);
 
-    });
     addMalfunctionMsg.children[1].addEventListener('click', function () {
         if (addMalfunctionMsg.children[1].dataset.value === 'remove') {
             addMalfunctionMsg.children[0].value = "";
+            addMalfunctionMsg.children[0].focus();
             addMalfunctionMsg.children[1].classList.add('hidden');
         }
         else {
@@ -120,7 +129,6 @@ const malfunctions = (function () {
         });
     });
 
-    ///////proveri ovo
     function malfunctionsServiceMessage(data) {
         addMalfunctionMsg.children[0].value = data;
         if (addMalfunctionMsg.children[0].value) {

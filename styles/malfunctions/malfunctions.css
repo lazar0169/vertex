@@ -36,17 +36,17 @@
     padding: 0 0.5em;
 }
 
-#malfunction-info-color-active, .malfunction-details-info-flag-color-0 {
+#malfunction-info-color-active, .malfunction-details-info-flag-color-1 {
     background-color: rgb(244, 67, 54);
     /* border-left: 0.5rem solid rgb(244,67,54);  */
 }
 
-#malfunction-info-color-received, .malfunction-details-info-flag-color-1 {
+#malfunction-info-color-received, .malfunction-details-info-flag-color-2 {
     background-color: rgb(255, 152, 0);
     /* border-left: 0.5rem solid rgb(255,152,0);  */
 }
 
-#malfunction-info-color-inprogress, .malfunction-details-info-flag-color-2 {
+#malfunction-info-color-inprogress, .malfunction-details-info-flag-color-3 {
     background-color: rgb(0, 150, 136);
     /* border-left: 0.5rem solid rgb(0,150,136);  */
 }
