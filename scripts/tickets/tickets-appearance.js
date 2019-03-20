@@ -10,6 +10,13 @@ const ticketAppearance = (function () {
         trigger('form/getData', { formSettings: formSettingsAppearance });
     });
 
+    //ToDo: nadji bolje resenje za iscrtavanje slike kad se zavrsi popunjavanje polja sa servera//
+    let ticketAppearanceTab = $$('#tickets-appearance-tab')
+    ticketAppearanceTab.addEventListener('click', function () {
+        drawInitialImage();
+    });
+    //-----------------------------------------------------------------------------------//
+
     let ticketAppearanceAdvance = $$('#wrapper-ticket-appearance-advanced').children[0];
     let ticketAppearanceAdvanceShow = $$('#wrapper-ticket-appearance-advanced').children[1];
     let inputCasino = $$('#wrapper-tickets-appearance-general-settings').children[1].children[1];
@@ -48,9 +55,9 @@ const ticketAppearance = (function () {
     let currencyValueText = `one hundred and thirty-eight ${inputCurrency.value} 0/100`;
     let insertSide = 'INSERT THIS SIDE UP';
 
-    dropdown.generate({ values: dateFormatArray, parent: dateWrapper,name:'DateFormat' });
-    dropdown.generate({ values: timeFormatArray, parent: timeWrapper,name:'TimeFormat'});
-     
+    dropdown.generate({ values: dateFormatArray, parent: dateWrapper, name: 'DateFormat' });
+    dropdown.generate({ values: timeFormatArray, parent: timeWrapper, name: 'TimeFormat' });
+
     let selectedDateFormat = $$('#tickets-advanced-settings-date').children[1].children[0];
     let selectedTimeFormat = $$('#tickets-advanced-settings-time').children[1].children[0];
     let setDateFormat = $$('#tickets-advanced-settings-date').children[1];
@@ -215,7 +222,7 @@ const ticketAppearance = (function () {
         h: 30
     }
 
-    window.addEventListener('load', function () {
+    function drawInitialImage() {
         drawPicture();
         drawStatic(insertSideRightCoordinate, insertSide);
         drawStatic(insertSideLeftCoordinate, insertSide);
@@ -236,15 +243,13 @@ const ticketAppearance = (function () {
         draw(ticketVoidAfterCoordinate, inputTicketVoid.value);
         draw(ticketVoidAfterNumberCoordinate, inputExpiringCashout.value);
         if (!isNaN(inputExpiringCashout.value)) {
-            draw(ticketVoidAfterDaysCoordinate, inputCurrency.value);
+            draw(ticketVoidAfterDaysCoordinate, inputTicketVoidDays.value);
         } else {
             draw(ticketVoidAfterDaysCoordinate, '');
         }
         draw(assetCoordinate, `${inputAsset.value} #`);
         draw(assetCoordinateNumberCoordinate, inputAssetNumber.value);
-
-
-    });
+    }
 
     ticketAppearanceAdvance.addEventListener('click', function () {
         trigger('opened-arrow', { div: ticketAppearanceAdvance });
