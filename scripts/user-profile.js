@@ -19,7 +19,7 @@ const userEditProfileModule = (function () {
         saveUserEditProfile.classList.add('loading');
         setTimeout(function () {
             saveUserEditProfile.classList.remove('loading');
-        }, 4000);
+        }, 2000);
     });
 
     on('show/app', function () {

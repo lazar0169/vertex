@@ -59,7 +59,6 @@ let table = (function () {
         link.href = window.URL.createObjectURL(blob);
         link.download = 'Report.pdf';
         link.click();
-        trigger('preloader/hide');
     });
     on('filters/show-selected-filters', function (params) {
         showSelectedFilters(params)
@@ -167,9 +166,6 @@ let table = (function () {
                 generateHeaders(table);
             }
             generateRows(table);
-        }
-        if (table.settings.showPreloader) {
-            trigger('preloader/hide');
         }
     }
 
@@ -861,9 +857,6 @@ let table = (function () {
         }
         if (settings.page === undefined) {
             settings.page = defaultPage;
-        }
-        if (settings.showPreloader === undefined) {
-            settings.showPreloader = true;
         }
         if (settings.pageSizeContainer === undefined) {
             settings.pageSizeContainer = null;

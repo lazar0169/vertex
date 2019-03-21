@@ -61,7 +61,6 @@ const malfunctions = (function () {
         $$('#malfunctions-details').classList.add('collapse');
 
         let filters = malfunctionsFilter.prepareMalfunctionsFilters();
-        trigger('preloader/show');
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
 
     });

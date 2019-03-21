@@ -81,7 +81,6 @@ const aftFilters = (function () {
     //region helper functions
     function filterAftTable() {
         let filters = prepareAftFilters();
-        trigger('preloader/show');
         trigger(communication.events.aft.transactions.previewTransactions, { data: filters });
     }
 
@@ -191,6 +190,9 @@ const aftFilters = (function () {
         }
         table.setVisibleColumns(visibleColumns);
         return filters;
+    }
+    return {
+        clearAftFilters,
     }
     //endregion
 })();

@@ -13,12 +13,9 @@ const tickets = (function () {
     //region module events
     on(events.activated, function (params) {
         let ticketId = params.params[0].value;
-
         selectTab('tickets-tab');
         selectInfoContent('tickets-tab');
-
         trigger(communication.events.tickets.getTickets, { endpointId: ticketId });
-
         trigger('tickets/tab/appearance', { endpointId: ticketId });
         trigger('tickets/tab/maxValue', { endpointId: ticketId });
         trigger('tickets/tab/smsSettings', { endpointId: ticketId });
@@ -44,6 +41,7 @@ const tickets = (function () {
     on(events.previewTickets, function (params) {
         let data = params.data.Data;
         $$(`#${ticketTableId}`).update(data);
+        trigger('preloader/hide');
         //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
     });
 
@@ -61,7 +59,7 @@ const tickets = (function () {
     });
 
     on(table.events.export(ticketTableId), function (params) {
-        trigger('preloader/show');
+
         let ticketsTable = params.table;
         let filters = null;
         if (ticketsTable.settings.filters === null) {
@@ -124,6 +122,7 @@ const tickets = (function () {
     //region Tickets communication events
     //tickets get tickets
     on(communication.events.tickets.getTickets, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.getTickets;
         let request = communication.requestTypes.post;
         let data = {
@@ -142,6 +141,7 @@ const tickets = (function () {
     });
 
     on(communication.events.tickets.previewTickets, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.previewTickets;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -157,6 +157,7 @@ const tickets = (function () {
     });
 
     on(communication.events.tickets.getFilters, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.getFilters;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -174,6 +175,7 @@ const tickets = (function () {
     });
     //tickets getting values for show sms settings
     on(communication.events.tickets.showSmsSettings, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.showSmsSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -191,6 +193,7 @@ const tickets = (function () {
     });
     //tickets SaveTitoSmsAction
     on(communication.events.tickets.saveSmsSettings, function (params) {
+        trigger('preloader/show');
         console.log('params:', params);
         let route = communication.apiRoutes.tickets.saveSmsSettings;
         let request = communication.requestTypes.post;
@@ -209,6 +212,7 @@ const tickets = (function () {
     });
     //tickets ShowTitoMaxValueSettings
     on(communication.events.tickets.showMaxValueSettings, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.showMaxValueSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -226,6 +230,7 @@ const tickets = (function () {
     });
     //tickets SaveTitoMaxValuesAction
     on(communication.events.tickets.saveMaxValuesAction, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.saveMaxValuesAction;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -243,6 +248,7 @@ const tickets = (function () {
     });
     //ShowTicketAppearanceSettings
     on(communication.events.tickets.ticketAppearance, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.ticketAppearance;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -260,6 +266,7 @@ const tickets = (function () {
     });
     //SaveTicketAppearanceAction
     on(communication.events.tickets.saveAppearance, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.saveAppearance;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -277,6 +284,7 @@ const tickets = (function () {
     });
 
     on(communication.events.tickets.exportToPDF, function (params) {
+        trigger('preloader/show');
         let data = params.data;
         communication.sendRequest(communication.apiRoutes.tickets.exportToPDF, communication.requestTypes.post, data,
             table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf.type }, [{

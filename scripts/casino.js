@@ -65,9 +65,7 @@ let casino = (function () {
 
     on('casinos/activated', function () {
 
-        setTimeout(function () {
-            trigger('preloader/hide');
-        }, 2000);
+      
 
     });
 

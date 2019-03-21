@@ -1,4 +1,5 @@
 const aft = (function () {
+
     const cancelTransactionsPopUpId = 'aft-cancel-transaction-popup';
     const aftTableId = 'table-container-aft';
     const aftTableSelector = '#table-container-aft';
@@ -31,9 +32,7 @@ const aft = (function () {
         let aftId = params.params[0].value;
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
-
-        trigger('preloader/show');
-        trigger(communication.events.aft.transactions.getTransactions, { endpointId: aftId });
+        trigger(communication.events.aft.transactions.getTransactions, { data: { EndpointId: aftId } });
 
         //initialize add transaction form
         let addTransactionFormSettings = {};
@@ -74,10 +73,7 @@ const aft = (function () {
     });
 
     on(table.events.export(aftTableId), function (params) {
-        trigger('preloader/show');
-
         let aftTable = params.table;
-
         let filters = null;
 
         if (aftTable.settings.filters === null) {
@@ -303,9 +299,7 @@ const aft = (function () {
     on(communication.events.aft.transactions.getTransactions, function (params) {
         let route = communication.apiRoutes.aft.getTransactions;
         let request = communication.requestTypes.post;
-        let data = {
-            'EndpointId': params.endpointId
-        };
+        let data = params.data
         let successEvent = events.getTransactions;
         let errorEvent = '';
 
@@ -313,7 +307,7 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
-            additionalData: params.endpointId,
+            additionalData: params.data.EndpointId,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

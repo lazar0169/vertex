@@ -68,9 +68,16 @@ let aftAddTransactions = (function () {
     });
 
     on('aft/add-transaction-success', function (params) {
+        $$('#black-area').classList.remove('show');
+        $$('#add-transaction-wrapper').classList.add('hidden');
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
+
+        aftFilters.clearAftFilters();
+
+
+
     });
 })();

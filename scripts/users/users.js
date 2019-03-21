@@ -1,18 +1,13 @@
 const users = (function () {
 
     on('users/activated', function (params) {
-        setTimeout(function () {
-            trigger('preloader/hide');
-        }, 2000);
-
+       
 
     });
     let addNewUserButton = $$('#users-add-new-user-button');
     let addNewUserWrapper = $$('#users-add-new-user');
     let addNewUserActionButtonsWrapper = $$('#add-new-user-buttons-wrapper');
-    setTimeout(function () {
-        trigger('preloader/hide');
-    }, 2000);
+    
 
     addNewUserButton.children[0].addEventListener('click', function () {
         addNewUserButton.children[0].classList.add('add-new-user-active');

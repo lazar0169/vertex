@@ -1,10 +1,10 @@
-let ticketsSmsSettings = (function(){
+let ticketsSmsSettings = (function () {
     let formSettingsSmsSettings = {};
     formSettingsSmsSettings.formContainerSelector = '#tickets-sms-settings-tab-info';
     formSettingsSmsSettings.getData = communication.events.tickets.showSmsSettings;
     formSettingsSmsSettings.submitEvent = communication.events.tickets.saveSmsSettings;
 
-    formSettingsSmsSettings.afterDisplayData = function(formSettings,data) {
+    formSettingsSmsSettings.afterDisplayData = function (formSettings, data) {
         let enableSMS = data.Data.EnableSms === true;
         let enableEmail = data.Data.EnableEmail === true;
 
@@ -15,8 +15,8 @@ let ticketsSmsSettings = (function(){
             $$('#tickets-enable-sms-mode').parentNode.vertexToggle.uncheck();
         }
     };
-    formSettingsSmsSettings.beforeSubmit = function(formSettings,data) {
-        console.log('data to be sent',data);
+    formSettingsSmsSettings.beforeSubmit = function (formSettings, data) {
+        console.log('data to be sent', data);
         //if emails or phone first field is empty arrays has always one element with value of empty string
         if ($$('#tickets-enable-sms-mode').parentNode.vertexToggle.getState()) {
             if (data.Emails[data.Emails.length - 1] === '') {
@@ -37,9 +37,10 @@ let ticketsSmsSettings = (function(){
         return data;
     };
 
-    on('tickets/tab/smsSettings', function(params){
+    on('tickets/tab/smsSettings', function (params) {
         formSettingsSmsSettings.endpointId = params.endpointId;
-        trigger('form/init', {formSettings: formSettingsSmsSettings});
-        trigger('form/getData', {formSettings: formSettingsSmsSettings});
+        trigger('form/init', { formSettings: formSettingsSmsSettings });
+        trigger('form/getData', { formSettings: formSettingsSmsSettings });
+        trigger('preloader/hide');
     });
 })();

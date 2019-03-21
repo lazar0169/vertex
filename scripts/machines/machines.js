@@ -3,12 +3,8 @@ let machines = (function () {
     on('machines/activated', function (params) {
         let machinesId = params.params[0].value;
         endpointId = machinesId;
-        setTimeout(function () {
-            trigger('preloader/hide');
-        }, 2000);
         let tableSettings = {};
         tableSettings.successEvent = "machines/display-machine-info/"
-
         trigger(communication.events.machines.getMachines, { data: { EndpointId: machinesId }, tableSettings })
     });
 

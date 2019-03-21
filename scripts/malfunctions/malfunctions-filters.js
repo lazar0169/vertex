@@ -61,7 +61,6 @@ const malfunctionsFilter = (function () {
 
     function filterMalfunctionsTable() {
         let filters = prepareMalfunctionsFilters();
-        trigger('preloader/show');
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
     }
 

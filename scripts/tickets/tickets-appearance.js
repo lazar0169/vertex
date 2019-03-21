@@ -5,6 +5,7 @@ const ticketAppearance = (function () {
     formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
+       
         formSettingsAppearance.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsAppearance });
         trigger('form/getData', { formSettings: formSettingsAppearance });
