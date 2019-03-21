@@ -33,7 +33,7 @@ const aft = (function () {
         selectInfoContent('aft-tabs-transaction');
 
         trigger('preloader/show');
-        trigger(communication.events.aft.transactions.getTransactions, {endpointId: aftId});
+        trigger(communication.events.aft.transactions.getTransactions, { endpointId: aftId });
 
         //initialize add transaction form
         let addTransactionFormSettings = {};
@@ -43,11 +43,11 @@ const aft = (function () {
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
 
-        trigger('form/init', {formSettings: addTransactionFormSettings});
+        trigger('form/init', { formSettings: addTransactionFormSettings });
 
 
-        trigger('aft/tab/transaction', {endpointId: aftId});
-        trigger('aft/tab/notification', {endpointId: aftId});
+        trigger('aft/tab/transaction', { endpointId: aftId });
+        trigger('aft/tab/notification', { endpointId: aftId });
     });
 
     on(table.events.rowClick(aftTableId), function (params) {
@@ -96,7 +96,7 @@ const aft = (function () {
             };
         } else {
             //clone table filters;
-           filters = aftTable.cloneFiltersForExport();
+            filters = aftTable.cloneFiltersForExport();
         }
         filters.selectedColumns = aftTable.getVisibleColumns();
         let event = null;
@@ -111,7 +111,7 @@ const aft = (function () {
                 console.error('unsuported export type');
                 break;
         }
-        trigger(event,{data:filters});
+        trigger(event, { data: filters });
     });
 
     on(events.getTransactions, function (params) {
@@ -125,7 +125,7 @@ const aft = (function () {
             exportButtonsContainer: '#wrapper-aft-export-to',
             appearanceButtonsContainer: '#aft-show-space'
         }, params.data.Data);
-        trigger('aft/filters/init', {endpointId: params.additionalData});
+        trigger('aft/filters/init', { endpointId: params.additionalData });
         $$('#aft-tabs-transaction-info').appendChild(aftTable);
     });
 
@@ -141,12 +141,12 @@ const aft = (function () {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
-        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
     });
 
     on('aft/addTransaction/success', function (params) {
-        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
+        trigger('form/reset', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
         trigger('show/app');
         //ToDo: da li se ovde resetuju filteri ili ne?
         trigger(events.filterTable);
@@ -202,7 +202,7 @@ const aft = (function () {
             gmcid: parentElement.additionalData.Properties.Gmcid,
             jidtString: parentElement.additionalData.Properties.JidtString,
         };
-        yesButton.cancelationPending =  parentElement.cancelationPending !== undefined;
+        yesButton.cancelationPending = parentElement.cancelationPending !== undefined;
 
         noButton.addEventListener('click', cancelCallback);
 
@@ -211,7 +211,7 @@ const aft = (function () {
     }
 
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
-       removeTransactionPopUp();
+        removeTransactionPopUp();
         $$(aftTableSelector).disableScroll();
 
         trigger('template/render', {
@@ -292,8 +292,8 @@ const aft = (function () {
 
     function deselectHighlightedTransaction() {
         let tableSettings = $$(aftTableSelector).tableSettings;
-        trigger('table/deselect/active-row', {tableSettings: tableSettings});
-        trigger('table/deselect/hover-row', {tableSettings: tableSettings});
+        trigger('table/deselect/active-row', { tableSettings: tableSettings });
+        trigger('table/deselect/hover-row', { tableSettings: tableSettings });
     }
     //endregion
 
@@ -353,8 +353,8 @@ const aft = (function () {
         let route = communication.apiRoutes.aft.addTransaction;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let successEvent = params.additionalData.submitSuccessEvent;
-        let errorEvent = params.additionalData.submitErrorEvent;
+        let successEvent = 'aft/add-transaction-success';
+        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
@@ -475,10 +475,10 @@ const aft = (function () {
     on(communication.events.aft.transactions.exportToPDF, function (params) {
         let data = params.data;
         communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data,
-            table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf.type}, [{
-            name: 'responseType',
-            value: 'arraybuffer'
-        }]);
+            table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf.type }, [{
+                name: 'responseType',
+                value: 'arraybuffer'
+            }]);
     });
 
     on(communication.events.aft.transactions.exportToXLS, function (params) {

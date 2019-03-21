@@ -210,7 +210,7 @@ const sidebar = (function () {
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
                         trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name, icon: `icon-${tempData[searchCategory].List}` });
-                        saveCategoryAndLink(searchCategory, linkSelectedId)
+                        saveCategoryAndLink(searchCategory, linkSelectedId, categoryValue.Name)
                         // trigger('communicate/category', { category: category }); //todo check if needed
                         navigation.hide();
                         let temp = categoryValue;
@@ -266,7 +266,7 @@ const sidebar = (function () {
                                 selectCategory(categorySelectedId);
                                 selectLink(linkSelectedId);
                                 trigger('topBar/category', { category: value.categoryName, casino: value.Name, icon: `icon-${value.categoryName}` });
-                                saveCategoryAndLink(categorySelectedId, linkSelectedId)
+                                saveCategoryAndLink(categorySelectedId, linkSelectedId, value.Name)
                                 trigger('communicate/category', { category: categorySelectedId });
                                 navigation.hide();
                             });
@@ -413,10 +413,11 @@ const sidebar = (function () {
     }
 
     //save category and link id in localStorage
-    function saveCategoryAndLink(category, link) {
+    function saveCategoryAndLink(category, link, casino) {
         let categoryAndLink = {
             category: category,
             link: link,
+            server: casino,
             path: $$('#top-bar-path').innerHTML
         }
         sessionStorage.setItem('categoryAndLink', JSON.stringify(categoryAndLink));

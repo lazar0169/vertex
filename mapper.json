@@ -36,6 +36,7 @@
       "aft/aft-filters.js",
       "aft/aft-tab-enable-transaction.js",
       "aft/aft-tab-notification-settings.js",
+      "aft/aft-add-transactions.js",
       "components/datepicker.js",
       "components/currency-input.js",
       "components/dropdown-date.js",

@@ -11,11 +11,12 @@ const aftFilters = (function () {
     let transactionTab = $$('#aft-tabs-transaction');
     let closeAddTransaction = $$('#add-transaction-header-element').children[1];
     let dropdownStatus;
+    let ddTransactionType;
     let endpointId = null;
 
     //region event listeners
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterAftTable();
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
@@ -125,7 +126,7 @@ const aftFilters = (function () {
         if (dropdownStatus) {
             dropdownStatus.remove();
         }
-        dropdownStatus = dropdown.generate({values: filters.StatusList, type: 'multi'});
+        dropdownStatus = dropdown.generate({ values: filters.StatusList, type: 'multi' });
         aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
 
         //set up columns selection dropdown
@@ -148,14 +149,21 @@ const aftFilters = (function () {
         dropdown.generate({ values: columns, parent: aftAdvanceTableFilterColumn, type: 'multi' });
 
         //transaction type select in add transaction form
-        dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single', name: 'Type' });
+        if (ddTransactionType) {
+            ddTransactionType.remove();
+        }
+        ddTransactionType = dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), type: 'single', name: 'Type' });
+        aftAddTransactionType.appendChild(ddTransactionType);
+
+        // dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single', name: 'Type' });
+        trigger('aft/aft-add-transaction', { dropdown: ddTransactionType });
         //machine select in add transaction form
         dropdown.generate({ values: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single', name: 'Gmcid' });
     }
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
