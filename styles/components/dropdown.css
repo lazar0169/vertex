@@ -53,7 +53,7 @@
     text-overflow: ellipsis;
 }
 
-.default-select label {
+.default-select label, .default-select label>icon {
     cursor: pointer;
     pointer-events: none !important
 }
