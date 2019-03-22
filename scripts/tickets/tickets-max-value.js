@@ -8,6 +8,5 @@ let ticketsMaxValue = (function () {
         formSettingsMaxValue.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsMaxValue });
         trigger('form/getData', { formSettings: formSettingsMaxValue });
-        trigger('preloader/hide');
     });
 })();

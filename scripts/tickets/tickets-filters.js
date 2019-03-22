@@ -30,18 +30,15 @@ const ticketsFilter = (function () {
     on('tickets/filters/init', function (params) {
         let endpointId = params.endpointId;
         getFiltersFromAPI(endpointId);
-        trigger('preloader/hide');
     });
 
     on('tickets/filters/display', function (params) {
         let apiResponseData = params.data;
         let filters = apiResponseData.Data;
         displayFilters(filters);
-        trigger('preloader/hide');
     });
     on('tickets/table/filter', function (params) {
         filterTicketsTable();
-        trigger('preloader/hide');
     });
     //endregion
 
@@ -110,6 +107,8 @@ const ticketsFilter = (function () {
         }
 
         dropdown.generate({ values: columns, parent: ticketsAdvanceTableFilterColumn, type: 'multi' });
+
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
 
     function prepareTicketFilters() {

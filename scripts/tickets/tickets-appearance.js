@@ -5,7 +5,7 @@ const ticketAppearance = (function () {
     formSettingsAppearance.submitEvent = communication.events.tickets.saveAppearance;
 
     on('tickets/tab/appearance', function (params) {
-       
+
         formSettingsAppearance.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsAppearance });
         trigger('form/getData', { formSettings: formSettingsAppearance });
@@ -379,5 +379,10 @@ const ticketAppearance = (function () {
 
     cancelTicketAppearance.addEventListener('click', function () {
         trigger('form/getData', { formSettings: formSettingsAppearance });
+        //ToDo: nadji bolje resenje za iscrtavanje slike kad se zavrsi popunjavanje polja sa servera//
+        setTimeout(() => {
+            drawInitialImage();
+
+        }, 1000);
     });
 })();

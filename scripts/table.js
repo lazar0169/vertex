@@ -346,6 +346,9 @@ let table = (function () {
                         cell.classList.add('sortable');
                         cell.addEventListener('click', onSort);
                     }
+                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo') {
+                        cell.classList.add('input-number-right');
+                    }
                 }
                 settings.columns[columnName].header = cell;
                 tbody.appendChild(cell);
@@ -404,7 +407,8 @@ let table = (function () {
                 }
 
                 if (Number.isInteger(cellData) && column !== 'Code') {
-                    cell.innerHTML = formatFloatValue(cellData);
+                    cell.classList.add('input-number-right');
+                    cell.innerHTML = formatFloatValue(cellData / 100);
                 } else {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function

@@ -23,23 +23,26 @@ const malfunctionsFilter = (function () {
     on('malfunctions/table/filter', function (params) {
         filterMalfunctionsTable();
     });
+    on('malfunctions/set-service-message/show-server-message', function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+    });
 
     function displayFilters(filters) {
-
         let malfunctionsAdvanceTableFilterDate = $$('#malfunctions-advance-table-filter-date-range');
         let malfunctionsAdvanceTableFilterCasino = $$('#malfunctions-advance-table-filter-casino');
         let malfunctionsAdvanceTableFilterPriority = $$('#malfunctions-advance-table-filter-priority');
         let malfunctionsAdvanceTableFilterStatus = $$('#malfunctions-advance-table-filter-status');
         let malfunctionsAdvanceTableFilterType = $$('#malfunctions-advance-table-filter-type');
 
-
         dropdownDate.generate({ values: filters.PeriodList, parent: malfunctionsAdvanceTableFilterDate })
         dropdown.generate({ values: filters.CasinoList, parent: malfunctionsAdvanceTableFilterCasino, type: 'multi' });
         dropdown.generate({ values: filters.PriorityList, parent: malfunctionsAdvanceTableFilterPriority, type: 'multi' });
         dropdown.generate({ values: filters.StatusList, parent: malfunctionsAdvanceTableFilterStatus, type: 'multi' });
         dropdown.generate({ values: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
-
-
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
@@ -64,7 +67,6 @@ const malfunctionsFilter = (function () {
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
     }
 
-
     function prepareMalfunctionsFilters() {
         var table = $$('#table-container-malfunctions');
 
@@ -87,5 +89,4 @@ const malfunctionsFilter = (function () {
     return {
         prepareMalfunctionsFilters
     }
-
 })();

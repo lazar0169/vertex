@@ -41,6 +41,5 @@ let ticketsSmsSettings = (function () {
         formSettingsSmsSettings.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsSmsSettings });
         trigger('form/getData', { formSettings: formSettingsSmsSettings });
-        trigger('preloader/hide');
     });
 })();

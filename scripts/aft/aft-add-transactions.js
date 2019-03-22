@@ -30,8 +30,6 @@ let aftAddTransactions = (function () {
                     cashable.classList.add('hidden');
                     expiration.classList.add('hidden');
                     break;
-
-
             }
         }
     }
@@ -58,9 +56,7 @@ let aftAddTransactions = (function () {
             }
         }
         data['EndpointName'] = JSON.parse(sessionStorage.categoryAndLink).server
-
         trigger(communication.events.aft.transactions.addTransaction, { data: data })
-        console.log(data)
     });
 
     on('aft/aft-add-transaction', function (params) {
@@ -74,10 +70,6 @@ let aftAddTransactions = (function () {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
-
         aftFilters.clearAftFilters();
-
-
-
     });
 })();
