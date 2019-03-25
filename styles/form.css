@@ -1,7 +1,7 @@
-.element-async-form {
+/* .element-async-form {
     padding-left: 30px;
     margin: 0 !important;
-}
+} */
 
 .element-async-form .btn-success:hover {
     box-shadow: none;
@@ -29,7 +29,7 @@
 }
 
 .element-async-form .form-buttons-section {
-    padding-top: 30px;
+    padding-top: 15px;
 }
 
 .element-async-form .form-buttons-section button:not(:last-child) {
@@ -69,9 +69,10 @@
     height: 35px;
 }
 
+/* 
 .element-async-form .form-section .form-section-content .form-group:not(:last-child) {
     margin-bottom: 20px !important;
-}
+} */
 
 .element-async-form .btn-success {
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.26);

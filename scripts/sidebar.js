@@ -161,7 +161,6 @@ const sidebar = (function () {
             });
 
             tempFragment.childNodes[0].addEventListener('click', function () {
-
                 categorySelectedId = category;
                 searchCategory = category;
                 editMode.classList.add('collapse');
@@ -178,7 +177,6 @@ const sidebar = (function () {
                     searchLink.focus();
                     navigation.show();
                 }
-
             });
             fragment.appendChild(tempFragment.childNodes[0]);
         }
@@ -210,7 +208,7 @@ const sidebar = (function () {
                         selectCategory(searchCategory);
                         selectLink(linkSelectedId);
                         trigger('topBar/category', { category: tempData[searchCategory].List, casino: categoryValue.Name, icon: `icon-${tempData[searchCategory].List}` });
-                        saveCategoryAndLink(searchCategory, linkSelectedId)
+                        saveCategoryAndLink(searchCategory, linkSelectedId, categoryValue.Name)
                         // trigger('communicate/category', { category: category }); //todo check if needed
                         navigation.hide();
                         let temp = categoryValue;
@@ -266,7 +264,7 @@ const sidebar = (function () {
                                 selectCategory(categorySelectedId);
                                 selectLink(linkSelectedId);
                                 trigger('topBar/category', { category: value.categoryName, casino: value.Name, icon: `icon-${value.categoryName}` });
-                                saveCategoryAndLink(categorySelectedId, linkSelectedId)
+                                saveCategoryAndLink(categorySelectedId, linkSelectedId, value.Name)
                                 trigger('communicate/category', { category: categorySelectedId });
                                 navigation.hide();
                             });
@@ -277,14 +275,11 @@ const sidebar = (function () {
                 }
             }
         }
-
         linkWrapper.appendChild(fragment);
         //bind handlers to elements that are added dynamically after router init event
         trigger('router/bind-handlers/navigation-links');
         selectLink(linkSelectedId);
-
     }
-
     // highlight chosen link
     function selectLink(name) {
         if (previousLinkSelected) {
@@ -296,7 +291,6 @@ const sidebar = (function () {
             previousLinkSelected = linkSelected;
         }
     }
-
     // highlight chosen category
     function selectCategory(category) {
         if (category !== 'Search') {
@@ -310,7 +304,6 @@ const sidebar = (function () {
             }
         }
     }
-
     // function to remember last search in localStorage
     function recentSearch(valueLink) {
         recent = JSON.parse(localStorage.getItem('recentSearch'));
@@ -327,7 +320,6 @@ const sidebar = (function () {
         };
         localStorage.setItem('recentSearch', JSON.stringify(object));
     }
-
     //data search
     function search(termin, category) {
         let newData = {};
@@ -365,7 +357,6 @@ const sidebar = (function () {
             return newObject;
         }
     }
-
     //function for tooltip
     function showTooltip(category) {
         let rect = $$(`#${category}`).getBoundingClientRect();
@@ -373,7 +364,6 @@ const sidebar = (function () {
         tooltipText.innerHTML = menuData[category].List;
         tooltipText.classList.remove('hidden');
     }
-
     //test, if you don't need it anymore, remove it
     let isActiveDetailsTest = true;
     let detailsmenutest = function () {
@@ -400,7 +390,6 @@ const sidebar = (function () {
             detailsmenutest.collapse() :
             detailsmenutest.expand();
     });
-
     //helper functions
     function initVariables() {
         let category;
@@ -411,18 +400,17 @@ const sidebar = (function () {
 
         linkSelectedId = menuData[categorySelectedId]['Value'][0] ? `${categorySelectedId}-link-${menuData[categorySelectedId]['Value'][0]['Id']}` : undefined;
     }
-
     //save category and link id in localStorage
-    function saveCategoryAndLink(category, link) {
+    function saveCategoryAndLink(category, link, casino) {
         let categoryAndLink = {
             category: category,
             link: link,
+            server: casino,
             path: $$('#top-bar-path').innerHTML
         }
         sessionStorage.setItem('categoryAndLink', JSON.stringify(categoryAndLink));
 
     }
-
     //events
     on('sidebar/menu/generate', function (e) {
         menuData = e.menuData;
@@ -442,5 +430,4 @@ const sidebar = (function () {
         }
         selectCategory(categorySelectedId);
     });
-
 })();

@@ -12,8 +12,6 @@ const aft = (function () {
         previewTransactions: 'aft/transactions/preview',
         filterTable: 'aft/table/filter'
     };
-
-
     //region event handlers
     window.addEventListener('click', function (e) {
         let selector = '#' + cancelTransactionsPopUpId;
@@ -31,9 +29,7 @@ const aft = (function () {
         let aftId = params.params[0].value;
         selectTab('aft-tabs-transaction');
         selectInfoContent('aft-tabs-transaction');
-
-        trigger('preloader/show');
-        trigger(communication.events.aft.transactions.getTransactions, {endpointId: aftId});
+        trigger(communication.events.aft.transactions.getTransactions, { data: { EndpointId: aftId } });
 
         //initialize add transaction form
         let addTransactionFormSettings = {};
@@ -42,12 +38,9 @@ const aft = (function () {
         addTransactionFormSettings.submitErrorEvent = 'aft/addTransaction/error';
         addTransactionFormSettings.submitSuccessEvent = 'aft/addTransaction/success';
         addTransactionFormSettings.endpointId = aftId;
-
-        trigger('form/init', {formSettings: addTransactionFormSettings});
-
-
-        trigger('aft/tab/transaction', {endpointId: aftId});
-        trigger('aft/tab/notification', {endpointId: aftId});
+        trigger('form/init', { formSettings: addTransactionFormSettings });
+        trigger('aft/tab/transaction', { endpointId: aftId });
+        trigger('aft/tab/notification', { endpointId: aftId });
     });
 
     on(table.events.rowClick(aftTableId), function (params) {
@@ -60,7 +53,6 @@ const aft = (function () {
 
     on(table.events.pageSize(aftTableId), function (params) {
         trigger(events.filterTable);
-
     });
 
     on(table.events.sort(aftTableId), function (params) {
@@ -70,35 +62,34 @@ const aft = (function () {
 
     on(table.events.pagination(aftTableId), function (params) {
         trigger(events.filterTable);
-
     });
 
     on(table.events.export(aftTableId), function (params) {
-        trigger('preloader/show');
-
         let aftTable = params.table;
-
         let filters = null;
-
         if (aftTable.settings.filters === null) {
+
             filters = {
                 'EndpointId': aftTable.settings.endpointId,
-                //ToDo: uneti default vrednost za Period paramter - nije dokumentovano
-                'Period': null,
-                'MachineList': [],
-                'JackpotList': [],
-                'Status': [],
-                'Type': [],
+                'SelectedPeriod': {
+                    DateFrom: null,
+                    DateTo: null,
+                    Period: 0
+                },
+                'MachineList': null,
+                'JackpotList': null,
+                'Status': null,
+                'Type': null,
                 BasicData: {
-                    SortOrder: null,
-                    SortName: null
+                    SortOrder: aftTable.settings.sort.direction,
+                    SortName: aftTable.settings.sort.name
                 },
             };
         } else {
             //clone table filters;
-           filters = aftTable.cloneFiltersForExport();
+            filters = aftTable.cloneFiltersForExport();
         }
-        filters.selectedColumns = aftTable.getVisibleColumns();
+        filters.SelectedColumns = aftTable.getVisibleColumns();
         let event = null;
         switch (params.type.name) {
             case table.exportFileTypes.pdf.name:
@@ -111,7 +102,7 @@ const aft = (function () {
                 console.error('unsuported export type');
                 break;
         }
-        trigger(event,{data:filters});
+        trigger(event, { data: filters });
     });
 
     on(events.getTransactions, function (params) {
@@ -125,15 +116,16 @@ const aft = (function () {
             exportButtonsContainer: '#wrapper-aft-export-to',
             appearanceButtonsContainer: '#aft-show-space'
         }, params.data.Data);
-        trigger('aft/filters/init', {endpointId: params.additionalData});
+        trigger('aft/filters/init', { endpointId: params.additionalData });
         $$('#aft-tabs-transaction-info').appendChild(aftTable);
+        trigger('preloader/hide');
     });
 
     on(events.previewTransactions, function (params) {
         let data = params.data.Data;
         $$(aftTableSelector).update(data);
+        trigger('preloader/hide');
     });
-
     //ToDo: prebaciti evente u enum
 
     on('aft/addTransaction/error', function (params) {
@@ -141,12 +133,12 @@ const aft = (function () {
             message: localization.translateMessage(params.message.MessageCode),
             type: params.message.MessageType,
         });
-        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
     });
 
     on('aft/addTransaction/success', function (params) {
-        trigger('form/complete', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
-        trigger('form/reset', {formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings});
+        trigger('form/complete', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
+        trigger('form/reset', { formSettings: $$('#aft-tabs-add-transaction-form-wrapper').formSettings });
         trigger('show/app');
         //ToDo: da li se ovde resetuju filteri ili ne?
         trigger(events.filterTable);
@@ -155,7 +147,6 @@ const aft = (function () {
             message: localization.translateMessage(params.data.MessageCode.toString()),
             type: params.data.MessageType
         });
-
     });
 
     on('aft/transactions/canceled/error', function (params) {
@@ -163,7 +154,9 @@ const aft = (function () {
         dismissCancelTransactionPopUp();
         deselectHighlightedTransaction();
     });
+
     on('aft/transactions/canceled', transactionCanceled);
+
     on('aft/table/show/cancel-pop-up', function (params) {
         delete params.params.containerCell.cancelationPending;
         beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, removeTransactionPopUp,
@@ -176,18 +169,12 @@ const aft = (function () {
         beforeShowPopUp(params.params.coordinates, params.element, onCancelTransaction, removeTransactionPopUp,
             containerCell, $$(aftTableSelector));
         delete containerCell.cancelationPending;
-
     });
-
     //endregion
-
-
-
     function beforeShowPopUp(coordinates, element, confirmCallback, cancelCallback, parentElement, boundsContainer) {
         element.setAttribute('id', cancelTransactionsPopUpId);
         element.style.left = coordinates.x + 'px';
         element.style.top = coordinates.y + 'px';
-
         //stop event propagation as new element is part of the cell which has click event handler
         element.addEventListener('click', function (e) {
             e.preventDefault();
@@ -202,7 +189,7 @@ const aft = (function () {
             gmcid: parentElement.additionalData.Properties.Gmcid,
             jidtString: parentElement.additionalData.Properties.JidtString,
         };
-        yesButton.cancelationPending =  parentElement.cancelationPending !== undefined;
+        yesButton.cancelationPending = parentElement.cancelationPending !== undefined;
 
         noButton.addEventListener('click', cancelCallback);
 
@@ -211,7 +198,7 @@ const aft = (function () {
     }
 
     function displayTransactionPopUp(title, callbackEvent, coordinates, cell) {
-       removeTransactionPopUp();
+        removeTransactionPopUp();
         $$(aftTableSelector).disableScroll();
 
         trigger('template/render', {
@@ -253,7 +240,6 @@ const aft = (function () {
             type: params.data.MessageType,
             message: localization.translateMessage(data.MessageCode.toString())
         });
-
         removeTransactionPopUp();
 
         if (additionalData !== undefined && additionalData !== null &&
@@ -292,20 +278,17 @@ const aft = (function () {
 
     function deselectHighlightedTransaction() {
         let tableSettings = $$(aftTableSelector).tableSettings;
-        trigger('table/deselect/active-row', {tableSettings: tableSettings});
-        trigger('table/deselect/hover-row', {tableSettings: tableSettings});
+        trigger('table/deselect/active-row', { tableSettings: tableSettings });
+        trigger('table/deselect/hover-row', { tableSettings: tableSettings });
     }
     //endregion
-
     //region AFT communication events
-
     //aft get transactions
     on(communication.events.aft.transactions.getTransactions, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.aft.getTransactions;
         let request = communication.requestTypes.post;
-        let data = {
-            'EndpointId': params.endpointId
-        };
+        let data = params.data
         let successEvent = events.getTransactions;
         let errorEvent = '';
 
@@ -313,15 +296,15 @@ const aft = (function () {
             route: route,
             requestType: request,
             data: data,
-            additionalData: params.endpointId,
+            additionalData: params.data.EndpointId,
             successEvent: successEvent,
             errorEvent: errorEvent
         });
     });
-
     //aft pagination filtering sorting
     //aft preview transactions
     on(communication.events.aft.transactions.previewTransactions, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.aft.previewTransactions;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -335,7 +318,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft cancel transaction
     on(communication.events.aft.transactions.cancelTransaction, function (params) {
         let data = {
@@ -347,14 +329,13 @@ const aft = (function () {
         let route = params.status.pending === true ? communication.apiRoutes.aft.cancelPendingTransaction : communication.apiRoutes.aft.cancelTransaction;
         communication.sendRequest(route, communication.requestTypes.post, data, 'aft/transactions/canceled', 'aft/transactions/canceled/error');
     });
-
     //aft add transaction
     on(communication.events.aft.transactions.addTransaction, function (params) {
         let route = communication.apiRoutes.aft.addTransaction;
         let request = communication.requestTypes.post;
         let data = params.data;
-        let successEvent = params.additionalData.submitSuccessEvent;
-        let errorEvent = params.additionalData.submitErrorEvent;
+        let successEvent = 'aft/add-transaction-success';
+        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
@@ -363,7 +344,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft cancel pending transaction
     on(communication.events.aft.transactions.cancelPendingTransaction, function (params) {
         let route = communication.apiRoutes.aft.cancelPendingTransaction;
@@ -381,7 +361,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft get basic settings
     on(communication.events.aft.transactions.getBasicSettings, function (params) {
         let route = communication.apiRoutes.aft.getBasicSettings;
@@ -399,7 +378,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft save basic settings
     on(communication.events.aft.transactions.saveBasicSettings, function (params) {
         let route = communication.apiRoutes.aft.saveBasicSettings;
@@ -417,7 +395,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft get notification settings
     on(communication.events.aft.transactions.getNotificationSettings, function (params) {
         let route = communication.apiRoutes.aft.getNotificationSettings;
@@ -435,7 +412,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft save notification settings
     on(communication.events.aft.transactions.saveNotificationSettings, function (params) {
         let route = communication.apiRoutes.aft.saveNotificationSettings;
@@ -453,7 +429,6 @@ const aft = (function () {
             errorEvent: errorEvent
         });
     });
-
     //aft get filters
     on(communication.events.aft.transactions.getFilters, function (params) {
         let route = communication.apiRoutes.aft.getFilters;
@@ -475,13 +450,13 @@ const aft = (function () {
     on(communication.events.aft.transactions.exportToPDF, function (params) {
         let data = params.data;
         communication.sendRequest(communication.apiRoutes.aft.exportToPDF, communication.requestTypes.post, data,
-            table.events.saveExportedFile, communication.handleError, {type: table.exportFileTypes.pdf.type}, [{
-            name: 'responseType',
-            value: 'arraybuffer'
-        }]);
+            table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf.type }, [{
+                name: 'responseType',
+                value: 'arraybuffer'
+            }]);
     });
 
     on(communication.events.aft.transactions.exportToXLS, function (params) {
-        //ToDo
+        //ToDo za ovo ne postoji backend
     });
 })();

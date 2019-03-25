@@ -1,5 +1,4 @@
 const tickets = (function () {
-
     const events = {
         activated: 'tickets/activated',
         getTickets: 'tickets/get',
@@ -7,18 +6,13 @@ const tickets = (function () {
         filterTable: 'tickets/table/filter'
     };
     const ticketTableId = 'table-container-tickets';
-
     let ticketsTable = null;
-
     //region module events
     on(events.activated, function (params) {
         let ticketId = params.params[0].value;
-
         selectTab('tickets-tab');
         selectInfoContent('tickets-tab');
-
         trigger(communication.events.tickets.getTickets, { endpointId: ticketId });
-
         trigger('tickets/tab/appearance', { endpointId: ticketId });
         trigger('tickets/tab/maxValue', { endpointId: ticketId });
         trigger('tickets/tab/smsSettings', { endpointId: ticketId });
@@ -36,14 +30,16 @@ const tickets = (function () {
             appearanceButtonsContainer: '#tickets-show-space'
         },
             params.data.Data);
+        trigger('showing-tickets-top-bar-value', { ItemValue: params.data.Data.ItemValue });
         trigger('tickets/filters/init', { endpointId: params.additionalData });
         $$('#tickets-tab-info').appendChild(ticketsTable);
+        trigger('preloader/hide');
     });
 
     on(events.previewTickets, function (params) {
         let data = params.data.Data;
         $$(`#${ticketTableId}`).update(data);
-        //ToDo: Nikola: ovde možeš da ubaciš onaj bar koji ide ispod filtera, samo treba da se trigeruje nešto ako se ne varam.
+        trigger('preloader/hide');
     });
 
     on(table.events.pageSize(ticketTableId), function () {
@@ -60,23 +56,26 @@ const tickets = (function () {
     });
 
     on(table.events.export(ticketTableId), function (params) {
-        trigger('preloader/show');
         let ticketsTable = params.table;
         let filters = null;
         if (ticketsTable.settings.filters === null) {
             filters = {
                 'EndpointId': ticketsTable.settings.endpointId,
-                'DateFrom': null,
-                'DateTo': null,
-                'RedeemDateFrom': null,
-                'RedeemDateTo': null,
-                'PrintedList': [],
-                'RedeemList': [],
-                'Status': [],
-                'Type': [],
+                'SelectedPeriod': {
+                    'RedeemDateFrom': null,
+                    'RedeemDateTo': null,
+                    'Period': 0
+                },
+                'SelectedPeriodRedeemed': {
+                    'PrintedList': null,
+                    'RedeemList': null,
+                    'Period': 0
+                },
+                'Status': null,
+                'Type': null,
                 BasicData: {
-                    SortOrder: null,
-                    SortName: null
+                    SortOrder: ticketsTable.settings.sort.direction,
+                    SortName: ticketsTable.settings.sort.name
                 },
             };
         } else {
@@ -84,7 +83,7 @@ const tickets = (function () {
             filters = ticketsTable.cloneFiltersForExport();
         }
 
-        filters.selectedColumns = ticketsTable.getVisibleColumns();
+        filters.SelectedColumns = ticketsTable.getVisibleColumns();
         let event = null;
         switch (params.type.name) {
             case table.exportFileTypes.pdf.name:
@@ -102,27 +101,26 @@ const tickets = (function () {
 
     //ToDo:: ubaciti u events enum, nisam siguran cemu sluzi
     on('showing-tickets-top-bar-value', function (data) {
-        topBarInfoBoxValue(data.dataItemValue)
+        topBarInfoBoxValue(data.ItemValue);
     });
     //endregion
-
     //region helper functions
     function topBarInfoBoxValue(data) {
         let topBarValueCashable = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-value');
-        topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable/100);
+        topBarValueCashable[0].innerHTML = formatFloatValue(data.SumCashable / 100);
         let topBarNumberOfCashableTickets = $$('#top-bar-tickets').getElementsByClassName('element-cashable-active-tickets-number');
         topBarNumberOfCashableTickets[0].innerHTML = `/${data.NumOfCashable}`;
 
         let topBarInfoPromoValue = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-value');
-        topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo/100);
+        topBarInfoPromoValue[0].innerHTML = formatFloatValue(data.SumPromo / 100);
         let topBarnumberOfPromoTickets = $$('#top-bar-tickets').getElementsByClassName('element-promo-active-tickets-number');
         topBarnumberOfPromoTickets[0].innerHTML = `/${data.NumOfPromo}`;
     }
     //endregion
-
     //region Tickets communication events
     //tickets get tickets
     on(communication.events.tickets.getTickets, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.getTickets;
         let request = communication.requestTypes.post;
         let data = {
@@ -139,8 +137,9 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
+    //tickets get preview tickets
     on(communication.events.tickets.previewTickets, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.tickets.previewTickets;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -154,7 +153,7 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
+    //tickets get filetrs
     on(communication.events.tickets.getFilters, function (params) {
         let route = communication.apiRoutes.tickets.getFilters;
         let request = communication.requestTypes.post;
@@ -190,7 +189,6 @@ const tickets = (function () {
     });
     //tickets SaveTitoSmsAction
     on(communication.events.tickets.saveSmsSettings, function (params) {
-        console.log('params:', params);
         let route = communication.apiRoutes.tickets.saveSmsSettings;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -274,7 +272,7 @@ const tickets = (function () {
             errorEvent: errorEvent
         });
     });
-
+    //tickets get PDF
     on(communication.events.tickets.exportToPDF, function (params) {
         let data = params.data;
         communication.sendRequest(communication.apiRoutes.tickets.exportToPDF, communication.requestTypes.post, data,
@@ -283,9 +281,9 @@ const tickets = (function () {
                 value: 'arraybuffer'
             }]);
     });
-
+    //tickets get XLS
     on(communication.events.tickets.exportToXLS, function (params) {
-        //ToDo
+        //ToDo za ovo ne postoji backend
     });
     //endregion
 })();

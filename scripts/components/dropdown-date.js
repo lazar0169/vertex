@@ -18,6 +18,7 @@ const dropdownDate = (function () {
         let select = document.createElement('div');
         select.dataset.selectId = indexDsId;
         select.classList.add('default-date-select');
+        select.classList.add('element-form-data');
         select.id = `ds-${indexDsId}`;
         //selected option
         let selected = document.createElement('div');

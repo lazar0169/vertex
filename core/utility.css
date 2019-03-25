@@ -242,7 +242,10 @@
 }
 
 .input-number-right {
-    text-align: right;
+    text-align: right !important;
+    align-items: center !important;
+    justify-content: flex-end!important;
+    flex-direction: row !important;
 }
 
 .option-casionos-in-city-wrapper {

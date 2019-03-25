@@ -2,6 +2,7 @@ const malfunctions = (function () {
     let addMalfunctionMsg = $$('#malfunctions-add-message');
     let malfunctionsDetailsStatus = $$('#malfunction-details-change-status');
     let malfunctionsDetailsProblemType = $$('#malfunction-details-change-type');
+
     const events = {
         activated: 'malfunctions/activated',
         getMalfunctions: 'malfunctions/get',
@@ -10,9 +11,7 @@ const malfunctions = (function () {
         showChangeStateMalfunctionMessage: 'malfunction/changeState'
     };
     const malfunctionsTableId = 'table-container-malfunctions';
-
     let malfunctionsTable = null;
-
 
     /*********************----Module Events------*********************/
     on(events.activated, function (params) {
@@ -44,11 +43,13 @@ const malfunctions = (function () {
             params.data.Data);
         trigger('malfunctions/filters/init', { endpointId: params.additionalData });
         $$('#malfunctions-info').appendChild(malfunctionsTable);
+        trigger('preloader/hide');
     });
 
     on(events.previewMalfunctions, function (params) {
         let data = params.data.Data;
         $$(`#${malfunctionsTableId}`).update(data);
+        trigger('preloader/hide');
     });
 
     on(events.showChangeStateMalfunctionMessage, function (params) {
@@ -61,9 +62,7 @@ const malfunctions = (function () {
         $$('#malfunctions-details').classList.add('collapse');
 
         let filters = malfunctionsFilter.prepareMalfunctionsFilters();
-        trigger('preloader/show');
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
-
     });
     /*------------------Show malfunction details--------------------------*/
 
@@ -74,8 +73,17 @@ const malfunctions = (function () {
 
     });
     /*------------------------------------------------------------------*/
+    on(table.events.sort(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
 
+    on(table.events.pageSize(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
 
+    on(table.events.pagination(malfunctionsTableId), function () {
+        trigger(events.filterTable);
+    });
 
     addMalfunctionMsg.children[0].addEventListener('keyup', function (event) {
         if (addMalfunctionMsg.children[0].value) {
@@ -88,22 +96,21 @@ const malfunctions = (function () {
         addMalfunctionMsg.children[1].dataset.value = 'save';
         addMalfunctionMsg.children[1].title = localization.translateMessage(addMalfunctionMsg.children[1].dataset.value);
         if (event.keyCode === 13) {
-
+            addMalfunctionMsg.children[1].innerHTML = '&#10006;';
             trigger(communication.events.malfunctions.setServiceMessage, {
                 data: {
                     'EndpointId': 0,
                     'Message': addMalfunctionMsg.children[0].value
                 }
             });
+            addMalfunctionMsg.children[0].blur();
         }
     });
-    on(table.events.sort(malfunctionsTableId), function () {
-        trigger(events.filterTable);
 
-    });
     addMalfunctionMsg.children[1].addEventListener('click', function () {
         if (addMalfunctionMsg.children[1].dataset.value === 'remove') {
             addMalfunctionMsg.children[0].value = "";
+            addMalfunctionMsg.children[0].focus();
             addMalfunctionMsg.children[1].classList.add('hidden');
         }
         else {
@@ -120,7 +127,6 @@ const malfunctions = (function () {
         });
     });
 
-    ///////proveri ovo
     function malfunctionsServiceMessage(data) {
         addMalfunctionMsg.children[0].value = data;
         if (addMalfunctionMsg.children[0].value) {
@@ -144,17 +150,13 @@ const malfunctions = (function () {
         });
     }
 
-
-
     on('malfunctions/filters/init', function (params) {
         getFiltersFromAPI(params.endpointId);
     });
-
-
-
     /*--------------------------------- MALFUNCTIONS EVENTS -----------------------------------*/
     // get malfunctions (all)
     on(communication.events.malfunctions.getMalfunctions, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.malfunctions.getMalfunctions;
         let request = communication.requestTypes.post;
         let data = {
@@ -173,6 +175,7 @@ const malfunctions = (function () {
     });
     //get preview malfunctions
     on(communication.events.malfunctions.previewMalfunctions, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.malfunctions.previewMalfunctions;
         let request = communication.requestTypes.post;
         let data = params.data;
@@ -184,11 +187,8 @@ const malfunctions = (function () {
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
-
-
         });
     });
-
     // get filters
     on(communication.events.malfunctions.getFilters, function (params) {
         let route = communication.apiRoutes.malfunctions.getFilters;
@@ -204,19 +204,21 @@ const malfunctions = (function () {
             errorEvent: errorEvent
         });
     });
-
     // set service message
     on(communication.events.malfunctions.setServiceMessage, function (params) {
         let route = communication.apiRoutes.malfunctions.setServiceMessage;
         let request = communication.requestTypes.post;
         let data = params.data;
+        let successEvent = 'malfunctions/set-service-message/show-server-message';
+        let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
-            data: data
+            data: data,
+            successEvent,
+            errorEvent
         });
     });
-
     // change malfunction state
     on(communication.events.malfunctions.changeMalfunctionState, function (params) {
         let route = communication.apiRoutes.malfunctions.changeMalfunctionState;
@@ -232,5 +234,4 @@ const malfunctions = (function () {
         });
     });
     /*-----------------------------------------------------------------------------------------*/
-
 })();

@@ -59,7 +59,6 @@ let table = (function () {
         link.href = window.URL.createObjectURL(blob);
         link.download = 'Report.pdf';
         link.click();
-        trigger('preloader/hide');
     });
     on('filters/show-selected-filters', function (params) {
         showSelectedFilters(params)
@@ -167,9 +166,6 @@ let table = (function () {
                 generateHeaders(table);
             }
             generateRows(table);
-        }
-        if (table.settings.showPreloader) {
-            trigger('preloader/hide');
         }
     }
 
@@ -350,6 +346,9 @@ let table = (function () {
                         cell.classList.add('sortable');
                         cell.addEventListener('click', onSort);
                     }
+                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo') {
+                        cell.classList.add('input-number-right');
+                    }
                 }
                 settings.columns[columnName].header = cell;
                 tbody.appendChild(cell);
@@ -407,8 +406,13 @@ let table = (function () {
                     cell.classList.add('clickable');
                 }
 
-                if (Number.isInteger(cellData) && column !== 'Code') {
-                    cell.innerHTML = formatFloatValue(cellData);
+                if (Number.isInteger(cellData)) {
+                    cell.classList.add('input-number-right');
+                    if (cellData === 9999999999) {
+                        cell.innerHTML = '/'
+                    } else {
+                        cell.innerHTML = formatFloatValue(cellData / 100);
+                    }
                 } else {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
@@ -861,9 +865,6 @@ let table = (function () {
         }
         if (settings.page === undefined) {
             settings.page = defaultPage;
-        }
-        if (settings.showPreloader === undefined) {
-            settings.showPreloader = true;
         }
         if (settings.pageSizeContainer === undefined) {
             settings.pageSizeContainer = null;

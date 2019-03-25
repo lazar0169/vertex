@@ -581,8 +581,6 @@ let form = (function () {
     });
 
     on('form/fillFormData', function (params) {
-
-
         let formSettings = params.additionalData;
         let apiResponseData = params.data;
         displayData(formSettings, apiResponseData);

@@ -4,18 +4,18 @@ const aftFilters = (function () {
     let clearAdvanceFilter = $$('#aft-advance-table-filter-clear').children[0];
     let aftAdvanceApplyFilters = $$('#aft-advance-table-filter-apply').children[0];
     let advanceTableFilterInfobar = $$('#aft-advance-table-filter-active-infobar');
-    //ToDo Nikola: vidi cemu sluzi ovaj advanceTableFilterInfobar
     let clearAdvanceFilterInfobar = $$('#aft-advance-table-filter-active-infobar-button').children[0];
     let aftAddTransactionButton = $$('#aft-add-transaction').children[0];
     let aftAddTransactionWrapper = $$('#add-transaction-wrapper');
     let transactionTab = $$('#aft-tabs-transaction');
     let closeAddTransaction = $$('#add-transaction-header-element').children[1];
     let dropdownStatus;
+    let ddTransactionType;
     let endpointId = null;
 
     //region event listeners
     aftAdvanceApplyFilters.addEventListener('click', function () {
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         filterAftTable();
         trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     });
@@ -76,11 +76,9 @@ const aftFilters = (function () {
         trigger('show/app');
     });
     //endregion
-
     //region helper functions
     function filterAftTable() {
         let filters = prepareAftFilters();
-        trigger('preloader/show');
         trigger(communication.events.aft.transactions.previewTransactions, { data: filters });
     }
 
@@ -125,9 +123,8 @@ const aftFilters = (function () {
         if (dropdownStatus) {
             dropdownStatus.remove();
         }
-        dropdownStatus = dropdown.generate({values: filters.StatusList, type: 'multi'});
+        dropdownStatus = dropdown.generate({ values: filters.StatusList, type: 'multi' });
         aftAdvanceTableFilterStatus.appendChild(dropdownStatus);
-
         //set up columns selection dropdown
         let aftTable = $$('#table-container-aft');
         let columns = [];
@@ -148,25 +145,32 @@ const aftFilters = (function () {
         dropdown.generate({ values: columns, parent: aftAdvanceTableFilterColumn, type: 'multi' });
 
         //transaction type select in add transaction form
-        dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single', name: 'Type' });
+        if (ddTransactionType) {
+            ddTransactionType.remove();
+        }
+        ddTransactionType = dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), type: 'single', name: 'Type' });
+        aftAddTransactionType.appendChild(ddTransactionType);
+
+        // dropdown.generate({ values: filters.TypeList.slice(1, filters.TypeList.lenght), parent: aftAddTransactionType, type: 'single', name: 'Type' });
+        trigger('aft/aft-add-transaction', { dropdown: ddTransactionType });
         //machine select in add transaction form
         dropdown.generate({ values: filters.MachineAddTransactionList, parent: aftAddTransactionMachine, type: 'single', name: 'Gmcid' });
+
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
 
     function showAdvanceTableFilter() {
         advanceTableFilter.classList.toggle('advance-filter-active');
-        trigger('opened-arrow', {div: advanceTableFilter.children[0]});
+        trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     }
 
     function prepareAftFilters() {
         let table = $$('#table-container-aft');
-
         let machineList = $$('#aft-advance-table-filter-finished').children[1].get();
         let jackpotList = $$('#aft-advance-table-filter-jackpot').children[1].get();
         let statusesList = $$('#aft-advance-table-filter-status').children[1].get();
         let typesList = $$('#aft-advance-table-filter-type').children[1].get();
-
         let filters = {
             'EndpointId': table.settings.endpointId,
             'SelectedPeriod': $$('#aft-advance-table-filter-date-range').children[1].get(),
@@ -183,6 +187,9 @@ const aftFilters = (function () {
         }
         table.setVisibleColumns(visibleColumns);
         return filters;
+    }
+    return {
+        clearAftFilters,
     }
     //endregion
 })();

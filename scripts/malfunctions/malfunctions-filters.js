@@ -23,23 +23,26 @@ const malfunctionsFilter = (function () {
     on('malfunctions/table/filter', function (params) {
         filterMalfunctionsTable();
     });
+    on('malfunctions/set-service-message/show-server-message', function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+    });
 
     function displayFilters(filters) {
-
         let malfunctionsAdvanceTableFilterDate = $$('#malfunctions-advance-table-filter-date-range');
         let malfunctionsAdvanceTableFilterCasino = $$('#malfunctions-advance-table-filter-casino');
         let malfunctionsAdvanceTableFilterPriority = $$('#malfunctions-advance-table-filter-priority');
         let malfunctionsAdvanceTableFilterStatus = $$('#malfunctions-advance-table-filter-status');
         let malfunctionsAdvanceTableFilterType = $$('#malfunctions-advance-table-filter-type');
 
-
         dropdownDate.generate({ values: filters.PeriodList, parent: malfunctionsAdvanceTableFilterDate })
         dropdown.generate({ values: filters.CasinoList, parent: malfunctionsAdvanceTableFilterCasino, type: 'multi' });
         dropdown.generate({ values: filters.PriorityList, parent: malfunctionsAdvanceTableFilterPriority, type: 'multi' });
         dropdown.generate({ values: filters.StatusList, parent: malfunctionsAdvanceTableFilterStatus, type: 'multi' });
         dropdown.generate({ values: filters.TypeList, parent: malfunctionsAdvanceTableFilterType, type: 'multi' });
-
-
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
     //ToDo: test for malfunction filter infobar
     malfunctionsAdvanceApplyFilters.addEventListener('click', function () {
@@ -61,34 +64,29 @@ const malfunctionsFilter = (function () {
 
     function filterMalfunctionsTable() {
         let filters = prepareMalfunctionsFilters();
-        trigger('preloader/show');
         trigger(communication.events.malfunctions.previewMalfunctions, { data: filters });
     }
 
-
     function prepareMalfunctionsFilters() {
-        let table = $$('#table-container-malfunctions');
+        var table = $$('#table-container-malfunctions');
 
-        let casinoList = $$('#malfunctions-advance-table-filter-casino').children[1].get();
-        let priorityList = $$('#malfunctions-advance-table-filter-priority').children[1].get();
-        let statusesList = $$('#malfunctions-advance-table-filter-status').children[1].get();
-        let typesList = $$('#malfunctions-advance-table-filter-type').children[1].get();
+        var casinoList = $$('#malfunctions-advance-table-filter-casino').children[1].children[0].dataset.value;
+        var priorityList = $$('#malfunctions-advance-table-filter-priority').children[1].get();
+        var statusesList = $$('#malfunctions-advance-table-filter-status').children[1].get();
+        var typesList = $$('#malfunctions-advance-table-filter-type').children[1].get();
 
-        let filters = {
+        var filters = {
             'EndpointId': table.settings.endpointId,
             'SelectedPeriod': $$('#malfunctions-advance-table-filter-date-range').children[1].get(),
-            'CasinoList': casinoList === 'null' ? null : casinoList.split(','),
-            'Prioroty': priorityList === 'null' ? null : priorityList.split(','),
+            'CasinoList': casinoList === '-' ? null : casinoList.split(','),
+            'Priority': priorityList === 'null' ? null : priorityList.split(',').map(Number),
             'Status': statusesList === 'null' ? null : statusesList.split(','),
-            'Type': typesList === 'null' ? null : typesList.split(','),
+            'Type': typesList === 'null' ? null : typesList.split(',')
         };
         filters = table.getFilters(filters);
-        //mark hidden columns
-
         return filters;
     }
     return {
         prepareMalfunctionsFilters
     }
-
 })();

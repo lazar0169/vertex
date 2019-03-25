@@ -45,7 +45,6 @@ const ticketsFilter = (function () {
     //region helper functions
     function filterTicketsTable() {
         let filters = prepareTicketFilters();
-        trigger('preloader/show');
         trigger(communication.events.tickets.previewTickets, { data: filters });
     }
 
@@ -108,6 +107,8 @@ const ticketsFilter = (function () {
         }
 
         dropdown.generate({ values: columns, parent: ticketsAdvanceTableFilterColumn, type: 'multi' });
+
+        trigger('filters/show-selected-filters', { active: advanceTableFilterActive, infobar: advanceTableFilterInfobar });
     }
 
     function prepareTicketFilters() {

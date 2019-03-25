@@ -11,7 +11,7 @@
 
 #wrapper-ticket-appearance-settings>div>div:first-child {
     font-weight: bold;
-    border-bottom: 2px solid transparent;
+    border-bottom: 3px solid transparent;
 }
 
 #wrapper-ticket-appearance-advanced>div:first-child {
@@ -23,11 +23,11 @@
 }
 
 #wrapper-ticket-appearance-settings>div>div:last-child {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.5em;
 }
 
-#wrapper-ticket-appearance-settings>div>div {
-    margin-top: 0.5rem;
+#wrapper-ticket-appearance-settings>div>div:not(:first-child) {
+    margin-top: 0.5em;
 }
 
 #wrapper-ticket-appearance-advanced {

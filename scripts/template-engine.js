@@ -22,7 +22,7 @@ let template = (function () {
             for (let i = 0; i < placeholders.length; i++) {
                 let placeholder = placeholders[i];
                 let property = placeholder.replace("{{", "").replace("}}", "").replace("model.", "");
-                placeholderValues.push({placeholder: placeholder, value: getValueFromModel(property, model)});
+                placeholderValues.push({ placeholder: placeholder, value: getValueFromModel(property, model) });
             }
         }
         return placeholderValues;
@@ -55,7 +55,7 @@ let template = (function () {
         return newElement;
     }
 
-    function render(templateElementSelector, model, callbackEvent,params) {
+    function render(templateElementSelector, model, callbackEvent, params) {
         let templateElement = $$(templateElementSelector);
 
         if (templateElement === null || templateElement.length <= 0) {
@@ -64,14 +64,14 @@ let template = (function () {
             templateElement = templateElement[0];
         }
         let newElement = cloneTemplateElement(templateElement);
-        if ( model !==  undefined) {
+        if (model !== undefined) {
             let newElementString = newElement.innerHTML;
             let placeholders = getPlaceholders(newElementString);
             let placeholderValues = getPlaceholderValues(placeholders, model);
             newElement.innerHTML = replaceValueInTemplate(newElementString, placeholderValues);
         }
-        if (callbackEvent !==  undefined) {
-            trigger(callbackEvent, {model: model, element: newElement,params:params});
+        if (callbackEvent !== undefined) {
+            trigger(callbackEvent, { model: model, element: newElement, params: params });
         }
 
         return newElement;
@@ -88,7 +88,7 @@ let template = (function () {
     on('template/render', function (params) {
         let templateElementSelector = params.templateElementSelector;
         let model = params.model;
-        render(templateElementSelector, model, params.callbackEvent,params);
+        render(templateElementSelector, model, params.callbackEvent, params);
     });
 
     return {

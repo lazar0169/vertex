@@ -200,7 +200,8 @@ const dropdown = (function () {
                         case 1:
                             if (setId === option.dataset.id) {
                                 selected.firstChild.innerHTML = localization.translateMessage(option.innerHTML);
-                                selected.firstChild.title = option.innerHTML;
+                                selected.title = option.innerHTML;
+                                selected.dataset.value = option.innerHTML;
                             }
                             break;
 

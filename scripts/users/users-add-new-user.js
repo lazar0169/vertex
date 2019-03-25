@@ -1,5 +1,5 @@
 const usersAddNewUser = (function () {
-    trigger('preloader/hide');
+    
 
     function generateRole(roleData) {
         let addNewUserRoleSettings = $$('#add-new-user-role-settings');

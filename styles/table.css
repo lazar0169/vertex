@@ -57,7 +57,7 @@
 
 .vertex-table .cell {
     background-color: rgb(38, 50, 56);
-    padding-left: 0.5em;
+    padding: 0 0.5em;
     border-bottom: 1px solid #37454C;
     color: #cfd8dc;
     white-space: nowrap;
@@ -133,7 +133,7 @@
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px;
+    margin: 0 5px;
     visibility: hidden;
 }
 
@@ -161,7 +161,6 @@
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px;
 }
 
 .vertex-table .head.cell.sortable.sort-desc {
@@ -174,7 +173,7 @@
     height: 13px;
     width: 8px;
     top: 27%;
-    margin-left: 5px
+    margin: 0 5px
 }
 
 .head.cell:nth-child(1) {
@@ -220,7 +219,7 @@
 }
 
 .tbody::-webkit-scrollbar {
-    width: 5px;
+    width: 7px;
     background-color: #3A4950;
 }
 
@@ -282,15 +281,19 @@ textarea {
     width: 25px;
 }
 
-.cell-flag.row-flag-0 {
-    border-left: 7px solid rgb(244, 67, 54);
+.cell-flag.row-flag-1 {
+    background-color: rgb(139, 195, 74);
 }
 
 .cell-flag.row-flag-1 {
-    border-left: 7px solid rgb(255, 152, 0);
+    border-left: 7px solid rgb(244, 67, 54);
 }
 
 .cell-flag.row-flag-2 {
+    border-left: 7px solid rgb(255, 152, 0);
+}
+
+.cell-flag.row-flag-3 {
     border-left: 7px solid rgb(0, 150, 136);
 }
 
@@ -300,14 +303,18 @@ textarea {
 }
 
 .cell .flaglist-element.flaglist-0 {
-    background-color: rgb(244, 67, 54);
+    background-color: rgb(139, 195, 74);
 }
 
 .cell .flaglist-element.flaglist-1 {
-    background-color: rgb(255, 152, 0);
+    background-color: rgb(244, 67, 54);
 }
 
 .cell .flaglist-element.flaglist-2 {
+    background-color: rgb(255, 152, 0);
+}
+
+.cell .flaglist-element.flaglist-3 {
     background-color: rgb(0, 150, 136);
 }
 
