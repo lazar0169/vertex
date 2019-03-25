@@ -1,8 +1,16 @@
 let machines = (function () {
-    let endpointId;
-    on('machines/activated', function (params) {
+    const machinesTableId = 'table-container-machines';
+    let machinesTable = null;
+
+    const events = {
+        activated: 'machines/activated',
+        displayMachinesInfo: 'machines/display-machine-info/',
+        previewMachines: 'machines/preview-machines',
+        filterTable: 'machines/table/filter',
+        // showChangeStateMalfunctionMessage: 'malfunction/changeState'
+    };
+    on(events.activated, function (params) {
         let machinesId = params.params[0].value;
-        endpointId = machinesId;
         let tableSettings = {};
         tableSettings.successEvent = "machines/display-machine-info/"
         trigger(communication.events.machines.getMachines, { data: { EndpointId: machinesId }, tableSettings })
@@ -13,7 +21,7 @@ let machines = (function () {
         alert('An error occurred.');
     });
 
-    on('machines/display-machine-info/', function (params) {
+    on(events.displayMachinesInfo, function (params) {
         let machinesFiltersVendors = $$('#machines-advance-table-filter-vendors');
         let machinesFiltersStatus = $$('#machines-advance-table-filter-status');
 
@@ -23,9 +31,67 @@ let machines = (function () {
         dropdown.generate({ values: machinesVendors, parent: machinesFiltersVendors, type: 'multi' });
         dropdown.generate({ values: machinesStatus, parent: machinesFiltersStatus, type: 'multi' });
 
-        trigger('showing-machines-top-bar-value', params)
+        trigger('showing-machines-top-bar-value', params);
 
+        if (machinesTable !== null) {
+            machinesTable.destroy();
+        }
+        machinesTable = table.init({
+            endpointId: params.additionalData,
+            id: machinesTableId,
+            pageSizeContainer: '#machine-filters-number-machines',
+            appearanceButtonsContainer: '#machine-filters-show-space'
+        },
+            params.data.Data);
+        $$('#machines-content').appendChild(machinesTable);
     });
+
+    on(table.events.sort(machinesTableId), function () {
+        trigger(events.filterTable);
+    });
+
+    on(table.events.pageSize(machinesTableId), function () {
+        trigger(events.filterTable);
+    });
+
+    on(table.events.pagination(machinesTableId), function () {
+        trigger(events.filterTable);
+    });
+
+    on('machines/table/filter', function (params) {
+        filterMachinesTable();
+    });
+
+    function filterMachinesTable() {
+        let filters = prepareMachinesFilters();
+        trigger(communication.events.machines.previewMachines, { data: filters });
+    }
+
+    function prepareMachinesFilters() {
+        var table = $$('#table-container-machines');
+        var machineWithPlayer = $$('#machine-filters-player').getElementsByClassName('form-checkbox')[0].checked ? true : false;
+        var vendorList = $$('#machines-advance-table-filter-vendors').children[1].get();
+        var statusesList = $$('#machines-advance-table-filter-status').children[1].get();
+
+
+        var filters = {
+            'EndpointId': table.settings.endpointId,
+            'VendorList': vendorList === 'null' ? null : vendorList.split(','),
+            'Status': statusesList === 'null' ? null : statusesList.split(','),
+            'AdditionalData': {
+                'OnlyActive': machineWithPlayer ? true : false,
+                'MachineName': ''
+            }
+        };
+        filters = table.getFilters(filters);
+        return filters;
+    }
+
+    on(events.previewMachines, function (params) {
+        console.log(params)
+        trigger('preloader/hide')
+    });
+
 
     /*------------------------------------ MACHINES EVENTS ----------------------------------*/
 
@@ -41,6 +107,7 @@ let machines = (function () {
             route: route,
             data: data,
             requestType: request,
+            additionalData: data.EndpointId,
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
@@ -62,6 +129,23 @@ let machines = (function () {
             settingsObject: tableSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
+        });
+    });
+
+    //get preview machines
+    on(communication.events.machines.previewMachines, function (params) {
+        trigger('preloader/show');
+        let route = communication.apiRoutes.machines.previewMachines;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let successEvent = 'machines/preview-machines';
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
         });
     });
 
@@ -330,4 +414,8 @@ let machines = (function () {
     });
 
     /*-----------------------------------------------------------------------------------------*/
+
+    return {
+        prepareMachinesFilters
+    }
 })();
