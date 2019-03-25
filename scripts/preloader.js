@@ -3,14 +3,14 @@ let preloader = (function () {
 
     function showPreloader() {
         preloaderElement.classList.remove('hide');
-        preloaderElement.classList.add('fade-in');
         preloaderElement.classList.remove('fade-out');
+        preloaderElement.classList.add('fade-in');
     }
 
     function hidePreloader() {
-        preloaderElement.classList.remove('fade-in');
         preloaderElement.classList.add('fade-out');
         preloaderElement.classList.add('hide');
+        preloaderElement.classList.remove('fade-in');
 
     }
 

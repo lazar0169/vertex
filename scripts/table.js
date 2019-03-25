@@ -406,9 +406,13 @@ let table = (function () {
                     cell.classList.add('clickable');
                 }
 
-                if (Number.isInteger(cellData) && column !== 'Code') {
+                if (Number.isInteger(cellData)) {
                     cell.classList.add('input-number-right');
-                    cell.innerHTML = formatFloatValue(cellData / 100);
+                    if (cellData === 9999999999) {
+                        cell.innerHTML = '/'
+                    } else {
+                        cell.innerHTML = formatFloatValue(cellData / 100);
+                    }
                 } else {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function

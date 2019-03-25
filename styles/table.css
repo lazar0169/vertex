@@ -282,6 +282,10 @@ textarea {
 }
 
 .cell-flag.row-flag-1 {
+    background-color: rgb(139, 195, 74);
+}
+
+.cell-flag.row-flag-1 {
     border-left: 7px solid rgb(244, 67, 54);
 }
 
@@ -296,6 +300,10 @@ textarea {
 .cell .flaglist-element {
     width: 7px;
     height: 100%;
+}
+
+.cell .flaglist-element.flaglist-0 {
+    background-color: rgb(139, 195, 74);
 }
 
 .cell .flaglist-element.flaglist-1 {
