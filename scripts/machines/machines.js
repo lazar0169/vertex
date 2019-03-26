@@ -89,7 +89,13 @@ let machines = (function () {
 
     on(events.previewMachines, function (params) {
         console.log(params)
-        trigger('preloader/hide')
+        let data = params.data.Data;
+        $$(`#${machinesTableId}`).update(data);
+        trigger('preloader/hide');
+    });
+
+    on(table.events.rowClick(machinesTableId), function (params) {
+        trigger('machines/machines-details', { data: params.target.additionalData, endpointId: parseInt($$('#table-container-machines').dataset.endpointId) });
     });
 
 
@@ -114,24 +120,6 @@ let machines = (function () {
         });
     });
 
-    //machines get machine details
-    on(communication.events.machines.getMachineDetails, function (params) {
-        let route = communication.apiRoutes.machines.getMachineDetails;
-        let data = params.data;
-        let request = communication.requestTypes.post;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.successEvent;
-        let errorEvent = '';
-        trigger('communicate/createAndSendXhr', {
-            route: route,
-            data: data,
-            requestType: request,
-            settingsObject: tableSettings,
-            successEvent: successEvent,
-            errorEvent: errorEvent
-        });
-    });
-
     //get preview machines
     on(communication.events.machines.previewMachines, function (params) {
         trigger('preloader/show');
@@ -143,9 +131,27 @@ let machines = (function () {
         trigger('communicate/createAndSendXhr', {
             route: route,
             requestType: request,
+            additionalData: data.EndpointId,
             data: data,
             successEvent: successEvent,
             errorEvent: errorEvent,
+        });
+    });
+
+    //machines get machine details
+    on(communication.events.machines.getMachineDetails, function (params) {
+        let route = communication.apiRoutes.machines.getMachineDetails;
+        let data = params.EntryData;
+        let request = communication.requestTypes.post;
+        let successEvent = params.data.successAction;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            data: data,
+            requestType: request,
+            successEvent: successEvent,
+            errorEvent: errorEvent,
+            additionalData: params.data.EndpointId
         });
     });
 

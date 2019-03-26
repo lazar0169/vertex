@@ -80,6 +80,9 @@ let table = (function () {
         //     console.error(`table ${settings.id} settings endpointId is required`);
         //     return undefined;
         // }
+        if (settings.endpointId || settings.endpointId !== null || settings.endpointId !== undefined) {
+            table.dataset.endpointId = settings.endpointId;
+        }
         table.setAttribute('id', settings.id);
         setDefaults(settings, table);
 
@@ -346,7 +349,7 @@ let table = (function () {
                         cell.classList.add('sortable');
                         cell.addEventListener('click', onSort);
                     }
-                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo') {
+                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo' || columnName === 'LastBet' || columnName === 'LastWin' || columnName === 'CurrentCredits') {
                         cell.classList.add('input-number-right');
                     }
                 }
@@ -406,7 +409,7 @@ let table = (function () {
                     cell.classList.add('clickable');
                 }
 
-                if (Number.isInteger(cellData)) {
+                if (Number.isInteger(cellData) && column !== 'Order') {
                     cell.classList.add('input-number-right');
                     if (cellData === 9999999999) {
                         cell.innerHTML = '/'

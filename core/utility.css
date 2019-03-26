@@ -105,7 +105,7 @@
     cursor: pointer;
 }
 
-.chosen-info-tab {
+.chosen-info-tab, #page-machines {
     flex: 1;
     /* padding: 0 0.5rem 0.5rem 0 !important; */
     background: rgb(38, 50, 56);

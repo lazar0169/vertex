@@ -26,13 +26,13 @@
 #machine-current-details {
     display: flex;
     align-items: center;
-    width: 30%;
-    padding: 0.5rem;
+    width: 100%;
+    padding: 0.5em;
     padding-bottom: 0;
 }
 
 #machine-current-name {
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
     color: white;
 }
 
@@ -44,14 +44,14 @@
 }
 
 #machine-curent-casino {
-    padding: 0 1.5rem;
+    padding: 0 1.5em;
 }
 
 #machine-close-details-bar {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 0.5rem;
+    padding: 0.5em;
     padding-bottom: 0;
     cursor: pointer;
 }
@@ -67,7 +67,7 @@
 }
 
 #info-tabs>div {
-    padding: 0.5rem;
+    padding: 0.5em;
     cursor: pointer;
 }
 
@@ -75,7 +75,7 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    padding: 0.5rem;
+    padding: 0.5em;
     cursor: pointer;
     color: rgb(30, 155, 227);
 }
@@ -88,7 +88,9 @@
 
 #machine-info-content {
     height: 80%;
-    padding: 0.5rem;
+    padding: 0.5em;
+    font-family: 'Open Sans';
+    font-size: 14px;
 }
 
 #machine-details-tab-info {
@@ -97,7 +99,7 @@
 }
 
 #machine-details-tab-info>div {
-    padding: 1rem 0;
+    padding: 1em 0;
 }
 
 #machine-general-info, #machine-tito, #machine-aft, #machine-service-tab-info>div:first-child {
@@ -110,8 +112,12 @@
 }
 
 #machine-general-info>div>div, .machine-category-info>div>div, #machine-tito-name, #machine-aft-name, #machine-service-info>div>div, #machine-jackpot-name {
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
     color: white;
+}
+
+#machine-tito-name>div:not(:first-child), #machine-aft-name>div:not(:first-child) {
+    padding-left: 0.5em
 }
 
 #machine-general-info>div>div:first-child, .machine-category-info>div>div:first-child, #machine-service-info>div>div:first-child {
@@ -120,12 +126,11 @@
 
 .machine-category-info>div {
     display: flex;
-    padding: 0 1.3rem;
+    padding: 0 1.3em;
 }
 
 #machine-jackpot-server {
-    margin-left: 1.3rem;
-    padding-top: 0.5rem;
+    margin-left: 1.3em;
 }
 
 #machine-jackpot {
@@ -135,7 +140,7 @@
 
 #machine-last-jackpot {
     flex: 1;
-    padding: 0.5rem 1.3rem;
+    padding: 0.5em 1.3em;
     padding-bottom: 0;
     color: white;
 }
@@ -145,29 +150,29 @@
 }
 
 #machine-service-mode {
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
 }
 
 #machine-service-tab-info>div {
-    padding: 0.5rem 1.3rem;
+    padding: 0.5em 1.3em;
 }
 
 #machine-history-tab-info {
     position: relative;
-    padding: 0 0.8rem;
+    padding: 0 0.8em;
 }
 
 .active-content {
     width: 100%;
-    height:calc(100vh - 130px);
-    max-height:calc(100vh - 130px);
+    height: calc(100vh - 130px);
+    max-height: calc(100vh - 130px);
 }
 
 .table-head {
     position: absolute;
     width: auto;
     height: 100%;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.5em;
     pointer-events: none;
 }
 
@@ -175,7 +180,7 @@
     position: absolute;
     width: auto;
     height: 100%;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.5em;
 }
 
 .table-head>table>tbody {
@@ -212,10 +217,14 @@
 
 .machine-meter-wrapper>div, .machine-meter-wrapper-time>div, .machine-meter-wrapper-info>div, .machine-meter-wrapper-info>div>div:not(:first-child), .machine-meter-wrapper-edit>div {
     display: flex;
-    padding: 0 0.3rem;
+    padding: 0 0.3em;
 }
 
 .machine-meter-wrapper-edit {
     display: inline-flex;
     align-items: center;
+}
+
+#machine-last-jackpot .pagination {
+    display: none;
 }
