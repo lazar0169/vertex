@@ -69,15 +69,15 @@ let machines = (function () {
 
     function prepareMachinesFilters() {
         var table = $$('#table-container-machines');
-        var machineWithPlayer = $$('#machine-filters-player').getElementsByClassName('form-checkbox')[0].checked ? true : false;
+        var machineWithPlayer = $$('#machine-filters-player').getElementsByClassName('form-checkbox')[0].children[0].checked ? true : false;
         var vendorList = $$('#machines-advance-table-filter-vendors').children[1].get();
         var statusesList = $$('#machines-advance-table-filter-status').children[1].get();
 
 
         var filters = {
             'EndpointId': table.settings.endpointId,
-            'VendorList': vendorList === 'null' ? null : vendorList.split(','),
-            'Status': statusesList === 'null' ? null : statusesList.split(','),
+            'VendorList': vendorList === 'null' ? null : vendorList.split(',').map(Number),
+            'Status': statusesList === 'null' ? null : statusesList.split(',').map(Number),
             'AdditionalData': {
                 'OnlyActive': machineWithPlayer ? true : false,
                 'MachineName': ''

@@ -30,15 +30,7 @@ const detailsBar = (function () {
     toggle.generate({
         element: serviceModeCheckbox.parentNode
     });
-    serviceModeCheckbox.parentNode.addEventListener('click', function () {
-        let data = {}
-        let EntryData = {}
-        data.successAction = 'machines/details-service-switch';
-        EntryData.Gmcid = parseInt(machineGmcid.dataset.gmcid);
-        EntryData.EndpointId = parseInt(detailsBar.dataset.endpointId);
-        EntryData.IsInServiceMode = toggle.isChecked(serviceModeCheckbox.parentNode);
-        trigger(communication.events.machines.switchServiceMode, { data, EntryData });
-    })
+
 
 
 
@@ -69,7 +61,6 @@ const detailsBar = (function () {
     on('machines/machines-details', function (params) {
         selectTab('machine-details-tab');
         selectInfoContent('machine-details-tab');
-        detailsBar.dataset.endpointId = params.endpointId;
         let data = {}
         let EntryData = {}
         EntryData.EndpointId = params.endpointId;
@@ -89,7 +80,11 @@ const detailsBar = (function () {
 
         data.successAction = 'machines/details-service'
         trigger(communication.events.machines.getMachineServiceData, { data, EntryData });
-
+        serviceModeCheckbox.parentNode.onclick = function () {
+            data.successAction = 'machines/details-service-switch';
+            EntryData.IsInServiceMode = toggle.isChecked(serviceModeCheckbox.parentNode);
+            trigger(communication.events.machines.switchServiceMode, { data, EntryData });
+        }
     });
 
     on('machines/details', function (params) {

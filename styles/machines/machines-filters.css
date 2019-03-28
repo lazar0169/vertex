@@ -1,5 +1,6 @@
 #auto-select-status {
-    color: green;
+    color: white;
+    text-transform: capitalize;
     padding-left: 0.5em;
     cursor: pointer;
 }

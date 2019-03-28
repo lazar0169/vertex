@@ -836,14 +836,24 @@ let table = (function () {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
         for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
-                filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
-                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].classList.remove('hidden');
-            } else {
-                filterInfobar.children[1].children[count].classList.add('hidden');
+
+            filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
+            if (filterActive.children[count].children[1].dataset.type === 'checkbox') {
+                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].children[2].innerHTML;
+                filterActive.children[count].children[1].children[0].children[0].checked ? filterInfobar.children[1].children[count].classList.remove('hidden') : filterInfobar.children[1].children[count].classList.add('hidden');
+                filterInfobar.children[1].children[count].title = filterInfobar.children[1].children[count].children[1].innerHTML;
             }
+            else {
+
+                if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
+                    filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].classList.remove('hidden');
+                } else {
+                    filterInfobar.children[1].children[count].classList.add('hidden');
+                }
+            }
+
         }
         for (let isHidden of filterInfobar.children[1].children) {
             if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {

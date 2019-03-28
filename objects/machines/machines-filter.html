@@ -14,7 +14,7 @@
 
             <div id="machine-filters-player">
                 <div class="element-multilanguage" data-translation-key="Machines">Machines:</div>
-                <div>
+                <div data-type='checkbox'>
                     <label class="form-checkbox">
                         <input type="checkbox">
                         <i class="form-icon"></i>
@@ -46,7 +46,7 @@
         <div id="auto-select-status-details">
             <div class="center">
                 <div>Auto select:</div>
-                <div id="auto-select-status">On</div>
+                <div id="auto-select-status" data-value="on">On</div>
             </div>
         </div>
         <div id="machine-filters-show-space" class="center">
@@ -55,5 +55,26 @@
         <div id="machine-filters-number-machines" class="center">
             <div class="hidden"></div>
         </div>
+    </div>
+</div>
+
+<div id="machines-advance-table-filter-active-infobar" class="advance-table-filter-active-infobar hidden">
+    <div>ikona</div>
+    <div>
+        <div id="machines-advance-table-filter-withplayer-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="ticket-advance-table-filter-vendors-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+        <div id="ticket-advance-table-filter-status-infobar" class="hidden infobar-wrapper-info">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <div id="machines-advance-table-filter-active-infobar-button">
+        <a class="button-link element-multilanguage" data-translation-key="ClearAll">Clear all</a>
     </div>
 </div>
