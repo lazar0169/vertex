@@ -83,14 +83,18 @@ let table = (function () {
         if (settings.endpointId || settings.endpointId !== null || settings.endpointId !== undefined) {
             table.dataset.endpointId = settings.endpointId;
         }
+        if (settings.pageSize === undefined) {
+            settings.pageSize = data.Items.length;
+        }
+
         table.setAttribute('id', settings.id);
         setDefaults(settings, table);
 
         table.elements = {
             body: generateTableBody(),
             noDataElement: generateNoDataElement(),
-            pagination: generatePagination(),
             pageSize: generatePageSize(table),
+            pagination: generatePagination(),
             appearance: generateAppearanceButtons(table),
             export: generateExportButtons(table)
         };
@@ -349,7 +353,7 @@ let table = (function () {
                         cell.classList.add('sortable');
                         cell.addEventListener('click', onSort);
                     }
-                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo' || columnName === 'LastBet' || columnName === 'LastWin' || columnName === 'CurrentCredits') {
+                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo' || columnName === 'LastBet' || columnName === 'LastWin' || columnName === 'CurrentCredits' || columnName === 'Value') {
                         cell.classList.add('input-number-right');
                     }
                 }
@@ -403,13 +407,14 @@ let table = (function () {
                 else {
                     cellData = tempRow[column];
                 }
+
                 //set cell to be clickable if criteria are met
                 //ToDo: Add criteria for other pages
                 if (!isEmpty(tempRow.ActionList) && tempRow.ActionList.length > 0) {
                     cell.classList.add('clickable');
                 }
 
-                if (Number.isInteger(cellData) && column !== 'Order') {
+                if (Number.isInteger(cellData) && column !== 'Order' && column !== 'Gmcid') {
                     cell.classList.add('input-number-right');
                     if (cellData === 9999999999) {
                         cell.innerHTML = '/'
@@ -420,6 +425,13 @@ let table = (function () {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
                     // cell.innerHTML = localization.translateMessage(cellData,cell);
+                }
+                if (!cell.classList.contains('column-action-list') && !cell.classList.contains('column-flag-list')) {
+                    if (cell.children.length !== 0) {
+                        cell.title = `${cell.children[1].innerHTML}`;
+                    } else {
+                        cell.title = cell.innerHTML;
+                    }
                 }
                 //hide hidden columns
                 let columnData = settings.columns[column];
@@ -561,6 +573,9 @@ let table = (function () {
         cell.classList.add('table-item');
         cell.classList.add(rowClassPrefix + rowId);
         cell.classList.add(cellColumnClass);
+        if (column === 'ActionList') {
+            cell.classList.add('visibility-hidden-children');
+        }
         if (column === 'actions') {
             cell.classList.add('table-actions-column');
         }
@@ -633,6 +648,11 @@ let table = (function () {
     function hoverRow(elements, highlight = false) {
         for (let element of document.getElementsByClassName(elements)) {
             element.classList[highlight ? "add" : "remove"]('hover');
+        }
+        let array = document.getElementsByClassName(elements);
+        let actionElement = array.item(array.length - 1);
+        if (actionElement.classList.contains('column-action-list')) {
+            actionElement.classList[highlight ? "remove" : "add"]('visibility-hidden-children');
         }
     }
 
@@ -863,9 +883,7 @@ let table = (function () {
             settings.stickyRow = true;
         }
 
-        if (settings.pageSize === undefined) {
-            settings.pageSize = defaultPageSize;
-        }
+
         if (settings.page === undefined) {
             settings.page = defaultPage;
         }

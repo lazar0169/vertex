@@ -61,7 +61,7 @@
     border-bottom: 1px solid #37454C;
     color: #cfd8dc;
     white-space: nowrap;
-    cursor: default;
+    cursor: pointer;
     width: 100%;
     display: flex;
     font-family: "Open Sans";
@@ -69,6 +69,19 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    /*ToDo ovo je zbog prevelikih stringova*/
+    max-width: 450px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cell label {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
 .vertex-table .column-flag-list {
@@ -353,6 +366,10 @@ textarea {
     color: white;
 }
 
+.vertex-table .cell {
+    cursor: pointer;
+}
+
 .vertex-table .cell.flex-column {
     flex-direction: column;
 }
@@ -442,4 +459,40 @@ textarea {
 .vertex-table .cell.clickable {
     cursor: pointer;
     pointer-events: auto;
+}
+
+.visibility-hidden-children .actionlist-element {
+    visibility: hidden;
+}
+
+.actionlist-element.actionlist-0 {
+    background: Blue
+}
+
+.actionlist-element.actionlist-0::after {
+    content: 'Edit'
+}
+
+.actionlist-element.actionlist-1 {
+    background: green
+}
+
+.actionlist-element.actionlist-1::after {
+    content: 'Cancel'
+}
+
+.actionlist-element.actionlist-6 {
+    background: red
+}
+
+.actionlist-element.actionlist-6::after {
+    content: 'Edit'
+}
+
+.actionlist-element.actionlist-7 {
+    background: black
+}
+
+.actionlist-element.actionlist-7:after {
+    content: 'Remove'
 }

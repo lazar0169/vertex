@@ -10,8 +10,8 @@ const machinesFilter = (function () {
     function topBarInfoBoxValue(params) {
         machinesTopBarActiveMachines.innerHTML = params.NumberOfActiveMachines;
         machinesTopBarAllMachines.innerHTML = `/ ${params.NumberOfMachines}`;
-        machinesTopBarTotalBet.innerHTML = params.TotalBet;
-        machinesTopBarCurrentCredits.innerHTML = params.TotalCurrentCredits;
+        machinesTopBarTotalBet.innerHTML = formatFloatValue(params.TotalBet / 100);
+        machinesTopBarCurrentCredits.innerHTML = formatFloatValue(params.TotalCurrentCredits / 100);
     }
 
     on('showing-machines-top-bar-value', function (params) {
