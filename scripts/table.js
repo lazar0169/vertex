@@ -228,6 +228,7 @@ let table = (function () {
         filters.TokenInfo = tokenInfo;
 
         let page = compareFilters(table, filters) ? settings.page : 1;
+        // let page = settings.page;
 
         settings.page = page;
         filters.BasicData.Page = page;

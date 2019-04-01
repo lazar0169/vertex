@@ -143,3 +143,7 @@ table {
 .is-outside-current-month .pika-button {
     background-color: rgb(55, 71, 79);
 }
+.pika-title, .pika-table th, .pika-label, .pika-row{
+    font-size: 14px;
+    font-weight: normal;
+}

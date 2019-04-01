@@ -12,14 +12,21 @@ const machinesFilter = (function () {
     let clearAdvanceFilterInfobar = $$('#machines-advance-table-filter-active-infobar-button').children[0];
     let machineWithPlayer = $$('#machine-filters-player').children[1];
     let autoSelect = $$('#auto-select-status');
+    let autoSelectOn;
 
     autoSelect.onclick = function () {
         if (autoSelect.dataset.value === 'on') {
             autoSelect.dataset.value = 'off';
+            clearInterval(autoSelectOn)
         } else {
             autoSelect.dataset.value = 'on';
+            autoSelectOn = setInterval(autoSelectInterval, 3000);
+
         }
         autoSelect.innerHTML = localization.translateMessage(autoSelect.dataset.value);
+    }
+    function autoSelectInterval() {
+        trigger('machines/table/filter')
     }
 
     machineWithPlayer.onclick = function () {

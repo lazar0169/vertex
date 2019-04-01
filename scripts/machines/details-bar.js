@@ -85,6 +85,10 @@ const detailsBar = (function () {
             EntryData.IsInServiceMode = toggle.isChecked(serviceModeCheckbox.parentNode);
             trigger(communication.events.machines.switchServiceMode, { data, EntryData });
         }
+
+        data.successAction = 'machines/details-edit-machine'
+        trigger(communication.events.machines.editMachine, { data, EntryData });
+
     });
 
     on('machines/details', function (params) {
@@ -107,14 +111,13 @@ const detailsBar = (function () {
     on('machines/details-service', function (params) {
         fillServiceData(params)
     });
+
     on('machines/details-service-switch', function (params) {
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
     });
-
-
 
     function fillDetailsTab(params) {
         let data = params.data.Data;
