@@ -31,8 +31,12 @@ function selectTab(name) {
     if (tabSelected) {
         tabSelected.classList.add('tab-active');
         previousTabSelected = tabSelected;
+        if (tabSelected.dataset && tabSelected.dataset.route) {
+            console.log(tabSelected.dataset.route);
+        }
     }
 }
+
 //shows content for selected tab
 let previousInfoContSelected;
 

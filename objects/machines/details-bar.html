@@ -11,11 +11,11 @@
         </div>
 
         <div id="info-tabs" class="center">
-            <div id="machine-details-tab" class="tabs">DETAILS</div>
-            <div id="machine-history-tab" class="tabs">HISTORY</div>
-            <div id="machine-meters-tab" class="tabs">METERS</div>
-            <div id="machine-events-tab" class="tabs">EVENTS</div>
-            <div id="machine-service-tab" class="tabs">SERVICE</div>
+            <div id="machine-details-tab" class="tabs" data-route="get-machines/machines-details">DETAILS</div>
+            <div id="machine-history-tab" class="tabs" data-route="get-machines/machines-history">HISTORY</div>
+            <div id="machine-meters-tab" class="tabs" data-route="get-machines/machines-meters">METERS</div>
+            <div id="machine-events-tab" class="tabs" data-route="get-machines/machines-events">EVENTS</div>
+            <div id="machine-service-tab" class="tabs" data-route="get-machines/machines-service">SERVICE</div>
         </div>
         <div id="edit-current-machine">EDIT MACHINE</div>
     </div>
@@ -109,7 +109,8 @@
             <div>
                 <div>Service mode:</div>
                 <figure class="vertex-form-checkbox">
-                    <div id="machine-details-service-mode-checkbox" class="element-form-mode checkbox-label element-dynamic-translatable"
+                    <div id="machine-details-service-mode-checkbox"
+                        class="element-form-mode checkbox-label element-dynamic-translatable"
                         data-translation-key="switchYesLabel">Yes</div>
                     <label class="form-switch">
                         <input data-type="int" class="" type="checkbox" novalidate="true">
