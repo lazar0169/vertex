@@ -16,6 +16,7 @@
     cursor: pointer;
     font-family: OpenSans-Bold;
     font-size: 14px;
+    text-transform: uppercase;
 }
 
 .tabs:hover {
