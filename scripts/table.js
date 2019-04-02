@@ -166,6 +166,7 @@ let table = (function () {
         if (table.data.items.length <= 0) {
             table.elements.body.classList.add(hiddenClass);
             table.elements.noDataElement.classList.remove(hiddenClass);
+            table.elements.pagination.classList.add(hiddenClass);
         } else {
             table.elements.body.classList.remove(hiddenClass);
             table.elements.noDataElement.classList.add(hiddenClass);

@@ -32,7 +32,7 @@ function selectTab(name) {
         tabSelected.classList.add('tab-active');
         previousTabSelected = tabSelected;
         if (tabSelected.dataset && tabSelected.dataset.route) {
-            console.log(tabSelected.dataset.route);
+            trigger(tabSelected.dataset.route)
         }
     }
 }

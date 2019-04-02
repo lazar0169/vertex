@@ -38,6 +38,7 @@
       "aft/aft-tab-notification-settings.js",
       "aft/aft-add-transactions.js",
       "components/datepicker.js",
+      "components/checkbox-change-state.js",
       "components/currency-input.js",
       "components/dropdown-date.js",
       "components/toggle.js",

@@ -31,6 +31,8 @@ const detailsBar = (function () {
         element: serviceModeCheckbox.parentNode
     });
 
+    let machineEditMode = $$('#machine-edit-mode');
+
 
 
 
@@ -59,25 +61,55 @@ const detailsBar = (function () {
     }();
 
     on('machines/machines-details', function (params) {
+
+        detailsBar.dataset.endpointId = params.endpointId;
+        detailsBar.dataset.gmcid = params.data.Properties.Gmcid;
         selectTab('machine-details-tab');
         selectInfoContent('machine-details-tab');
-        let data = {}
-        let EntryData = {}
-        EntryData.EndpointId = params.endpointId;
-        EntryData.Gmcid = params.data.Properties.Gmcid;
 
+        // data.successAction = 'machines/details-edit-machine'
+        // trigger(communication.events.machines.editMachine, { data, EntryData });
+
+    });
+
+    function prepareData() {
+        let data = {};
+        data.EndpointId = detailsBar.dataset.endpointId;
+        data.Gmcid = detailsBar.dataset.gmcid;
+        return data;
+    }
+
+    on('get-machines/machines-details', function () {
+        let EntryData = prepareData();
+        let data = {};
         data.successAction = 'machines/details'
         trigger(communication.events.machines.getMachineDetails, { data, EntryData });
+    });
 
+    on('get-machines/machines-history', function () {
+        let EntryData = prepareData();
+        let data = {};
         data.successAction = 'machines/details-history'
         trigger(communication.events.machines.getMachineHistory, { data, EntryData });
+    });
 
+    on('get-machines/machines-meters', function () {
+        let EntryData = prepareData();
+        let data = {};
         data.successAction = 'machines/details-meters'
         trigger(communication.events.machines.getAllMachineMeters, { data, EntryData });
+    });
 
+    on('get-machines/machines-events', function () {
+        let EntryData = prepareData();
+        let data = {};
         data.successAction = 'machines/details-events'
         trigger(communication.events.machines.getMachineEvents, { data, EntryData });
+    });
 
+    on('get-machines/machines-service', function () {
+        let EntryData = prepareData();
+        let data = {};
         data.successAction = 'machines/details-service'
         trigger(communication.events.machines.getMachineServiceData, { data, EntryData });
         serviceModeCheckbox.parentNode.onclick = function () {
@@ -85,23 +117,20 @@ const detailsBar = (function () {
             EntryData.IsInServiceMode = toggle.isChecked(serviceModeCheckbox.parentNode);
             trigger(communication.events.machines.switchServiceMode, { data, EntryData });
         }
-
-        data.successAction = 'machines/details-edit-machine'
-        trigger(communication.events.machines.editMachine, { data, EntryData });
-
     });
 
     on('machines/details', function (params) {
         fillDetailsTab(params)
         details.show();
+        trigger('machines/details-edit-machine', params);
     });
 
     on('machines/details-history', function (params) {
-        fillHistoryTab(params)
+        fillHistoryTab(params);
     });
 
     on('machines/details-meters', function (params) {
-        fillMetersTab(params)
+        fillMetersTab(params);
     });
 
     on('machines/details-events', function (params) {
@@ -140,10 +169,7 @@ const detailsBar = (function () {
         if (machineLastJackpotTable !== null) {
             machineLastJackpotTable.destroy();
         }
-        machineLastJackpotTable = table.init({
-            id: '',
-        },
-            { Items: data.LastJackpots });
+        machineLastJackpotTable = table.init({ id: '' }, { Items: data.LastJackpots });
         $$('#machine-last-jackpot').appendChild(machineLastJackpotTable);
     }
 
@@ -152,9 +178,7 @@ const detailsBar = (function () {
         if (machinesHistoryTable !== null) {
             machinesHistoryTable.destroy();
         }
-        machinesHistoryTable = table.init({
-            id: '',
-        }, items);
+        machinesHistoryTable = table.init({ id: '' }, items);
         $$('#machine-history-tab-info').appendChild(machinesHistoryTable);
     }
 
@@ -163,9 +187,7 @@ const detailsBar = (function () {
         if (machinesMetersTable !== null) {
             machinesMetersTable.destroy();
         }
-        machinesMetersTable = table.init({
-            id: ''
-        }, items);
+        machinesMetersTable = table.init({ id: '' }, items);
         $$('#machine-meters-tab-info').appendChild(machinesMetersTable);
     }
 
@@ -174,9 +196,7 @@ const detailsBar = (function () {
         if (machinesEventsTable !== null) {
             machinesEventsTable.destroy();
         }
-        machinesEventsTable = table.init({
-            id: '',
-        }, items);
+        machinesEventsTable = table.init({ id: '' }, items);
         $$('#machine-events-tab-info').appendChild(machinesEventsTable);
     }
 
@@ -193,9 +213,6 @@ const detailsBar = (function () {
         machineGmcid.dataset.gmcid = items.Gmcid;
     }
 
-
-
-
     editCurrentMachine.addEventListener('click', function () {
         editMachine.show();
     });
@@ -207,14 +224,13 @@ const detailsBar = (function () {
     window.addEventListener('keyup', function (event) {
         if (event.keyCode == 27) {
             details.hide();
-
         }
     });
 
     on('show/app', function () {
         details.hide();
     });
-
-
-
+    return {
+        prepareData
+    }
 })();

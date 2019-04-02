@@ -37,6 +37,10 @@
 #machine-edit-id {
     width: 50px;
 }
+#machine-edit-name, #machine-edit-serial{
+    width: 320px;
+
+}
 
 .machine-edit-info>div:last-child {
     margin-right: 1rem;
