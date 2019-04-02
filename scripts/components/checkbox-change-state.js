@@ -1,5 +1,5 @@
 const checkboxChangeState = (function () {
-    
+
     function checkboxClick(checkbox) {
         let input = checkbox.getElementsByClassName('form-checkbox')[0].children[0];
         checkbox.onclick = function () {
@@ -30,9 +30,23 @@ const checkboxChangeState = (function () {
         }
     }
 
+    function getCheckboxState(checkbox) {
+        return checkbox.getElementsByClassName('form-checkbox')[0].children[0].checked;
+    }
+    function getRadioState(radioWrapper) {
+        for (let radio of radioWrapper.getElementsByClassName('form-radio')) {
+            let input = radio.children[0];
+            if (input.checked) {
+                return radio.dataset.value;
+            }
+        }
+    }
+
     return {
         checkboxClick,
         radioClick,
-        checkboxIsChecked
+        checkboxIsChecked,
+        getRadioState,
+        getCheckboxState
     }
 })();

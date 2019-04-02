@@ -37,7 +37,7 @@ const editMachine = (function () {
     on('machines/details-edit-machine', function (params) {
         let data = params.data.Data;
 
-        console.log(params)
+
 
         machineSerialNumber.value = 'stize u service';
         machineOrdinalNumber.value = data.OrdinalNumber;
@@ -56,9 +56,9 @@ const editMachine = (function () {
         checkboxChangeState.checkboxIsChecked(allowPromoTicket.children[0].children[0], data.AllowedPromoTickets);
         checkboxChangeState.checkboxIsChecked(enableAftTransaction.children[0].children[0], data.AllowedTransaction);
 
-
-
-
+        console.log(checkboxChangeState.getCheckboxState(allowPromoTicket))
+        console.log(checkboxChangeState.getRadioState(speedType))
+       
         // let dropdownVendors;
         // let dropdownType;
         // let dropdownSerial;
@@ -79,6 +79,7 @@ const editMachine = (function () {
         // dropdownSerial = dropdown.generate({ values: data.MachineCodeList, parent: machineEditSerialSelect });
 
     });
+
     removeMachineFromCasino.onclick = function () {
         let EntryData = detailsBar.prepareData();
         let data = {};
@@ -89,12 +90,13 @@ const editMachine = (function () {
 
 
     }
+    
     on('machines/remove-machine-from-casino', function (params) {
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
- 
+
         //masina posalje da je izbrisana a jos postoji u bazi pa je ukloni nakon nekog vremena
         setTimeout(() => {
             let filters = machines.prepareMachinesFilters();
