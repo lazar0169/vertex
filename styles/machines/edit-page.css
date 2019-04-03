@@ -5,11 +5,12 @@
     width: 100%;
     top: -6%;
     transition: all 0.1s ease;
-    padding: 1rem 0;
+    padding: 1em 0;
     transform: translateX(0);
     display: flex;
     flex-flow: column;
     color: rgb(120, 144, 156);
+    font-size: 14px;
 }
 
 #machine-edit-mode.collapse {
@@ -21,17 +22,17 @@
     align-items: center;
     width: 100%;
     background: rgb(38, 50, 56);
-    padding: 0.5rem 0;
+    padding: 0.5em 0;
 }
 
 .machine-edit-info>div {
-    margin-left: 1rem;
-    display: inline-flex;
-    align-items: center
+    margin-left: 1em;
+    /* display: inline-flex;
+    align-items: center */
 }
 
 #machine-edit-header>div:not(:first-child) {
-    box-shadow: inset 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0.3em 0.3em 0 rgba(0, 0, 0, 0.5);
 }
 
 #machine-edit-id {
@@ -43,7 +44,7 @@
 }
 
 .machine-edit-info>div:last-child {
-    margin-right: 1rem;
+    margin-right: 1em;
 }
 
 #machine-edit-id>input {
@@ -52,23 +53,23 @@
 
 
 #machine-edit-content {
-    margin-top: 1rem;
+    margin-top: 1em;
     width: 100%;
     background: rgb(38, 50, 56);
     flex: 1;
 }
 
 #machine-edit-content>div {
-    padding: 0 1rem;
-    padding-top: 1rem;
+    padding: 0 1em;
+    padding-top: 1em;
     width: 320px
 }
 
 #machine-edit-content>div:last-child {
-    padding-bottom: 1rem;
+    padding-bottom: 1em;
 }
 
 #machine-edit-enable-aft>div:last-child {
-    padding: 0 1rem;
+    padding: 0 1em;
     width: 320px
 }

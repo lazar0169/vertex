@@ -1,6 +1,9 @@
 let machines = (function () {
     const machinesTableId = 'table-container-machines';
     let machinesTable = null;
+    let autoSelect = $$('#auto-select-status');
+
+
 
     const events = {
         activated: 'machines/activated',
@@ -14,6 +17,9 @@ let machines = (function () {
         let tableSettings = {};
         tableSettings.successEvent = "machines/display-machine-info/"
         trigger(communication.events.machines.getMachines, { data: { EndpointId: machinesId }, tableSettings });
+        autoSelect.dataset.value = 'on';
+        autoSelect.innerHTML = localization.translateMessage(autoSelect.dataset.value);
+        machinesFilter.setAutoInterval();
     });
 
     on('machines/display-machine-info/error', function (e) {
@@ -278,36 +284,34 @@ let machines = (function () {
     //machines preview meters
     on(communication.events.machines.previewMachineMeters, function (params) {
         let route = communication.apiRoutes.machines.previewMachineMeters;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
-            settingsObject: tableSettings,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
     //machines remove meter
     on(communication.events.machines.removeMeter, function (params) {
         let route = communication.apiRoutes.machines.removeMeter;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let tableSettings = params.tableSettings;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
-            settingsObject: tableSettings,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 

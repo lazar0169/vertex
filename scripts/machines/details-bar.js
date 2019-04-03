@@ -20,7 +20,7 @@ const detailsBar = (function () {
     let jackpotServerName = $$('#machine-jackpot-server');
     let machineLastJackpotTable = null;
     let machinesHistoryTable = null;
-    let machinesMetersTable = null;
+
     let machinesEventsTable = null;
 
     let machineSerial = $$('#machine-service-serial');
@@ -31,7 +31,8 @@ const detailsBar = (function () {
         element: serviceModeCheckbox.parentNode
     });
 
-    let machineEditMode = $$('#machine-edit-mode');
+
+
 
 
 
@@ -74,8 +75,8 @@ const detailsBar = (function () {
 
     function prepareData() {
         let data = {};
-        data.EndpointId = detailsBar.dataset.endpointId;
-        data.Gmcid = detailsBar.dataset.gmcid;
+        data.EndpointId = parseInt(detailsBar.dataset.endpointId);
+        data.Gmcid = parseInt(detailsBar.dataset.gmcid);
         return data;
     }
 
@@ -93,12 +94,7 @@ const detailsBar = (function () {
         trigger(communication.events.machines.getMachineHistory, { data, EntryData });
     });
 
-    on('get-machines/machines-meters', function () {
-        let EntryData = prepareData();
-        let data = {};
-        data.successAction = 'machines/details-meters'
-        trigger(communication.events.machines.getAllMachineMeters, { data, EntryData });
-    });
+
 
     on('get-machines/machines-events', function () {
         let EntryData = prepareData();
@@ -129,9 +125,10 @@ const detailsBar = (function () {
         fillHistoryTab(params);
     });
 
-    on('machines/details-meters', function (params) {
-        fillMetersTab(params);
-    });
+
+
+
+
 
     on('machines/details-events', function (params) {
         fillEventsTab(params);
@@ -181,15 +178,73 @@ const detailsBar = (function () {
         machinesHistoryTable = table.init({ id: '' }, items);
         $$('#machine-history-tab-info').appendChild(machinesHistoryTable);
     }
+    //-----------------Meters Tab----------------------//
+    let machinesMetersTable = null;
+    const machinesMetersTableId = 'table-container-machines-meters';
+
+    on('get-machines/machines-meters', function () {
+        let EntryData = prepareData();
+        let data = {};
+        data.successAction = 'machines/details-meters'
+        trigger(communication.events.machines.getAllMachineMeters, { data, EntryData });
+    });
+
+    on('machines/details-meters', function (params) {
+        fillMetersTab(params);
+    });
+
+    on('machines/details-meters-preview', function (params) {
+        let data = params.data.Data;
+        $$(`#${machinesMetersTableId}`).update(data);
+    });
 
     function fillMetersTab(params) {
         let items = params.data.Data
         if (machinesMetersTable !== null) {
             machinesMetersTable.destroy();
         }
-        machinesMetersTable = table.init({ id: '' }, items);
+        machinesMetersTable = table.init({ id: machinesMetersTableId }, items);
         $$('#machine-meters-tab-info').appendChild(machinesMetersTable);
     }
+
+    on(table.events.pagination(machinesMetersTableId), function () {
+        let EntryData = prepareData();
+        EntryData.Page = machinesMetersTable.settings.page;
+        EntryData.PageSize = machinesMetersTable.settings.pageSize;
+        let data = {};
+        data.successAction = 'machines/details-meters-preview'
+        trigger(communication.events.machines.previewMachineMeters, { data, EntryData })
+    });
+
+    on(table.events.rowClick(machinesMetersTableId), function (params) {
+        if (params.event.target.classList.contains('actionlist-6')) {
+            console.log('ovo ce da edituje miter');
+        }
+        else if (params.event.target.classList.contains('actionlist-7')) {
+            console.log('ovo ce da brise miter');
+            let EntryData = prepareData()
+            EntryData.Date = params.target.additionalData.EntryData.MeterData.Time;
+            let data = {}
+            data.successAction = 'machines/details-meters-remove'
+            trigger(communication.events.machines.removeMeter, { data, EntryData });
+        }
+    });
+    on('machines/details-meters-remove', function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        let EntryData = prepareData();
+        EntryData.Page = machinesMetersTable.settings.page;
+        EntryData.PageSize = machinesMetersTable.settings.pageSize;
+        let data = {}
+        data.successAction = 'machines/details-meters-preview'
+        trigger(communication.events.machines.previewMachineMeters, { data, EntryData });
+
+    });
+
+
+    //-------------------------------------------------//
 
     function fillEventsTab(params) {
         let items = params.data.Data

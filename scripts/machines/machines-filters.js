@@ -17,16 +17,23 @@ const machinesFilter = (function () {
     autoSelect.onclick = function () {
         if (autoSelect.dataset.value === 'on') {
             autoSelect.dataset.value = 'off';
-            clearInterval(autoSelectOn)
+            clearInterval(autoSelectOn);
         } else {
             autoSelect.dataset.value = 'on';
-            autoSelectOn = setInterval(autoSelectInterval, 3000);
-
+            setAutoInterval();
         }
         autoSelect.innerHTML = localization.translateMessage(autoSelect.dataset.value);
     }
+
+    function setAutoInterval() {
+        autoSelectOn = setInterval(autoSelectInterval, 3000);
+    }
+    
     function autoSelectInterval() {
-        trigger('machines/table/filter')
+        trigger('machines/table/filter');
+        if (JSON.parse(sessionStorage.categoryAndLink).category !== 'Machines') {
+            clearInterval(autoSelectOn);
+        }
     }
 
     machineWithPlayer.onclick = function () {
@@ -79,5 +86,8 @@ const machinesFilter = (function () {
     function filterMachinesTable() {
         let filters = machines.prepareMachinesFilters();
         trigger(communication.events.machines.previewMachines, { data: filters });
+    }
+    return {
+        setAutoInterval
     }
 })();
