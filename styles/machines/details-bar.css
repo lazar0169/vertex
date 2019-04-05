@@ -19,7 +19,7 @@
 #machines-header {
     position: relative;
     width: 100%;
-    height: 150px;
+    height: 130px;
     background: rgb(55, 71, 79);
 }
 
@@ -194,6 +194,7 @@
 #machine-meters-tab-info {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 #machine-meters-tab-header {
@@ -227,4 +228,17 @@
 
 #machine-last-jackpot .pagination {
     display: none;
+}
+
+#details-bar-edit-meters>div:not(:first-child){
+    border-top: 2px solid rgb(55, 71, 79);
+}
+#details-edit-meters-save{
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 0.5em;
+}
+#details-edit-meters-save>button{
+    margin: 0.5em 0;
+    
 }

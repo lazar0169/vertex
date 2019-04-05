@@ -418,6 +418,8 @@ let table = (function () {
 
                 if (Number.isInteger(cellData) && column !== 'Order' && column !== 'Gmcid') {
                     cell.classList.add('input-number-right');
+                    cell.classList.add('table-column-right-padding');
+
                     if (cellData === 9999999999) {
                         cell.innerHTML = '/'
                     } else {

@@ -496,3 +496,7 @@ textarea {
 .actionlist-element.actionlist-7:after {
     content: 'Remove'
 }
+
+.table-column-right-padding{
+    padding-right: 2em !important
+}

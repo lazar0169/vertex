@@ -19,7 +19,7 @@
     text-transform: uppercase;
 }
 
-.tabs:hover {
+.tabs:hover, #details-bar-edit-meters>div:hover {
     color: white;
 }
 
@@ -283,6 +283,9 @@
     transition: all .15s ease-in-out;
     color: white;
 }
+.opened-closed-wrapper{
+    cursor: pointer;
+}
 
 .opened-closed-wrapper>div, .opened-closed-wrapper>span {
     pointer-events: none;
@@ -290,6 +293,7 @@
 
 .opened-closed-wrapper>div {
     padding-right: 0.5em;
+    width: 100%;
 }
 
 .opened-closed-wrapper>span {

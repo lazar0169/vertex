@@ -1,0 +1,20 @@
+#details-bar-edit-meters{
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: rgb(38, 50, 56);
+}
+
+.wrapper-meters>div{
+    display: inline-flex;
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 0.5em
+}
+.wrapper-meters>div:first-child{
+    margin-top: 0.5em;
+}
+.wrapper-meters>div>label, .wrapper-meters>div>input{
+    width: 50%;
+}

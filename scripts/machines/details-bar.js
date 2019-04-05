@@ -31,12 +31,6 @@ const detailsBar = (function () {
         element: serviceModeCheckbox.parentNode
     });
 
-
-
-
-
-
-
     let details = function () {
         return {
             hide: function () {
@@ -62,9 +56,11 @@ const detailsBar = (function () {
     }();
 
     on('machines/machines-details', function (params) {
+        let settings = {}
+        settings.endpointId = params.endpointId;
+        settings.gmcid = params.data.Properties.Gmcid;
+        detailsBar.settings = settings;
 
-        detailsBar.dataset.endpointId = params.endpointId;
-        detailsBar.dataset.gmcid = params.data.Properties.Gmcid;
         selectTab('machine-details-tab');
         selectInfoContent('machine-details-tab');
 
@@ -75,8 +71,8 @@ const detailsBar = (function () {
 
     function prepareData() {
         let data = {};
-        data.EndpointId = parseInt(detailsBar.dataset.endpointId);
-        data.Gmcid = parseInt(detailsBar.dataset.gmcid);
+        data.EndpointId = parseInt(detailsBar.settings.endpointId);
+        data.Gmcid = parseInt(detailsBar.settings.gmcid);
         return data;
     }
 
@@ -124,11 +120,6 @@ const detailsBar = (function () {
     on('machines/details-history', function (params) {
         fillHistoryTab(params);
     });
-
-
-
-
-
 
     on('machines/details-events', function (params) {
         fillEventsTab(params);
@@ -182,6 +173,7 @@ const detailsBar = (function () {
     let machinesMetersTable = null;
     const machinesMetersTableId = 'table-container-machines-meters';
 
+
     on('get-machines/machines-meters', function () {
         let EntryData = prepareData();
         let data = {};
@@ -191,6 +183,13 @@ const detailsBar = (function () {
 
     on('machines/details-meters', function (params) {
         fillMetersTab(params);
+        $$('#details-bar-edit-meters').classList.add('hidden');
+
+        let categories = $$('#details-bar-edit-meters').getElementsByClassName('opened-closed-wrapper');
+        for (let category of categories) {
+            category.parentNode.children[1].classList.add('hidden')
+            category.children[1].classList.remove('opened-arrow');
+        }
     });
 
     on('machines/details-meters-preview', function (params) {
@@ -217,18 +216,23 @@ const detailsBar = (function () {
     });
 
     on(table.events.rowClick(machinesMetersTableId), function (params) {
+        let EntryData = prepareData()
+        EntryData.Date = params.target.additionalData.EntryData.MeterData.Time;
         if (params.event.target.classList.contains('actionlist-6')) {
             console.log('ovo ce da edituje miter');
+            let data = {}
+            data.successAction = 'machines/details-meters-edit'
+            trigger(communication.events.machines.showMachineMeters, { data, EntryData });
+
         }
         else if (params.event.target.classList.contains('actionlist-7')) {
             console.log('ovo ce da brise miter');
-            let EntryData = prepareData()
-            EntryData.Date = params.target.additionalData.EntryData.MeterData.Time;
             let data = {}
             data.successAction = 'machines/details-meters-remove'
             trigger(communication.events.machines.removeMeter, { data, EntryData });
         }
     });
+
     on('machines/details-meters-remove', function (params) {
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode),
@@ -240,7 +244,13 @@ const detailsBar = (function () {
         let data = {}
         data.successAction = 'machines/details-meters-preview'
         trigger(communication.events.machines.previewMachineMeters, { data, EntryData });
+    });
 
+    on('machines/details-meters-save', function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
     });
 
 
