@@ -1,4 +1,5 @@
 let detailsBareditMeters = (function () {
+    
     let enumMeters = {
         0: 'TotalIn',
         1: 'TotalOut',

@@ -20,8 +20,6 @@ const detailsBar = (function () {
     let jackpotServerName = $$('#machine-jackpot-server');
     let machineLastJackpotTable = null;
 
-
-
     let details = function () {
         return {
             hide: function () {
@@ -34,6 +32,7 @@ const detailsBar = (function () {
             }
         };
     }();
+
     let editMachine = function () {
         return {
             hide: function () {
@@ -46,8 +45,14 @@ const detailsBar = (function () {
         };
     }();
 
+    function prepareData() {
+        let data = {};
+        data.EndpointId = parseInt(detailsBar.settings.endpointId);
+        data.Gmcid = parseInt(detailsBar.settings.gmcid);
+        return data;
+    }
 
-
+    //--------------------Details Tab-----------------------------------------//
     on('machines/machines-details', function (params) {
         let settings = {}
         settings.endpointId = params.endpointId;
@@ -56,21 +61,7 @@ const detailsBar = (function () {
 
         selectTab('machine-details-tab');
         selectInfoContent('machine-details-tab');
-
-        // data.successAction = 'machines/details-edit-machine'
-        // trigger(communication.events.machines.editMachine, { data, EntryData });
-
     });
-
-    function prepareData() {
-        let data = {};
-        data.EndpointId = parseInt(detailsBar.settings.endpointId);
-        data.Gmcid = parseInt(detailsBar.settings.gmcid);
-        return data;
-    }
-
-
-    //--------------------Details Tab-----------------------------------------//
 
     on('get-machines/machines-details', function () {
         let EntryData = prepareData();
@@ -78,6 +69,36 @@ const detailsBar = (function () {
         data.successAction = 'machines/details'
         trigger(communication.events.machines.getMachineDetails, { data, EntryData });
     });
+
+    on('machines/details', function (params) {
+        fillDetailsTab(params)
+        details.show();
+        trigger('machines/details-edit-machine', params);
+    });
+
+    function fillDetailsTab(params) {
+        let data = params.data.Data;
+        machineName.innerHTML = data.MachineName;
+        casinoServerName.innerHTML = data.CasinoServerName;
+        ordinalNumber.innerHTML = data.OrdinalNumber;
+        aftServerName.innerHTML = data.AftServerName;
+        titoServerName.innerHTML = data.TitoServerName
+        machineVendor.innerHTML = data.Vendor;
+        machineType.innerHTML = data.Type;
+        notificationValueLimit.innerHTML = formatFloatValue(data.NotificationValueLimit / 100);
+        allowedPromoTickets.innerHTML = data.AllowedPromoTickets ? localization.translateMessage('Yes') : localization.translateMessage('No');
+        allowedTransaction.innerHTML = data.AllowedTransaction ? localization.translateMessage('Yes') : localization.translateMessage('No');
+        maxValueForTicketPrinting.innerHTML = formatFloatValue(data.MaximumValueForTicketPrinting / 100);
+        maxValueForTransaction.innerHTML = formatFloatValue(data.MaximumValueForTransaction / 100);
+        jackpotServerName.innerHTML = data.JackpotServerName.join(", ");
+        speedType.innerHTML = localization.translateMessage(data.SpeedType);
+
+        if (machineLastJackpotTable !== null) {
+            machineLastJackpotTable.destroy();
+        }
+        machineLastJackpotTable = table.init({ id: '' }, { Items: data.LastJackpots });
+        $$('#machine-last-jackpot').appendChild(machineLastJackpotTable);
+    }
     //------------------------------------------------------------------------//
 
     //----------------------Service Tab--------------------------------------//
@@ -126,39 +147,6 @@ const detailsBar = (function () {
     });
     //----------------------------------------------------------------------//
 
-
-    on('machines/details', function (params) {
-        fillDetailsTab(params)
-        details.show();
-        trigger('machines/details-edit-machine', params);
-    });
-
-
-
-    function fillDetailsTab(params) {
-        let data = params.data.Data;
-        machineName.innerHTML = data.MachineName;
-        casinoServerName.innerHTML = data.CasinoServerName;
-        ordinalNumber.innerHTML = data.OrdinalNumber;
-        aftServerName.innerHTML = data.AftServerName;
-        titoServerName.innerHTML = data.TitoServerName
-        machineVendor.innerHTML = data.Vendor;
-        machineType.innerHTML = data.Type;
-        notificationValueLimit.innerHTML = formatFloatValue(data.NotificationValueLimit / 100);
-        allowedPromoTickets.innerHTML = data.AllowedPromoTickets ? localization.translateMessage('Yes') : localization.translateMessage('No');
-        allowedTransaction.innerHTML = data.AllowedTransaction ? localization.translateMessage('Yes') : localization.translateMessage('No');
-        maxValueForTicketPrinting.innerHTML = formatFloatValue(data.MaximumValueForTicketPrinting / 100);
-        maxValueForTransaction.innerHTML = formatFloatValue(data.MaximumValueForTransaction / 100);
-        jackpotServerName.innerHTML = data.JackpotServerName.join(", ");
-        speedType.innerHTML = localization.translateMessage(data.SpeedType);
-
-        if (machineLastJackpotTable !== null) {
-            machineLastJackpotTable.destroy();
-        }
-        machineLastJackpotTable = table.init({ id: '' }, { Items: data.LastJackpots });
-        $$('#machine-last-jackpot').appendChild(machineLastJackpotTable);
-    }
-
     //---------------------Events Tab---------------------------------------------------------//
     let machinesEventsTable = null;
     let machinesEventsTableId = 'machines-events-table-id'
@@ -177,6 +165,7 @@ const detailsBar = (function () {
             trigger(communication.events.machines.previewMachineEvents, { data, EntryData });
         }
     }
+
     paginationEventsNext.onclick = function () {
         if (machinesEventsTable.data.totalItems === 20) {
             machinesEventsTable.settings.page += 1;
@@ -218,13 +207,11 @@ const detailsBar = (function () {
         detailsPaginationEvents.children[1].innerHTML = machinesEventsTable.settings.page;
         $$('#machine-events-tab-info').appendChild(machinesEventsTable);
     }
-
     //----------------------------------------------------------------------------------------//
 
     //-----------------------------History Tab------------------------------------------------//
     let machinesHistoryTable = null;
     let machinesHistoryTableId = 'machine-history-table-content';
-
     let detailsPaginationHistory = $$('#pagination-history');
     let paginationHistoryPrev = detailsPaginationHistory.children[0];
     let paginationHistoryNext = detailsPaginationHistory.children[2];
@@ -275,7 +262,6 @@ const detailsBar = (function () {
         EntryData.Date = table.settings.Date;
         return EntryData;
     }
-
 
     function fillHistoryTab(params) {
 
@@ -379,12 +365,7 @@ const detailsBar = (function () {
             type: params.data.MessageType,
         });
     });
-
-
     //-------------------------------------------------------------------------------------//
-
-
-
 
     editCurrentMachine.addEventListener('click', function () {
         editMachine.show();

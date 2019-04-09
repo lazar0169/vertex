@@ -3,8 +3,6 @@ let machines = (function () {
     let machinesTable = null;
     let autoSelect = $$('#auto-select-status');
 
-
-
     const events = {
         activated: 'machines/activated',
         displayMachinesInfo: 'machines/display-machine-info/',
@@ -12,6 +10,7 @@ let machines = (function () {
         filterTable: 'machines/table/filter',
         // showChangeStateMalfunctionMessage: 'malfunction/changeState'
     };
+
     on(events.activated, function (params) {
         let machinesId = params.params[0].value;
         let tableSettings = {};
@@ -78,8 +77,6 @@ let machines = (function () {
         var machineWithPlayer = $$('#machine-filters-player').getElementsByClassName('form-checkbox')[0].children[0].checked ? true : false;
         var vendorList = $$('#machines-advance-table-filter-vendors').children[1].get();
         var statusesList = $$('#machines-advance-table-filter-status').children[1].get();
-
-
         var filters = {
             'EndpointId': table.settings.endpointId,
             'VendorList': vendorList === 'null' ? null : vendorList.split(',').map(Number),
@@ -103,9 +100,7 @@ let machines = (function () {
         trigger('machines/machines-details', { data: params.target.additionalData, endpointId: parseInt($$('#table-container-machines').dataset.endpointId) });
     });
 
-
     /*------------------------------------ MACHINES EVENTS ----------------------------------*/
-
     //get all machines
     on(communication.events.machines.getMachines, function (params) {
         let route = communication.apiRoutes.machines.getMachines;
@@ -411,7 +406,6 @@ let machines = (function () {
     });
 
     /*-----------------------------------------------------------------------------------------*/
-
     return {
         prepareMachinesFilters
     }

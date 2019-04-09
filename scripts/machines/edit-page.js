@@ -5,13 +5,13 @@ const editMachine = (function () {
         Medium: 1,
         Fast: 2
     }
+
     let editMachineContent = $$('#machine-edit-content')
     let machineEditVendor = $$('#machine-edit-vendor');
     let machineEditType = $$('#machine-edit-type');
     let machineEditSerialSelect = $$('#machine-edit-serial-select');
     let backMachineEdit = $$('#machine-edit-back');
     let machineEditMode = $$('#machine-edit-mode');
-
     let machineSerialNumber = $$('#machine-edit-serial').children[1];
     let machineOrdinalNumber = $$('#machine-edit-id').children[1];
     let machineName = $$('#machine-edit-name').children[1];
@@ -20,8 +20,6 @@ const editMachine = (function () {
     let field3 = $$('#machine-integration-parameters-field-3');
     let field4 = $$('#machine-integration-parameters-field-4');
     let field5 = $$('#machine-integration-parameters-field-5');
-
-
 
     let maxTicketPrinting = $$('#machine-max-ticket-printing');
     validation.init(maxTicketPrinting, {});
@@ -38,7 +36,6 @@ const editMachine = (function () {
     let speedType = $$('#machine-edit-speed-type');
     checkboxChangeState.radioClick(speedType);
 
-
     let allowPromoTicket = $$('#machine-edit-allow-promo-ticket');
     checkboxChangeState.checkboxClick(allowPromoTicket);
     let enableAftTransaction = $$('#machine-edit-enable-aft').children[0];
@@ -52,7 +49,6 @@ const editMachine = (function () {
         let EntryData = prepareDataForApi();
         let data = {}
         data.successAction = 'machines/save-edited-machine';
-        console.log(EntryData)
         trigger(communication.events.machines.saveMachine, { data, EntryData });
     }
     on('machines/save-edited-machine', function (params) {
@@ -60,7 +56,6 @@ const editMachine = (function () {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
-        console.log('sacuvao sam masinu')
     });
 
     function prepareDataForApi() {
@@ -90,14 +85,10 @@ const editMachine = (function () {
         data.Field3 = field3.value;
         data.Field4 = field4.value;
         data.Field5 = field5.value;
-
-
-
         return data;
     }
 
     on('machines/details-edit-machine', function (params) {
-
         let data = params.data.Data;
         editMachineContent.settings = data;
         machineSerialNumber.value = data.SerialNumber;
@@ -146,7 +137,6 @@ const editMachine = (function () {
         }
         dropdownSerial = dropdown.generate({ values: data.MachineCodeList, parent: machineEditSerialSelect });
         dropdownSerial.children[1].set([`${data.MachineCode}`])
-
     });
 
     removeMachineFromCasino.onclick = function () {
@@ -162,8 +152,6 @@ const editMachine = (function () {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
-
-
     });
 
     backMachineEdit.addEventListener('click', function () {
