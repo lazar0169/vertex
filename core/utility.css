@@ -79,7 +79,7 @@
     align-items: center;
 }
 
-.advance-filter-tabele-search {
+/* .advance-filter-tabele-search {
     cursor: pointer;
 }
 
@@ -95,7 +95,7 @@
 .advance-filter-tabele-search-active .search {
     height: 40px !important;
     width: 600px !important;
-}
+} */
 
 .advance-table-filter {
     position: relative;

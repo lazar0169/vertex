@@ -5,6 +5,7 @@ const editMachine = (function () {
         Medium: 1,
         Fast: 2
     }
+    let editMachineContent = $$('#machine-edit-content')
     let machineEditVendor = $$('#machine-edit-vendor');
     let machineEditType = $$('#machine-edit-type');
     let machineEditSerialSelect = $$('#machine-edit-serial-select');
@@ -14,6 +15,13 @@ const editMachine = (function () {
     let machineSerialNumber = $$('#machine-edit-serial').children[1];
     let machineOrdinalNumber = $$('#machine-edit-id').children[1];
     let machineName = $$('#machine-edit-name').children[1];
+    let field1 = $$('#machine-integration-parameters-field-1');
+    let field2 = $$('#machine-integration-parameters-field-2');
+    let field3 = $$('#machine-integration-parameters-field-3');
+    let field4 = $$('#machine-integration-parameters-field-4');
+    let field5 = $$('#machine-integration-parameters-field-5');
+
+
 
     let maxTicketPrinting = $$('#machine-max-ticket-printing');
     validation.init(maxTicketPrinting, {});
@@ -41,14 +49,23 @@ const editMachine = (function () {
     let saveEditMachine = $$('#machine-edit-save');
 
     saveEditMachine.onclick = function () {
-        let data = prepareDataForApi();
-        alert('ne stizu podaci svi sa servera')
-        console.log(data)
+        let EntryData = prepareDataForApi();
+        let data = {}
+        data.successAction = 'machines/save-edited-machine';
+        console.log(EntryData)
+        trigger(communication.events.machines.saveMachine, { data, EntryData });
     }
+    on('machines/save-edited-machine', function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        console.log('sacuvao sam masinu')
+    });
 
     function prepareDataForApi() {
         let data = detailsBar.prepareData()
-        data.ID = 'jedinstveni broj masine'
+        data.ID = editMachineContent.settings.ID;
         data.Name = machineName.value;
         data.EnableTransaction = checkboxChangeState.getCheckboxState(enableAftTransaction);
         data.TransactionLimit = parseInt($$('#machine-edit-enable-aft').children[1].children[1].dataset.value);
@@ -61,19 +78,29 @@ const editMachine = (function () {
         data.Type = $$('#machine-edit-type').children[1].children[0].dataset.value;
         data.Vendor = $$('#machine-edit-vendor').children[1].children[0].dataset.value;
         let vendorId = $$('#machine-edit-vendor').children[1].get()
-        data.VendorId = vendorId === 'null' ? null : vendorId;
+        data.VendorId = vendorId === 'null' ? null : parseInt(vendorId);
         data.OrdinalNumber = parseInt(machineOrdinalNumber.value);
         data.SerialNumber = machineSerialNumber.value;
         data.MeterStepValue = parseInt(meterValue.dataset.value);
         data.MachineCodeName = machineEditSerialSelect.children[1].children[0].dataset.value;
         let machineCode = machineEditSerialSelect.children[1].get()
         data.MachineCode = machineCode === 'null' ? null : parseInt(machineCode);
+        data.Field1 = field1.value;
+        data.Field2 = field2.value;
+        data.Field3 = field3.value;
+        data.Field4 = field4.value;
+        data.Field5 = field5.value;
+
+
+
         return data;
     }
 
     on('machines/details-edit-machine', function (params) {
+
         let data = params.data.Data;
-        machineSerialNumber.value = 'stize u service';
+        editMachineContent.settings = data;
+        machineSerialNumber.value = data.SerialNumber;
         machineOrdinalNumber.value = data.OrdinalNumber;
         machineName.value = data.MachineName;
         maxTicketPrinting.value = formatFloatValue(data.MaximumValueForTicketPrinting / 100);
@@ -82,6 +109,11 @@ const editMachine = (function () {
         meterValue.dataset.value = data.NotificationValueLimit;
         maxValueTransaction.value = formatFloatValue(data.MaximumValueForTransaction / 100);
         maxValueTransaction.dataset.value = data.MaximumValueForTransaction
+        field1.value = data.Field1;
+        field2.value = data.Field2;
+        field3.value = data.Field3;
+        field4.value = data.Field4;
+        field5.value = data.Field5;
 
         for (let radio of speedType.getElementsByClassName('form-radio')) {
             if (radio.dataset.value === data.SpeedType) {
@@ -93,24 +125,27 @@ const editMachine = (function () {
         checkboxChangeState.checkboxIsChecked(allowPromoTicket.children[0].children[0], data.AllowedPromoTickets);
         checkboxChangeState.checkboxIsChecked(enableAftTransaction.children[0].children[0], data.AllowedTransaction);
 
-        // let dropdownVendors;
-        // let dropdownType;
-        // let dropdownSerial;
+        let dropdownVendors;
+        let dropdownType;
+        let dropdownSerial;
 
-        // if (dropdownVendors) {
-        //     dropdownVendors.remove();
-        // }
-        // dropdownVendors = dropdown.generate({ values: data.VendorList, parent: machineEditVendor, type: 'single' });
+        if (dropdownVendors) {
+            dropdownVendors.remove();
+        }
+        dropdownVendors = dropdown.generate({ values: data.VendorList, parent: machineEditVendor, type: 'single' });
+        dropdownVendors.children[1].set([`${data.VendorId}`])
 
-        // if (dropdownType) {
-        //     dropdownType.remove();
-        // }
-        // dropdownType = dropdown.generate({ values: data.TypeList, parent: machineEditType, type: 'single' });
+        if (dropdownType) {
+            dropdownType.remove();
+        }
+        dropdownType = dropdown.generate({ values: data.TypeList, parent: machineEditType, type: 'single' });
+        dropdownType.children[1].set([`${data.TypeId}`])
 
-        // if (dropdownSerial) {
-        //     dropdownSerial.remove();
-        // }
-        // dropdownSerial = dropdown.generate({ values: data.MachineCodeList, parent: machineEditSerialSelect });
+        if (dropdownSerial) {
+            dropdownSerial.remove();
+        }
+        dropdownSerial = dropdown.generate({ values: data.MachineCodeList, parent: machineEditSerialSelect });
+        dropdownSerial.children[1].set([`${data.MachineCode}`])
 
     });
 
@@ -120,9 +155,6 @@ const editMachine = (function () {
         data.successAction = 'machines/remove-machine-from-casino'
         trigger(communication.events.machines.removeMachineFromCasino, { data, EntryData });
         machineEditMode.classList.add('collapse');
-        trigger('')
-
-
     }
 
     on('machines/remove-machine-from-casino', function (params) {
@@ -131,16 +163,8 @@ const editMachine = (function () {
             type: params.data.MessageType,
         });
 
-        //masina posalje da je izbrisana a jos postoji u bazi pa je ukloni nakon nekog vremena
-        // setTimeout(() => {
-        //     let filters = machines.prepareMachinesFilters();
-        //     trigger(communication.events.machines.previewMachines, { data: filters });
-        // }, 10000);
-    });
 
-    dropdown.generate({ values: machinesVendors, parent: machineEditVendor, type: 'multi' });
-    dropdown.generate({ values: machinesType, parent: machineEditType, type: 'multi' });
-    dropdown.generate({ values: machinesSerial, parent: machineEditSerialSelect });
+    });
 
     backMachineEdit.addEventListener('click', function () {
         machineEditMode.classList.add('collapse');

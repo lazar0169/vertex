@@ -152,6 +152,7 @@ let table = (function () {
 
     function update(data) {
         let table = this;
+
         //ToDo: parse data here
         table.data.items = data.Items;
         table.data.totalItems = data.NumOfItems;

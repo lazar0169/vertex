@@ -38,7 +38,9 @@
 #machine-edit-id {
     width: 50px;
 }
-#machine-edit-name, #machine-edit-serial{
+
+#machine-edit-name,
+#machine-edit-serial {
     width: 320px;
 
 }
@@ -72,4 +74,8 @@
 #machine-edit-enable-aft>div:last-child {
     padding: 0 1em;
     width: 320px
+}
+
+#machine-edit-integration-parameters>div:not(:first-child) {
+    padding-top: 0.5em;
 }

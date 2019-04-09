@@ -37,7 +37,6 @@ let detailsBareditMeters = (function () {
     }
 
     let metersDetail = $$('#details-bar-edit-meters');
-
     let categories = $$('#details-bar-edit-meters').getElementsByClassName('opened-closed-wrapper');
     let saveMetersButton = $$('#details-edit-meters-save').children[0];
 
@@ -63,6 +62,7 @@ let detailsBareditMeters = (function () {
         settings.EndpointId = data.EndpointId;
         settings.Gmcid = data.Gmcid;
         settings.EventTime = data.EventTime;
+        settings.MeterGroupId = data.MeterGroupId
         metersDetail.settings = settings;
         metersDetail.classList.remove('hidden');
         fillMeters(data.Values);
@@ -114,7 +114,6 @@ let detailsBareditMeters = (function () {
                 }
             }
         }
-
         return values;
     }
 })();
