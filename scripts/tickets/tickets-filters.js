@@ -3,7 +3,6 @@ const ticketsFilter = (function () {
     let advanceTableFilterActive = $$('#tickets-advance-table-filter-active');
     let ticketAdvanceFilterButton = $$('#tickets-advance-table-filter').children[0];
     let advanceTableFilterInfobar = $$('#ticket-advance-table-filter-active-infobar');
-    //ToDo:Nikola vidi cemu sluzi ovo
     let clearAdvanceFilterInfobar = $$('#ticket-advance-table-filter-active-infobar-button').children[0];
     let ticketsAdvanceFilterApplyButton = $$('#tickets-advance-table-filter-apply').children[0];
     let ticketsAdvanceFilterCancelButton = $$('#tickets-advance-table-filter-clear').children[0];

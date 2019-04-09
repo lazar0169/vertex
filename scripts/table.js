@@ -80,14 +80,21 @@ let table = (function () {
         //     console.error(`table ${settings.id} settings endpointId is required`);
         //     return undefined;
         // }
+        if (settings.endpointId || settings.endpointId !== null || settings.endpointId !== undefined) {
+            table.dataset.endpointId = settings.endpointId;
+        }
+        if (settings.pageSize === undefined) {
+            settings.pageSize = data.Items.length;
+        }
+
         table.setAttribute('id', settings.id);
         setDefaults(settings, table);
 
         table.elements = {
             body: generateTableBody(),
             noDataElement: generateNoDataElement(),
-            pagination: generatePagination(),
             pageSize: generatePageSize(table),
+            pagination: generatePagination(),
             appearance: generateAppearanceButtons(table),
             export: generateExportButtons(table)
         };
@@ -145,6 +152,7 @@ let table = (function () {
 
     function update(data) {
         let table = this;
+
         //ToDo: parse data here
         table.data.items = data.Items;
         table.data.totalItems = data.NumOfItems;
@@ -159,6 +167,7 @@ let table = (function () {
         if (table.data.items.length <= 0) {
             table.elements.body.classList.add(hiddenClass);
             table.elements.noDataElement.classList.remove(hiddenClass);
+            table.elements.pagination.classList.add(hiddenClass);
         } else {
             table.elements.body.classList.remove(hiddenClass);
             table.elements.noDataElement.classList.add(hiddenClass);
@@ -221,6 +230,7 @@ let table = (function () {
         filters.TokenInfo = tokenInfo;
 
         let page = compareFilters(table, filters) ? settings.page : 1;
+        // let page = settings.page;
 
         settings.page = page;
         filters.BasicData.Page = page;
@@ -346,7 +356,7 @@ let table = (function () {
                         cell.classList.add('sortable');
                         cell.addEventListener('click', onSort);
                     }
-                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo') {
+                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo' || columnName === 'LastBet' || columnName === 'LastWin' || columnName === 'CurrentCredits' || columnName === 'Value') {
                         cell.classList.add('input-number-right');
                     }
                 }
@@ -400,14 +410,17 @@ let table = (function () {
                 else {
                     cellData = tempRow[column];
                 }
+
                 //set cell to be clickable if criteria are met
                 //ToDo: Add criteria for other pages
                 if (!isEmpty(tempRow.ActionList) && tempRow.ActionList.length > 0) {
                     cell.classList.add('clickable');
                 }
 
-                if (Number.isInteger(cellData)) {
+                if (Number.isInteger(cellData) && column !== 'Order' && column !== 'Gmcid') {
                     cell.classList.add('input-number-right');
+                    cell.classList.add('table-column-right-padding');
+
                     if (cellData === 9999999999) {
                         cell.innerHTML = '/'
                     } else {
@@ -417,6 +430,13 @@ let table = (function () {
                     cell.innerHTML = cellData;
                     //ToDo: if language will be changed from within the application, there are attributes that needs to be set up on cell element using following function
                     // cell.innerHTML = localization.translateMessage(cellData,cell);
+                }
+                if (!cell.classList.contains('column-action-list') && !cell.classList.contains('column-flag-list')) {
+                    if (cell.children.length !== 0) {
+                        cell.title = `${cell.children[1].innerHTML}`;
+                    } else {
+                        cell.title = cell.innerHTML;
+                    }
                 }
                 //hide hidden columns
                 let columnData = settings.columns[column];
@@ -558,6 +578,9 @@ let table = (function () {
         cell.classList.add('table-item');
         cell.classList.add(rowClassPrefix + rowId);
         cell.classList.add(cellColumnClass);
+        if (column === 'ActionList') {
+            cell.classList.add('visibility-hidden-children');
+        }
         if (column === 'actions') {
             cell.classList.add('table-actions-column');
         }
@@ -630,6 +653,11 @@ let table = (function () {
     function hoverRow(elements, highlight = false) {
         for (let element of document.getElementsByClassName(elements)) {
             element.classList[highlight ? "add" : "remove"]('hover');
+        }
+        let array = document.getElementsByClassName(elements);
+        let actionElement = array.item(array.length - 1);
+        if (actionElement.classList.contains('column-action-list')) {
+            actionElement.classList[highlight ? "remove" : "add"]('visibility-hidden-children');
         }
     }
 
@@ -813,14 +841,24 @@ let table = (function () {
         let filterActive = params.active;
         let filterInfobar = params.infobar;
         for (let count = 0; count < filterActive.children.length - 1; count++) {
-            if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
-                filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
-                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
-                filterInfobar.children[1].children[count].classList.remove('hidden');
-            } else {
-                filterInfobar.children[1].children[count].classList.add('hidden');
+
+            filterInfobar.children[1].children[count].children[0].innerHTML = filterActive.children[count].children[0].innerHTML;
+            if (filterActive.children[count].children[1].dataset.type === 'checkbox') {
+                filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].children[2].innerHTML;
+                filterActive.children[count].children[1].children[0].children[0].checked ? filterInfobar.children[1].children[count].classList.remove('hidden') : filterInfobar.children[1].children[count].classList.add('hidden');
+                filterInfobar.children[1].children[count].title = filterInfobar.children[1].children[count].children[1].innerHTML;
             }
+            else {
+
+                if (filterActive.children[count].children[1].children[0].dataset && filterActive.children[count].children[1].children[0].dataset.value !== '-') {
+                    filterInfobar.children[1].children[count].children[1].innerHTML = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].title = filterActive.children[count].children[1].children[0].title;
+                    filterInfobar.children[1].children[count].classList.remove('hidden');
+                } else {
+                    filterInfobar.children[1].children[count].classList.add('hidden');
+                }
+            }
+
         }
         for (let isHidden of filterInfobar.children[1].children) {
             if (isHidden.classList && !isHidden.classList.contains('hidden') && !isHidden.classList.contains('button-wrapper')) {
@@ -860,9 +898,7 @@ let table = (function () {
             settings.stickyRow = true;
         }
 
-        if (settings.pageSize === undefined) {
-            settings.pageSize = defaultPageSize;
-        }
+
         if (settings.page === undefined) {
             settings.page = defaultPage;
         }

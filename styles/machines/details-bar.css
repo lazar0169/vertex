@@ -19,20 +19,20 @@
 #machines-header {
     position: relative;
     width: 100%;
-    height: 20%;
+    height: 130px;
     background: rgb(55, 71, 79);
 }
 
 #machine-current-details {
     display: flex;
     align-items: center;
-    width: 30%;
-    padding: 0.5rem;
+    width: 100%;
+    padding: 0.5em;
     padding-bottom: 0;
 }
 
 #machine-current-name {
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
     color: white;
 }
 
@@ -44,19 +44,20 @@
 }
 
 #machine-curent-casino {
-    padding: 0 1.5rem;
+    padding: 0 1.5em;
 }
 
 #machine-close-details-bar {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 0.5rem;
+    padding: 0.5em;
     padding-bottom: 0;
     cursor: pointer;
 }
 
-#machine-close-details-bar:hover>span, #info-tabs>div:hover {
+#machine-close-details-bar:hover>span,
+#info-tabs>div:hover {
     color: rgb(30, 155, 227);
 }
 
@@ -67,7 +68,7 @@
 }
 
 #info-tabs>div {
-    padding: 0.5rem;
+    padding: 0.5em;
     cursor: pointer;
 }
 
@@ -75,20 +76,22 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    padding: 0.5rem;
+    padding: 0.5em;
     cursor: pointer;
     color: rgb(30, 155, 227);
 }
 
 .tab-active {
-    border-bottom: 3px solid rgb(30, 155, 227)!important;
+    border-bottom: 3px solid rgb(30, 155, 227) !important;
     color: white !important;
     font-weight: 800;
 }
 
 #machine-info-content {
     height: 80%;
-    padding: 0.5rem;
+    padding: 0.5em;
+    font-family: 'Open Sans';
+    font-size: 14px;
 }
 
 #machine-details-tab-info {
@@ -97,35 +100,55 @@
 }
 
 #machine-details-tab-info>div {
-    padding: 1rem 0;
+    padding: 1em 0;
 }
 
-#machine-general-info, #machine-tito, #machine-aft, #machine-service-tab-info>div:first-child {
+#machine-general-info,
+#machine-tito,
+#machine-aft,
+#machine-service-tab-info>div:first-child {
     border-bottom: 2px solid rgb(55, 71, 79);
 }
 
-#machine-general-info>div, #machine-aft-casino, #machine-jackpot-casino, #machine-tito-system, #machine-service-tab-info>div:first-child, #machine-service-mode, #machine-service-info>div {
+#machine-general-info>div,
+#machine-aft-casino,
+#machine-jackpot-casino,
+#machine-tito-system,
+#machine-service-tab-info>div:first-child,
+#machine-service-mode,
+#machine-service-info>div {
     display: flex;
     align-items: center;
 }
 
-#machine-general-info>div>div, .machine-category-info>div>div, #machine-tito-name, #machine-aft-name, #machine-service-info>div>div, #machine-jackpot-name {
-    padding: 0 0.5rem;
+#machine-general-info>div>div,
+.machine-category-info>div>div,
+#machine-tito-name,
+#machine-aft-name,
+#machine-service-info>div>div,
+#machine-jackpot-name {
+    padding: 0 0.5em;
     color: white;
 }
 
-#machine-general-info>div>div:first-child, .machine-category-info>div>div:first-child, #machine-service-info>div>div:first-child {
+#machine-tito-name>div:not(:first-child),
+#machine-aft-name>div:not(:first-child) {
+    padding-left: 0.5em
+}
+
+#machine-general-info>div>div:first-child,
+.machine-category-info>div>div:first-child,
+#machine-service-info>div>div:first-child {
     color: rgb(120, 144, 156);
 }
 
 .machine-category-info>div {
     display: flex;
-    padding: 0 1.3rem;
+    padding: 0 1.3em;
 }
 
 #machine-jackpot-server {
-    margin-left: 1.3rem;
-    padding-top: 0.5rem;
+    margin-left: 1.3em;
 }
 
 #machine-jackpot {
@@ -135,7 +158,7 @@
 
 #machine-last-jackpot {
     flex: 1;
-    padding: 0.5rem 1.3rem;
+    padding: 0.5em 1.3em;
     padding-bottom: 0;
     color: white;
 }
@@ -145,29 +168,29 @@
 }
 
 #machine-service-mode {
-    padding: 0 0.5rem;
+    padding: 0 0.5em;
 }
 
 #machine-service-tab-info>div {
-    padding: 0.5rem 1.3rem;
+    padding: 0.5em 1.3em;
 }
 
 #machine-history-tab-info {
     position: relative;
-    padding: 0 0.8rem;
+    padding: 0 0.8em;
 }
 
 .active-content {
     width: 100%;
-    height:calc(100vh - 130px);
-    max-height:calc(100vh - 130px);
+    height: calc(100vh - 130px);
+    max-height: calc(100vh - 130px);
 }
 
 .table-head {
     position: absolute;
     width: auto;
     height: 100%;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.5em;
     pointer-events: none;
 }
 
@@ -175,7 +198,7 @@
     position: absolute;
     width: auto;
     height: 100%;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.5em;
 }
 
 .table-head>table>tbody {
@@ -189,6 +212,7 @@
 #machine-meters-tab-info {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 #machine-meters-tab-header {
@@ -210,12 +234,50 @@
     color: white;
 }
 
-.machine-meter-wrapper>div, .machine-meter-wrapper-time>div, .machine-meter-wrapper-info>div, .machine-meter-wrapper-info>div>div:not(:first-child), .machine-meter-wrapper-edit>div {
+.machine-meter-wrapper>div,
+.machine-meter-wrapper-time>div,
+.machine-meter-wrapper-info>div,
+.machine-meter-wrapper-info>div>div:not(:first-child),
+.machine-meter-wrapper-edit>div {
     display: flex;
-    padding: 0 0.3rem;
+    padding: 0 0.3em;
 }
 
 .machine-meter-wrapper-edit {
     display: inline-flex;
     align-items: center;
+}
+
+#machine-last-jackpot .pagination {
+    display: none;
+}
+
+#details-bar-edit-meters>div:not(:first-child) {
+    border-top: 2px solid rgb(55, 71, 79);
+}
+
+#details-edit-meters-save {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 0.5em;
+}
+
+#details-edit-meters-save>button {
+    margin: 0.5em 0;
+}
+
+.default-pagination {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    padding: 0.5em;
+}
+
+.default-pagination>div {
+    cursor: pointer;
+}
+
+.default-pagination>div:nth-child(2) {
+    padding: 0 0.5em;
+    cursor: default;
 }

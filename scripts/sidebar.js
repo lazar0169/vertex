@@ -364,32 +364,7 @@ const sidebar = (function () {
         tooltipText.innerHTML = menuData[category].List;
         tooltipText.classList.remove('hidden');
     }
-    //test, if you don't need it anymore, remove it
-    let isActiveDetailsTest = true;
-    let detailsmenutest = function () {
-        return {
-            collapse: function () {
-                //test, if you don't need it anymore, remove it
-                $$('#details-bar').classList.remove('collapse');
-                blackArea.classList.add('show');
-            },
-            expand: function () {
-                //test, if you don't need it anymore, remove it
-                $$('#details-bar').classList.add('collapse');
-                blackArea.classList.remove('show');
-                editMode.classList.add('collapse');
-            }
-        };
-    }();
-    //test, if you don't need it anymore, remove it
-    $$('#test-enable-details').addEventListener('click', function () {
-        selectTab('machine-details-tab');
-        selectInfoContent('machine-details-tab');
 
-        isActiveDetailsTest ?
-            detailsmenutest.collapse() :
-            detailsmenutest.expand();
-    });
     //helper functions
     function initVariables() {
         let category;

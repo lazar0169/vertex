@@ -32,7 +32,7 @@
     display: none;
 }
 
-.element-pagination-page-button, .aft-pagination .element-pagination-link {
+.element-pagination-page-button, .pagination .element-pagination-link {
     color: rgb(111, 134, 144);
     background: rgb(38, 50, 56);
     border: none;
@@ -54,7 +54,7 @@
     border: none;
 }
 
-.aft-pagination .page-item a {
+.pagination .page-item a {
     padding: 0;
 }
 
