@@ -130,7 +130,8 @@
     justify-content: flex-start;
 }
 
-.cell.first-cell.cell-flag, .cell-cancel-head.cell.cell-cancel {
+.cell.first-cell.cell-flag,
+.cell-cancel-head.cell.cell-cancel {
     top: 0;
     position: sticky !important;
     position: -webkit-sticky;
@@ -193,7 +194,8 @@
     left: 0;
 }
 
-.head.active-column, .cell.active-column {
+.head.active-column,
+.cell.active-column {
     background: #2F3B41;
     color: white;
 }
@@ -272,7 +274,8 @@ textarea {
     margin: 20px 0 0 20px;
 }
 
-.hide-column-section, .row-flag-section {
+.hide-column-section,
+.row-flag-section {
     display: flex;
     flex-direction: row;
     width: 500px;
@@ -280,7 +283,8 @@ textarea {
     justify-content: flex-start;
 }
 
-.hide-column-button, .row-flag-button {
+.hide-column-button,
+.row-flag-button {
     margin-left: 20px;
 }
 
@@ -290,7 +294,8 @@ textarea {
 
 /** FLAGS **/
 
-.head.cell.cell-flag, .table-item.cell.cell-flag {
+.head.cell.cell-flag,
+.table-item.cell.cell-flag {
     width: 25px;
 }
 
@@ -418,11 +423,17 @@ textarea {
     padding-right: 20px;
 }
 
-.cell-createdby, .cell-finishedby, .cell-issuedby, .cell-redeemedby {
+.cell-createdby,
+.cell-finishedby,
+.cell-issuedby,
+.cell-redeemedby {
     display: block;
 }
 
-.cell-createdby.head, .cell-finishedby.head, .cell-issuedby.head, .cell-redeemedby.head {
+.cell-createdby.head,
+.cell-finishedby.head,
+.cell-issuedby.head,
+.cell-redeemedby.head {
     display: flex;
     flex-direction: row;
 }
@@ -431,7 +442,10 @@ textarea {
     color: #6D818C;
 }
 
-.cell-createdby.head.hidden-column, .cell-finishedby.head.hidden-column, .cell-cashoutedby.head.hidden-column, .cell-redeemedby.head.hidden-column {
+.cell-createdby.head.hidden-column,
+.cell-finishedby.head.hidden-column,
+.cell-cashoutedby.head.hidden-column,
+.cell-redeemedby.head.hidden-column {
     display: none;
 }
 
@@ -481,6 +495,14 @@ textarea {
     content: 'Cancel'
 }
 
+.actionlist-element.actionlist-2 {
+    background: blue
+}
+
+.actionlist-element.actionlist-2:after {
+    content: 'Details'
+}
+
 .actionlist-element.actionlist-6 {
     background: red
 }
@@ -497,6 +519,6 @@ textarea {
     content: 'Remove'
 }
 
-.table-column-right-padding{
+.table-column-right-padding {
     padding-right: 2em !important
 }

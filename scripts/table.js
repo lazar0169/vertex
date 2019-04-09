@@ -356,7 +356,7 @@ let table = (function () {
                         cell.classList.add('sortable');
                         cell.addEventListener('click', onSort);
                     }
-                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo' || columnName === 'LastBet' || columnName === 'LastWin' || columnName === 'CurrentCredits' || columnName === 'Value') {
+                    if (columnName === 'Amount' || columnName === 'AmountCashable' || columnName === 'AmountPromo' || columnName === 'LastBet' || columnName === 'LastWin' || columnName === 'CurrentCredits' || columnName === 'Value' || columnName === 'StartValue') {
                         cell.classList.add('input-number-right');
                     }
                 }

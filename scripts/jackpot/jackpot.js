@@ -1,24 +1,104 @@
 const jackpots = (function () {
 
-    on('jackpots/activated', function (params) {
-       
+    let pageJackpot = $$('#page-jackpots');
+
+
+    const events = {
+        activated: 'jackpots/activated',
+        getJackpots: 'jackpot/get-jackpots',
+        getJackpotHistory: 'jackpot/get-jackpot-history',
+
+    };
+
+    on(events.activated, function (params) {
+        let jackpotId = params.params[0].value;
+        pageJackpot.settings = {
+            EndpointId: jackpotId
+        }
+        let data = {}
+        data.successAction = 'jackpot/set-filters'
+        let EntryData = getEndpointId()
         selectTab('jackpot-tab');
         selectInfoContent('jackpot-tab');
+        trigger(communication.events.jackpots.getFilters, { data, EntryData });
+
     });
 
-    //get all jackpots
+    function getEndpointId() {
+        let endpointId = pageJackpot.settings.EndpointId;
+        let EntryData = {};
+        EntryData.EndpointId = endpointId;
+        return EntryData;
+    }
+    //------------------Jackpot Tab----------------------------------------//
+    const jackpotsTableId = 'table-container-jackpots';
+    let jackpotsTable = null;
+
+
+    on(events.getJackpots, function (params) {
+        let EntryData = getEndpointId()
+        let data = {};
+        data.successAction = 'jackpot/show-jackpots-table'
+        trigger(communication.events.jackpots.getJackpots, { data, EntryData });
+    });
+
+    on('jackpot/show-jackpots-table', function (params) {
+        if (jackpotsTable !== null) {
+            jackpotsTable.destroy();
+        }
+        jackpotsTable = table.init({
+            id: jackpotsTableId,
+            pageSizeContainer: '#jackpot-machines-number',
+            appearanceButtonsContainer: '#jackpot-show-space'
+        },
+            params.data.Data);
+        $$('#jackpot-tab-info').appendChild(jackpotsTable);
+        trigger('preloader/hide');
+    });
+    //---------------------------------------------------------------------//
+
+
+    //-----------------------Jackpot History Tab------------------------------//
+    const jackpotsHistoryTableId = 'table-container-jackpot-history';
+    let jackpotsHistoryTable = null;
+
+    on(events.getJackpotHistory, function (params) {
+        let data = {};
+        data.successAction = 'jackpot/show-jackpots-history-table'
+        let EntryData = getEndpointId();
+        trigger(communication.events.jackpots.getJackpotHistory, { data, EntryData });
+    });
+
+    on('jackpot/show-jackpots-history-table', function (params) {
+        if (jackpotsHistoryTable !== null) {
+            jackpotsHistoryTable.destroy();
+        }
+        jackpotsHistoryTable = table.init({
+            id: jackpotsHistoryTableId,
+            // pageSizeContainer: '#jackpot-machines-number',
+            // appearanceButtonsContainer: '#jackpot-show-space'
+        },
+            params.data.Data);
+        $$('#jackpot-history-tab-info').appendChild(jackpotsHistoryTable);
+        trigger('preloader/hide');
+    });
+    //-------------------------------------------------------------------------//
+
+    //get all jackpots +++
     on(communication.events.jackpots.getJackpots, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.jackpots.getJackpots;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
@@ -72,17 +152,19 @@ const jackpots = (function () {
 
     //get jackpots history
     on(communication.events.jackpots.getJackpotHistory, function (params) {
+        trigger('preloader/hide');
         let route = communication.apiRoutes.jackpots.getJackpotHistory;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
@@ -102,19 +184,20 @@ const jackpots = (function () {
         });
     });
 
-    //get jackpots filters
+    //get jackpots filters +++
     on(communication.events.jackpots.getFilters, function (params) {
         let route = communication.apiRoutes.jackpots.getFilters;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
