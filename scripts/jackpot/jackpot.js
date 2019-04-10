@@ -1,12 +1,16 @@
 const jackpots = (function () {
 
     let pageJackpot = $$('#page-jackpots');
+    let jackpotDailyLimitTopBar = $$('#top-bar-jackpots').children[0].children[2];
+    let jackpotPaidTodayTopBar = $$('#top-bar-jackpots').children[1].children[2];
 
 
     const events = {
         activated: 'jackpots/activated',
         getJackpots: 'jackpot/get-jackpots',
         getJackpotHistory: 'jackpot/get-jackpot-history',
+        getEvents: 'jackpot/get-jackpot-events',
+        getJackpotAnimtionSettings: 'jackpot/get-jackpot-animation-settings'
 
     };
 
@@ -21,7 +25,6 @@ const jackpots = (function () {
         selectTab('jackpot-tab');
         selectInfoContent('jackpot-tab');
         trigger(communication.events.jackpots.getFilters, { data, EntryData });
-
     });
 
     function getEndpointId() {
@@ -43,15 +46,17 @@ const jackpots = (function () {
     });
 
     on('jackpot/show-jackpots-table', function (params) {
+        let data = params.data.Data;
+        jackpotDailyLimitTopBar.innerHTML = formatFloatValue(data.ItemValue.DailyLimitValue / 100);
+        jackpotPaidTodayTopBar.innerHTML = formatFloatValue(data.ItemValue.PaidTodayValue / 100);
+
         if (jackpotsTable !== null) {
             jackpotsTable.destroy();
         }
         jackpotsTable = table.init({
             id: jackpotsTableId,
-            pageSizeContainer: '#jackpot-machines-number',
-            appearanceButtonsContainer: '#jackpot-show-space'
         },
-            params.data.Data);
+            data);
         $$('#jackpot-tab-info').appendChild(jackpotsTable);
         trigger('preloader/hide');
     });
@@ -59,30 +64,62 @@ const jackpots = (function () {
 
 
     //-----------------------Jackpot History Tab------------------------------//
-    const jackpotsHistoryTableId = 'table-container-jackpot-history';
-    let jackpotsHistoryTable = null;
+    const jackpotHistoryTableId = 'table-container-jackpot-history';
+    let jackpotHistoryTable = null;
 
     on(events.getJackpotHistory, function (params) {
         let data = {};
-        data.successAction = 'jackpot/show-jackpots-history-table'
+        data.successAction = 'jackpot/show-jackpot-history-table'
         let EntryData = getEndpointId();
         trigger(communication.events.jackpots.getJackpotHistory, { data, EntryData });
     });
 
-    on('jackpot/show-jackpots-history-table', function (params) {
-        if (jackpotsHistoryTable !== null) {
-            jackpotsHistoryTable.destroy();
+    on('jackpot/show-jackpot-history-table', function (params) {
+        if (jackpotHistoryTable !== null) {
+            jackpotHistoryTable.destroy();
         }
-        jackpotsHistoryTable = table.init({
-            id: jackpotsHistoryTableId,
+        jackpotHistoryTable = table.init({
+            id: jackpotHistoryTableId,
+            pageSizeContainer: '#jackpot-machines-number',
+            appearanceButtonsContainer: '#jackpot-show-space'
+        },
+            params.data.Data);
+        $$('#jackpot-history-tab-info').appendChild(jackpotHistoryTable);
+        trigger('preloader/hide');
+    });
+    //-------------------------------------------------------------------------//
+
+    //-----------------------Jackpot Events Tab------------------------------//
+    const jackpotEventsTableId = 'table-container-jackpot-events';
+    let jackpotEventsTable = null;
+
+    on(events.getEvents, function (params) {
+        let data = {};
+        data.successAction = 'jackpot/show-jackpot-events-table'
+        let EntryData = getEndpointId();
+        trigger(communication.events.jackpots.getEvents, { data, EntryData });
+    });
+
+    on('jackpot/show-jackpot-events-table', function (params) {
+        if (jackpotEventsTable !== null) {
+            jackpotEventsTable.destroy();
+        }
+        jackpotEventsTable = table.init({
+            id: jackpotEventsTableId,
             // pageSizeContainer: '#jackpot-machines-number',
             // appearanceButtonsContainer: '#jackpot-show-space'
         },
             params.data.Data);
-        $$('#jackpot-history-tab-info').appendChild(jackpotsHistoryTable);
+        $$('#jackpot-events-tab-info').appendChild(jackpotEventsTable);
         trigger('preloader/hide');
     });
     //-------------------------------------------------------------------------//
+
+    //-------------------Jackpot Animation Settings---------------------------//
+
+
+    //------------------------------------------------------------------------//
+
 
     //get all jackpots +++
     on(communication.events.jackpots.getJackpots, function (params) {
@@ -118,19 +155,21 @@ const jackpots = (function () {
         });
     });
 
-    //get jackpots events
+    //get jackpots events ++++
     on(communication.events.jackpots.getEvents, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.jackpots.getEvents;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
@@ -150,9 +189,9 @@ const jackpots = (function () {
         });
     });
 
-    //get jackpots history
+    //get jackpots history ++++
     on(communication.events.jackpots.getJackpotHistory, function (params) {
-        trigger('preloader/hide');
+        trigger('preloader/show');
         let route = communication.apiRoutes.jackpots.getJackpotHistory;
         let data = params.EntryData;
         let request = communication.requestTypes.post;
@@ -313,19 +352,20 @@ const jackpots = (function () {
         });
     });
 
-    //get jackpot plasma settings
+    //get jackpot plasma settings ++++
     on(communication.events.jackpots.getJackpotPlasmaSettings, function (params) {
         let route = communication.apiRoutes.jackpots.getJackpotPlasmaSettings;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
@@ -345,19 +385,20 @@ const jackpots = (function () {
         });
     });
 
-    //set jackpot plasma settings
+    //set jackpot plasma settings +++
     on(communication.events.jackpots.setJackpotPlasmaSettings, function (params) {
         let route = communication.apiRoutes.jackpots.setJackpotPlasmaSettings;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = params.data.successAction;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 
@@ -392,4 +433,8 @@ const jackpots = (function () {
             errorEvent: errorEvent
         });
     });
+
+    return {
+        getEndpointId
+    }
 })();

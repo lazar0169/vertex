@@ -1,3 +1,10 @@
+#jackpot-add-jackpot {
+    padding: 0.5em;
+    display: flex;
+    justify-content: flex-end;
+    background: rgb(55, 71, 79);
+}
+
 #add-new-jackpot-wrapper {
     width: 100%;
     height: 100%;
@@ -5,6 +12,7 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 1;
 }
 
 #add-new-jackpot-wrapper>div {
@@ -30,7 +38,8 @@
     border-bottom: 1px solid rgb(120, 144, 156);
 }
 
-.add-new-jackpot-control-settings>div:first-child, .add-new-jackpot-control-settings>div:first-child>div {
+.add-new-jackpot-control-settings>div:first-child,
+.add-new-jackpot-control-settings>div:first-child>div {
     display: flex;
     flex-direction: row;
     align-items: center;

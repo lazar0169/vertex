@@ -1,5 +1,10 @@
 const checkboxChangeState = (function () {
 
+    function generateCheckbox(data) {
+        checkboxClick(data.checkbox);
+        checkboxIsChecked(data.checkbox.getElementsByClassName('form-checkbox')[0].children[0], data.isChecked)
+    }
+
     function checkboxClick(checkbox) {
         let input = checkbox.getElementsByClassName('form-checkbox')[0].children[0];
         checkbox.onclick = function () {
@@ -43,6 +48,7 @@ const checkboxChangeState = (function () {
     }
 
     return {
+        generateCheckbox,
         checkboxClick,
         radioClick,
         checkboxIsChecked,

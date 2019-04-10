@@ -1,5 +1,5 @@
 const jackpotanimationSettings = (function () {
-    let jackpotanimationSettingsBackground = $$('#jackpot-animation-general-settings-background');
+    let jackpotAnimationSettingsContent = $$('#jackpot-animation-settings-wrapper')
     let jackpotanimationGeneralCheckbox = $$('.jackpot-animation-general-checkbox');
     let jackpotanimationWinCheckbox = $$('.jackpot-animation-win-checkbox');
     let jackpotanimationGeneralSettingsHousing = $$('#jackpot-animation-general-settings-housing');
@@ -7,8 +7,121 @@ const jackpotanimationSettings = (function () {
     let infoLineText = $$('#jackpot-animation-general-settings-infoline-text').children[0];
     let infoLineCheckbox = $$('#jackpot-animation-general-settings-infoline');
     let applyInfoLineText = $$('#jackpot-animation-general-settings-infoline-text').children[1];
+    let saveAnimationSettings = $$('#jackpot-animation-settings-buttons').children[0];
+    let animationBackgroundDropdown = $$('#jackpot-animation-general-settings-background');
+    let animationBackgroundPicture = $$('#new-york-landscape-animation-background');
 
-    dropdown.generate({ values: pictureName, parent: jackpotanimationSettingsBackground })
+    saveAnimationSettings.onclick = function () {
+        let EntryData = {}
+        EntryData = jackpots.getEndpointId();
+        //todo: ovo da se doradi
+        EntryData.TimerValue = jackpotAnimationSettingsContent.settings.TimerValue;
+        EntryData.ShowTimer = jackpotAnimationSettingsContent.settings.ShowTimer;
+        EntryData.JackpotBackgroundList = jackpotAnimationSettingsContent.settings.JackpotBackgroundList;
+        EntryData.Background = "https://api.fazigaming.com//Images/Template Images/New York.png"
+        EntryData.IsLocal = jackpotAnimationSettingsContent.settings.IsLocal;
+
+        EntryData.InfoLine = infoLineText.value;
+        for (let checkbox of jackpotAnimationSettingsContent.getElementsByClassName('form-checkbox')) {
+            EntryData[checkbox.parentNode.dataset.name] = checkboxChangeState.getCheckboxState(checkbox.parentNode);
+        }
+        let data = {}
+        data.successAction = 'jackpot/save-jackpot-animation-settings'
+        trigger(communication.events.jackpots.setJackpotPlasmaSettings, { data, EntryData });
+    }
+    on('jackpot/save-jackpot-animation-settings', function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+    });
+
+    for (let check of jackpotanimationGeneralCheckbox) {
+        let data = {}
+        data.checkbox = check;
+        data.isChecked = false;
+        checkboxChangeState.generateCheckbox(data);
+
+        check.addEventListener('click', function () {
+            if (!checkboxChangeState.getCheckboxState(jackpotanimationGeneralSettingsHousing)) {
+                drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
+                return;
+            }
+            drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
+            for (let isChecked of jackpotanimationGeneralCheckbox) {
+                if (checkboxChangeState.getCheckboxState(isChecked)) {
+                    callDrawJackpotLabelOnGeneralCheck(isChecked.dataset.name);
+                }
+            }
+        });
+    }
+
+    for (let check of jackpotanimationWinCheckbox) {
+        let data = {}
+        data.checkbox = check;
+        data.isChecked = false;
+        checkboxChangeState.generateCheckbox(data);
+
+        check.addEventListener('click', function (e) {
+            drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
+            drawWinningJackpotLabel('#ShowHousing', housingCoordinateWin, '500.00');
+            for (let isChecked of jackpotanimationWinCheckbox) {
+                if (checkboxChangeState.getCheckboxState(isChecked)) {
+                    callDrawJackpotLabelOnWinCheck(isChecked.dataset.name);
+                }
+            }
+        });
+    }
+
+    infoLineCheckbox.addEventListener('click', function (e) {
+        if (checkboxChangeState.getCheckboxState(infoLineCheckbox)) {
+            drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
+        }
+        else {
+            drawJackpotInfoLine(infoLineCoordinate, "");
+        }
+        infoLineWrapper.classList.toggle('hidden');
+    });
+
+
+    on('jackpot/get-jackpot-animation-settings', function (params) {
+        let EntryData = jackpots.getEndpointId()
+        let data = {};
+        data.successAction = 'jackpot/show-jackpots-animation-settings'
+        trigger(communication.events.jackpots.getJackpotPlasmaSettings, { data, EntryData });
+    });
+
+    on('jackpot/show-jackpots-animation-settings', function (params) {
+        let data = params.data.Data;
+        animationBackgroundPicture.src = data.Background;
+        drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
+        drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
+        drawWinningJackpotLabel('#ShowHousing', housingCoordinateWin, '500.00');
+        jackpotAnimationSettingsContent.settings = data;
+        dropdown.generate({ values: data.JackpotBackgroundList, parent: animationBackgroundDropdown });
+        infoLineText.value = data.InfoLine;
+
+        for (let check of jackpotanimationGeneralCheckbox) {
+            for (let checkName of Object.keys(data)) {
+                if (checkName === check.dataset.name) {
+                    checkboxChangeState.checkboxIsChecked(check.getElementsByClassName('form-checkbox')[0].children[0], params.data.Data[checkName]);
+                    callDrawJackpotLabelOnGeneralCheck(checkName)
+                    break;
+                }
+            }
+        }
+
+        for (let check of jackpotanimationWinCheckbox) {
+            for (let checkName of Object.keys(data)) {
+                if (checkName === check.dataset.name) {
+                    checkboxChangeState.checkboxIsChecked(check.getElementsByClassName('form-checkbox')[0].children[0], params.data.Data[checkName]);
+                    callDrawJackpotLabelOnWinCheck(checkName)
+                    break;
+                }
+            }
+        }
+    });
+
     //first
     let topLabelCoordinate1 = {
         x: 535,
@@ -164,7 +277,6 @@ const jackpotanimationSettings = (function () {
         ctx.font = `bold ${coordinate.h - 5}px roboto`;
         ctx.drawImage(img, coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 7 / 8);
-
     }
 
     function drawWinningJackpotLabel(imgId, coordinate, text) {
@@ -190,40 +302,9 @@ const jackpotanimationSettings = (function () {
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 4 / 5);
     }
 
-    function callDrawJackpotLabelAll() {
-        for (let count = 1; count < 5; count++) {
-            switch (count) {
-                case 1:
-                    drawJackpotLabel('#top-label-animation-background', topLabelCoordinate1, 'First');
-                    drawJackpotLabel('#housing-label-animation-background', housingCoordinate1, '10000.00');
-                    drawJackpotLabel('#left-label-animation-background', leftLabelCoordinate1, '1');
-                    drawJackpotLabel('#bottom-label-animation-background', bottomLabelCoordinate1, 'Gold');
-                    break;
-                case 2:
-                    drawJackpotLabel('#top-label-animation-background', topLabelCoordinate2, 'Second');
-                    drawJackpotLabel('#housing-label-animation-background', housingCoordinate2, '5000.00');
-                    drawJackpotLabel('#left-label-animation-background', leftLabelCoordinate2, '2');
-                    drawJackpotLabel('#bottom-label-animation-background', bottomLabelCoordinate2, 'Silver');
-                    break;
-                case 3:
-                    drawJackpotLabel('#top-label-animation-background', topLabelCoordinate3, 'Third');
-                    drawJackpotLabel('#housing-label-animation-background', housingCoordinate3, '1000.00');
-                    drawJackpotLabel('#left-label-animation-background', leftLabelCoordinate3, '3');
-                    drawJackpotLabel('#bottom-label-animation-background', bottomLabelCoordinate3, 'Bronse');
-                    break;
-                case 4:
-                    drawJackpotLabel('#top-label-animation-background', topLabelCoordinate4, 'Fourth');
-                    drawJackpotLabel('#housing-label-animation-background', housingCoordinate4, '500.00');
-                    drawJackpotLabel('#left-label-animation-background', leftLabelCoordinate4, '4');
-                    drawJackpotLabel('#bottom-label-animation-background', bottomLabelCoordinate4, 'Diamond');
-                    break;
-            }
-        }
-    }
-
     function callDrawJackpotLabelOnGeneralCheck(checkedLabel) {
         switch (checkedLabel) {
-            case 'top-label-animation-background':
+            case 'ShowTopLabel':
                 for (let count = 1; count < 5; count++) {
                     {
                         switch (count) {
@@ -243,7 +324,7 @@ const jackpotanimationSettings = (function () {
                     }
                 }
                 break;
-            case 'left-label-animation-background':
+            case 'ShowOrder':
                 for (let count = 1; count < 5; count++) {
                     {
                         switch (count) {
@@ -263,7 +344,7 @@ const jackpotanimationSettings = (function () {
                     }
                 }
                 break;
-            case 'housing-label-animation-background':
+            case 'ShowHousing':
                 for (let count = 1; count < 5; count++) {
                     {
                         switch (count) {
@@ -283,7 +364,7 @@ const jackpotanimationSettings = (function () {
                     }
                 }
                 break;
-            case 'bottom-label-animation-background':
+            case 'ShowBottomLabel':
                 for (let count = 1; count < 5; count++) {
                     {
                         switch (count) {
@@ -303,19 +384,22 @@ const jackpotanimationSettings = (function () {
                     }
                 }
                 break;
+            case 'ShowInfoLine':
+                drawJackpotInfoLine(infoLineCoordinate, infoLineText.value);
+                break;
         }
     }
 
     function callDrawJackpotLabelOnWinCheck(checkedLabel) {
         switch (checkedLabel) {
-            case 'top-label-animation-background':
-                drawWinningJackpotLabel(`#${checkedLabel}`, topLabelCoordinateWin, 'Winning');
+            case 'ShowTopLabelWin':
+                drawWinningJackpotLabel(`#${checkedLabel.slice(0, -3)}`, topLabelCoordinateWin, 'Winning');
                 break;
-            case 'left-label-animation-background':
-                drawWinningJackpotLabel(`#${checkedLabel}`, leftLabelCoordinateWin, '1');
+            case 'ShowOrderWin':
+                drawWinningJackpotLabel(`#${checkedLabel.slice(0, -3)}`, leftLabelCoordinateWin, '1');
                 break;
-            case 'bottom-label-animation-background':
-                drawWinningJackpotLabel(`#${checkedLabel}`, bottomLabelCoordinateWin, 'FAZI');
+            case 'ShowBottomLabelWin':
+                drawWinningJackpotLabel(`#${checkedLabel.slice(0, -3)}`, bottomLabelCoordinateWin, 'FAZI');
                 break;
         }
     }
@@ -323,74 +407,5 @@ const jackpotanimationSettings = (function () {
     applyInfoLineText.addEventListener('click', function () {
         infoLineText.value = infoLineText.value;
         drawJackpotInfoLine(infoLineCoordinate, infoLineText.value);
-    });
-
-    window.addEventListener('load', function () {
-        drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], $$('#new-york-landscape-animation-background'));
-        drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
-        callDrawJackpotLabelAll();
-        drawWinningJackpotLabel('#top-label-animation-background', topLabelCoordinateWin, 'Winning');
-        drawWinningJackpotLabel('#housing-label-animation-background', housingCoordinateWin, '500.00');
-        drawWinningJackpotLabel('#left-label-animation-background', leftLabelCoordinateWin, '1');
-        drawWinningJackpotLabel('#bottom-label-animation-background', bottomLabelCoordinateWin, 'FAZI');
-        //ToDo: value treba biti text koji se dobije sa servera
-        infoLineWrapper.children[0].value = 'Text info line';
-        drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
-
-        for (let check of jackpotanimationGeneralCheckbox) {
-            check.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (check.children[0].children[0].checked) {
-                    check.children[0].children[0].checked = false;
-                }
-                else {
-                    check.children[0].children[0].checked = true;
-                }
-                if (!jackpotanimationGeneralSettingsHousing.children[0].children[0].checked) {
-                    drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], $$('#new-york-landscape-animation-background'));
-                    return;
-                }
-                drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], $$('#new-york-landscape-animation-background'));
-                for (let isChecked of jackpotanimationGeneralCheckbox) {
-                    if (isChecked.children[0].children[0].checked) {
-                        callDrawJackpotLabelOnGeneralCheck(isChecked.dataset.name);
-                    }
-                }
-                if (infoLineCheckbox.children[0].children[0].checked) {
-                    drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
-                }
-            });
-        }
-        infoLineCheckbox.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (infoLineCheckbox.children[0].children[0].checked) {
-                infoLineCheckbox.children[0].children[0].checked = false;
-                drawJackpotInfoLine(infoLineCoordinate, "");
-            }
-            else {
-                infoLineCheckbox.children[0].children[0].checked = true;
-                drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
-            }
-            infoLineWrapper.classList.toggle('hidden');
-        });
-
-        for (let check of jackpotanimationWinCheckbox) {
-            check.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (check.children[0].children[0].checked) {
-                    check.children[0].children[0].checked = false;
-                }
-                else {
-                    check.children[0].children[0].checked = true;
-                }
-                drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
-                drawWinningJackpotLabel('#housing-label-animation-background', housingCoordinateWin, '500.00');
-                for (let isChecked of jackpotanimationWinCheckbox) {
-                    if (isChecked.children[0].children[0].checked) {
-                        callDrawJackpotLabelOnWinCheck(isChecked.dataset.name);
-                    }
-                }
-            });
-        }
     });
 })();
