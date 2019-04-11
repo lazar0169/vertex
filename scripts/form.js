@@ -49,7 +49,7 @@ let form = (function () {
             EndpointId: parseInt(formSettings.endpointId)
         };
 
-        trigger(formSettings.getData, {data: data, additionalData: formSettings});
+        trigger(formSettings.getData, { data: data, additionalData: formSettings });
     }
 
     //helper functions
@@ -93,7 +93,18 @@ let form = (function () {
                             checkbox.vertexToggle.uncheck();
                         }
                     }
-                } else {
+                }
+                else if (inputElement.type === 'radio') {
+                    let radio = inputElement.parentNode;
+                    if (dataToDisplay[inputName]) {
+                        if (radio.dataset.value === dataToDisplay[inputName] || parseInt(radio.dataset.value) === dataToDisplay[inputName]) {
+                            checkboxChangeState.checkboxIsChecked(inputElement, true);
+                        }
+                    }
+
+                }
+
+                else {
                     if (inputName !== 'EndpointId') {
                         if (dataToDisplay[inputName].constructor === Array) {
                             let values = dataToDisplay[inputName];
@@ -273,7 +284,7 @@ let form = (function () {
                 dataForApi = formSettings.beforeSubmit(formSettings, dataForApi);
             }
 
-            trigger(formSettings.submitEvent, {data: dataForApi, additionalData: formSettings})
+            trigger(formSettings.submitEvent, { data: dataForApi, additionalData: formSettings })
         } else {
             return false;
         }
@@ -369,7 +380,7 @@ let form = (function () {
 
                 //add required rule to check if field is not empty
                 let validationConstraint = {
-                    name:validation.constraintAttributes.required,
+                    name: validation.constraintAttributes.required,
                     operator: validation.constraintsOperators.required,
                     value: true
                 };
@@ -596,12 +607,18 @@ let form = (function () {
     });
 
     on('form/submit/error', function (params) {
-       // console.log('params in form submit error:',params);
+        // console.log('params in form submit error:',params);
 
         let formSettings = params.additionalData;
         let apiResponseData = params.data;
         handleStandardReponseMessages(apiResponseData);
         complete(formSettings);
     });
+
+    on('fill/jackpot-notification', function (params) {
+        let formSettings = params.additionalData;
+        let apiResponseData = params.data;
+        displayData(formSettings, apiResponseData);
+    })
 
 })();

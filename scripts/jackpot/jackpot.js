@@ -25,6 +25,8 @@ const jackpots = (function () {
         selectTab('jackpot-tab');
         selectInfoContent('jackpot-tab');
         trigger(communication.events.jackpots.getFilters, { data, EntryData });
+
+        trigger('jackpot/tab/notification-settings', { endpointId: jackpotId });
     });
 
     function getEndpointId() {
@@ -336,17 +338,19 @@ const jackpots = (function () {
         });
     });
 
-    //get jackpot settings
+    //get jackpot settings ++++
     on(communication.events.jackpots.getJackpotSettings, function (params) {
         let route = communication.apiRoutes.jackpots.getJackpotSettings;
-        let data = params.data;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let data = params.data;
+        let formSettings = params.additionalData;
+        let successEvent = formSettings.populateData;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
-            data: data,
             requestType: request,
+            data: data,
+            additionalData: formSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

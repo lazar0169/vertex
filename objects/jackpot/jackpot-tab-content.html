@@ -1,21 +1,153 @@
+<!-- Jackpot tab content -->
 <div id="jackpot-tab-info" class="chosen-info-tab overflow-content hidden">
-
     <div id="jackpot-add-jackpot">
         <button class="secundarybutton">ADD JACKPOT</button>
     </div>
-
     <object data-object="choose-machines-jackpot"></object>
     <object data-object="add-new-jackpot"></object>
 </div>
+
+<!-- History tab content -->
 <div id="jackpot-history-tab-info" class="chosen-info-tab overflow-content hidden">
     <object data-object="jackpot-filter"></object>
 </div>
+
+<!-- Events tab content -->
 <div id="jackpot-events-tab-info" class="chosen-info-tab overflow-content hidden">
-    
+
 </div>
+
+<!-- Notification settings tab content -->
 <div id="jackpot-notification-settings-tab-info" class="chosen-info-tab overflow-content hidden">
-    JACKPOT NOTIFICATION SETTINGS
+    <form class=" element-async-form">
+
+        <div class="form-section border-bottom">
+            <div class="form-section-content">
+                <div id="jackpot-sort-by" class="form-group">
+                    <label>Sort by</label>
+                    <label class="form-radio" data-value="1">
+                        <input type="radio" name="Sort" class="form-input element-form-data">
+                        <i class="form-icon"></i>
+                        <div>Ordinal number</div>
+                    </label>
+                    <label class="form-radio" data-value="2">
+                        <input type="radio" name="Sort" class="form-input element-form-data">
+                        <i class="form-icon"></i>
+                        <div>Values</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section border-bottom">
+            <div class="form-section-content">
+                <div id="jackpot-daily-limit" class="form-group">
+                    <label class="form-label element-multilanguage" data-translation-key="DailyLimit"
+                        for="jackpot-daily-limit-value">
+                    </label>
+                    <input name="DailyLimit" class="form-input element-form-data input-number-right" data-type="float"
+                        type="text" id="jackpot-daily-limit-value" placeholder="700.000,00">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="jackpot-enable-notification-check" class="form-section border-bottom">
+            <div class="form-section-content">
+                <label class="element-multilanguage form-label"
+                    data-translation-key="Jackpot.Transactions.EnableNotification">Enable
+                    notification:</label>
+                <figure class="element-form-check vertex-form-checkbox" data-target="#jackpot-enable-notification">
+                    <div id="jackpot-enable-transaction-mode" class="element-form-mode checkbox-label">Yes</div>
+                    <label class="form-switch">
+                        <input name="EnableTransactions" data-type="int" type="checkbox" class="element-form-data">
+                        <i class="form-icon"></i>
+                    </label>
+                </figure>
+            </div>
+        </div>
+        <section id="jackpot-enable-notification" class="collapsible">
+
+            <div id="jackpot-daily-limit-notification-wrapper"
+                class="form-section border-bottom jackpot-enable-transaction">
+                <div class="form-section-content">
+                    <div id="jackpot-daily-limit-notification" class="form-group">
+                        <label class="form-label element-multilanguage"
+                            data-translation-key="SendANotificationWhenTheValueOfTheAllocatedJackpotIsGreaterThan"
+                            for="jackpot-notification-value">
+                            Send a notification when the value of the allocated jackpot is greater than
+                        </label>
+                        <input name="JackpotValueLimitForNotification"
+                            class="form-input element-form-data input-number-right" data-type="float" type="text"
+                            id="jackpot-notification-value" placeholder="700.000,00">
+                    </div>
+                </div>
+
+                <div id="jackpot-notification-send-mobile"
+                    class="form-section border-bottom jackpot-notification-settings">
+                    <div class="form-section-content">
+                        <label class="form-label element-multilanguage"
+                            data-translation-key="Jackpot.Notification.MobilePhoneNumber"
+                            for="notification-mobile-phone-number">
+                            Mobile phone number:
+                        </label>
+                        <div class="element-form-phone-number form-group d-flex flex-baseline flex-row">
+                            <input maxlength="20" name="PhoneNumber" class="form-input element-form-data"
+                                data-type="array" type="text" placeholder="xxx-xxx-xxxx">
+                            <a class="action-delete-form-element button-link visibility-hidden element-multilanguage"
+                                data-translation-key="Delete">
+                                Delete
+                            </a>
+                        </div>
+                        <div id="jackpot-notification-another-phone">
+                            <a class="button-link action-add-another-field element-multilanguage"
+                                data-translation-key="Jackpot.Notification.AddAnotherPhoneNumber"
+                                data-target-selector="element-form-phone-number" data-max-number="5">
+                                ADD another phone number
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="jackpot-notification-send-email"
+                    class="form-section border-bottom jackpot-notification-settings">
+                    <div class="form-section-content">
+                        <label class="form-label element-multilanguage"
+                            data-translation-key="Jackpot.Notification.EmailAddress"
+                            for="jackpot-notification-email-address">
+                            Email address:
+                        </label>
+                        <div class="element-form-email form-group d-flex flex-baseline flex-row">
+                            <input maxlength="50" name="Email"
+                                class="form-input element-form-data element-multilanguage" data-type="array" type="text"
+                                email="true" id="jackpot-notification-email-address" data-translation-key="Your Email">
+                            <a class="action-delete-form-element button-link visibility-hidden element-multilanguage"
+                                data-translation-key="Delete">
+                                Delete
+                            </a>
+                        </div>
+                        <div id="jackpot-notification-another-email">
+                            <a class="button-link action-add-another-field element-multilanguage"
+                                data-translation-key="Jackpot.Notification.AddAnotherEmailAddress"
+                                data-target-selector="element-form-email" data-max-number="5">
+                                ADD another email address
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+
+    <div id="jackpot-notification-save">
+        <button class="primarybutton element-multilanguage" data-translation-key="Save">Save
+        </button>
+    </div>
+
+
 </div>
+
+<!-- Animation settings tab content -->
 <div id="jackpot-animation-settings-tab-info" class="chosen-info-tab overflow-content hidden">
     <object data-object="jackpot-animation-settings"></object>
 </div>

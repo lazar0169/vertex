@@ -56,6 +56,7 @@
       "jackpot/jackpot.js",
       "jackpot/jackpot-filter.js",
       "jackpot/add-new-jackpot.js",
+      "jackpot/jackpot-notification-settings.js",
       "jackpot/jackpot-animation-settings.js",
       "jackpot/jackpot-choose-participating-machines.js",
       "malfunctions/malfunctions.js",
