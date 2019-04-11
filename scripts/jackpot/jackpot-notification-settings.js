@@ -5,57 +5,11 @@ let jackpotNotificationSettings = (function () {
         1: 'OrdinalNumber',
         2: 'Value'
     }
-
-    let jackpotNotificationSave = $$('#jackpot-notification-save').children[0];
-    jackpotNotificationSave.onclick = function () {
-        console.log('kliknuto')
-    }
-    // let jackpotNotificationValue = $$('#jackpot-notification-value');
-    // let formSettingsTransaction = {};
-    // formSettingsTransaction.formContainerSelector = '#jackpot-notification-settings-tab-info';
-    // formSettingsTransaction.getData = communication.events.jackpots.getJackpotSettings;
-    // // formSettingsTransaction.submitEvent = communication.events.aft.transactions.saveBasicSettings;
-    // formSettingsTransaction.populateData = 'form/fillFormData';
-
-
-    // // formSettingsTransaction.afterDisplayData = function (formSettings, data) {
-    // //     let enableSMS = data.Data.EnableSms === true;
-    // //     let enableEmail = data.Data.EnableEmail === true;
-
-    // //     if (enableSMS || enableEmail) {
-    // //         $$('#jackpot-enable-notification-checke').parentNode.vertexToggle.check();
-    // //     }
-    // //     else {
-    // //         $$('#jackpot-enable-notification-check').parentNode.vertexToggle.uncheck();
-    // //     }
-    // // };
-
-    // on('jackpot/get-jackpot-notification-settings', function (params) {
-    //     let EntryData = jackpots.getEndpointId()
-    //     trigger('form/init', { formSettings: formSettingsTransaction });
-    //     let data = {}
-    //     data.successAction = 'jackpot/show-jackpot-notification-settings'
-    //     trigger(communication.events.jackpots.getJackpotSettings, { data, EntryData });
-    // });
-
-    on('jackpot/show-jackpot-notification-settings', function (params) {
-        let data = params.data.Data;
-        trigger('fill/jackpot-notification', { params });
-
-        // if (data.EnableSMS || data.EnableEmail) {
-        //     $$('#jackpot-enable-transaction-mode').parentNode.vertexToggle.check();
-        // }
-        // else {
-        //     $$('#jackpot-enable-transaction-mode').parentNode.vertexToggle.uncheck();
-        // }
-        // jackpotNotificationValue.value = formatFloatValue(data.DailyLimit / 100);
-
-        console.log(data)
-    });
+  
     let formSettingsSmsSettings = {};
     formSettingsSmsSettings.formContainerSelector = '#jackpot-notification-settings-tab-info';
     formSettingsSmsSettings.getData = communication.events.jackpots.getJackpotSettings;
-    // formSettingsSmsSettings.submitEvent = communication.events.tickets.saveSmsSettings;
+    formSettingsSmsSettings.submitEvent = communication.events.jackpots.setJackpotSettings;
     checkboxChangeState.radioClick($$('#jackpot-sort-by'));
 
     formSettingsSmsSettings.afterDisplayData = function (formSettings, data) {
@@ -63,11 +17,36 @@ let jackpotNotificationSettings = (function () {
         let enableEmail = data.Data.EnableEmail === true;
 
         if (enableSMS || enableEmail) {
-            $$('#jackpot-enable-transaction-mode').parentNode.vertexToggle.check();
+            $$('#jackpot-enable-notification-mode').parentNode.vertexToggle.check();
         }
         else {
-            $$('#jackpot-enable-transaction-mode').parentNode.vertexToggle.uncheck();
+            $$('#jackpot-enable-notification-mode').parentNode.vertexToggle.uncheck();
         }
+    };
+
+    formSettingsSmsSettings.beforeSubmit = function (formSettings, data) {
+        // console.log('data to be sent', data);
+        if ($$('#jackpot-enable-notification-mode').parentNode.vertexToggle.getState()) {
+            if (data.Email[data.Email.length - 1] === '') {
+                data.Email.pop();
+            }
+            if (data.PhoneNumber[data.PhoneNumber.length - 1] === '') {
+                data.PhoneNumber.pop();
+            }
+            data.EnableEmail = data.Email.length > 0;
+            data.EnableSMS = data.PhoneNumber.length > 0;
+        }
+        else {
+            data.EnableEmail = false;
+            data.EnableSMS = false;
+            
+        }
+        //todo: dorada sta ako je globalni islocal je na false
+        //data.IsLocal = true;
+        let jackpotId = jackpots.getEndpointId();
+        data.EndpointId = jackpotId.EndpointId;
+        data.Sort = parseInt(checkboxChangeState.getRadioState($$('#jackpot-sort-by')));
+        return data;
     };
 
 
@@ -75,12 +54,8 @@ let jackpotNotificationSettings = (function () {
         formSettingsSmsSettings.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsSmsSettings });
         trigger('form/getData', { formSettings: formSettingsSmsSettings });
-        // let EntryData = jackpots.getEndpointId()
-        // let data = {}
-        // data.successAction = 'jackpot/show-jackpot-notification-settings'
-        // trigger(communication.events.jackpots.getJackpotSettings, { data, EntryData });
     });
-    
+
     return {
         enumSort
     }

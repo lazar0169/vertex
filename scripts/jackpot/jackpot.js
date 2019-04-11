@@ -373,17 +373,19 @@ const jackpots = (function () {
         });
     });
 
-    //set jackpot settings
+    //set jackpot settings ++++
     on(communication.events.jackpots.setJackpotSettings, function (params) {
         let route = communication.apiRoutes.jackpots.setJackpotSettings;
-        let data = params.data;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
-        let errorEvent = '';
+        let data = params.data;
+        let formSettings = params.additionalData;
+        let successEvent = formSettings.submitSuccessEvent;
+        let errorEvent = formSettings.submitErrorEvent;
         trigger('communicate/createAndSendXhr', {
             route: route,
-            data: data,
             requestType: request,
+            data: data,
+            additionalData: formSettings,
             successEvent: successEvent,
             errorEvent: errorEvent
         });

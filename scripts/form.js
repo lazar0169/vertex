@@ -77,6 +77,7 @@ let form = (function () {
             multipleValueInputContainers[counter].parentNode.removeChild(multipleValueInputContainers[counter]);
         }
 
+
         let formInputElementsArray = collectAllFormElements(formSettings);
 
         formInputElementsArray.forEach(function (inputElement) {
@@ -226,7 +227,11 @@ let form = (function () {
             } else {
                 if (formInputElement.name === 'EndpointId') {
                     dataForApi[formInputElement.name] = parseInt(formInputElement.dataset.value);
-                } else {
+                }
+                else if (formInputElement.name === 'IsLocal') {
+                    dataForApi[formInputElement.name] = Boolean(formInputElement.value);
+                }
+                else {
                     switch (formInputElement.dataset.type) {
                         //ToDo: get values of multi select
                         /*                        case 'multiple-select':
@@ -284,7 +289,7 @@ let form = (function () {
                 dataForApi = formSettings.beforeSubmit(formSettings, dataForApi);
             }
 
-            trigger(formSettings.submitEvent, { data: dataForApi, additionalData: formSettings })
+            trigger(formSettings.submitEvent, { data: dataForApi, additionalData: formSettings });
         } else {
             return false;
         }

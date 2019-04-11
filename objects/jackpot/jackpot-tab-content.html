@@ -20,7 +20,7 @@
 <!-- Notification settings tab content -->
 <div id="jackpot-notification-settings-tab-info" class="chosen-info-tab overflow-content hidden">
     <form class=" element-async-form">
-
+        <input name="IsLocal" type="hidden" class="element-form-data hidden">
         <div class="form-section border-bottom">
             <div class="form-section-content">
                 <div id="jackpot-sort-by" class="form-group">
@@ -55,12 +55,12 @@
         <div id="jackpot-enable-notification-check" class="form-section border-bottom">
             <div class="form-section-content">
                 <label class="element-multilanguage form-label"
-                    data-translation-key="Jackpot.Transactions.EnableNotification">Enable
+                    data-translation-key="Jackpot.Notification.EnableNotification">Enable
                     notification:</label>
                 <figure class="element-form-check vertex-form-checkbox" data-target="#jackpot-enable-notification">
-                    <div id="jackpot-enable-transaction-mode" class="element-form-mode checkbox-label">Yes</div>
+                    <div id="jackpot-enable-notification-mode" class="element-form-mode checkbox-label">Yes</div>
                     <label class="form-switch">
-                        <input name="EnableTransactions" data-type="int" type="checkbox" class="element-form-data">
+                        <input name="EnableNotification" data-type="int" type="checkbox">
                         <i class="form-icon"></i>
                     </label>
                 </figure>
@@ -140,7 +140,8 @@
     </form>
 
     <div id="jackpot-notification-save">
-        <button class="primarybutton element-multilanguage" data-translation-key="Save">Save
+        <button type="submit" class="primarybutton element-form-submit element-multilanguage"
+            data-translation-key="Save">Save
         </button>
     </div>
 
