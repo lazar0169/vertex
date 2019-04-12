@@ -9,10 +9,12 @@
     width: 100%;
     height: 100%;
     background: rgb(38, 50, 56);
-    position: absolute;
+    color: rgb(120, 144, 156);
+    font-size: 14px;
+    /* position: absolute;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 1; */
 }
 
 #add-new-jackpot-wrapper>div {
@@ -20,8 +22,9 @@
     height: 100%;
 }
 
-#add-new-jackpot-wrapper>div>div {
-    padding: 0.5rem;
+#add-new-jackpot-content-header,
+#add-new-jackpot-content-inputs {
+    padding: 0.5em;
 }
 
 #add-new-jackpot-content-inputs {
@@ -31,11 +34,12 @@
 }
 
 #add-new-jackpot-content-inputs>div:not(:first-child) {
-    margin-left: 0.5rem;
+    margin-left: 0.5em;
 }
 
 .add-new-jackpot-control-settings {
     border-bottom: 1px solid rgb(120, 144, 156);
+    padding: 0.5em 0;
 }
 
 .add-new-jackpot-control-settings>div:first-child,
@@ -47,8 +51,9 @@
 }
 
 #add-new-jackpot-content-buttons-wrapper {
-    position: absolute;
-    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5em
 }
 
 .add-new-jackpot-control-settings-info {
@@ -59,24 +64,23 @@
 
 .add-new-jackpot-control-settings>div:not(:first-child) {
     width: 100%;
-    height: 30%;
 }
 
-.add-new-jackpot-control-settings>div:not(:first-child)>div {
+#add-new-jackpot-content-machines-participate>div:not(:first-child)>div {
     display: flex;
     flex-flow: row wrap;
-    padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+    padding: 0.5em 0.5em 0.5em 2.5em;
     align-items: center;
 }
 
 .add-new-jackpot-control-settings>div:not(:first-child)>div>div {
-    margin-left: 0.5rem;
+    margin-left: 0.5em;
 }
 
 .add-new-jackpot-control-settings-info>div:first-child {
     display: flex;
     flex-direction: row;
-    padding-left: 0.5rem;
+    padding-left: 0.5em;
     white-space: nowrap;
 }
 
@@ -85,5 +89,20 @@
 }
 
 .expanded-add-new-jackpot-settings {
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.5em;
+}
+
+#add-new-jackpot-content-header {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    padding: 0.5em
+}
+
+#add-new-jackpot-content-advance-settings .default-select>div:first-child {
+    width: 300px;
+}
+
+#add-new-jackpot-content-advance-settings>div:not(:first-child)>div {
+    padding: 0.5em 0.5em 0.5em 2.5em;
 }

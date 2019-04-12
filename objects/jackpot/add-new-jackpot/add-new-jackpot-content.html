@@ -1,38 +1,44 @@
 <div>
-    <div id="add-new-jackpot-content-header">ADD NEW JACKPOT</div>
+    <div id="add-new-jackpot-content-header" class="element-multilanguage" data-translation-key="AddNewJackpot"></div>
 
     <div id="add-new-jackpot-content-inputs">
         <div>
-            <div>&numero;:</div>
-            <input class="form-input" type="text" placeholder="&numero;">
+            <label>&numero;</label>
+            <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
+                placeholder="&numero;">
         </div>
         <div>
-            <div>Name:</div>
-            <input class="form-input" type="text" placeholder="Name">
+            <label class="element-multilanguage" data-translation-key="Name">Name:</label>
+            <input name="rednibroj2" class="form-input element-form-data" data-type="string" type="text"
+                placeholder="Name">
         </div>
         <div>
-            <div>Handpay:</div>
-            <input class="form-input" type="text" placeholder="Handpay">
+            <label class="element-multilanguage" data-translation-key="Handpay">Handpay:</label>
+            <input name="rednibroj3" class="form-input element-form-data" data-type="string" type="text"
+                placeholder="Handpay">
         </div>
         <div>
-            <div>Start value:</div>
-            <input class="form-input" type="text" placeholder="Start value">
+            <label class="element-multilanguage" data-translation-key="StartValue">Start value:</label>
+            <input name="rednibroj4" class="form-input element-form-data" data-type="string" type="text"
+                placeholder="StartValue">
         </div>
         <div>
-            <div>Bottom label text:</div>
-            <input class="form-input" type="text" placeholder="Bottom label text">
+            <label class="element-multilanguage" data-translation-key="BottomLabelText">Bottom label text:</label>
+            <input name="rednibroj5" class="form-input element-form-data" data-type="string" type="text"
+                placeholder="Bottom label text">
         </div>
 
     </div>
 
     <div id="add-new-jackpot-content-growth-patern" class='add-new-jackpot-control-settings'>
         <div>
-            <div>
+            <figure class="element-form-check vertex-form-checkbox" data-target="#testproba">
+                <div id="testproba" class="element-form-mode checkbox-label"></div>
                 <label class="form-switch">
-                    <input type="checkbox">
+                    <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
-            </div>
+            </figure>
             <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
                 <div>
                     <div>GROWTH PATERN:</div>
@@ -48,12 +54,13 @@
 
     <div id="add-new-jackpot-content-control-active-time" class="add-new-jackpot-control-settings">
         <div>
-            <div>
+            <figure class="element-form-check vertex-form-checkbox" data-target="#testproba">
+                <div id="testproba" class="element-form-mode checkbox-label"></div>
                 <label class="form-switch">
-                    <input type="checkbox">
+                    <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
-            </div>
+            </figure>
             <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
                 <div>
                     <div>CONTROL ACTIVE TIME:</div>
@@ -69,12 +76,13 @@
 
     <div id="add-new-jackpot-content-limit-settings" class='add-new-jackpot-control-settings'>
         <div>
-            <div>
+            <figure class="element-form-check vertex-form-checkbox" data-target="#testproba">
+                <div id="testproba" class="element-form-mode checkbox-label"></div>
                 <label class="form-switch">
-                    <input type="checkbox">
+                    <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
-            </div>
+            </figure>
             <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
                 <div>
                     <div>BET AND WIN LIMITS SETTINGS:</div>
@@ -90,12 +98,13 @@
 
     <div id="add-new-jackpot-content-machines-participate" class='add-new-jackpot-control-settings'>
         <div>
-            <div>
+            <figure class="element-form-check vertex-form-checkbox" data-target="#testproba">
+                <div id="testproba" class="element-form-mode checkbox-label"></div>
                 <label class="form-switch">
-                    <input type="checkbox">
+                    <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
-            </div>
+            </figure>
             <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
                 <div>
                     <div>ALL MACHINES DO NOT PARTICIPATE:</div>
@@ -124,12 +133,13 @@
 
     <div id="add-new-jackpot-content-advance-settings" class='add-new-jackpot-control-settings'>
         <div>
-            <div>
+            <figure class="element-form-check vertex-form-checkbox" data-target="#testproba">
+                <div id="testproba" class="element-form-mode checkbox-label"></div>
                 <label class="form-switch">
-                    <input type="checkbox">
+                    <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
-            </div>
+            </figure>
             <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
                 <div>
                     <div>ADVANCE SETTINGS:</div>
@@ -139,7 +149,21 @@
             </div>
         </div>
         <div class="hidden">
-            <div>add-new-jackpot-content-advance-settings</div>
+            <div id="advance-settings-deactivate-jackpot-and-grow">
+                <div class="element-multilanguage" data-translation-key="DeactivateJackpotButContinueToGrow"></div>
+            </div>
+            <div id="advance-settings-deactivate-jackpot-and-stop-grow">
+                <div class="element-multilanguage" data-translation-key="DeactivateJackpotAndStopWithGrowth"></div>
+            </div>
+            <div id="advance-settings-hide-jackpot-and-grow">
+                <div class="element-multilanguage" data-translation-key="HideJackpotFromScreenButContinueToGrow"></div>
+            </div>
+            <div id="advance-settings-hide-jackpot-and-stop-grow">
+                <div class="element-multilanguage" data-translation-key="HideJackpotFromScreenAndStopWithGrowth"></div>
+            </div>
+            <div id="advance-settings-next-jackpots">
+                <div class="element-multilanguage" data-translation-key="NextJackpots"></div>
+            </div>
         </div>
     </div>
     <div id="add-new-jackpot-content-buttons-wrapper">

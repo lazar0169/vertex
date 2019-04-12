@@ -1,10 +1,11 @@
+<div id="jackpot-add-jackpot">
+    <button class="secundarybutton">ADD JACKPOT</button>
+</div>
+<object data-object="add-new-jackpot"></object>
+
 <!-- Jackpot tab content -->
 <div id="jackpot-tab-info" class="chosen-info-tab overflow-content hidden">
-    <div id="jackpot-add-jackpot">
-        <button class="secundarybutton">ADD JACKPOT</button>
-    </div>
     <object data-object="choose-machines-jackpot"></object>
-    <object data-object="add-new-jackpot"></object>
 </div>
 
 <!-- History tab content -->
@@ -24,7 +25,8 @@
         <div class="form-section border-bottom">
             <div class="form-section-content">
                 <div id="jackpot-sort-by" class="form-group">
-                    <label>Sort by</label>
+                    <label class="form-label element-multilanguage" data-translation-key="SortBy"
+                        for="jackpot-notification-value"></label>
                     <label class="form-radio" data-value="1">
                         <input type="radio" name="Sort" class="form-input element-form-data">
                         <i class="form-icon"></i>
@@ -137,13 +139,13 @@
                 </div>
             </div>
         </section>
+        <div id="jackpot-notification-save">
+            <button type="submit" class="primarybutton element-form-submit element-multilanguage"
+                data-translation-key="Save">Save
+            </button>
+        </div>
     </form>
 
-    <div id="jackpot-notification-save">
-        <button type="submit" class="primarybutton element-form-submit element-multilanguage"
-            data-translation-key="Save">Save
-        </button>
-    </div>
 
 
 </div>

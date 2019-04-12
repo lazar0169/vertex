@@ -13,9 +13,13 @@ const addNewJackpot = (function () {
         alert('Set all fields to initial value');
     });
 
+    removeAllMachines.addEventListener('click', function () {
+        alert('Remove all machines');
+    });
+
     window.addEventListener('load', function () {
         for (let control of addNewJackpotControlSettingsInfo) {
-            control.addEventListener('click', function () {
+            control.onclick = function () {
                 for (let element of addNewJackpotControlSettingsInfo) {
                     if (control !== element) {
                         element.parentNode.parentNode.children[1].classList.add('hidden');
@@ -29,13 +33,13 @@ const addNewJackpot = (function () {
                         trigger('opened-arrow', { div: element });
                     }
                 }
-            });
+            };
         }
         for (let checkSwitch of addNewJackpotControlSettings) {
-            checkSwitch.children[0].children[0].children[0].addEventListener('click', function (e) {
+            checkSwitch.children[0].children[0].onclick = function (e) {
                 e.preventDefault();
-                if (checkSwitch.children[0].children[0].children[0].children[0].checked) {
-                    checkSwitch.children[0].children[0].children[0].children[0].checked = false;
+                if (checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked) {
+                    checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked = false;
                     checkSwitch.children[0].children[1].children[0].children[1].innerHTML = 'Off';
                     checkSwitch.children[1].classList.add('hidden');
                     checkSwitch.children[0].classList.remove('expanded-add-new-jackpot-settings');
@@ -43,14 +47,14 @@ const addNewJackpot = (function () {
 
                 }
                 else {
-                    checkSwitch.children[0].children[0].children[0].children[0].checked = true;
+                    checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked = true;
                     checkSwitch.children[0].children[1].children[0].children[1].innerHTML = 'On';
                     checkSwitch.children[1].classList.remove('hidden');
                     checkSwitch.children[0].classList.add('expanded-add-new-jackpot-settings');
                     checkSwitch.children[0].children[1].children[1].classList.add('opened-arrow');
                 }
                 for (let currentCheck of addNewJackpotControlSettings) {
-                    if (checkSwitch.children[0].children[0].children[0] !== currentCheck.children[0].children[0].children[0] && checkSwitch.children[0].children[0].children[0].children[0].checked) {
+                    if (checkSwitch.children[0].getElementsByClassName('form-switch')[0].children[0] !== currentCheck.getElementsByClassName('form-switch')[0].children[0] && checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked) {
                         currentCheck.children[1].classList.add('hidden');
                         currentCheck.children[0].classList.remove('expanded-add-new-jackpot-settings');
                         currentCheck.children[0].children[1].children[1].classList.remove('opened-arrow');
@@ -58,13 +62,30 @@ const addNewJackpot = (function () {
                 }
                 checkSwitch.children[0].classList.toggle('checked-add-new-jackpot-settings');
                 checkSwitch.children[0].children[1].children[0].children[1].classList.toggle('active-add-new-jackpot-settings')
-            })
+            }
         }
     });
 
-    removeAllMachines.addEventListener('click', function () {
-        alert('Remove all machines');
+    on('jackpot/get-add-jackpot', function (params) {
+        console.log(params);
+        fillAdvanceSettings(params);
     });
 
+    function fillAdvanceSettings(params) {
+        let data = params.data.Data;
+        let ddDeactivateWithGrow = $$('#advance-settings-deactivate-jackpot-and-grow');
+        let ddDeactivateStopGrow = $$('#advance-settings-deactivate-jackpot-and-stop-grow');
+        let ddHideWithGrow = $$('#advance-settings-hide-jackpot-and-grow');
+        let ddHideStopGrow = $$('#advance-settings-hide-jackpot-and-stop-grow');
+        let ddNewJackpots = $$('#advance-settings-next-jackpots')
+
+        dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single' });
+        dropdown.generate({ values: data.JackpotList, parent: ddDeactivateStopGrow, type: 'single' });
+        dropdown.generate({ values: data.JackpotList, parent: ddHideWithGrow, type: 'single' });
+        dropdown.generate({ values: data.JackpotList, parent: ddHideStopGrow, type: 'single' });
+        dropdown.generate({ values: data.NewJackpotStateList, parent: ddNewJackpots, type: 'single' });
+        console.log(data);
+
+    }
 
 })();
