@@ -59,6 +59,7 @@
       "jackpot/jackpot-notification-settings.js",
       "jackpot/jackpot-animation-settings.js",
       "jackpot/jackpot-choose-participating-machines.js",
+      "jackpot/jackpot-grows-pattern.js",
       "malfunctions/malfunctions.js",
       "malfunctions/malfunctions-filters.js",
       "malfunctions/malfunctions-details.js",

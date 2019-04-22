@@ -19,7 +19,8 @@
     text-transform: uppercase;
 }
 
-.tabs:hover, #details-bar-edit-meters>div:hover {
+.tabs:hover,
+#details-bar-edit-meters>div:hover {
     color: white;
 }
 
@@ -106,7 +107,8 @@
     cursor: pointer;
 }
 
-.chosen-info-tab, #page-machines {
+.chosen-info-tab,
+#page-machines {
     flex: 1;
     /* padding: 0 0.5em 0.5em 0 !important; */
     background: rgb(38, 50, 56);
@@ -158,7 +160,8 @@
     padding: 0.3em 0 0.3em 0;
 }
 
-.advance-table-filter-select>.default-select>div:first-child, .advance-table-filter-select>.default-date-select>div:first-child {
+.advance-table-filter-select>.default-select>div:first-child,
+.advance-table-filter-select>.default-date-select>div:first-child {
     width: 200px;
 }
 
@@ -219,7 +222,8 @@
     border: none;
 }
 
-.primarybutton:hover, .secundarybutton:hover {
+.primarybutton:hover,
+.secundarybutton:hover {
     background: #03A9F4;
 }
 
@@ -234,7 +238,9 @@
     text-decoration: underline;
 }
 
-.button-wrapper>div, .button-wrapper>a, .button-wrapper>button {
+.button-wrapper>div,
+.button-wrapper>a,
+.button-wrapper>button {
     padding: 0 0.5em;
 }
 
@@ -245,7 +251,7 @@
 .input-number-right {
     text-align: right !important;
     align-items: center !important;
-    justify-content: flex-end!important;
+    justify-content: flex-end !important;
     flex-direction: row !important;
 }
 
@@ -257,6 +263,10 @@
     border-bottom: 1px solid #37474f;
 }
 
+.border-bottom-bet-limits {
+    border-bottom: 1px solid rgb(120, 144, 156);
+}
+
 .background-dark {
     background: rgb(38, 50, 56);
     box-shadow: 0 0 10px #000000;
@@ -266,7 +276,9 @@
     max-height: 210px;
 } */
 
-.option-casino:hover label, .option-city:hover, .option-all:hover label {
+.option-casino:hover label,
+.option-city:hover,
+.option-all:hover label {
     cursor: pointer !important;
     color: white !important;
 }
@@ -283,11 +295,13 @@
     transition: all .15s ease-in-out;
     color: white;
 }
-.opened-closed-wrapper{
+
+.opened-closed-wrapper {
     cursor: pointer;
 }
 
-.opened-closed-wrapper>div, .opened-closed-wrapper>span {
+.opened-closed-wrapper>div,
+.opened-closed-wrapper>span {
     pointer-events: none;
 }
 
@@ -317,4 +331,8 @@ figure:hover {
 
 .icon-vertex-Search>input {
     margin-left: 0.5em
+}
+
+figure .checkbox-name {
+    padding: 0.5em;
 }

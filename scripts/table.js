@@ -158,7 +158,7 @@ let table = (function () {
         table.data.totalItems = data.NumOfItems;
         //update sorting from data received by server
         if (data.ItemValue && data.ItemValue.SortedBy || data.ItemValue && data.ItemValue.SortDirection) {
-            setSort(table, data.ItemValue.SortedBy, data.ItemValue.SortDirection);
+            setSort(table, data.ItemValue.SortedBy, data.ItemValue.SortDirection ? data.ItemValue.SortDirection : data.ItemValue.SortedDirection);
         }
 
         if (isEmpty(data)) {

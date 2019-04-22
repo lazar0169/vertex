@@ -10,9 +10,19 @@ const jackpots = (function () {
         getJackpots: 'jackpot/get-jackpots',
         getJackpotHistory: 'jackpot/get-jackpot-history',
         getEvents: 'jackpot/get-jackpot-events',
+        previewEvents: 'jackpot/preview-jackpot',
         getJackpotAnimtionSettings: 'jackpot/get-jackpot-animation-settings'
 
     };
+
+    const EventsSortName = {
+        0: 'EventTime',
+        1: 'Status',
+        2: 'UserName',
+        3: 'JackpotName',
+        4: 'AmountCents',
+        5: 'Info'
+    }
 
     on(events.activated, function (params) {
         let jackpotId = params.params[0].value;
@@ -25,8 +35,8 @@ const jackpots = (function () {
         selectTab('jackpot-tab');
         selectInfoContent('jackpot-tab');
         trigger(communication.events.jackpots.getFilters, { data, EntryData });
-
         trigger('jackpot/tab/notification-settings', { endpointId: jackpotId });
+        trigger(events.getJackpotAnimtionSettings)
     });
 
     function getEndpointId() {
@@ -108,13 +118,41 @@ const jackpots = (function () {
         }
         jackpotEventsTable = table.init({
             id: jackpotEventsTableId,
-            // pageSizeContainer: '#jackpot-machines-number',
-            // appearanceButtonsContainer: '#jackpot-show-space'
+            pageSizeContainer: '#jackpot-events-machines-number',
+            appearanceButtonsContainer: '#jackpot-events-show-space'
         },
             params.data.Data);
         $$('#jackpot-events-tab-info').appendChild(jackpotEventsTable);
         trigger('preloader/hide');
     });
+
+    on(table.events.pageSize(jackpotEventsTableId), function () {
+        prepareJackpotEventsFiltersAndUpdateTable();
+    });
+
+    on(table.events.sort(jackpotEventsTableId), function () {
+        prepareJackpotEventsFiltersAndUpdateTable();
+    });
+
+    on(events.previewEvents, function (params) {
+        let data = params.data.Data;
+        $$(`#${jackpotEventsTableId}`).update(data);
+    });
+
+    function prepareJackpotEventsFiltersAndUpdateTable() {
+        let table = $$(`#${jackpotEventsTableId}`);
+        let endpointId = getEndpointId();
+        let prepareFilters = {
+        }
+        table.getFilters(prepareFilters);
+        let filters = {
+
+        }
+        filters = prepareFilters.BasicData
+        filters.EndpointId = endpointId.EndpointId;
+        trigger(communication.events.jackpots.previewEvents, { data: filters });
+    }
+
     //-------------------------------------------------------------------------//
 
     //-------------------Jackpot Animation Settings---------------------------//
@@ -180,14 +218,15 @@ const jackpots = (function () {
         let route = communication.apiRoutes.jackpots.previewEvents;
         let data = params.data;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.previewEvents;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 

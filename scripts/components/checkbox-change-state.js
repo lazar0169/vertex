@@ -6,13 +6,20 @@ const checkboxChangeState = (function () {
     }
 
     function checkboxClick(checkbox) {
-        let input = checkbox.getElementsByClassName('form-checkbox')[0].children[0];
+        let input;
+        if (checkbox.getElementsByClassName('form-checkbox')[0]) {
+            input = checkbox.getElementsByClassName('form-checkbox')[0].children[0];
+        } else {
+            input = checkbox.getElementsByClassName('form-switch')[0].children[0];
+        }
         checkbox.onclick = function () {
             if (input.checked) {
-                checkboxIsChecked(input, false)
+                checkboxIsChecked(input, false);
+
             }
             else {
-                checkboxIsChecked(input, true)
+                checkboxIsChecked(input, true);
+
             }
         }
     }
@@ -29,9 +36,17 @@ const checkboxChangeState = (function () {
     function checkboxIsChecked(input, isChecked) {
         if (isChecked) {
             input.checked = true;
+            if (input.parentNode.parentNode.dataset && input.parentNode.parentNode.dataset.target) {
+                $$(`${input.parentNode.parentNode.dataset.target}`).classList.remove('hidden');
+                input.parentNode.parentNode.getElementsByClassName('checkbox-name')[0].classList.add('color-white');
+            }
         }
         else {
             input.checked = false;
+            if (input.parentNode.parentNode.dataset && input.parentNode.parentNode.dataset.target) {
+                $$(`${input.parentNode.parentNode.dataset.target}`).classList.add('hidden');
+                input.parentNode.parentNode.getElementsByClassName('checkbox-name')[0].classList.remove('color-white');
+            }
         }
     }
 

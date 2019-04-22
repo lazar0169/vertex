@@ -73,9 +73,9 @@
     align-items: center;
 }
 
-.add-new-jackpot-control-settings>div:not(:first-child)>div>div {
+/* .add-new-jackpot-control-settings>div:not(:first-child)>div>div {
     margin-left: 0.5em;
-}
+} */
 
 .add-new-jackpot-control-settings-info>div:first-child {
     display: flex;
@@ -105,4 +105,80 @@
 
 #add-new-jackpot-content-advance-settings>div:not(:first-child)>div {
     padding: 0.5em 0.5em 0.5em 2.5em;
+}
+
+.grid-3-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0.5em;
+    margin: 0 2.5em;
+}
+
+.grid-3-columns>div {
+    display: flex;
+    align-items: center;
+    padding: 0 0.5em;
+}
+
+.grid-3-columns>button:nth-child(2) {
+    margin: 0 0.5em;
+}
+
+#jackpot-grows-automatically-content {
+    padding: 0.5em 3em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#jackpot-grows-automatically-content>div:first-child .form-input,
+#jackopot-grow-pattern-value-limit>div:first-child .form-input {
+    width: 450px;
+    margin-left: 0.5em;
+}
+
+#jackpot-growth-pattern-after-reaching-max .default-select>div:first-child {
+    width: 225px;
+}
+
+#jackpot-grows-automatically-content>figure {
+    padding: 0.5em 0;
+    grid-column: 1 / span 2;
+}
+
+#jackopot-grow-pattern-value-limit {
+    grid-column: 1/span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-left: 2.5em;
+}
+
+#jackpot-control-growth-period>div {
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+.pattern-active {
+    background: #006ac4 !important;
+}
+
+#jackpot-value-limit-wrapper {
+    padding: 0.5em;
+    margin: 0 2.5em;
+}
+
+#jackpot-grows-by-bet {
+    padding: 0.5em 3em;
+}
+
+#jackpot-grows-by-bet .form-input {
+    width: 450px;
+}
+
+#add-new-jackpot-grows-by-bet-choose-machines-wrapper {
+    padding: 0.5em 0;
+    display: flex;
+}
+
+#add-new-jackpot-grows-by-bet-choose-machines-wrapper>div:nth-child(2) {
+    padding: 0 0.5em
 }

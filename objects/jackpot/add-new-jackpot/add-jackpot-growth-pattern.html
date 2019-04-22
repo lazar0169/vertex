@@ -1,0 +1,137 @@
+<div id="add-new-jackpot-content-growth-pattern" class='add-new-jackpot-control-settings'>
+    <div>
+        <figure class="element-form-check vertex-form-checkbox" data-target="#testproba">
+            <div id="testproba" class="element-form-mode checkbox-label"></div>
+            <label class="form-switch">
+                <input name="EnableNotification" data-type="int" type="checkbox">
+                <i class="form-icon"></i>
+            </label>
+        </figure>
+        <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
+            <div>
+                <div>GROWTH PATTERN:</div>
+                <div>Off</div>
+            </div>
+            <span class="closed-arrow">&#9660;</span>
+        </div>
+    </div>
+    <div class="hidden">
+        <div id="jackpot-growth-pattern-buttons" class="grid-3-columns">
+            <button class="primarybutton" data-value="jackpot-grows-automatically-content">Grows automatically</button>
+            <button class="primarybutton" data-value="jackpot-grows-by-bet">Grows by bet</button>
+            <button class="primarybutton" data-value="jackpot-grows-discreetly">Grows discreetly</button>
+        </div>
+
+        <div id="jackpot-grows-automatically-content" class="hidden  jackpot-pattern-buttons-content">
+            <div>
+                <div>
+                    <label class="element-multilanguage" data-translation-key="TheValueByWhichItIsGrowing">The value by
+                        which it is growing</label>
+                    <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
+                        placeholder="TheValueByWhichItIsGrowing">
+                </div>
+
+                <div>
+                    <label class="element-multilanguage" data-translation-key="GrowthValue(InDays)">Growth value (in
+                        days):</label>
+                    <input name="rednibroj2" class="form-input element-form-data" data-type="string" type="text"
+                        placeholder="GrowthValue(InDays)">
+                </div>
+
+                <div>
+                    <label class="element-multilanguage" data-translation-key="Hidden"></label>
+                    <input name="rednibroj3" class="form-input element-form-data" data-type="string" type="text"
+                        placeholder="Hidden">
+                </div>
+            </div>
+
+            <div>
+                <div id="jackpot-control-growth-period" class="center">
+                    <div class="tab-active">raste po dani</div>
+                    <div>raste po sati</div>
+                </div>
+
+                <div class="grid-3-columns">
+                    <div>
+                        <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
+                            placeholder="Dani/sati">
+                    </div>
+                    <div>
+                        <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
+                            placeholder="Procenat">
+                    </div>
+                    <div>
+                        <button class="secundarybutton" data-value="add-new-field">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="jackpot-grows-by-bet" class="hidden jackpot-pattern-buttons-content">
+            <div>
+                <label class="element-multilanguage" data-translation-key="Percent[%]"></label>
+                <input name="rednibroj111" class="form-input element-form-data" data-type="string" type="text"
+                    placeholder="Percent">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="Hidden[%]"></label>
+                <input name="rednibroj112" class="form-input element-form-data" data-type="string" type="text"
+                    placeholder="Hidden">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="MinimumBetForGrowth"></label>
+                <input name="rednibroj113" class="form-input element-form-data" data-type="string" type="text"
+                    placeholder="MinimumBetForGrowth">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="MaximumBetForGrowth"></label>
+                <input name="rednibroj114" class="form-input element-form-data" data-type="string" type="text"
+                    placeholder="MaximumBetForGrowth">
+            </div>
+
+            <div id="add-new-jackpot-grows-by-bet-choose-machines-wrapper">
+                <div> Choose machines that are participating:</div>
+                <div>22/38</div>
+                <div id="add-new-jackpot-grows-by-bet-choose-machines-buttons" class="button-wrapper">
+                    <button class="secundarybutton">Choose Machines</button>
+                    <a class="button-link">Remove all</a>
+                </div>
+            </div>
+        </div>
+        <div id="jackpot-value-limit-wrapper" class="hidden">
+            <figure class="element-form-check vertex-form-checkbox" data-target="#jackopot-grow-pattern-value-limit">
+                <label class="form-switch">
+                    <input name="EnableNotification" data-type="int" type="checkbox">
+                    <i class="form-icon"></i>
+                </label>
+                <div id="testproba1" class="checkbox-name">Value limit</div>
+            </figure>
+            <div id="jackopot-grow-pattern-value-limit" class="hidden">
+                <div>
+                    <div>
+                        <label class="element-multilanguage" data-translation-key="MinimumValue"></label>
+                        <input name="rednibroj10" class="form-input element-form-data" data-type="string" type="text"
+                            placeholder="Hidden">
+                    </div>
+                    <div>
+                        <label class="element-multilanguage" data-translation-key="MaximumValue"></label>
+                        <input name="rednibroj11" class="form-input element-form-data" data-type="string" type="text"
+                            placeholder="Hidden">
+                    </div>
+                    <div id="jackpot-growth-pattern-after-reaching-max">
+                        <div>After reaching the maximum value</div>
+                    </div>
+                </div>
+                <div>ovde ide deo sa dijagramom</div>
+            </div>
+        </div>
+
+        <div id="jackpot-grows-discreetly" class="hidden jackpot-pattern-buttons-content">
+            <div id="jackpot-grows-discreetly-buttons" class="grid-3-columns">
+                <div class='center'>RAIN</div>
+                <div class='center'>TOURNAMENT</div>
+                <div class='center tab-active'>CUSTOM</div>
+            </div>
+        </div>
+    </div>
+</div>

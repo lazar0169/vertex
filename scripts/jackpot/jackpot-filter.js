@@ -21,13 +21,13 @@ const jackpotFilter = (function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
-
     });
 
     //close add new jackpot form
     jackpotTab.addEventListener('click', function () {
         addNewJackpot.classList.add('hidden');
     });
+
     //show add new jackop form
     addJackpot.onclick = function () {
         let EntryData = jackpots.getEndpointId();
@@ -35,6 +35,5 @@ const jackpotFilter = (function () {
         data.successAction = 'jackpot/get-add-jackpot';
         trigger(communication.events.jackpots.addJackpot, { data, EntryData })
         addNewJackpot.classList.toggle('hidden');
-
     }
 })();

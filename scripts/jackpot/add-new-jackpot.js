@@ -69,6 +69,7 @@ const addNewJackpot = (function () {
     on('jackpot/get-add-jackpot', function (params) {
         console.log(params);
         fillAdvanceSettings(params);
+        dropdown.generate({ values: params.data.Data.MinMaxState, parent: $$('#jackpot-growth-pattern-after-reaching-max') })
     });
 
     function fillAdvanceSettings(params) {
@@ -85,7 +86,5 @@ const addNewJackpot = (function () {
         dropdown.generate({ values: data.JackpotList, parent: ddHideStopGrow, type: 'single' });
         dropdown.generate({ values: data.NewJackpotStateList, parent: ddNewJackpots, type: 'single' });
         console.log(data);
-
     }
-
 })();

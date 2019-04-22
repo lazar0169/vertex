@@ -229,7 +229,7 @@ const jackpotChooseParticipatingMachines = (function () {
                         newOption.title = element.Name;
                         newOption.dataset.value = element.Name;
                         newOption.classList.add('option-casino');
-                        
+
                         newOption.innerHTML = `<label class="form-checkbox" >
                                                          <input type="checkbox" name="casino-group-${element.City}" ${checkedCasino}>
                                                          <i class="form-icon" data-elementId = "${element.Name}"></i> <div>${element.Name}</div>
@@ -388,6 +388,7 @@ const jackpotChooseParticipatingMachines = (function () {
     });
 
     return {
-        createJackpotFilterCasinos
+        createJackpotFilterCasinos,
+        showHideChooseMachine
     };
 })();
