@@ -14,7 +14,6 @@ const jackpotanimationSettings = (function () {
     saveAnimationSettings.onclick = function () {
         let EntryData = {}
         EntryData = jackpots.getEndpointId();
-        //todo: ovo da se doradi
         EntryData.TimerValue = jackpotAnimationSettingsContent.settings.TimerValue;
         EntryData.ShowTimer = jackpotAnimationSettingsContent.settings.ShowTimer;
         EntryData.JackpotBackgroundList = jackpotAnimationSettingsContent.settings.JackpotBackgroundList;
@@ -94,22 +93,24 @@ const jackpotanimationSettings = (function () {
     on('jackpot/show-jackpots-animation-settings', function (params) {
         let data = params.data.Data;
         animationBackgroundPicture.src = data.Background;
-        drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
+
+        animationBackgroundPicture.onload = function () {
+            drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
+            for (let check of jackpotanimationGeneralCheckbox) {
+                for (let checkName of Object.keys(data)) {
+                    if (checkName === check.dataset.name) {
+                        checkboxChangeState.checkboxIsChecked(check.getElementsByClassName('form-checkbox')[0].children[0], params.data.Data[checkName]);
+                        callDrawJackpotLabelOnGeneralCheck(checkName)
+                        break;
+                    }
+                }
+            }
+        }
         drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
         drawWinningJackpotLabel('#ShowHousing', housingCoordinateWin, '500.00');
         jackpotAnimationSettingsContent.settings = data;
         dropdown.generate({ values: data.JackpotBackgroundList, parent: animationBackgroundDropdown });
         infoLineText.value = data.InfoLine;
-
-        for (let check of jackpotanimationGeneralCheckbox) {
-            for (let checkName of Object.keys(data)) {
-                if (checkName === check.dataset.name) {
-                    checkboxChangeState.checkboxIsChecked(check.getElementsByClassName('form-checkbox')[0].children[0], params.data.Data[checkName]);
-                    callDrawJackpotLabelOnGeneralCheck(checkName)
-                    break;
-                }
-            }
-        }
 
         for (let check of jackpotanimationWinCheckbox) {
             for (let checkName of Object.keys(data)) {

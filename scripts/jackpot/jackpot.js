@@ -4,25 +4,15 @@ const jackpots = (function () {
     let jackpotDailyLimitTopBar = $$('#top-bar-jackpots').children[0].children[2];
     let jackpotPaidTodayTopBar = $$('#top-bar-jackpots').children[1].children[2];
 
-
     const events = {
         activated: 'jackpots/activated',
         getJackpots: 'jackpot/get-jackpots',
+        previewJackpots: 'jackpot/preview-jackpot',
         getJackpotHistory: 'jackpot/get-jackpot-history',
         getEvents: 'jackpot/get-jackpot-events',
-        previewEvents: 'jackpot/preview-jackpot',
+        previewEvents: 'jackpot/preview-jackpot-events',
         getJackpotAnimtionSettings: 'jackpot/get-jackpot-animation-settings'
-
     };
-
-    const EventsSortName = {
-        0: 'EventTime',
-        1: 'Status',
-        2: 'UserName',
-        3: 'JackpotName',
-        4: 'AmountCents',
-        5: 'Info'
-    }
 
     on(events.activated, function (params) {
         let jackpotId = params.params[0].value;
@@ -45,10 +35,10 @@ const jackpots = (function () {
         EntryData.EndpointId = endpointId;
         return EntryData;
     }
+
     //------------------Jackpot Tab----------------------------------------//
     const jackpotsTableId = 'table-container-jackpots';
     let jackpotsTable = null;
-
 
     on(events.getJackpots, function (params) {
         let EntryData = getEndpointId()
@@ -72,6 +62,17 @@ const jackpots = (function () {
         $$('#jackpot-tab-info').appendChild(jackpotsTable);
         trigger('preloader/hide');
     });
+
+    on(table.events.sort(jackpotsTableId), function () {
+        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
+    });
+
+    on(events.previewJackpots, function (params) {
+        let data = params.data.Data;
+        $$(`#${jackpotsTableId}`).update(data);
+    });
+
     //---------------------------------------------------------------------//
 
 
@@ -127,11 +128,8 @@ const jackpots = (function () {
     });
 
     on(table.events.pageSize(jackpotEventsTableId), function () {
-        prepareJackpotEventsFiltersAndUpdateTable();
-    });
-
-    on(table.events.sort(jackpotEventsTableId), function () {
-        prepareJackpotEventsFiltersAndUpdateTable();
+        let filtersForApi = prepareJackpotFIlters(jackpotEventsTableId);
+        trigger(communication.events.jackpots.previewEvents, { data: filtersForApi });
     });
 
     on(events.previewEvents, function (params) {
@@ -139,18 +137,28 @@ const jackpots = (function () {
         $$(`#${jackpotEventsTableId}`).update(data);
     });
 
-    function prepareJackpotEventsFiltersAndUpdateTable() {
-        let table = $$(`#${jackpotEventsTableId}`);
+    on(table.events.pagination(jackpotEventsTableId), function (params) {
+        let filtersForApi = prepareJackpotFIlters(jackpotEventsTableId);
+        trigger(communication.events.jackpots.previewEvents, { data: filtersForApi });
+    });
+
+    function prepareJackpotFIlters(tableId) {
+        let table = $$(`#${tableId}`);
         let endpointId = getEndpointId();
-        let prepareFilters = {
-        }
-        table.getFilters(prepareFilters);
         let filters = {
+            'EndpointId': endpointId.EndpointId
+        }
+        table.getFilters(filters);
+
+        let filtersForApi = {
+            'EndpointId': filters.EndpointId,
+            'Page': filters.BasicData.Page,
+            'PageSize': filters.BasicData.PageSize,
+            'SortOrder': filters.BasicData.SortOrder,
+            'SortName': filters.BasicData.SortName
 
         }
-        filters = prepareFilters.BasicData
-        filters.EndpointId = endpointId.EndpointId;
-        trigger(communication.events.jackpots.previewEvents, { data: filters });
+        return filtersForApi
     }
 
     //-------------------------------------------------------------------------//
@@ -179,19 +187,20 @@ const jackpots = (function () {
         });
     });
 
-    //preview jackpots
+    //preview jackpots ++++
     on(communication.events.jackpots.previewJackpots, function (params) {
         let route = communication.apiRoutes.jackpots.previewJackpots;
         let data = params.data;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.previewJackpots;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 
