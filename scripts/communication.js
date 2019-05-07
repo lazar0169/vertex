@@ -42,7 +42,10 @@ let communication = (function () {
             cancelPendingTransaction: 'api/transactions/cancelpendingtransaction/',
             exportToPDF: 'api/transactions/reports/'
         },
-        casinos: {},
+        casinos: {
+            getAllCasinos: 'api/main/',
+            previewAllCasinos: 'api/main/preview/',
+        },
         machines: {
             getMachines: 'api/machines/',
             previewMachines: 'api/machines/previewmachines/',
@@ -131,7 +134,10 @@ let communication = (function () {
                 parseRemoteData: 'communicate/aft/data/parseRemoteData'
             }
         },
-        casinos: {},
+        casinos: {
+            getAllCasinos: 'communicate/casinos/getAllCasinos',
+            previewAllCasinos: 'communicate/casinos/previewAllCasinos',
+        },
         machines: {
             getMachines: 'communicate/machines/getMachines',
             previewMachines: 'communicate/machines/previewMachines',
@@ -287,13 +293,13 @@ let communication = (function () {
             if (xhr.readyState === xhrStates.done && xhr.status >= 200 && xhr.status < 300) {
                 success(xhr, successEvent, additionalData);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
-                if (xhr.status >= 500){
+                if (xhr.status >= 500) {
                     trigger('notifications/show', {
                         message: localization.translateMessage('InternalServerError'),
                         type: notifications.messageTypes.error
                     });
                 }
-                    error(xhr, errorEvent);
+                error(xhr, errorEvent);
             }
         };
         return xhr;

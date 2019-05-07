@@ -1,0 +1,219 @@
+.casino-display-name-wrapper {
+    grid-area: name-wrapper;
+}
+
+.casino-display-saldo-wrapper {
+    grid-area: saldo-wrapper;
+}
+
+.casino-display-total-in-wrapper {
+    grid-area: total-in-wrapper;
+}
+
+.casino-display-total-in-cashdesk-wrapper {
+    grid-area: total-in-cashdesk-wrapper;
+}
+
+.casino-display-bills-wrapper {
+    grid-area: bills-wrapper;
+}
+
+.casino-display-last-column {
+    grid-area: last-column-wrapper;
+}
+
+.casino-display-players-wrapper {
+    grid-area: players-wrapper;
+}
+
+.casino-display-warning {
+    grid-area: warning;
+}
+
+.casino-display-details {
+    grid-area: details;
+}
+
+
+.casino-display-table-view {
+    display: grid;
+    grid-template-areas: ' name-wrapper  saldo-wrapper  total-in-wrapper total-in-cashdesk-wrapper bills-wrapper  last-column-wrapper';
+    /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; */
+    color: rgb(120, 144, 156);
+    font-size: 14px;
+}
+
+.casino-display-table-view>div {
+    background: rgba(38, 50, 56, 0.5);
+    border-right: 2px solid rgb(55, 71, 79);
+    padding: 0 0.5em;
+}
+
+.casino-display-table-view>div:first-child {
+    background: rgb(38, 50, 56);
+}
+
+.casino-display-status {
+    grid-area: status;
+    width: 15px;
+    height: 15px;
+    background: rgb(139, 195, 74);
+    border-radius: 10px;
+    margin: auto;
+}
+
+.casino-display-name {
+    grid-area: name;
+    padding-left: 0.5em;
+}
+
+.casino-display-city {
+    grid-area: city;
+    padding-left: 0.5em;
+}
+
+.casino-display-name-wrapper {
+    display: grid;
+    grid-template-areas:
+        'status name name name name'
+        'status city city city city';
+}
+
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.casino-display-details {
+    color: rgb(30, 155, 227);
+}
+
+.casino-display-saldo-wrapper {
+    color: rgb(139, 195, 74);
+}
+
+.casino-display-details:hover {
+    cursor: pointer;
+}
+
+#casinos-display-all-casinos {
+    padding-bottom: 0.5em;
+    box-shadow: 0 0.1em 0 rgba(38, 50, 56, 0.5);
+}
+
+#casinos-display-all-casinos-content {
+    display: grid;
+    padding: 0.5em 0;
+    grid-row-gap: 0.5em;
+}
+
+.casino-display-last-column {
+    display: grid;
+    grid-template-areas: 'players-wrapper players-wrapper warning details details';
+
+}
+
+.casino-display-players-wrapper {
+    margin: auto;
+    background: rgb(38, 50, 56);
+    border-radius: 1em;
+    padding: 0.2em 0.4em 0.2em 0.4em;
+}
+
+.casino-display-players-wrapper>div:first-child {
+    padding-right: 0.5em
+}
+
+#casino-display-filter-wrapper {
+    display: flex;
+    padding: 0.5em 0;
+    color: rgb(120, 144, 156);
+    font-size: 13px;
+}
+
+#casino-display-filter-wrapper>div {
+    display: flex;
+}
+
+#casino-display-filter-wrapper>div>div {
+    display: flex
+}
+
+#casino-display-filter-wrapper>div>div>div {
+    padding: 0 0.5em;
+}
+
+#casino-display-filter-wrapper>div>div>div:hover {
+    cursor: pointer;
+    color: white
+}
+
+#casino-display-filter-wrapper>div>div>div:not(:last-child) {
+    border-right: 1px solid rgb(38, 50, 56);
+}
+
+#casino-display-change-view {
+    position: absolute;
+    right: 1em;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#casino-display-change-view:hover {
+    color: white;
+}
+
+.casino-display-grid-view-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    color: rgb(120, 144, 156);
+    font-size: 14px;
+    grid-gap: 1em;
+}
+
+.casino-display-grid-view-wrapper>div {
+    display: grid;
+    grid-template-areas: 'name-wrapper name-wrapper name-wrapper name-wrapper name-wrapper name-wrapper'
+        'saldo-wrapper saldo-wrapper saldo-wrapper last-column-wrapper last-column-wrapper last-column-wrapper'
+        'total-in-wrapper  total-in-wrapper total-in-cashdesk-wrapper total-in-cashdesk-wrapper bills-wrapper bills-wrapper';
+    background: rgb(38, 50, 56);
+    grid-row-gap: 0.5em;
+}
+
+.casino-display-grid-view .casino-display-name-wrapper {
+    display: grid;
+    grid-template-areas:
+        'name name name name status'
+        'city city city city status';
+    padding-top: 0.5em;
+}
+
+.casino-display-grid-view .casino-display-saldo-wrapper {
+    justify-content: flex-start;
+    padding: 0 0.5em
+}
+
+.casino-display-grid-view .casino-display-players-wrapper,
+.casino-display-grid-view .casino-display-warning {
+    display: none;
+}
+
+.casino-display-grid-view .casino-display-total-in-wrapper,
+.casino-display-grid-view .casino-display-total-in-cashdesk-wrapper,
+.casino-display-grid-view .casino-display-bills-wrapper {
+    padding: 0.5em;
+    background: rgb(46, 60, 67);
+}
+
+.casino-display-grid-view .casino-display-total-in-wrapper>div,
+.casino-display-grid-view .casino-display-total-in-cashdesk-wrapper>div,
+.casino-display-grid-view .casino-display-bills-wrapper>div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.casino-display-grid-view .casino-display-total-in-cashdesk-wrapper>div {
+    border-left: 1px solid rgb(120, 144, 156);
+    border-right: 1px solid rgb(120, 144, 156);
+}

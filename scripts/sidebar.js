@@ -121,6 +121,15 @@ const sidebar = (function () {
             let center = document.createElement('div');
             center.classList.add('center');
             let categoryEl;
+
+            if (category === 'Casinos') {
+                let allCasinos = {}
+                allCasinos.Id = 0;
+                allCasinos.Name = 'AllCasinos';
+                allCasinos.City = 'AllCasinos'
+                data[category].Value.unshift(allCasinos);
+            }
+
             if (data[category].Value.length === 0) {
                 categoryEl = document.createElement('a');
                 categoryEl.classList.add('element-navigation-link');

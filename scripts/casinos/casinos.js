@@ -1,4 +1,22 @@
 let casino = (function () {
+    let casinoChangeView = $$('#casino-display-change-view');
+    let casinosAllCasinosContent = $$('#casinos-display-all-casinos-content');
+
+    casinoChangeView.onclick = function () {
+        console.log('promeni izgled')
+
+        changeDisplayView();
+    }
+
+    function changeDisplayView() {
+
+        casinosAllCasinosContent.classList.toggle('casino-display-grid-view-wrapper')
+        for (let casino of casinosAllCasinosContent.children) {
+            casino.classList.toggle('casino-display-table-view');
+            casino.classList.toggle('casino-display-grid-view');
+        }
+
+    }
 
     // let testDataTableCasinos = [
     //     {
@@ -62,12 +80,33 @@ let casino = (function () {
     //         "totalWin": 2
     //     }
     // ];
+    const events = {
+        activated: 'casinos/activated',
+        getAllCasinos: 'casinos/get',
+        previewAllCasinos: 'casinos/preview'
+    };
 
-    on('casinos/activated', function () {
-
-      
-
+    on(events.activated, function (params) {
+        selectTab('casinos-tab-current-shift');
+        let casinoId = params.params[0].value;
+        trigger(communication.events.casinos.getAllCasinos, { data: { EndpointId: casinoId, Filter: 6 } });
     });
+    on(events.getAllCasinos, function (params) {
+
+        console.log(params)
+        $$('#casinos-display-all-casinos').appendChild(casinoDisplay.generateView('1'));
+
+        $$('#casinos-display-all-casinos-content').appendChild(casinoDisplay.generateView('1'));
+
+        $$('#casinos-display-all-casinos-content').appendChild(casinoDisplay.generateView('1'));
+
+        $$('#casinos-display-all-casinos-content').appendChild(casinoDisplay.generateView('1'));
+
+        $$('#casinos-display-all-casinos-content').appendChild(casinoDisplay.generateView('1'));
+
+        trigger('preloader/hide');
+    });
+
 
     on('casinos/add', function (e) {
         let model = e.model;
@@ -92,6 +131,24 @@ let casino = (function () {
     on('casino/display-casino-info/error', function (e) {
         data = e.data;
         alert('An error occured.');
+    });
+
+
+    on(communication.events.casinos.getAllCasinos, function (params) {
+        trigger('preloader/show');
+        let route = communication.apiRoutes.casinos.getAllCasinos;
+        let request = communication.requestTypes.post;
+        let data = params.data
+        let successEvent = events.getAllCasinos;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            additionalData: params.data.EndpointId,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
     });
 
 })();
