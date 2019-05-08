@@ -291,10 +291,7 @@ const jackpotChooseParticipatingMachines = (function () {
             wrapperOptionAndSearch.children[1].remove();
             generateCasinosAndCities(wrapperOptionAndSearch, newObject)
         }
-
-
     }
-
 
     function checkGroupCasinosCheckbox(group, groupName) {
         //ovde si stao prosledjujes ime grupe

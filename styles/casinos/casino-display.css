@@ -41,6 +41,7 @@
     /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr; */
     color: rgb(120, 144, 156);
     font-size: 14px;
+    grid-auto-columns: 1fr;
 }
 
 .casino-display-table-view>div {
@@ -148,14 +149,12 @@
     color: white
 }
 
-#casino-display-filter-wrapper>div>div>div:not(:last-child) {
+#casino-display-filter-wrapper>div>div>div {
     border-right: 1px solid rgb(38, 50, 56);
 }
 
 #casino-display-change-view {
-    position: absolute;
-    right: 1em;
-    font-size: 20px;
+    font-size: 14px;
     cursor: pointer;
 }
 
@@ -165,7 +164,7 @@
 
 .casino-display-grid-view-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     color: rgb(120, 144, 156);
     font-size: 14px;
     grid-gap: 1em;
@@ -216,4 +215,9 @@
 .casino-display-grid-view .casino-display-total-in-cashdesk-wrapper>div {
     border-left: 1px solid rgb(120, 144, 156);
     border-right: 1px solid rgb(120, 144, 156);
+}
+
+#casinos-search-casino {
+    margin: auto;
+    width: 50%
 }

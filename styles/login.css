@@ -3,6 +3,8 @@
     flex-direction: row;
     background: rgb(38, 50, 56);
     color: rgb(120, 144, 156);
+    width: 100%;
+    height: 100%;
 }
 
 #login-left-sector {
@@ -61,7 +63,8 @@
     padding: 80px 50px 0 50px;
 }
 
-#login-content .form-group>div, #login-content .form-group>input {
+#login-content .form-group>div,
+#login-content .form-group>input {
     width: 100%;
     font-family: 'Open Sans';
     font-size: 15px;
