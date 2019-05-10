@@ -6,25 +6,33 @@
         <div id="casino-display-filter-wrapper">
             <div>
                 <div>Ordered by:</div>
-                <div>
-                    <div>Name</div>
-                    <div>Saldo</div>
-                    <div>Total In</div>
-                    <div>CashDesk</div>
-                    <div>Bills</div>
+                <div data-id="1">
+                    <div class="casino-sort element-multilanguage color-white sort-active" data-translation-key="Name"
+                        data-id="1">
+                        Name</div>
+                    <div class="casino-sort  element-multilanguage" data-translation-key="Saldo" data-id="2">Saldo</div>
+                    <div class="casino-sort  element-multilanguage" data-translation-key="TotalIn" data-id="3">Total In
+                    </div>
+                    <div class="casino-sort  element-multilanguage" data-translation-key="CashDesk" data-id="4">CashDesk
+                    </div>
+                    <div class="casino-sort  element-multilanguage" data-translation-key="Bills" data-id="5">Bills</div>
+                    <div class="casino-sort  element-multilanguage" data-translation-key="NumOfPlayers" data-id="6">
+                        NumOfPlayers</div>
                 </div>
             </div>
-            <div id="casinos-search-casino" class="center icon-vertex-Search">
-                <input class="element-multilanguage search" type="text" onfocus="value=''" placeholder="Search"
-                    data-translation-key="searchCasino">
+            <div id="casinos-search-casino-wrapper">
+                <div id="casinos-search-casino-button" class="center icon-vertex-Search element-multilanguage"
+                    data-translation-key="SearchCasino"> Search</div>
+                <div id="casinos-search-casino" class="center icon-vertex-Search hidden">
+                    <input class="element-multilanguage search" type="text" onfocus="value=''" placeholder="Search"
+                        data-translation-key="SearchCasino">
+                </div>
             </div>
-            <div id="casino-display-change-view" class="mdi mdi-menu">
-            </div>
+            <!-- <div id="casino-display-change-view" class="mdi mdi-menu">
+            </div> -->
         </div>
 
         <div id="casinos-display-all-casinos-content"></div>
-
-
 
     </div>
 </section>

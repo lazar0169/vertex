@@ -275,7 +275,7 @@ const jackpotanimationSettings = (function () {
         let img = $$(imgId);
         let txt = text;
         ctx.fillStyle = 'white';
-        ctx.font = `bold ${coordinate.h - 5}px roboto`;
+        ctx.font = `bold ${coordinate.h - 5}px Open Sans`;
         ctx.drawImage(img, coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 7 / 8);
     }
@@ -286,7 +286,7 @@ const jackpotanimationSettings = (function () {
         let img = $$(imgId);
         let txt = text;
         ctx.fillStyle = 'white';
-        ctx.font = `bold ${coordinate.h - 5}px roboto`;
+        ctx.font = `bold ${coordinate.h - 5}px Open Sans`;
         ctx.drawImage(img, coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 7 / 8);
     }
@@ -299,7 +299,7 @@ const jackpotanimationSettings = (function () {
         ctx.fillRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = text;
         ctx.fillStyle = 'white';
-        ctx.font = `bold ${coordinate.h - 5}px roboto`;
+        ctx.font = `bold ${coordinate.h - 5}px Open Sans`;
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 4 / 5);
     }
 

@@ -343,7 +343,7 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = `${value}`;
-        ctx.font = `bold ${coordinate.h - 10}px roboto`;
+        ctx.font = `bold ${coordinate.h - 10}px Open Sans`;
         ctx.globalAlpha = 1;
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h - 10);
     }
@@ -353,7 +353,7 @@ const ticketAppearance = (function () {
         let ctx = canvas.getContext("2d");
         ctx.clearRect(coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         let txt = `${value}`;
-        ctx.font = `bold ${coordinate.h - 10}px roboto`;
+        ctx.font = `bold ${coordinate.h - 10}px Open Sans`;
         ctx.globalAlpha = 0.6;
         ctx.save();
         if (coordinate.x < 0) {

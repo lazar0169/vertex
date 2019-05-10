@@ -273,6 +273,10 @@ const dropdownDate = (function () {
             $$('#top-bar-logout').classList.remove('logout-is-opened');
             $$('#top-bar-logout-dropdown-menu').classList.add('hidden');
         }
+
+        if (document.activeElement !== $$('#casinos-search-casino').children[0]) {
+            $$('#casinos-search-casino').classList.add('hidden');
+        }
     });
     return {
         generate

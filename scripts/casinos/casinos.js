@@ -1,20 +1,55 @@
 let casino = (function () {
-    let casinoChangeView = $$('#casino-display-change-view');
+    // let casinoChangeView = $$('#casino-display-change-view');
     let casinosAllCasinosContent = $$('#casinos-display-all-casinos-content');
-    let searchCasino = $$('#casinos-search-casino').children[0];
+    let searchCasino = $$('#casinos-search-casino');
+    let searchCasinoButton = $$('#casinos-search-casino-button');
+    let casinoSortOrder = $$('.casino-sort')
+    let casinoFilterWrapper = $$('#casino-display-filter-wrapper').children[0].children[1];
+    let activeShift = $$('#casinos-tabs-wrapper').getElementsByClassName('tab-active');
 
-    casinoChangeView.onclick = function () {
-        changeDisplayView();
-    }
 
-    function changeDisplayView() {
-        casinosAllCasinosContent.classList.toggle('casino-display-grid-view-wrapper')
-        for (let casino of casinosAllCasinosContent.children) {
-            casino.classList.toggle('casino-display-table-view');
-            casino.classList.toggle('casino-display-grid-view');
+    for (let sort of casinoSortOrder) {
+        sort.onclick = function () {
+            removeActiveFilter();
+
+            sort.classList.add('color-white');
+            sort.classList.add('sort-active');
+
+            sort.parentNode.dataset.id = sort.dataset.id;
+
+            let data = {};
+            data.EndpointId = casinosAllCasinosContent.settings.EndpointId;
+            data.Filter = parseInt(activeShift[0].dataset.id);
+            //uslov zbog imena sortiranje A-Z, ili po vrednosti vrednost prve celije > od vrednosti druge celije
+            if (parseInt(sort.parentNode.dataset.id) === 1) {
+                data.SortOrder = 1;
+            } else {
+                data.SortOrder = 2;
+            }
+            data.SortName = parseInt(sort.parentNode.dataset.id);
+
+            trigger(communication.events.casinos.previewAllCasinos, { data });
         }
     }
 
+    searchCasinoButton.onclick = function () {
+        searchCasino.classList.remove('hidden');
+        searchCasino.children[0].focus();
+    }
+
+    //------------ ne brisi mozda ostaje, sluzi za menjanje tabelarnog prikaza u grid prikaz -------------------//
+    // casinoChangeView.onclick = function () {
+    //     changeDisplayView();
+    // }
+
+    // function changeDisplayView() {
+    //     casinosAllCasinosContent.classList.toggle('casino-display-grid-view-wrapper')
+    //     for (let casino of casinosAllCasinosContent.children) {
+    //         casino.classList.toggle('casino-display-table-view');
+    //         casino.classList.toggle('casino-display-grid-view');
+    //     }
+    // }
+    //-----------------------------------------------------------------//
     function removeChildren(div) {
         while (div.children.length > 0) {
             div.children[0].remove();
@@ -50,21 +85,70 @@ let casino = (function () {
         getAllCasinos: 'casinos/get',
         previewAllCasinos: 'casinos/preview'
     };
+    function removeActiveFilter() {
+        for (let sort of casinoSortOrder) {
+            sort.classList.remove('color-white');
+            sort.classList.remove('sort-active');
+        }
+    }
+
+    //------------------- smene u kazinu -------------------//
+    on('casinos/casino-tab', function (params) {
+
+        let urlArray = window.location.pathname.split("/");
+        let endpointId = urlArray[2];
+        casinoFilterWrapper.dataset.id = 1;
+        removeActiveFilter();
+
+        casinoFilterWrapper.children[0].classList.add('color-white');
+        casinoFilterWrapper.children[0].classList.add('sort-active');
+
+        let data = {};
+        data.EndpointId = parseInt(endpointId);
+        data.Filter = parseInt(activeShift[0].dataset.id);
+        data.SortName = 1;
+        data.SortOrder = 1;
+
+        trigger(communication.events.casinos.previewAllCasinos, { data });
+    });
+    //------------------------------------------------------//
 
     on(events.activated, function (params) {
         selectTab('casinos-tab-current-shift');
-        let casinoId = params.params[0].value;
-        trigger(communication.events.casinos.getAllCasinos, { data: { EndpointId: casinoId, Filter: 6 } });
+        // let casinoId = params.params[0].value;
+        // trigger(communication.events.casinos.previewAllCasinos, { data: { EndpointId: casinoId, Filter: 6, SortOrder: 1, SortName: 1 } });
     });
+    //getAllCasinos ne mora da postoji posto se odma sortira po imenu kazina i potrebno je poslati SortName 1
+    // on(events.getAllCasinos, function (params) {
 
-    on(events.getAllCasinos, function (params) {
+    //     let casinoDataList = params.data.CasinoDataList;
+    //     let allCasinos = $$('#casinos-display-all-casinos');
+    //     casinosAllCasinosContent.settings = params.data;
 
-        casinosAllCasinosContent.classList.remove('casino-display-grid-view-wrapper')
+    //     searchCasino.children[0].addEventListener('keyup', function (event) {
+    //         findCasino(searchCasino.children[0].value, casinoDataList)
+    //     });
+
+    //     removeChildren(allCasinos);
+    //     removeChildren(casinosAllCasinosContent);
+
+    //     for (let data of casinoDataList) {
+    //         if (data.Id === -1) {
+    //             $$('#casinos-display-all-casinos').appendChild(casinoDisplay.generateView(data));
+    //         } else {
+    //             casinosAllCasinosContent.appendChild(casinoDisplay.generateView(data));
+    //         }
+    //     }
+    //     trigger('preloader/hide');
+    // });
+    on(events.previewAllCasinos, function (params) {
+
         let casinoDataList = params.data.CasinoDataList;
         let allCasinos = $$('#casinos-display-all-casinos');
+        casinosAllCasinosContent.settings = params.data;
 
-        searchCasino.addEventListener('keyup', function (event) {
-            findCasino($$('#casinos-search-casino').children[0].value, casinoDataList)
+        searchCasino.children[0].addEventListener('keyup', function (event) {
+            findCasino(searchCasino.children[0].value, casinoDataList)
         });
 
         removeChildren(allCasinos);
@@ -74,10 +158,9 @@ let casino = (function () {
             if (data.Id === -1) {
                 $$('#casinos-display-all-casinos').appendChild(casinoDisplay.generateView(data));
             } else {
-                $$('#casinos-display-all-casinos-content').appendChild(casinoDisplay.generateView(data));
+                casinosAllCasinosContent.appendChild(casinoDisplay.generateView(data));
             }
         }
-        trigger('preloader/hide');
     });
 
     on('casinos/add', function (e) {
@@ -105,13 +188,28 @@ let casino = (function () {
         alert('An error occured.');
     });
 
-
     on(communication.events.casinos.getAllCasinos, function (params) {
         trigger('preloader/show');
         let route = communication.apiRoutes.casinos.getAllCasinos;
         let request = communication.requestTypes.post;
         let data = params.data
         let successEvent = events.getAllCasinos;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            additionalData: params.data.EndpointId,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    on(communication.events.casinos.previewAllCasinos, function (params) {
+        let route = communication.apiRoutes.casinos.previewAllCasinos;
+        let request = communication.requestTypes.post;
+        let data = params.data
+        let successEvent = events.previewAllCasinos;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,

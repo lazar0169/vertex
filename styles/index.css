@@ -1,7 +1,7 @@
-@font-face {
+/* @font-face {
     font-family: 'roboto';
     src: url('../fonts/roboto.ttf') format('truetype');
-}
+} */
 
 body {
     display: flex;
@@ -10,7 +10,7 @@ body {
     width: 100%;
     height: 100%;
     background: white;
-    font-family: 'roboto';
+    font-family: 'Open Sans';
     user-select: none;
     overflow: hidden;
 }
