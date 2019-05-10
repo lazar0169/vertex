@@ -58,9 +58,16 @@
     grid-area: status;
     width: 15px;
     height: 15px;
-    background: rgb(139, 195, 74);
     border-radius: 10px;
     margin: auto;
+}
+
+.casino-status-true {
+    background: rgb(139, 195, 74);
+}
+
+.casino-status-false {
+    background: rgb(244, 67, 54);
 }
 
 .casino-display-name {
@@ -234,4 +241,9 @@
     width: 25vw;
     background: rgb(55, 71, 79);
     z-index: 1;
+}
+
+.casino-closed {
+    pointer-events: none !important;
+    color: rgb(120, 144, 156) !important;
 }

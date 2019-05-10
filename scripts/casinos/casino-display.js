@@ -98,43 +98,78 @@ let casinoDisplay = (function () {
         </div>`
         }
         else {
-            casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper">
-        <div class="casino-display-status"></div>
-        <div class="casino-display-name color-white">${data.CasinoName}</div>
-        <div class="casino-display-city">${data.City}</div>
-        </div>`
+            if (data.Status) {
+                casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper">
+                <div class="casino-display-status casino-status-${data.Status}"></div>
+                <div class="casino-display-name color-white">${data.CasinoName}</div>
+                <div class="casino-display-city">${data.City}</div>
+                </div>`
+            }
+            else {
+                casinoWrapper.classList.add('casino-closed');
+                casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper">
+                <div class="casino-display-status casino-status-${data.Status}"></div>
+                <div class="casino-display-name">${data.CasinoName}</div>
+                <div class="casino-display-city">${data.City}</div>
+                </div>`
+
+                casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper center">${data.Saldo}</div>
+
+                <div class="casino-display-total-in-wrapper">
+                <div class="casino-display-total-in align-right element-multilanguage" data-translation-key="TotalIn">total in</div>
+                <div class="casino-display-total-in-value align-right">${data.TotalIn}</div>
+                </div>
+
+                <div class="casino-display-total-in-cashdesk-wrapper">
+                <div class="casino-display-total-in-cashdesk align-right element-multilanguage" data-translation-key="TotalInCashdesk">total in cashdesk</div>
+                <div class="casino-display-total-in-cashdesk-value align-right">${data.CashDesk}</div>
+                </div>
+                
+                <div class="casino-display-bills-wrapper">
+                <div class="casino-display-bills align-right element-multilanguage" data-translation-key="Bills">bills</div>
+                <div class="casino-display-bills-value align-right">${data.MoneyInBills}</div>
+                </div>
+
+                <div class="casino-display-last-column"> 
+                    <div class="casino-display-players-wrapper center">
+                    <div>&#9924;</div>
+                    <div>${data.NumOfActiveMachines}/${data.NumOfMachines}</div>
+                    </div>
+
+                    <div class="casino-display-warning center">!</div>
+
+                    <div class="casino-display-details casino-closed center element-multilanguage" data-translation-key="Details">details</div>
+                </div>`
+                return casinoWrapper
+            }
         }
+        casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper center">${data.Saldo}</div>
 
-        casinoWrapper.innerHTML += `
-        <div class="casino-display-saldo-wrapper center">${data.Saldo}</div>
+                <div class="casino-display-total-in-wrapper">
+                <div class="casino-display-total-in align-right element-multilanguage" data-translation-key="TotalIn">total in</div>
+                <div class="casino-display-total-in-value color-white align-right">${data.TotalIn}</div>
+                </div>
 
-        
+                <div class="casino-display-total-in-cashdesk-wrapper">
+                <div class="casino-display-total-in-cashdesk align-right element-multilanguage" data-translation-key="TotalInCashdesk">total in cashdesk</div>
+                <div class="casino-display-total-in-cashdesk-value color-white align-right">${data.CashDesk}</div>
+                </div>
+                
+                <div class="casino-display-bills-wrapper">
+                <div class="casino-display-bills align-right element-multilanguage" data-translation-key="Bills">bills</div>
+                <div class="casino-display-bills-value color-white align-right">${data.MoneyInBills}</div>
+                </div>
 
-        <div class="casino-display-total-in-wrapper">
-        <div class="casino-display-total-in align-right element-multilanguage" data-translation-key="TotalIn">total in</div>
-        <div class="casino-display-total-in-value color-white align-right">${data.TotalIn}</div>
-        </div>
+                <div class="casino-display-last-column"> 
+                    <div class="casino-display-players-wrapper color-white center">
+                    <div>&#9924;</div>
+                    <div>${data.NumOfActiveMachines}/${data.NumOfMachines}</div>
+                    </div>
 
-        <div class="casino-display-total-in-cashdesk-wrapper">
-        <div class="casino-display-total-in-cashdesk align-right element-multilanguage" data-translation-key="TotalInCashdesk">total in cashdesk</div>
-        <div class="casino-display-total-in-cashdesk-value color-white align-right">${data.CashDesk}</div>
-        </div>
-        
-        <div class="casino-display-bills-wrapper">
-        <div class="casino-display-bills align-right element-multilanguage" data-translation-key="Bills">bills</div>
-        <div class="casino-display-bills-value color-white align-right">${data.MoneyInBills}</div>
-        </div>
+                    <div class="casino-display-warning center color-white">!</div>
 
-        <div class="casino-display-last-column"> 
-            <div class="casino-display-players-wrapper color-white center">
-            <div>&#9924;</div>
-            <div>${data.NumOfActiveMachines}/${data.NumOfMachines}</div>
-            </div>
-
-            <div class="casino-display-warning center color-white">!</div>
-
-            <div class="casino-display-details center element-multilanguage" data-translation-key="Details">details</div>
-        </div>`
+                    <div class="casino-display-details center element-multilanguage" data-translation-key="Details">details</div>
+                </div>`
         return casinoWrapper
     }
 
