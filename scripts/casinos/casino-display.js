@@ -1,5 +1,25 @@
 let casinoDisplay = (function () {
 
+    // function showingCasinoMachines() {
+    //     console.log('radim')
+    // }
+    on('showingCasinoMachines', function (data) {
+        console.log('kliknuo si na saldo masina:');
+        console.log(data);
+
+    });
+
+    on('showingCasinoDetails', function (data) {
+        console.log('kliknuo si na detalje:')
+        console.log(data)
+
+    });
+
+    on('showingCasino', function (data) {
+        console.log('kliknuo si na kazino:')
+        console.log(data)
+    });
+
     function generateView(data) {
         let casinoWrapper = document.createElement('div');
         casinoWrapper.settings = data;
@@ -99,7 +119,7 @@ let casinoDisplay = (function () {
         }
         else {
             if (data.Status) {
-                casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper">
+                casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper" onclick = "trigger('showingCasino', parentNode.settings)">
                 <div class="casino-display-status casino-status-${data.Status}"></div>
                 <div class="casino-display-name color-white">${data.CasinoName}</div>
                 <div class="casino-display-city">${data.City}</div>
@@ -131,9 +151,11 @@ let casinoDisplay = (function () {
                 </div>
 
                 <div class="casino-display-last-column"> 
-                    <div class="casino-display-players-wrapper center">
-                    <div>&#9924;</div>
-                    <div>${data.NumOfActiveMachines}/${data.NumOfMachines}</div>
+                    <div class="casino-display-players-wrapper casino-offline center">
+
+                        <div class="color-red">OFFLINE</div>
+                        <div>${formatTimeData(data.LastOnline)}</div>
+                   
                     </div>
 
                     <div class="casino-display-warning center">!</div>
@@ -143,7 +165,7 @@ let casinoDisplay = (function () {
                 return casinoWrapper
             }
         }
-        casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper center">${data.Saldo}</div>
+        casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper color-green center" onclick = "trigger('showingCasinoMachines', parentNode.settings)">${data.Saldo}</div>
 
                 <div class="casino-display-total-in-wrapper">
                 <div class="casino-display-total-in align-right element-multilanguage" data-translation-key="TotalIn">total in</div>
@@ -168,10 +190,12 @@ let casinoDisplay = (function () {
 
                     <div class="casino-display-warning center color-white">!</div>
 
-                    <div class="casino-display-details center element-multilanguage" data-translation-key="Details">details</div>
+                    <div class="casino-display-details center element-multilanguage" data-translation-key="Details" onclick = "trigger('showingCasinoDetails', parentNode.parentNode.settings)">details</div>
                 </div>`
         return casinoWrapper
     }
+
+
 
     return {
         generateView

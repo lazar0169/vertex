@@ -2,7 +2,8 @@ let communication = (function () {
 
     /*-------------------------------------- VARIABLES ---------------------------------------*/
 
-    const apiUrl = 'https://api.fazigaming.com/';
+    // const apiUrl = 'https://api.fazigaming.com/';
+    const apiUrl = 'http://94.228.237.2:81/'
 
     const contentTypes = {
         json: 'application/json',
