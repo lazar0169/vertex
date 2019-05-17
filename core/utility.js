@@ -270,14 +270,12 @@ function formatFloatValue(amount) {
     //     console.error(e);
     // }
     const negativeSign = amount < 0 ? "-" : "";
-    let vrednost = Number(amount.toString().replace(/,/g, '').replace(/\./g, '')) / 100;
-    console.log(amount)
-    // console.log(vrednost.toLocaleString('de-De', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+    let value = Number(amount.toString().replace(/,/g, '').replace(/\./g, '')) / 100;
     if (config.decimalSeparator === ',') {
-        return negativeSign + vrednost.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+        return negativeSign + value.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
     else {
-        return negativeSign + vrednost.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+        return negativeSign + value.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
 }
 

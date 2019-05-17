@@ -49,8 +49,8 @@ const jackpots = (function () {
 
     on('jackpot/show-jackpots-table', function (params) {
         let data = params.data.Data;
-        jackpotDailyLimitTopBar.innerHTML = formatFloatValue(data.ItemValue.DailyLimitValue / 100);
-        jackpotPaidTodayTopBar.innerHTML = formatFloatValue(data.ItemValue.PaidTodayValue / 100);
+        jackpotDailyLimitTopBar.innerHTML = formatFloatValue(data.ItemValue.DailyLimitValue);
+        jackpotPaidTodayTopBar.innerHTML = formatFloatValue(data.ItemValue.PaidTodayValue);
 
         if (jackpotsTable !== null) {
             jackpotsTable.destroy();

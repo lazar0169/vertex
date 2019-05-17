@@ -85,11 +85,11 @@ const detailsBar = (function () {
         titoServerName.innerHTML = data.TitoServerName
         machineVendor.innerHTML = data.Vendor;
         machineType.innerHTML = data.Type;
-        notificationValueLimit.innerHTML = formatFloatValue(data.NotificationValueLimit / 100);
+        notificationValueLimit.innerHTML = formatFloatValue(data.NotificationValueLimit);
         allowedPromoTickets.innerHTML = data.AllowedPromoTickets ? localization.translateMessage('Yes') : localization.translateMessage('No');
         allowedTransaction.innerHTML = data.AllowedTransaction ? localization.translateMessage('Yes') : localization.translateMessage('No');
-        maxValueForTicketPrinting.innerHTML = formatFloatValue(data.MaximumValueForTicketPrinting / 100);
-        maxValueForTransaction.innerHTML = formatFloatValue(data.MaximumValueForTransaction / 100);
+        maxValueForTicketPrinting.innerHTML = formatFloatValue(data.MaximumValueForTicketPrinting);
+        maxValueForTransaction.innerHTML = formatFloatValue(data.MaximumValueForTransaction);
         jackpotServerName.innerHTML = data.JackpotServerName.join(", ");
         speedType.innerHTML = localization.translateMessage(data.SpeedType);
 

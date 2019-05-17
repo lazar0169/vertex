@@ -48,8 +48,8 @@ const machinesFilter = (function () {
     function topBarInfoBoxValue(params) {
         machinesTopBarActiveMachines.innerHTML = params.NumberOfActiveMachines;
         machinesTopBarAllMachines.innerHTML = `/ ${params.NumberOfMachines}`;
-        machinesTopBarTotalBet.innerHTML = formatFloatValue(params.TotalBet / 100);
-        machinesTopBarCurrentCredits.innerHTML = formatFloatValue(params.TotalCurrentCredits / 100);
+        machinesTopBarTotalBet.innerHTML = formatFloatValue(params.TotalBet);
+        machinesTopBarCurrentCredits.innerHTML = formatFloatValue(params.TotalCurrentCredits);
     }
 
     machinesAdvanceFilterApplyButton.addEventListener('click', function () {

@@ -424,7 +424,7 @@ let table = (function () {
                     if (cellData === 9999999999) {
                         cell.innerHTML = '/'
                     } else {
-                        cell.innerHTML = formatFloatValue(cellData / 100);
+                        cell.innerHTML = formatFloatValue(cellData);
                     }
                 } else {
                     cell.innerHTML = cellData;

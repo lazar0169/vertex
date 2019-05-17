@@ -85,7 +85,7 @@ let detailsBareditMeters = (function () {
                     meter.value = data[i]
                     meter.dataset.value = data[i]
                     if (meter.dataset.type === 'float') {
-                        meter.value = formatFloatValue(meter.value / 100);
+                        meter.value = formatFloatValue(meter.value);
                     }
                     break;
                 }

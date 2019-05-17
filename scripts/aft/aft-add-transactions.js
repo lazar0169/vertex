@@ -48,7 +48,7 @@ let aftAddTransactions = (function () {
                     data[input.name] = parseInt(input.dataset.value);
                 }
                 else {
-                    data[input.name] = input.value === "" ? 0 : input.dataset.value;
+                    data[input.name] = input.value === "" ? 0 : parseInt(input.dataset.value);
                 }
             }
             else {
