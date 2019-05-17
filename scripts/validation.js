@@ -239,7 +239,15 @@ let validation = (function () {
                             rule.regex = new RegExp('^\\d+$');
                             break;
                         case inputTypes.float:
-                            rule.regex = new RegExp(/^[0-9.]*$/);
+
+                            if (config.decimalSeparator === '.') {
+                                rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
+                            } else {
+                                rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
+
+                            }
+                            // rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)\.[0-9][0-9])?$/);
+
                             break;
                         case inputTypes.string:
                             rule.regex = new RegExp('');
@@ -266,43 +274,43 @@ let validation = (function () {
 
             if (!isEmpty(email)) {
                 settings.constraints.set(constraintAttributes.email, {
-                        name: constraintAttributes.email,
-                        operator: constraintsOperators.email,
-                        value: true
-                    }
+                    name: constraintAttributes.email,
+                    operator: constraintsOperators.email,
+                    value: true
+                }
                 )
             }
 
             if (!isEmpty(min)) {
                 settings.constraints.set(constraintAttributes.minimum, {
-                        name: constraintAttributes.minimum,
-                        operator: constraintsOperators.greaterThan,
-                        value: parseFloat(min)
-                    }
+                    name: constraintAttributes.minimum,
+                    operator: constraintsOperators.greaterThan,
+                    value: parseFloat(min)
+                }
                 )
             }
             if (!isEmpty(max)) {
                 settings.constraints.set(constraintAttributes.maximum, {
-                        name: constraintAttributes.maximum,
-                        operator: constraintsOperators.lesserThan,
-                        value: parseFloat(max)
-                    }
+                    name: constraintAttributes.maximum,
+                    operator: constraintsOperators.lesserThan,
+                    value: parseFloat(max)
+                }
                 )
             }
             if (!isEmpty(equals)) {
                 settings.constraints.set(constraintAttributes.equals, {
-                        name: constraintAttributes.equals,
-                        operator: constraintsOperators.equals,
-                        value: equals
-                    }
+                    name: constraintAttributes.equals,
+                    operator: constraintsOperators.equals,
+                    value: equals
+                }
                 )
             }
             if (!isEmpty(required)) {
                 settings.constraints.set(constraintAttributes.required, {
-                        name: constraintAttributes.required,
-                        operator: constraintsOperators.required,
-                        value: true
-                    }
+                    name: constraintAttributes.required,
+                    operator: constraintsOperators.required,
+                    value: true
+                }
                 )
             }
             if (!isEmpty(maxLength)) {
@@ -324,7 +332,7 @@ let validation = (function () {
                     settings.errorMessages.set(rule.type, defaultErrorMessages[rule.type]);
                 }
             });
-//            for (let i = 0; i < settings.constraints.length; i++) {
+            //            for (let i = 0; i < settings.constraints.length; i++) {
             settings.constraints.forEach(function (constraint) {
                 let errorMessageAttributeName = constraint.type + errorMessageAttributeSuffix;
                 if (!isEmpty(element.getAttribute(errorMessageAttributeName))) {
@@ -410,4 +418,4 @@ let validation = (function () {
         }
     }
 })
-();
+    ();

@@ -31,18 +31,44 @@ const currencyInput = (function () {
 
     function onBlur(e) {
         let target = e.target;
-        let value = target.value;
+        let value;
+
+        if (target.value.indexOf(config.decimalSeparator) !== -1) {
+
+            switch (target.value.split(config.decimalSeparator)[1].length) {
+                case 0:
+                    value = target.value.replace(/,/g, '').replace(/\./g, '') + "00";
+                    break;
+
+                case 1:
+                    value = target.value.replace(/,/g, '').replace(/\./g, '') + "0";
+                    break;
+
+                case 2:
+                    value = target.value.replace(/,/g, '').replace(/\./g, '');
+                    break;
+            }
+        } else {
+            value = Number(target.value) * 100;
+        }
+        // let value = target.value.replace(/,/g, '').replace(/\./g, '');
         let parsedValue = formatFloatValue(value);
         target.value = parsedValue;
-        target.dataset.value = parsedValue.replace(/,/g, '').replace('.', '');
+        target.dataset.value = value;
     }
 
     function onFocus(e) {
         let target = e.target;
-        let value = target.value;
-        value = value.replace(/,/g, '');
-        target.value = value;
-        target.dataset.value = value.replace('.', '');
+        let value;
+        if (config.decimalSeparator === '.') {
+            value = target.value.replace(/,/g, '');
+        } else {
+            value = target.value.replace(/\./g, '');
+
+        }
+        let parsedValue = value;
+        target.value = parsedValue;
+        target.dataset.value = value;
     }
 
     return {

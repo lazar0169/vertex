@@ -1,7 +1,7 @@
-let config = (function  () {
+let config = (function () {
     return {
-        decimalSeparator: '.',
-        thousandSeparator: ',',
-        decimalCount : 2
+        decimalSeparator: ',',
+        thousandSeparator: '.',
+        decimalCount: 2
     }
 })();

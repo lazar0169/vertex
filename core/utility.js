@@ -253,21 +253,31 @@ function formatTimeData(timeData) {
 
 //formats number 2000.53 into 2,000.53
 function formatFloatValue(amount) {
-    let decimalCount = config.decimalCount;
-    let decimal = config.decimalSeparator;
-    let thousands = config.thousandSeparator;
-    try {
-        decimalCount = Math.abs(decimalCount);
-        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+    //let decimalCount = config.decimalCount;
+    // let decimal = config.decimalSeparator;
+    // let thousands = config.thousandSeparator;
+    // try {
+    //     decimalCount = Math.abs(decimalCount);
+    //     decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
 
-        const negativeSign = amount < 0 ? "-" : "";
+    //     const negativeSign = amount < 0 ? "-" : "";
 
-        let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-        let j = (i.length > 3) ? i.length % 3 : 0;
+    //     let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+    //     let j = (i.length > 3) ? i.length % 3 : 0;
 
-        return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-    } catch (e) {
-        console.error(e);
+    //     return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+    // } catch (e) {
+    //     console.error(e);
+    // }
+    const negativeSign = amount < 0 ? "-" : "";
+    let vrednost = Number(amount.toString().replace(/,/g, '').replace(/\./g, '')) / 100;
+    console.log(amount)
+    // console.log(vrednost.toLocaleString('de-De', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+    if (config.decimalSeparator === ',') {
+        return negativeSign + vrednost.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+    }
+    else {
+        return negativeSign + vrednost.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
 }
 
