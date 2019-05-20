@@ -239,12 +239,22 @@ function getProperty(path, object) {
     }, object || self);
 }
 
-//removes all children except firs one
-function removeChildren(element) {
+//removes all children except first one
+function removeChildrenExceptFirst(element) {
     while (element.childElementCount > 1) {
         element.removeChild(element.lastChild);
     }
 }
+
+//remove all children
+function removeAllChildren(div) {
+    while (div.children.length > 0) {
+        div.children[0].remove();
+    }
+}
+
+
+
 function formatTimeData(timeData) {
     if (timeData) {
         return timeData.replace(/-/g, '/').replace('T', ' ').replace(/\..*/, '');

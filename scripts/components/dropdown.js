@@ -18,7 +18,7 @@ const dropdown = (function () {
             type = 'single';
         }
         if (data.parent && data.parent.children[1]) {
-            removeChildren(data.parent);
+            removeChildrenExceptFirst(data.parent);
         }
         // wrapper select
         let select = document.createElement('div');

@@ -1,0 +1,83 @@
+#casinos-cash-transfer-wrapper {
+    position: absolute;
+    transform: translateX(0);
+    top: 0;
+    right: 0;
+    width: 600px;
+    height: 100%;
+    background: rgb(38, 50, 56);
+    z-index: 1;
+    transition: all 0.2s ease;
+    color: rgb(120, 144, 156);
+    overflow: hidden;
+}
+
+#casinos-cash-transfer-wrapper.collapse {
+    transform: translateX(101%);
+}
+
+#casino-cash-transfer-header {
+    position: relative;
+    width: 100%;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    background: rgb(55, 71, 79);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0.5em;
+    white-space: nowrap;
+}
+
+#casinos-valuts-close-cash-transfer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5em;
+    padding-bottom: 0;
+    cursor: pointer;
+}
+
+#casinos-valuts-close-cash-transfer:hover>span,
+#casinos-valuts-tabs-wrapper>div :hover {
+    color: rgb(30, 155, 227);
+}
+
+#casinos-valuts-tabs-wrapper {
+    display: flex;
+    background: rgb(55, 71, 79);
+}
+
+#casinos-valuts-tabs-wrapper>div {
+    padding-left: 0.5em;
+    cursor: pointer;
+}
+
+#casinos-vaults-tab-content {
+    padding: 0.5em;
+}
+
+.casino-vaults-history {
+    grid-area: casino-vaults-history;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: transparent;
+}
+
+.casino-vaults-value {
+    grid-area: casino-vaults-value;
+}
+
+.casino-vaults-casino-name {
+    grid-area: casino-vaults-casino-name;
+}
+
+.casino-vault-display-wrapper {
+    cursor: pointer;
+    grid-template-areas: 'casino-vaults-casino-name casino-vaults-casino-name casino-vaults-casino-name casino-vaults-value casino-vaults-history casino-vaults-history casino-vaults-history'
+}
+
+.casino-vault-display-wrapper:hover>.casino-vaults-history {
+    color: rgb(30, 155, 227);
+}

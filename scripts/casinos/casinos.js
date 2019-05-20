@@ -6,6 +6,7 @@ let casino = (function () {
     let casinoSortOrder = $$('.casino-sort')
     let casinoFilterWrapper = $$('#casino-display-filter-wrapper').children[0].children[1];
     let activeShift = $$('#casinos-tabs-wrapper').getElementsByClassName('tab-active');
+    let casinoDepositBoxWrapper = $$('#casinos-vaults-display-wrapper');
 
 
     for (let sort of casinoSortOrder) {
@@ -50,15 +51,15 @@ let casino = (function () {
     //     }
     // }
     //-----------------------------------------------------------------//
-    function removeChildren(div) {
-        while (div.children.length > 0) {
-            div.children[0].remove();
-        }
-    }
+    // function removeChildren(div) {
+    //     while (div.children.length > 0) {
+    //         div.children[0].remove();
+    //     }
+    // }
 
     function findCasino(termin, data) {
         let searchTermin = termin.toLowerCase()
-        removeChildren(casinosAllCasinosContent);
+        removeAllChildren(casinosAllCasinosContent);
         for (let value of data) {
             if (value.Id !== -1) {
                 let valueName = value.CasinoName.toLowerCase();
@@ -83,7 +84,8 @@ let casino = (function () {
     const events = {
         activated: 'casinos/activated',
         getAllCasinos: 'casinos/get',
-        previewAllCasinos: 'casinos/preview'
+        previewAllCasinos: 'casinos/preview',
+        getDepositBoxes: 'casinos/get-deposit-boxes'
     };
     function removeActiveFilter() {
         for (let sort of casinoSortOrder) {
@@ -114,6 +116,8 @@ let casino = (function () {
     //------------------------------------------------------//
 
     on(events.activated, function (params) {
+        $$('#casinos-vaults-wrapper').classList.add('hidden');
+        $$('#casinos-all-casinos-wrapper').classList.remove('hidden');
         selectTab('casinos-tab-current-shift');
         // let casinoId = params.params[0].value;
         // trigger(communication.events.casinos.previewAllCasinos, { data: { EndpointId: casinoId, Filter: 6, SortOrder: 1, SortName: 1 } });
@@ -151,8 +155,8 @@ let casino = (function () {
             findCasino(searchCasino.children[0].value, casinoDataList)
         });
 
-        removeChildren(allCasinos);
-        removeChildren(casinosAllCasinosContent);
+        removeAllChildren(allCasinos);
+        removeAllChildren(casinosAllCasinosContent);
 
         for (let data of casinoDataList) {
             if (data.Id === -1) {
@@ -162,6 +166,16 @@ let casino = (function () {
             }
         }
     });
+
+    on(events.getDepositBoxes, function (params) {
+        console.log(params);
+        let depositBoxes = params.data.DepositBoxes;
+        removeAllChildren(casinoDepositBoxWrapper);
+        for (let box of depositBoxes) {
+            casinoDepositBoxWrapper.appendChild(casinosVaults.generateView(box));
+        }
+    });
+
 
     on('casinos/add', function (e) {
         let model = e.model;
@@ -188,12 +202,28 @@ let casino = (function () {
         alert('An error occured.');
     });
 
-    on(communication.events.casinos.getAllCasinos, function (params) {
-        trigger('preloader/show');
-        let route = communication.apiRoutes.casinos.getAllCasinos;
+    // on(communication.events.casinos.getAllCasinos, function (params) {
+    //     trigger('preloader/show');
+    //     let route = communication.apiRoutes.casinos.getAllCasinos;
+    //     let request = communication.requestTypes.post;
+    //     let data = params.data
+    //     let successEvent = events.getAllCasinos;
+    //     let errorEvent = '';
+    //     trigger('communicate/createAndSendXhr', {
+    //         route: route,
+    //         requestType: request,
+    //         data: data,
+    //         additionalData: params.data.EndpointId,
+    //         successEvent: successEvent,
+    //         errorEvent: errorEvent
+    //     });
+    // });
+    //preview casinos
+    on(communication.events.casinos.previewAllCasinos, function (params) {
+        let route = communication.apiRoutes.casinos.previewAllCasinos;
         let request = communication.requestTypes.post;
         let data = params.data
-        let successEvent = events.getAllCasinos;
+        let successEvent = events.previewAllCasinos;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
@@ -205,11 +235,12 @@ let casino = (function () {
         });
     });
 
-    on(communication.events.casinos.previewAllCasinos, function (params) {
-        let route = communication.apiRoutes.casinos.previewAllCasinos;
+    //casinos GetDepositBoxes
+    on(communication.events.casinos.getDepositBoxes, function (params) {
+        let route = communication.apiRoutes.casinos.getDepositBoxes;
         let request = communication.requestTypes.post;
-        let data = params.data
-        let successEvent = events.previewAllCasinos;
+        let data = params.data;
+        let successEvent = events.getDepositBoxes;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,

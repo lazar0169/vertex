@@ -12,7 +12,7 @@ const dropdownDate = (function () {
         let values = data.values;
         let parent = data.parent
         if (parent) {
-            removeChildren(parent);
+            removeChildrenExceptFirst(parent);
         }
         // wrapper select
         let select = document.createElement('div');

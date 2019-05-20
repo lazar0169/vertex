@@ -46,6 +46,7 @@ let communication = (function () {
         casinos: {
             getAllCasinos: 'api/main/',
             previewAllCasinos: 'api/main/preview/',
+            getDepositBoxes: '/api/main/depositboxes'
         },
         machines: {
             getMachines: 'api/machines/',
@@ -138,6 +139,7 @@ let communication = (function () {
         casinos: {
             getAllCasinos: 'communicate/casinos/getAllCasinos',
             previewAllCasinos: 'communicate/casinos/previewAllCasinos',
+            getDepositBoxes: 'communicate/casinos/getDepositBoxes',
         },
         machines: {
             getMachines: 'communicate/machines/getMachines',

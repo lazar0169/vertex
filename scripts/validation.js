@@ -246,8 +246,6 @@ let validation = (function () {
                                 rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
 
                             }
-                            // rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)\.[0-9][0-9])?$/);
-
                             break;
                         case inputTypes.string:
                             rule.regex = new RegExp('');

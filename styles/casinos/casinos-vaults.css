@@ -1,0 +1,50 @@
+#casinos-vaults-wrapper {
+    color: rgb(120, 144, 156);
+}
+
+#casinos-vaults-header-wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+    height: 35px;
+}
+
+#casinos-vaults-header-wrapper>div:first-child:hover {
+    cursor: pointer;
+    color: white;
+}
+
+#casinos-vaults-header-wrapper>div {
+    padding-left: 0.5em;
+}
+
+#casinos-vaults-cash-transfer-button {
+    position: absolute;
+    right: 0;
+}
+
+#casinos-vaults-display-wrapper {
+    padding: 0.5em 0;
+}
+
+#casinos-vaults-display-wrapper>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-columns: 1fr;
+    padding-bottom: 0.5em;
+}
+
+#casinos-vaults-display-wrapper>div>div {
+    background: rgba(38, 50, 56, 0.5);
+    border-right: 2px solid rgb(55, 71, 79);
+    padding: 0 0.5em;
+    grid-auto-columns: 1fr;
+}
+
+#casinos-vaults-display-wrapper>div>div:first-child {
+    background: rgb(38, 50, 56);
+}
+
+#casinos-vaults-display-wrapper>div>div:last-child {
+    border: none;
+}
