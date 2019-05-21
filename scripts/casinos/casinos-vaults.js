@@ -9,6 +9,92 @@ let casinosVaults = (function () {
     let closeCasinoCashTransfer = $$('#casinos-vaults-close-cash-transfer');
     let swapCashTransferPosition = $$('#swap-cash-transfer-position');
 
+    let vaultToVaultTransferButton = $$('#casino-cash-transfer-vault-to-vault-button-wrapper').children[0];
+    let cashTransferValutFrom = $$('#casino-cash-transfer-vault-to-vault-from');
+    let cashTransferValutTo = $$('#casino-cash-transfer-vault-to-vault-to');
+    let valutToValutDescription = $$('#casinos-cash-transfer-vault-to-vault-textarea').children[0];
+
+    let vaultToFromCashdeskButton = $$('#casino-cash-transfer-vault-to-from-cashdesk-button-wrapper').children[0];
+    let cashTransferVaultCashdeskFrom = $$('#casino-cash-transfer-vault-to-from-cashdesk-from');
+    let cashTransferVaultCashdeskTo = $$('#casino-cash-transfer-vault-to-from-cashdesk-to');
+    let valutToFromCashdeskDescription = $$('#casino-cash-transfer-vault-to-from-cashdesk-textarea').children[0];
+
+    let vaultOthertransferButton = $$('#casino-cash-transfer-other-transfer-wrapper').children[0];
+    let cashTransferOtherTransferFrom = $$('#casino-cash-transfer-other-transfer-vault-from');
+    let vaultOtherTransferDescription = $$('#casino-cash-transfer-other-transfer-textarea').children[0];
+
+    let inputVaultToVaultValue = $$('#casino-cash-transfer-vault-to-vault-value');
+    validation.init(inputVaultToVaultValue, {});
+    currencyInput.generate(inputVaultToVaultValue, {});
+
+    let inputVaulToFromCashdesk = $$('#casino-cash-transfer-vault-to-from-cashdesk-value');
+    validation.init(inputVaulToFromCashdesk, {});
+    currencyInput.generate(inputVaulToFromCashdesk, {});
+
+    let inputOtherTransferValue = $$('#casino-cash-transfer-other-transfer-value');
+    validation.init(inputOtherTransferValue, {});
+    currencyInput.generate(inputOtherTransferValue, {});
+
+    vaultToVaultTransferButton.onclick = function () {
+        let data = {}
+        data.EndpointId = 0;
+        data.FromId = parseInt(cashTransferValutFrom.children[1].get());
+        data.ToId = parseInt(cashTransferValutTo.children[1].get());
+        data.Money = parseInt(inputVaultToVaultValue.dataset.value);
+        data.DepositBoxId = parseInt(cashTransferValutFrom.children[1].get());
+        data.Description = valutToFromCashdeskDescription.value;
+        console.log(data);
+        trigger(communication.events.casinos.vaultToVaultTransfer, { data });
+    }
+
+    vaultToFromCashdeskButton.onclick = function () {
+        let data = {}
+        data.EndpointId = 0;
+        data.FromId = parseInt(cashTransferVaultCashdeskFrom.children[1].get());
+        data.ToId = parseInt(cashTransferVaultCashdeskTo.children[1].get());
+        data.Money = parseInt(inputVaulToFromCashdesk.dataset.value);
+        data.DepositBoxId = parseInt(cashTransferVaultCashdeskFrom.children[1].get());
+        data.Description = valutToValutDescription.value;
+        data.Type = 1;
+
+        console.log(data);
+        trigger(communication.events.casinos.moveToFromCashdesk, { data });
+    }
+
+    vaultOthertransferButton.onclick = function () {
+        let data = {}
+        data.EndpointId = 0;
+        data.Money = parseInt(inputVaulToFromCashdesk.dataset.value);
+        data.DepositBoxId = parseInt(cashTransferOtherTransferFrom.children[1].get());
+        data.Description = vaultOtherTransferDescription.value;
+        console.log(data);
+        trigger(communication.events.casinos.changeDepositBox, { data });
+    }
+
+    function generateDropdownToByFrom(dd) {
+        for (let option of dd.children[1].children) {
+            option.addEventListener('click', function () {
+                if (isSwapedActive()) {
+                    cashTransferVaultCashdeskFrom.children[1].remove()
+                    dropdown.generate({ values: casinoCashTransferWrapper.settings.DepositBoxCashDesks[dd.get()], parent: cashTransferVaultCashdeskFrom });
+                } else {
+                    cashTransferVaultCashdeskTo.children[1].remove();
+                    dropdown.generate({ values: casinoCashTransferWrapper.settings.DepositBoxCashDesks[dd.get()], parent: cashTransferVaultCashdeskTo });
+                }
+            });
+        }
+    }
+
+    function isSwapedActive() {
+        if (swapCashTransferPosition.classList.contains('swaped-active')) {
+            return true
+        }
+        return false;
+    }
+    on('casinos/vault-cashdesk-dropdown', function (data) {
+        generateDropdownToByFrom(data.dropdown)
+    });
+
     let cashTransferDetails = function () {
         return {
             hide: function () {
@@ -24,18 +110,13 @@ let casinosVaults = (function () {
 
     swapCashTransferPosition.onclick = function () {
         swapCashTransferPosition.classList.toggle('color-white');
+        swapCashTransferPosition.classList.toggle('swaped-active');
+
         let nextElement = swapCashTransferPosition.nextElementSibling.children[1];
         let prevElement = swapCashTransferPosition.previousElementSibling.children[1];
 
         swapCashTransferPosition.nextElementSibling.appendChild(prevElement);
         swapCashTransferPosition.previousElementSibling.appendChild(nextElement);
-
-
-        console.log('svapuj pozicije');
-        console.log($$('#casino-cash-transfer-vault-to-from-cashdesk-from').children[1].get());
-        console.log($$('#casino-cash-transfer-vault-to-from-cashdesk-to').children[1].get());
-
-
     }
 
     vaultsCashTransferButton.onclick = function () {
@@ -97,6 +178,11 @@ let casinosVaults = (function () {
                                             <div class="casino-vaults-history">history</div>`
         return casinoDepositBoxDisplay;
     }
+    window.addEventListener('keyup', function (event) {
+        if (event.keyCode == 27) {
+            cashTransferDetails.hide();
+        }
+    });
 
     return {
         generateView

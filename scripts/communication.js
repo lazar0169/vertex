@@ -46,7 +46,10 @@ let communication = (function () {
         casinos: {
             getAllCasinos: 'api/main/',
             previewAllCasinos: 'api/main/preview/',
-            getDepositBoxes: '/api/main/depositboxes'
+            getDepositBoxes: '/api/main/depositboxes',
+            vaultToVaultTransfer: '/api/main/vaulttovault',
+            moveToFromCashdesk: '/api/main/vaulttofromcashdesk',
+            changeDepositBox: '/api/main/othertransfer'
         },
         machines: {
             getMachines: 'api/machines/',
@@ -140,6 +143,9 @@ let communication = (function () {
             getAllCasinos: 'communicate/casinos/getAllCasinos',
             previewAllCasinos: 'communicate/casinos/previewAllCasinos',
             getDepositBoxes: 'communicate/casinos/getDepositBoxes',
+            vaultToVaultTransfer: 'communicate/casinos/vaultToVaultTransfer',
+            moveToFromCashdesk: 'communicate/casinos/moveToFromCashdesk',
+            changeDepositBox: 'communicate/casinos/changeDepositBox'
         },
         machines: {
             getMachines: 'communicate/machines/getMachines',

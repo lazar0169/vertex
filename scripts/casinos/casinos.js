@@ -7,6 +7,8 @@ let casino = (function () {
     let casinoFilterWrapper = $$('#casino-display-filter-wrapper').children[0].children[1];
     let activeShift = $$('#casinos-tabs-wrapper').getElementsByClassName('tab-active');
     let casinoDepositBoxWrapper = $$('#casinos-vaults-display-wrapper');
+    let casinoCashTransferWrapper = $$('#casinos-cash-transfer-wrapper');
+    let ddCasinoVaultCashdesk;
 
 
     for (let sort of casinoSortOrder) {
@@ -85,7 +87,10 @@ let casino = (function () {
         activated: 'casinos/activated',
         getAllCasinos: 'casinos/get',
         previewAllCasinos: 'casinos/preview',
-        getDepositBoxes: 'casinos/get-deposit-boxes'
+        getDepositBoxes: 'casinos/get-deposit-boxes',
+        vaultToVaultTransfer: 'casinos/transfer-vault-to-vault',
+        moveToFromCashdesk: 'casinos/transfer-vault-to-from-cashdesk',
+        changeDepositBox: 'casinos/transfer-other-transfer'
     };
     function removeActiveFilter() {
         for (let sort of casinoSortOrder) {
@@ -169,6 +174,7 @@ let casino = (function () {
 
     on(events.getDepositBoxes, function (params) {
         console.log(params);
+        casinoCashTransferWrapper.settings = params.data;
         let depositBoxes = params.data.DepositBoxes;
         let depositBoxtransferList = params.data.DepositBoxTransferList;
         let depositBoxCashDesks = params.data.DepositBoxCashDesks;
@@ -186,11 +192,20 @@ let casino = (function () {
         //---------------------------------------------------------//
 
         //--------------------- vault to/from cashdesk -------------------//
-        let cashTransferVaultToCashdeskFrom = $$('#casino-cash-transfer-vault-to-from-cashdesk-from')
-        dropdown.generate({ values: depositBoxtransferList, parent: cashTransferVaultToCashdeskFrom });
+        let cashTransferVaultToCashdeskFrom = $$('#casino-cash-transfer-vault-to-from-cashdesk-from');
+
+        if (ddCasinoVaultCashdesk) {
+            ddCasinoVaultCashdesk.remove()
+        }
+        ddCasinoVaultCashdesk = dropdown.generate({ values: depositBoxtransferList });
+        cashTransferVaultToCashdeskFrom.appendChild(ddCasinoVaultCashdesk);
 
         let cashTransferVaultCashdeskTo = $$('#casino-cash-transfer-vault-to-from-cashdesk-to')
         dropdown.generate({ values: depositBoxCashDesks[cashTransferVaultToCashdeskFrom.children[1].get()], parent: cashTransferVaultCashdeskTo });
+
+        trigger('casinos/vault-cashdesk-dropdown', { dropdown: ddCasinoVaultCashdesk });
+
+
         //--------------------------------------------------------------//
         //------------------- other transfer from ----------------------//
         let cashTransferOtherTransferFrom = $$('#casino-cash-transfer-other-transfer-vault-from');
@@ -199,6 +214,42 @@ let casino = (function () {
         //-------------------------------------------------------------//
     });
 
+    on(events.vaultToVaultTransfer, function (params) {
+
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        casinoCashTransferWrapper.classList.add('collapse');
+        $$('#black-area').classList.remove('show');
+        let data = {};
+        data.EndpointId = 0
+        trigger(communication.events.casinos.getDepositBoxes, { data });
+    });
+
+    on(events.moveToFromCashdesk, function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        casinoCashTransferWrapper.classList.add('collapse');
+        $$('#black-area').classList.remove('show');
+        let data = {};
+        data.EndpointId = 0
+        trigger(communication.events.casinos.getDepositBoxes, { data });
+    });
+
+    on(events.changeDepositBox, function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        casinoCashTransferWrapper.classList.add('collapse');
+        $$('#black-area').classList.remove('show');
+        let data = {};
+        data.EndpointId = 0
+        trigger(communication.events.casinos.getDepositBoxes, { data });
+    });
 
     on('casinos/add', function (e) {
         let model = e.model;
@@ -264,6 +315,57 @@ let casino = (function () {
         let request = communication.requestTypes.post;
         let data = params.data;
         let successEvent = events.getDepositBoxes;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            additionalData: params.data.EndpointId,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //casinos vaultToVaultTransfer
+    on(communication.events.casinos.vaultToVaultTransfer, function (params) {
+        let route = communication.apiRoutes.casinos.vaultToVaultTransfer;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let successEvent = events.vaultToVaultTransfer;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            additionalData: params.data.EndpointId,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //casinos moveToFromCashdesk
+    on(communication.events.casinos.moveToFromCashdesk, function (params) {
+        let route = communication.apiRoutes.casinos.moveToFromCashdesk;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let successEvent = events.moveToFromCashdesk;
+        let errorEvent = '';
+        trigger('communicate/createAndSendXhr', {
+            route: route,
+            requestType: request,
+            data: data,
+            additionalData: params.data.EndpointId,
+            successEvent: successEvent,
+            errorEvent: errorEvent
+        });
+    });
+
+    //casinos changeDepositBox
+    on(communication.events.casinos.changeDepositBox, function (params) {
+        let route = communication.apiRoutes.casinos.changeDepositBox;
+        let request = communication.requestTypes.post;
+        let data = params.data;
+        let successEvent = events.changeDepositBox;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
