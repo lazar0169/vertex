@@ -70,7 +70,7 @@
     align-items: flex-start;
     justify-content: center;
     /*ToDo ovo je zbog prevelikih stringova*/
-    max-width: 450px;
+    /* max-width: 450px; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

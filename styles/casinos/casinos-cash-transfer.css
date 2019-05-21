@@ -29,7 +29,7 @@
     white-space: nowrap;
 }
 
-#casinos-valuts-close-cash-transfer {
+#casinos-vaults-close-cash-transfer {
     position: absolute;
     top: 0;
     right: 0;
@@ -38,23 +38,24 @@
     cursor: pointer;
 }
 
-#casinos-valuts-close-cash-transfer:hover>span,
-#casinos-valuts-tabs-wrapper>div :hover {
+#casinos-vaults-close-cash-transfer:hover>span,
+#casinos-vaults-tabs-wrapper>div :hover {
     color: rgb(30, 155, 227);
 }
 
-#casinos-valuts-tabs-wrapper {
+#casinos-vaults-tabs-wrapper {
     display: flex;
     background: rgb(55, 71, 79);
 }
 
-#casinos-valuts-tabs-wrapper>div {
+#casinos-vaults-tabs-wrapper>div {
     padding-left: 0.5em;
     cursor: pointer;
 }
 
 #casinos-vaults-tab-content {
     padding: 0.5em;
+    font-size: 14px;
 }
 
 .casino-vaults-history {
@@ -80,4 +81,47 @@
 
 .casino-vault-display-wrapper:hover>.casino-vaults-history {
     color: rgb(30, 155, 227);
+}
+
+.casino-vault-cash-transfer-from-to-vault-wrapper,
+.casino-vault-cash-transfer-from-to-cashdesk-wrapper {
+    display: flex;
+}
+
+.casino-vault-cash-transfer-from-to-vault-wrapper>div:not(:last-child) {
+    padding-right: 5em;
+}
+
+#casinos-vaults-tab-vault-to-vault-info>div,
+#casinos-vaults-tab-vault-to-from-cashdesk-info>div {
+    padding-bottom: 0.5em;
+}
+
+#casino-cash-transfer-vault-to-vault-value,
+#casino-cash-transfer-vault-to-from-cashdesk-value {
+    width: 40% !important;
+
+}
+
+#casinos-cash-transfer-vault-to-vault-textarea>textarea,
+#casino-cash-transfer-vault-to-from-cashdesk-textarea>textarea {
+    width: 60% !important;
+    height: 200px !important;
+    background: rgb(55, 71, 79);
+    border: 1px solid rgb(55, 71, 79);
+    outline: none;
+    color: rgb(120, 144, 156);
+    font-size: 14px;
+}
+
+#swap-cash-transfer-position {
+    padding: 0 0.83em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 2em;
+}
+
+#swap-cash-transfer-position:hover {
+    color: white;
 }

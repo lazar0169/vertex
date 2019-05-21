@@ -6,7 +6,8 @@ let casinosVaults = (function () {
     let vaultsButtonBack = $$('#casinos-vaults-header-wrapper').children[0];
     let vaultsCashTransferButton = $$('#casinos-vaults-cash-transfer-button').children[0];
     let casinoCashTransferWrapper = $$('#casinos-cash-transfer-wrapper');
-    let closeCasinoCashTransfer = $$('#casinos-valuts-close-cash-transfer');
+    let closeCasinoCashTransfer = $$('#casinos-vaults-close-cash-transfer');
+    let swapCashTransferPosition = $$('#swap-cash-transfer-position');
 
     let cashTransferDetails = function () {
         return {
@@ -21,9 +22,25 @@ let casinosVaults = (function () {
         };
     }();
 
+    swapCashTransferPosition.onclick = function () {
+        swapCashTransferPosition.classList.toggle('color-white');
+        let nextElement = swapCashTransferPosition.nextElementSibling.children[1];
+        let prevElement = swapCashTransferPosition.previousElementSibling.children[1];
+
+        swapCashTransferPosition.nextElementSibling.appendChild(prevElement);
+        swapCashTransferPosition.previousElementSibling.appendChild(nextElement);
+
+
+        console.log('svapuj pozicije');
+        console.log($$('#casino-cash-transfer-vault-to-from-cashdesk-from').children[1].get());
+        console.log($$('#casino-cash-transfer-vault-to-from-cashdesk-to').children[1].get());
+
+
+    }
 
     vaultsCashTransferButton.onclick = function () {
         selectTab('casinos-vaults-tab-vault-to-vault');
+        selectInfoContent('casinos-vaults-tab-vault-to-vault');
         cashTransferDetails.show();
     }
 
@@ -34,7 +51,6 @@ let casinosVaults = (function () {
     closeCasinoCashTransfer.onclick = function () {
         cashTransferDetails.hide();
     }
-
 
     vaultsButtonBack.onclick = function () {
         casinosVaults.classList.add('hidden');
@@ -51,7 +67,23 @@ let casinosVaults = (function () {
         casinosAllCasinos.classList.add('hidden');
         casinosVaults.classList.remove('hidden');
     }
+    // ne treba mi jer imam funkcije selectTab i selectInfoContent koje se mogu iskoristiti
+    // on('casinos/cash-transfer-vault-to-vault', function () {
+    //     console.log('vault to vault');
+    // });
 
+    // on('casinos/cash-transfer-vault-to-from-cashdesk', function () {
+    //     console.log('vault to from');
+    // });
+
+    // on('casinos/cash-transfer-other-transfer', function () {
+    //     console.log('other');
+    // });
+
+    // on('casinos/cash-transfer-tab', function () {
+    //     let aktivniTab = $$('#casinos-vaults-tabs-wrapper').getElementsByClassName('tab-active');
+    //     console.log(aktivniTab)
+    // });
     function generateView(data) {
         let casinoDepositBoxDisplay = document.createElement('div');
         casinoDepositBoxDisplay.settings = data;

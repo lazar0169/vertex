@@ -170,10 +170,28 @@ let casino = (function () {
     on(events.getDepositBoxes, function (params) {
         console.log(params);
         let depositBoxes = params.data.DepositBoxes;
+        let depositBoxtransferList = params.data.DepositBoxTransferList;
+        let depositBoxCashDesks = params.data.DepositBoxCashDesks;
         removeAllChildren(casinoDepositBoxWrapper);
         for (let box of depositBoxes) {
             casinoDepositBoxWrapper.appendChild(casinosVaults.generateView(box));
         }
+
+        //---------------------vault to vault -------------------//
+        let cashTransferFrom = $$('#casino-cash-transfer-vault-to-vault-from')
+        dropdown.generate({ values: depositBoxtransferList, parent: cashTransferFrom });
+
+        let cashTransferTo = $$('#casino-cash-transfer-vault-to-vault-to')
+        dropdown.generate({ values: depositBoxtransferList, parent: cashTransferTo });
+        //---------------------------------------------------------//
+
+        //---------------------vault to/from cashdesk -------------------//
+        let cashTransferVaultToCashdeskFrom = $$('#casino-cash-transfer-vault-to-from-cashdesk-from')
+        dropdown.generate({ values: depositBoxtransferList, parent: cashTransferVaultToCashdeskFrom });
+
+        let cashTransferVaultCashdeskTo = $$('#casino-cash-transfer-vault-to-from-cashdesk-to')
+        dropdown.generate({ values: depositBoxCashDesks[cashTransferVaultToCashdeskFrom.children[1].get()], parent: cashTransferVaultCashdeskTo });
+        //--------------------------------------------------------------//
     });
 
 

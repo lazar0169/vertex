@@ -13,10 +13,10 @@ window.addEventListener('load', function () {
 
 function setTabListener() {
     for (let tab of tabs) {
-        tab.addEventListener('click', function () {
+        tab.onclick = function () {
             selectTab(tab.id);
             selectInfoContent(tab.id);
-        });
+        }
     }
 }
 
