@@ -93,18 +93,21 @@
 }
 
 #casinos-vaults-tab-vault-to-vault-info>div,
-#casinos-vaults-tab-vault-to-from-cashdesk-info>div {
+#casinos-vaults-tab-vault-to-from-cashdesk-info>div,
+#casinos-vaults-tab-other-transfer-info>div {
     padding-bottom: 0.5em;
 }
 
 #casino-cash-transfer-vault-to-vault-value,
-#casino-cash-transfer-vault-to-from-cashdesk-value {
+#casino-cash-transfer-vault-to-from-cashdesk-value,
+#casino-cash-transfer-other-transfer-value {
     width: 40% !important;
 
 }
 
 #casinos-cash-transfer-vault-to-vault-textarea>textarea,
-#casino-cash-transfer-vault-to-from-cashdesk-textarea>textarea {
+#casino-cash-transfer-vault-to-from-cashdesk-textarea>textarea,
+#casino-cash-transfer-other-transfer-textarea>textarea {
     width: 60% !important;
     height: 200px !important;
     background: rgb(55, 71, 79);

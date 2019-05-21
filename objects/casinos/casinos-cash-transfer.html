@@ -12,7 +12,7 @@
         <div id="casinos-vaults-tab-vault-to-from-cashdesk" class="tabs element-multilanguage"
             data-translation-key="VaultTo/FromCashdesk" data-route="casinos/cash-transfer-tab">
         </div>
-        <div id="casinos-vaults-tab-other-transfers" class="tabs element-multilanguage"
+        <div id="casinos-vaults-tab-other-transfer" class="tabs element-multilanguage"
             data-translation-key="OtherTransfers" data-route="casinos/cash-transfer-tab">
         </div>
     </div>
@@ -30,7 +30,7 @@
             <div>
                 <label class="element-multilanguage" data-translation-key="Value"></label>
                 <input class="form-input input-number-right" data-type="float"
-                    id="casino-cash-transfer-vault-to-vault-value" placeholder="7.000,00" data-value="10000000">
+                    id="casino-cash-transfer-vault-to-vault-value" placeholder="7.000,00">
             </div>
             <div>
                 <div class="element-multilanguage" data-translation-key="Description"></div>
@@ -57,7 +57,7 @@
             <div>
                 <label class="element-multilanguage" data-translation-key="Value"></label>
                 <input class="form-input input-number-right" data-type="float"
-                    id="casino-cash-transfer-vault-to-from-cashdesk-value" placeholder="7.000,00" data-value="10000000">
+                    id="casino-cash-transfer-vault-to-from-cashdesk-value" placeholder="7.000,00">
             </div>
             <div>
                 <div class="element-multilanguage" data-translation-key="Description"></div>
@@ -70,9 +70,30 @@
                 <button class="secundarybutton element-multilanguage" data-translation-key="Transfers"></button>
             </div>
         </div>
-        <!---------------------------------------- other transfers ---------------------------------->
-        <div id="casinos-vaults-tab-other-transfers-info" class="hidden">
-            drugi transferi
+        <!---------------------------------------- other transfer ---------------------------------->
+        <div id="casinos-vaults-tab-other-transfer-info" class="hidden">
+
+
+            <div id="casino-cash-transfer-other-transfer-vault-from">
+                <div class="element-multilanguage" data-translation-key="TransferFrom">transfer from</div>
+            </div>
+
+            <div>
+                <label class="element-multilanguage" data-translation-key="Value"></label>
+                <input class="form-input input-number-right" data-type="float"
+                    id="casino-cash-transfer-other-transfer-value" placeholder="7.000,00">
+            </div>
+            <div>
+                <div class="element-multilanguage" data-translation-key="Description"></div>
+                <div id="casino-cash-transfer-other-transfer-textarea">
+                    <textarea rows="4" cols="50" name="comment" form="usrform"
+                        placeholder="Enter text here..."></textarea>
+                </div>
+            </div>
+            <div id="casino-cash-transfer-other-transfer-wrapper">
+                <button class="secundarybutton element-multilanguage" data-translation-key="Transfers"></button>
+            </div>
+
         </div>
     </div>
 </div>
