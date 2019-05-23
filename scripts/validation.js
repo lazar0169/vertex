@@ -408,12 +408,11 @@ let validation = (function () {
         }
         switch (type) {
             case inputTypes.float:
-                return input.value.replace(/,/g, '');
+                return input.value.replace(/,/g, '').replace(/./g, '');
             case inputTypes.singleSelect:
                 return input.get();
             default:
                 return input.value;
         }
     }
-})
-    ();
+})();

@@ -150,7 +150,10 @@ let form = (function () {
                                     inputElement.value = dataToDisplay[inputName];
                                     break;
                                 case inputTypes.float:
-                                    inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
+                                    // inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
+
+                                    inputElement.value = formatFloatValue(dataToDisplay[inputName]);
+                                    inputElement.dataset.value = dataToDisplay[inputName];
                                     break;
                                 case inputTypes.string:
                                     inputElement.value = dataToDisplay[inputName];
@@ -256,8 +259,12 @@ let form = (function () {
                             }
                             break;
                         case inputTypes.float:
-                            let value = prepareFloatValue(formInputElement.value);
-                            dataForApi[formInputElement.name] = value * valueMultiplier;
+                            // let value = prepareFloatValue(formInputElement.value);
+                            let value = parseInt(formInputElement.dataset.value);
+
+                            // dataForApi[formInputElement.name] = value * valueMultiplier;
+                            dataForApi[formInputElement.name] = value;
+
                             break;
                         case inputTypes.string:
                             dataForApi[formInputElement.name] = formInputElement.value;

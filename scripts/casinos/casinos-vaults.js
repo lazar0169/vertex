@@ -42,7 +42,7 @@ let casinosVaults = (function () {
         data.ToId = parseInt(cashTransferValutTo.children[1].get());
         data.Money = parseInt(inputVaultToVaultValue.dataset.value);
         data.DepositBoxId = parseInt(cashTransferValutFrom.children[1].get());
-        data.Description = valutToFromCashdeskDescription.value;
+        data.Description = valutToValutDescription.value;
         console.log(data);
         trigger(communication.events.casinos.vaultToVaultTransfer, { data });
     }
@@ -50,12 +50,17 @@ let casinosVaults = (function () {
     vaultToFromCashdeskButton.onclick = function () {
         let data = {}
         data.EndpointId = 0;
+        data.Money = parseInt(inputVaulToFromCashdesk.dataset.value);
+        data.Description = valutToFromCashdeskDescription.value;
         data.FromId = parseInt(cashTransferVaultCashdeskFrom.children[1].get());
         data.ToId = parseInt(cashTransferVaultCashdeskTo.children[1].get());
-        data.Money = parseInt(inputVaulToFromCashdesk.dataset.value);
         data.DepositBoxId = parseInt(cashTransferVaultCashdeskFrom.children[1].get());
-        data.Description = valutToValutDescription.value;
-        data.Type = 1;
+
+        if (isSwapedActive()) {
+            data.Type = 0;
+        } else {
+            data.Type = 1;
+        }
 
         console.log(data);
         trigger(communication.events.casinos.moveToFromCashdesk, { data });
@@ -122,6 +127,14 @@ let casinosVaults = (function () {
     vaultsCashTransferButton.onclick = function () {
         selectTab('casinos-vaults-tab-vault-to-vault');
         selectInfoContent('casinos-vaults-tab-vault-to-vault');
+        // remove active class form swap button
+        swapCashTransferPosition.classList.remove('color-white');
+        swapCashTransferPosition.classList.remove('swaped-active');
+        // reset input and text area values
+        inputVaultToVaultValue.value = formatFloatValue('0');
+        inputVaulToFromCashdesk.value = formatFloatValue('0');
+        inputOtherTransferValue.value = formatFloatValue('0');
+
         cashTransferDetails.show();
     }
 

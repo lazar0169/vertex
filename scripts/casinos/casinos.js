@@ -8,7 +8,8 @@ let casino = (function () {
     let activeShift = $$('#casinos-tabs-wrapper').getElementsByClassName('tab-active');
     let casinoDepositBoxWrapper = $$('#casinos-vaults-display-wrapper');
     let casinoCashTransferWrapper = $$('#casinos-cash-transfer-wrapper');
-    let ddCasinoVaultCashdesk;
+    let ddCasinoVaultCashdeskFrom;
+    let ddCasinoVaultCashdeskTo;
 
 
     for (let sort of casinoSortOrder) {
@@ -167,13 +168,19 @@ let casino = (function () {
             if (data.Id === -1) {
                 $$('#casinos-display-all-casinos').appendChild(casinoDisplay.generateView(data));
             } else {
-                casinosAllCasinosContent.appendChild(casinoDisplay.generateView(data));
+                let casino = casinoDisplay.generateView(data)
+                casinosAllCasinosContent.appendChild(casino);
+                if (Object.entries(data.BestMachineList).length !== 0 && data.BestMachineList.constructor === Object) {
+                    casinoDisplay.generateMachinesDetails(data, casino);
+
+                }
             }
         }
+
+        trigger('preloader/hide');
     });
 
     on(events.getDepositBoxes, function (params) {
-        console.log(params);
         casinoCashTransferWrapper.settings = params.data;
         let depositBoxes = params.data.DepositBoxes;
         let depositBoxtransferList = params.data.DepositBoxTransferList;
@@ -193,25 +200,31 @@ let casino = (function () {
 
         //--------------------- vault to/from cashdesk -------------------//
         let cashTransferVaultToCashdeskFrom = $$('#casino-cash-transfer-vault-to-from-cashdesk-from');
-
-        if (ddCasinoVaultCashdesk) {
-            ddCasinoVaultCashdesk.remove()
+        if (ddCasinoVaultCashdeskFrom) {
+            ddCasinoVaultCashdeskFrom.remove();
         }
-        ddCasinoVaultCashdesk = dropdown.generate({ values: depositBoxtransferList });
-        cashTransferVaultToCashdeskFrom.appendChild(ddCasinoVaultCashdesk);
+        ddCasinoVaultCashdeskFrom = dropdown.generate({ values: depositBoxtransferList });
 
-        let cashTransferVaultCashdeskTo = $$('#casino-cash-transfer-vault-to-from-cashdesk-to')
-        dropdown.generate({ values: depositBoxCashDesks[cashTransferVaultToCashdeskFrom.children[1].get()], parent: cashTransferVaultCashdeskTo });
+        let cashTransferVaultCashdeskTo = $$('#casino-cash-transfer-vault-to-from-cashdesk-to');
+        if (ddCasinoVaultCashdeskTo) {
+            ddCasinoVaultCashdeskTo.remove();
+        }
+        ddCasinoVaultCashdeskTo = dropdown.generate({ values: depositBoxCashDesks[ddCasinoVaultCashdeskFrom.get()] });
 
-        trigger('casinos/vault-cashdesk-dropdown', { dropdown: ddCasinoVaultCashdesk });
+        cashTransferVaultToCashdeskFrom.appendChild(ddCasinoVaultCashdeskFrom);
+        cashTransferVaultCashdeskTo.appendChild(ddCasinoVaultCashdeskTo);
 
+        // dropdown.generate({ values: depositBoxCashDesks[ddCasinoVaultCashdesk.get()], parent: cashTransferVaultCashdeskTo });
 
+        trigger('casinos/vault-cashdesk-dropdown', { dropdown: ddCasinoVaultCashdeskFrom });
         //--------------------------------------------------------------//
+
         //------------------- other transfer from ----------------------//
         let cashTransferOtherTransferFrom = $$('#casino-cash-transfer-other-transfer-vault-from');
         dropdown.generate({ values: depositBoxtransferList, parent: cashTransferOtherTransferFrom });
-
         //-------------------------------------------------------------//
+
+        trigger('preloader/hide');
     });
 
     on(events.vaultToVaultTransfer, function (params) {
@@ -294,6 +307,7 @@ let casino = (function () {
     // });
     //preview casinos
     on(communication.events.casinos.previewAllCasinos, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.casinos.previewAllCasinos;
         let request = communication.requestTypes.post;
         let data = params.data
@@ -311,6 +325,7 @@ let casino = (function () {
 
     //casinos GetDepositBoxes
     on(communication.events.casinos.getDepositBoxes, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.casinos.getDepositBoxes;
         let request = communication.requestTypes.post;
         let data = params.data;

@@ -4,15 +4,25 @@ let casinoDisplay = (function () {
     //     console.log('radim')
     // }
     on('showingCasinoMachines', function (data) {
-        console.log('kliknuo si na saldo masina:');
-        console.log(data);
+        let saldoDetails = data.getElementsByClassName('testProba')[0];
+        saldoDetails.classList.remove('hidden');
+
+    });
+
+    on('hideCasinoMachines', function (data) {
+        let saldoDetails = data.getElementsByClassName('testProba')[0];
+        saldoDetails.classList.add('hidden');
 
     });
 
     on('showingCasinoDetails', function (data) {
-        console.log('kliknuo si na detalje:')
-        console.log(data)
+        let casinoDetails = data.getElementsByClassName('casino-display-details-content')[0];
+        casinoDetails.classList.remove('hidden');
+    });
 
+    on('hideCasinosDetails', function (data) {
+        let casinoDetails = data.getElementsByClassName('casino-display-details-content')[0];
+        casinoDetails.classList.add('hidden');
     });
 
     on('showingCasino', function (data) {
@@ -21,96 +31,13 @@ let casinoDisplay = (function () {
     });
 
     function generateView(data) {
+        // let bestMachineList = data.BestMachineList;
+        // let worstMachineList = data.WorstMachineList;
+        let bestMachineList = [{ "masina1": 100 }, { "masina2": 200 }];
+        let worstMachineList = [{ "masina1": 1000 }, { "masina2": 2000 }];
         let casinoWrapper = document.createElement('div');
         casinoWrapper.settings = data;
         casinoWrapper.classList.add('casino-display-table-view');
-
-        // //---------------------Casino Name---------------------------//
-        // let nameWrapper = document.createElement('div')
-        // nameWrapper.classList.add('casino-display-name-wrapper');
-
-        // let casinoDisplayStatus = document.createElement('div')
-        // casinoDisplayStatus.classList.add('casino-display-status');
-        // nameWrapper.appendChild(casinoDisplayStatus);
-
-        // let casinoDisplayName = document.createElement('div');
-        // casinoDisplayName.classList.add('casino-display-name')
-        // casinoDisplayName.classList.add('color-white')
-        // nameWrapper.appendChild(casinoDisplayName);
-
-        // let casinoDisplayCity = document.createElement('div');
-        // casinoDisplayCity.classList.add('casino-display-city');
-        // nameWrapper.appendChild(casinoDisplayCity);
-        // casinoWrapper.appendChild(nameWrapper);
-        // //----------------------------------------------------------//
-
-
-        // //-------------------Casino saldo----------------------------//
-        // let casinoDisplaySaldoWrapper = document.createElement('div');
-        // casinoDisplaySaldoWrapper.classList.add('casino-display-saldo-wrapper');
-        // casinoDisplaySaldoWrapper.classList.add('center')
-        // casinoWrapper.appendChild(casinoDisplaySaldoWrapper);
-        // //----------------------------------------------------------//
-
-
-        // //----------------Casino total in-------------------------//
-        // let casinoDisplayTotalInWrapper = document.createElement('div');
-        // casinoDisplayTotalInWrapper.classList.add('casino-display-total-in-wrapper');
-
-        // let casinoDisplayTotalIn = document.createElement('div');
-        // casinoDisplayTotalIn.classList.add('casino-display-total-in')
-        // casinoDisplayTotalIn.classList.add('align-right')
-        // casinoDisplayTotalInWrapper.appendChild(casinoDisplayTotalIn);
-
-        // let casinoDisplayTotalInValue = document.createElement('div');
-        // casinoDisplayTotalInValue.classList.add('casino-display-total-in-value');
-        // casinoDisplayTotalInValue.classList.add('color-white');
-        // casinoDisplayTotalInValue.classList.add('align-right');
-        // casinoDisplayTotalInWrapper.appendChild(casinoDisplayTotalInValue);
-        // casinoWrapper.appendChild(casinoDisplayTotalInWrapper);
-        // //----------------------------------------------------------//
-
-        // //----------------Casino total in cashdesk-------------------------//
-        // let casinoDisplayTotalInCashdeskWrapper = document.createElement('div');
-        // casinoDisplayTotalInCashdeskWrapper.classList.add('casino-display-total-in-cashdesk-wrapper');
-
-        // let casinoDisplayTotalInCashdesk = document.createElement('div');
-        // casinoDisplayTotalInCashdesk.classList.add('casino-display-total-in-cashdesk')
-        // casinoDisplayTotalInCashdesk.classList.add('align-right')
-        // casinoDisplayTotalInCashdeskWrapper.appendChild(casinoDisplayTotalInCashdesk);
-
-        // let casinoDisplayTotalInCashdeskValue = document.createElement('div');
-        // casinoDisplayTotalInCashdeskValue.classList.add('casino-display-total-in-cashdesk-value');
-        // casinoDisplayTotalInCashdeskValue.classList.add('color-white');
-        // casinoDisplayTotalInCashdeskValue.classList.add('align-right');
-        // casinoDisplayTotalInCashdeskWrapper.appendChild(casinoDisplayTotalInCashdeskValue);
-        // casinoWrapper.appendChild(casinoDisplayTotalInCashdeskWrapper);
-        // //----------------------------------------------------------//
-
-        // //----------------Casino bills-------------------------//
-        // let casinoDisplayTotalInCashdeskWrapper = document.createElement('div');
-        // casinoDisplayTotalInCashdeskWrapper.classList.add('casino-display-bills-wrapper');
-
-        // let casinoDisplayTotalInCashdesk = document.createElement('div');
-        // casinoDisplayTotalInCashdesk.classList.add('casino-display-bills')
-        // casinoDisplayTotalInCashdesk.classList.add('align-right')
-        // casinoDisplayTotalInCashdeskWrapper.appendChild(casinoDisplayTotalInCashdesk);
-
-        // let casinoDisplayTotalInCashdeskValue = document.createElement('div');
-        // casinoDisplayTotalInCashdeskValue.classList.add('casino-display-bills-value');
-        // casinoDisplayTotalInCashdeskValue.classList.add('color-white');
-        // casinoDisplayTotalInCashdeskValue.classList.add('align-right');
-        // casinoDisplayTotalInCashdeskWrapper.appendChild(casinoDisplayTotalInCashdeskValue);
-        // casinoWrapper.appendChild(casinoDisplayTotalInCashdeskWrapper);
-        // //----------------------------------------------------------//
-
-        // //----------------Casino total in cashdesk-------------------------//
-        // let casinoDisplayLastColumn = document.createElement('div');
-        // casinoDisplayLastColumn.classList.add('casino-display-last-column');
-
-        // let casinoDisplayPlayersWrapper = document.createElement('div');
-        // casinoDisplayPlayersWrapper.innerHTML = ``
-        // //----------------------------------------------------------//
 
         if (data.Id === -1) {
             casinoWrapper.innerHTML = `<div class="casino-display-all-wrapper center element-multilanguage" data-translation-key="AllCasinos"> All Casinos
@@ -133,7 +60,7 @@ let casinoDisplay = (function () {
                 <div class="casino-display-city">${data.City}</div>
                 </div>`
 
-                casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper center">${data.Saldo}</div>
+                casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper center" onclick="">${formatFloatValue(data.Saldo)}</div>
 
                 <div class="casino-display-total-in-wrapper">
                 <div class="casino-display-total-in align-right element-multilanguage" data-translation-key="TotalIn">total in</div>
@@ -165,7 +92,26 @@ let casinoDisplay = (function () {
                 return casinoWrapper
             }
         }
-        casinoWrapper.innerHTML += `<div class="casino-display-saldo-wrapper color-green center" onclick = "trigger('showingCasinoMachines', parentNode.settings)">${data.Saldo}</div>
+        casinoWrapper.innerHTML += `
+        <div class="casino-display-saldo-wrapper center">
+            <div class="color-green center casino-display-saldo-value" onclick = "trigger('showingCasinoMachines', parentNode)">${formatFloatValue(data.Saldo)}</div>
+
+            <div class="testProba hidden"  onmouseleave = "trigger('hideCasinoMachines', parentNode.parentNode)">
+                
+                <div class="casino-display-details-content-header">
+                    <div class="color-white">${localization.translateMessage('Machines')}</div>
+                    <div class="casino-display-details-close">
+                        <a class="button-link element-multilanguage" data-translation-key="Close" onclick = "trigger('hideCasinoMachines', parentNode.parentNode.parentNode.parentNode)">Close</a>
+                    </div>
+                    <div class="casino-display-details-city">${data.CasinoName}</div>
+                    <div class="color-green">${formatFloatValue(data.Saldo)}</div>
+                </div>
+
+                <div class="casino-display-machines-wrapper"></div>
+
+            </div>
+        
+        </div>
 
                 <div class="casino-display-total-in-wrapper">
                 <div class="casino-display-total-in align-right element-multilanguage" data-translation-key="TotalIn">total in</div>
@@ -190,15 +136,94 @@ let casinoDisplay = (function () {
 
                     <div class="casino-display-warning center color-white">!</div>
 
-                    <div class="casino-display-details center element-multilanguage" data-translation-key="Details" onclick = "trigger('showingCasinoDetails', parentNode.parentNode.settings)">details</div>
+                    <div class="casino-display-details center element-multilanguage" data-translation-key="Details" onclick = "trigger('showingCasinoDetails', parentNode.parentNode)">details</div>
+
+                    <div class='casino-display-details-content hidden'  onmouseleave = "trigger('hideCasinosDetails', parentNode.parentNode)">
+                    
+                    <div class="casino-display-details-content-header">
+                        <div class="color-white">${data.CasinoName}</div>
+                        <div class="casino-display-details-close">
+                            <a class="button-link element-multilanguage" data-translation-key="Close" onclick = "trigger('hideCasinosDetails', parentNode.parentNode.parentNode.parentNode)">Close</a>
+                        </div>
+                        <div class="casino-display-details-city">${data.City}</div>
+                        <div class="color-green">${formatFloatValue(data.Saldo)}</div>
+                    </div>
+
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="TotalIn">TotalIn</div>
+                        <div>${formatFloatValue(data.TotalIn)}</div>
+                    </div>
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="TotalOut">TotalOut</div>
+                        <div>${formatFloatValue(data.TotalOut)}</div>
+                    </div>
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="TotalInCashDesk">TotalInCashDesk</div>
+                        <div>${formatFloatValue(data.CashDesk)}</div>
+                    </div>
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="CashableTickets">CashableTickets</div>
+                        <div>${formatFloatValue(data.CashableTickets)}</div>
+                    </div>
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="MoneyInBill">MoneyInBill</div>
+                        <div>${formatFloatValue(data.MoneyInBills)}</div>
+                    </div>
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="Deposit">Deposit</div>
+                        <div>${formatFloatValue(data.Deposit)}</div>
+                    </div>
+                    <div class="border-bottom-casino-display-details">
+                        <div class="element-multilanguage" data-translation-key="Vaults">Vaults</div>
+                        <div>${formatFloatValue(data.Vaults)}</div>
+                    </div>
+
+                    <div class="casino-display-details-button">
+                    <a class="button-link element-multilanguage" data-translation-key="FullDetails">Full details</a>
+                    </div>
+
+
+                    </div>
                 </div>`
         return casinoWrapper
+    }
+
+    function generateMachinesDetails(data, casino) {
+        console.log(data);
+        console.log(casino);
+        let object;
+        object = Object.entries(data.BestMachineList);
+        for (let array of Object.entries(data.WorstMachineList)) {
+            object.push(array);
+        }
+        console.log(object)
+        // let bestMachineList = data.BestMachineList;
+        // let worstMachineList = data.WorstMachineList;
+        let machinesWrapper = casino.getElementsByClassName('casino-display-machines-wrapper');
+
+        for (let i = 0; i < object.length; i++) {
+
+            let machine = document.createElement('div');
+            machine.classList.add('border-bottom-casino-machines-details');
+            machine.innerHTML = ` <div>${object[i][0]}</div>
+            <div>${formatFloatValue(object[i][1])}</div>`
+            machinesWrapper[0].appendChild(machine);
+            if (i < object.length / 2) {
+                machine.children[1].classList.add('color-green');
+            } else {
+                machine.children[1].classList.add('color-red');
+            }
+        }
+
+
+
     }
 
 
 
     return {
-        generateView
+        generateView,
+        generateMachinesDetails
     }
 
 })();

@@ -279,13 +279,12 @@ function formatFloatValue(amount) {
     // } catch (e) {
     //     console.error(e);
     // }
-    const negativeSign = amount < 0 ? "-" : "";
     let value = Number(amount.toString().replace(/,/g, '').replace(/\./g, '')) / 100;
     if (config.decimalSeparator === ',') {
-        return negativeSign + value.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+        return  value.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
     else {
-        return negativeSign + value.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+        return  value.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
 }
 
