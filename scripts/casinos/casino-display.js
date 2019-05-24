@@ -1,12 +1,11 @@
 let casinoDisplay = (function () {
-
-    // function showingCasinoMachines() {
-    //     console.log('radim')
-    // }
     on('showingCasinoMachines', function (data) {
-        let saldoDetails = data.getElementsByClassName('testProba')[0];
-        saldoDetails.classList.remove('hidden');
-
+        if (data.parentNode.settings.BestMachineList) {
+            if (Object.entries(data.parentNode.settings.BestMachineList).length !== 0) {
+                let saldoDetails = data.getElementsByClassName('testProba')[0];
+                saldoDetails.classList.remove('hidden');
+            }
+        }
     });
 
     on('hideCasinoMachines', function (data) {
@@ -31,20 +30,19 @@ let casinoDisplay = (function () {
     });
 
     function generateView(data) {
-        // let bestMachineList = data.BestMachineList;
-        // let worstMachineList = data.WorstMachineList;
-        let bestMachineList = [{ "masina1": 100 }, { "masina2": 200 }];
-        let worstMachineList = [{ "masina1": 1000 }, { "masina2": 2000 }];
+        let casinoName;
         let casinoWrapper = document.createElement('div');
         casinoWrapper.settings = data;
         casinoWrapper.classList.add('casino-display-table-view');
 
         if (data.Id === -1) {
-            casinoWrapper.innerHTML = `<div class="casino-display-all-wrapper center element-multilanguage" data-translation-key="AllCasinos"> All Casinos
+            casinoName = localization.translateMessage('AllCasinos');
+            casinoWrapper.innerHTML = `<div class="casino-display-all-wrapper center element-multilanguage" data-translation-key="AllCasinos" onclick = "trigger('showingCasino', parentNode.settings)"> All Casinos
             
         </div>`
         }
         else {
+            casinoName = data.CasinoName;
             if (data.Status) {
                 casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper" onclick = "trigger('showingCasino', parentNode.settings)">
                 <div class="casino-display-status casino-status-${data.Status}"></div>
@@ -52,9 +50,10 @@ let casinoDisplay = (function () {
                 <div class="casino-display-city">${data.City}</div>
                 </div>`
             }
+            //ukoliko je status false ne mozes kliknuti na kazino
             else {
                 casinoWrapper.classList.add('casino-closed');
-                casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper">
+                casinoWrapper.innerHTML = `<div class="casino-display-name-wrapper"> 
                 <div class="casino-display-status casino-status-${data.Status}"></div>
                 <div class="casino-display-name">${data.CasinoName}</div>
                 <div class="casino-display-city">${data.City}</div>
@@ -80,12 +79,12 @@ let casinoDisplay = (function () {
                 <div class="casino-display-last-column"> 
                     <div class="casino-display-players-wrapper casino-offline center">
 
-                        <div class="color-red">OFFLINE</div>
+                        <div class="color-red">${localization.translateMessage('Offline')}</div>
                         <div>${formatTimeData(data.LastOnline)}</div>
                    
                     </div>
 
-                    <div class="casino-display-warning center">!</div>
+                    <div class="casino-display-warning casino-display-warning-${data.LastInventoryDone} center">!</div>
 
                     <div class="casino-display-details casino-closed center element-multilanguage" data-translation-key="Details">details</div>
                 </div>`
@@ -134,14 +133,14 @@ let casinoDisplay = (function () {
                     <div>${data.NumOfActiveMachines}/${data.NumOfMachines}</div>
                     </div>
 
-                    <div class="casino-display-warning center color-white">!</div>
+                    <div class="casino-display-warning casino-display-warning-${data.LastInventoryDone} center">!</div>
 
                     <div class="casino-display-details center element-multilanguage" data-translation-key="Details" onclick = "trigger('showingCasinoDetails', parentNode.parentNode)">details</div>
 
                     <div class='casino-display-details-content hidden'  onmouseleave = "trigger('hideCasinosDetails', parentNode.parentNode)">
                     
                     <div class="casino-display-details-content-header">
-                        <div class="color-white">${data.CasinoName}</div>
+                        <div class="color-white">${casinoName}</div>
                         <div class="casino-display-details-close">
                             <a class="button-link element-multilanguage" data-translation-key="Close" onclick = "trigger('hideCasinosDetails', parentNode.parentNode.parentNode.parentNode)">Close</a>
                         </div>
@@ -189,20 +188,13 @@ let casinoDisplay = (function () {
     }
 
     function generateMachinesDetails(data, casino) {
-        console.log(data);
-        console.log(casino);
         let object;
         object = Object.entries(data.BestMachineList);
         for (let array of Object.entries(data.WorstMachineList)) {
             object.push(array);
         }
-        console.log(object)
-        // let bestMachineList = data.BestMachineList;
-        // let worstMachineList = data.WorstMachineList;
         let machinesWrapper = casino.getElementsByClassName('casino-display-machines-wrapper');
-
         for (let i = 0; i < object.length; i++) {
-
             let machine = document.createElement('div');
             machine.classList.add('border-bottom-casino-machines-details');
             machine.innerHTML = ` <div>${object[i][0]}</div>

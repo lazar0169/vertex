@@ -222,6 +222,25 @@
     border: none;
 }
 
+.secundarybutton-orange {
+    height: 25px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: "Open Sans";
+    border-radius: 3px;
+    background-color: #f57f17;
+    box-shadow: 0px 2px 10px 0px rgba(1, 1, 1, 0.26);
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+.secundarybutton-orange:hover {
+    background-color: #f57f17;
+    opacity: 0.9;
+}
+
 .primarybutton:hover,
 .secundarybutton:hover {
     background: #03A9F4;
@@ -335,4 +354,8 @@ figure:hover {
 
 figure .checkbox-name {
     padding: 0.5em;
+}
+
+.background-orange {
+    background: #f57f17;
 }

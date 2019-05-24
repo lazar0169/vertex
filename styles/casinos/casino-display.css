@@ -11,6 +11,7 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
+    font-size: 16px;
 }
 
 .casino-display-total-in-wrapper {
@@ -35,6 +36,14 @@
 
 .casino-display-warning {
     grid-area: warning;
+}
+
+.casino-display-warning-true {
+    color: transparent
+}
+
+.casino-display-warning-false {
+    color: rgb(244, 67, 54);
 }
 
 .casino-display-details {
@@ -116,6 +125,11 @@
 #casinos-display-all-casinos {
     padding-bottom: 0.5em;
     box-shadow: 0 0.1em 0 rgba(38, 50, 56, 0.5);
+}
+
+#casinos-display-all-casinos .casino-display-warning-true,
+#casinos-display-all-casinos .casino-display-warning-false {
+    color: transparent !important;
 }
 
 #casinos-display-all-casinos-content {
@@ -323,4 +337,8 @@
 
 .casino-display-details-city {
     font-size: 12px;
+}
+
+#casinos-display-all-casinos .casino-display-details-city {
+    display: none
 }

@@ -68,10 +68,15 @@
 
 .casino-vaults-value {
     grid-area: casino-vaults-value;
+    font-size: 16px;
 }
 
 .casino-vaults-casino-name {
     grid-area: casino-vaults-casino-name;
+}
+
+.casino-vaults-casino-name>div:last-child {
+    font-size: 12px;
 }
 
 .casino-vault-display-wrapper {

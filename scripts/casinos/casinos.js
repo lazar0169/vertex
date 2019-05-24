@@ -176,6 +176,19 @@ let casino = (function () {
                 }
             }
         }
+        if ($$('#casinos-tabs-wrapper').getElementsByClassName('tab-active')[0].dataset.id !== '6') {
+            let status = $$('#casinos-display-all-casinos-content').getElementsByClassName('casino-display-status');
+            let numbOfPlayers = $$('#casinos-display-all-casinos-content').getElementsByClassName('casino-display-players-wrapper');
+            let casinoList = $$('#casinos-display-all-casinos-content').getElementsByClassName('casino-display-table-view');
+            $$('#casinos-display-all-casinos').getElementsByClassName('casino-display-players-wrapper')[0].classList.add('hidden');
+            for (let casino of casinoList) {
+                casino.getElementsByClassName('casino-display-status')[0].classList.add('hidden');
+                casino.getElementsByClassName('casino-display-players-wrapper')[0].classList.add('hidden');
+                casino.getElementsByClassName('casino-display-warning')[0].classList.add('hidden');
+            }
+        }
+
+
 
         trigger('preloader/hide');
     });

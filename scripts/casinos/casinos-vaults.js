@@ -61,7 +61,6 @@ let casinosVaults = (function () {
         } else {
             data.Type = 1;
         }
-
         console.log(data);
         trigger(communication.events.casinos.moveToFromCashdesk, { data });
     }
@@ -69,7 +68,7 @@ let casinosVaults = (function () {
     vaultOthertransferButton.onclick = function () {
         let data = {}
         data.EndpointId = 0;
-        data.Money = parseInt(inputVaulToFromCashdesk.dataset.value);
+        data.Money = parseInt(inputOtherTransferValue.dataset.value);
         data.DepositBoxId = parseInt(cashTransferOtherTransferFrom.children[1].get());
         data.Description = vaultOtherTransferDescription.value;
         console.log(data);
@@ -154,30 +153,11 @@ let casinosVaults = (function () {
     vaultsButton.onclick = function () {
         let data = {};
         data.EndpointId = 0
-
         trigger(communication.events.casinos.getDepositBoxes, { data });
-
-        console.log('obrati se serveru za podatke "GetDepositBoxes", prikazi podatke na stranici ');
         casinosAllCasinos.classList.add('hidden');
         casinosVaults.classList.remove('hidden');
     }
-    // ne treba mi jer imam funkcije selectTab i selectInfoContent koje se mogu iskoristiti
-    // on('casinos/cash-transfer-vault-to-vault', function () {
-    //     console.log('vault to vault');
-    // });
-
-    // on('casinos/cash-transfer-vault-to-from-cashdesk', function () {
-    //     console.log('vault to from');
-    // });
-
-    // on('casinos/cash-transfer-other-transfer', function () {
-    //     console.log('other');
-    // });
-
-    // on('casinos/cash-transfer-tab', function () {
-    //     let aktivniTab = $$('#casinos-vaults-tabs-wrapper').getElementsByClassName('tab-active');
-    //     console.log(aktivniTab)
-    // });
+   
     function generateView(data) {
         let casinoDepositBoxDisplay = document.createElement('div');
         casinoDepositBoxDisplay.settings = data;

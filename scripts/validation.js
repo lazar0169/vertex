@@ -241,9 +241,9 @@ let validation = (function () {
                         case inputTypes.float:
 
                             if (config.decimalSeparator === '.') {
-                                rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
+                                rule.regex = new RegExp(/^\$?(-)?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
                             } else {
-                                rule.regex = new RegExp(/^\$?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
+                                rule.regex = new RegExp(/^\$?(-)?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
 
                             }
                             break;
