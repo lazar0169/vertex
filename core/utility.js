@@ -280,11 +280,17 @@ function formatFloatValue(amount) {
     //     console.error(e);
     // }
     let value = Number(amount.toString().replace(/,/g, '').replace(/\./g, '')) / 100;
+
+    if (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER) {
+        value = 0
+    }
+
+
     if (config.decimalSeparator === ',') {
-        return  value.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+        return value.toLocaleString('de-De', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
     else {
-        return  value.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
+        return value.toLocaleString('en', { minimumFractionDigits: config.decimalCount, maximumFractionDigits: config.decimalCount })
     }
 }
 
