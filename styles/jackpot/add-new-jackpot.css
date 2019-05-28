@@ -63,13 +63,13 @@
 }
 
 .add-new-jackpot-control-settings>div:not(:first-child) {
-    width: 100%;
+    margin: 0 0.5em 0 5.5em;
 }
 
 #add-new-jackpot-content-machines-participate>div:not(:first-child)>div {
     display: flex;
     flex-flow: row wrap;
-    padding: 0.5em 0.5em 0.5em 5.5em;
+    padding-bottom: 0.5em;
     align-items: center;
 }
 
@@ -104,7 +104,7 @@
 }
 
 #add-new-jackpot-content-advance-settings>div:not(:first-child)>div {
-    padding: 0.5em 0.5em 0.5em 5.5em;
+    padding-bottom: 0.5em;
 }
 
 .grid-3-columns {
@@ -124,13 +124,14 @@
 }
 
 #jackpot-grows-automatically-content {
-    padding: 0.5em 3em;
+    padding: 0.5em 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
 
 #jackpot-grows-automatically-content>div:first-child .form-input,
-#jackopot-grow-pattern-value-limit>div:first-child .form-input {
+#jackopot-grow-pattern-value-limit>div:first-child .form-input,
+#jackpot-grows-by-bet .form-input {
     width: 450px;
     margin-left: 0.5em;
 }
@@ -148,7 +149,7 @@
     grid-column: 1/span 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-left: 2.5em;
+    margin-left: 5.5em;
 }
 
 #jackpot-control-growth-period>div {
@@ -179,13 +180,9 @@
     outline: none;
 }
 
-#jackpot-value-limit-wrapper {
-    padding: 0.5em;
-    margin: 0 2.5em;
-}
 
 #jackpot-grows-by-bet {
-    padding: 0.5em 3em;
+    padding: 0.5em 0;
 }
 
 #jackpot-grows-by-bet .form-input {
@@ -203,7 +200,6 @@
 
 #jackpot-growth-pattern-tabs {
     padding: 0;
-    margin: 0 2.5em;
     display: flex;
 }
 
@@ -215,10 +211,6 @@
     margin: 0 0.5em
 }
 
-#jackpot-grows-discreetly-buttons {
-    margin: 0 2.5em;
-}
-
 #jackpot-grows-discreetly-buttons>div {
     padding: 0.5em 0;
 }
@@ -226,8 +218,4 @@
 #jackpot-grows-discreetly-buttons>.border-bottom {
     border-bottom: 2px solid #33454d;
 
-}
-
-#add-new-jackpot-content-limit-settings .grid-3-columns {
-    margin: 0 2.5em;
 }
