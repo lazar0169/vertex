@@ -306,7 +306,7 @@
 
 .border-bottom-casino-display-details,
 .border-bottom-casino-machines-details {
-    border-bottom: 1px solid rgb(55, 71, 79);
+    border-bottom: 1px solid #33454d;
     display: flex;
     padding: 0.5em;
 }

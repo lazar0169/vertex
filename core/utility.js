@@ -281,9 +281,9 @@ function formatFloatValue(amount) {
     // }
     let value = Number(amount.toString().replace(/,/g, '').replace(/\./g, '')) / 100;
 
-    if (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER) {
-        value = 0
-    }
+    // if (value > Number.MAX_SAFE_INTEGER || value < Number.MIN_SAFE_INTEGER) {
+    //     value = 0
+    // }
 
 
     if (config.decimalSeparator === ',') {

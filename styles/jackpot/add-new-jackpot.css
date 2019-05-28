@@ -38,7 +38,7 @@
 }
 
 .add-new-jackpot-control-settings {
-    border-bottom: 1px solid rgb(120, 144, 156);
+    border-bottom: 1px solid #33454d;
     padding: 0.5em 0;
 }
 
@@ -69,7 +69,7 @@
 #add-new-jackpot-content-machines-participate>div:not(:first-child)>div {
     display: flex;
     flex-flow: row wrap;
-    padding: 0.5em 0.5em 0.5em 2.5em;
+    padding: 0.5em 0.5em 0.5em 5.5em;
     align-items: center;
 }
 
@@ -104,14 +104,13 @@
 }
 
 #add-new-jackpot-content-advance-settings>div:not(:first-child)>div {
-    padding: 0.5em 0.5em 0.5em 2.5em;
+    padding: 0.5em 0.5em 0.5em 5.5em;
 }
 
 .grid-3-columns {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    padding: 0.5em;
-    margin: 0 2.5em;
+    padding: 0.5em 0;
 }
 
 .grid-3-columns>div {
@@ -120,7 +119,7 @@
     padding: 0 0.5em;
 }
 
-.grid-3-columns>button:nth-child(2) {
+.grid-3-columns>.growth-pattern-tabs:nth-child(2) {
     margin: 0 0.5em;
 }
 
@@ -157,8 +156,27 @@
     cursor: pointer;
 }
 
+.growth-pattern-tabs {
+    background: rgb(30, 155, 227);
+    height: 35px;
+    color: #fff;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: "Open Sans";
+    cursor: pointer;
+    border: none;
+    padding: 0 20px;
+}
+
 .pattern-active {
-    background: #006ac4 !important;
+    background: rgb(30, 155, 227);
+}
+
+.pattern-not-active {
+    background: rgb(55, 71, 79);
+    color: black;
+    outline: none;
 }
 
 #jackpot-value-limit-wrapper {
@@ -181,4 +199,35 @@
 
 #add-new-jackpot-grows-by-bet-choose-machines-wrapper>div:nth-child(2) {
     padding: 0 0.5em
+}
+
+#jackpot-growth-pattern-tabs {
+    padding: 0;
+    margin: 0 2.5em;
+    display: flex;
+}
+
+#jackpot-growth-pattern-tabs.border-bottom {
+    border-bottom: 2px solid rgb(30, 155, 227);
+}
+
+#jackpot-growth-pattern-tabs>div:nth-child(2) {
+    margin: 0 0.5em
+}
+
+#jackpot-grows-discreetly-buttons {
+    margin: 0 2.5em;
+}
+
+#jackpot-grows-discreetly-buttons>div {
+    padding: 0.5em 0;
+}
+
+#jackpot-grows-discreetly-buttons>.border-bottom {
+    border-bottom: 2px solid #33454d;
+
+}
+
+#add-new-jackpot-content-limit-settings .grid-3-columns {
+    margin: 0 2.5em;
 }

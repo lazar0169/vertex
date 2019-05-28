@@ -16,10 +16,11 @@
         </div>
     </div>
     <div class="hidden">
-        <div id="jackpot-growth-pattern-buttons" class="grid-3-columns">
-            <button class="primarybutton" data-value="jackpot-grows-automatically-content">Grows automatically</button>
-            <button class="primarybutton" data-value="jackpot-grows-by-bet">Grows by bet</button>
-            <button class="primarybutton" data-value="jackpot-grows-discreetly">Grows discreetly</button>
+        <div id="jackpot-growth-pattern-tabs" class="">
+            <div class="growth-pattern-tabs center" data-value="jackpot-grows-automatically-content">Grows
+                automatically</div>
+            <div class="growth-pattern-tabs center" data-value="jackpot-grows-by-bet">Grows by bet</div>
+            <div class="growth-pattern-tabs center" data-value="jackpot-grows-discreetly">Grows discreetly</div>
         </div>
 
         <div id="jackpot-grows-automatically-content" class="hidden  jackpot-pattern-buttons-content">
@@ -104,7 +105,7 @@
                     <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
-                <div id="testproba1" class="checkbox-name">Value limit</div>
+                <div id="jackpot-growth-pattern-value-limit-checkbox" class="checkbox-name">Value limit</div>
             </figure>
             <div id="jackopot-grow-pattern-value-limit" class="hidden">
                 <div>
@@ -127,10 +128,28 @@
         </div>
 
         <div id="jackpot-grows-discreetly" class="hidden jackpot-pattern-buttons-content">
-            <div id="jackpot-grows-discreetly-buttons" class="grid-3-columns">
-                <div class='center'>RAIN</div>
-                <div class='center'>TOURNAMENT</div>
-                <div class='center tab-active'>CUSTOM</div>
+            <div id="jackpot-grows-discreetly-buttons" class="">
+                <div class='border-bottom'>
+                    <label class="form-radio" data-value="1">
+                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
+                        <i class="form-icon"></i>
+                        <div>Rain</div>
+                    </label>
+                </div>
+                <div class='border-bottom'>
+                    <label class="form-radio" data-value="1">
+                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
+                        <i class="form-icon"></i>
+                        <div>Tournament</div>
+                    </label>
+                </div>
+                <div class=''>
+                    <label class="form-radio" data-value="1">
+                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
+                        <i class="form-icon"></i>
+                        <div>Custom</div>
+                    </label>
+                </div>
             </div>
         </div>
     </div>

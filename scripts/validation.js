@@ -17,7 +17,8 @@ let validation = (function () {
         maximum: 'max',
         equals: 'equals',
         email: 'email',
-        maxLength: 'maxlength'
+        maxLength: 'maxlength',
+        validNumber: 'validNumber',
     };
 
     const constraintsOperators = {
@@ -26,7 +27,8 @@ let validation = (function () {
         lesserThan: '<',
         equals: '=',
         email: 'email',
-        maxLength: 'maxLength'
+        maxLength: 'maxLength',
+        validNumber: 'validNumber'
     };
 
     const defaultErrorMessages = {};
@@ -40,6 +42,7 @@ let validation = (function () {
     defaultErrorMessages[constraintAttributes.maximum] = 'GreaterThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.equals] = 'EqualsValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.maxLength] = 'MaxLengthValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.validNumber] = 'NumberIsNotValid';
 
     let operatorFunctions = {};
     // a - input value
@@ -66,6 +69,9 @@ let validation = (function () {
     operatorFunctions[constraintsOperators.maxLength] = function (a, b) {
         b = parseInt(b);
         return a.length <= b;
+    };
+    operatorFunctions[constraintsOperators.validNumber] = function (a, b) {
+        return a > b.maxNumber || a < b.minNumber ? '' : a;
     };
     //endregion
 
@@ -268,6 +274,8 @@ let validation = (function () {
             let required = element.getAttribute(constraintAttributes.required);
             let email = element.getAttribute(constraintAttributes.email);
             let maxLength = element.getAttribute(constraintAttributes.maxLength);
+            let validNumber = element.getAttribute(constraintAttributes.validNumber);
+
             //email constraint
 
             if (!isEmpty(email)) {
@@ -316,6 +324,16 @@ let validation = (function () {
                     name: constraintAttributes.maxLength,
                     operator: constraintsOperators.maxLength,
                     value: maxLength
+                });
+            }
+            if (!isEmpty(validNumber)) {
+                settings.constraints.set(constraintAttributes.validNumber, {
+                    name: constraintAttributes.validNumber,
+                    operator: constraintsOperators.validNumber,
+                    value: {
+                        maxNumber: Number.MAX_SAFE_INTEGER,
+                        minNumber: Number.MIN_SAFE_INTEGER
+                    }
                 });
             }
         }
@@ -408,7 +426,8 @@ let validation = (function () {
         }
         switch (type) {
             case inputTypes.float:
-                return input.value.replace(/,/g, '').replace(/./g, '');
+                // console.log(input.dataset.value)
+                return input.value.replace(/,/g, '').replace(/\./g, '');
             case inputTypes.singleSelect:
                 return input.get();
             default:

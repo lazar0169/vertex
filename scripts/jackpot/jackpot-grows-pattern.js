@@ -1,11 +1,13 @@
 const jackpotGrowthpattern = (function () {
-    let growspatternButtons = $$('#jackpot-growth-pattern-buttons').children;
+    let growsPatternTabs = $$('#jackpot-growth-pattern-tabs');
     let buttonsContent = $$('.jackpot-pattern-buttons-content');
     let jackpotControlGrowthPeriodByDays = $$('#jackpot-control-growth-period').children[0];
     let jackpotControlGrowthPeriodByHours = $$('#jackpot-control-growth-period').children[1];
     let addNewGrowthField = $$('#jackpot-grows-automatically-content').getElementsByClassName('secundarybutton');
-    let valueLimitCheckbox = $$('#testproba1').parentNode;
+    let valueLimitCheckbox = $$('#jackpot-growth-pattern-value-limit-checkbox').parentNode;
     let choseMachines = $$('#add-new-jackpot-grows-by-bet-choose-machines-buttons').children[0];
+
+    checkboxChangeState.radioClick($$('#jackpot-grows-discreetly-buttons'));
 
     choseMachines.onclick = function () {
         jackpotChooseParticipatingMachines.showHideChooseMachine.show();
@@ -25,18 +27,26 @@ const jackpotGrowthpattern = (function () {
     }
 
 
-    for (let button of growspatternButtons) {
+    for (let button of growsPatternTabs.children) {
         button.onclick = function () {
-            for (let button of growspatternButtons) {
-                button.classList.remove('pattern-active')
+            for (let button of growsPatternTabs.children) {
+                button.classList.remove('pattern-active');
+                button.classList.add('pattern-not-active');
             }
             for (let content of buttonsContent) {
                 if (button.dataset.value === content.id) {
                     content.classList.toggle('hidden');
                     if (content.classList.contains('hidden')) {
                         button.classList.remove('pattern-active');
+                        for (let button of growsPatternTabs.children) {
+                            button.classList.remove('pattern-not-active');
+                        }
+                        growsPatternTabs.classList.remove('border-bottom');
+
                     } else {
                         button.classList.add('pattern-active');
+                        button.classList.remove('pattern-not-active');
+                        growsPatternTabs.classList.add('border-bottom');
                     }
                     showValueLimitButton(button);
                 }

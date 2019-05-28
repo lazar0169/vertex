@@ -244,6 +244,7 @@
 .primarybutton:hover,
 .secundarybutton:hover {
     background: #03A9F4;
+    color: white;
 }
 
 .button-link {
@@ -278,12 +279,9 @@
     padding: 0 0.5em;
 }
 
-.border-bottom-cities {
-    border-bottom: 1px solid #37474f;
-}
-
+.border-bottom-cities,
 .border-bottom-bet-limits {
-    border-bottom: 1px solid rgb(120, 144, 156);
+    border-bottom: 1px solid #33454d;
 }
 
 .background-dark {

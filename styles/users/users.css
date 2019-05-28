@@ -10,7 +10,9 @@
     background: inherit;
 }
 
-.add-new-user-active, .add-new-user-active:hover, .add-new-user-active:focus {
+.add-new-user-active,
+.add-new-user-active:hover,
+.add-new-user-active:focus {
     background: #778f9b;
     color: rgb(38, 50, 56);
     border: none;
@@ -18,7 +20,8 @@
     pointer-events: none;
 }
 
-#add-new-user-account, #add-new-user-role {
+#add-new-user-account,
+#add-new-user-role {
     padding-bottom: 20px;
 }
 
@@ -38,7 +41,7 @@
 }
 
 .border-bottom-role {
-    border-bottom: 1px solid rgb(38, 50, 56);
+    border-bottom: 1px solid #33454d;
     padding-bottom: 20px !important;
 }
 
@@ -51,6 +54,6 @@
     margin: 0 0 0 15px;
 }
 
- #add-new-user-buttons-wrapper .button-link {
+#add-new-user-buttons-wrapper .button-link {
     padding-left: 0.5rem;
 }
