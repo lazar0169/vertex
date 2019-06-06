@@ -131,7 +131,8 @@
 
 #jackpot-grows-automatically-content>div:first-child .form-input,
 #jackopot-grow-pattern-value-limit>div:first-child .form-input,
-#jackpot-grows-by-bet .form-input {
+#jackpot-grows-by-bet .form-input,
+.discreetly-tab-content .form-input {
     width: 450px;
     margin-left: 0.5em;
 }
@@ -189,12 +190,12 @@
     width: 450px;
 }
 
-#add-new-jackpot-grows-by-bet-choose-machines-wrapper {
+.choose-machines-wrapper {
     padding: 0.5em 0;
     display: flex;
 }
 
-#add-new-jackpot-grows-by-bet-choose-machines-wrapper>div:nth-child(2) {
+.choose-machines-wrapper>div:nth-child(2) {
     padding: 0 0.5em
 }
 
@@ -211,11 +212,73 @@
     margin: 0 0.5em
 }
 
-#jackpot-grows-discreetly-buttons>div {
-    padding: 0.5em 0;
+#jackpot-grows-discreetly-radio-buttons>div {
+    margin: 0.5em 0;
+    cursor: pointer;
 }
 
-#jackpot-grows-discreetly-buttons>.border-bottom {
+#jackpot-grows-discreetly-radio-buttons>.border-bottom {
     border-bottom: 2px solid #33454d;
 
+}
+
+.jackpot-grows-discreetly-type-contents {}
+
+.discreetly-tab-content>div {
+    display: flex;
+    padding-bottom: 0.5em;
+}
+
+.discreetly-tab-content>div>div {
+    padding-right: 0.5em;
+}
+
+.discreetly-tab-content .default-select>div:first-child {
+    width: 150px
+}
+
+.jackpot-level-exist-wrapper {
+    display: flex;
+}
+
+.jackpot-level-exist-wrapper>div {
+    margin: 0.5em;
+    border: 1px solid #33454d;
+    background: rgb(29, 38, 43);
+    position: relative;
+}
+
+.jackpot-level-exist-wrapper>div>div:not(:last-child) {
+    display: flex;
+    margin: 0.5em;
+}
+
+.jackpot-level-exist-wrapper>div>div>div {
+    padding: 0 0.5em
+}
+
+.edit-close-level-wrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
+    visibility: hidden;
+}
+
+.edit-close-level-wrapper>div {
+    cursor: pointer;
+    padding: 0 !important;
+    border: 1px solid rgb(55, 71, 79);
+    margin: 2px;
+}
+
+.level-edit-button {
+    color: rgb(30, 155, 227);
+}
+
+.jackpot-level-exist-wrapper>div:hover .edit-close-level-wrapper {
+    visibility: visible;
+}
+
+#custom-radio-buttons {
+    display: block;
 }

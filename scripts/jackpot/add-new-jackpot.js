@@ -69,7 +69,6 @@ const addNewJackpot = (function () {
     on('jackpot/get-add-jackpot', function (params) {
         console.log(params);
         fillAdvanceSettings(params);
-        dropdown.generate({ values: params.data.Data.MinMaxState, parent: $$('#jackpot-growth-pattern-after-reaching-max') })
     });
 
     function fillAdvanceSettings(params) {
@@ -78,13 +77,28 @@ const addNewJackpot = (function () {
         let ddDeactivateStopGrow = $$('#advance-settings-deactivate-jackpot-and-stop-grow');
         let ddHideWithGrow = $$('#advance-settings-hide-jackpot-and-grow');
         let ddHideStopGrow = $$('#advance-settings-hide-jackpot-and-stop-grow');
-        let ddNewJackpots = $$('#advance-settings-next-jackpots')
+        let ddNewJackpots = $$('#advance-settings-next-jackpots');
+        let ddAfterReachingMax = $$('#jackpot-growth-pattern-after-reaching-max');
+        let ddTournamentLevelOutcome = $$('#tournament-dropdown-level-outcome');
+        let ddRainLevelOutcome = $$("#rain-dropdown-level-outcome");
+        let ddCustomLevelOutcome = $$("#custom-dropdown-level-outcome");
+        let ddCustomCountTypeList = $$("#custom-dropdown-level-count-type-list");
 
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single' });
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateStopGrow, type: 'single' });
         dropdown.generate({ values: data.JackpotList, parent: ddHideWithGrow, type: 'single' });
         dropdown.generate({ values: data.JackpotList, parent: ddHideStopGrow, type: 'single' });
         dropdown.generate({ values: data.NewJackpotStateList, parent: ddNewJackpots, type: 'single' });
+        dropdown.generate({ values: data.MinMaxState, parent: ddAfterReachingMax });
+        dropdown.generate({ values: data.CounterList, parent: ddTournamentLevelOutcome, name: "LevelOutcome" });
+        dropdown.generate({ values: data.CounterList, parent: ddRainLevelOutcome, name: "LevelOutcome" });
+        dropdown.generate({ values: data.CounterList, parent: ddCustomLevelOutcome, name: "LevelOutcome" });
+        dropdown.generate({ values: data.CountTypeList, parent: ddCustomCountTypeList, name: "CountTypeList" });
+
+
+
+
+
         console.log(data);
     }
 })();

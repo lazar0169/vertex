@@ -306,3 +306,38 @@ let roleData = {
         "Enabled": true
     }]
 }
+
+let operatorAndMinMaxEnum = [
+    {
+        Name: 'None',
+        Id: 0
+    },
+    {
+        Name: '>=',
+        Id: 1
+    },
+    {
+        Name: '>',
+        Id: 3
+    },
+    {
+        Name: "=",
+        Id: 3
+    },
+    {
+        Name: "<",
+        Id: 4
+    },
+    {
+        Name: "<=",
+        Id: 5
+    },
+    {
+        Name: "Min",
+        Id: 6
+    },
+    {
+        Name: "Max",
+        Id: 7
+    }
+]
