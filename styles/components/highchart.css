@@ -1,0 +1,81 @@
+.chart {
+    background: rgb(55, 71, 79);
+    overflow: visible !important;
+    x: 0;
+    y: 300;
+}
+
+.chart-dot {
+    r: 12px;
+    stroke: rgb(30, 155, 227);
+    fill: white;
+    stroke-width: 3px;
+    cursor: pointer;
+}
+
+.chart-dot:hover {
+    background: blue;
+    fill: rgb(30, 155, 227);
+    stroke: white;
+}
+
+.chart-polyline {
+    fill: none;
+    stroke: black;
+    stroke-width: 3px;
+}
+
+.chart-vertical-polyline,
+.chart-horizontal-polyline {
+    fill: none;
+    stroke: rgb(120, 144, 156);
+    stroke-width: 2px;
+}
+
+.chart-polygon {
+    fill: #03A9F4;
+    opacity: 0.5;
+
+}
+
+.chart-wrapper {
+    padding: 1em;
+    position: relative;
+    display: flex;
+}
+
+/* .chart-vertical-text {
+    position: relative;
+    margin-right: 3em;
+}
+
+.chart-vertical-text>div:first-child {
+    position: absolute;
+    top: -1em;
+}
+
+.chart-vertical-text>div:last-child {
+    bottom: -0.5em;
+    position: absolute
+}
+
+.chart-horizontal-text {
+    position: absolute;
+    bottom: -0.5em;
+    z-index: 2;
+    display: flex;
+    width: 600px;
+    left: 3em;
+}
+
+.chart-horizontal-text>div:first-child {
+    position: absolute;
+    left: -2em;
+    bottom: 0;
+}
+
+.chart-horizontal-text>div:last-child {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+} */

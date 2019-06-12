@@ -282,3 +282,20 @@
 #custom-radio-buttons {
     display: block;
 }
+
+#custom-level-conditions-wrapper {
+    display: block;
+}
+
+.single-condition-wrapper {
+    display: flex;
+    margin-bottom: 0.5em
+}
+
+.single-condition-wrapper>a {
+    padding: 0 1em;
+}
+
+.single-condition-wrapper:hover {
+    color: white;
+}

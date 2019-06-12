@@ -10,9 +10,11 @@ const jackpotGrowthpattern = (function () {
     let jackpotGrowsPatternCustomRadio = jackpotGrowsDiscreetlyRadioButtonsWrapper.children;
     let jackpotGrowsCustomRadioButtonsWrapper = $$("#custom-radio-buttons");
 
+    highchart.drawHighchart({ parent: $$('#dijagram'), dotsX: 10, dotsY: 10 });
+    highchart.drawHighchart({ parent: $$('#jackpot-growth-pattern-grows-by-bet-chart'), dotsX: 3, dotsY: 5 })
+
 
     let customInputs = $$('#custom-input-wrapper').getElementsByTagName('input')
-    console.log(customInputs)
     for (let input of customInputs) {
         validation.init(input, {});
         if (input.dataset.type === 'float') {
@@ -20,27 +22,28 @@ const jackpotGrowthpattern = (function () {
         }
     }
 
-
     checkboxChangeState.radioClick(jackpotGrowsCustomRadioButtonsWrapper);
 
+
+
+    let addLevelDiscreetlyConditionButton = $$('#custom-add-level-condition-button').children[0];
+    addLevelDiscreetlyConditionButton.onclick = function (e) {
+        addConditionLevel(e.target.dataset.value, e.target)
+    }
+
     let addLevelDiscreetlyTournamentButton = $$('#tournament-add-level-button').children[0];
-    let addLevelDiscreetlyRainButton = $$('#rain-add-level-button').children[0];
-    let addLevelDiscreetlyCustomButton = $$('#custom-add-level-button').children[0];
-
-    dropdown.generate({ values: operatorAndMinMaxEnum, parent: $$('#tournament-dropdown-operators'), name: "Operator" });
-    dropdown.generate({ values: operatorAndMinMaxEnum, parent: $$('#rain-dropdown-operators'), name: "Operator" });
-    dropdown.generate({ values: operatorAndMinMaxEnum, parent: $$('#custom-dropdown-operators'), name: "Operator" });
-
     addLevelDiscreetlyTournamentButton.onclick = function (e) {
         createLevel(e.target.dataset.value);
         clearInputsFields(e.target.parentNode.parentNode.parentNode);
     }
 
+    let addLevelDiscreetlyRainButton = $$('#rain-add-level-button').children[0];
     addLevelDiscreetlyRainButton.onclick = function (e) {
         createLevel(e.target.dataset.value);
         clearInputsFields(e.target.parentNode.parentNode.parentNode);
     }
 
+    let addLevelDiscreetlyCustomButton = $$('#custom-add-level-button').children[0];
     addLevelDiscreetlyCustomButton.onclick = function (e) {
         createLevel(e.target.dataset.value);
         clearInputsFields(e.target.parentNode.parentNode.parentNode);
@@ -56,7 +59,7 @@ const jackpotGrowthpattern = (function () {
         editLevelButton.onclick = function (e) {
             let newData = prepareDataForLevel(e.target.dataset.value);
             let str;
-            newData.CountTypeList ? str = newData.CountTypeList.name : str = "SUM"
+            newData.CountTypeList ? str = newData.CountTypeList.name : str = $$(`.element-jackpot-condition-text-${jackpotGrowsDiscreetlyRadioButtonsWrapper.settings.radioName}`)[0].innerHTML
             levelWrapper.getElementsByClassName('element-level-name')[0].innerHTML = newData.LevelName;
             levelWrapper.getElementsByClassName('element-level-value')[0].innerHTML = newData.LevelValue;
             levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = `${newData.LevelOutcome.name}: ${str} ${newData.Operator.name} ${newData.Value}`
@@ -116,7 +119,12 @@ const jackpotGrowthpattern = (function () {
     }
 
     function prepareDataForLevel(id) {
-        let inputWrapper = $$(`#${id}`);
+        let inputWrapper;
+        if (typeof id === 'string') {
+            inputWrapper = $$(`#${id}`);
+        } else {
+            inputWrapper = id;
+        }
         let data = {};
         for (let input of inputWrapper.getElementsByClassName('element-form-data')) {
             switch (input.dataset.type) {
@@ -135,11 +143,42 @@ const jackpotGrowthpattern = (function () {
         return data;
     }
 
+    function addConditionLevel(conditionsWrapperId, inputsWrapperId) {
+        let conditionArray = [];
+        let conditionsWrapper = $$(`#${conditionsWrapperId}`);
+
+
+        let data = prepareDataForLevel(inputsWrapperId.parentNode.parentNode);
+        console.log(data)
+
+        let singleConditonWrapper = document.createElement('div');
+        singleConditonWrapper.classList.add('single-condition-wrapper');
+        
+        let removeConditionLevel = document.createElement('a')
+        removeConditionLevel.innerHTML = 'X';
+        removeConditionLevel.onclick = function () {
+            alert('kliknuo si')
+        }
+        removeConditionLevel.classList.add('remove-condition-level');
+        removeConditionLevel.classList.add('center');
+        removeConditionLevel.classList.add('button-link');
+        singleConditonWrapper.appendChild(removeConditionLevel);
+        
+        singleConditonWrapper.innerHTML += `<div>${data.LevelOutcome.name} : ${data.CountTypeList.name} ${data.Operator.name} ${data.Value}</div>`
+
+
+
+
+
+        conditionsWrapper.appendChild(singleConditonWrapper);
+
+    }
+
     function createLevel(id) {
         let levelArray = []
 
         let inputWrapper = $$(`#${id}`);
-        let levelExistWrapper = inputWrapper.parentNode.getElementsByClassName('jackpot-level-exist-wrapper')[0]
+        let levelExistWrapper = inputWrapper.parentNode.getElementsByClassName('jackpot-level-exist-wrapper')[0];
 
         for (let level of levelExistWrapper.children) {
             levelArray.push(level.settings)
@@ -164,7 +203,7 @@ const jackpotGrowthpattern = (function () {
                 }
             }
             let str;
-            data.CountTypeList ? str = data.CountTypeList.name : str = "SUM"
+            data.CountTypeList ? str = data.CountTypeList.name : str = $$(`.element-jackpot-condition-text-${jackpotGrowsDiscreetlyRadioButtonsWrapper.settings.radioName}`)[0].innerHTML;
             let levelWrapper = document.createElement('div');
             levelWrapper.settings = data;
             levelWrapper.innerHTML = `<div>
@@ -215,6 +254,9 @@ const jackpotGrowthpattern = (function () {
 
     for (let radio of jackpotGrowsPatternCustomRadio) {
         radio.onclick = function () {
+            jackpotGrowsDiscreetlyRadioButtonsWrapper.settings = {
+                'radioName': radio.dataset.name
+            }
             for (let content of $$(".jackpot-grows-discreetly-type-contents")) {
                 content.classList.add('hidden');
 
@@ -261,6 +303,14 @@ const jackpotGrowthpattern = (function () {
                         growsPatternTabs.classList.remove('border-bottom');
 
                     } else {
+                        if (!$$('#table-container-jackpots').getElementsByClassName('table-element-no-data')[0].classList.contains('hidden')) {
+                            for (let radio of $$('#jackpot-grows-discreetly-radio-buttons').children) {
+                                if (radio.dataset.name === 'rain') {
+                                    radio.classList.add('hidden')
+                                }
+                            }
+                        }
+
                         tab.classList.add('pattern-active');
                         tab.classList.remove('pattern-not-active');
                         growsPatternTabs.classList.add('border-bottom');

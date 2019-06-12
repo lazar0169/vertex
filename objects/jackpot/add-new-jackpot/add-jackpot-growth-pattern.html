@@ -123,27 +123,27 @@
                         <div>After reaching the maximum value</div>
                     </div>
                 </div>
-                <div>ovde ide deo sa dijagramom</div>
+                <div id="jackpot-growth-pattern-grows-by-bet-chart"></div>
             </div>
         </div>
 
         <div id="jackpot-grows-discreetly" class="hidden jackpot-pattern-tab-content">
             <div id="jackpot-grows-discreetly-radio-buttons" class="">
-                <div class='border-bottom'>
+                <div class='border-bottom' data-name="rain">
                     <label class="form-radio" data-value="1">
                         <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
                         <i class="form-icon"></i>
                         <div>Rain</div>
                     </label>
                 </div>
-                <div class='border-bottom'>
+                <div class='border-bottom' data-name="tournament">
                     <label class="form-radio" data-value="2">
                         <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
                         <i class="form-icon"></i>
                         <div>Tournament</div>
                     </label>
                 </div>
-                <div class=''>
+                <div class='' data-name="custom">
                     <label class="form-radio" data-value="3">
                         <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
                         <i class="form-icon"></i>
@@ -172,7 +172,8 @@
                             <!-- <div class="element-multilanguage" data-translation-key="LevelOutcome"></div> -->
                             <div></div>
                         </div>
-                        <div class="center element-multilanguage" data-translation-key="SUM"></div>
+                        <div class="center element-multilanguage element-jackpot-condition-text-rain"
+                            data-translation-key="Count" data-value="COUNT"></div>
                         <div id="rain-dropdown-operators">
                             <!-- <div class="element-multilanguage" data-translation-key="Operators"></div> -->
                             <div></div>
@@ -227,7 +228,8 @@
                             <div></div>
                             <!-- <div class="element-multilanguage" data-translation-key="LevelOutcome"></div> -->
                         </div>
-                        <div class="center element-multilanguage" data-translation-key="SUM"></div>
+                        <div class="center element-multilanguage element-jackpot-condition-text-tournament"
+                            data-translation-key="SUM" data-value="SUM"></div>
                         <div id="tournament-dropdown-operators">
                             <div></div>
                             <!-- <div class="element-multilanguage" data-translation-key="Operators"></div> -->
@@ -298,12 +300,15 @@
                                 type="text" placeholder="Value">
                         </div>
 
-                        <div id="custom-add-level-button" class="center">
-                            <button class="secundarybutton element-multilanguage" data-translation-key="AddLevel"
-                                data-value="custom-input-wrapper"></button>
-                            <button class="secundarybutton element-multilanguage hidden"
-                                data-translation-key="EditLevel" data-value="custom-input-wrapper"></button>
+                        <div id="custom-add-level-condition-button" class="center">
+                            <button class="secundarybutton element-multilanguage" data-translation-key="AddCondition"
+                                data-value="custom-level-conditions-wrapper"></button>
+
                         </div>
+                    </div>
+
+                    <div id="custom-level-conditions-wrapper">
+
                     </div>
 
                     <div id="custom-radio-buttons" class="">
@@ -311,14 +316,21 @@
                             <input type="radio" data-type="radio" name="CustomConditions"
                                 class="form-input element-form-data" checked>
                             <i class="form-icon"></i>
-                            <div>Only one contion is required</div>
+                            <div class="element-multilanguage" data-translation-key="OnlyOneConditionIsRequired"></div>
                         </label>
                         <label class="form-radio" data-value="0">
                             <input type="radio" data-type="radio" name="CustomConditions"
                                 class="form-input element-form-data">
                             <i class="form-icon"></i>
-                            <div>All conditions must be met</div>
+                            <div class="element-multilanguage" data-translation-key="AllConditionsMustBeMet"></div>
                         </label>
+                    </div>
+
+                    <div id="custom-add-level-button" class="center">
+                        <button class="secundarybutton element-multilanguage" data-translation-key="AddLevel"
+                            data-value="custom-input-wrapper"></button>
+                        <button class="secundarybutton element-multilanguage hidden" data-translation-key="EditLevel"
+                            data-value="custom-input-wrapper"></button>
                     </div>
 
                     <div id="custom-jackpot-exist-wrapper" class="jackpot-level-exist-wrapper">

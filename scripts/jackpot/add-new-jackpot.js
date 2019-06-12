@@ -67,7 +67,6 @@ const addNewJackpot = (function () {
     });
 
     on('jackpot/get-add-jackpot', function (params) {
-        console.log(params);
         fillAdvanceSettings(params);
     });
 
@@ -83,22 +82,24 @@ const addNewJackpot = (function () {
         let ddRainLevelOutcome = $$("#rain-dropdown-level-outcome");
         let ddCustomLevelOutcome = $$("#custom-dropdown-level-outcome");
         let ddCustomCountTypeList = $$("#custom-dropdown-level-count-type-list");
-
+        let ddTournamentOperators = $$('#tournament-dropdown-operators');
+        let ddRainOperators = $$('#rain-dropdown-operators');
+        let ddCustomOperators = $$('#custom-dropdown-operators')
+        console.log(data)
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single' });
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateStopGrow, type: 'single' });
         dropdown.generate({ values: data.JackpotList, parent: ddHideWithGrow, type: 'single' });
         dropdown.generate({ values: data.JackpotList, parent: ddHideStopGrow, type: 'single' });
         dropdown.generate({ values: data.NewJackpotStateList, parent: ddNewJackpots, type: 'single' });
         dropdown.generate({ values: data.MinMaxState, parent: ddAfterReachingMax });
-        dropdown.generate({ values: data.CounterList, parent: ddTournamentLevelOutcome, name: "LevelOutcome" });
-        dropdown.generate({ values: data.CounterList, parent: ddRainLevelOutcome, name: "LevelOutcome" });
-        dropdown.generate({ values: data.CounterList, parent: ddCustomLevelOutcome, name: "LevelOutcome" });
-        dropdown.generate({ values: data.CountTypeList, parent: ddCustomCountTypeList, name: "CountTypeList" });
+        dropdown.generate({ values: data.CounterLevelList, parent: ddTournamentLevelOutcome, name: "LevelOutcome" });
+        dropdown.generate({ values: data.JackpotList, parent: ddRainLevelOutcome, name: "LevelOutcome" });
+        dropdown.generate({ values: data.CounterLevelList, parent: ddCustomLevelOutcome, name: "LevelOutcome" });
+        dropdown.generate({ values: data.CountTypeLevelList, parent: ddCustomCountTypeList, name: "CountTypeList" });
 
+        dropdown.generate({ values: data.OperatorLevelList, parent: ddTournamentOperators, name: "Operator" });
+        dropdown.generate({ values: data.OperatorLevelList, parent: ddRainOperators, name: "Operator" });
+        dropdown.generate({ values: data.OperatorLevelList, parent: ddCustomOperators, name: "Operator" });
 
-
-
-
-        console.log(data);
     }
 })();

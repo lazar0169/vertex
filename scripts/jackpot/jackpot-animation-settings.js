@@ -1,6 +1,6 @@
 const jackpotanimationSettings = (function () {
     let jackpotAnimationSettingsContent = $$('#jackpot-animation-settings-wrapper')
-    let jackpotanimationGeneralCheckbox = $$('.jackpot-animation-general-checkbox');
+    let jackpotAnimationGeneralCheckbox = $$('.jackpot-animation-general-checkbox');
     let jackpotanimationWinCheckbox = $$('.jackpot-animation-win-checkbox');
     let jackpotanimationGeneralSettingsHousing = $$('#jackpot-animation-general-settings-housing');
     let infoLineWrapper = $$("#jackpot-animation-general-settings-infoline-text");
@@ -35,7 +35,7 @@ const jackpotanimationSettings = (function () {
         });
     });
 
-    for (let check of jackpotanimationGeneralCheckbox) {
+    for (let check of jackpotAnimationGeneralCheckbox) {
         let data = {}
         data.checkbox = check;
         data.isChecked = false;
@@ -47,7 +47,7 @@ const jackpotanimationSettings = (function () {
                 return;
             }
             drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
-            for (let isChecked of jackpotanimationGeneralCheckbox) {
+            for (let isChecked of jackpotAnimationGeneralCheckbox) {
                 if (checkboxChangeState.getCheckboxState(isChecked)) {
                     callDrawJackpotLabelOnGeneralCheck(isChecked.dataset.name);
                 }
@@ -96,7 +96,7 @@ const jackpotanimationSettings = (function () {
 
         animationBackgroundPicture.onload = function () {
             drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
-            for (let check of jackpotanimationGeneralCheckbox) {
+            for (let check of jackpotAnimationGeneralCheckbox) {
                 for (let checkName of Object.keys(data)) {
                     if (checkName === check.dataset.name) {
                         checkboxChangeState.checkboxIsChecked(check.getElementsByClassName('form-checkbox')[0].children[0], params.data.Data[checkName]);
