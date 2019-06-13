@@ -28,7 +28,8 @@ const jackpotGrowthpattern = (function () {
 
     let addLevelDiscreetlyConditionButton = $$('#custom-add-level-condition-button').children[0];
     addLevelDiscreetlyConditionButton.onclick = function (e) {
-        addConditionLevel(e.target.dataset.value, e.target)
+        addConditionLevel(e.target.dataset.value, e.target);
+        clearInputsFields(e.target.parentNode.parentNode.parentNode);
     }
 
     let addLevelDiscreetlyTournamentButton = $$('#tournament-add-level-button').children[0];
@@ -126,6 +127,7 @@ const jackpotGrowthpattern = (function () {
             inputWrapper = id;
         }
         let data = {};
+        // if(inputWrapper === $$('#'))
         for (let input of inputWrapper.getElementsByClassName('element-form-data')) {
             switch (input.dataset.type) {
                 case 'single-select':
@@ -153,7 +155,9 @@ const jackpotGrowthpattern = (function () {
 
         let singleConditonWrapper = document.createElement('div');
         singleConditonWrapper.classList.add('single-condition-wrapper');
-        
+
+        singleConditonWrapper.settings = data;
+
         let removeConditionLevel = document.createElement('a')
         removeConditionLevel.innerHTML = 'X';
         removeConditionLevel.onclick = function () {
@@ -163,12 +167,8 @@ const jackpotGrowthpattern = (function () {
         removeConditionLevel.classList.add('center');
         removeConditionLevel.classList.add('button-link');
         singleConditonWrapper.appendChild(removeConditionLevel);
-        
+
         singleConditonWrapper.innerHTML += `<div>${data.LevelOutcome.name} : ${data.CountTypeList.name} ${data.Operator.name} ${data.Value}</div>`
-
-
-
-
 
         conditionsWrapper.appendChild(singleConditonWrapper);
 
