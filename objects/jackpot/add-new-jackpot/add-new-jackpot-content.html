@@ -1,33 +1,52 @@
 <div>
     <div id="add-new-jackpot-content-header" class="element-multilanguage" data-translation-key="AddNewJackpot"></div>
+    <div id="add-new-jackpot-content-inputs-wrapper">
+        <div id="add-new-jackpot-content-inputs">
+            <div>
+                <label>&numero;</label>
+                <input name="OrdinalNumber" class="form-input element-form-data" data-type="int" type="text"
+                    placeholder="&numero;">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="Name">Name:</label>
+                <input required name="Title" class="form-input element-form-data" data-type="string" type="text"
+                    placeholder="Name">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="Handpay">Handpay:</label>
+                <input validNumber name="Handpay" class="form-input element-form-data" data-type="float" type="text"
+                    placeholder="Handpay">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="StartValue">Start value:</label>
+                <input validNumber name="StartValue" class="form-input element-form-data" data-type="float" type="text"
+                    placeholder="StartValue">
+            </div>
+            <div>
+                <label class="element-multilanguage" data-translation-key="BottomLabelText">Bottom label text:</label>
+                <input required name="BottomLabelInfo" class="form-input element-form-data" data-type="string"
+                    type="text" placeholder="Bottom label text">
+            </div>
+        </div>
 
-    <div id="add-new-jackpot-content-inputs">
-        <div>
-            <label>&numero;</label>
-            <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
-                placeholder="&numero;">
+        <div id="add-new-jackpot-content-inputs-radio">
+            <label class="form-label element-multilanguage" data-translation-key="ChooseType" for="">ChooseType</label>
+            <label class="form-radio" data-value="0">
+                <input type="radio" name="choose-type-jackpot" class="form-input element-form-data" checked>
+                <i class="form-icon"></i>
+                <div class="element-multilanguage" data-translation-key="Random"></div>
+            </label>
+            <label class="form-radio" data-value="1">
+                <input type="radio" name="choose-type-jackpot" class="form-input element-form-data">
+                <i class="form-icon"></i>
+                <div class="element-multilanguage" data-translation-key="WithoutRepeating"></div>
+            </label>
+            <label class="form-radio" data-value="2">
+                <input type="radio" name="choose-type-jackpot" class="form-input element-form-data">
+                <i class="form-icon"></i>
+                <div class="element-multilanguage" data-translation-key="ByBet"></div>
+            </label>
         </div>
-        <div>
-            <label class="element-multilanguage" data-translation-key="Name">Name:</label>
-            <input name="rednibroj2" class="form-input element-form-data" data-type="string" type="text"
-                placeholder="Name">
-        </div>
-        <div>
-            <label class="element-multilanguage" data-translation-key="Handpay">Handpay:</label>
-            <input name="rednibroj3" class="form-input element-form-data" data-type="string" type="text"
-                placeholder="Handpay">
-        </div>
-        <div>
-            <label class="element-multilanguage" data-translation-key="StartValue">Start value:</label>
-            <input name="rednibroj4" class="form-input element-form-data" data-type="string" type="text"
-                placeholder="StartValue">
-        </div>
-        <div>
-            <label class="element-multilanguage" data-translation-key="BottomLabelText">Bottom label text:</label>
-            <input name="rednibroj5" class="form-input element-form-data" data-type="string" type="text"
-                placeholder="Bottom label text">
-        </div>
-
     </div>
 
     <object data-object="add-jackpot-growth-pattern"></object>
@@ -39,7 +58,7 @@
     <div id="add-new-jackpot-content-buttons-wrapper">
         <div class="button-wrapper">
             <a class="button-link">Clear all</a>
-            <button class="secundarybutton">SAVE</button>
+            <button class="secundarybutton" data-value="add-new-jackpot-content-inputs">SAVE</button>
         </div>
     </div>
 </div>

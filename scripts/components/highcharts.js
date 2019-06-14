@@ -32,6 +32,9 @@ const highchart = (function () {
         svg.setAttributeNS(null, 'width', '600px');
         svg.setAttributeNS(null, 'height', '300px');
         svg.setAttributeNS(null, 'transform', 'scale(1,-1)')
+        if (data.name) {
+            svg.dataset.name = data.name;
+        }
         let horizontalSpace = 600 / numOfDotsX;
         let verticalSpace = 300 / numOfDotsY;
         let mouseDown;

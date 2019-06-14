@@ -5,8 +5,27 @@ const addNewJackpot = (function () {
     let saveNewJackpot = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[1];
     let clearAllFields = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[0];
 
-    saveNewJackpot.addEventListener('click', function () {
-        alert('Save new Jackpot');
+    checkboxChangeState.radioClick($$('#add-new-jackpot-content-inputs-radio'));
+
+    for (let input of $$('#add-new-jackpot-content-inputs').getElementsByTagName('input')) {
+        validation.init(input, {});
+        if (input.dataset.type === 'float') {
+            currencyInput.generate(input, {});
+        }
+    }
+
+    saveNewJackpot.addEventListener('click', function (e) {
+        if (checkValidationField($$(`#${e.target.dataset.value}`))) {
+            if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) || checkboxChangeState.getSwitchState($$("#jackpot-control-active-time-toggle").parentNode)) {
+                alert("save new jackpot");
+            }
+            else {
+                trigger('notifications/show', {
+                    message: localization.translateMessage('nisu aktivni ni growth ni active time'),
+                    type: notifications.messageTypes.error,
+                });
+            }
+        }
     });
 
     clearAllFields.addEventListener('click', function () {
@@ -79,27 +98,48 @@ const addNewJackpot = (function () {
         let ddNewJackpots = $$('#advance-settings-next-jackpots');
         let ddAfterReachingMax = $$('#jackpot-growth-pattern-after-reaching-max');
         let ddTournamentLevelOutcome = $$('#tournament-dropdown-level-outcome');
-        let ddRainLevelOutcome = $$("#rain-dropdown-level-outcome");
+        let ddRainJackpot = $$("#rain-dropdown-jackpot");
         let ddCustomLevelOutcome = $$("#custom-dropdown-level-outcome");
         let ddCustomCountTypeList = $$("#custom-dropdown-level-count-type-list");
         let ddTournamentOperators = $$('#tournament-dropdown-operators');
         let ddRainOperators = $$('#rain-dropdown-operators');
-        let ddCustomOperators = $$('#custom-dropdown-operators')
-        console.log(data)
-        dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single' });
-        dropdown.generate({ values: data.JackpotList, parent: ddDeactivateStopGrow, type: 'single' });
-        dropdown.generate({ values: data.JackpotList, parent: ddHideWithGrow, type: 'single' });
-        dropdown.generate({ values: data.JackpotList, parent: ddHideStopGrow, type: 'single' });
-        dropdown.generate({ values: data.NewJackpotStateList, parent: ddNewJackpots, type: 'single' });
-        dropdown.generate({ values: data.MinMaxState, parent: ddAfterReachingMax });
-        dropdown.generate({ values: data.CounterLevelList, parent: ddTournamentLevelOutcome, name: "LevelOutcome" });
-        dropdown.generate({ values: data.JackpotList, parent: ddRainLevelOutcome, name: "LevelOutcome" });
-        dropdown.generate({ values: data.CounterLevelList, parent: ddCustomLevelOutcome, name: "LevelOutcome" });
-        dropdown.generate({ values: data.CountTypeLevelList, parent: ddCustomCountTypeList, name: "CountTypeList" });
+        let ddCustomOperators = $$('#custom-dropdown-operators');
+        let ddTournamentJackpot = $$("#tournament-dropdown-jackpot");
+        let ddCustomJackpot = $$("#custom-dropdown-jackpot")
 
+        dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single', name: 'SelectedBlockJackpotDisableWithLoadingIds' });
+        dropdown.generate({ values: data.JackpotList, parent: ddDeactivateStopGrow, type: 'single', name: 'SelectedBlockJackpotDisableWithoutLoadingIds' });
+        dropdown.generate({ values: data.JackpotList, parent: ddHideWithGrow, type: 'single', name: 'SelectedBlockJackpotHIdeWithLoadingIds' });
+        dropdown.generate({ values: data.JackpotList, parent: ddHideStopGrow, type: 'single', name: 'SelectedBlockJackpotHIdeWithoutLoadingIds' });
+        dropdown.generate({ values: data.NewJackpotStateList, parent: ddNewJackpots, type: 'single', name: 'NewJackpotOptionId' });
+        dropdown.generate({ values: data.MinMaxState, parent: ddAfterReachingMax, name: 'MinMaxStateId' });
+        dropdown.generate({ values: data.JackpotList, parent: ddRainJackpot, name: "JackpotList" });
+
+        dropdown.generate({ values: data.CounterLevelList, parent: ddTournamentLevelOutcome, name: "LevelOutcome" });
+        bindOptionsGroup(ddTournamentLevelOutcome);
+
+        dropdown.generate({ values: data.CounterLevelList, parent: ddCustomLevelOutcome, name: "LevelOutcome" });
+        bindOptionsGroup(ddCustomLevelOutcome);
+
+        dropdown.generate({ values: data.CountTypeLevelList, parent: ddCustomCountTypeList, name: "CountTypeList" });
+        dropdown.generate({ values: data.JackpotList, parent: ddTournamentJackpot, name: "JackpotList" });
+        dropdown.generate({ values: data.JackpotList, parent: ddCustomJackpot, name: "JackpotList" });
         dropdown.generate({ values: data.OperatorLevelList, parent: ddTournamentOperators, name: "Operator" });
         dropdown.generate({ values: data.OperatorLevelList, parent: ddRainOperators, name: "Operator" });
         dropdown.generate({ values: data.OperatorLevelList, parent: ddCustomOperators, name: "Operator" });
 
     }
+
+    function bindOptionsGroup(dropdown) {
+        for (let option of dropdown.children[1].children[1].children) {
+            option.addEventListener('click', function () {
+                if (option.dataset.id === '2') {
+                    $$(`#${dropdown.dataset.value}`).classList.remove('not-clickable');
+                } else {
+                    $$(`#${dropdown.dataset.value}`).classList.add('not-clickable');
+                }
+            });
+        }
+    }
+
 })();

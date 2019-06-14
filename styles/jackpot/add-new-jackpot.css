@@ -31,6 +31,11 @@
     display: flex;
     flex-flow: row wrap;
     white-space: nowrap;
+    align-items: center;
+}
+
+#add-new-jackpot-content-inputs-wrapper {
+    display: flex
 }
 
 #add-new-jackpot-content-inputs>div:not(:first-child) {
@@ -233,7 +238,8 @@
     padding-right: 0.5em;
 }
 
-.discreetly-tab-content .default-select>div:first-child {
+.discreetly-tab-content .default-select>div:first-child,
+#tournament-dropdown-jackpot .default-select>div:first-child {
     width: 150px
 }
 
@@ -298,4 +304,18 @@
 
 .single-condition-wrapper:hover {
     color: white;
+}
+
+#add-new-jackpot-content-inputs-radio {
+    padding: 0 0.5em;
+}
+
+#tournament-dropdown-jackpot-wrapper {
+    display: flex;
+}
+
+.not-clickable .default-select {
+    pointer-events: none;
+    background: rgb(55, 71, 79);
+
 }

@@ -108,3 +108,14 @@ function dimissPopUp(target) {
         popup.parentNode.removeChild(popup);
     }
 }
+
+function checkValidationField(wrapper) {
+    let inputElements = wrapper.getElementsByClassName('element-form-data')
+    let valid = true;
+    for (let input of inputElements) {
+        if (input.vertexValidation !== undefined) {
+            valid = input.vertexValidation.validate() && valid;
+        }
+    }
+    return valid;
+}
