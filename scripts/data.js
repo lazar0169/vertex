@@ -341,3 +341,38 @@ let operatorAndMinMaxEnum = [
         Id: 7
     }
 ]
+
+let daysInWeek = [
+    {
+        Name: "AllDays",
+        Id: 0
+    },
+    {
+        Name: "Monday",
+        Id: 1
+    },
+    {
+        Name: "Tuesday",
+        Id: 2
+    },
+    {
+        Name: "Wednesday",
+        Id: 3
+    },
+    {
+        Name: "Thursday",
+        Id: 4
+    },
+    {
+        Name: "Friday",
+        Id: 5
+    },
+    {
+        Name: "Saturday",
+        Id: 6
+    },
+    {
+        Name: "Sunday",
+        Id: 7
+    }
+]

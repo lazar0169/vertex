@@ -1,4 +1,5 @@
-<div id="add-new-jackpot-content-control-active-time" class="add-new-jackpot-control-settings">
+<div id="add-new-jackpot-content-control-active-time" class="add-new-jackpot-control-settings"
+    data-name="ControlActiveTime">
     <div>
         <figure class="element-form-check vertex-form-checkbox">
             <div id="jackpot-control-active-time-toggle" class="element-form-mode checkbox-label"></div>
@@ -16,9 +17,131 @@
         </div>
     </div>
     <div class="hidden">
-        <div id='dijagram'>
+        <div class="add-new-jackpot-time-interval-conditions-and-settings">
+            <div class="element-multilanguage header-element"
+                data-translation-key="ChooseTimeIntervalAndMachineCondition">
+
+            </div>
+            <div class="display-flex">
+                <div id="add-new-jackpot-time-interval-wrapper">
+                    <div class="element-multilanguage" data-translation-key="Time"></div>
+                    <div id="add-new-jackpot-time-interval-dropdown">
+                        <div class="center">00:00 - 00:00</div>
+                        <div class="hidden">
+                            <div id="add-new-jackpot-time-interval-dropdown-days" class="center">
+                                <div></div>
+                            </div>
+                            <div class="choose-date-time">
+                                <div data-translation-key="TimeFrom">Time from:</div>
+                                <div class="timepicker"></div>
+                            </div>
+                            <div class="choose-date-time">
+                                <div data-translation-key="TimeTo">Time to:</div>
+                                <div class="timepicker"></div>
+                            </div>
+                            <div id="add-new-jackpot-jackpot-time-interval-dropdown-buttons" class="button-wrapper">
+                                <button class="secundarybutton element-multilanguage"
+                                    data-translation-key="Apply"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="add-new-jackpot-time-interval-chart">
+
+                </div>
+            </div>
+
+            <div id="add-new-jackpot-time-interval-include-conditions-dropdown">
+                <div></div>
+            </div>
 
 
+            <div id="add-new-jackpot-time-interval-include-conditions-wrapper" class="icon-Machines">
+                <label class="element-multilanguage" data-translation-key="ActivateWhenTheNumberOfActiveMachines"
+                    for="jackpot-condition-time-duration"></label>
+                <input name="imeInputa" class="form-input element-form-data input-number-right" data-type="int"
+                    type="text" id="jackpot-condition-number-of-machines" placeholder="" validNumber data-value="">
+
+                <label class="element-multilanguage" data-translation-key="Duration"
+                    for="jackpot-condition-time-duration"></label>
+                <input name="imeInputa" class="form-input element-form-data input-number-right" data-type="string"
+                    type="text" id="jackpot-condition-time-duration" placeholder="" data-value="">
+
+                <label class="element-multilanguage" data-translation-key="MaximumNumberOfJackpotActivations"
+                    for="jackpot-condition-maximum-number-of-jackpot-activations"></label>
+                <input name="imeInputa" class="form-input element-form-data input-number-right" data-type="int"
+                    type="text" id="jackpot-condition-maximum-number-of-jackpot-activations" placeholder="" validNumber
+                    data-value="">
+            </div>
+        </div>
+        <div class="add-new-jackpot-time-interval-conditions-and-settings">
+            <div class="element-multilanguage header-element" data-translation-key="ConditionsForWinningJackpot"></div>
+            <div id="add-new-jackpot-time-interval-winning-conditions">
+                <label class="form-radio" data-value="0">
+                    <input type="radio" name="choose-jackpot-winning-conditions" class="form-input" checked="">
+                    <i class="form-icon"></i>
+                    <div class="element-multilanguage" data-translation-key="MoreThanOneJackpotInTheInterval"></div>
+                </label>
+                <label class="form-radio" data-value="1">
+                    <input type="radio" name="choose-jackpot-winning-conditions" class="form-input">
+                    <i class="form-icon"></i>
+                    <div class="element-multilanguage" data-translation-key="JackpotAtTheEndOfInterval"></div>
+                </label>
+            </div>
+
+        </div>
+        <div class="add-new-jackpot-time-interval-conditions-and-settings">
+            <div class="element-multilanguage header-element" data-translation-key="SettingsWhenJackpotActive"></div>
+            <div class="display-flex">
+                <span class="icon-Malfunctions center"></span>
+                <div class="element-multilanguage" data-translation-key="Settings"></div>
+            </div>
+
+            <div class="display-flex">
+                <div class="width-50 jackpot-control-active-time-settings">
+                    <div id="add-new-jackpot-control-active-time-settings-jackpot-active-background-checkbox">
+                        <label class="form-checkbox">
+                            <input type="checkbox">
+                            <i class="form-icon"></i>
+                            <div class="element-multilanguage"
+                                data-translation-key="ChangeTheBackgroundOfTheAnimationWhenTheJackpotIsActive"></div>
+                        </label>
+                    </div>
+                    <div class="display-flex">
+                        <div id="add-new-jackpot-control-active-time-settings-jackpot-active-background-dropdown">
+                            <div></div>
+                        </div>
+                        <div id="add-new-jackpot-control-active-time-settings-jackpot-active-background-buttons"
+                            class="center">
+                            <a class="button-link element-multilanguage" data-translation-key="ViewBackground"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="width-50 jackpot-control-active-time-settings">
+                    <div>
+                        <div
+                            id="add-new-jackpot-control-active-time-settings-jackpot-active-after-jackpot-win-dropdown">
+                            <div class="element-multilanguage" data-translation-key="AfterTheJackpotWin"></div>
+                        </div>
+                    </div>
+                    <div id="add-new-jackpot-control-active-time-settings-jackpot-active-adding-values-checkbox">
+                        <label class="form-checkbox">
+                            <input type="checkbox">
+                            <i class="form-icon"></i>
+                            <div class="element-multilanguage" data-translation-key="AddingValuesToTheNextInterval">
+                            </div>
+                        </label>
+                    </div>
+                    <div>
+                        <div
+                            id="add-new-jackpot-control-active-time-settings-jackpot-active-more-jackpot-winners-dropdown">
+                            <div class="element-multilanguage" data-translation-key="MoreJackpotWinners"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

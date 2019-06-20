@@ -43,7 +43,7 @@
 }
 
 .add-new-jackpot-control-settings {
-    border-bottom: 1px solid #33454d;
+    border-bottom: 3px solid #33454d;
     padding: 0.5em 0;
 }
 
@@ -135,7 +135,7 @@
 }
 
 #jackpot-grows-automatically-content>div:first-child .form-input,
-#jackopot-grow-pattern-value-limit>div:first-child .form-input,
+#jackpot-grow-pattern-value-limit>div:first-child .form-input,
 #jackpot-grows-by-bet .form-input,
 .discreetly-tab-content .form-input {
     width: 450px;
@@ -151,7 +151,7 @@
     grid-column: 1 / span 2;
 }
 
-#jackopot-grow-pattern-value-limit {
+#jackpot-grow-pattern-value-limit {
     grid-column: 1/span 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -317,5 +317,79 @@
 .not-clickable .default-select {
     pointer-events: none;
     background: rgb(55, 71, 79);
+}
 
+.add-new-jackpot-time-interval-conditions-and-settings>.header-element {
+    border-bottom: 1px solid #33454d;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.add-new-jackpot-time-interval-conditions-and-settings>div {
+    padding: 0.5em
+}
+
+#add-new-jackpot-time-interval-dropdown {
+    position: relative;
+
+}
+
+#add-new-jackpot-time-interval-dropdown>div:first-child {
+    background: rgb(55, 71, 79);
+    width: 250px;
+    cursor: pointer;
+}
+
+#add-new-jackpot-time-interval-dropdown>div:not(:first-child) {
+    position: absolute;
+    border: 1px solid rgb(55, 71, 79);
+
+}
+
+#add-new-jackpot-time-interval-dropdown>div:not(:first-child)>div:not(:last-child) {
+    padding: 0.5em 0.5em 0 0.5em;
+}
+
+#add-new-jackpot-time-interval-dropdown>div:not(:first-child)>div:last-child {
+    padding: 0.5em;
+}
+
+#add-new-jackpot-time-interval-wrapper {
+    width: 40%;
+}
+
+#add-new-jackpot-time-interval-dropdown-days .default-select>div:first-child:hover {
+    background: rgb(55, 71, 79);
+}
+
+#add-new-jackpot-jackpot-time-interval-dropdown-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#add-new-jackpot-time-interval-include-conditions-dropdown {
+    position: relative;
+    background: transparent;
+    display: flex;
+}
+
+#add-new-jackpot-time-interval-include-conditions-dropdown:after {
+    position: absolute;
+    content: "";
+    height: 1px;
+    background-color: #33454d;
+    width: 99%;
+    top: 50%;
+}
+
+#add-new-jackpot-time-interval-include-conditions-dropdown>.default-select {
+    z-index: 1;
+}
+
+#add-new-jackpot-time-interval-include-conditions-wrapper input {
+    width: 350px
+}
+
+.add-new-jackpot-time-interval-conditions-and-settings .jackpot-control-active-time-settings>div {
+    padding: 0 0.5em 0.5em 0.5em;
 }

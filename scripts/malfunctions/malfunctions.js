@@ -49,6 +49,7 @@ const malfunctions = (function () {
     on(events.previewMalfunctions, function (params) {
         let data = params.data.Data;
         $$(`#${malfunctionsTableId}`).update(data);
+        trigger('preloader/hide');
     });
 
     on(events.showChangeStateMalfunctionMessage, function (params) {
@@ -174,6 +175,7 @@ const malfunctions = (function () {
     });
     //get preview malfunctions
     on(communication.events.malfunctions.previewMalfunctions, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.malfunctions.previewMalfunctions;
         let request = communication.requestTypes.post;
         let data = params.data;

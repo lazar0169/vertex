@@ -1,4 +1,4 @@
-<div id="add-new-jackpot-content-limit-settings" class='add-new-jackpot-control-settings'>
+<div id="add-new-jackpot-content-limit-settings" class='add-new-jackpot-control-settings' data-name="BetAndWinLimit">
     <div>
         <figure class="element-form-check vertex-form-checkbox">
             <div id="jackpot-content-limit-settings-toggle" class="element-form-mode checkbox-label"></div>
@@ -28,34 +28,34 @@
         <div class="grid-3-columns border-bottom-bet-limits">
             <div>Slow</div>
             <div class="center">
-                <input name="MinBetForPayoutSlow" class="form-input element-form-data" data-type="string" type="text"
-                    placeholder="Min">
+                <input validNumber name="MinBetForPayoutSlow" class="form-input element-form-data" data-type="float"
+                    type="text" placeholder="Min">
             </div>
             <div class="center">
-                <input name="MaxBetForPayoutSlow" class="form-input element-form-data" data-type="string" type="text"
-                    placeholder="Max">
+                <input validNumber name="MaxBetForPayoutSlow" class="form-input element-form-data" data-type="float"
+                    type="text" placeholder="Max">
             </div>
         </div>
         <div class="grid-3-columns border-bottom-bet-limits">
             <div>Medium</div>
             <div class="center">
-                <input name="MinBetForPayoutMedium" class="form-input element-form-data" data-type="string" type="text"
-                    placeholder="Min">
+                <input validNumber name="MinBetForPayoutMedium" class="form-input element-form-data" data-type="float"
+                    type="text" placeholder="Min">
             </div>
             <div class="center">
-                <input name="MaxBetForPayoutMedium" class="form-input element-form-data" data-type="string" type="text"
-                    placeholder="Max">
+                <input validNumber name="MaxBetForPayoutMedium" class="form-input element-form-data" data-type="float"
+                    type="text" placeholder="Max">
             </div>
         </div>
         <div class="grid-3-columns">
             <div>Fast</div>
             <div class="center">
-                <input name="MinBetForPayoutFast" class="form-input element-form-data" data-type="string" type="text"
-                    placeholder="Min">
+                <input validNumber name="MinBetForPayoutFast" class="form-input element-form-data" data-type="float"
+                    type="text" placeholder="Min">
             </div>
             <div class="center">
-                <input name="MaxBetForPayoutFast" class="form-input element-form-data" data-type="string" type="text"
-                    placeholder="Max">
+                <input validNumber name="MaxBetForPayoutFast" class="form-input element-form-data" data-type="float"
+                    type="text" placeholder="Max">
             </div>
         </div>
     </div>

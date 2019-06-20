@@ -11,7 +11,8 @@ const jackpots = (function () {
         getJackpotHistory: 'jackpot/get-jackpot-history',
         getEvents: 'jackpot/get-jackpot-events',
         previewEvents: 'jackpot/preview-jackpot-events',
-        getJackpotAnimtionSettings: 'jackpot/get-jackpot-animation-settings'
+        getJackpotAnimationSettings: 'jackpot/get-jackpot-animation-settings',
+        saveJackpot: 'jackpot/save-jackpot'
     };
 
     on(events.activated, function (params) {
@@ -26,7 +27,7 @@ const jackpots = (function () {
         selectInfoContent('jackpot-tab');
         trigger(communication.events.jackpots.getFilters, { data, EntryData });
         trigger('jackpot/tab/notification-settings', { endpointId: jackpotId });
-        trigger(events.getJackpotAnimtionSettings)
+        trigger(events.getJackpotAnimationSettings)
     });
 
     function getEndpointId() {
@@ -60,6 +61,8 @@ const jackpots = (function () {
         },
             data);
         $$('#jackpot-tab-info').appendChild(jackpotsTable);
+
+        $$('#add-new-jackpot-wrapper').settings = data.ItemValue;
         trigger('preloader/hide');
     });
 
@@ -460,16 +463,17 @@ const jackpots = (function () {
     //save jackpot settings
     on(communication.events.jackpots.saveJackpot, function (params) {
         let route = communication.apiRoutes.jackpots.saveJackpot;
-        let data = params.data;
+        let data = params.EntryData;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.saveJackpot;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EntryData.EndpointId
         });
     });
 

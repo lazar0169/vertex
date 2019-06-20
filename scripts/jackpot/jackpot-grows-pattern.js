@@ -10,25 +10,25 @@ const jackpotGrowthpattern = (function () {
     let jackpotGrowsPatternCustomRadio = jackpotGrowsDiscreetlyRadioButtonsWrapper.children;
     let jackpotGrowsCustomRadioButtonsWrapper = $$("#custom-radio-buttons");
 
-    highchart.drawHighchart({ parent: $$('#dijagram'), dotsX: 10, dotsY: 10, name: 'LinearFunction' });
+
     highchart.drawHighchart({ parent: $$('#jackpot-growth-pattern-grows-by-bet-chart'), dotsX: 10, dotsY: 10, name: 'MinMaxFunction' })
 
 
-    let customInputs = $$('#custom-input-wrapper').getElementsByTagName('input');
-    for (let input of customInputs) {
-        validation.init(input, {});
-        if (input.dataset.type === 'float') {
-            currencyInput.generate(input, {});
-        }
-    }
-    let tournamentInputs = $$('#tournament-input-wrapper').getElementsByTagName('input')
-    for (let input of tournamentInputs) {
-        validation.init(input, {});
-    }
-    let rainInputs = $$('#rain-input-wrapper').getElementsByTagName('input')
-    for (let input of rainInputs) {
-        validation.init(input, {});
-    }
+    // let customInputs = $$('#custom-input-wrapper').getElementsByTagName('input');
+    // for (let input of customInputs) {
+    //     validation.init(input, {});
+    //     if (input.dataset.type === 'float') {
+    //         currencyInput.generate(input, {});
+    //     }
+    // }
+    // let tournamentInputs = $$('#tournament-input-wrapper').getElementsByTagName('input')
+    // for (let input of tournamentInputs) {
+    //     validation.init(input, {});
+    // }
+    // let rainInputs = $$('#rain-input-wrapper').getElementsByTagName('input')
+    // for (let input of rainInputs) {
+    //     validation.init(input, {});
+    // }
 
     checkboxChangeState.radioClick(jackpotGrowsCustomRadioButtonsWrapper);
 
@@ -109,8 +109,6 @@ const jackpotGrowthpattern = (function () {
 
             }
         }
-
-
     }
 
     function clearInputsFields(inputsWrapper) {
@@ -345,18 +343,24 @@ const jackpotGrowthpattern = (function () {
     choseMachines.onclick = function () {
         jackpotChooseParticipatingMachines.showHideChooseMachine.show();
     }
-
+    //days
     bindGridButton(addNewGrowthField[0]);
+    //hours
+    bindGridButton(addNewGrowthField[1]);
 
     checkboxChangeState.checkboxClick(valueLimitCheckbox);
 
-    jackpotControlGrowthPeriodByDays.onclick = function () {
+    jackpotControlGrowthPeriodByDays.onclick = function (e) {
         jackpotControlGrowthPeriodByHours.classList.remove('tab-active');
         jackpotControlGrowthPeriodByDays.classList.add('tab-active');
+        $$(`#${jackpotControlGrowthPeriodByDays.dataset.value}`).classList.remove('hidden');
+        $$(`#${jackpotControlGrowthPeriodByHours.dataset.value}`).classList.add('hidden');
     }
     jackpotControlGrowthPeriodByHours.onclick = function () {
         jackpotControlGrowthPeriodByDays.classList.remove('tab-active');
         jackpotControlGrowthPeriodByHours.classList.add('tab-active');
+        $$(`#${jackpotControlGrowthPeriodByHours.dataset.value}`).classList.remove('hidden');
+        $$(`#${jackpotControlGrowthPeriodByDays.dataset.value}`).classList.add('hidden');
     }
 
     for (let tab of growsPatternTabs.children) {
@@ -418,11 +422,11 @@ const jackpotGrowthpattern = (function () {
                 let newField = document.createElement('div');
                 newField.classList.add('grid-3-columns');
                 newField.innerHTML = `<div>
-                                <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
+                                <input name="NumOfDays" class="form-input element-form-data" data-type="int" type="text"
                                 placeholder="Dani/sati">
                             </div>
                             <div>
-                                <input name="rednibroj1" class="form-input element-form-data" data-type="string" type="text"
+                                <input name="Percent" class="form-input element-form-data" data-type="string" type="text"
                                 placeholder="Procenat">
                             </div>
                             <div>

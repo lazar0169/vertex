@@ -1,4 +1,4 @@
-<div id="add-new-jackpot-content-growth-pattern" class='add-new-jackpot-control-settings'>
+<div id="add-new-jackpot-content-growth-pattern" class='add-new-jackpot-control-settings' data-name="GrowthPattern">
     <div>
         <figure class="element-form-check vertex-form-checkbox">
             <div id="jackpot-content-growth-pattern-toggle" class="element-form-mode checkbox-label"></div>
@@ -17,10 +17,13 @@
     </div>
     <div class="hidden">
         <div id="jackpot-growth-pattern-tabs" class="">
-            <div class="growth-pattern-tabs center" data-value="jackpot-grows-automatically-content">Grows
+            <div class="growth-pattern-tabs center" data-value="jackpot-grows-automatically-content"
+                data-loadingtype='1'>Grows
                 automatically</div>
-            <div class="growth-pattern-tabs center" data-value="jackpot-grows-by-bet">Grows by bet</div>
-            <div class="growth-pattern-tabs center" data-value="jackpot-grows-discreetly">Grows discreetly</div>
+            <div class="growth-pattern-tabs center" data-value="jackpot-grows-by-bet" data-loadingtype="2">Grows by bet
+            </div>
+            <div class="growth-pattern-tabs center" data-value="jackpot-grows-discreetly" data-loadingtype="3">Grows
+                discreetly</div>
         </div>
 
         <div id="jackpot-grows-automatically-content" class="hidden  jackpot-pattern-tab-content">
@@ -28,55 +31,76 @@
                 <div>
                     <label class="element-multilanguage" data-translation-key="TheValueByWhichItIsGrowing">The value by
                         which it is growing</label>
-                    <input name="AutomaticValue" class="form-input element-form-data" data-type="string" type="text"
-                        placeholder="TheValueByWhichItIsGrowing">
+                    <input validNumber name="AutomaticValue" class="form-input element-form-data" data-type="float"
+                        type="text" placeholder="TheValueByWhichItIsGrowing">
                 </div>
 
                 <div>
                     <label class="element-multilanguage" data-translation-key="GrowthValue(InDays)">Growth value (in
                         days):</label>
-                    <input name="TimeInDays" class="form-input element-form-data" data-type="string" type="text"
-                        placeholder="GrowthValue(InDays)">
+                    <input validNumber name="TimeInDays" class="form-input element-form-data" data-type="int"
+                        type="text" placeholder="GrowthValue(InDays)">
                 </div>
 
                 <div>
                     <label class="element-multilanguage" data-translation-key="Hidden"></label>
                     <input max='100' name="AutomaticHiddenPercent" class="form-input element-form-data"
-                        data-type="string" type="text" placeholder="Hidden">
+                        data-type="float" type="text" placeholder="Hidden">
                 </div>
             </div>
 
             <div>
                 <div id="jackpot-control-growth-period" class="center">
-                    <div class="tab-active">raste po dani</div>
-                    <div>raste po sati</div>
+                    <div class="tab-active element-multilanguage" data-translation-key="GrowthPatternByDay"
+                        data-value="add-new-jackpot-growth-pattern-by-day"></div>
+                    <div class="element-multilanguage" data-translation-key="GrowthPatternByHours"
+                        data-value="add-new-jackpot-growth-pattern-by-hours"></div>
                 </div>
                 <!-- ovo treba da se pogleda i doradi -->
-                <div class="grid-3-columns">
-                    <div>
-                        <input name="DayIntervals" class="form-input element-form-data" data-type="string" type="text"
-                            placeholder="Dani/sati">
-                    </div>
-                    <div>
-                        <input max='100' name="Percent" class="form-input element-form-data" data-type="string"
-                            type="text" placeholder="Procenat">
-                    </div>
-                    <div>
-                        <button class="secundarybutton" data-value="add-new-field">Add</button>
+                <div id="add-new-jackpot-growth-pattern-by-day">
+                    <div class="grid-3-columns">
+                        <div>
+                            <input name="NumOfDay" class="form-input element-form-data" data-type="int" type="text"
+                                placeholder="Days">
+                        </div>
+                        <div>
+                            <input max='100' name="Percent" class="form-input element-form-data" data-type="int"
+                                type="text" placeholder="Procenat">
+                        </div>
+                        <div>
+                            <button class="secundarybutton" data-value="add-new-field">Add</button>
+                        </div>
                     </div>
                 </div>
+                <div id="add-new-jackpot-growth-pattern-by-hours" class="hidden">
+
+                    <div class="grid-3-columns">
+                        <div>
+                            <input name="NumOfHours" class="form-input element-form-data" data-type="int" type="text"
+                                placeholder="Hours">
+                        </div>
+                        <div>
+                            <input max='100' name="Percent" class="form-input element-form-data" data-type="int"
+                                type="text" placeholder="Procenat">
+                        </div>
+                        <div>
+                            <button class="secundarybutton" data-value="add-new-field">Add</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <div id="jackpot-grows-by-bet" class="hidden jackpot-pattern-tab-content">
             <div>
                 <label class="element-multilanguage" data-translation-key="Percent[%]"></label>
-                <input max='100' name="Percent" class="form-input element-form-data" data-type="string" type="text"
+                <input max='10000' name="Percent" class="form-input element-form-data" data-type="float" type="text"
                     placeholder="Percent">
             </div>
             <div>
                 <label class="element-multilanguage" data-translation-key="Hidden[%]"></label>
-                <input max='100' name="HiddenPercent" class="form-input element-form-data" data-type="string"
+                <input max='10000' name="HiddenPercent" class="form-input element-form-data" data-type="float"
                     type="text" placeholder="Hidden">
             </div>
             <div>
@@ -100,24 +124,24 @@
             </div>
         </div>
         <div id="jackpot-value-limit-wrapper" class="hidden">
-            <figure class="element-form-check vertex-form-checkbox" data-target="#jackopot-grow-pattern-value-limit">
+            <figure class="element-form-check vertex-form-checkbox" data-target="#jackpot-grow-pattern-value-limit">
                 <label class="form-switch">
                     <input name="EnableNotification" data-type="int" type="checkbox">
                     <i class="form-icon"></i>
                 </label>
                 <div id="jackpot-growth-pattern-value-limit-checkbox" class="checkbox-name">Value limit</div>
             </figure>
-            <div id="jackopot-grow-pattern-value-limit" class="hidden">
+            <div id="jackpot-grow-pattern-value-limit" class="hidden">
                 <div>
                     <div>
                         <label class="element-multilanguage" data-translation-key="MinimumValue"></label>
-                        <input name="MinValueLimit" class="form-input element-form-data" data-type="string" type="text"
-                            placeholder="Hidden">
+                        <input validNumber name="MinValueLimit" class="form-input element-form-data" data-type="float"
+                            type="text" placeholder="Hidden">
                     </div>
                     <div>
                         <label class="element-multilanguage" data-translation-key="MaximumValue"></label>
-                        <input name="MaxValueLimit" class="form-input element-form-data" data-type="string" type="text"
-                            placeholder="Hidden">
+                        <input validNumber name="MaxValueLimit" class="form-input element-form-data" data-type="float"
+                            type="text" placeholder="Hidden">
                     </div>
                     <div id="jackpot-growth-pattern-after-reaching-max">
                         <div>After reaching the maximum value</div>
@@ -128,24 +152,25 @@
         </div>
 
         <div id="jackpot-grows-discreetly" class="hidden jackpot-pattern-tab-content">
-            <div id="jackpot-grows-discreetly-radio-buttons" class="">
+            <div id="jackpot-grows-discreetly-radio-buttons" class="element-form-data" data-type="radio"
+                data-name="DiscreeteType">
                 <div class='border-bottom' data-name="rain">
                     <label class="form-radio" data-value="1">
-                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
+                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input">
                         <i class="form-icon"></i>
                         <div>Rain</div>
                     </label>
                 </div>
                 <div class='border-bottom' data-name="tournament">
                     <label class="form-radio" data-value="2">
-                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
+                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input">
                         <i class="form-icon"></i>
                         <div>Tournament</div>
                     </label>
                 </div>
                 <div class='' data-name="custom">
                     <label class="form-radio" data-value="3">
-                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input element-form-data">
+                        <input type="radio" name="jackpot-grows-discreetly-type" class="form-input">
                         <i class="form-icon"></i>
                         <div>Custom</div>
                     </label>
@@ -180,7 +205,7 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="Value"></label> -->
-                            <input validNumber name="Value" class="form-input element-form-data" data-type="string"
+                            <input validNumber name="Value" class="form-input element-form-data" data-type="float"
                                 type="text" placeholder="Value">
                         </div>
 
@@ -235,7 +260,7 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="Value"></label> -->
-                            <input validNumber name="Value" class="form-input element-form-data" data-type="string"
+                            <input validNumber name="Value" class="form-input element-form-data" data-type="float"
                                 type="text" placeholder="Value">
                         </div>
 

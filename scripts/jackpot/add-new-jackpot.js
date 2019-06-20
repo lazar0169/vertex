@@ -7,17 +7,107 @@ const addNewJackpot = (function () {
 
     checkboxChangeState.radioClick($$('#add-new-jackpot-content-inputs-radio'));
 
-    for (let input of $$('#add-new-jackpot-content-inputs').getElementsByTagName('input')) {
+    //validacija growth pattern polja
+
+    for (let input of $$('#add-new-jackpot-wrapper').getElementsByClassName('element-form-data')) {
         validation.init(input, {});
         if (input.dataset.type === 'float') {
             currencyInput.generate(input, {});
         }
     }
 
+    function getInputValueByType(input) {
+        let value
+        switch (input.dataset.type) {
+            case 'int':
+                value = parseInt(input.value);
+                break;
+            case 'float':
+                value = parseInt(input.dataset.value);
+                break;
+            case 'radio':
+                value = checkboxChangeState.getRadioState(input);
+                break;
+            default:
+                value = input.value;
+        }
+        return value
+    }
+
     saveNewJackpot.addEventListener('click', function (e) {
         if (checkValidationField($$(`#${e.target.dataset.value}`))) {
             if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) || checkboxChangeState.getSwitchState($$("#jackpot-control-active-time-toggle").parentNode)) {
                 alert("save new jackpot");
+
+                let data = {};
+                for (let input of $$('#add-new-jackpot-content-inputs-wrapper').getElementsByClassName('element-form-data')) {
+                    data[input.name ? input.name : input.dataset.name] = getInputValueByType(input);
+                }
+
+                let patternActive = $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0];
+                patternActive ? data.GrowthType = patternActive.dataset.loadingtype : data.GrowthType = 0;
+                data.IsLocal = $$('#add-new-jackpot-wrapper').settings.IsLocal;
+
+                for (let element of $$('#add-new-jackpot-wrapper').getElementsByClassName('add-new-jackpot-control-settings')) {
+
+                    data[element.getElementsByClassName('form-switch')[0].children[0].name] = checkboxChangeState.getSwitchState(element);
+                    data[element.dataset.name] = {}
+
+                    // for (let inputInPattern of element.getElementsByClassName('element-form-data')) {
+
+                    //     if (inputInPattern.classList.contains('default-select')) {
+                    //         data[element.dataset.name][inputInPattern.children[0].dataset.name] = inputInPattern.get();
+                    //     } else if (inputInPattern.dataset.type === 'float') {
+                    //         data[element.dataset.name][inputInPattern.name] = inputInPattern.dataset.value ? parseInt(inputInPattern.dataset.value) : 0;
+                    //     }
+                    //     else {
+                    //         data[element.dataset.name][inputInPattern.name] = inputInPattern.value;
+
+                    //     }
+
+                    // }
+                }
+                //bet limits settings
+                for (let element of $$('#add-new-jackpot-content-limit-settings').getElementsByClassName('element-form-data')) {
+                    data.BetAndWinLimit[element.name] = element.dataset.value ? parseInt(element.dataset.value) : 0;
+                }
+                //advance settings
+                for (let element of $$('#add-new-jackpot-content-advance-settings').getElementsByClassName('element-form-data')) {
+                    data.AdvancedSettings[element.children[0].dataset.name] = element.get();
+                }
+                //growth pattern
+                // automatically
+                for (let element of $$('#jackpot-grows-automatically-content').children[0].getElementsByClassName('element-form-data')) {
+                    let value = getInputValueByType(element)
+                    data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
+                }
+                data.GrowthPattern.DayIntervalData = [];
+                for (let element of $$('#jackpot-control-growth-period').parentNode.children) {
+                    if (element.classList.contains('grid-3-columns') && element.children[0].children[0].value && element.children[1].children[0].value) {
+                        let object = {}
+                        object[element.children[0].children[0].name] = element.children[0].children[0].value
+                        object[element.children[1].children[0].name] = element.children[1].children[0].value
+                        data.GrowthPattern.DayIntervalData.push(object)
+                    }
+                }
+                //by bet
+                for (let element of $$('#jackpot-grows-by-bet').getElementsByClassName('element-form-data')) {
+                    let value = getInputValueByType(element)
+                    data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
+                }
+
+                //custom
+                let value = checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons'))
+                data.GrowthPattern.DiscreeteType = value ? value : 0;
+                data.GrowthPattern.Levels = [];
+                let discreetlyRadioWrapper = $$('#jackpot-grows-discreetly-radio-buttons');
+                if (discreetlyRadioWrapper.settings && discreetlyRadioWrapper.settings.radioName && $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children.lenght !== 0) {
+                    for (let level of $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children) {
+                        console.log(level.settings)
+                    }
+                }
+
+                console.log(data)
             }
             else {
                 trigger('notifications/show', {
@@ -105,7 +195,12 @@ const addNewJackpot = (function () {
         let ddRainOperators = $$('#rain-dropdown-operators');
         let ddCustomOperators = $$('#custom-dropdown-operators');
         let ddTournamentJackpot = $$("#tournament-dropdown-jackpot");
-        let ddCustomJackpot = $$("#custom-dropdown-jackpot")
+        let ddCustomJackpot = $$("#custom-dropdown-jackpot");
+        let ddControlActiveTimeIncludeConditions = $$('#add-new-jackpot-time-interval-include-conditions-dropdown');
+        let ddControlActiveTimeSettingsBackground = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-dropdown')
+        let ddControlActiveTimeSettingsAfterJackpotWin = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-after-jackpot-win-dropdown');
+        let ddControlActiveTimeSettingsMoreJackpotWinners = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-more-jackpot-winners-dropdown');
+
 
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single', name: 'SelectedBlockJackpotDisableWithLoadingIds' });
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateStopGrow, type: 'single', name: 'SelectedBlockJackpotDisableWithoutLoadingIds' });
@@ -127,6 +222,13 @@ const addNewJackpot = (function () {
         dropdown.generate({ values: data.OperatorLevelList, parent: ddTournamentOperators, name: "Operator" });
         dropdown.generate({ values: data.OperatorLevelList, parent: ddRainOperators, name: "Operator" });
         dropdown.generate({ values: data.OperatorLevelList, parent: ddCustomOperators, name: "Operator" });
+
+        dropdown.generate({ values: data.LogicFunction, parent: ddControlActiveTimeIncludeConditions, name: "LogicFunction" });
+
+        dropdown.generate({ values: data.JackpotBackgroundList, parent: ddControlActiveTimeSettingsBackground, name: "JackpotBackgroundList" });
+        dropdown.generate({ values: data.IntervalStatus, parent: ddControlActiveTimeSettingsAfterJackpotWin, name: "IntervalStatus" });
+        dropdown.generate({ values: data.MultiWinners, parent: ddControlActiveTimeSettingsMoreJackpotWinners, name: "MultiWinners" });
+
 
     }
 
