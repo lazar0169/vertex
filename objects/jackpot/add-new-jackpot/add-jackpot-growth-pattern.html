@@ -52,9 +52,9 @@
             <div>
                 <div id="jackpot-control-growth-period" class="center">
                     <div class="tab-active element-multilanguage" data-translation-key="GrowthPatternByDay"
-                        data-value="add-new-jackpot-growth-pattern-by-day"></div>
+                        data-value="add-new-jackpot-growth-pattern-by-day" data-name="days"></div>
                     <div class="element-multilanguage" data-translation-key="GrowthPatternByHours"
-                        data-value="add-new-jackpot-growth-pattern-by-hours"></div>
+                        data-value="add-new-jackpot-growth-pattern-by-hours" data-name="hours"></div>
                 </div>
                 <!-- ovo treba da se pogleda i doradi -->
                 <div id="add-new-jackpot-growth-pattern-by-day">
@@ -76,8 +76,8 @@
 
                     <div class="grid-3-columns">
                         <div>
-                            <input name="NumOfHours" class="form-input element-form-data" data-type="int" type="text"
-                                placeholder="Hours">
+                            <input max="24" name="NumOfHours" class="form-input element-form-data" data-type="int"
+                                type="text" placeholder="Hours">
                         </div>
                         <div>
                             <input max='100' name="Percent" class="form-input element-form-data" data-type="int"
@@ -152,8 +152,7 @@
         </div>
 
         <div id="jackpot-grows-discreetly" class="hidden jackpot-pattern-tab-content">
-            <div id="jackpot-grows-discreetly-radio-buttons" class="element-form-data" data-type="radio"
-                data-name="DiscreeteType">
+            <div id="jackpot-grows-discreetly-radio-buttons" class="" data-type="radio" data-name="DiscreeteType">
                 <div class='border-bottom' data-name="rain">
                     <label class="form-radio" data-value="1">
                         <input type="radio" name="jackpot-grows-discreetly-type" class="form-input">
@@ -188,7 +187,7 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelValue"></label> -->
-                            <input required="" name="LevelValue" class="form-input element-form-data" data-type="string"
+                            <input required="" name="LevelValue" class="form-input element-form-data" data-type="float"
                                 type="text" placeholder="level value">
                         </div>
                     </div>
@@ -198,7 +197,7 @@
                             <div></div>
                         </div>
                         <div class="center element-multilanguage element-jackpot-condition-text-rain"
-                            data-translation-key="Count" data-value="COUNT"></div>
+                            data-translation-key="Count" data-value="COUNT" data-id="4"></div>
                         <div id="rain-dropdown-operators">
                             <!-- <div class="element-multilanguage" data-translation-key="Operators"></div> -->
                             <div></div>
@@ -243,7 +242,7 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelValue"></label> -->
-                            <input required name="LevelValue" class="form-input element-form-data" data-type="string"
+                            <input required name="LevelValue" class="form-input element-form-data" data-type="float"
                                 type="text" placeholder="level value">
                         </div>
                     </div>
@@ -253,7 +252,7 @@
                             <!-- <div class="element-multilanguage" data-translation-key="LevelOutcome"></div> -->
                         </div>
                         <div class="center element-multilanguage element-jackpot-condition-text-tournament"
-                            data-translation-key="SUM" data-value="SUM"></div>
+                            data-translation-key="SUM" data-value="SUM" data-id="5"></div>
                         <div id="tournament-dropdown-operators">
                             <div></div>
                             <!-- <div class="element-multilanguage" data-translation-key="Operators"></div> -->
@@ -303,7 +302,7 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelValue"></label> -->
-                            <input required name="LevelValue" class="form-input element-form-data" data-type="string"
+                            <input required name="LevelValue" class="form-input element-form-data" data-type="float"
                                 type="text" placeholder="level value">
                         </div>
                     </div>

@@ -34,80 +34,212 @@ const addNewJackpot = (function () {
         return value
     }
 
+    function findInputElementWithName(wrapper, inputName) {
+        for (let input of wrapper.getElementsByClassName('element-form-data')) {
+            if (inputName === input.name) {
+                return getInputValueByType(input);
+            }
+        }
+    }
+
     saveNewJackpot.addEventListener('click', function (e) {
         if (checkValidationField($$(`#${e.target.dataset.value}`))) {
-            if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) || checkboxChangeState.getSwitchState($$("#jackpot-control-active-time-toggle").parentNode)) {
-                alert("save new jackpot");
 
-                let data = {};
-                for (let input of $$('#add-new-jackpot-content-inputs-wrapper').getElementsByClassName('element-form-data')) {
-                    data[input.name ? input.name : input.dataset.name] = getInputValueByType(input);
-                }
+            // if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) && $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0]
+            //     || checkboxChangeState.getSwitchState($$("#jackpot-control-active-time-toggle").parentNode) && $$('#add-new-jackpot-time-interval-added-by-dropdown').children.length !== 0) {
 
-                let patternActive = $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0];
-                patternActive ? data.GrowthType = patternActive.dataset.loadingtype : data.GrowthType = 0;
-                data.IsLocal = $$('#add-new-jackpot-wrapper').settings.IsLocal;
+            //     alert("save new jackpot");
 
-                for (let element of $$('#add-new-jackpot-wrapper').getElementsByClassName('add-new-jackpot-control-settings')) {
+            // }else{
+            //     trigger('notifications/show', {
+            //         message: localization.translateMessage('neki je aktivan ali unutar nije nista izabrano'),
+            //         type: notifications.messageTypes.error,
+            //     });
+            // }
 
-                    data[element.getElementsByClassName('form-switch')[0].children[0].name] = checkboxChangeState.getSwitchState(element);
+            // && $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0]
+
+            // for (let jackpotContent of $$('#add-new-jackpot-wrapper').getElementsByClassName('checked-add-new-jackpot-settings')) {
+            //     if (checkboxChangeState.getSwitchState(jackpotContent))
+            //         checkValidationField(jackpotContent.parentNode.children[1])
+            // }
+
+            // if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) && $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0]) {
+            //     let patternActive = $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0];
+            //     checkValidationField($$(`#${patternActive.dataset.value}`))
+            // } else {
+
+            // }
+
+            // if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode)) {
+            //     console.log()
+            //     alert("save new jackpot");
+            // }
+            // else {
+            //     alert("izaberi patern");
+            // }
+
+            let data = {};
+            for (let input of $$('#add-new-jackpot-content-inputs-wrapper').getElementsByClassName('element-form-data')) {
+                data[input.name ? input.name : input.dataset.name] = getInputValueByType(input);
+            }
+
+            let patternActive = $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0];
+            patternActive ? data.GrowthType = patternActive.dataset.loadingtype : data.GrowthType = 0;
+            data.IsLocal = $$('#add-new-jackpot-wrapper').settings.IsLocal;
+
+            for (let element of $$('#add-new-jackpot-wrapper').getElementsByClassName('add-new-jackpot-control-settings')) {
+
+                data[element.getElementsByClassName('form-switch')[0].children[0].name] = checkboxChangeState.getSwitchState(element);
+                if (checkboxChangeState.getSwitchState(element)) {
                     data[element.dataset.name] = {}
 
-                    // for (let inputInPattern of element.getElementsByClassName('element-form-data')) {
+                    if (element.dataset.name === "GrowthPattern") {
 
-                    //     if (inputInPattern.classList.contains('default-select')) {
-                    //         data[element.dataset.name][inputInPattern.children[0].dataset.name] = inputInPattern.get();
-                    //     } else if (inputInPattern.dataset.type === 'float') {
-                    //         data[element.dataset.name][inputInPattern.name] = inputInPattern.dataset.value ? parseInt(inputInPattern.dataset.value) : 0;
-                    //     }
-                    //     else {
-                    //         data[element.dataset.name][inputInPattern.name] = inputInPattern.value;
+                        if (patternActive.dataset.value !== 'jackpot-grows-discreetly') {
+                            for (let input of $$(`#${patternActive.dataset.value}`).getElementsByClassName('element-form-data')) {
+                                if (input.dataset.type !== 'radio') {
+                                    checkValidationField(input.parentNode);
+                                }
+                            }
+                        }
 
-                    //     }
+                        data[element.dataset.name]['AutomaticValue'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticValue') : 0;
+                        data[element.dataset.name]['TimeInDays'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'TimeInDays') : 0;
+                        data[element.dataset.name]['AutomaticHiddenPercent'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticHiddenPercent') : 0;
+                        //todo ovde niz za dayIntervals 
+                        data[element.dataset.name]['DayIntervals'] = [];
+                        //todo ovde niz za HourIntervals
+                        data[element.dataset.name]['HourIntervals'] = [];
+                        if ($$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name === 'days') {
+                            for (let day of $$('#add-new-jackpot-growth-pattern-by-day').getElementsByClassName('grid-3-columns')) {
+                                let object = {}
+                                object[day.children[0].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
+                                object[day.children[1].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
+                                data[element.dataset.name]['DayIntervals'].push(object)
+                            }
+                        } else {
+                            for (let hour of $$('#add-new-jackpot-growth-pattern-by-hours').getElementsByClassName('grid-3-columns')) {
+                                let object = {}
+                                object[hour.children[0].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
+                                object[hour.children[1].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
+                                data[element.dataset.name]['HourIntervals'].push(object)
+                            }
+                        }
+                        data[element.dataset.name]['MinBetForLoading'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'MinBetForLoading') : 0;
+                        data[element.dataset.name]['MaxBetForLoading'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'MaxBetForLoading') : 0;
+                        data[element.dataset.name]['Percent'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'Percent') : 0;
+                        data[element.dataset.name]['HiddenPercent'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'HiddenPercent') : 0;
+                        data[element.dataset.name]['SelectedMachineForBetLoadingIDs'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? [] : [];
+                        let discreeteType = checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons'));
+                        data[element.dataset.name]['DiscreeteType'] = discreeteType ? discreeteType : 0;
+                        //leveli deca iz rain-jackpot-exist-wrapper svako dete ima settings gde mu se nalaze podaci za kreiranje levela
+                        data[element.dataset.name]['Levels'] = [];
 
-                    // }
-                }
-                //bet limits settings
-                for (let element of $$('#add-new-jackpot-content-limit-settings').getElementsByClassName('element-form-data')) {
-                    data.BetAndWinLimit[element.name] = element.dataset.value ? parseInt(element.dataset.value) : 0;
-                }
-                //advance settings
-                for (let element of $$('#add-new-jackpot-content-advance-settings').getElementsByClassName('element-form-data')) {
-                    data.AdvancedSettings[element.children[0].dataset.name] = element.get();
-                }
-                //growth pattern
-                // automatically
-                for (let element of $$('#jackpot-grows-automatically-content').children[0].getElementsByClassName('element-form-data')) {
-                    let value = getInputValueByType(element)
-                    data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
-                }
-                data.GrowthPattern.DayIntervalData = [];
-                for (let element of $$('#jackpot-control-growth-period').parentNode.children) {
-                    if (element.classList.contains('grid-3-columns') && element.children[0].children[0].value && element.children[1].children[0].value) {
-                        let object = {}
-                        object[element.children[0].children[0].name] = element.children[0].children[0].value
-                        object[element.children[1].children[0].name] = element.children[1].children[0].value
-                        data.GrowthPattern.DayIntervalData.push(object)
+                        if ($$('#tournament-jackpot-exist-wrapper').children.length > 0) {
+                            for (let level of $$('#tournament-jackpot-exist-wrapper').children) {
+                                let object = {}
+                                object.Name = level.settings.LevelName;
+                                object.Value = level.settings.LevelValue;
+                                object.Formula = {
+                                    "_Exspressions": {
+                                        "Counter": level.settings.LevelOutcome.id,
+                                        "JPId": level.settings.LevelOutcome.id === '2' ? 1 : null,
+                                        "Type": level.settings.CountTypeList,
+                                        "OperatorType": level.settings.Operator.id,
+                                        "Number": level.settings.Value
+                                    },
+                                    "_Condition": 0
+                                }
+                                data[element.dataset.name]['Levels'].push(object);
+                            }
+                        }
+
+                        data[element.dataset.name]['SelectedMachineForDiscreteLoadingIDs'] = $$('#jackpot-growth-pattern-tabs').children[2].classList.contains('pattern-active') ? [] : [];
+
+                        let hasValueLimit = checkboxChangeState.getSwitchState($$('#jackpot-growth-pattern-value-limit-checkbox').parentNode);
+                        data[element.dataset.name]['HasMinMaxLimit'] = hasValueLimit;
+                        data[element.dataset.name]['MinMaxStateId'] = hasValueLimit ? $$('#jackpot-growth-pattern-after-reaching-max').children[1].get() : "null"
+                        data[element.dataset.name]['MinValueLimit'] = hasValueLimit ? findInputElementWithName($$('#jackpot-grow-pattern-value-limit').children[0], 'MinValueLimit') : 0;
+                        data[element.dataset.name]['MaxValueLimit'] = hasValueLimit ? findInputElementWithName($$('#jackpot-grow-pattern-value-limit').children[0], 'MaxValueLimit') : 0;
+                        data[element.dataset.name]['MinMaxFunction'] = hasValueLimit ? $$('#jackpot-growth-pattern-grows-by-bet-chart').get() : [];
+                    }
+                    else {
+                        for (let input of element.children[1].getElementsByClassName('element-form-data')) {
+                            if (input.classList.contains('default-select')) {
+                                data[element.dataset.name][input.children[0].name ? input.children[0].name : input.children[0].dataset.name] = input.get();
+
+                            } else {
+                                if (input.dataset.type !== 'radio') {
+                                    checkValidationField(input.parentNode)
+                                }
+                                data[element.dataset.name][input.name ? input.name : input.dataset.name] = getInputValueByType(input);
+                            }
+
+                        }
                     }
                 }
-                //by bet
-                for (let element of $$('#jackpot-grows-by-bet').getElementsByClassName('element-form-data')) {
-                    let value = getInputValueByType(element)
-                    data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
-                }
 
-                //custom
-                let value = checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons'))
-                data.GrowthPattern.DiscreeteType = value ? value : 0;
-                data.GrowthPattern.Levels = [];
-                let discreetlyRadioWrapper = $$('#jackpot-grows-discreetly-radio-buttons');
-                if (discreetlyRadioWrapper.settings && discreetlyRadioWrapper.settings.radioName && $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children.lenght !== 0) {
-                    for (let level of $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children) {
-                        console.log(level.settings)
-                    }
-                }
+            }
 
-                console.log(data)
+            //     // for (let inputInPattern of element.getElementsByClassName('element-form-data')) {
+
+            //     //     if (inputInPattern.classList.contains('default-select')) {
+            //     //         data[element.dataset.name][inputInPattern.children[0].dataset.name] = inputInPattern.get();
+            //     //     } else if (inputInPattern.dataset.type === 'float') {
+            //     //         data[element.dataset.name][inputInPattern.name] = inputInPattern.dataset.value ? parseInt(inputInPattern.dataset.value) : 0;
+            //     //     }
+            //     //     else {
+            //     //         data[element.dataset.name][inputInPattern.name] = inputInPattern.value;
+
+            //     //     }
+
+            //     // }
+            // }
+            // //bet limits settings
+            // for (let element of $$('#add-new-jackpot-content-limit-settings').getElementsByClassName('element-form-data')) {
+            //     data.BetAndWinLimit[element.name] = element.dataset.value ? parseInt(element.dataset.value) : 0;
+            // }
+            // //advance settings
+            // for (let element of $$('#add-new-jackpot-content-advance-settings').getElementsByClassName('element-form-data')) {
+            //     data.AdvancedSettings[element.children[0].dataset.name] = element.get();
+            // }
+            // //growth pattern
+            // // automatically
+            // for (let element of $$('#jackpot-grows-automatically-content').children[0].getElementsByClassName('element-form-data')) {
+            //     let value = getInputValueByType(element)
+            //     data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
+            // }
+            // data.GrowthPattern.DayIntervalData = [];
+            // for (let element of $$('#jackpot-control-growth-period').parentNode.children) {
+            //     if (element.classList.contains('grid-3-columns') && element.children[0].children[0].value && element.children[1].children[0].value) {
+            //         let object = {}
+            //         object[element.children[0].children[0].name] = element.children[0].children[0].value
+            //         object[element.children[1].children[0].name] = element.children[1].children[0].value
+            //         data.GrowthPattern.DayIntervalData.push(object)
+            //     }
+            // }
+            // //by bet
+            // for (let element of $$('#jackpot-grows-by-bet').getElementsByClassName('element-form-data')) {
+            //     let value = getInputValueByType(element)
+            //     data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
+            // }
+
+            // //custom
+            // let value = checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons'))
+            // data.GrowthPattern.DiscreeteType = value ? value : 0;
+            // data.GrowthPattern.Levels = [];
+            // let discreetlyRadioWrapper = $$('#jackpot-grows-discreetly-radio-buttons');
+            // if (discreetlyRadioWrapper.settings && discreetlyRadioWrapper.settings.radioName && $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children.length !== 0) {
+            //     for (let level of $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children) {
+            //         console.log(level.settings)
+            //     }
+            // }
+
+            console.log(data)
+            if (data.IsGrowing || data.HasControlActiveTime) {
+                trigger(communication.events.jackpots.saveJackpot, {data});
+
             }
             else {
                 trigger('notifications/show', {

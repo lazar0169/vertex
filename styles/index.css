@@ -41,17 +41,39 @@ body {
     overflow: auto;
 }
 
-.overflow-x::-webkit-scrollbar, .overflow-y::-webkit-scrollbar, .overflow-content::-webkit-scrollbar {
+.overflow-x::-webkit-scrollbar,
+.overflow-y::-webkit-scrollbar,
+.overflow-content::-webkit-scrollbar {
     width: 7px;
     height: 7px;
 }
 
-.overflow-x::-webkit-scrollbar-track, .overflow-y::-webkit-scrollbar-track, .overflow-content::-webkit-scrollbar-track {
+.overflow-x::-webkit-scrollbar-track,
+.overflow-y::-webkit-scrollbar-track,
+.overflow-content::-webkit-scrollbar-track {
     /* box-shadow: inset 0 0 6px rgb(55, 71, 79); */
     background-color: transparent
 }
 
-.overflow-x::-webkit-scrollbar-thumb, .overflow-y::-webkit-scrollbar-thumb, .overflow-content::-webkit-scrollbar-thumb {
+.overflow-x::-webkit-scrollbar-thumb,
+.overflow-y::-webkit-scrollbar-thumb,
+.overflow-content::-webkit-scrollbar-thumb {
     background-color: #78909c;
     border-radius: 50px;
+}
+
+#show-image-container {
+    width: 70%;
+    height: 70%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    margin: auto;
+}
+
+#show-image-container>img {
+    box-shadow: 0 0 0.5em currentColor;
 }

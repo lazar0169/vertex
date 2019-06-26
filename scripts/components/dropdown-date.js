@@ -215,7 +215,7 @@ const dropdownDate = (function () {
             }
             pickCustom = false;
         }
-        else if (found && pickCustom || e.target.classList && e.target.classList.contains('pika-select') || found && e.target.dataset && e.target.dataset.value === 'Custom' || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
+        else if (found && pickCustom || e.target.classList && e.target.classList.contains('datepicker') || e.target.classList && e.target.classList.contains('pika-select') || found && e.target.dataset && e.target.dataset.value === 'Custom' || e.target.classList && e.target.classList.contains('is-disabled') || e.target.classList && e.target.classList.contains('is-empty')) {
             $$(`#${activeSelectId}`).classList.add('active-date-select');
             $$(`#${activeSelectId}`).children[1].classList.remove('hidden');
         }

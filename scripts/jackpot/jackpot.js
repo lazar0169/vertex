@@ -76,6 +76,10 @@ const jackpots = (function () {
         $$(`#${jackpotsTableId}`).update(data);
     });
 
+    on(events.saveJackpot, function (params) {
+        console.log(params)
+    });
+
     //---------------------------------------------------------------------//
 
 
@@ -463,7 +467,7 @@ const jackpots = (function () {
     //save jackpot settings
     on(communication.events.jackpots.saveJackpot, function (params) {
         let route = communication.apiRoutes.jackpots.saveJackpot;
-        let data = params.EntryData;
+        let data = params.data;
         let request = communication.requestTypes.post;
         let successEvent = events.saveJackpot;
         let errorEvent = '';
@@ -473,7 +477,7 @@ const jackpots = (function () {
             requestType: request,
             successEvent: successEvent,
             errorEvent: errorEvent,
-            additionalData: params.EntryData.EndpointId
+
         });
     });
 

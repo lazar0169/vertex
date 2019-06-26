@@ -14,22 +14,6 @@ const jackpotGrowthpattern = (function () {
     highchart.drawHighchart({ parent: $$('#jackpot-growth-pattern-grows-by-bet-chart'), dotsX: 10, dotsY: 10, name: 'MinMaxFunction' })
 
 
-    // let customInputs = $$('#custom-input-wrapper').getElementsByTagName('input');
-    // for (let input of customInputs) {
-    //     validation.init(input, {});
-    //     if (input.dataset.type === 'float') {
-    //         currencyInput.generate(input, {});
-    //     }
-    // }
-    // let tournamentInputs = $$('#tournament-input-wrapper').getElementsByTagName('input')
-    // for (let input of tournamentInputs) {
-    //     validation.init(input, {});
-    // }
-    // let rainInputs = $$('#rain-input-wrapper').getElementsByTagName('input')
-    // for (let input of rainInputs) {
-    //     validation.init(input, {});
-    // }
-
     checkboxChangeState.radioClick(jackpotGrowsCustomRadioButtonsWrapper);
 
     let addLevelDiscreetlyConditionButton = $$('#custom-add-level-condition-button').children[0];
@@ -140,6 +124,8 @@ const jackpotGrowthpattern = (function () {
             inputWrapper = id;
         }
         let data = {};
+        //todo obrisi
+        data.Id = 5;
         // if(inputWrapper === $$('#'))
         for (let input of inputWrapper.getElementsByClassName('element-form-data')) {
 
@@ -149,6 +135,9 @@ const jackpotGrowthpattern = (function () {
                         name: input.children[0].dataset.value,
                         id: input.children[0].dataset.id
                     }
+                    break;
+                case 'float':
+                    data[input.name ? input.name : ''] = parseInt(input.dataset.value);
                     break;
                 default:
                     data[input.name ? input.name : ''] = input.value ? input.value : "";
@@ -166,6 +155,8 @@ const jackpotGrowthpattern = (function () {
                 data.CustomLevelConditionsText += `${levelCondition.children[1].innerHTML}<br>`;
 
             }
+        } else {
+            data.CountTypeList = $$(`#jackpot-grows-discreetly-${jackpotGrowsDiscreetlyRadioButtonsWrapper.settings.radioName}-content`).children[0].children[1].children[1].dataset.id;
         }
         return data;
     }
@@ -201,21 +192,6 @@ const jackpotGrowthpattern = (function () {
         singleConditonWrapper.appendChild(levelTextWrapper);
 
         conditionsWrapper.appendChild(singleConditonWrapper);
-
-        // else {
-        //     trigger('notifications/show', {
-        //         message: localization.translateMessage('Value is empty!!!'),
-        //         type: notifications.messageTypes.error,
-        //     });
-        //     for (let input of inputsWrapperId.parentNode.parentNode.getElementsByTagName('input')) {
-        //         console.log(input.vertexValidation.validate())
-
-        //     }
-        // }
-
-
-
-
     }
 
     function createLevel(id) {
@@ -234,7 +210,7 @@ const jackpotGrowthpattern = (function () {
             data.Condition = checkboxChangeState.getRadioState(jackpotGrowsCustomRadioButtonsWrapper);
         }
 
-        if (data.LevelName && data.LevelValue && data.Operator && data.LevelOutcome && data.Value && levelExistWrapper.children.length < 4) {
+        if (data.LevelName && data.LevelValue && data.Operator && levelExistWrapper.children.length < 4) {
 
             for (let level of levelArray) {
                 if (data.LevelName === level.LevelName && data.LevelValue === level.LevelValue) {
@@ -275,6 +251,7 @@ const jackpotGrowthpattern = (function () {
             } else {
                 levelWrapper.settings = data;
                 let str;
+                let conditionText = data.LevelOutcome ? data.LevelOutcome.name : data.JackpotList.name
                 str = $$(`.element-jackpot-condition-text-${jackpotGrowsDiscreetlyRadioButtonsWrapper.settings.radioName}`)[0].innerHTML;
                 levelWrapper.innerHTML = `<div>
                     <div>Level name:</div> 
@@ -286,7 +263,7 @@ const jackpotGrowthpattern = (function () {
                 </div>
                 <div>
                     <div>Level conditions:</div> 
-                    <div class="element-level-conditions">${data.LevelOutcome.name}: ${str} ${data.Operator.name} ${data.Value}</div>
+                    <div class="element-level-conditions">${conditionText}: ${str} ${data.Operator.name} ${data.Value}</div>
                 </div>
                 `
             }
@@ -415,26 +392,53 @@ const jackpotGrowthpattern = (function () {
     }
 
     function bindGridButton(button) {
-        button.onclick = function () {
+        button.onclick = function (e) {
             if (button.dataset.value === 'add-new-field') {
-                button.dataset.value = 'delete-field';
-                button.innerHTML = 'Delete';
-                let newField = document.createElement('div');
-                newField.classList.add('grid-3-columns');
-                newField.innerHTML = `<div>
-                                <input name="NumOfDays" class="form-input element-form-data" data-type="int" type="text"
-                                placeholder="Dani/sati">
-                            </div>
-                            <div>
-                                <input name="Percent" class="form-input element-form-data" data-type="string" type="text"
-                                placeholder="Procenat">
-                            </div>
-                            <div>
-                                <button class="secundarybutton" data-value="add-new-field">Add</button>
-                            </div>`
-                button.parentNode.parentNode.parentNode.appendChild(newField);
-                bindGridButton(newField.children[2].children[0]);
+                if (checkValidationField(e.target.parentNode.parentNode)) {
+                    button.dataset.value = 'delete-field';
+                    button.innerHTML = 'Delete';
+                    let newField = document.createElement('div');
+                    newField.classList.add('grid-3-columns');
+                    let dataName = $$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name
+                    if (dataName === 'days') {
+                        newField.innerHTML = `<div>
+                                        <input name="NumOfDays" class="form-input element-form-data" data-type="int" type="text"
+                                        placeholder="Days">
+                                    </div>
+                                    <div>
+                                        <input max="100" name="Percent" class="form-input element-form-data" data-type="int" type="text"
+                                        placeholder="Procenat">
+                                    </div>
+                                    <div>
+                                        <button class="secundarybutton" data-value="add-new-field">Add</button>
+                                    </div>`
+                    } else {
+                        newField.innerHTML = `<div>
+                        <input max="24" name="NumOfHours" class="form-input element-form-data" data-type="int" type="text"
+                        placeholder="Days">
+                    </div>
+                    <div>
+                        <input max="100" name="Percent" class="form-input element-form-data" data-type="int" type="text"
+                        placeholder="Procenat">
+                    </div>
+                    <div>
+                        <button class="secundarybutton" data-value="add-new-field">Add</button>
+                    </div>`
+                    }
+
+                    button.parentNode.parentNode.parentNode.appendChild(newField);
+
+                    for (let input of newField.getElementsByClassName('element-form-data')) {
+                        validation.init(input, {});
+                    }
+
+
+                    bindGridButton(newField.children[2].children[0]);
+                } else {
+
+                }
             } else {
+
                 button.parentNode.parentNode.remove()
             }
         }

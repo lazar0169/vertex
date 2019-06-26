@@ -8,7 +8,8 @@ let validation = (function () {
         email: 'email',
         string: 'string',
         pattern: 'pattern',
-        array: 'array'
+        array: 'array',
+        time: 'time'
     };
 
     const constraintAttributes = {
@@ -253,6 +254,10 @@ let validation = (function () {
 
                             }
                             break;
+                        case inputTypes.time:
+                            rule.regex = new RegExp(/((0[0-9]?:?)|(1[0-9]?:?)|(2[0-3]?:?)){0,2}([0-5]?[0-9]){0,2}?/);
+                            break;
+
                         case inputTypes.string:
                             rule.regex = new RegExp('');
                             break;

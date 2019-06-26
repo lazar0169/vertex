@@ -33,18 +33,23 @@
                             </div>
                             <div class="choose-date-time">
                                 <div data-translation-key="TimeFrom">Time from:</div>
-                                <div class="timepicker"></div>
+                                <div class="timepicker" data-value="From"></div>
                             </div>
                             <div class="choose-date-time">
                                 <div data-translation-key="TimeTo">Time to:</div>
-                                <div class="timepicker"></div>
+                                <div class="timepicker" data-value="To"></div>
                             </div>
                             <div id="add-new-jackpot-jackpot-time-interval-dropdown-buttons" class="button-wrapper">
-                                <button class="secundarybutton element-multilanguage"
-                                    data-translation-key="Apply"></button>
+                                <button class="secundarybutton element-multilanguage" data-translation-key="Apply"
+                                    data-target="add-new-jackpot-time-interval-added-by-dropdown"></button>
                             </div>
                         </div>
                     </div>
+
+                    <div id="add-new-jackpot-time-interval-added-by-dropdown">
+
+                    </div>
+
                 </div>
 
                 <div id="add-new-jackpot-time-interval-chart">
@@ -59,14 +64,14 @@
 
             <div id="add-new-jackpot-time-interval-include-conditions-wrapper" class="icon-Machines">
                 <label class="element-multilanguage" data-translation-key="ActivateWhenTheNumberOfActiveMachines"
-                    for="jackpot-condition-time-duration"></label>
+                    for="jackpot-condition-number-of-machines"></label>
                 <input name="imeInputa" class="form-input element-form-data input-number-right" data-type="int"
                     type="text" id="jackpot-condition-number-of-machines" placeholder="" validNumber data-value="">
 
-                <label class="element-multilanguage" data-translation-key="Duration"
-                    for="jackpot-condition-time-duration"></label>
-                <input name="imeInputa" class="form-input element-form-data input-number-right" data-type="string"
-                    type="text" id="jackpot-condition-time-duration" placeholder="" data-value="">
+                <div class="choose-date-time">
+                    <div class="element-multilanguage" data-translation-key="Duration"></div>
+                    <div class="timepicker" data-value="To"></div>
+                </div>
 
                 <label class="element-multilanguage" data-translation-key="MaximumNumberOfJackpotActivations"
                     for="jackpot-condition-maximum-number-of-jackpot-activations"></label>
