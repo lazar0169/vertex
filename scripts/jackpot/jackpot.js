@@ -3,11 +3,18 @@ const jackpots = (function () {
     let pageJackpot = $$('#page-jackpots');
     let jackpotDailyLimitTopBar = $$('#top-bar-jackpots').children[0].children[2];
     let jackpotPaidTodayTopBar = $$('#top-bar-jackpots').children[1].children[2];
+    let jackpotEditDetailsWrapper = $$("#jackpot-edit-details-wrapper");
 
     const jackpotBlockType = {
         'Stop': 0,
         'Hide': 1,
         'Gone': 2,
+    }
+    const jackpotGrowthType = {
+        0: "None",
+        1: "AutomaticLoading",
+        2: "BetLoading",
+        3: "DiscreteLoading"
     }
 
     const events = {
@@ -19,7 +26,8 @@ const jackpots = (function () {
         previewEvents: 'jackpot/preview-jackpot-events',
         getJackpotAnimationSettings: 'jackpot/get-jackpot-animation-settings',
         saveJackpot: 'jackpot/save-jackpot',
-        changeJackpotState: 'jackpot/change-jackpot-state'
+        changeJackpotState: 'jackpot/change-jackpot-state',
+        showJackpotInfo: 'jackpot/show-jackpot-info'
     };
 
     on(events.activated, function (params) {
@@ -123,6 +131,11 @@ const jackpots = (function () {
         }
         else {
             console.log('prikazi detalje za dzekpot')
+            let EndpointId = data.EndpointId;
+            let Id = data.Id;
+
+            trigger(communication.events.jackpots.showJackpotInfo, { EndpointId, Id });
+
         }
         console.log(data)
     });
@@ -134,7 +147,55 @@ const jackpots = (function () {
         });
         let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
         trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
-    })
+    });
+
+    on(events.showJackpotInfo, function (params) {
+        let data = params.data.Data;
+        $$('#jackpot-edit-details-header').children[0].innerHTML = data.Title;
+        $$('#jackpot-edit-details-general-info-wrapper').innerHTML = `<div class="display-flex">
+                            <div class="element-multilanguage" data-translation-key="StartValue">${localization.translateMessage("StartValue:")}</div>
+                            <div>${formatFloatValue(data.StartValue)}</div>
+                            </div>
+
+                            <div class="display-flex">
+                            <div class="element-multilanguage" data-translation-key="Value">${localization.translateMessage("Value:")}</div>
+                            <div>${formatFloatValue(data.CurrentValue)}</div>
+                            </div>
+                            
+
+                            <div class="display-flex">
+                            <div class="element-multilanguage" data-translation-key="Status">${localization.translateMessage("Status:")}</div>
+                            <div>${localization.translateMessage(data.StatusDescription)}</div>
+                            </div>
+
+                            <div class="display-flex">
+                            <div class="element-multilanguage" data-translation-key="GrowthType">${localization.translateMessage("GrowthType:")}</div>
+                            <div>${localization.translateMessage(jackpotGrowthType[data.Loading])}</div>
+                            </div>`
+
+        for (let checkbox of $$('#jackpot-edit-details-conditions-checkbox').children) {
+            for (let key of Object.keys(data.IgnoreList)) {
+                if (checkbox.dataset.name === key) {
+                    if (data.IgnoreList[key] !== null) {
+                        checkbox.classList.remove('not-clickable');
+                        let checkboxData = {}
+                        checkboxData.checkbox = checkbox;
+                        checkboxData.isChecked = data.IgnoreList[key];
+                        checkboxChangeState.generateCheckbox(checkboxData);
+                        break;
+                    } else {
+                        checkboxChangeState.checkboxIsChecked(checkbox.getElementsByClassName('form-checkbox')[0].children[0], false)
+                        checkbox.classList.add('not-clickable');
+                    }
+                }
+            }
+        }
+
+
+        $$('#black-area').classList.add('show');
+        jackpotEditDetailsWrapper.classList.remove('collapse');
+        console.log(params);
+    });
 
     //---------------------------------------------------------------------//
 
@@ -356,16 +417,17 @@ const jackpots = (function () {
     //show jackpots info
     on(communication.events.jackpots.showJackpotInfo, function (params) {
         let route = communication.apiRoutes.jackpots.showJackpotInfo;
-        let data = params.data;
+        let data = params;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.showJackpotInfo;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 

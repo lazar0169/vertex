@@ -365,3 +365,12 @@ figure .checkbox-name {
 .background-orange {
     background: #f57f17;
 }
+
+.not-clickable,
+.not-clickable label,
+.not-clickable i,
+.not-clickable input,
+.not-clickable div {
+    pointer-events: none !important;
+    color: rgba(120, 144, 156, 0.2);
+}

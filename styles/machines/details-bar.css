@@ -13,7 +13,8 @@
     overflow: hidden;
 }
 
-#details-bar.collapse {
+#details-bar.collapse,
+#jackpot-edit-details-wrapper.collapse {
     transform: translateX(101%);
 }
 
@@ -48,7 +49,8 @@
     padding: 0 1.5em;
 }
 
-#machine-close-details-bar {
+#machine-close-details-bar,
+#jackpot-close-details-bar {
     position: absolute;
     top: 0;
     right: 0;
@@ -58,7 +60,8 @@
 }
 
 #machine-close-details-bar:hover>span,
-#info-tabs>div:hover {
+#info-tabs>div:hover,
+#jackpot-close-details-bar:hover>span {
     color: rgb(30, 155, 227);
 }
 
