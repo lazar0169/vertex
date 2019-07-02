@@ -475,7 +475,8 @@ textarea {
     pointer-events: auto;
 }
 
-.visibility-hidden-children .actionlist-element {
+.visibility-hidden-children .actionlist-element,
+.visibility-hidden-children .special-action {
     visibility: hidden;
 }
 
@@ -520,5 +521,19 @@ textarea {
 }
 
 .table-column-right-padding {
-    padding-right: 2em !important
+    padding-right: 2em !important;
+}
+
+.special-action {
+    margin: auto;
+}
+
+.special-action>.button-link {
+    padding: 0 0.5em;
+    font-size: 10px !important;
+}
+
+.special-action>.button-link:nth-child(2) {
+    border-right: 1px solid white;
+    border-left: 1px solid white;
 }

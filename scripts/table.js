@@ -401,7 +401,7 @@ let table = (function () {
                 let cellData;
                 if (tempRow[column] instanceof Object) {
                     if (tempRow[column] instanceof Array) {
-                        cellData = createCellFromArray({ name: column, array: tempRow[column] });
+                        cellData = createCellFromArray({ name: column, array: tempRow[column], jackpotAction: settings.isJackpot });
                     }
                     else {
                         cellData = createTimeUserCellHTML(formatTimeData(tempRow[column].Time), tempRow[column].Name)
@@ -616,7 +616,18 @@ let table = (function () {
         let tempWrapper = document.createElement('div')
         for (let element of data.array) {
             if (name === 'flaglist' || name === 'actionlist') {
-                tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}"></div>`;
+                let index = data.array.indexOf(element)
+                if (name === 'actionlist' && data.jackpotAction && index === 0) {
+                    tempWrapper.innerHTML += `<div class="special-action"> 
+                    <a class="button-link actionlist-hidden" data-translation-key="HideFromScreen">${localization.translateMessage('HideFromScreen')}</a>
+                    <a class="button-link actionlist-deactivate" data-translation-key="Deactivate">${localization.translateMessage('Deactivate')}</a>
+                    <a class="button-link actionlist-stop" data-translation-key="Stop">${localization.translateMessage('Stop')}</a>
+                    </div> 
+                    <div class="${name}-element ${name}-${element}"></div>`;
+
+                } else {
+                    tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}"></div>`;
+                }
             } else {
                 tempWrapper.innerHTML += `<div class="${name}-element ${name}-${element}">${element}</div>`;
             }

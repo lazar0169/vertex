@@ -8,22 +8,11 @@ const highchart = (function () {
         let nameSpace = 'http://www.w3.org/2000/svg';
         let polygon = document.createElementNS(nameSpace, 'polygon');
         let parent = data.parent;
-        parent.classList.add('chart-wrapper')
+        parent.classList.add('chart-wrapper');
 
-        // let textYBottom;
-        // let textXTop;
-
-        // let textVertical = document.createElement('div');
-        // textVertical.classList.add('chart-vertical-text');
-
-        // textVertical.innerHTML = `<div>100</div> <div>0</div>`
-        // parent.appendChild(textVertical);
-
-        // let textHorizontal = document.createElement('div');
-        // textHorizontal.classList.add('chart-horizontal-text');
-
-        // textHorizontal.innerHTML = `<div>pocetak</div> <div>kraj</div>`
-        // parent.appendChild(textHorizontal);
+        let infoBox = document.createElement('div');
+        infoBox.classList.add('chart-info-box');
+        infoBox.classList.add('center');
 
         let numOfDotsX = data.dotsX;
         let numOfDotsY = data.dotsY;
@@ -77,27 +66,30 @@ const highchart = (function () {
             dot.onmousedown = function (down) {
                 mouseDown = true;
                 selectedDot = dot;
+                infoBox.innerHTML = Math.floor(dot.getAttribute('cy') / 3);
                 selectedPolygon = dot.parentNode.getElementsByClassName('chart-polygon')[0];
             }
             parent.onmouseup = function (up) {
                 mouseDown = false;
                 selectedDot = false;
                 selectedPolygon = false;
+                infoBox.innerHTML = "";
             }
             svg.onmousemove = function (move) {
                 if (mouseDown && selectedDot && selectedPolygon) {
-                    // if (maxHeight > move.offsetY && minHeight < move.offsetY) {
-                    let newCY = selectedDot.getAttribute('cy')
+                    let newCY = selectedDot.getAttribute('cy');
                     newCY = move.offsetY;
                     if (newCY <= 300 && newCY >= 0 && move.toElement.parentNode.classList.contains('chart') || move.toElement.classList.contains('chart')) {
                         selectedDot.setAttributeNS(null, 'cy', newCY);
                         selectedDot.innerHTML = `<title>${Math.floor(selectedDot.getAttribute('cy') / 3)} %</title>`;
                         changePolylinePoint(polyline, selectedDot, selectedPolygon);
+                        infoBox.innerHTML = Math.floor(selectedDot.getAttribute('cy') / 3);
                     }
                     else {
                         mouseDown = false;
                         selectedDot = false;
                         selectedPolygon = false;
+
                     }
                 }
             }
@@ -121,8 +113,9 @@ const highchart = (function () {
             svg.appendChild(dot);
         }
         parent.appendChild(svg);
-        setLinearPointData(polylinePoints, parent);
 
+        parent.appendChild(infoBox);
+        setLinearPointData(polylinePoints, parent);
 
         parent.get = function () {
             return parent.settings;

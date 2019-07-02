@@ -1,4 +1,5 @@
-#details-bar {
+#details-bar,
+#jackpot-edit-details-wrapper {
     position: absolute;
     transform: translateX(0);
     top: -6%;

@@ -80,6 +80,7 @@ const addNewJackpot = (function () {
             // }
 
             let data = {};
+            data.EndpointId = $$('#page-jackpots').settings.EndpointId;
             for (let input of $$('#add-new-jackpot-content-inputs-wrapper').getElementsByClassName('element-form-data')) {
                 data[input.name ? input.name : input.dataset.name] = getInputValueByType(input);
             }
@@ -238,7 +239,7 @@ const addNewJackpot = (function () {
 
             console.log(data)
             if (data.IsGrowing || data.HasControlActiveTime) {
-                trigger(communication.events.jackpots.saveJackpot, {data});
+                trigger(communication.events.jackpots.saveJackpot, { data });
 
             }
             else {

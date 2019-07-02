@@ -4,6 +4,12 @@ const jackpots = (function () {
     let jackpotDailyLimitTopBar = $$('#top-bar-jackpots').children[0].children[2];
     let jackpotPaidTodayTopBar = $$('#top-bar-jackpots').children[1].children[2];
 
+    const jackpotBlockType = {
+        'Stop': 0,
+        'Hide': 1,
+        'Gone': 2,
+    }
+
     const events = {
         activated: 'jackpots/activated',
         getJackpots: 'jackpot/get-jackpots',
@@ -12,7 +18,8 @@ const jackpots = (function () {
         getEvents: 'jackpot/get-jackpot-events',
         previewEvents: 'jackpot/preview-jackpot-events',
         getJackpotAnimationSettings: 'jackpot/get-jackpot-animation-settings',
-        saveJackpot: 'jackpot/save-jackpot'
+        saveJackpot: 'jackpot/save-jackpot',
+        changeJackpotState: 'jackpot/change-jackpot-state'
     };
 
     on(events.activated, function (params) {
@@ -58,6 +65,7 @@ const jackpots = (function () {
         }
         jackpotsTable = table.init({
             id: jackpotsTableId,
+            isJackpot: true
         },
             data);
         $$('#jackpot-tab-info').appendChild(jackpotsTable);
@@ -77,8 +85,56 @@ const jackpots = (function () {
     });
 
     on(events.saveJackpot, function (params) {
-        console.log(params)
+        // console.log(params)
+        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
+        $$('#add-new-jackpot-wrapper').classList.add('hidden');
+
     });
+
+    on(table.events.rowClick(jackpotsTableId), function (params) {
+        let event = params.event;
+        let target = params.target;
+        let data = {};
+        data.Id = target.additionalData.Properties.Id;
+        data.EndpointId = $$('#page-jackpots').settings.EndpointId;
+        data.Hidden = target.additionalData.Properties.Hidden;
+        data.Gone = target.additionalData.Properties.Gone;
+        data.Stopped = target.additionalData.Properties.Stopped;
+        data.BlockType = target.additionalData.Properties.BlockType;
+
+        if (event.target.classList.contains('actionlist-2')) {
+            console.log('kliknuto na akciju 2')
+        }
+        else if (event.target.classList.contains('actionlist-hidden')) {
+            console.log('kliknuto na akciju sakrij dzekpot')
+            data.BlockType = jackpotBlockType.Hide;
+            trigger(communication.events.jackpots.changeJackpotState, { data });
+        }
+        else if (event.target.classList.contains('actionlist-deactivate')) {
+            console.log('kliknuto na akciju deaktviraj dzekpot');
+            data.BlockType = jackpotBlockType.Gone;
+            trigger(communication.events.jackpots.changeJackpotState, { data });
+        }
+        else if (event.target.classList.contains('actionlist-stop')) {
+            console.log('kliknuto na akciju stopiraj jackpot');
+            data.BlockType = jackpotBlockType.Stop;
+            trigger(communication.events.jackpots.changeJackpotState, { data });
+        }
+        else {
+            console.log('prikazi detalje za dzekpot')
+        }
+        console.log(data)
+    });
+
+    on(events.changeJackpotState, function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
+    })
 
     //---------------------------------------------------------------------//
 
@@ -350,14 +406,15 @@ const jackpots = (function () {
         let route = communication.apiRoutes.jackpots.changeJackpotState;
         let data = params.data;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.changeJackpotState;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 

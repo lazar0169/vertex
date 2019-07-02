@@ -125,7 +125,7 @@ const jackpotGrowthpattern = (function () {
         }
         let data = {};
         //todo obrisi
-        data.Id = 5;
+        
         // if(inputWrapper === $$('#'))
         for (let input of inputWrapper.getElementsByClassName('element-form-data')) {
 
