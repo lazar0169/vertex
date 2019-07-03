@@ -19,3 +19,7 @@
     padding-left: 0.5em;
     color: white;
 }
+
+#jackpot-edit-details-conditions-header>a {
+    padding-left: 0.5em;
+}
