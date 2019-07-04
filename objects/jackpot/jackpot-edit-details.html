@@ -5,72 +5,94 @@
             <div>[esc]</div> <span class="mdi mdi-close"></span>
         </div>
     </div>
+
     <div id="jackpot-edit-details-general-info-wrapper">
-
-
-
     </div>
-    <div id="jackpot-edit-details-conditions-wrapper">
-        <div id="jackpot-edit-details-conditions-header" class="display-flex">
-            <div class="element-multilanguage" data-translation-key="IgnoreConditionsForAssingTheJackpot"></div>
-            <a class="button-link element-multilanguage center" data-translation-key="SelectAll"></a>
-        </div>
-        <div id="jackpot-edit-details-conditions-checkbox">
-            <div class="not-clickable" data-name="Bet">
-                <label class="form-checkbox">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="Bet"></div>
-                </label>
-            </div>
-            <div class="not-clickable" data-name="Status">
-                <label class="form-checkbox">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="Status"></div>
-                </label>
-            </div>
-            <div class="not-clickable">
-                <label class="form-checkbox" data-name="PayoutAtTheEndInterval">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="IgnorePaymentAtTheEndOfTheInterval">Info
-                        Line</div>
-                </label>
-            </div>
-            <div class="not-clickable" data-name="IntervalFunction">
-                <label class="form-checkbox">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="Interval"></div>
-                </label>
-            </div>
-            <div class="not-clickable" data-name="NumOfActiveMachine">
-                <label class="form-checkbox">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="NumberOfActiveMachine"></div>
-                </label>
-            </div>
-            <div class="not-clickable" data-name="MachineForPayout">
-                <label class="form-checkbox">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="PayoutMachines"></div>
-                </label>
-            </div>
-            <div class="not-clickable" data-name="MinMaxValue">
-                <label class="form-checkbox">
-                    <input type="checkbox">
-                    <i class="form-icon"></i>
-                    <div class="element-multilanguage" data-translation-key="MinimumAndMaximumValue"></div>
-                </label>
-            </div>
-        </div>
 
+    <div id="jackpot-edit-details-conditions-wrapper">
         <div id="jackpot-edit-details-machines-dropdown">
             <div class="element-multilanguage" data-translation-key="ChooseMachineForAssingJackpot"></div>
+
+            <div>
+                <div id="jackpot-details-chosen-machine">izabrana masina</div>
+                <div class="hidden jackpot-details-search-machines">
+                    <div class="center icon-vertex-Search">
+                        <input id="jackpot-details-search-machines" class="element-multilanguage search" type="text"
+                            onfocus="value=''" placeholder="search" data-translation-key="search">
+                    </div>
+                    <div id="jackpot-details-search-machines-content">
+
+                    </div>
+                </div>
+            </div>
+
         </div>
+
+        <div>
+            <div id="jackpot-edit-details-conditions-header" class="display-flex">
+                <div class="element-multilanguage" data-translation-key="IgnoreConditionsForAssingTheJackpot"></div>
+                <a class="button-link element-multilanguage center" data-translation-key="SelectAll"></a>
+            </div>
+            <div id="jackpot-edit-details-conditions-checkbox">
+                <div class="not-clickable" data-name="Bet" data-id="0">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="Bet"></div>
+                    </label>
+                </div>
+                <div class="not-clickable" data-name="Status" data-id="1">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="Status"></div>
+                    </label>
+                </div>
+                <div class="not-clickable">
+                    <label class="form-checkbox" data-name="PayoutAtTheEndInterval" data-id="2">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="IgnorePaymentAtTheEndOfTheInterval">
+                            Info
+                            Line</div>
+                    </label>
+                </div>
+                <div class="not-clickable" data-name="IntervalFunction" data-id="4">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="Interval"></div>
+                    </label>
+                </div>
+                <div class="not-clickable" data-name="NumOfActiveMachine" data-id="5">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="NumberOfActiveMachine"></div>
+                    </label>
+                </div>
+                <div class="not-clickable" data-name="MachineForPayout" data-id="6">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="PayoutMachines"></div>
+                    </label>
+                </div>
+                <div class="not-clickable" data-name="MinMaxValue" data-id="7">
+                    <label class="form-checkbox">
+                        <input type="checkbox">
+                        <i class="form-icon"></i>
+                        <div class="element-multilanguage" data-translation-key="MinimumAndMaximumValue"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-wrapper jackpot-details-buttons-wrapper">
+            <button class="secundarybutton element-multilanguage background-red" data-translation-key="Delete"></button>
+            <button class="secundarybutton element-multilanguage" data-translation-key="AssingJackpot"> </button>
+        </div>
+
     </div>
 
 </div>

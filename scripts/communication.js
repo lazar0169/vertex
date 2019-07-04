@@ -83,14 +83,15 @@ let communication = (function () {
             setIgnoreRestrictions: 'api/jackpots/setignore/',
             showJackpotEditInfo: 'api/jackpots/editjackpot/',
             changeJackpotState: 'api/jackpots/changestate/',
-            removeJackpot: ' api/jackpots/remove/',
+            removeJackpot: 'api/jackpots/remove/',
             addJackpot: 'api/jackpots/addjackpot/',
             getJackpotSettings: 'api/jackpots/getsettings/',
             getJackpotPlasmaSettings: 'api/jackpots/getplasmasettings/',
             setJackpotSettings: 'api/jackpots/savesettings/',
             setJackpotPlasmaSettings: 'api/jackpots/saveplasmasettings/',
             saveJackpot: 'api/jackpots/save/',
-            reportsJackpot: 'api/jackpots/reports/'
+            reportsJackpot: 'api/jackpots/reports/',
+            exportToPDF: 'api/jackpots/reports/'
         },
         malfunctions: {
             getMalfunctions: 'api/malfunctions/',
@@ -186,7 +187,9 @@ let communication = (function () {
             setJackpotSettings: 'communicate/jackpots/setSettings/',
             setJackpotPlasmaSettings: 'communicate/jackpots/setPlasmaSettings/',
             saveJackpot: 'communicate/jackpots/save/',
-            reportsJackpot: 'communicate/jackpots/reports/'
+            reportsJackpot: 'communicate/jackpots/reports/',
+            exportToPDF: 'communicate/jackpot/export/pdf',
+            exportToXLS: 'communicate/jackpot/export/xls'
         },
         malfunctions: {
             parseRemoteData: 'communicate/malfunctions/data/parse',

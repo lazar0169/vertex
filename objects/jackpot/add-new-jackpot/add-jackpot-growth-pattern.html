@@ -31,21 +31,22 @@
                 <div>
                     <label class="element-multilanguage" data-translation-key="TheValueByWhichItIsGrowing">The value by
                         which it is growing</label>
-                    <input validNumber name="AutomaticValue" class="form-input element-form-data" data-type="float"
-                        type="text" placeholder="TheValueByWhichItIsGrowing">
+                    <input validNumber name="AutomaticValue" class="form-input element-form-data input-number-right"
+                        data-type="float" type="text" placeholder="TheValueByWhichItIsGrowing">
                 </div>
 
                 <div>
                     <label class="element-multilanguage" data-translation-key="GrowthValue(InDays)">Growth value (in
                         days):</label>
-                    <input validNumber name="TimeInDays" class="form-input element-form-data" data-type="int"
+                    <input validNumber name="TimeInDays" class="form-input element-form-data input-number-right" data-type="int"
                         type="text" placeholder="GrowthValue(InDays)">
                 </div>
 
                 <div>
                     <label class="element-multilanguage" data-translation-key="Hidden"></label>
-                    <input max='100' name="AutomaticHiddenPercent" class="form-input element-form-data"
-                        data-type="float" type="text" placeholder="Hidden">
+                    <input max='100' name="AutomaticHiddenPercent"
+                        class="form-input element-form-data input-number-right" data-type="float" type="text"
+                        placeholder="Hidden">
                 </div>
             </div>
 
@@ -60,11 +61,11 @@
                 <div id="add-new-jackpot-growth-pattern-by-day">
                     <div class="grid-3-columns">
                         <div>
-                            <input name="NumOfDay" class="form-input element-form-data" data-type="int" type="text"
+                            <input name="NumOfDay" class="form-input element-form-data input-number-right" data-type="int" type="text"
                                 placeholder="Days">
                         </div>
                         <div>
-                            <input max='100' name="Percent" class="form-input element-form-data" data-type="int"
+                            <input max='100' name="Percent" class="form-input element-form-data input-number-right" data-type="int"
                                 type="text" placeholder="Procenat">
                         </div>
                         <div>
@@ -76,11 +77,11 @@
 
                     <div class="grid-3-columns">
                         <div>
-                            <input max="24" name="NumOfHours" class="form-input element-form-data" data-type="int"
+                            <input max="24" name="NumOfHours" class="form-input element-form-data input-number-right" data-type="int"
                                 type="text" placeholder="Hours">
                         </div>
                         <div>
-                            <input max='100' name="Percent" class="form-input element-form-data" data-type="int"
+                            <input max='100' name="Percent" class="form-input element-form-data input-number-right" data-type="int"
                                 type="text" placeholder="Procenat">
                         </div>
                         <div>
@@ -95,23 +96,23 @@
         <div id="jackpot-grows-by-bet" class="hidden jackpot-pattern-tab-content">
             <div>
                 <label class="element-multilanguage" data-translation-key="Percent[%]"></label>
-                <input max='10000' name="Percent" class="form-input element-form-data" data-type="float" type="text"
-                    placeholder="Percent">
+                <input max='10000' name="Percent" class="form-input element-form-data input-number-right"
+                    data-type="float" type="text" placeholder="Percent">
             </div>
             <div>
                 <label class="element-multilanguage" data-translation-key="Hidden[%]"></label>
-                <input max='10000' name="HiddenPercent" class="form-input element-form-data" data-type="float"
-                    type="text" placeholder="Hidden">
+                <input max='10000' name="HiddenPercent" class="form-input element-form-data input-number-right"
+                    data-type="float" type="text" placeholder="Hidden">
             </div>
             <div>
                 <label class="element-multilanguage" data-translation-key="MinimumBetForGrowth"></label>
-                <input validNumber name="MinBetForLoading" class="form-input element-form-data" data-type="float"
-                    type="text" placeholder="MinimumBetForGrowth">
+                <input validNumber name="MinBetForLoading" class="form-input element-form-data input-number-right"
+                    data-type="float" type="text" placeholder="MinimumBetForGrowth">
             </div>
             <div>
                 <label class="element-multilanguage" data-translation-key="MaximumBetForGrowth"></label>
-                <input validNumber name="MaxBetForLoading" class="form-input element-form-data" data-type="float"
-                    type="text" placeholder="MaximumBetForGrowth">
+                <input validNumber name="MaxBetForLoading" class="form-input element-form-data input-number-right"
+                    data-type="float" type="text" placeholder="MaximumBetForGrowth">
             </div>
 
             <div id="add-new-jackpot-grows-by-bet-choose-machines-wrapper" class="choose-machines-wrapper">
@@ -135,13 +136,13 @@
                 <div>
                     <div>
                         <label class="element-multilanguage" data-translation-key="MinimumValue"></label>
-                        <input validNumber name="MinValueLimit" class="form-input element-form-data" data-type="float"
-                            type="text" placeholder="Hidden">
+                        <input validNumber name="MinValueLimit" class="form-input element-form-data input-number-right"
+                            data-type="float" type="text" placeholder="Hidden">
                     </div>
                     <div>
                         <label class="element-multilanguage" data-translation-key="MaximumValue"></label>
-                        <input validNumber name="MaxValueLimit" class="form-input element-form-data" data-type="float"
-                            type="text" placeholder="Hidden">
+                        <input validNumber name="MaxValueLimit" class="form-input element-form-data input-number-right"
+                            data-type="float" type="text" placeholder="Hidden">
                     </div>
                     <div id="jackpot-growth-pattern-after-reaching-max">
                         <div>After reaching the maximum value</div>
@@ -187,8 +188,8 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelValue"></label> -->
-                            <input required="" name="LevelValue" class="form-input element-form-data" data-type="float"
-                                type="text" placeholder="level value">
+                            <input required="" name="LevelValue" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" placeholder="level value">
                         </div>
                     </div>
                     <div>
@@ -204,8 +205,8 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="Value"></label> -->
-                            <input validNumber name="Value" class="form-input element-form-data" data-type="float"
-                                type="text" placeholder="Value">
+                            <input validNumber name="Value" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" placeholder="Value">
                         </div>
 
                         <div id="rain-add-level-button" class="center">
@@ -242,8 +243,8 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelValue"></label> -->
-                            <input required name="LevelValue" class="form-input element-form-data" data-type="float"
-                                type="text" placeholder="level value">
+                            <input required name="LevelValue" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" placeholder="level value">
                         </div>
                     </div>
                     <div>
@@ -259,8 +260,8 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="Value"></label> -->
-                            <input validNumber name="Value" class="form-input element-form-data" data-type="float"
-                                type="text" placeholder="Value">
+                            <input validNumber name="Value" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" placeholder="Value">
                         </div>
 
                         <div id="tournament-add-level-button" class="center">
@@ -302,8 +303,8 @@
                         </div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelValue"></label> -->
-                            <input required name="LevelValue" class="form-input element-form-data" data-type="float"
-                                type="text" placeholder="level value">
+                            <input required name="LevelValue" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" placeholder="level value">
                         </div>
                     </div>
 
@@ -324,8 +325,8 @@
                         </div>
                         <div>
 
-                            <input validNumber name="Value" class="form-input element-form-data" data-type="float"
-                                type="text" placeholder="Value">
+                            <input validNumber name="Value" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" placeholder="Value">
                         </div>
 
                         <div id="custom-add-level-condition-button" class="center">

@@ -23,3 +23,41 @@
 #jackpot-edit-details-conditions-header>a {
     padding-left: 0.5em;
 }
+
+#jackpot-edit-details-machines-dropdown>div:not(:first-child) {
+    padding: 0.5em;
+    border-bottom: 1px solid rgb(55, 71, 79);
+}
+
+#jackpot-details-chosen-machine {
+    cursor: pointer;
+}
+
+
+.jackpot-details-search-machines {
+    position: absolute;
+    background: rgb(55, 71, 79);
+    width: 100%;
+    height: 50%;
+    left: 0;
+    z-index: 1;
+}
+
+.jackpot-details-search-machines>.icon-vertex-Search {
+    padding: 0 0.5em;
+}
+
+.jackpot-details-buttons-wrapper {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5em;
+    left: 0;
+    background: rgb(55, 71, 79);
+}
+
+.jackpot-details-buttons-wrapper>button {
+    margin: 0 0.5em;
+}

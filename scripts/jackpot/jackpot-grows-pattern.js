@@ -402,11 +402,11 @@ const jackpotGrowthpattern = (function () {
                     let dataName = $$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name
                     if (dataName === 'days') {
                         newField.innerHTML = `<div>
-                                        <input name="NumOfDays" class="form-input element-form-data" data-type="int" type="text"
+                                        <input name="NumOfDays" class="form-input element-form-data input-number-right" data-type="int" type="text"
                                         placeholder="Days">
                                     </div>
                                     <div>
-                                        <input max="100" name="Percent" class="form-input element-form-data" data-type="int" type="text"
+                                        <input max="100" name="Percent" class="form-input element-form-data input-number-right" data-type="int" type="text"
                                         placeholder="Procenat">
                                     </div>
                                     <div>
@@ -414,11 +414,11 @@ const jackpotGrowthpattern = (function () {
                                     </div>`
                     } else {
                         newField.innerHTML = `<div>
-                        <input max="24" name="NumOfHours" class="form-input element-form-data" data-type="int" type="text"
+                        <input max="24" name="NumOfHours" class="form-input element-form-data input-number-right" data-type="int" type="text"
                         placeholder="Days">
                     </div>
                     <div>
-                        <input max="100" name="Percent" class="form-input element-form-data" data-type="int" type="text"
+                        <input max="100" name="Percent" class="form-input element-form-data input-number-right" data-type="int" type="text"
                         placeholder="Procenat">
                     </div>
                     <div>

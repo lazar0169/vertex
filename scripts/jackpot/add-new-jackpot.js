@@ -97,13 +97,15 @@ const addNewJackpot = (function () {
 
                     if (element.dataset.name === "GrowthPattern") {
 
-                        if (patternActive.dataset.value !== 'jackpot-grows-discreetly') {
+                        if (patternActive && patternActive.dataset.value !== 'jackpot-grows-discreetly') {
                             for (let input of $$(`#${patternActive.dataset.value}`).getElementsByClassName('element-form-data')) {
                                 if (input.dataset.type !== 'radio') {
                                     checkValidationField(input.parentNode);
                                 }
                             }
+
                         }
+
 
                         data[element.dataset.name]['AutomaticValue'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticValue') : 0;
                         data[element.dataset.name]['TimeInDays'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'TimeInDays') : 0;
@@ -239,7 +241,22 @@ const addNewJackpot = (function () {
 
             console.log(data)
             if (data.IsGrowing || data.HasControlActiveTime) {
-                trigger(communication.events.jackpots.saveJackpot, { data });
+
+                if (data.HasControlActiveTime) {
+                    trigger(communication.events.jackpots.saveJackpot, { data });
+                }
+                else {
+                    if (data.GrowthType) {
+                        trigger(communication.events.jackpots.saveJackpot, { data });
+                    }
+                    else {
+                        trigger('notifications/show', {
+                            message: localization.translateMessage('nije odabran nijedan tab iz growth pattern'),
+                            type: notifications.messageTypes.error,
+                        });
+                    }
+                }
+
 
             }
             else {

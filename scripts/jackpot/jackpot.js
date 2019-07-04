@@ -27,7 +27,9 @@ const jackpots = (function () {
         getJackpotAnimationSettings: 'jackpot/get-jackpot-animation-settings',
         saveJackpot: 'jackpot/save-jackpot',
         changeJackpotState: 'jackpot/change-jackpot-state',
-        showJackpotInfo: 'jackpot/show-jackpot-info'
+        showJackpotInfo: 'jackpot/show-jackpot-info',
+        removeJackpot: 'jackpot/remove-jackpot',
+        setIgnoreRestrictions: 'jackpot/set-ignore-restrictions'
     };
 
     on(events.activated, function (params) {
@@ -94,8 +96,13 @@ const jackpots = (function () {
 
     on(events.saveJackpot, function (params) {
         // console.log(params)
-        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
-        trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+
+        selectTab('jackpot-tab');
+        selectInfoContent('jackpot-tab');
         $$('#add-new-jackpot-wrapper').classList.add('hidden');
 
     });
@@ -140,6 +147,8 @@ const jackpots = (function () {
         console.log(data)
     });
 
+
+
     on(events.changeJackpotState, function (params) {
         trigger('notifications/show', {
             message: localization.translateMessage(params.data.MessageCode),
@@ -151,6 +160,7 @@ const jackpots = (function () {
 
     on(events.showJackpotInfo, function (params) {
         let data = params.data.Data;
+        jackpotEditDetailsWrapper.settings = data
         $$('#jackpot-edit-details-header').children[0].innerHTML = data.Title;
         $$('#jackpot-edit-details-general-info-wrapper').innerHTML = `<div class="display-flex">
                             <div class="element-multilanguage" data-translation-key="StartValue">${localization.translateMessage("StartValue:")}</div>
@@ -190,11 +200,32 @@ const jackpots = (function () {
                 }
             }
         }
-
-
         $$('#black-area').classList.add('show');
         jackpotEditDetailsWrapper.classList.remove('collapse');
-        console.log(params);
+    });
+
+    on(events.removeJackpot, function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        jackpotEditDetailsWrapper.classList.add('collapse');
+        $$('#black-area').classList.remove('show');
+
+        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
+    });
+
+    on(events.setIgnoreRestrictions, function (params) {
+        trigger('notifications/show', {
+            message: localization.translateMessage(params.data.MessageCode),
+            type: params.data.MessageType,
+        });
+        jackpotEditDetailsWrapper.classList.add('collapse');
+        $$('#black-area').classList.remove('show');
+
+        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
     });
 
     //---------------------------------------------------------------------//
@@ -218,11 +249,54 @@ const jackpots = (function () {
         jackpotHistoryTable = table.init({
             id: jackpotHistoryTableId,
             pageSizeContainer: '#jackpot-machines-number',
+            appearanceButtonsContainer: '#jackpot-show-space',
+            exportButtonsContainer: '#wrapper-jackpot-export-to',
             appearanceButtonsContainer: '#jackpot-show-space'
         },
             params.data.Data);
         $$('#jackpot-history-tab-info').appendChild(jackpotHistoryTable);
         trigger('preloader/hide');
+    });
+
+    on(table.events.export(jackpotHistoryTableId), function (params) {
+        let jackpotHistoryTable = params.table;
+        let filters = null;
+        if (jackpotHistoryTable.settings.filters === null) {
+
+            filters = {
+                'EndpointId': getEndpointId().EndpointId,
+                'SelectedPeriod': {
+                    DateFrom: null,
+                    DateTo: null,
+                    Period: 0
+                },
+                'MachineList': null,
+                'MachineIdList': null,
+                'JackpotList': null,
+                'CasinoList': null,
+                BasicData: {
+                    SortOrder: jackpotHistoryTable.settings.sort.direction,
+                    SortName: jackpotHistoryTable.settings.sort.name
+                },
+            };
+        } else {
+            //clone table filters;
+            filters = aftTable.cloneFiltersForExport();
+        }
+        filters.SelectedColumns = jackpotHistoryTable.getVisibleColumns();
+        let event = null;
+        switch (params.type.name) {
+            case table.exportFileTypes.pdf.name:
+                event = communication.events.jackpots.exportToPDF;
+                break;
+            case table.exportFileTypes.excel.name:
+                event = communication.events.jackpots.exportToXLS;
+                break;
+            default:
+                console.error('unsuported export type');
+                break;
+        }
+        trigger(event, { data: filters });
     });
     //-------------------------------------------------------------------------//
 
@@ -265,6 +339,8 @@ const jackpots = (function () {
         let filtersForApi = prepareJackpotFIlters(jackpotEventsTableId);
         trigger(communication.events.jackpots.previewEvents, { data: filtersForApi });
     });
+
+
 
     function prepareJackpotFIlters(tableId) {
         let table = $$(`#${tableId}`);
@@ -431,19 +507,20 @@ const jackpots = (function () {
         });
     });
 
-    //set ignore restrictions
+    //set ignore restrictions ++++
     on(communication.events.jackpots.setIgnoreRestrictions, function (params) {
         let route = communication.apiRoutes.jackpots.setIgnoreRestrictions;
-        let data = params.data;
+        let data = params;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.setIgnoreRestrictions;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 
@@ -480,19 +557,20 @@ const jackpots = (function () {
         });
     });
 
-    //remove jackpot
+    //remove jackpot ++++
     on(communication.events.jackpots.removeJackpot, function (params) {
         let route = communication.apiRoutes.jackpots.removeJackpot;
-        let data = params.data;
+        let data = params;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.removeJackpot;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 
@@ -614,6 +692,19 @@ const jackpots = (function () {
             successEvent: successEvent,
             errorEvent: errorEvent
         });
+    });
+
+    on(communication.events.jackpots.exportToPDF, function (params) {
+        let data = params.data;
+        communication.sendRequest(communication.apiRoutes.jackpots.exportToPDF, communication.requestTypes.post, data,
+            table.events.saveExportedFile, communication.handleError, { type: table.exportFileTypes.pdf.type }, [{
+                name: 'responseType',
+                value: 'arraybuffer'
+            }]);
+    });
+
+    on(communication.events.jackpots.exportToXLS, function (params) {
+        //ToDo za ovo ne postoji backend
     });
 
     return {

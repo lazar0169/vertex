@@ -401,7 +401,7 @@ let table = (function () {
                 let cellData;
                 if (tempRow[column] instanceof Object) {
                     if (tempRow[column] instanceof Array) {
-                        cellData = createCellFromArray({ name: column, array: tempRow[column], jackpotAction: settings.isJackpot });
+                        cellData = createCellFromArray({ name: column, array: tempRow[column], jackpotAction: settings.isJackpot, property: items[row].Properties });
                     }
                     else {
                         cellData = createTimeUserCellHTML(formatTimeData(tempRow[column].Time), tempRow[column].Name)
@@ -618,10 +618,15 @@ let table = (function () {
             if (name === 'flaglist' || name === 'actionlist') {
                 let index = data.array.indexOf(element)
                 if (name === 'actionlist' && data.jackpotAction && index === 0) {
+
+                    let showHidefromScreen = data.property.Hidden.IsBlocked ? 'ShowFromScreen' : 'HideFromScreen';
+                    let activateDeactivate = data.property.Gone.IsBlocked ? 'Activate' : 'Deactivate';
+                    let startStop = data.property.Stopped.IsBlocked ? 'Start' : 'Stop';
+
                     tempWrapper.innerHTML += `<div class="special-action"> 
-                    <a class="button-link actionlist-hidden" data-translation-key="HideFromScreen">${localization.translateMessage('HideFromScreen')}</a>
-                    <a class="button-link actionlist-deactivate" data-translation-key="Deactivate">${localization.translateMessage('Deactivate')}</a>
-                    <a class="button-link actionlist-stop" data-translation-key="Stop">${localization.translateMessage('Stop')}</a>
+                    <a class="button-link actionlist-hidden" data-translation-key="HideFromScreen">${localization.translateMessage(showHidefromScreen)}</a>
+                    <a class="button-link actionlist-deactivate" data-translation-key="Deactivate">${localization.translateMessage(activateDeactivate)}</a>
+                    <a class="button-link actionlist-stop" data-translation-key="Stop">${localization.translateMessage(startStop)}</a>
                     </div> 
                     <div class="${name}-element ${name}-${element}"></div>`;
 

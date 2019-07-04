@@ -179,27 +179,29 @@
             </div>
         </div>
         <section id="ticket-notification-settings" class="collapsible">
-            <div class="form-section">
-                <div class="form-section-content">
-                    <div id="tickets-sms-settings-max-redemption" class="form-group">
-                        <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">
-                            Send notification when the value of the printed ticket is higher than:
-                        </label>
-                        <input name="RedeemedTicketLimitForNotification" data-type="float"
-                            class="form-input element-form-data input-number-right" type="text" required min="20"
-                            placeholder="Max. redemption" validNumber>
+            <div id="ticket-notification-settings-value">
+                <div class="form-section">
+                    <div class="form-section-content">
+                        <div id="tickets-sms-settings-max-redemption" class="form-group">
+                            <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Redeemed">
+                                Send notification when the value of the printed ticket is higher than:
+                            </label>
+                            <input name="RedeemedTicketLimitForNotification" data-type="float"
+                                class="form-input element-form-data input-number-right" type="text" required min="20"
+                                placeholder="Max.redemption" validNumber>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-section border-bottom">
-                <div class="form-section-content">
-                    <div class="form-group" id="tickets-sms-settings-max-issuance">
-                        <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Printed">
-                            Send notification when the value of the printed ticket is higher than:
-                        </label>
-                        <input name="SoldTicketLimitForNotification"
-                            class="form-input element-form-data input-number-right" data-type="float" type="text"
-                            placeholder="Max. issuance" validNumber>
+                <div class="form-section border-bottom">
+                    <div class="form-section-content">
+                        <div class="form-group" id="tickets-sms-settings-max-issuance">
+                            <label class="element-multilanguage" data-translation-key="Tickets.SmsSettings.Printed">
+                                Send notification when the value of the printed ticket is higher than:
+                            </label>
+                            <input name="SoldTicketLimitForNotification"
+                                class="form-input element-form-data input-number-right" data-type="float" type="text"
+                                placeholder="Max. issuance" validNumber>
+                        </div>
                     </div>
                 </div>
             </div>
