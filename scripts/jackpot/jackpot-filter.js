@@ -28,12 +28,14 @@ const jackpotFilter = (function () {
         addNewJackpot.classList.add('hidden');
     });
 
-    //show add new jackop form
+    //show add new jackpot form
     addJackpot.onclick = function () {
         let EntryData = jackpots.getEndpointId();
         let data = {};
         data.successAction = 'jackpot/get-add-jackpot';
-        trigger(communication.events.jackpots.addJackpot, { data, EntryData })
+        trigger(communication.events.jackpots.addJackpot, { data, EntryData });
         addNewJackpot.classList.toggle('hidden');
+        //todo jel ovde praznim polja?
+        trigger('jackpot/clear-add-jackpot-input');
     }
 })();

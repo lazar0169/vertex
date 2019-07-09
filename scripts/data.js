@@ -376,3 +376,127 @@ let daysInWeek = [
         Id: 7
     }
 ]
+
+let testDataMachinesInCasino = {
+    'Casino1': {
+        List: 'casino1',
+        Value: [
+            {
+                Name: 'masina 1',
+                Id: 1,
+                Casino: 'Casino1'
+            },
+            {
+                Name: 'masina 2',
+                Id: 3,
+                Casino: 'Casino1'
+            },
+            {
+                Name: 'masina 3',
+                Id: 3,
+                Casino: 'Casino1'
+            },
+            {
+                Name: 'masina 4',
+                Id: 4,
+                Casino: 'Casino1'
+            },
+            {
+                Name: 'masina 5',
+                Id: 5,
+                Casino: 'Casino1'
+            },
+            {
+                Name: 'masina 6',
+                Id: 6,
+                Casino: 'Casino1'
+            },
+            {
+                Name: 'masina 7',
+                Id: 7,
+                Casino: 'Casino1'
+            },
+        ]
+    },
+    'Casino3': {
+        List: 'casino3',
+        Value: [
+            {
+                Name: 'masina Beograd 1',
+                Id: 1,
+                Casino: 'Casino3'
+            },
+            {
+                Name: 'masina  Beograd 2',
+                Id: 3,
+                Casino: 'Casino3'
+            },
+            {
+                Name: 'masina Beograd 3',
+                Id: 3,
+                Casino: 'Casino3'
+            },
+            {
+                Name: 'masina Beograd 4',
+                Id: 4,
+                Casino: 'Casino3'
+            },
+            {
+                Name: 'masina Beograd 5',
+                Id: 5,
+                Casino: 'Casino3'
+            },
+            {
+                Name: 'masina Beograd 6',
+                Id: 6,
+                Casino: 'Casino3'
+            },
+            {
+                Name: 'masina Beograd 7',
+                Id: 7,
+                Casino: 'Casino3'
+            },
+        ]
+    },
+    'Casino2': {
+        List: 'casino2',
+        Value: [
+            {
+                Name: 'masina Surdulica 1',
+                Id: 1,
+                Casino: 'Casino2'
+            },
+            {
+                Name: 'masina Surdulica 2',
+                Id: 3,
+                Casino: 'Casino2'
+            },
+            {
+                Name: 'masina 3',
+                Id: 3,
+                Casino: 'Casino2'
+            },
+            {
+                Name: 'masina Surdulica 4',
+                Id: 4,
+                Casino: 'Casino2'
+            },
+            {
+                Name: 'masina  Surdulica 5',
+                Id: 5,
+                Casino: 'Casino2'
+            },
+            {
+                Name: 'masina  Surdulica6',
+                Id: 6,
+                Casino: 'Casino2'
+            },
+            {
+                Name: 'masina Surdulica 7',
+                Id: 7,
+                Casino: 'Casino2'
+            },
+        ]
+    },
+
+}

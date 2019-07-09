@@ -45,40 +45,6 @@ const addNewJackpot = (function () {
     saveNewJackpot.addEventListener('click', function (e) {
         if (checkValidationField($$(`#${e.target.dataset.value}`))) {
 
-            // if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) && $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0]
-            //     || checkboxChangeState.getSwitchState($$("#jackpot-control-active-time-toggle").parentNode) && $$('#add-new-jackpot-time-interval-added-by-dropdown').children.length !== 0) {
-
-            //     alert("save new jackpot");
-
-            // }else{
-            //     trigger('notifications/show', {
-            //         message: localization.translateMessage('neki je aktivan ali unutar nije nista izabrano'),
-            //         type: notifications.messageTypes.error,
-            //     });
-            // }
-
-            // && $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0]
-
-            // for (let jackpotContent of $$('#add-new-jackpot-wrapper').getElementsByClassName('checked-add-new-jackpot-settings')) {
-            //     if (checkboxChangeState.getSwitchState(jackpotContent))
-            //         checkValidationField(jackpotContent.parentNode.children[1])
-            // }
-
-            // if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode) && $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0]) {
-            //     let patternActive = $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0];
-            //     checkValidationField($$(`#${patternActive.dataset.value}`))
-            // } else {
-
-            // }
-
-            // if (checkboxChangeState.getSwitchState($$("#jackpot-content-growth-pattern-toggle").parentNode)) {
-            //     console.log()
-            //     alert("save new jackpot");
-            // }
-            // else {
-            //     alert("izaberi patern");
-            // }
-
             let data = {};
             data.EndpointId = $$('#page-jackpots').settings.EndpointId;
             for (let input of $$('#add-new-jackpot-content-inputs-wrapper').getElementsByClassName('element-form-data')) {
@@ -90,13 +56,11 @@ const addNewJackpot = (function () {
             data.IsLocal = $$('#add-new-jackpot-wrapper').settings.IsLocal;
 
             for (let element of $$('#add-new-jackpot-wrapper').getElementsByClassName('add-new-jackpot-control-settings')) {
-
                 data[element.getElementsByClassName('form-switch')[0].children[0].name] = checkboxChangeState.getSwitchState(element);
                 if (checkboxChangeState.getSwitchState(element)) {
                     data[element.dataset.name] = {}
 
                     if (element.dataset.name === "GrowthPattern") {
-
                         if (patternActive && patternActive.dataset.value !== 'jackpot-grows-discreetly') {
                             for (let input of $$(`#${patternActive.dataset.value}`).getElementsByClassName('element-form-data')) {
                                 if (input.dataset.type !== 'radio') {
@@ -105,8 +69,6 @@ const addNewJackpot = (function () {
                             }
 
                         }
-
-
                         data[element.dataset.name]['AutomaticValue'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticValue') : 0;
                         data[element.dataset.name]['TimeInDays'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'TimeInDays') : 0;
                         data[element.dataset.name]['AutomaticHiddenPercent'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticHiddenPercent') : 0;
@@ -182,62 +144,7 @@ const addNewJackpot = (function () {
                         }
                     }
                 }
-
             }
-
-            //     // for (let inputInPattern of element.getElementsByClassName('element-form-data')) {
-
-            //     //     if (inputInPattern.classList.contains('default-select')) {
-            //     //         data[element.dataset.name][inputInPattern.children[0].dataset.name] = inputInPattern.get();
-            //     //     } else if (inputInPattern.dataset.type === 'float') {
-            //     //         data[element.dataset.name][inputInPattern.name] = inputInPattern.dataset.value ? parseInt(inputInPattern.dataset.value) : 0;
-            //     //     }
-            //     //     else {
-            //     //         data[element.dataset.name][inputInPattern.name] = inputInPattern.value;
-
-            //     //     }
-
-            //     // }
-            // }
-            // //bet limits settings
-            // for (let element of $$('#add-new-jackpot-content-limit-settings').getElementsByClassName('element-form-data')) {
-            //     data.BetAndWinLimit[element.name] = element.dataset.value ? parseInt(element.dataset.value) : 0;
-            // }
-            // //advance settings
-            // for (let element of $$('#add-new-jackpot-content-advance-settings').getElementsByClassName('element-form-data')) {
-            //     data.AdvancedSettings[element.children[0].dataset.name] = element.get();
-            // }
-            // //growth pattern
-            // // automatically
-            // for (let element of $$('#jackpot-grows-automatically-content').children[0].getElementsByClassName('element-form-data')) {
-            //     let value = getInputValueByType(element)
-            //     data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
-            // }
-            // data.GrowthPattern.DayIntervalData = [];
-            // for (let element of $$('#jackpot-control-growth-period').parentNode.children) {
-            //     if (element.classList.contains('grid-3-columns') && element.children[0].children[0].value && element.children[1].children[0].value) {
-            //         let object = {}
-            //         object[element.children[0].children[0].name] = element.children[0].children[0].value
-            //         object[element.children[1].children[0].name] = element.children[1].children[0].value
-            //         data.GrowthPattern.DayIntervalData.push(object)
-            //     }
-            // }
-            // //by bet
-            // for (let element of $$('#jackpot-grows-by-bet').getElementsByClassName('element-form-data')) {
-            //     let value = getInputValueByType(element)
-            //     data.GrowthPattern[element.name ? element.name : element.dataset.name] = value ? value : 0;
-            // }
-
-            // //custom
-            // let value = checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons'))
-            // data.GrowthPattern.DiscreeteType = value ? value : 0;
-            // data.GrowthPattern.Levels = [];
-            // let discreetlyRadioWrapper = $$('#jackpot-grows-discreetly-radio-buttons');
-            // if (discreetlyRadioWrapper.settings && discreetlyRadioWrapper.settings.radioName && $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children.length !== 0) {
-            //     for (let level of $$(`#${discreetlyRadioWrapper.settings.radioName}-jackpot-exist-wrapper`).children) {
-            //         console.log(level.settings)
-            //     }
-            // }
 
             console.log(data)
             if (data.IsGrowing || data.HasControlActiveTime) {
@@ -250,16 +157,17 @@ const addNewJackpot = (function () {
                         trigger(communication.events.jackpots.saveJackpot, { data });
                     }
                     else {
+                        trigger(communication.events.jackpots.saveJackpot, { data });
                         trigger('notifications/show', {
                             message: localization.translateMessage('nije odabran nijedan tab iz growth pattern'),
                             type: notifications.messageTypes.error,
                         });
                     }
                 }
-
-
             }
+
             else {
+                trigger(communication.events.jackpots.saveJackpot, { data });
                 trigger('notifications/show', {
                     message: localization.translateMessage('nisu aktivni ni growth ni active time'),
                     type: notifications.messageTypes.error,
@@ -326,6 +234,7 @@ const addNewJackpot = (function () {
     });
 
     on('jackpot/get-add-jackpot', function (params) {
+        $$('#add-new-jackpot-content-header').innerHTML = localization.translateMessage('AddNewJackpot');
         fillAdvanceSettings(params);
     });
 

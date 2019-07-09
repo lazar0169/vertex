@@ -1,5 +1,4 @@
-#details-bar,
-#jackpot-edit-details-wrapper {
+#details-bar {
     position: absolute;
     transform: translateX(0);
     top: -6%;
@@ -13,8 +12,7 @@
     overflow: hidden;
 }
 
-#details-bar.collapse,
-#jackpot-edit-details-wrapper.collapse {
+#details-bar.collapse {
     transform: translateX(101%);
 }
 

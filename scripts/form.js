@@ -632,5 +632,4 @@ let form = (function () {
         let apiResponseData = params.data;
         displayData(formSettings, apiResponseData);
     })
-
 })();

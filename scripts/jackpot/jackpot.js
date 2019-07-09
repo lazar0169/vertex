@@ -4,6 +4,7 @@ const jackpots = (function () {
     let jackpotDailyLimitTopBar = $$('#top-bar-jackpots').children[0].children[2];
     let jackpotPaidTodayTopBar = $$('#top-bar-jackpots').children[1].children[2];
     let jackpotEditDetailsWrapper = $$("#jackpot-edit-details-wrapper");
+    let jackpotDetailsChosenMachine = $$('#jackpot-details-chosen-machine');
 
     const jackpotBlockType = {
         'Stop': 0,
@@ -15,6 +16,15 @@ const jackpots = (function () {
         1: "AutomaticLoading",
         2: "BetLoading",
         3: "DiscreteLoading"
+    }
+    const inputTypes = {
+        singleSelect: 'single-select',
+        integer: 'int',
+        float: 'float',
+        string: 'string',
+        array: 'array',
+        vertexSlide: 'vertex-slide',
+        radio: 'radio'
     }
 
     const events = {
@@ -29,7 +39,8 @@ const jackpots = (function () {
         changeJackpotState: 'jackpot/change-jackpot-state',
         showJackpotInfo: 'jackpot/show-jackpot-info',
         removeJackpot: 'jackpot/remove-jackpot',
-        setIgnoreRestrictions: 'jackpot/set-ignore-restrictions'
+        setIgnoreRestrictions: 'jackpot/set-ignore-restrictions',
+        showJackpotEditInfo: 'jackpot/show-jackpot-edit-info'
     };
 
     on(events.activated, function (params) {
@@ -120,6 +131,9 @@ const jackpots = (function () {
 
         if (event.target.classList.contains('actionlist-2')) {
             console.log('kliknuto na akciju 2')
+            let EndpointId = data.EndpointId;
+            let Id = data.Id;
+            trigger(communication.events.jackpots.showJackpotEditInfo, { EndpointId, Id });
         }
         else if (event.target.classList.contains('actionlist-hidden')) {
             console.log('kliknuto na akciju sakrij dzekpot')
@@ -140,7 +154,6 @@ const jackpots = (function () {
             console.log('prikazi detalje za dzekpot')
             let EndpointId = data.EndpointId;
             let Id = data.Id;
-
             trigger(communication.events.jackpots.showJackpotInfo, { EndpointId, Id });
 
         }
@@ -200,6 +213,11 @@ const jackpots = (function () {
                 }
             }
         }
+        jackpotDetailsChosenMachine.settings = '';
+        jackpotDetailsChosenMachine.innerHTML = localization.translateMessage('ChooseMachine');
+        jackpotDetailsBar.generateMachinesList(data.MachineRestrictionList);
+
+
         $$('#black-area').classList.add('show');
         jackpotEditDetailsWrapper.classList.remove('collapse');
     });
@@ -226,6 +244,112 @@ const jackpots = (function () {
 
         let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
         trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
+    });
+
+    on(events.showJackpotEditInfo, function (params) {
+        console.log('showJackpotEditInfo');
+        console.log(params);
+        let jackpotData = params.data.Data.Jackpot;
+        $$('#add-new-jackpot-content-header').innerHTML = localization.translateMessage('EditJackpot');
+
+        // for (let inputElement of $$('#add-new-jackpot-wrapper').getElementsByClassName('element-form-data')) {
+        //     let inputName = inputElement.name ? inputElement.name : inputElement.children[0].dataset.name;
+        //     let value;
+        //     if (inputName) {
+        //         value = findProp(jackpotData, inputName);
+        //     }
+        //     switch (inputElement.dataset.type) {
+        //         case inputTypes.singleSelect:
+        //             jackpotData[inputName] ? inputElement.set(jackpotData[inputName]) : inputElement.reset();
+        //             break;
+        //         case inputTypes.integer:
+        //             if (value || value === 0) {
+        //                 inputElement.value = value
+        //             }
+        //             break;
+        //         case inputTypes.float:
+        //             // inputElement.value = formatFloatValue(dataToDisplay[inputName] / valueMultiplier);
+        //             if (value || value === 0) {
+        //                 inputElement.value = formatFloatValue(value);
+        //                 inputElement.dataset.value = value;
+        //             }
+        //             break;
+        //         case inputTypes.string:
+        //             inputElement.value = jackpotData[inputName] ? jackpotData[inputName] : '';
+        //             break;
+        //         case inputTypes.array:
+        //             if (jackpotData[inputName].length === 1) {
+        //                 inputElement.value = jackpotData[inputName][0];
+        //             }
+        //             break;
+
+        //         case inputTypes.vertexSlide:
+        //             inputElement.checked = jackpotData[inputName];
+        //             break;
+
+        //         case inputTypes.radio:
+
+        //             if (inputElement.dataset.value === jackpotData[inputElement.parentNode.dataset.name] || parseInt(inputElement.dataset.value) === jackpotData[inputElement.parentNode.dataset.name]) {
+        //                 checkboxChangeState.checkboxIsChecked(inputElement, true);
+        //             }
+        //             break;
+        //         default:
+        //             inputElement.value = jackpotData[inputName] ? jackpotData[inputName] : '';
+        //     }
+        // }
+
+        // for (let inputElement of $$('#add-new-jackpot-content-inputs').getElementsByClassName('element-form-data')) {
+        //     inputElement.value = jackpotData[inputElement.name]
+        // }
+
+        // for (let radioElement of $$('#add-new-jackpot-content-inputs-radio').getElementsByClassName('form-radio')) {
+        //     if (jackpotData[radioElement.parentNode.dataset.name]) {
+        //         if (radioElement.dataset.value === jackpotData[radioElement.parentNode.dataset.name] || parseInt(radioElement.dataset.value) === jackpotData[radioElement.parentNode.dataset.name]) {
+        //             checkboxChangeState.checkboxIsChecked(radioElement.getElementsByClassName('form-input')[0], true);
+        //         }
+        //     }
+        // }
+
+        // for (let controlSettings of $$('#add-new-jackpot-wrapper').getElementsByClassName('add-new-jackpot-control-settings')) {
+        //     checkboxChangeState.checkboxIsChecked(controlSettings.getElementsByClassName('form-switch')[0], jackpotData[controlSettings.dataset.name]);
+        // }
+
+
+        $$('#add-new-jackpot-wrapper').classList.remove('hidden')
+    });
+
+    // function findProp(obj, searchKey) {
+    //     let objKeys = Object.keys(obj);
+    //     for (let key of objKeys) {
+    //         if (key === searchKey) {
+    //             return obj[`${key}`];
+    //         }
+    //         if (typeof obj[`${key}`] === 'object') {
+    //             let result = findProp(obj[`${key}`], searchKey);
+    //             if (result !== undefined) {
+    //                 return result;
+    //             }
+    //         }
+    //     }
+    //     return undefined;
+    // }
+
+    function clearAddJackpotInput() {
+
+        for (let inputElement of $$('#add-new-jackpot-wrapper').getElementsByClassName('element-form-data')) {
+            switch (inputElement.dataset.type) {
+                case inputTypes.singleSelect:
+                    inputElement.reset();
+                    break;
+
+                default:
+                    inputElement.value = '';
+            }
+        }
+    }
+
+    on('jackpot/clear-add-jackpot-input', function () {
+        clearAddJackpotInput();
     });
 
     //---------------------------------------------------------------------//
@@ -527,16 +651,17 @@ const jackpots = (function () {
     //show jackpot edit info
     on(communication.events.jackpots.showJackpotEditInfo, function (params) {
         let route = communication.apiRoutes.jackpots.showJackpotEditInfo;
-        let data = params.data;
+        let data = params;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.showJackpotEditInfo;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 

@@ -1,8 +1,34 @@
+#jackpot-edit-details-wrapper {
+    position: absolute;
+    transform: translateX(0);
+    top: -6%;
+    right: -1%;
+    width: 40%;
+    height: 106%;
+    background: rgb(38, 50, 56);
+    z-index: 1;
+    transition: all 0.2s ease;
+    color: rgb(120, 144, 156);
+    overflow: hidden;
+    font-size: 14px;
+}
+
+#jackpot-edit-details-wrapper.collapse {
+    transform: translateX(101%);
+}
+
+
 #jackpot-edit-details-header {
     position: relative;
     width: 100%;
     height: 100px;
     background: rgb(55, 71, 79);
+}
+
+#jackpot-edit-details-header>div:first-child {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 #jackpot-edit-details-wrapper>div {
@@ -31,6 +57,7 @@
 
 #jackpot-details-chosen-machine {
     cursor: pointer;
+    color: white;
 }
 
 
@@ -60,4 +87,32 @@
 
 .jackpot-details-buttons-wrapper>button {
     margin: 0 0.5em;
+}
+
+.jackpot-details-casino-wrapper {
+    padding: 0.5em;
+    font-size: 0.938em;
+}
+
+.jackpot-details-casino-name {
+    padding: 0 0.5em;
+    border-bottom: 2px solid rgb(38, 50, 56);
+    color: white;
+    font-weight: 600;
+}
+
+.jackpot-details-casino-machine-name {
+    padding: 0 1em;
+
+    cursor: pointer;
+}
+
+.jackpot-details-casino-machine-name:hover {
+    color: white;
+}
+
+.jackpot-details-empty-machine-content {
+    padding: 0.5em;
+    font-size: 16px;
+    color: white;
 }

@@ -425,20 +425,16 @@ const jackpotGrowthpattern = (function () {
                         <button class="secundarybutton" data-value="add-new-field">Add</button>
                     </div>`
                     }
-
                     button.parentNode.parentNode.parentNode.appendChild(newField);
 
                     for (let input of newField.getElementsByClassName('element-form-data')) {
                         validation.init(input, {});
                     }
-
-
                     bindGridButton(newField.children[2].children[0]);
                 } else {
 
                 }
             } else {
-
                 button.parentNode.parentNode.remove()
             }
         }
