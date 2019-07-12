@@ -124,9 +124,6 @@ const jackpotGrowthpattern = (function () {
             inputWrapper = id;
         }
         let data = {};
-        //todo obrisi
-        
-        // if(inputWrapper === $$('#'))
         for (let input of inputWrapper.getElementsByClassName('element-form-data')) {
 
             switch (input.dataset.type) {
@@ -147,7 +144,7 @@ const jackpotGrowthpattern = (function () {
 
         }
 
-        if (inputWrapper === $$('#custom-input-wrapper')) {
+        if (inputWrapper.parentNode === $$('#custom-input-wrapper')) {
             data.CustomLevelConditions = [];
             data.CustomLevelConditionsText = [];
             for (let levelCondition of $$('#custom-level-conditions-wrapper').children) {

@@ -145,9 +145,6 @@ const jackpotDetailsBar = (function () {
             return newObject;
         }
     }
-
-
-
     return {
         generateMachinesList
     }

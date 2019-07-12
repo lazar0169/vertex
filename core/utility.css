@@ -294,7 +294,7 @@
 
 .background-dark {
     background: rgb(38, 50, 56);
-    box-shadow: 0 0 10px #000000;
+    /* box-shadow: 0 0 10px #000000; */
 }
 
 /* .cities-wrapper {

@@ -398,3 +398,12 @@
 .control-active-time-interval-wrapper:hover {
     color: white;
 }
+
+#winning-conditions-only-at-the-end-of-interval,
+#winning-conditions-only-at-the-end-of-interval-custom {
+    padding: 0 0.5em 0 2em;
+}
+
+#winning-conditions-only-at-the-end-of-interval-custom>div>div {
+    padding: 0 0.5em;
+}

@@ -121,6 +121,34 @@ const highchart = (function () {
             return parent.settings;
         }
 
+        parent.set = function (params) {
+
+            let dots = parent.getElementsByClassName('chart-dot')
+            if (params && params.length === dots.length) {
+                for (let d = 0; d < dots.length; d++) {
+                    dots[d].setAttributeNS(null, 'cx', `${dots[d].getAttribute('cx')}`);
+                    dots[d].setAttributeNS(null, 'cy', `${params[d].Y * 3}`);
+                    dots[d].innerHTML = `<title>${Math.floor(dots[d].getAttribute('cy') / 3)} %</title>`;
+                    changePolylinePoint(polyline, dots[d], polygon);
+                }
+            } else {
+                trigger('notifications/show', {
+                    message: localization.translateMessage('Chart: Invalid data'),
+                    type: notifications.messageTypes.error,
+                });
+            }
+            //todo napraviti funkciju za setovanje tacaka
+        }
+
+        parent.reset = function () {
+            for (let dot of parent.getElementsByClassName('chart-dot')) {
+                dot.setAttributeNS(null, 'cx', `${dot.getAttribute('cx')}`);
+                dot.setAttributeNS(null, 'cy', '150');
+                dot.innerHTML = `<title>${Math.floor(dot.getAttribute('cy') / 3)} %</title>`;
+                changePolylinePoint(polyline, dot, polygon);
+            }
+
+        }
     }
 
     function changePolylinePoint(polyline, dot, polygon) {

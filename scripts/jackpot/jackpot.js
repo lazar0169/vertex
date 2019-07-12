@@ -249,6 +249,11 @@ const jackpots = (function () {
     on(events.showJackpotEditInfo, function (params) {
         console.log('showJackpotEditInfo');
         console.log(params);
+        let addJackpotListData = params.data.Data.AddJackpotLists;
+
+        addNewJackpot.fillAdvanceSettings(addJackpotListData)
+
+
         let jackpotData = params.data.Data.Jackpot;
         $$('#add-new-jackpot-content-header').innerHTML = localization.translateMessage('EditJackpot');
 
@@ -334,9 +339,9 @@ const jackpots = (function () {
     //     return undefined;
     // }
 
-    function clearAddJackpotInput() {
+    function clearAddJackpotInput(wrapper) {
 
-        for (let inputElement of $$('#add-new-jackpot-wrapper').getElementsByClassName('element-form-data')) {
+        for (let inputElement of wrapper.getElementsByClassName('element-form-data')) {
             switch (inputElement.dataset.type) {
                 case inputTypes.singleSelect:
                     inputElement.reset();
@@ -349,7 +354,7 @@ const jackpots = (function () {
     }
 
     on('jackpot/clear-add-jackpot-input', function () {
-        clearAddJackpotInput();
+        clearAddJackpotInput($$('#add-new-jackpot-wrapper'));
     });
 
     //---------------------------------------------------------------------//
@@ -833,6 +838,7 @@ const jackpots = (function () {
     });
 
     return {
-        getEndpointId
+        getEndpointId,
+        clearAddJackpotInput
     }
 })();
