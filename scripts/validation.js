@@ -5,6 +5,7 @@ let validation = (function () {
         singleSelect: 'single-select',
         integer: 'int',
         float: 'float',
+        floatZ: 'float-z',
         email: 'email',
         string: 'string',
         pattern: 'pattern',
@@ -248,12 +249,18 @@ let validation = (function () {
                         case inputTypes.float:
 
                             if (config.decimalSeparator === '.') {
-                                rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
+                                rule.regex = new RegExp(/^([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
                             } else {
-                                rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
-
+                                rule.regex = new RegExp(/^([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
                             }
                             break;
+                        case inputTypes.floatZ:
+                                if (config.decimalSeparator === '.') {
+                                    rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
+                                } else {
+                                    rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
+                                }
+                            break
                         case inputTypes.time:
                             rule.regex = new RegExp(/((0[0-9]?:?)|(1[0-9]?:?)|(2[0-3]?:?)){0,2}([0-5]?[0-9]){0,2}?/);
                             break;
