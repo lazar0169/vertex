@@ -7,6 +7,7 @@ let validation = (function () {
         float: 'float',
         floatZ: 'float-z',
         email: 'email',
+        phone: 'phone',
         string: 'string',
         pattern: 'pattern',
         array: 'array',
@@ -19,6 +20,7 @@ let validation = (function () {
         maximum: 'max',
         equals: 'equals',
         email: 'email',
+        phone: 'phone',
         maxLength: 'maxlength',
         validNumber: 'validNumber',
     };
@@ -29,6 +31,7 @@ let validation = (function () {
         lesserThan: '<',
         equals: '=',
         email: 'email',
+        phone: 'phone',
         maxLength: 'maxLength',
         validNumber: 'validNumber'
     };
@@ -39,6 +42,8 @@ let validation = (function () {
     defaultErrorMessages[inputTypes.float] = 'FloatValidationErrorMessage';
     defaultErrorMessages[inputTypes.email] = 'EmailFormatValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.email] = 'EmailFormatValidationErrorMessage';
+    defaultErrorMessages[inputTypes.phone] = 'PhoneFormatValidationErrorMessage';
+    defaultErrorMessages[constraintAttributes.phone] = 'PhoneFormatValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.required] = 'RequiredValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.minimum] = 'LesserThanValidationErrorMessage';
     defaultErrorMessages[constraintAttributes.maximum] = 'GreaterThanValidationErrorMessage';
@@ -68,12 +73,16 @@ let validation = (function () {
         return a === '' || a.match(new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ));
     };
+
+    operatorFunctions[constraintsOperators.phone] = function (a) {
+        return a === '' || a.match(new RegExp(/^((\+[0-9])?[0-9]*)?$/));
+    };
     operatorFunctions[constraintsOperators.maxLength] = function (a, b) {
         b = parseInt(b);
         return a.length <= b;
     };
     operatorFunctions[constraintsOperators.validNumber] = function (a, b) {
-        return a > b.maxNumber || a < b.minNumber ? '' : a;
+        return isNaN(a) ? '' : a > b.maxNumber || a < b.minNumber ? '' : a;
     };
     //endregion
 
@@ -255,11 +264,11 @@ let validation = (function () {
                             }
                             break;
                         case inputTypes.floatZ:
-                                if (config.decimalSeparator === '.') {
-                                    rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
-                                } else {
-                                    rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
-                                }
+                            if (config.decimalSeparator === '.') {
+                                rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\.?)([0-9]){0,2})?$/);
+                            } else {
+                                rule.regex = new RegExp(/^(-)?([0-9]*)(([0-9]*)(\,?)([0-9]){0,2})?$/);
+                            }
                             break
                         case inputTypes.time:
                             rule.regex = new RegExp(/((0[0-9]?:?)|(1[0-9]?:?)|(2[0-3]?:?)){0,2}([0-5]?[0-9]){0,2}?/);
@@ -285,6 +294,7 @@ let validation = (function () {
             let equals = element.getAttribute(constraintAttributes.equals);
             let required = element.getAttribute(constraintAttributes.required);
             let email = element.getAttribute(constraintAttributes.email);
+            let phone = element.getAttribute(constraintAttributes.phone);
             let maxLength = element.getAttribute(constraintAttributes.maxLength);
             let validNumber = element.getAttribute(constraintAttributes.validNumber);
 
@@ -294,6 +304,14 @@ let validation = (function () {
                 settings.constraints.set(constraintAttributes.email, {
                     name: constraintAttributes.email,
                     operator: constraintsOperators.email,
+                    value: true
+                }
+                )
+            }
+            if (!isEmpty(phone)) {
+                settings.constraints.set(constraintAttributes.phone, {
+                    name: constraintAttributes.phone,
+                    operator: constraintsOperators.phone,
                     value: true
                 }
                 )
