@@ -595,7 +595,7 @@ let table = (function () {
         }, { passive: false });
         cell.addEventListener('click', function (e) {
             //check if there's on beforeCellClick handler
-            trigger(events.rowClick(settings.id), { event: e, target: cell });
+            trigger(events.rowClick(settings.id), { event: e, target: cell, row: rowClassPrefix, rowId: rowId });
         });
         return cell;
     }

@@ -38,8 +38,8 @@
                 <div>
                     <label class="element-multilanguage" data-translation-key="GrowthValue(InDays)">Growth value (in
                         days):</label>
-                    <input validNumber name="TimeInDays" class="form-input element-form-data input-number-right" data-type="int"
-                        type="text" placeholder="GrowthValue(InDays)">
+                    <input validNumber name="TimeInDays" class="form-input element-form-data input-number-right"
+                        data-type="int" type="text" placeholder="GrowthValue(InDays)">
                 </div>
 
                 <div>
@@ -61,12 +61,12 @@
                 <div id="add-new-jackpot-growth-pattern-by-day">
                     <div class="grid-3-columns">
                         <div>
-                            <input name="NumOfDays" class="form-input element-form-data input-number-right" data-type="int" type="text"
-                                placeholder="Days">
+                            <input name="NumOfDays" class="form-input element-form-data input-number-right"
+                                data-type="int" type="text" placeholder="Days">
                         </div>
                         <div>
-                            <input max='100' name="Percent" class="form-input element-form-data input-number-right" data-type="int"
-                                type="text" placeholder="Procenat">
+                            <input max='100' name="Percent" class="form-input element-form-data input-number-right"
+                                data-type="int" type="text" placeholder="Procenat">
                         </div>
                         <div>
                             <button class="secundarybutton" data-value="add-new-field">Add</button>
@@ -77,12 +77,12 @@
 
                     <div class="grid-3-columns">
                         <div>
-                            <input max="24" name="NumOfHours" class="form-input element-form-data input-number-right" data-type="int"
-                                type="text" placeholder="Hours">
+                            <input max="24" name="Time" class="form-input element-form-data input-number-right"
+                                data-type="int" type="text" placeholder="Hours">
                         </div>
                         <div>
-                            <input max='100' name="Percent" class="form-input element-form-data input-number-right" data-type="int"
-                                type="text" placeholder="Procenat">
+                            <input max='100' name="Percent" class="form-input element-form-data input-number-right"
+                                data-type="int" type="text" placeholder="Procenat">
                         </div>
                         <div>
                             <button class="secundarybutton" data-value="add-new-field">Add</button>
@@ -210,9 +210,9 @@
                         </div>
 
                         <div id="rain-add-level-button" class="center">
-                            <button class="secundarybutton element-multilanguage" data-translation-key="AddLevel"
-                                data-value="rain-input-wrapper"></button>
-                            <button class="secundarybutton element-multilanguage hidden"
+                            <button class="secundarybutton element-multilanguage element-add-button"
+                                data-translation-key="AddLevel" data-value="rain-input-wrapper"></button>
+                            <button class="secundarybutton element-multilanguage hidden element-edit-button"
                                 data-translation-key="EditLevel" data-value="rain-input-wrapper"></button>
 
                         </div>
@@ -265,18 +265,18 @@
                         </div>
 
                         <div id="tournament-add-level-button" class="center">
-                            <button class="secundarybutton element-multilanguage" data-translation-key="AddLevel"
-                                data-value="tournament-input-wrapper"></button>
-                            <button class="secundarybutton element-multilanguage hidden"
+                            <button class="secundarybutton element-multilanguage element-add-button"
+                                data-translation-key="AddLevel" data-value="tournament-input-wrapper"></button>
+                            <button class="secundarybutton element-multilanguage hidden element-edit-button"
                                 data-translation-key="EditLevel" data-value="tournament-input-wrapper"></button>
                         </div>
                     </div>
-
-                </div>
-                <div id='tournament-dropdown-jackpot-wrapper' class="not-clickable">
-                    <div id="tournament-dropdown-jackpot">
-                        <div></div>
+                    <div id='tournament-dropdown-jackpot-wrapper' class="not-clickable">
+                        <div id="tournament-dropdown-jackpot">
+                            <div></div>
+                        </div>
                     </div>
+
                 </div>
                 <div id="tournament-jackpot-exist-wrapper" class="jackpot-level-exist-wrapper">
 
@@ -346,26 +346,24 @@
 
                     </div>
 
-                    <div id="custom-radio-buttons" class="">
+                    <div id="custom-radio-buttons" class="element-form-data" data-type="radio" data-name="_Conditions">
                         <label class="form-radio" data-value="1">
-                            <input type="radio" data-type="radio" name="CustomConditions"
-                                class="form-input element-form-data" checked>
+                            <input type="radio" data-type="radio" name="CustomConditions" class="form-input " checked>
                             <i class="form-icon"></i>
                             <div class="element-multilanguage" data-translation-key="OnlyOneConditionIsRequired"></div>
                         </label>
                         <label class="form-radio" data-value="0">
-                            <input type="radio" data-type="radio" name="CustomConditions"
-                                class="form-input element-form-data">
+                            <input type="radio" data-type="radio" name="CustomConditions" class="form-input">
                             <i class="form-icon"></i>
                             <div class="element-multilanguage" data-translation-key="AllConditionsMustBeMet"></div>
                         </label>
                     </div>
 
                     <div id="custom-add-level-button" class="">
-                        <button class="secundarybutton element-multilanguage" data-translation-key="AddLevel"
-                            data-value="custom-input-wrapper"></button>
-                        <button class="secundarybutton element-multilanguage hidden" data-translation-key="EditLevel"
-                            data-value="custom-input-wrapper"></button>
+                        <button class="secundarybutton element-multilanguage element-add-button"
+                            data-translation-key="AddLevel" data-value="custom-input-wrapper"></button>
+                        <button class="secundarybutton element-multilanguage hidden element-edit-button"
+                            data-translation-key="EditLevel" data-value="custom-input-wrapper"></button>
                     </div>
 
                     <div id="custom-jackpot-exist-wrapper" class="jackpot-level-exist-wrapper">

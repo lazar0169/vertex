@@ -112,15 +112,33 @@ const addNewJackpot = (function () {
                                             data[element.dataset.name][inputElement.name] = getInputValueByType(inputElement);
                                         }
                                     }
-                                    if (isPeriodValid($$('#jackpot-control-growth-period').parentNode) || isPeriodEmpty($$('#jackpot-control-growth-period').parentNode)) {
-                                        console.log('Validno!!!')
+                                    let validPeriod = isPeriodValid($$('#jackpot-control-growth-period').parentNode);
+                                    let emptyPeriod = isPeriodEmpty($$('#jackpot-control-growth-period').parentNode)
+                                    if (validPeriod || emptyPeriod) {
+                                        if (validPeriod) {
+                                            if ($$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name === 'days') {
+                                                for (let day of $$('#add-new-jackpot-growth-pattern-by-day').getElementsByClassName('grid-3-columns')) {
+                                                    let object = {}
+                                                    object[day.children[0].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
+                                                    object[day.children[1].children[0].name] = findInputElementWithName(day, day.children[1].children[0].name);
+                                                    data[element.dataset.name]['DayIntervals'].push(object)
+                                                }
+                                            } else {
+                                                for (let hour of $$('#add-new-jackpot-growth-pattern-by-hours').getElementsByClassName('grid-3-columns')) {
+                                                    let object = {}
+                                                    object[hour.children[0].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
+                                                    object[hour.children[1].children[0].name] = findInputElementWithName(hour, hour.children[1].children[0].name);
+                                                    data[element.dataset.name]['HourIntervals'].push(object)
+                                                }
+                                            }
+                                        }
                                     } else {
-                                        // if (isPeriodEmpty($$('#jackpot-control-growth-period').parentNode)) {
-                                        //     console.log('polja su prazna validno')
-                                        // } else {
-                                        //     console.log('neka od polja nisu prazna nevalidno')
-                                        // }
+
                                         console.log('Nevalidno!!!')
+                                        trigger('notifications/show', {
+                                            message: localization.translateMessage('Vremenski period nije validan'),
+                                            type: notifications.messageTypes.error,
+                                        });
                                     }
 
                                     break;
@@ -138,7 +156,29 @@ const addNewJackpot = (function () {
                                     break;
                                 //todo kada je ukljucen diskretan rast
                                 case '3':
+                                    let radioButtonsWrapper = $$('#jackpot-grows-discreetly-radio-buttons');
                                     data[element.dataset.name]['HasMinMaxLimit'] = false;
+                                    let DiscreeteType = checkboxChangeState.getRadioState(radioButtonsWrapper)
+                                    data[element.dataset.name]['DiscreeteType'] = DiscreeteType ? DiscreeteType : 0;
+
+                                    if (DiscreeteType) {
+                                        for (let level of $$(`#${radioButtonsWrapper.settings.radioName}-jackpot-exist-wrapper`).children) {
+                                            let settings = level.settings;
+                                            let object = {};
+                                            object.Name = settings.LevelName;
+                                            object.Value = settings.LevelValue;
+                                            object.Formula = {};
+                                            object.Formula._Exspressions = [];
+                                            let object2 = {}
+                                            object2.Counter = settings.LevelOutcome ? settings.LevelOutcome.id : null;
+                                            object2.JPId = settings.JackpotList ? settings.JackpotList.id : null;
+                                            object2.Type = settings.CountTypeList;
+                                            object2.Number = settings.Value;
+                                            object.Formula._Exspressions.push(object2);
+                                            object.Formula._Condition = DiscreeteType === '3' ? checkboxChangeState.getRadioState($$('#custom-radio-buttons')) : 1;
+                                            data[element.dataset.name]['Levels'].push(object);
+                                        }
+                                    }
 
                                     break;
                                 //kada nije ukljucen nijedan tab
@@ -153,8 +193,46 @@ const addNewJackpot = (function () {
                             break;
 
                         case 'ControlActiveTime':
+                            data[element.dataset.name]["NotAlwaysActive"] = false;
+                            data[element.dataset.name]["Intervals"] = null;
+                            data[element.dataset.name]["ChangeBackground"] = false;
+                            data[element.dataset.name]["Background"] = null;
+                            data[element.dataset.name]["LogicFunctionSelected"] = 0;
+                            data[element.dataset.name]["ControlNumOfActiveMachines"] = null;
+                            data[element.dataset.name]["Duration"] = null;
+                            data[element.dataset.name]["MaxNumOfActiveJackpots"] = null;
+                            data[element.dataset.name]["IntervalStatusOptionId"] = 0;
+                            data[element.dataset.name]["TransferToNextInterval"] = false;
+                            data[element.dataset.name]["JackpotConditionEnum"] = 0;
+                            data[element.dataset.name]["IntervalFormula"] = [];
+                            data[element.dataset.name]["IntervalLogicFunction"] = 0;
+                            data[element.dataset.name]["LinearFunction"] = null;
+                            data[element.dataset.name]["MultiWinningsInInterval"] = false;
+                            data[element.dataset.name]["PayoutAtTheEndInterval"] = false;
+                            data[element.dataset.name]["MultiWinnersId"] = 0;
 
+                            data[element.dataset.name]["LinearFunction"] = $$('#add-new-jackpot-time-interval-chart').get()
+                            data[element.dataset.name]["ChangeBackground"] = checkboxChangeState.getCheckboxState($$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-checkbox'));
+                            data[element.dataset.name]["Background"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-dropdown').children[1].get();
+                            let LogicFunctionSelected = $$('#add-new-jackpot-time-interval-include-conditions-dropdown').children[1].get();
+                            data[element.dataset.name]["LogicFunctionSelected"] = LogicFunctionSelected === 'null' ? 0 : LogicFunctionSelected;
+                            data[element.dataset.name]["ControlNumOfActiveMachines"] = getInputValueByType($$('#jackpot-condition-number-of-machines'))
+                            data[element.dataset.name]["MaxNumOfActiveJackpots"] = getInputValueByType($$('#jackpot-condition-maximum-number-of-jackpot-activations'))
+                            data[element.dataset.name]["IntervalStatusOptionId"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-after-jackpot-win-dropdown').children[1].get();
+                            data[element.dataset.name]["TransferToNextInterval"] = checkboxChangeState.getCheckboxState($$('#add-new-jackpot-control-active-time-settings-jackpot-active-adding-values-checkbox'));
+
+                            let jackpotWinningConditions = checkboxChangeState.getRadioState($$('#add-new-jackpot-time-interval-winning-conditions'));
+                            if (jackpotWinningConditions === '1') {
+                                let JackpotConditionEnum = checkboxChangeState.getRadioState($$('#winning-conditions-only-at-the-end-of-interval'))
+                                data[element.dataset.name]["JackpotConditionEnum"] = JackpotConditionEnum;
+                            }
+
+                            data[element.dataset.name]["IntervalLogicFunction"] = checkboxChangeState.getRadioState($$('#winning-conditions-added-by-custom-radio-buttons'));
+
+                            data[element.dataset.name]["MultiWinnersId"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-more-jackpot-winners-dropdown').children[1].get();
                             break;
+
+
 
                         case 'DontParticipateAllMachines':
 
@@ -265,15 +343,15 @@ const addNewJackpot = (function () {
 
             //     if (data.HasControlActiveTime) {
 
-            if ($$('#add-new-jackpot-wrapper').getElementsByClassName('vertex-error-container').length === 0) {
+            // if ($$('#add-new-jackpot-wrapper').getElementsByClassName('vertex-error-container').length === 0) {
 
-                trigger(communication.events.jackpots.saveJackpot, { data });
-            } else {
-                trigger('notifications/show', {
-                    message: localization.translateMessage('imas nepopunjena polja'),
-                    type: notifications.messageTypes.error,
-                });
-            }
+            //trigger(communication.events.jackpots.saveJackpot, { data });
+            // } else {
+            //     trigger('notifications/show', {
+            //         message: localization.translateMessage('imas nepopunjena polja'),
+            //         type: notifications.messageTypes.error,
+            //     });
+            // }
             //     }
             //     else {
             //         if (data.GrowthType) {
@@ -313,7 +391,7 @@ const addNewJackpot = (function () {
             if (inputElement.name == 'NumOfDays') {
                 dayCounter += getInputValueByType(inputElement);
             }
-            else if (inputElement.name == 'NumOfHours') {
+            else if (inputElement.name == 'Time') {
                 hoursCounter += getInputValueByType(inputElement);
             }
             else {
@@ -420,6 +498,7 @@ const addNewJackpot = (function () {
 
     on('jackpot/get-add-jackpot', function (params) {
         $$('#add-new-jackpot-content-header').innerHTML = localization.translateMessage('AddNewJackpot');
+        $$('#add-new-jackpot-wrapper').settings = params.data.Data;
         fillAdvanceSettings(params.data.Data);
     });
 

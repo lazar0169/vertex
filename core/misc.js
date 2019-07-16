@@ -119,3 +119,63 @@ function checkValidationField(wrapper) {
     }
     return valid;
 }
+
+function generateMachinesForChoosing(allM, selectedM) {
+    // //todo ovde se cuvaju sve masine
+    // let allMachines = allM;
+    // //todo ovde se cuvaju selektovane masine
+    // let selectedMachines = selectedM;
+    // for (let machine of allMachines) {
+    //     let machineWrapper = document.createElement('div');
+    //     machineWrapper.settings = machine;
+
+    //     machineWrapper.innerHTML = `<label class="form-checkbox">
+    //     <input type="checkbox">
+    //     <icon class="form-icon" data-element-id="0"></icon>
+    //     <div>BonusWinHostToMachine</div>
+    //     </label>`
+    // }
+
+    let unselectedMachinesContent = $$('#choose-machines-jackpot-content-unselected-machines-list');
+    let selectedMachineContent = $$('#choose-machines-jackpot-content-selected-machines-list');
+    let data = {};
+    data.Items = allM;
+    
+
+    const unselectedMachineTableId = 'table-container-unselected-machines';
+    const unselectedMachineTableSelector = '#table-container-unselected-machines';
+    let unselectedMachineTable;
+
+    const selectedMachineTableId = 'table-container-selected-machines';
+    const selectedMachineTableSelector = '#table-container-selected-machines';
+    let selectedMachineTable;
+    // neselektovane masine
+    if (unselectedMachinesContent.children.length !== 0) {
+        unselectedMachinesContent.innerHTML = ''
+    }
+    unselectedMachineTable = table.init({
+        id: unselectedMachineTableId,
+    },
+        data);
+    unselectedMachinesContent.appendChild(unselectedMachineTable);
+
+
+    //selektovane masine
+    // if (selectedMachineContent.children.length !== 0) {
+    //     selectedMachineContent.innerHTML = ''
+    // }
+    // selectedMachineTable = table.init({
+    //     id: selectedMachineTableId,
+    // },
+    //     data);
+    // selectedMachineContent.appendChild(selectedMachineTable);
+
+    
+    on(table.events.rowClick(unselectedMachineTableId), function (params) {
+        let className = params.row + params.rowId;
+        for (let row of unselectedMachineTable.getElementsByClassName(className)) {
+            row.classList.toggle('machine-is-selected')
+        }
+
+    });
+}

@@ -115,7 +115,8 @@
     flex-direction: column;
 }
 
-#choose-machines-jackpot-content-unselected-machines>div:not(:first-child), #choose-machines-jackpot-content-selected-machines>div:not(:first-child) {
+#choose-machines-jackpot-content-unselected-machines>div:not(:first-child),
+#choose-machines-jackpot-content-selected-machines>div:not(:first-child) {
     box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.5);
     background: rgb(55, 71, 79);
     flex: 1;
@@ -123,7 +124,9 @@
     flex-direction: column;
 }
 
-#choose-machines-jackpot-content-unselected-machines>div:first-child, #choose-machines-jackpot-content-selected-machines>div:first-child, #choose-machines-jackpot-content-unselected-machines-list, #choose-machines-jackpot-content-selected-machines-list {
+#choose-machines-jackpot-content-unselected-machines>div:first-child,
+#choose-machines-jackpot-content-selected-machines>div:first-child
+{
     padding: 0.5rem;
 }
 
@@ -131,12 +134,25 @@
     float: right;
 }
 
-#choose-machines-jackpot-content-unselected-machines>div:not(:first-child)>div:first-child, #choose-machines-jackpot-content-selected-machines>div:not(:first-child)>div:first-child {
+#choose-machines-jackpot-content-unselected-machines>div:not(:first-child)>div:first-child,
+#choose-machines-jackpot-content-selected-machines>div:not(:first-child)>div:first-child {
     box-shadow: 0 0.1rem 0.5rem rgba(0, 0, 0, 0.5);
 }
 
-#choose-machines-jackpot-content-unselected-machines-list, #choose-machines-jackpot-content-selected-machines-list {
+#choose-machines-jackpot-content-unselected-machines-list,
+#choose-machines-jackpot-content-selected-machines-list {
     flex: 1;
+}
+
+#choose-machines-jackpot-content-unselected-machines-list,
+#choose-machines-jackpot-content-selected-machines-list {
+    background: rgb(38, 50, 56);
+    position: relative;
+}
+
+#choose-machines-jackpot-content-unselected-machines-list .pagination,
+#choose-machines-jackpot-content-selected-machines-list .pagination {
+    display: none
 }
 
 .choose-machines-jackpot-search>input {

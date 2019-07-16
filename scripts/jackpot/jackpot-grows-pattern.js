@@ -10,6 +10,14 @@ const jackpotGrowthpattern = (function () {
     let jackpotGrowsPatternCustomRadio = jackpotGrowsDiscreetlyRadioButtonsWrapper.children;
     let jackpotGrowsCustomRadioButtonsWrapper = $$("#custom-radio-buttons");
 
+    const CountTypeList = {
+        '1': 'Exists',
+        '2': 'Every',
+        '3': 'Last',
+        '4': 'Count',
+        '5': 'Sum'
+    }
+
 
     highchart.drawHighchart({ parent: $$('#jackpot-growth-pattern-grows-by-bet-chart'), dotsX: 10, dotsY: 10, name: 'MinMaxFunction' })
 
@@ -46,23 +54,28 @@ const jackpotGrowthpattern = (function () {
         if (checkValidationField(e.target.parentNode.parentNode.children[0])) {
             createLevel(e.target.dataset.value);
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
+            clearCustomConditions($$('#custom-level-conditions-wrapper'));
         }
     }
 
     function editExistLevel(inputsWrapper, levelWrapper) {
         let data = levelWrapper.settings;
-        let addLevelButton = inputsWrapper.getElementsByClassName('secundarybutton')[0];
+        let addLevelButton = inputsWrapper.getElementsByClassName('element-add-button')[0];
         addLevelButton.classList.add('hidden');
-        let editLevelButton = inputsWrapper.getElementsByClassName('secundarybutton')[1];
+        let editLevelButton = inputsWrapper.getElementsByClassName('element-edit-button')[0];
         editLevelButton.classList.remove('hidden');
 
         editLevelButton.onclick = function (e) {
             let newData = prepareDataForLevel(e.target.dataset.value);
             let str;
-            newData.CountTypeList ? str = newData.CountTypeList.name : str = $$(`.element-jackpot-condition-text-${jackpotGrowsDiscreetlyRadioButtonsWrapper.settings.radioName}`)[0].innerHTML
+            str = CountTypeList[newData.CountTypeList];
             levelWrapper.getElementsByClassName('element-level-name')[0].innerHTML = newData.LevelName;
-            levelWrapper.getElementsByClassName('element-level-value')[0].innerHTML = newData.LevelValue;
-            levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = `${newData.LevelOutcome.name}: ${str} ${newData.Operator.name} ${newData.Value}`
+            levelWrapper.getElementsByClassName('element-level-value')[0].innerHTML = formatFloatValue(newData.LevelValue);
+            if (newData.CustomLevelConditions) {
+                levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = newData.CustomLevelConditionsText;
+            } else {
+                levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = `${newData.LevelOutcome.name}: ${str} ${newData.Operator.name} ${formatFloatValue(newData.Value)}`
+            }
 
             levelWrapper.settings = newData;
 
@@ -70,27 +83,36 @@ const jackpotGrowthpattern = (function () {
             addLevelButton.classList.remove('hidden');
             editLevelButton.classList.add('hidden');
         }
+        if (checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons')) === '3') {
+            for (let input of $$('#custom-input-wrapper').children[0].getElementsByClassName('element-form-data')) {
+                let inputName = input.name === undefined ? input.children[0].dataset.name : input.name;
+                input.value = data[inputName];
+            }
+            for (let condition of data.CustomLevelConditions) {
+                addConditionLevel('custom-level-conditions-wrapper', '', condition)
+            }
+        }
+        else {
+            let inputsFields = inputsWrapper.getElementsByClassName('element-form-data');
+            for (let input of inputsFields) {
+                let inputName = input.name === undefined ? input.children[0].dataset.name : input.name;
 
-        let inputsFields = inputsWrapper.getElementsByClassName('element-form-data');
-
-        for (let input of inputsFields) {
-            let inputName = input.name === undefined ? input.children[0].dataset.name : input.name;
-
-            switch (input.dataset.type) {
-                case 'single-select':
-                    input.set(data[inputName].id);
-                    break;
-
-                case 'radio':
-                    if (input.parentNode.dataset.value == data.Condition) {
-                        input.checked = true;
-                    }
-                    break;
-
-                default:
-                    input.value = data[inputName]
-                    break;
-
+                switch (input.dataset.type) {
+                    case 'single-select':
+                        input.set(data[inputName].id);
+                        break;
+                    case 'radio':
+                        if (input.parentNode.dataset.value == data.Condition) {
+                            input.checked = true;
+                        }
+                        break;
+                    case 'float':
+                        input.value = formatFloatValue(data[inputName]);
+                        break;
+                    default:
+                        input.value = data[inputName]
+                        break;
+                }
             }
         }
     }
@@ -105,7 +127,7 @@ const jackpotGrowthpattern = (function () {
                     break;
 
                 case 'radio':
-
+                    checkboxChangeState.checkboxIsChecked(input.getElementsByClassName('form-radio')[0].children[0], true);
                     break;
 
                 default:
@@ -114,6 +136,10 @@ const jackpotGrowthpattern = (function () {
 
             }
         }
+    }
+
+    function clearCustomConditions(wrapper) {
+        wrapper.innerHTML = ''
     }
 
     function prepareDataForLevel(id) {
@@ -136,15 +162,18 @@ const jackpotGrowthpattern = (function () {
                 case 'float':
                     data[input.name ? input.name : ''] = parseInt(input.dataset.value);
                     break;
+                case 'radio':
+                    data[input.dataset.name] = checkboxChangeState.getRadioState(input);
+                    break
                 default:
                     data[input.name ? input.name : ''] = input.value ? input.value : "";
                     break;
             }
-
-
         }
-
         if (inputWrapper.parentNode === $$('#custom-input-wrapper')) {
+            return data;
+        }
+        else if (inputWrapper === $$('#custom-input-wrapper')) {
             data.CustomLevelConditions = [];
             data.CustomLevelConditionsText = [];
             for (let levelCondition of $$('#custom-level-conditions-wrapper').children) {
@@ -158,12 +187,15 @@ const jackpotGrowthpattern = (function () {
         return data;
     }
 
-    function addConditionLevel(conditionsWrapperId, inputsWrapperId) {
+    function addConditionLevel(conditionsWrapperId, inputsWrapperId, params) {
         let conditionArray = [];
         let conditionsWrapper = $$(`#${conditionsWrapperId}`);
-
-
-        let data = prepareDataForLevel(inputsWrapperId.parentNode.parentNode);
+        let data;
+        if (params) {
+            data = params
+        } else {
+            data = prepareDataForLevel(inputsWrapperId.parentNode.parentNode);
+        }
         console.log(data)
 
         let singleConditonWrapper = document.createElement('div');
@@ -184,7 +216,7 @@ const jackpotGrowthpattern = (function () {
 
         let levelTextWrapper = document.createElement('div');;
 
-        levelTextWrapper.innerHTML = `${data.LevelOutcome.name} : ${data.CountTypeList.name} ${data.Operator.name} ${data.Value}`
+        levelTextWrapper.innerHTML = `${data.LevelOutcome.name} : ${data.CountTypeList.name} ${data.Operator.name} ${formatFloatValue(data.Value)}`
 
         singleConditonWrapper.appendChild(levelTextWrapper);
 
@@ -202,10 +234,6 @@ const jackpotGrowthpattern = (function () {
         }
 
         let data = prepareDataForLevel(id);
-
-        if (data.CustomConditions) {
-            data.Condition = checkboxChangeState.getRadioState(jackpotGrowsCustomRadioButtonsWrapper);
-        }
 
         if (data.LevelName && data.LevelValue && data.Operator && levelExistWrapper.children.length < 4) {
 
@@ -248,19 +276,19 @@ const jackpotGrowthpattern = (function () {
             } else {
                 levelWrapper.settings = data;
                 let str;
-                let conditionText = data.LevelOutcome ? data.LevelOutcome.name : data.JackpotList.name
-                str = $$(`.element-jackpot-condition-text-${jackpotGrowsDiscreetlyRadioButtonsWrapper.settings.radioName}`)[0].innerHTML;
+                let conditionText = data.LevelOutcome ? data.LevelOutcome.name : data.JackpotList.name;
+                str = CountTypeList[data.CountTypeList];
                 levelWrapper.innerHTML = `<div>
                     <div>Level name:</div> 
                     <div class="element-level-name">${data.LevelName}</div>
                 </div>
                 <div>
                     <div>Level value:</div> 
-                    <div class="element-level-value">${data.LevelValue}</div>
+                    <div class="element-level-value">${formatFloatValue(data.LevelValue)}</div>
                 </div>
                 <div>
                     <div>Level conditions:</div> 
-                    <div class="element-level-conditions">${conditionText}: ${str} ${data.Operator.name} ${data.Value}</div>
+                    <div class="element-level-conditions">${conditionText}: ${str} ${data.Operator.name} ${formatFloatValue(data.Value)}</div>
                 </div>
                 `
             }
@@ -315,7 +343,11 @@ const jackpotGrowthpattern = (function () {
     checkboxChangeState.radioClick(jackpotGrowsDiscreetlyRadioButtonsWrapper);
 
     choseMachines.onclick = function () {
+
         jackpotChooseParticipatingMachines.showHideChooseMachine.show();
+        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList)
+
+
     }
     //days
     bindGridButton(addNewGrowthField[0]);
@@ -411,8 +443,8 @@ const jackpotGrowthpattern = (function () {
                                     </div>`
                     } else {
                         newField.innerHTML = `<div>
-                        <input max="24" name="NumOfHours" class="form-input element-form-data input-number-right" data-type="int" type="text"
-                        placeholder="Days">
+                        <input max="24" name="Time" class="form-input element-form-data input-number-right" data-type="int" type="text"
+                        placeholder="Hours">
                     </div>
                     <div>
                         <input max="100" name="Percent" class="form-input element-form-data input-number-right" data-type="int" type="text"

@@ -41,6 +41,14 @@ body {
     overflow: auto;
 }
 
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.machine-is-selected {
+    color: rgb(30, 155, 227) !important;
+}
+
 .overflow-x::-webkit-scrollbar,
 .overflow-y::-webkit-scrollbar,
 .overflow-content::-webkit-scrollbar {
