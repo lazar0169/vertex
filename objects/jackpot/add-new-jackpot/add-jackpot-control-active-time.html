@@ -114,31 +114,41 @@
             </div>
 
             <div id="winning-conditions-only-at-the-end-of-interval-custom" class="hidden">
-                <div class="display-flex">
-                    <div id="proba1">
-                        <div class="element-multilanguage" data-translation-key="CounterWinnerConditionList"></div>
+                <div>
+                    <div class="display-flex">
+                        <div id="proba1" data-value="proba4omotac">
+                            <div class="element-multilanguage" data-translation-key="CounterWinnerConditionList"></div>
+                        </div>
+
+                        <div id="proba2">
+                            <div class="element-multilanguage" data-translation-key="CountTypeWinnerConditionList">
+                            </div>
+                        </div>
+
+                        <div id="proba3">
+                            <div class="element-multilanguage" data-translation-key="OperatorWinnerConditionList"></div>
+                        </div>
+
+                        <div>
+                            <label class="element-multilanguage" data-translation-key="Value"
+                                for="winning-conditions-end-interval-custom-value"></label>
+                            <input validNumber name="Number" class="form-input element-form-data input-number-right"
+                                data-type="float" type="text" id="winning-conditions-end-interval-custom-value"
+                                placeholder="" validNumber data-value="">
+                        </div>
+                        <div id="add-conditions-for-winning-jackpot-button" class="center">
+                            <button class="secundarybutton element-multilanguage" data-translation-key="Add"
+                                data-target="winning-conditions-added-by-custom"></button>
+                        </div>
                     </div>
 
-                    <div id="proba2">
-                        <div class="element-multilanguage" data-translation-key="CountTypeWinnerConditionList"></div>
-                    </div>
-
-                    <div id="proba3">
-                        <div class="element-multilanguage" data-translation-key="OperatorWinnerConditionList"></div>
-                    </div>
-
-                    <div>
-                        <label class="element-multilanguage" data-translation-key="Value"
-                            for="winning-conditions-end-interval-custom-value"></label>
-                        <input validNumber name="imeInputa" class="form-input element-form-data input-number-right"
-                            data-type="float" type="text" id="winning-conditions-end-interval-custom-value"
-                            placeholder="" validNumber data-value="">
-                    </div>
-                    <div id="add-conditions-for-winning-jackpot-button" class="center">
-                        <button class="secundarybutton element-multilanguage" data-translation-key="Add"
-                            data-target="winning-conditions-added-by-custom"></button>
+                    <div id='proba4omotac' class="not-clickable display-flex">
+                        <div id="proba4">
+                            <div></div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="display-flex">
                     <div id="winning-conditions-added-by-custom">
                     </div>

@@ -211,6 +211,11 @@ const addNewJackpot = (function () {
                             data[element.dataset.name]["PayoutAtTheEndInterval"] = false;
                             data[element.dataset.name]["MultiWinnersId"] = 0;
 
+
+                            let DurationHours = $$('#add-new-jackpot-time-interval-include-conditions-wrapper').getElementsByClassName('timepicker')[0].children[0];
+                            let DurationMinutes = $$('#add-new-jackpot-time-interval-include-conditions-wrapper').getElementsByClassName('timepicker')[0].children[1];
+                            data[element.dataset.name]["Duration"] = `${DurationHours.getValue().slice(0, 2)}:${DurationMinutes.getValue().slice(0, 2)}`;
+
                             data[element.dataset.name]["LinearFunction"] = $$('#add-new-jackpot-time-interval-chart').get()
                             data[element.dataset.name]["ChangeBackground"] = checkboxChangeState.getCheckboxState($$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-checkbox'));
                             data[element.dataset.name]["Background"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-dropdown').children[1].get();
@@ -222,17 +227,44 @@ const addNewJackpot = (function () {
                             data[element.dataset.name]["TransferToNextInterval"] = checkboxChangeState.getCheckboxState($$('#add-new-jackpot-control-active-time-settings-jackpot-active-adding-values-checkbox'));
 
                             let jackpotWinningConditions = checkboxChangeState.getRadioState($$('#add-new-jackpot-time-interval-winning-conditions'));
+                            data[element.dataset.name]["MultiWinningsInInterval"] = jackpotWinningConditions === '0' ? true : false;
                             if (jackpotWinningConditions === '1') {
                                 let JackpotConditionEnum = checkboxChangeState.getRadioState($$('#winning-conditions-only-at-the-end-of-interval'))
                                 data[element.dataset.name]["JackpotConditionEnum"] = JackpotConditionEnum;
+                                data[element.dataset.name]["PayoutAtTheEndInterval"] = true;
+
+                                if (JackpotConditionEnum === '2') {
+
+                                    if ($$('#winning-conditions-added-by-custom').children.length !== 0) {
+                                        for (let conditionCustom of $$('#winning-conditions-added-by-custom').children) {
+                                            let conditionObject = {}
+                                            conditionObject.Counter = parseInt(conditionCustom.settings.CounterWinnerConditionList);
+                                            conditionObject.JPId = parseInt(conditionCustom.settings.JackpotList);
+                                            conditionObject.Type = parseInt(conditionCustom.settings.CountTypeWinnerConditionList);
+                                            conditionObject.OperatorType = parseInt(conditionCustom.settings.OperatorWinnerConditionList);
+                                            conditionObject.Number = parseInt(conditionCustom.settings.Number);
+                                            data[element.dataset.name]["IntervalFormula"].push(conditionObject);
+                                        }
+                                    } else {
+                                        trigger('notifications/show', {
+                                            message: localization.translateMessage('Nisi izabrao uslove'),
+                                            type: notifications.messageTypes.error,
+                                        });
+                                    }
+                                } else {
+                                    let conditionObject = {}
+                                    conditionObject.Counter = 3;
+                                    conditionObject.JPId = null;
+                                    conditionObject.Type = 0;
+                                    conditionObject.OperatorType = 7;
+                                    conditionObject.Number = null;
+                                    data[element.dataset.name]["IntervalFormula"].push(conditionObject);
+                                }
                             }
 
                             data[element.dataset.name]["IntervalLogicFunction"] = checkboxChangeState.getRadioState($$('#winning-conditions-added-by-custom-radio-buttons'));
-
                             data[element.dataset.name]["MultiWinnersId"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-more-jackpot-winners-dropdown').children[1].get();
                             break;
-
-
 
                         case 'DontParticipateAllMachines':
 
@@ -527,6 +559,7 @@ const addNewJackpot = (function () {
         let ddCounterWinnerConditionList = $$('#proba1');
         let ddCountTypeWinnerConditionList = $$('#proba2');
         let ddOperatorWinnerConditionList = $$('#proba3');
+        let ddJackpotWinnerConditionList = $$('#proba4');
 
 
         dropdown.generate({ values: data.JackpotList, parent: ddDeactivateWithGrow, type: 'single', name: 'SelectedBlockJackpotDisableWithLoadingIds' });
@@ -560,7 +593,8 @@ const addNewJackpot = (function () {
         dropdown.generate({ values: data.CounterWinnerConditionList, parent: ddCounterWinnerConditionList, name: "CounterWinnerConditionList" });
         dropdown.generate({ values: data.CountTypeWinnerConditionList, parent: ddCountTypeWinnerConditionList, name: "CountTypeWinnerConditionList" });
         dropdown.generate({ values: data.OperatorWinnerConditionList, parent: ddOperatorWinnerConditionList, name: "OperatorWinnerConditionList" });
-
+        bindOptionsGroup(ddCounterWinnerConditionList);
+        dropdown.generate({ values: data.JackpotList, parent: ddJackpotWinnerConditionList, name: "JackpotList" });
     }
 
     function bindOptionsGroup(dropdown) {

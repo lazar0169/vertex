@@ -138,9 +138,23 @@ function generateMachinesForChoosing(allM, selectedM) {
 
     let unselectedMachinesContent = $$('#choose-machines-jackpot-content-unselected-machines-list');
     let selectedMachineContent = $$('#choose-machines-jackpot-content-selected-machines-list');
+    let [...copyOfAllM] = allM;
     let data = {};
-    data.Items = allM;
-    
+    data.Items = [];
+
+    for (let value of copyOfAllM) {
+        let objectData = {};
+        let Properties = {};
+        Properties.Gmcid = value.Gmcid;
+        let { Gmcid, ...EntryData } = value;
+        objectData.EntryData = EntryData;
+        objectData.Properties = Properties;
+
+        data.Items.push(objectData);
+    }
+
+
+
 
     const unselectedMachineTableId = 'table-container-unselected-machines';
     const unselectedMachineTableSelector = '#table-container-unselected-machines';
@@ -152,6 +166,7 @@ function generateMachinesForChoosing(allM, selectedM) {
     // neselektovane masine
     if (unselectedMachinesContent.children.length !== 0) {
         unselectedMachinesContent.innerHTML = ''
+        $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = localization.translateMessage("AddSelected");
     }
     unselectedMachineTable = table.init({
         id: unselectedMachineTableId,
@@ -170,12 +185,22 @@ function generateMachinesForChoosing(allM, selectedM) {
     //     data);
     // selectedMachineContent.appendChild(selectedMachineTable);
 
-    
+
     on(table.events.rowClick(unselectedMachineTableId), function (params) {
         let className = params.row + params.rowId;
         for (let row of unselectedMachineTable.getElementsByClassName(className)) {
             row.classList.toggle('machine-is-selected')
         }
-
+        let numberOfUnselected = unselectedMachineTable.getElementsByClassName('machine-is-selected').length / unselectedMachineTable.getElementsByClassName('head').length;
+        $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = `${localization.translateMessage("AddSelected")} ${numberOfUnselected ? `(${numberOfUnselected})` : ''}`;
     });
+
+    $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].onclick = function (params) {
+        let chosenMachines = unselectedMachineTable.getElementsByClassName('machine-is-selected')
+        for (let i = 0; i < chosenMachines.length; i = i + unselectedMachineTable.getElementsByClassName('head').length) {
+            console.log(chosenMachines[i].additionalData)
+        }
+    }
+
+
 }

@@ -178,7 +178,11 @@ const dropdown = (function () {
         select.get = function () {
             return selected.dataset.id;
         }
-        
+
+        select.getValue = function () {
+            return selected.dataset.value;
+        }
+
 
         select.reset = function () {
             selected.dataset.id = optionsArray[0].Id !== -1 ? optionsArray[0].Id : null;

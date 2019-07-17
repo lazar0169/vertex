@@ -11,7 +11,7 @@ let jackpotControlActiveTime = (function () {
 
         if (checkValidationField($$('#winning-conditions-end-interval-custom-value').parentNode)) {
 
-            let dataElements = e.target.parentNode.parentNode.getElementsByClassName('element-form-data');
+            let dataElements = e.target.parentNode.parentNode.parentNode.getElementsByClassName('element-form-data');
             let showingData = {}
             let settingsData = {}
             for (let element of dataElements) {
@@ -27,12 +27,14 @@ let jackpotControlActiveTime = (function () {
 
             conditionWrapper.innerHTML = `<div class="display-flex control-active-time-interval-wrapper"> 
                 <a class="center button-link" onclick = "trigger('removeElement', parentNode)">x</a>
-                <div class="center">${showingData.CounterWinnerConditionList} ${settingsData.CountTypeWinnerConditionList === '0' ? '' : showingData.CountTypeWinnerConditionList} ${showingData.OperatorWinnerConditionList} ${showingData.imeInputa}<div>
+                <div class="center">${settingsData.CounterWinnerConditionList === '2' ? showingData.JackpotList : showingData.CounterWinnerConditionList} ${settingsData.CountTypeWinnerConditionList === '0' ? '' : showingData.CountTypeWinnerConditionList} ${showingData.OperatorWinnerConditionList} ${showingData.Number}<div>
             </div>`
 
             $$(`#${e.target.dataset.target}`).appendChild(conditionWrapper);
 
             jackpots.clearAddJackpotInput(e.target.parentNode.parentNode);
+            $$('#proba4omotac').classList.add('not-clickable');
+
         }
     }
 
