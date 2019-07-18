@@ -196,9 +196,9 @@ function generateMachinesForChoosing(allM, selectedM) {
     });
 
     $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].onclick = function (params) {
-        let chosenMachines = unselectedMachineTable.getElementsByClassName('machine-is-selected')
-        for (let i = 0; i < chosenMachines.length; i = i + unselectedMachineTable.getElementsByClassName('head').length) {
-            console.log(chosenMachines[i].additionalData)
+        let chosenMachines = unselectedMachineTable.querySelectorAll('.column-name.machine-is-selected');
+        for (let machine of chosenMachines) {
+            console.log(machine.additionalData)
         }
     }
 

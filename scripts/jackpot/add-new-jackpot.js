@@ -1,15 +1,120 @@
 const addNewJackpot = (function () {
+    let newAndEditJackpotWrapper = $$('#add-new-jackpot-wrapper');
+    let growsPatternTabs = $$('#jackpot-growth-pattern-tabs');
     let addNewJackpotControlSettings = $$('.add-new-jackpot-control-settings');
     let addNewJackpotControlSettingsInfo = $$('.add-new-jackpot-control-settings-info');
     let removeAllMachines = $$('#add-new-jackpot-choose-machines-buttons').children[1];
     let saveNewJackpot = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[1];
     let clearAllFields = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[0];
-
     checkboxChangeState.radioClick($$('#add-new-jackpot-content-inputs-radio'));
+
+    const inputTypes = {
+        singleSelect: 'single-select',
+        integer: 'int',
+        float: 'float',
+        string: 'string',
+        array: 'array',
+        vertexSlide: 'vertex-slide',
+        radio: 'radio'
+    }
+
+    function reset() {
+        //todo ovo radi ali pogedaj da ga spojis sa donjim
+        for (let errorInput of newAndEditJackpotWrapper.querySelectorAll('.vertex-validation-error')) {
+            errorInput.classList.remove(errorInput.vertexValidation.errorClass)
+            if (errorInput.vertexValidation.errorElements.length > 0) {
+
+                let element = errorInput.vertexValidation.errorElements.pop();
+                element.parentNode.removeChild(element);
+            }
+        }
+
+        for (let inputElement of newAndEditJackpotWrapper.getElementsByClassName('element-form-data')) {
+            switch (inputElement.dataset.type) {
+                case inputTypes.vertexSlide:
+                    checkboxChangeState.checkboxIsChecked(inputElement, false)
+                    break;
+
+                case inputTypes.singleSelect:
+                    inputElement.reset();
+                    break;
+
+                default:
+                    inputElement.value = '';
+            }
+        }
+
+        //todo vrati value limit na iskljuceno
+        checkboxChangeState.checkboxIsChecked($$('#jackpot-growth-pattern-value-limit-checkbox').parentNode.children[0].children[0], false);
+        //todo da se resetuje chart
+        $$('#jackpot-growth-pattern-grows-by-bet-chart').reset();
+
+        //todo deo za settings 
+        for (let settings of newAndEditJackpotWrapper.getElementsByClassName('add-new-jackpot-control-settings')) {
+            //todo sve strelice zatvori obicno je samo jedna otvorena
+            while (settings.querySelectorAll('.opened-arrow').length > 0) {
+                settings.querySelectorAll('.opened-arrow')[0].classList.remove('opened-arrow');
+            }
+            //todo da settings vrati na off ukloni belu boju i ukloni klasu active
+            console.log(settings.querySelectorAll('.color-white').length)
+            while (settings.querySelectorAll('.color-white').length > 0) {
+                settings.querySelectorAll('.color-white')[0].classList.remove('color-white');
+                let onOffText = settings.querySelectorAll('.active-add-new-jackpot-settings')[0]
+                if (onOffText) {
+                    onOffText.innerHTML = localization.translateMessage('Off');
+                    onOffText.classList.remove('active-add-new-jackpot-settings');
+                }
+            }
+            // todo da sakrije sve sadrzaje za settings-e
+            settings.children[1].classList.add('hidden');
+        }
+
+        //todo vrati polja za dani na jedno growth pattern -> grows automatically
+        let growthPatternByDayWrapper = $$('#add-new-jackpot-growth-pattern-by-day');
+        while (growthPatternByDayWrapper.children.length > 1) {
+            growthPatternByDayWrapper.children[0].remove();
+        }
+        //todo vrati polja za sati na jedno growth pattern -> grows automatically
+        let growthPatternByHoursWrapper = $$('#add-new-jackpot-growth-pattern-by-hours');
+        while (growthPatternByHoursWrapper.children.length > 1) {
+            growthPatternByHoursWrapper.children[0].remove();
+        }
+
+
+        //todo vracanje tabova na pocetne vrednosti u growth patternu
+        while (growsPatternTabs.querySelectorAll('.pattern-active').length > 0) {
+            let tabContentValue = growsPatternTabs.querySelectorAll('.pattern-active')[0].dataset.value
+            $$(`#${tabContentValue}`).classList.add('hidden');
+            growsPatternTabs.querySelectorAll('.pattern-active')[0].classList.remove('pattern-active');
+        }
+        while (growsPatternTabs.querySelectorAll('.pattern-not-active').length > 0) {
+            growsPatternTabs.querySelectorAll('.pattern-not-active')[0].classList.remove('pattern-not-active');
+        }
+        growsPatternTabs.classList.remove('border-bottom');
+
+        $$('#jackpot-value-limit-wrapper').classList.add('hidden');
+
+        //todo decekiranje diskretnih radio buttona
+        for (let radio of $$('#jackpot-grows-discreetly-radio-buttons').getElementsByClassName('form-input')) {
+            radio.checked = false;
+        }
+        for (let content of $$('.jackpot-grows-discreetly-type-contents')) {
+            content.classList.add('hidden');
+        }
+
+
+
+
+
+
+        console.log('vrati sve na pocetne vrednosti')
+
+
+    }
 
     //validacija growth pattern polja
 
-    for (let input of $$('#add-new-jackpot-wrapper').getElementsByClassName('element-form-data')) {
+    for (let input of newAndEditJackpotWrapper.getElementsByClassName('element-form-data')) {
         validation.init(input, {});
         if (input.dataset.type === 'float') {
             currencyInput.generate(input, {});
@@ -55,13 +160,13 @@ const addNewJackpot = (function () {
                 data[input.name ? input.name : input.dataset.name] = getInputValueByType(input);
             }
             //podatak: koji je tab aktivan u growth pattern delu ovo treba da bude prvo da li je growth pattern aktivan?
-            let patternActive = $$('#jackpot-growth-pattern-tabs').getElementsByClassName('pattern-active')[0];
+            let patternActive = growsPatternTabs.getElementsByClassName('pattern-active')[0];
             data.GrowthType = patternActive ? patternActive.dataset.loadingtype : 0;
 
             //podatak: citanje iz settings-a da li je lokalno
-            data.IsLocal = $$('#add-new-jackpot-wrapper').settings.IsLocal;
+            data.IsLocal = newAndEditJackpotWrapper.settings.IsLocal;
 
-            for (let element of $$('#add-new-jackpot-wrapper').getElementsByClassName('add-new-jackpot-control-settings')) {
+            for (let element of newAndEditJackpotWrapper.getElementsByClassName('add-new-jackpot-control-settings')) {
                 data[element.getElementsByClassName('form-switch')[0].children[0].name] = checkboxChangeState.getSwitchState(element);
                 if (checkboxChangeState.getSwitchState(element)) {
                     data[element.dataset.name] = {}
@@ -485,13 +590,11 @@ const addNewJackpot = (function () {
                 for (let element of addNewJackpotControlSettingsInfo) {
                     if (control !== element) {
                         element.parentNode.parentNode.children[1].classList.add('hidden');
-                        element.parentNode.classList.remove('expanded-add-new-jackpot-settings');
                         element.children[1].classList.remove('opened-arrow');
 
                     }
                     else {
                         element.parentNode.parentNode.children[1].classList.toggle('hidden');
-                        element.parentNode.classList.toggle('expanded-add-new-jackpot-settings');
                         trigger('opened-arrow', { div: element });
                     }
                 }
@@ -502,35 +605,32 @@ const addNewJackpot = (function () {
                 e.preventDefault();
                 if (checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked) {
                     checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked = false;
-                    checkSwitch.children[0].children[1].children[0].children[1].innerHTML = 'Off';
+                    checkSwitch.children[0].children[1].children[0].children[1].innerHTML = localization.translateMessage('Off');
                     checkSwitch.children[1].classList.add('hidden');
-                    checkSwitch.children[0].classList.remove('expanded-add-new-jackpot-settings');
                     checkSwitch.children[0].children[1].children[1].classList.remove('opened-arrow');
 
                 }
                 else {
                     checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked = true;
-                    checkSwitch.children[0].children[1].children[0].children[1].innerHTML = 'On';
+                    checkSwitch.children[0].children[1].children[0].children[1].innerHTML = localization.translateMessage('On');
                     checkSwitch.children[1].classList.remove('hidden');
-                    checkSwitch.children[0].classList.add('expanded-add-new-jackpot-settings');
                     checkSwitch.children[0].children[1].children[1].classList.add('opened-arrow');
                 }
                 for (let currentCheck of addNewJackpotControlSettings) {
                     if (checkSwitch.children[0].getElementsByClassName('form-switch')[0].children[0] !== currentCheck.getElementsByClassName('form-switch')[0].children[0] && checkSwitch.getElementsByClassName('form-switch')[0].children[0].checked) {
                         currentCheck.children[1].classList.add('hidden');
-                        currentCheck.children[0].classList.remove('expanded-add-new-jackpot-settings');
                         currentCheck.children[0].children[1].children[1].classList.remove('opened-arrow');
                     }
                 }
-                checkSwitch.children[0].classList.toggle('checked-add-new-jackpot-settings');
-                checkSwitch.children[0].children[1].children[0].children[1].classList.toggle('active-add-new-jackpot-settings')
+                checkSwitch.children[0].classList.toggle('color-white');
+                checkSwitch.children[0].children[1].children[0].children[1].classList.toggle('active-add-new-jackpot-settings');
             }
         }
     });
 
     on('jackpot/get-add-jackpot', function (params) {
         $$('#add-new-jackpot-content-header').innerHTML = localization.translateMessage('AddNewJackpot');
-        $$('#add-new-jackpot-wrapper').settings = params.data.Data;
+        newAndEditJackpotWrapper.settings = params.data.Data;
         fillAdvanceSettings(params.data.Data);
     });
 
@@ -610,7 +710,9 @@ const addNewJackpot = (function () {
     }
 
     return {
-        fillAdvanceSettings
+        fillAdvanceSettings,
+        reset
+
     }
 
 })();

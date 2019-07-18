@@ -2,7 +2,7 @@ const jackpotFilter = (function () {
     let advanceTableFilter = $$('#jackpot-advance-table-filter');
     let advanceTableFilterActive = $$('#jackpot-advance-table-filter-active');
     let addJackpot = $$('#jackpot-add-jackpot').children[0];
-    let addNewJackpot = $$('#add-new-jackpot-wrapper');
+    let addNewJackpotWrapper = $$('#add-new-jackpot-wrapper');
     let jackpotTab = $$('#jackpot-tab');
     let jackpotFilterDataRange = $$('#jackpot-advance-table-filter-date-range');
     let jackpotFilterCasino = $$('#jackpot-advance-table-filter-casino');
@@ -25,7 +25,7 @@ const jackpotFilter = (function () {
 
     //close add new jackpot form
     jackpotTab.addEventListener('click', function () {
-        addNewJackpot.classList.add('hidden');
+        addNewJackpotWrapper.classList.add('hidden');
     });
 
     //show add new jackpot form
@@ -34,8 +34,9 @@ const jackpotFilter = (function () {
         let data = {};
         data.successAction = 'jackpot/get-add-jackpot';
         trigger(communication.events.jackpots.addJackpot, { data, EntryData });
-        addNewJackpot.classList.toggle('hidden');
+        addNewJackpotWrapper.classList.toggle('hidden');
         //todo jel ovde praznim polja?
-        trigger('jackpot/clear-add-jackpot-input');
+        //trigger('jackpot/clear-add-jackpot-input');
+        addNewJackpot.reset();
     }
 })();

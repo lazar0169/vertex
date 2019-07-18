@@ -69,6 +69,7 @@
 
 .add-new-jackpot-control-settings>div:not(:first-child) {
     margin: 0 0.5em 0 5.5em;
+    padding-top: 0.5em
 }
 
 #add-new-jackpot-content-machines-participate>div:not(:first-child)>div {
@@ -87,14 +88,6 @@
     flex-direction: row;
     padding-left: 0.5em;
     white-space: nowrap;
-}
-
-.checked-add-new-jackpot-settings {
-    color: white;
-}
-
-.expanded-add-new-jackpot-settings {
-    padding-bottom: 0.5em;
 }
 
 #add-new-jackpot-content-header {

@@ -344,9 +344,11 @@ const jackpotChooseParticipatingMachines = (function () {
         for (let element of chooseMachinesFilterWrapper.children) {
             if (div !== element) {
                 element.children[1].classList.add('hidden');
+                element.getElementsByClassName('closed-arrow')[0].classList.remove('opened-arrow')
             }
             else {
                 element.children[1].classList.toggle('hidden');
+                trigger('opened-arrow', { div: element.children[0] });
             }
         }
     }
@@ -356,6 +358,7 @@ const jackpotChooseParticipatingMachines = (function () {
         for (let element of chooseMachinesFilterWrapper.children) {
             element.children[0].addEventListener('click', function () {
                 activeFilter(element);
+
             });
         }
     });
