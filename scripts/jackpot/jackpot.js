@@ -40,7 +40,8 @@ const jackpots = (function () {
         showJackpotInfo: 'jackpot/show-jackpot-info',
         removeJackpot: 'jackpot/remove-jackpot',
         setIgnoreRestrictions: 'jackpot/set-ignore-restrictions',
-        showJackpotEditInfo: 'jackpot/show-jackpot-edit-info'
+        showJackpotEditInfo: 'jackpot/show-jackpot-edit-info',
+        previewJackpotHistory: 'jackpot/preview-jackpot-history',
     };
 
     on(events.activated, function (params) {
@@ -91,12 +92,12 @@ const jackpots = (function () {
             data);
         $$('#jackpot-tab-info').appendChild(jackpotsTable);
 
-        $$('#add-new-jackpot-wrapper').settings = data.ItemValue;
+        $$('#add-new-jackpot-wrapper').settingsTable = data.ItemValue;
         trigger('preloader/hide');
     });
 
     on(table.events.sort(jackpotsTableId), function () {
-        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        let filtersForApi = prepareJackpotFilters(jackpotsTableId);
         trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
     });
 
@@ -167,7 +168,7 @@ const jackpots = (function () {
             message: localization.translateMessage(params.data.MessageCode),
             type: params.data.MessageType,
         });
-        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        let filtersForApi = prepareJackpotFilters(jackpotsTableId);
         trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
     });
 
@@ -230,7 +231,7 @@ const jackpots = (function () {
         jackpotEditDetailsWrapper.classList.add('collapse');
         $$('#black-area').classList.remove('show');
 
-        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        let filtersForApi = prepareJackpotFilters(jackpotsTableId);
         trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
     });
 
@@ -242,7 +243,7 @@ const jackpots = (function () {
         jackpotEditDetailsWrapper.classList.add('collapse');
         $$('#black-area').classList.remove('show');
 
-        let filtersForApi = prepareJackpotFIlters(jackpotsTableId);
+        let filtersForApi = prepareJackpotFilters(jackpotsTableId);
         trigger(communication.events.jackpots.previewJackpots, { data: filtersForApi });
     });
 
@@ -378,12 +379,32 @@ const jackpots = (function () {
         jackpotHistoryTable = table.init({
             id: jackpotHistoryTableId,
             pageSizeContainer: '#jackpot-machines-number',
-            appearanceButtonsContainer: '#jackpot-show-space',
             exportButtonsContainer: '#wrapper-jackpot-export-to',
             appearanceButtonsContainer: '#jackpot-show-space'
         },
             params.data.Data);
         $$('#jackpot-history-tab-info').appendChild(jackpotHistoryTable);
+        trigger('preloader/hide');
+    });
+
+    on(table.events.pageSize(jackpotHistoryTableId), function () {
+        let filtersForApi = jackpotFilter.prepareJackpotHistoryFilters(jackpotHistoryTableId);
+        trigger(communication.events.jackpots.previewJackpotHistory, { data: filtersForApi });
+    });
+
+    on(table.events.pagination(jackpotHistoryTableId), function (params) {
+        let filtersForApi = jackpotFilter.prepareJackpotHistoryFilters(jackpotHistoryTableId);
+        trigger(communication.events.jackpots.previewJackpotHistory, { data: filtersForApi });
+    });
+
+    on(table.events.sort(jackpotHistoryTableId), function () {
+        let filtersForApi = jackpotFilter.prepareJackpotHistoryFilters(jackpotHistoryTableId);
+        trigger(communication.events.jackpots.previewJackpotHistory, { data: filtersForApi });
+    });
+
+    on(events.previewJackpotHistory, function (params) {
+        let data = params.data.Data;
+        $$(`#${jackpotHistoryTableId}`).update(data);
         trigger('preloader/hide');
     });
 
@@ -455,7 +476,7 @@ const jackpots = (function () {
     });
 
     on(table.events.pageSize(jackpotEventsTableId), function () {
-        let filtersForApi = prepareJackpotFIlters(jackpotEventsTableId);
+        let filtersForApi = prepareJackpotFilters(jackpotEventsTableId);
         trigger(communication.events.jackpots.previewEvents, { data: filtersForApi });
     });
 
@@ -465,13 +486,13 @@ const jackpots = (function () {
     });
 
     on(table.events.pagination(jackpotEventsTableId), function (params) {
-        let filtersForApi = prepareJackpotFIlters(jackpotEventsTableId);
+        let filtersForApi = prepareJackpotFilters(jackpotEventsTableId);
         trigger(communication.events.jackpots.previewEvents, { data: filtersForApi });
     });
 
 
 
-    function prepareJackpotFIlters(tableId) {
+    function prepareJackpotFilters(tableId) {
         let table = $$(`#${tableId}`);
         let endpointId = getEndpointId();
         let filters = {
@@ -586,19 +607,21 @@ const jackpots = (function () {
         });
     });
 
-    //preview jackpots history
+    //preview jackpots history ++++
     on(communication.events.jackpots.previewJackpotHistory, function (params) {
+        trigger('preloader/show');
         let route = communication.apiRoutes.jackpots.previewJackpotHistory;
         let data = params.data;
         let request = communication.requestTypes.post;
-        let successEvent = tableSettings.successEvent;
+        let successEvent = events.previewJackpotHistory;
         let errorEvent = '';
         trigger('communicate/createAndSendXhr', {
             route: route,
             data: data,
             requestType: request,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.EndpointId
         });
     });
 

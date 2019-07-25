@@ -10,25 +10,26 @@
         </figure>
         <div class="add-new-jackpot-control-settings-info opened-closed-wrapper">
             <div>
-                <div>ALL MACHINES DO NOT PARTICIPATE:</div>
-                <div>Off</div>
+                <div class="element-multilanguage" data-translation-key="AllMachinesDoNotParticipate"></div>
+                <div class="element-multilanguage" data-translation-key="Off"></div>
             </div>
             <span class="closed-arrow">&#9660;</span>
         </div>
     </div>
     <div class="hidden">
         <div>
-            <div>Number of participating machines:</div>
+            <div class="element-multilanguage" data-translation-key="NumberOfParticipatingMachines"></div>
             <div>
-                <input class="form-input" type="text" placeholder="">
+                <input name="NumOfActiveMachinesRestriction" class="form-input element-form-data input-number-right"
+                    data-type="int" type="text" placeholder="">
             </div>
         </div>
-        <div>
-            <div> Choose machines that are participating:</div>
-            <div>22/38</div>
+        <div class="choose-machines-wrapper element-participating-machines">
+            <div class="element-multilanguage" data-translation-key="ChoseMachinesThatAreParticipating"></div>
+            <div class="showing-participating-machines"></div>
             <div id="add-new-jackpot-choose-machines-buttons" class="button-wrapper">
-                <button class="secundarybutton">Choose Machines</button>
-                <a class="button-link">Remove all</a>
+                <button class="secundarybutton element-multilanguage" data-translation-key="ChooseMachines"></button>
+                <a class="button-link element-multilanguage" data-translation-key="RemoveAll"></a>
             </div>
         </div>
     </div>

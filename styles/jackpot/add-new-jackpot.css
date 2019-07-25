@@ -75,7 +75,7 @@
 #add-new-jackpot-content-machines-participate>div:not(:first-child)>div {
     display: flex;
     flex-flow: row wrap;
-    padding-bottom: 0.5em;
+    /* padding-bottom: 0.5em; */
     align-items: center;
 }
 

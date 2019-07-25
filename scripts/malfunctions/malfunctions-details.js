@@ -70,9 +70,9 @@ const malfunctionsDetails = (function () {
             EndpointId: 0,
             Id: parseInt($$('#malfunction-details-table').dataset.id),
             Status: parseInt($$("#malfunction-details-change-status").children[1].get()),
-            ResolvedType: $$("#malfunction-details-change-type").children[1].get() === 'null' ? -1 : parseInt($$("#malfunction-details-change-type").children[1].get()),
             Description: $$('#malfunction-details-textarea').children[0].value
         }
+        data.ResolvedType = $$('#malfunction-details-change-type').classList.contains('hidden') ? -1 : parseInt($$("#malfunction-details-change-type").children[1].get());
         trigger(communication.events.malfunctions.changeMalfunctionState, { data })
     })
 })();

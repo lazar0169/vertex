@@ -11,7 +11,7 @@ const jackpotChooseParticipatingMachines = (function () {
     let filterCount = 0;
 
     let chooseMachineJackpotBackButton = $$('#choose-machines-jackpot-buttons').children[0].children[0];
-    let chooseMachineJackpotSaveButton = $$('#choose-machines-jackpot-buttons').children[0].children[1];
+
 
     // show/hide chose machine form
     let showHideChooseMachine = function () {
@@ -369,11 +369,9 @@ const jackpotChooseParticipatingMachines = (function () {
     chooseMachineJackpotBackButton.addEventListener('click', function () {
         showHideChooseMachine.hide();
     });
-    chooseMachineJackpotSaveButton.addEventListener('click', function () {
-        alert('Save machines for jackpot');
-        showHideChooseMachine.hide();
-    });
+
     chooseMachines.addEventListener('click', function () {
+        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList, $$('#add-new-jackpot-choose-machines-buttons').parentNode)
         showHideChooseMachine.show();
     });
     on('show/app', function () {

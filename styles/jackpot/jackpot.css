@@ -1,15 +1,13 @@
-#table-container-jackpot-events .head.cell.sortable:hover,
-#table-container-jackpot-history .head.cell.sortable:hover,
-#machine-history-table-content .head.cell.sortable:hover,
-#table-container-machines-meters .head.cell.sortable:hover,
-#machines-events-table-id .head.cell.sortable:hover {
+#table-container-jackpot-events .head.cell.sortable:not(.active-column):hover,
+#machine-history-table-content .head.cell.sortable:not(.active-column):hover,
+#table-container-machines-meters .head.cell.sortable:not(.active-column):hover,
+#machines-events-table-id .head.cell.sortable:not(.active-column):hover {
     background: transparent;
 }
 
-#table-container-jackpot-events .head.cell.sortable:hover:after,
-#table-container-jackpot-history .head.cell.sortable:hover:after,
-#machine-history-table-content .head.cell.sortable:hover::after,
-#table-container-machines-meters .head.cell.sortable:hover::after,
-#machines-events-table-id .head.cell.sortable:hover::after {
+#table-container-jackpot-events .head.cell.sortable:not(.active-column):hover:after,
+#machine-history-table-content .head.cell.sortable:not(.active-column):hover:after,
+#table-container-machines-meters .head.cell.sortable:not(.active-column):hover:after,
+#machines-events-table-id .head.cell.sortable:not(.active-column):hover:after {
     visibility: hidden;
 }

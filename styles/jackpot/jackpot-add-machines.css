@@ -147,7 +147,7 @@
 
 .choose-machines-jackpot-search>input {
     margin: 0.5em 0;
-    border: none;
+    border: 2px solid transparent;
 }
 
 #choose-machines-jackpot-buttons {

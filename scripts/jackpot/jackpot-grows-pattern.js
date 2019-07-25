@@ -345,7 +345,7 @@ const jackpotGrowthpattern = (function () {
     choseMachines.onclick = function () {
 
         jackpotChooseParticipatingMachines.showHideChooseMachine.show();
-        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList)
+        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList, $$('#add-new-jackpot-grows-by-bet-choose-machines-wrapper'))
 
 
     }

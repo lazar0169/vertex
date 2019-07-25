@@ -120,41 +120,33 @@ function checkValidationField(wrapper) {
     return valid;
 }
 
-function generateMachinesForChoosing(allM, selectedM) {
-    // //todo ovde se cuvaju sve masine
-    // let allMachines = allM;
-    // //todo ovde se cuvaju selektovane masine
-    // let selectedMachines = selectedM;
-    // for (let machine of allMachines) {
-    //     let machineWrapper = document.createElement('div');
-    //     machineWrapper.settings = machine;
+function generateMachinesForChoosing(allM, wrapper) {
+    let searchUnselected = $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('choose-machines-jackpot-search')[0].children[0];
+    let searchSelected = $$('#choose-machines-jackpot-content-selected-machines').getElementsByClassName('choose-machines-jackpot-search')[0].children[0];
 
-    //     machineWrapper.innerHTML = `<label class="form-checkbox">
-    //     <input type="checkbox">
-    //     <icon class="form-icon" data-element-id="0"></icon>
-    //     <div>BonusWinHostToMachine</div>
-    //     </label>`
-    // }
+    searchUnselected.addEventListener('keyup', function (event) {
+        searchMachine(unselectedMachineItems.Items, searchUnselected.value, unselectedMachineTableSelector)
+    });
+    // let copyOfAllMachineItems = JSON.parse(JSON.stringify(allM));
+
+
+    //todo masine koje su izabrane
+    let chosenUnselectedMachinesArrayId = []
+    let chosenSelectedMachinesArrayId = []
+
+    let unselectedMachineItems = {};
+    unselectedMachineItems.ItemValue = {}
+    unselectedMachineItems.ItemValue.SortDirection = 2;
+    unselectedMachineItems.ItemValue.SortedBy = "CasinoName"
+
+    let selectedMachineItems = {};
+    selectedMachineItems.ItemValue = {}
+    selectedMachineItems.ItemValue.SortDirection = 2;
+    selectedMachineItems.ItemValue.SortedBy = "CasinoName"
 
     let unselectedMachinesContent = $$('#choose-machines-jackpot-content-unselected-machines-list');
     let selectedMachineContent = $$('#choose-machines-jackpot-content-selected-machines-list');
-    let [...copyOfAllM] = allM;
-    let data = {};
-    data.Items = [];
-
-    for (let value of copyOfAllM) {
-        let objectData = {};
-        let Properties = {};
-        Properties.Gmcid = value.Gmcid;
-        let { Gmcid, ...EntryData } = value;
-        objectData.EntryData = EntryData;
-        objectData.Properties = Properties;
-
-        data.Items.push(objectData);
-    }
-
-
-
+    // unselectedMachinesContent.settings = unselectedMachineItems;
 
     const unselectedMachineTableId = 'table-container-unselected-machines';
     const unselectedMachineTableSelector = '#table-container-unselected-machines';
@@ -163,44 +155,235 @@ function generateMachinesForChoosing(allM, selectedM) {
     const selectedMachineTableId = 'table-container-selected-machines';
     const selectedMachineTableSelector = '#table-container-selected-machines';
     let selectedMachineTable;
+
+    //sortiranje niza 
+    function sortArray(array, sortName, order) {
+        array.sort(function (a, b) {
+            var nameA = a.EntryData[sortName].toUpperCase(); // ignore upper and lowercase
+            var nameB = b.EntryData[sortName].toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+                if (order === 1) {
+                    return -1;
+                }
+                else {
+                    return 1
+                }
+            }
+            if (nameA > nameB) {
+
+                if (order === 1) {
+                    return 1;
+                }
+                else {
+                    return -1
+                }
+            }
+
+            // names must be equal
+            return 0;
+        });
+        return array
+    }
+
+    if (wrapper.settings && wrapper.settings.selectedMachinesArrayID && wrapper.settings.selectedMachinesArrayID.length !== 0) {
+        unselectedMachineItems.Items = JSON.parse(JSON.stringify(allM.Items));
+        selectedMachineItems.Items = []
+
+        for (let machineId of wrapper.settings.selectedMachinesArrayID) {
+            for (let numb in unselectedMachineItems.Items) {
+                if (machineId === unselectedMachineItems.Items[numb].Properties.Gmcid) {
+                    let foundMachine = unselectedMachineItems.Items.splice(parseInt(numb), 1);
+                    selectedMachineItems.Items.push(foundMachine[0])
+                    break;
+                }
+            }
+        }
+        $$(`#${unselectedMachineTableId}`).update(unselectedMachineItems);
+        $$(`#${selectedMachineTableId}`).update(selectedMachineItems);
+
+    } else {
+        unselectedMachineItems.Items = JSON.parse(JSON.stringify(allM.Items));
+        selectedMachineItems.Items = []
+    }
+
+    //search casions in cities
+    function searchMachine(data, termin, tableId) {
+        let i = 0;
+        let arrayResult = [];
+        for (let machine of data) {
+            let machineName = machine.EntryData.MachineName.toLowerCase();
+            let casinoName = machine.EntryData.CasinoName.toLowerCase();
+            let index = machineName.indexOf(termin);
+            let index1 = machineName.indexOf(` ${termin}`);
+            let index2 = casinoName.indexOf(termin);
+            let index3 = casinoName.indexOf(` ${termin}`)
+            if (index === 0 ||
+                index1 !== -1 ||
+                index2 === 0 ||
+                index3 !== -1) {
+                arrayResult[i] = machine;
+                i++;
+            }
+        }
+        let newObject = {
+            'Items': arrayResult
+        }
+        $$(tableId).update(newObject);
+
+        for (let row of $$(tableId).querySelectorAll('.table-item')) {
+            for (let chosenMachineId of chosenUnselectedMachinesArrayId) {
+                if (row.additionalData.Properties.Gmcid === chosenMachineId) {
+                    row.classList.toggle('machine-is-selected')
+                    break;
+                }
+            }
+        }
+
+    }
+
     // neselektovane masine
     if (unselectedMachinesContent.children.length !== 0) {
         unselectedMachinesContent.innerHTML = ''
         $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = localization.translateMessage("AddSelected");
     }
+
+    unselectedMachineItems.Items = sortArray(unselectedMachineItems.Items, unselectedMachineItems.ItemValue.SortedBy, unselectedMachineItems.ItemValue.SortDirection);
     unselectedMachineTable = table.init({
         id: unselectedMachineTableId,
     },
-        data);
+        unselectedMachineItems);
     unselectedMachinesContent.appendChild(unselectedMachineTable);
 
-
     //selektovane masine
-    // if (selectedMachineContent.children.length !== 0) {
-    //     selectedMachineContent.innerHTML = ''
-    // }
-    // selectedMachineTable = table.init({
-    //     id: selectedMachineTableId,
-    // },
-    //     data);
-    // selectedMachineContent.appendChild(selectedMachineTable);
+    if (selectedMachineContent.children.length !== 0) {
+        selectedMachineContent.innerHTML = ''
+    }
 
+    selectedMachineItems.Items = sortArray(selectedMachineItems.Items, selectedMachineItems.ItemValue.SortedBy, selectedMachineItems.ItemValue.SortDirection)
+    selectedMachineTable = table.init({
+        id: selectedMachineTableId,
+    },
+        selectedMachineItems);
+    selectedMachineContent.appendChild(selectedMachineTable);
 
+    //row click - unselected table
     on(table.events.rowClick(unselectedMachineTableId), function (params) {
         let className = params.row + params.rowId;
         for (let row of unselectedMachineTable.getElementsByClassName(className)) {
             row.classList.toggle('machine-is-selected')
         }
-        let numberOfUnselected = unselectedMachineTable.getElementsByClassName('machine-is-selected').length / unselectedMachineTable.getElementsByClassName('head').length;
-        $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = `${localization.translateMessage("AddSelected")} ${numberOfUnselected ? `(${numberOfUnselected})` : ''}`;
+
+        let machineIsClicked = $$(unselectedMachineTableSelector).getElementsByClassName(className)[0];
+        if (chosenUnselectedMachinesArrayId.length === 0) {
+            chosenUnselectedMachinesArrayId.push(machineIsClicked.additionalData.Properties.Gmcid)
+        } else {
+            if (!chosenUnselectedMachinesArrayId.includes(machineIsClicked.additionalData.Properties.Gmcid)) {
+                chosenUnselectedMachinesArrayId.push(machineIsClicked.additionalData.Properties.Gmcid)
+            } else {
+                let index = chosenUnselectedMachinesArrayId.indexOf(machineIsClicked.additionalData.Properties.Gmcid)
+                chosenUnselectedMachinesArrayId.splice(index, 1);
+            }
+        }
+        //let numberOfUnselected = unselectedMachineTable.querySelectorAll('.column-casino-name.machine-is-selected').length;
+        $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = `${localization.translateMessage("AddSelected")} ${chosenUnselectedMachinesArrayId.length !== 0 ? `(${chosenUnselectedMachinesArrayId.length})` : ''}`;
     });
 
-    $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].onclick = function (params) {
-        let chosenMachines = unselectedMachineTable.querySelectorAll('.column-name.machine-is-selected');
-        for (let machine of chosenMachines) {
-            console.log(machine.additionalData)
+    //row click - selected table
+    on(table.events.rowClick(selectedMachineTableId), function (params) {
+        let className = params.row + params.rowId;
+        for (let row of selectedMachineTable.getElementsByClassName(className)) {
+            row.classList.toggle('machine-is-selected')
         }
+
+        let machineIsClicked = $$(selectedMachineTableSelector).getElementsByClassName(className)[0];
+        if (chosenSelectedMachinesArrayId.length === 0) {
+            chosenSelectedMachinesArrayId.push(machineIsClicked.additionalData.Properties.Gmcid)
+        } else {
+            if (!chosenSelectedMachinesArrayId.includes(machineIsClicked.additionalData.Properties.Gmcid)) {
+                chosenSelectedMachinesArrayId.push(machineIsClicked.additionalData.Properties.Gmcid)
+            } else {
+                let index = chosenSelectedMachinesArrayId.indexOf(machineIsClicked.additionalData.Properties.Gmcid)
+                chosenSelectedMachinesArrayId.splice(index, 1);
+            }
+        }
+
+        //let numberOfSelected = selectedMachineTable.querySelectorAll('.column-casino-name.machine-is-selected').length;
+        $$('#choose-machines-jackpot-content-selected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = `${localization.translateMessage("RemoveSelected")} ${chosenSelectedMachinesArrayId.length !== 0 ? `(${chosenSelectedMachinesArrayId.length})` : ''}`;
+    });
+    // prebacivanje masina iz unselected u selected
+    $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].onclick = function (params) {
+        //let chosenMachines = unselectedMachineTable.querySelectorAll('.column-casino-name.machine-is-selected');
+        for (let machineId of chosenUnselectedMachinesArrayId) {
+            for (let numb in unselectedMachineItems.Items) {
+                if (machineId === unselectedMachineItems.Items[numb].Properties.Gmcid) {
+                    let foundMachine = unselectedMachineItems.Items.splice(parseInt(numb), 1);
+                    selectedMachineItems.Items.push(foundMachine[0])
+                    break;
+                }
+            }
+        }
+        $$(`#${unselectedMachineTableId}`).update(unselectedMachineItems);
+
+        selectedMachineItems.Items = sortArray(selectedMachineItems.Items, selectedMachineItems.ItemValue.SortedBy, selectedMachineItems.ItemValue.SortDirection);
+        $$(`#${selectedMachineTableId}`).update(selectedMachineItems);
+        searchUnselected.value = ''
+        chosenUnselectedMachinesArrayId = [];
+        $$('#choose-machines-jackpot-content-unselected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = localization.translateMessage("AddSelected");
+    }
+    // prebacivanje masina iz selected u unselected
+    $$('#choose-machines-jackpot-content-selected-machines').getElementsByClassName('secundarybutton')[0].onclick = function (params) {
+        //let chosenMachines = selectedMachineTable.querySelectorAll('.column-casino-name.machine-is-selected');
+        for (let machineId of chosenSelectedMachinesArrayId) {
+            for (let numb in selectedMachineItems.Items) {
+                if (machineId === selectedMachineItems.Items[numb].Properties.Gmcid) {
+                    let foundMachine = selectedMachineItems.Items.splice(parseInt(numb), 1);
+                    unselectedMachineItems.Items.push(foundMachine[0])
+                    break;
+                }
+            }
+        }
+        $$(`#${selectedMachineTableId}`).update(selectedMachineItems);
+        unselectedMachineItems.Items = sortArray(unselectedMachineItems.Items, unselectedMachineItems.ItemValue.SortedBy, unselectedMachineItems.ItemValue.SortDirection);
+        $$(`#${unselectedMachineTableId}`).update(unselectedMachineItems);
+        searchSelected.value = ''
+        chosenSelectedMachinesArrayId = []
+        $$('#choose-machines-jackpot-content-selected-machines').getElementsByClassName('secundarybutton')[0].innerHTML = localization.translateMessage("RemoveSelected");
     }
 
+    //todo sortiranje tabele neselektovanih
+    on(table.events.sort(unselectedMachineTableId), function () {
+        let filters = {}
+        filters = $$(unselectedMachineTableSelector).getFilters(filters);
+        unselectedMachineItems.ItemValue.SortDirection = filters.BasicData.SortOrder;
+        unselectedMachineItems.ItemValue.SortedBy = filters.BasicData.SortName;
+        let newArray = sortArray(unselectedMachineItems.Items, filters.BasicData.SortName, filters.BasicData.SortOrder)
+        unselectedMachineItems.Items = newArray
+        $$(`#${unselectedMachineTableId}`).update(unselectedMachineItems);
+        // trigger(events.filterTable);
+    });
 
+    //todo sortiranje tabele selektovanih
+    on(table.events.sort(selectedMachineTableId), function () {
+        let filters = {}
+        filters = $$(selectedMachineTableSelector).getFilters(filters);
+        selectedMachineItems.ItemValue.SortDirection = filters.BasicData.SortOrder;
+        selectedMachineItems.ItemValue.SortedBy = filters.BasicData.SortName;
+        let newArray = sortArray(selectedMachineItems.Items, filters.BasicData.SortName, filters.BasicData.SortOrder);
+        selectedMachineItems.Items = newArray;
+        $$(`#${selectedMachineTableId}`).update(selectedMachineItems);
+        // trigger(events.filterTable);
+    });
+
+
+    let chooseMachineJackpotSaveButton = $$('#choose-machines-jackpot-buttons').children[0].children[1];
+    chooseMachineJackpotSaveButton.onclick = function () {
+        let selectedMachinesArrayID = []
+        for (let machineId of $$(selectedMachineTableSelector).querySelectorAll('.table-item.column-casino-name')) {
+            selectedMachinesArrayID.push(machineId.additionalData.Properties.Gmcid)
+        }
+        wrapper.settings = {}
+        wrapper.settings.selectedMachinesArrayID = selectedMachinesArrayID;
+        wrapper.getElementsByClassName('showing-participating-machines')[0].innerHTML = `${selectedMachinesArrayID.length}/${allM.Items.length}`
+        jackpotChooseParticipatingMachines.showHideChooseMachine.hide();
+    };
 }
