@@ -5,7 +5,20 @@ const jackpotGrowthpattern = (function () {
     let jackpotControlGrowthPeriodByHours = $$('#jackpot-control-growth-period').children[1];
     let addNewGrowthField = $$('#jackpot-grows-automatically-content').getElementsByClassName('secundarybutton');
     let valueLimitCheckbox = $$('#jackpot-growth-pattern-value-limit-checkbox').parentNode;
-    let choseMachines = $$('#add-new-jackpot-grows-by-bet-choose-machines-buttons').children[0];
+    let chooseMachinesGrowsByBet = $$('#add-new-jackpot-grows-by-bet-choose-machines-buttons').children[0];
+    let removeMachinesGrowsByBet = $$('#add-new-jackpot-grows-by-bet-choose-machines-buttons').children[1];
+
+    let chooseMachinesGrowsDiscreetlyRain = $$('#add-new-jackpot-grows-discreetly-rain-choose-machines-buttons').children[0];
+    let removeMachinesGrowsDiscreetlyRain = $$('#add-new-jackpot-grows-discreetly-rain-choose-machines-buttons').children[1];
+
+    let chooseMachinesGrowsDiscreetlyTournament = $$('#add-new-jackpot-grows-discreetly-tournament-choose-machines-buttons').children[0];
+    let removeMachinesGrowsDiscreetlyTournament = $$('#add-new-jackpot-grows-discreetly-tournament-choose-machines-buttons').children[1];
+
+    let chooseMachinesGrowsDiscreetlyCustom = $$('#add-new-jackpot-grows-discreetly-custom-choose-machines-buttons').children[0];
+    let removeMachinesGrowsDiscreetlyCustom = $$('#add-new-jackpot-grows-discreetly-custom-choose-machines-buttons').children[1];
+
+
+
     let jackpotGrowsDiscreetlyRadioButtonsWrapper = $$('#jackpot-grows-discreetly-radio-buttons');
     let jackpotGrowsPatternCustomRadio = jackpotGrowsDiscreetlyRadioButtonsWrapper.children;
     let jackpotGrowsCustomRadioButtonsWrapper = $$("#custom-radio-buttons");
@@ -342,13 +355,45 @@ const jackpotGrowthpattern = (function () {
 
     checkboxChangeState.radioClick(jackpotGrowsDiscreetlyRadioButtonsWrapper);
 
-    choseMachines.onclick = function () {
-
-        jackpotChooseParticipatingMachines.showHideChooseMachine.show();
+    chooseMachinesGrowsByBet.onclick = function () {
         generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList, $$('#add-new-jackpot-grows-by-bet-choose-machines-wrapper'))
-
-
+        jackpotChooseParticipatingMachines.showHideChooseMachine.show();
     }
+    removeMachinesGrowsByBet.onclick = function (e) {
+        removeChoosedMachines(e)
+    }
+
+    chooseMachinesGrowsDiscreetlyRain.onclick = function () {
+        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList, $$('#rain-choose-machines-wrapper'))
+        jackpotChooseParticipatingMachines.showHideChooseMachine.show();
+    }
+    removeMachinesGrowsDiscreetlyRain.onclick = function (e) {
+        removeChoosedMachines(e)
+    }
+
+    chooseMachinesGrowsDiscreetlyTournament.onclick = function () {
+        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList, $$('#tournament-choose-machines-wrapper'))
+        jackpotChooseParticipatingMachines.showHideChooseMachine.show();
+    }
+    removeMachinesGrowsDiscreetlyTournament.onclick = function (e) {
+        removeChoosedMachines(e)
+    }
+
+    chooseMachinesGrowsDiscreetlyCustom.onclick = function () {
+        generateMachinesForChoosing($$('#add-new-jackpot-wrapper').settings.MachineList, $$('#custom-choose-machines-wrapper'))
+        jackpotChooseParticipatingMachines.showHideChooseMachine.show();
+    }
+    removeMachinesGrowsDiscreetlyCustom.onclick = function (e) {
+        removeChoosedMachines(e)
+    }
+
+    function removeChoosedMachines(e) {
+        let choosingMachinesWrapper = e.target.parentNode.parentNode
+        choosingMachinesWrapper.settings = {}
+        let numberOfSelectedMachines = choosingMachinesWrapper.settings.selectedMachinesArrayID ? choosingMachinesWrapper.settings.selectedMachinesArrayID.length : '0'
+        choosingMachinesWrapper.getElementsByClassName('showing-participating-machines')[0].innerHTML = `${numberOfSelectedMachines}/${$$('#add-new-jackpot-wrapper').settings.MachineList.Items.length}`
+    }
+
     //days
     bindGridButton(addNewGrowthField[0]);
     //hours

@@ -3,7 +3,6 @@ const addNewJackpot = (function () {
     let growsPatternTabs = $$('#jackpot-growth-pattern-tabs');
     let addNewJackpotControlSettings = $$('.add-new-jackpot-control-settings');
     let addNewJackpotControlSettingsInfo = $$('.add-new-jackpot-control-settings-info');
-    let removeAllMachines = $$('#add-new-jackpot-choose-machines-buttons').children[1];
     let saveNewJackpot = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[1];
     let clearAllFields = $$("#add-new-jackpot-content-buttons-wrapper").children[0].children[0];
     checkboxChangeState.radioClick($$('#add-new-jackpot-content-inputs-radio'));
@@ -130,7 +129,6 @@ const addNewJackpot = (function () {
         //todo resetovanje settings-a za selektovane masine
         for (let wrapper of newAndEditJackpotWrapper.getElementsByClassName('element-participating-machines')) {
             wrapper.settings = {}
-            console.log(newAndEditJackpotWrapper.settings)
             wrapper.getElementsByClassName('showing-participating-machines')[0].innerHTML = '0/0';
         }
         console.log('vrati sve na pocetne vrednosti')
@@ -601,10 +599,6 @@ const addNewJackpot = (function () {
 
     clearAllFields.addEventListener('click', function () {
         alert('Set all fields to initial value');
-    });
-
-    removeAllMachines.addEventListener('click', function () {
-        alert('Remove all machines');
     });
 
     window.addEventListener('load', function () {
