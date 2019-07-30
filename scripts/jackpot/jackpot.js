@@ -116,7 +116,6 @@ const jackpots = (function () {
         selectTab('jackpot-tab');
         selectInfoContent('jackpot-tab');
         $$('#add-new-jackpot-wrapper').classList.add('hidden');
-
     });
 
     on(table.events.rowClick(jackpotsTableId), function (params) {

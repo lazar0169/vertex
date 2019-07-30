@@ -69,8 +69,19 @@ const addNewJackpot = (function () {
                     onOffText.classList.remove('active-add-new-jackpot-settings');
                 }
             }
+
+            //todo uklanja svu crvenu boju koja se postavlja kada settings ima gresku
+            while (settings.querySelectorAll('.color-red').length > 0) {
+                settings.querySelectorAll('.color-red')[0].classList.remove('color-red');
+            }
+
             // todo da sakrije sve sadrzaje za settings-e
             settings.children[1].classList.add('hidden');
+        }
+
+        //todo prazni jackpot-level-exist-wrapper ukoliko postoje kreirani leveli
+        for (let levelWrapper of newAndEditJackpotWrapper.querySelectorAll('.jackpot-level-exist-wrapper')) {
+            levelWrapper.innerHTML = ''
         }
 
         //todo vracanje tabova na pocetne vrednosti u growth patternu
@@ -171,9 +182,17 @@ const addNewJackpot = (function () {
         }
     }
 
-    saveNewJackpot.addEventListener('click', function (e) {
-        if (checkValidationField($$(`#${e.target.dataset.value}`))) {
+    saveNewJackpot.onclick = function (e) {
+        //isprazni sve greske i pokupi sve ispocetka
+        for (let errorInput of newAndEditJackpotWrapper.querySelectorAll('.vertex-validation-error')) {
+            errorInput.classList.remove(errorInput.vertexValidation.errorClass)
+            while (errorInput.vertexValidation.errorElements.length > 0) {
+                let element = errorInput.vertexValidation.errorElements.pop();
+                element.parentNode.removeChild(element);
+            }
+        }
 
+        if (checkValidationField($$(`#${e.target.dataset.value}`))) {
             let data = {};
             data.EndpointId = $$('#page-jackpots').settings.EndpointId;
             //podatak: No, Name, Handpay, StartValue, BottomLabelText i ChooseType
@@ -237,35 +256,38 @@ const addNewJackpot = (function () {
                                         for (let inputElement of $$('#jackpot-grows-automatically-content').children[0].getElementsByClassName('element-form-data')) {
                                             data[element.dataset.name][inputElement.name] = getInputValueByType(inputElement);
                                         }
-                                    }
-                                    let validPeriod = isPeriodValid($$('#jackpot-control-growth-period').parentNode);
-                                    let emptyPeriod = isPeriodEmpty($$('#jackpot-control-growth-period').parentNode)
-                                    if (validPeriod || emptyPeriod) {
-                                        if (validPeriod) {
-                                            if ($$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name === 'days') {
-                                                for (let day of $$('#add-new-jackpot-growth-pattern-by-day').getElementsByClassName('grid-3-columns')) {
-                                                    let object = {}
-                                                    object[day.children[0].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
-                                                    object[day.children[1].children[0].name] = findInputElementWithName(day, day.children[1].children[0].name);
-                                                    data[element.dataset.name]['DayIntervals'].push(object)
-                                                }
-                                            } else {
-                                                for (let hour of $$('#add-new-jackpot-growth-pattern-by-hours').getElementsByClassName('grid-3-columns')) {
-                                                    let object = {}
-                                                    object[hour.children[0].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
-                                                    object[hour.children[1].children[0].name] = findInputElementWithName(hour, hour.children[1].children[0].name);
-                                                    data[element.dataset.name]['HourIntervals'].push(object)
-                                                }
-                                            }
-                                        }
+                                        element.children[0].classList.remove('color-red');
                                     } else {
-
-                                        console.log('Nevalidno!!!')
-                                        trigger('notifications/show', {
-                                            message: localization.translateMessage('Vremenski period nije validan'),
-                                            type: notifications.messageTypes.error,
-                                        });
+                                        element.children[0].classList.add('color-red');
                                     }
+                                    // let validPeriod = isPeriodValid($$('#jackpot-control-growth-period').parentNode);
+                                    // let emptyPeriod = isPeriodEmpty($$('#jackpot-control-growth-period').parentNode);
+                                    // if (validPeriod || emptyPeriod) {
+                                    //     if (validPeriod) {
+                                    //         if ($$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name === 'days') {
+                                    //             for (let day of $$('#add-new-jackpot-growth-pattern-by-day').getElementsByClassName('grid-3-columns')) {
+                                    //                 let object = {}
+                                    //                 object[day.children[0].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
+                                    //                 object[day.children[1].children[0].name] = findInputElementWithName(day, day.children[1].children[0].name);
+                                    //                 data[element.dataset.name]['DayIntervals'].push(object)
+                                    //             }
+                                    //         } else {
+                                    //             for (let hour of $$('#add-new-jackpot-growth-pattern-by-hours').getElementsByClassName('grid-3-columns')) {
+                                    //                 let object = {}
+                                    //                 object[hour.children[0].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
+                                    //                 object[hour.children[1].children[0].name] = findInputElementWithName(hour, hour.children[1].children[0].name);
+                                    //                 data[element.dataset.name]['HourIntervals'].push(object)
+                                    //             }
+                                    //         }
+                                    //     }
+
+                                    // }
+                                    //  else {
+                                    //     trigger('notifications/show', {
+                                    //         message: localization.translateMessage('Vremenski period nije validan'),
+                                    //         type: notifications.messageTypes.error,
+                                    //     });
+                                    // }
 
                                     break;
 
@@ -275,6 +297,10 @@ const addNewJackpot = (function () {
                                         for (let inputElement of $$('#jackpot-grows-by-bet').getElementsByClassName('element-form-data')) {
                                             data[element.dataset.name][inputElement.name] = getInputValueByType(inputElement);
                                         }
+                                        element.children[0].classList.remove('color-red');
+                                    }
+                                    else {
+                                        element.children[0].classList.add('color-red');
                                     }
                                     data[element.dataset.name]['SelectedMachineForBetLoadingIDs'] = [];
                                     let HasMinMaxLimit = checkboxChangeState.getSwitchState($$('#jackpot-value-limit-wrapper').children[0]);
@@ -295,12 +321,25 @@ const addNewJackpot = (function () {
                                             object.Value = settings.LevelValue;
                                             object.Formula = {};
                                             object.Formula._Exspressions = [];
-                                            let object2 = {}
-                                            object2.Counter = settings.LevelOutcome ? settings.LevelOutcome.id : null;
-                                            object2.JPId = settings.JackpotList ? settings.JackpotList.id : null;
-                                            object2.Type = settings.CountTypeList;
-                                            object2.Number = settings.Value;
-                                            object.Formula._Exspressions.push(object2);
+
+                                            if (settings.CustomLevelConditions && settings.CustomLevelConditions.length !== 0) {
+                                                for (let exspression of settings.CustomLevelConditions) {
+                                                    let object2 = {}
+                                                    object2.Counter = exspression.LevelOutcome ? exspression.LevelOutcome.id : null;
+                                                    object2.JPId = exspression.LevelOutcome.id === '2' ? exspression.JackpotList ? exspression.JackpotList.id : null : null;
+                                                    object2.Type = exspression.CountTypeList.id;
+                                                    object2.Number = exspression.Value;
+                                                    object.Formula._Exspressions.push(object2);
+                                                }
+                                            }
+                                            else {
+                                                let object2 = {}
+                                                object2.Counter = settings.LevelOutcome ? settings.LevelOutcome.id : null;
+                                                object2.JPId = settings.JackpotList ? settings.JackpotList.id : null;
+                                                object2.Type = settings.CountTypeList;
+                                                object2.Number = settings.Value;
+                                                object.Formula._Exspressions.push(object2);
+                                            }
                                             object.Formula._Condition = DiscreeteType === '3' ? checkboxChangeState.getRadioState($$('#custom-radio-buttons')) : 1;
                                             data[element.dataset.name]['Levels'].push(object);
                                         }
@@ -308,19 +347,17 @@ const addNewJackpot = (function () {
 
                                     break;
                                 //kada nije ukljucen nijedan tab
-                                default:
-                                    trigger('notifications/show', {
-                                        message: localization.translateMessage('nije odabran nijedan tab iz growth pattern'),
-                                        type: notifications.messageTypes.error,
-                                    });
+                                // default:
+                                //     trigger('notifications/show', {
+                                //         message: localization.translateMessage('nije odabran nijedan tab iz growth pattern'),
+                                //         type: notifications.messageTypes.error,
+                                //     });
 
                             }
-
                             break;
 
                         case 'ControlActiveTime':
-                            data[element.dataset.name]["NotAlwaysActive"] = false;
-                            data[element.dataset.name]["Intervals"] = null;
+                            data[element.dataset.name]["Intervals"] = [];
                             data[element.dataset.name]["ChangeBackground"] = false;
                             data[element.dataset.name]["Background"] = null;
                             data[element.dataset.name]["LogicFunctionSelected"] = 0;
@@ -337,6 +374,45 @@ const addNewJackpot = (function () {
                             data[element.dataset.name]["PayoutAtTheEndInterval"] = false;
                             data[element.dataset.name]["MultiWinnersId"] = 0;
 
+                            let LogicFunctionSelected = $$('#add-new-jackpot-time-interval-include-conditions-dropdown').children[1].get();
+                            data[element.dataset.name]["LogicFunctionSelected"] = LogicFunctionSelected === 'null' ? 0 : LogicFunctionSelected;
+
+                            //todo nikola napraviti da radi kontrol aktiv tajm
+                            if (data[element.dataset.name]["LogicFunctionSelected"] === 0 && data.HasControlActiveTime) {
+                                console.log($$('#add-new-jackpot-time-interval-added-by-dropdown').children)
+                                if ($$('#add-new-jackpot-time-interval-added-by-dropdown').children.length > 0) {
+                                    for (let errorInput of $$(`#add-new-jackpot-time-interval-include-conditions-wrapper`).querySelectorAll('.vertex-validation-error')) {
+                                        errorInput.classList.remove(errorInput.vertexValidation.errorClass)
+                                        while (errorInput.vertexValidation.errorElements.length > 0) {
+                                            let element = errorInput.vertexValidation.errorElements.pop();
+                                            element.parentNode.removeChild(element);
+                                        }
+                                    }
+
+                                } else {
+                                    if (checkValidationField($$(`#add-new-jackpot-time-interval-include-conditions-wrapper`))) {
+
+                                    } else {
+                                        trigger('notifications/show', {
+                                            message: localization.translateMessage('Popuni jedno ili drugo'),
+                                            type: notifications.messageTypes.error,
+                                        });
+                                    }
+
+                                }
+
+                            } else {
+                                if (data.HasControlActiveTime && checkValidationField($$(`#add-new-jackpot-time-interval-include-conditions-wrapper`)) && $$('#add-new-jackpot-time-interval-added-by-dropdown').children.length > 0) {
+
+
+
+                                } else {
+                                    trigger('notifications/show', {
+                                        message: localization.translateMessage('Moras da popunis obadva'),
+                                        type: notifications.messageTypes.error,
+                                    });
+                                }
+                            }
 
                             let DurationHours = $$('#add-new-jackpot-time-interval-include-conditions-wrapper').getElementsByClassName('timepicker')[0].children[0];
                             let DurationMinutes = $$('#add-new-jackpot-time-interval-include-conditions-wrapper').getElementsByClassName('timepicker')[0].children[1];
@@ -345,8 +421,6 @@ const addNewJackpot = (function () {
                             data[element.dataset.name]["LinearFunction"] = $$('#add-new-jackpot-time-interval-chart').get()
                             data[element.dataset.name]["ChangeBackground"] = checkboxChangeState.getCheckboxState($$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-checkbox'));
                             data[element.dataset.name]["Background"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-background-dropdown').children[1].get();
-                            let LogicFunctionSelected = $$('#add-new-jackpot-time-interval-include-conditions-dropdown').children[1].get();
-                            data[element.dataset.name]["LogicFunctionSelected"] = LogicFunctionSelected === 'null' ? 0 : LogicFunctionSelected;
                             data[element.dataset.name]["ControlNumOfActiveMachines"] = getInputValueByType($$('#jackpot-condition-number-of-machines'))
                             data[element.dataset.name]["MaxNumOfActiveJackpots"] = getInputValueByType($$('#jackpot-condition-maximum-number-of-jackpot-activations'))
                             data[element.dataset.name]["IntervalStatusOptionId"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-after-jackpot-win-dropdown').children[1].get();
@@ -373,7 +447,7 @@ const addNewJackpot = (function () {
                                         }
                                     } else {
                                         trigger('notifications/show', {
-                                            message: localization.translateMessage('Nisi izabrao uslove'),
+                                            message: localization.translateMessage('Nisi izabrao uslove u JackpotAtTheEndOfInterval -> custom'),
                                             type: notifications.messageTypes.error,
                                         });
                                     }
@@ -387,13 +461,16 @@ const addNewJackpot = (function () {
                                     data[element.dataset.name]["IntervalFormula"].push(conditionObject);
                                 }
                             }
-
-                            data[element.dataset.name]["IntervalLogicFunction"] = checkboxChangeState.getRadioState($$('#winning-conditions-added-by-custom-radio-buttons'));
+                            let IntervalLogicFunction = checkboxChangeState.getRadioState($$('#winning-conditions-added-by-custom-radio-buttons'));
+                            data[element.dataset.name]["IntervalLogicFunction"] = IntervalLogicFunction === undefined ? 0 : IntervalLogicFunction
                             data[element.dataset.name]["MultiWinnersId"] = $$('#add-new-jackpot-control-active-time-settings-jackpot-active-more-jackpot-winners-dropdown').children[1].get();
                             break;
 
                         case 'DontParticipateAllMachines':
-
+                            let SelectedMachineRestrictionIDs = $$('#add-new-jackpot-choose-machines-buttons').parentNode.settings.selectedMachinesArrayID;
+                            data[element.dataset.name]["SelectedMachineRestrictionIDs"] = SelectedMachineRestrictionIDs ? SelectedMachineRestrictionIDs : []
+                            let NumOfActiveMachinesRestriction = $$('#jackpot-num-of-active-machines-restriction').children[0].value
+                            data[element.dataset.name]["NumOfActiveMachinesRestriction"] = NumOfActiveMachinesRestriction === '' ? null : parseInt(NumOfActiveMachinesRestriction);
                             break;
 
                         default:
@@ -404,125 +481,123 @@ const addNewJackpot = (function () {
                                 } else {
                                     if (checkValidationField(input.parentNode)) {
                                         data[element.dataset.name][input.name ? input.name : input.dataset.name] = getInputValueByType(input);
+                                        element.children[0].classList.remove('color-red');
+
+                                    }
+                                    else {
+                                        element.children[0].classList.add('color-red');
                                     }
                                 }
                             }
                     }
-
-
-                    // if (element.dataset.name === "GrowthPattern") {
-                    //     if (patternActive && patternActive.dataset.value !== 'jackpot-grows-discreetly') {
-                    //         for (let input of $$(`#${patternActive.dataset.value}`).getElementsByClassName('element-form-data')) {
-                    //             if (input.dataset.type !== 'radio') {
-                    //                 checkValidationField(input.parentNode);
-                    //             }
-                    //         }
-
-                    //     }
-                    //     data[element.dataset.name]['AutomaticValue'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticValue') : 0;
-                    //     data[element.dataset.name]['TimeInDays'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'TimeInDays') : 0;
-                    //     data[element.dataset.name]['AutomaticHiddenPercent'] = $$('#jackpot-growth-pattern-tabs').children[0].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-automatically-content').children[0], 'AutomaticHiddenPercent') : 0;
-                    //     //todo ovde niz za dayIntervals 
-                    //     data[element.dataset.name]['DayIntervals'] = [];
-                    //     //todo ovde niz za HourIntervals
-                    //     data[element.dataset.name]['HourIntervals'] = [];
-                    //     if ($$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name === 'days') {
-                    //         for (let day of $$('#add-new-jackpot-growth-pattern-by-day').getElementsByClassName('grid-3-columns')) {
-                    //             let object = {}
-                    //             object[day.children[0].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
-                    //             object[day.children[1].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
-                    //             data[element.dataset.name]['DayIntervals'].push(object)
-                    //         }
-                    //     } else {
-                    //         for (let hour of $$('#add-new-jackpot-growth-pattern-by-hours').getElementsByClassName('grid-3-columns')) {
-                    //             let object = {}
-                    //             object[hour.children[0].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
-                    //             object[hour.children[1].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
-                    //             data[element.dataset.name]['HourIntervals'].push(object)
-                    //         }
-                    //     }
-                    //     data[element.dataset.name]['MinBetForLoading'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'MinBetForLoading') : 0;
-                    //     data[element.dataset.name]['MaxBetForLoading'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'MaxBetForLoading') : 0;
-                    //     data[element.dataset.name]['Percent'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'Percent') : 0;
-                    //     data[element.dataset.name]['HiddenPercent'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? findInputElementWithName($$('#jackpot-grows-by-bet'), 'HiddenPercent') : 0;
-                    //     data[element.dataset.name]['SelectedMachineForBetLoadingIDs'] = $$('#jackpot-growth-pattern-tabs').children[1].classList.contains('pattern-active') ? [] : [];
-                    //     let discreeteType = checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons'));
-                    //     data[element.dataset.name]['DiscreeteType'] = discreeteType ? discreeteType : 0;
-                    //     //leveli deca iz rain-jackpot-exist-wrapper svako dete ima settings gde mu se nalaze podaci za kreiranje levela
-                    //     data[element.dataset.name]['Levels'] = [];
-
-                    //     if ($$('#tournament-jackpot-exist-wrapper').children.length > 0) {
-                    //         for (let level of $$('#tournament-jackpot-exist-wrapper').children) {
-                    //             let object = {}
-                    //             object.Name = level.settings.LevelName;
-                    //             object.Value = level.settings.LevelValue;
-                    //             object.Formula = {
-                    //                 "_Exspressions": {
-                    //                     "Counter": level.settings.LevelOutcome.id,
-                    //                     "JPId": level.settings.LevelOutcome.id === '2' ? 1 : null,
-                    //                     "Type": level.settings.CountTypeList,
-                    //                     "OperatorType": level.settings.Operator.id,
-                    //                     "Number": level.settings.Value
-                    //                 },
-                    //                 "_Condition": 0
-                    //             }
-                    //             data[element.dataset.name]['Levels'].push(object);
-                    //         }
-                    //     }
-
-                    //     data[element.dataset.name]['SelectedMachineForDiscreteLoadingIDs'] = $$('#jackpot-growth-pattern-tabs').children[2].classList.contains('pattern-active') ? [] : [];
-
-                    //     let hasValueLimit = checkboxChangeState.getSwitchState($$('#jackpot-growth-pattern-value-limit-checkbox').parentNode);
-                    //     data[element.dataset.name]['HasMinMaxLimit'] = hasValueLimit;
-                    //     data[element.dataset.name]['MinMaxStateId'] = hasValueLimit ? $$('#jackpot-growth-pattern-after-reaching-max').children[1].get() : "null"
-                    //     data[element.dataset.name]['MinValueLimit'] = hasValueLimit ? findInputElementWithName($$('#jackpot-grow-pattern-value-limit').children[0], 'MinValueLimit') : 0;
-                    //     data[element.dataset.name]['MaxValueLimit'] = hasValueLimit ? findInputElementWithName($$('#jackpot-grow-pattern-value-limit').children[0], 'MaxValueLimit') : 0;
-                    //     data[element.dataset.name]['MinMaxFunction'] = hasValueLimit ? $$('#jackpot-growth-pattern-grows-by-bet-chart').get() : [];
-                    // }
-                    // else {
-                    //     for (let input of element.children[1].getElementsByClassName('element-form-data')) {
-                    //         if (input.classList.contains('default-select')) {
-                    //             data[element.dataset.name][input.children[0].name ? input.children[0].name : input.children[0].dataset.name] = input.get();
-
-                    //         } else {
-                    //             if (input.dataset.type !== 'radio') {
-                    //                 checkValidationField(input.parentNode)
-                    //             }
-                    //             data[element.dataset.name][input.name ? input.name : input.dataset.name] = getInputValueByType(input);
-                    //         }
-
-                    //     }
-                    // }
                 }
             }
 
             console.log(data)
+
+            if ($$('#add-new-jackpot-wrapper').getElementsByClassName('vertex-error-container').length === 0) {
+
+                if (data.IsGrowing && data.GrowthType === '1') {
+                    let validPeriod = isPeriodValid($$('#jackpot-control-growth-period').parentNode);
+                    let emptyPeriod = isPeriodEmpty($$('#jackpot-control-growth-period').parentNode);
+                    if (validPeriod || emptyPeriod) {
+                        if (validPeriod) {
+                            if ($$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name === 'days') {
+                                for (let day of $$('#add-new-jackpot-growth-pattern-by-day').getElementsByClassName('grid-3-columns')) {
+                                    let object = {}
+                                    object[day.children[0].children[0].name] = findInputElementWithName(day, day.children[0].children[0].name);
+                                    object[day.children[1].children[0].name] = findInputElementWithName(day, day.children[1].children[0].name);
+                                    data.GrowthPattern.DayIntervals.push(object)
+                                }
+                            } else {
+                                for (let hour of $$('#add-new-jackpot-growth-pattern-by-hours').getElementsByClassName('grid-3-columns')) {
+                                    let object = {}
+                                    object[hour.children[0].children[0].name] = findInputElementWithName(hour, hour.children[0].children[0].name);
+                                    object[hour.children[1].children[0].name] = findInputElementWithName(hour, hour.children[1].children[0].name);
+                                    data.GrowthPattern.HourIntervals.push(object)
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        trigger('notifications/show', {
+                            message: localization.translateMessage('Vremenski period nije validan'),
+                            type: notifications.messageTypes.error,
+                        });
+                        $$('#add-new-jackpot-content-growth-pattern').children[0].classList.add('color-red');
+                        return;
+                    }
+                }
+                if (data.IsGrowing && data.GrowthType === '2' && data.GrowthPattern.MaxBetForLoading < data.GrowthPattern.MinBetForLoading) {
+                    trigger('notifications/show', {
+                        message: localization.translateMessage('Ne može da se doda ukoliko je vrednost Maximum bet for growth manja od vrednosti Minimum bet for growth, i obrnuto.'),
+                        type: notifications.messageTypes.error,
+                    });
+                    $$('#add-new-jackpot-content-growth-pattern').children[0].classList.add('color-red');
+                    return;
+
+                }
+                if (data.IsGrowing && data.GrowthPattern.HasMinMaxLimit && data.GrowthPattern.MaxValueLimit < data.GrowthPattern.MinValueLimit) {
+                    trigger('notifications/show', {
+                        message: localization.translateMessage('Vrednost za Minimum value ne može da bude veća od vrednosti za Maximum value'),
+                        type: notifications.messageTypes.error,
+                    });
+                    $$('#add-new-jackpot-content-growth-pattern').children[0].classList.add('color-red');
+                    return;
+                }
+                if (data.IsGrowing && data.GrowthPattern.HasMinMaxLimit && data.GrowthPattern.MinValueLimit < data.StartValue) {
+                    trigger('notifications/show', {
+                        message: localization.translateMessage('Vrednost za Minimum value ne može da bude manja od početne vrednosti za JP'),
+                        type: notifications.messageTypes.error,
+                    });
+                    $$('#add-new-jackpot-content-growth-pattern').children[0].classList.add('color-red');
+                    return;
+                }
+                if (data.HasBetAndWinLimit && data.BetAndWinLimit.MaxBetForPayoutSlow < data.BetAndWinLimit.MinBetForPayoutSlow && data.BetAndWinLimit.MaxBetForPayoutMedium < data.BetAndWinLimit.MinBetForPayoutMedium && data.BetAndWinLimit.MaxBetForPayoutFast < data.BetAndWinLimit.MinBetForPayoutFast) {
+                    trigger('notifications/show', {
+                        message: localization.translateMessage('Vrednost za Minimum value treba da bude manja od vrednosti za Maximum value.'),
+                        type: notifications.messageTypes.error,
+                    });
+                    $$('#add-new-jackpot-content-limit-settings').children[0].classList.add('color-red');
+                    return;
+                }
+
+
+                trigger(communication.events.jackpots.saveJackpot, { data });
+
+
+                // trigger(communication.events.jackpots.saveJackpot, { data });
+            }
+
+
+
+
             // if (data.IsGrowing || data.HasControlActiveTime) {
 
             //     if (data.HasControlActiveTime) {
 
             // if ($$('#add-new-jackpot-wrapper').getElementsByClassName('vertex-error-container').length === 0) {
 
-            //trigger(communication.events.jackpots.saveJackpot, { data });
+            // trigger(communication.events.jackpots.saveJackpot, { data });
             // } else {
             //     trigger('notifications/show', {
             //         message: localization.translateMessage('imas nepopunjena polja'),
             //         type: notifications.messageTypes.error,
             //     });
             // }
+            // }
+            // else {
+            //     if (data.GrowthType) {
+            //         trigger(communication.events.jackpots.saveJackpot, { data });
             //     }
             //     else {
-            //         if (data.GrowthType) {
-            //             trigger(communication.events.jackpots.saveJackpot, { data });
-            //         }
-            //         else {
-            //             trigger(communication.events.jackpots.saveJackpot, { data });
-            //             trigger('notifications/show', {
-            //                 message: localization.translateMessage('nije odabran nijedan tab iz growth pattern'),
-            //                 type: notifications.messageTypes.error,
-            //             });
-            //         }
+            //         trigger(communication.events.jackpots.saveJackpot, { data });
+            //         trigger('notifications/show', {
+            //             message: localization.translateMessage('nije odabran nijedan tab iz growth pattern'),
+            //             type: notifications.messageTypes.error,
+            //         });
             //     }
+            // }
             // }
 
             // else {
@@ -533,7 +608,7 @@ const addNewJackpot = (function () {
             //     });
             // }
         }
-    });
+    }
 
     function isPeriodValid(wrapper) {
 
@@ -558,19 +633,16 @@ const addNewJackpot = (function () {
         }
 
         if (activePeriod.dataset.name === 'days') {
+            let growthDays = parseInt($$('#jackpot-grows-automatically-growth-days').getElementsByClassName('element-form-data')[0].value);
 
-            if (dayCounter === 5 && percentCounter === 100) {
+            if (dayCounter === growthDays && percentCounter === 100) {
                 console.log('validno je')
                 valid = true
             } else {
                 console.log('NEVALIDNO')
                 valid = false
             }
-
-            console.log(dayCounter);
-            console.log(percentCounter);
         } else {
-
             if (hoursCounter === 24 && percentCounter === 100) {
                 console.log('validno je')
                 valid = true;
@@ -578,9 +650,6 @@ const addNewJackpot = (function () {
                 console.log('NEVALIDNO')
                 valid = false;
             }
-            console.log(hoursCounter);
-            console.log(percentCounter);
-
         }
         return valid;
     }
@@ -641,9 +710,26 @@ const addNewJackpot = (function () {
                 }
                 checkSwitch.children[0].classList.toggle('color-white');
                 checkSwitch.children[0].children[1].children[0].children[1].classList.toggle('active-add-new-jackpot-settings');
+
+                //todo ovde pobrisati validirana polja kada nema actice-add-new-jackpot-settings
+                checkSwitch.children[0].classList.remove('color-red');
+                for (let errorInput of checkSwitch.children[1].querySelectorAll('.vertex-validation-error')) {
+                    errorInput.classList.remove(errorInput.vertexValidation.errorClass)
+                    while (errorInput.vertexValidation.errorElements.length > 0) {
+                        let element = errorInput.vertexValidation.errorElements.pop();
+                        element.parentNode.removeChild(element);
+                    }
+                }
+
             }
         }
     });
+
+
+
+
+
+
 
     on('jackpot/get-add-jackpot', function (params) {
         $$('#add-new-jackpot-content-header').innerHTML = localization.translateMessage('AddNewJackpot');

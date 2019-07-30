@@ -34,16 +34,15 @@ const jackpotGrowthpattern = (function () {
 
     highchart.drawHighchart({ parent: $$('#jackpot-growth-pattern-grows-by-bet-chart'), dotsX: 10, dotsY: 10, name: 'MinMaxFunction' })
 
-
     checkboxChangeState.radioClick(jackpotGrowsCustomRadioButtonsWrapper);
 
-    let addLevelDiscreetlyConditionButton = $$('#custom-add-level-condition-button').children[0];
-    addLevelDiscreetlyConditionButton.onclick = function (e) {
+    let addLevelDiscreetlyCustomConditionButton = $$('#custom-add-level-condition-button').children[0];
+    addLevelDiscreetlyCustomConditionButton.onclick = function (e) {
         if (checkValidationField(e.target.parentNode.parentNode)) {
             addConditionLevel(e.target.dataset.value, e.target);
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
+            $$('#custom-dropdown-jackpot-wrapper').classList.add('not-clickable');
         }
-
     }
 
     let addLevelDiscreetlyTournamentButton = $$('#tournament-add-level-button').children[0];
@@ -51,6 +50,7 @@ const jackpotGrowthpattern = (function () {
         if (checkValidationField(e.target.parentNode.parentNode.parentNode)) {
             createLevel(e.target.dataset.value);
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
+            $$('#tournament-dropdown-jackpot-wrapper').classList.add('not-clickable');
         }
     }
 
@@ -59,6 +59,7 @@ const jackpotGrowthpattern = (function () {
         if (checkValidationField(e.target.parentNode.parentNode.parentNode)) {
             createLevel(e.target.dataset.value);
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
+            // $$('#rain-dropdown-jackpot-wrapper').classList.add('not-clickable');
         }
     }
 
@@ -87,12 +88,16 @@ const jackpotGrowthpattern = (function () {
             if (newData.CustomLevelConditions) {
                 levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = newData.CustomLevelConditionsText;
             } else {
-                levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = `${newData.LevelOutcome.name}: ${str} ${newData.Operator.name} ${formatFloatValue(newData.Value)}`
+                levelWrapper.getElementsByClassName('element-level-conditions')[0].innerHTML = `${newData.LevelOutcome.id === '2' ? newData.JackpotList.name : newData.LevelOutcome.name}: ${str} ${newData.Operator.name} ${formatFloatValue(newData.Value)}`
             }
 
             levelWrapper.settings = newData;
 
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
+            if (checkboxChangeState.getRadioState($$('#jackpot-grows-discreetly-radio-buttons')) === '3') {
+                $$('#custom-level-conditions-wrapper').innerHTML = '';
+            }
+
             addLevelButton.classList.remove('hidden');
             editLevelButton.classList.add('hidden');
         }
@@ -184,6 +189,11 @@ const jackpotGrowthpattern = (function () {
             }
         }
         if (inputWrapper.parentNode === $$('#custom-input-wrapper')) {
+            let ddCustomJackpot = $$('#custom-dropdown-jackpot').getElementsByClassName('element-form-data')[0].children[0]
+            data[ddCustomJackpot.dataset.name] = $$('#custom-dropdown-jackpot-wrapper').classList.contains('not-clickable') ? null : {
+                name: ddCustomJackpot.dataset.value,
+                id: ddCustomJackpot.dataset.id
+            }
             return data;
         }
         else if (inputWrapper === $$('#custom-input-wrapper')) {
@@ -229,7 +239,7 @@ const jackpotGrowthpattern = (function () {
 
         let levelTextWrapper = document.createElement('div');;
 
-        levelTextWrapper.innerHTML = `${data.LevelOutcome.name} : ${data.CountTypeList.name} ${data.Operator.name} ${formatFloatValue(data.Value)}`
+        levelTextWrapper.innerHTML = `${data.LevelOutcome.id === '2' ? data.JackpotList.name : data.LevelOutcome.name} : ${data.CountTypeList.name} ${data.Operator.name} ${formatFloatValue(data.Value)}`
 
         singleConditonWrapper.appendChild(levelTextWrapper);
 
@@ -289,7 +299,7 @@ const jackpotGrowthpattern = (function () {
             } else {
                 levelWrapper.settings = data;
                 let str;
-                let conditionText = data.LevelOutcome ? data.LevelOutcome.name : data.JackpotList.name;
+                let conditionText = data.LevelOutcome ? data.LevelOutcome.id === '2' ? data.JackpotList.name : data.LevelOutcome.name : data.JackpotList.name;
                 str = CountTypeList[data.CountTypeList];
                 levelWrapper.innerHTML = `<div>
                     <div>Level name:</div> 

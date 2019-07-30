@@ -27,8 +27,8 @@ let validation = (function () {
 
     const constraintsOperators = {
         required: 'required',
-        greaterThan: '>',
-        lesserThan: '<',
+        greaterThan: '>=',
+        lesserThan: '<=',
         equals: '=',
         email: 'email',
         phone: 'phone',
@@ -56,11 +56,11 @@ let validation = (function () {
     // b - compared value
     operatorFunctions[constraintsOperators.greaterThan] = function (a, b) {
         a = parseFloat(a.replace(/,/g, ''));
-        return a > b;
+        return a >= b;
     };
     operatorFunctions[constraintsOperators.lesserThan] = function (a, b) {
         a = parseFloat(a.replace(',', ''));
-        return a < b
+        return a <= b
     };
     operatorFunctions[constraintsOperators.equals] = function (a, b) {
         //unsafe comparison here as html attributes are always parsed as strings

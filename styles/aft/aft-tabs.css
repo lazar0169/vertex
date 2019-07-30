@@ -17,16 +17,6 @@
     padding: 0 !important;
 }
 
-/*
-#aft-tabs-notification-settings-info * , #aft-tabs-enable-transaction-info * {
-    margin: 0.15rem 0 0.20rem 0.05rem;
-}
-*/
-
-/*#aft-enable-transaction-check, #aft-enable-notification-check {
-    display: inline-flex;
-}*/
-
 #aft-enable-transaction-check>div, #aft-enable-notification-check>div {
     padding: 0 0.5rem;
     display: flex;

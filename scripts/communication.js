@@ -271,7 +271,12 @@ let communication = (function () {
         if (errorResponse === 'undefined') {
             errorResponse = xhr.responseText;
         }
-        //ToDo: refactor to send xhr only
+        trigger('notifications/show', {
+            message: localization.translateMessage(errorResponse.MessageCode.toString()),
+            type: errorResponse.MessageType
+        });
+
+        //ToDo: refactor to send xhr only ---nesketov deo nisam istrazio sta je
         let errorData = { 'message': errorResponse, 'xhr': xhr };
         if (typeof errorEventCallback !== typeof undefined) {
             if (isString(errorEventCallback)) {
@@ -306,6 +311,7 @@ let communication = (function () {
                 success(xhr, successEvent, additionalData);
             } else if (xhr.readyState === xhrStates.done && xhr.status >= 400) {
                 if (xhr.status >= 500) {
+                    let data = tryParseJSON(xhr.responseText);
                     trigger('notifications/show', {
                         message: localization.translateMessage('InternalServerError'),
                         type: notifications.messageTypes.error

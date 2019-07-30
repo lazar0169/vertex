@@ -26,7 +26,7 @@ let jackpotControlActiveTime = (function () {
             conditionWrapper.settings = settingsData;
 
             conditionWrapper.innerHTML = `<div class="display-flex control-active-time-interval-wrapper"> 
-                <a class="center button-link" onclick = "trigger('removeElement', parentNode)">x</a>
+                <a class="center button-link" onclick = "trigger('removeElement', parentNode.parentNode)">x</a>
                 <div class="center">${settingsData.CounterWinnerConditionList === '2' ? showingData.JackpotList : showingData.CounterWinnerConditionList} ${settingsData.CountTypeWinnerConditionList === '0' ? '' : showingData.CountTypeWinnerConditionList} ${showingData.OperatorWinnerConditionList} ${showingData.Number}<div>
             </div>`
 
@@ -104,7 +104,7 @@ let jackpotControlActiveTime = (function () {
         timeWrapper.settings = settingsData;
 
         timeWrapper.innerHTML = `<div class="display-flex control-active-time-interval-wrapper"> 
-            <a class="center button-link" onclick = "trigger('removeElement', parentNode)">x</a>
+            <a class="center button-link" onclick = "trigger('removeElement', parentNode.parentNode)">x</a>
             <div class="center">${showingData.hoursFrom.slice(0, 2)}:${showingData.minutesFrom.slice(0, 2)} - ${showingData.hoursTo.slice(0, 2)}:${showingData.minutesTo.slice(0, 2)} ${showingData.DaysinWeek}<div>
         </div>`
 

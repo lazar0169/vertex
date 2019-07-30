@@ -33,15 +33,15 @@
                         data-type="float" type="text" placeholder="TheValueByWhichItIsGrowing">
                 </div>
 
-                <div>
+                <div id="jackpot-grows-automatically-growth-days">
                     <label class="element-multilanguage" data-translation-key="GrowthValue(InDays)"></label>
-                    <input validNumber name="TimeInDays" class="form-input element-form-data input-number-right"
-                        data-type="int" type="text" placeholder="GrowthValue(InDays)">
+                    <input name="TimeInDays" class="form-input element-form-data input-number-right" data-type="int"
+                        type="text" placeholder="GrowthValue(InDays)">
                 </div>
 
                 <div>
                     <label class="element-multilanguage" data-translation-key="Hidden"></label>
-                    <input max='100' name="AutomaticHiddenPercent"
+                    <input max='10000' name="AutomaticHiddenPercent"
                         class="form-input element-form-data input-number-right" data-type="float" type="text"
                         placeholder="Hidden">
                 </div>
@@ -62,11 +62,12 @@
                                 data-type="int" type="text" placeholder="Days">
                         </div>
                         <div>
-                            <input max='100' name="Percent" class="form-input element-form-data input-number-right"
+                            <input max='10000' name="Percent" class="form-input element-form-data input-number-right"
                                 data-type="int" type="text" placeholder="Procenat">
                         </div>
                         <div>
-                            <button class="secundarybutton element-multilanguage" data-translation-key="Add" data-value="add-new-field"></button>
+                            <button class="secundarybutton element-multilanguage" data-translation-key="Add"
+                                data-value="add-new-field"></button>
                         </div>
                     </div>
                 </div>
@@ -78,11 +79,12 @@
                                 data-type="int" type="text" placeholder="Hours">
                         </div>
                         <div>
-                            <input max='100' name="Percent" class="form-input element-form-data input-number-right"
+                            <input max='10000' name="Percent" class="form-input element-form-data input-number-right"
                                 data-type="int" type="text" placeholder="Procenat">
                         </div>
                         <div>
-                            <button class="secundarybutton element-multilanguage" data-translation-key="Add" data-value="add-new-field"></button>
+                            <button class="secundarybutton element-multilanguage" data-translation-key="Add"
+                                data-value="add-new-field"></button>
                         </div>
                     </div>
                 </div>
@@ -112,11 +114,13 @@
                     data-type="float" type="text" placeholder="MaximumBetForGrowth">
             </div>
 
-            <div id="add-new-jackpot-grows-by-bet-choose-machines-wrapper" class="choose-machines-wrapper element-participating-machines">
+            <div id="add-new-jackpot-grows-by-bet-choose-machines-wrapper"
+                class="choose-machines-wrapper element-participating-machines">
                 <div class="element-multilanguage" data-translation-key="ChooseMachinesThatAreParticipating"></div>
                 <div class="showing-participating-machines"></div>
                 <div id="add-new-jackpot-grows-by-bet-choose-machines-buttons" class="button-wrapper">
-                    <button class="secundarybutton element-multilanguage" data-translation-key="ChooseMachines"></button>
+                    <button class="secundarybutton element-multilanguage"
+                        data-translation-key="ChooseMachines"></button>
                     <a class="button-link element-multilanguage" data-translation-key="RemoveAll"></a>
                 </div>
             </div>
@@ -222,7 +226,8 @@
                     <div class="element-multilanguage" data-translation-key="ChooseMachinesThatAreParticipating"></div>
                     <div class="showing-participating-machines"></div>
                     <div id="add-new-jackpot-grows-discreetly-rain-choose-machines-buttons" class="button-wrapper">
-                        <button class="secundarybutton element-multilanguage" data-translation-key="ChooseMachines"></button>
+                        <button class="secundarybutton element-multilanguage"
+                            data-translation-key="ChooseMachines"></button>
                         <a class="button-link element-multilanguage" data-translation-key="RemoveAll">Remove all</a>
                     </div>
                 </div>
@@ -278,11 +283,14 @@
                 <div id="tournament-jackpot-exist-wrapper" class="jackpot-level-exist-wrapper">
 
                 </div>
-                <div id="tournament-choose-machines-wrapper" class="choose-machines-wrapper element-participating-machines">
+                <div id="tournament-choose-machines-wrapper"
+                    class="choose-machines-wrapper element-participating-machines">
                     <div class="element-multilanguage" data-translation-key="ChooseMachinesThatAreParticipating"></div>
                     <div class="showing-participating-machines">22/38</div>
-                    <div id="add-new-jackpot-grows-discreetly-tournament-choose-machines-buttons" class="button-wrapper">
-                        <button class="secundarybutton element-multilanguage" data-translation-key="ChooseMachines"></button>
+                    <div id="add-new-jackpot-grows-discreetly-tournament-choose-machines-buttons"
+                        class="button-wrapper">
+                        <button class="secundarybutton element-multilanguage"
+                            data-translation-key="ChooseMachines"></button>
                         <a class="button-link element-multilanguage" data-translation-key="RemoveAll"></a>
                     </div>
                 </div>
@@ -292,6 +300,7 @@
             <div id="jackpot-grows-discreetly-custom-content" class="jackpot-grows-discreetly-type-contents hidden"
                 data-value="3">
                 <div id="custom-input-wrapper" class="discreetly-tab-content">
+
                     <div>
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="LevelName">Name</label> -->
@@ -304,6 +313,8 @@
                                 data-type="float" type="text" placeholder="level value">
                         </div>
                     </div>
+
+
 
                     <div>
                         <div id="custom-dropdown-level-outcome" data-value="custom-dropdown-jackpot-wrapper">
@@ -367,11 +378,15 @@
 
                     </div>
 
-                    <div id="custom-choose-machines-wrapper" class="choose-machines-wrapper element-participating-machines">
-                        <div class="element-multilanguage" data-translation-key="ChooseMachinesThatAreParticipating"></div>
+                    <div id="custom-choose-machines-wrapper"
+                        class="choose-machines-wrapper element-participating-machines">
+                        <div class="element-multilanguage" data-translation-key="ChooseMachinesThatAreParticipating">
+                        </div>
                         <div class="showing-participating-machines"></div>
-                        <div id="add-new-jackpot-grows-discreetly-custom-choose-machines-buttons" class="button-wrapper">
-                            <button class="secundarybutton element-multilanguage" data-translation-key="ChooseMachines"></button>
+                        <div id="add-new-jackpot-grows-discreetly-custom-choose-machines-buttons"
+                            class="button-wrapper">
+                            <button class="secundarybutton element-multilanguage"
+                                data-translation-key="ChooseMachines"></button>
                             <a class="button-link element-multilanguage" data-translation-key="RemoveAll">Remove all</a>
                         </div>
                     </div>

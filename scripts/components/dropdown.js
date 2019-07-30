@@ -204,23 +204,26 @@ const dropdown = (function () {
                     switch (dropdownType[type]) {
                         case 1:
                             if (setId === option.dataset.id) {
-                                selected.firstChild.innerHTML = localization.translateMessage(option.innerHTML);
-                                selected.title = option.innerHTML;
-                                selected.dataset.value = option.innerHTML;
+                                // selected.firstChild.innerHTML = localization.translateMessage(option.innerHTML);
+                                // selected.title = option.innerHTML;
+                                // selected.dataset.value = option.innerHTML;
+                                option.click();
                             }
                             break;
 
                         case 2:
                             if (setId === option.dataset.id) {
-                                if (selected.firstChild.innerHTML === '-') {
-                                    selected.firstChild.innerHTML = option.children[0].children[2].innerHTML;
-                                } else {
-                                    selected.firstChild.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
-                                }
-                                array.push(option.dataset.id);
-                                arrayInner.push(option.children[0].children[2].innerHTML);
-                                selected.title = selected.firstChild.innerHTML;
-                                option.children[0].children[0].checked = true;
+                                // if (selected.firstChild.innerHTML === '-') {
+                                //     selected.firstChild.innerHTML = option.children[0].children[2].innerHTML;
+                                // } else {
+                                //     selected.firstChild.innerHTML += `, ${option.children[0].children[2].innerHTML}`;
+                                // }
+                                // array.push(option.dataset.id);
+                                // arrayInner.push(option.children[0].children[2].innerHTML);
+                                // selected.title = selected.firstChild.innerHTML;
+                                // option.children[0].children[0].checked = true;
+                                option.click();
+
                             }
                             break;
                     }

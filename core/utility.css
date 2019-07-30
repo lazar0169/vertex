@@ -88,24 +88,6 @@
     align-items: center;
 }
 
-/* .advance-filter-tabele-search {
-    cursor: pointer;
-}
-
-.advance-filter-tabele-search>div {
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1;
-    background: rgb(38, 50, 56);
-    padding: 0 0.8em;
-}
-
-.advance-filter-tabele-search-active .search {
-    height: 40px !important;
-    width: 600px !important;
-} */
-
 .advance-table-filter {
     position: relative;
 }
@@ -296,10 +278,6 @@
     background: rgb(38, 50, 56);
     /* box-shadow: 0 0 10px #000000; */
 }
-
-/* .cities-wrapper {
-    max-height: 210px;
-} */
 
 .option-casino:hover label,
 .option-city:hover,
