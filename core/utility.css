@@ -352,3 +352,12 @@ figure .checkbox-name {
     pointer-events: none !important;
     color: rgba(120, 144, 156, 0.2);
 }
+
+.not-active-button {
+    pointer-events: none !important;
+    background: rgb(120, 144, 156);
+}
+
+.not-active-button:focus {
+    outline: none;
+}

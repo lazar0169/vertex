@@ -4,7 +4,7 @@ let jackpotControlActiveTime = (function () {
     let applyTime = $$('#add-new-jackpot-jackpot-time-interval-dropdown-buttons').children[0];
     let addConditionsForWinningJackpotButton = $$('#add-conditions-for-winning-jackpot-button').children[0];
 
-    dropdown.generate({ values: daysInWeek, parent: $$('#add-new-jackpot-time-interval-dropdown-days'), name: "DaysinWeek" });
+    dropdown.generate({ values: DayOfWeek, parent: $$('#add-new-jackpot-time-interval-dropdown-days'), name: "DayOfWeek" });
     highchart.drawHighchart({ parent: $$('#add-new-jackpot-time-interval-chart'), dotsX: 10, dotsY: 10, name: 'LinearFunction' });
 
     addConditionsForWinningJackpotButton.onclick = function (e) {
@@ -56,12 +56,10 @@ let jackpotControlActiveTime = (function () {
     for (let radioElement of $$('#add-new-jackpot-time-interval-winning-conditions').children) {
         radioElement.addEventListener('click', function () {
             if (radioElement.dataset.value === '1') {
-                $$('#winning-conditions-only-at-the-end-of-interval').classList.remove('hidden');
+                $$('#winning-conditions-only-at-the-end-of-interval').classList.toggle('hidden');
             } else {
                 $$('#winning-conditions-only-at-the-end-of-interval').classList.add('hidden');
                 $$('#winning-conditions-only-at-the-end-of-interval-custom').classList.add('hidden');
-                checkboxChangeState.checkboxIsChecked($$('#winning-conditions-only-at-the-end-of-interval').children[0].getElementsByClassName('form-input')[0], true);
-
             }
         });
     }
@@ -70,8 +68,8 @@ let jackpotControlActiveTime = (function () {
 
     for (let radioElement of $$('#winning-conditions-only-at-the-end-of-interval').children) {
         radioElement.addEventListener('click', function () {
-            if (radioElement.dataset.value === '2') {
-                $$('#winning-conditions-only-at-the-end-of-interval-custom').classList.remove('hidden');
+            if (radioElement.dataset.value === '3') {
+                $$('#winning-conditions-only-at-the-end-of-interval-custom').classList.toggle('hidden');
             } else {
                 $$('#winning-conditions-only-at-the-end-of-interval-custom').classList.add('hidden');
             }
@@ -97,15 +95,19 @@ let jackpotControlActiveTime = (function () {
         let settingsData = {}
         for (let dd of dropdowns) {
             showingData[dd.children[0].dataset.name] = dd.children[0].dataset.value;
-            settingsData[dd.children[0].dataset.name] = dd.get();
+            let valueId = dd.get()
+            settingsData[dd.children[0].dataset.name] = valueId === 'null' ? -1 : parseInt(valueId);
         }
 
         let timeWrapper = document.createElement('div');
-        timeWrapper.settings = settingsData;
+        timeWrapper.settings = {};
+        timeWrapper.settings['DayOfWeek'] = settingsData.DayOfWeek
+        timeWrapper.settings['Start'] = `${showingData.hoursFrom.slice(0, 2)}:${showingData.minutesFrom.slice(0, 2)}:00`
+        timeWrapper.settings['End'] = `${showingData.hoursTo.slice(0, 2)}:${showingData.minutesTo.slice(0, 2)}:00`
 
         timeWrapper.innerHTML = `<div class="display-flex control-active-time-interval-wrapper"> 
             <a class="center button-link" onclick = "trigger('removeElement', parentNode.parentNode)">x</a>
-            <div class="center">${showingData.hoursFrom.slice(0, 2)}:${showingData.minutesFrom.slice(0, 2)} - ${showingData.hoursTo.slice(0, 2)}:${showingData.minutesTo.slice(0, 2)} ${showingData.DaysinWeek}<div>
+            <div class="center">${showingData.hoursFrom.slice(0, 2)}:${showingData.minutesFrom.slice(0, 2)}:00 - ${showingData.hoursTo.slice(0, 2)}:${showingData.minutesTo.slice(0, 2)}:00 ${showingData.DayOfWeek}<div>
         </div>`
 
         $$(`#${e.target.dataset.target}`).appendChild(timeWrapper);

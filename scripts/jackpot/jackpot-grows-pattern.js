@@ -41,7 +41,7 @@ const jackpotGrowthpattern = (function () {
         if (checkValidationField(e.target.parentNode.parentNode)) {
             addConditionLevel(e.target.dataset.value, e.target);
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
-            $$('#custom-dropdown-jackpot-wrapper').classList.add('not-clickable');
+            $$('#custom-dropdown-jackpot-wrapper').classList.add('hidden');
         }
     }
 
@@ -50,7 +50,7 @@ const jackpotGrowthpattern = (function () {
         if (checkValidationField(e.target.parentNode.parentNode.parentNode)) {
             createLevel(e.target.dataset.value);
             clearInputsFields(e.target.parentNode.parentNode.parentNode);
-            $$('#tournament-dropdown-jackpot-wrapper').classList.add('not-clickable');
+            $$('#tournament-dropdown-jackpot-wrapper').classList.add('hidden');
         }
     }
 
@@ -486,11 +486,11 @@ const jackpotGrowthpattern = (function () {
                     let dataName = $$('#jackpot-control-growth-period').getElementsByClassName('tab-active')[0].dataset.name
                     if (dataName === 'days') {
                         newField.innerHTML = `<div>
-                                        <input name="NumOfDays" class="form-input element-form-data input-number-right" data-type="int" type="text"
+                                        <input name="NumOfDay" class="form-input element-form-data input-number-right" data-type="int" type="text"
                                         placeholder="Days">
                                     </div>
                                     <div>
-                                        <input max="100" name="Percent" class="form-input element-form-data input-number-right" data-type="int" type="text"
+                                        <input max="10000" name="Percent" class="form-input element-form-data input-number-right element-percent" data-type="int" type="text"
                                         placeholder="Procenat">
                                     </div>
                                     <div>
@@ -502,7 +502,7 @@ const jackpotGrowthpattern = (function () {
                         placeholder="Hours">
                     </div>
                     <div>
-                        <input max="100" name="Percent" class="form-input element-form-data input-number-right" data-type="int" type="text"
+                        <input max="10000" name="Percent" class="form-input element-form-data input-number-right element-percent" data-type="int" type="text"
                         placeholder="Procenat">
                     </div>
                     <div>

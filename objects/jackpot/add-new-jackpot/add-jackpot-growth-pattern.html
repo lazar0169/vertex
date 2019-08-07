@@ -3,7 +3,8 @@
         <figure class="element-form-check vertex-form-checkbox">
             <div id="jackpot-content-growth-pattern-toggle" class="element-form-mode checkbox-label"></div>
             <label class="form-switch">
-                <input name="IsGrowing" data-type="vertex-slide" type="checkbox" class="element-form-data">
+                <input name="IsGrowing" data-type="vertex-slide" type="checkbox"
+                    class="element-form-data element-settings-slide-checkbox">
                 <i class="form-icon"></i>
             </label>
         </figure>
@@ -42,8 +43,8 @@
                 <div>
                     <label class="element-multilanguage" data-translation-key="Hidden"></label>
                     <input max='10000' name="AutomaticHiddenPercent"
-                        class="form-input element-form-data input-number-right" data-type="float" type="text"
-                        placeholder="Hidden">
+                        class="form-input element-form-data input-number-right element-percent" data-type="float"
+                        type="text" placeholder="Hidden">
                 </div>
             </div>
 
@@ -58,12 +59,13 @@
                 <div id="add-new-jackpot-growth-pattern-by-day">
                     <div class="grid-3-columns">
                         <div>
-                            <input name="NumOfDays" class="form-input element-form-data input-number-right"
+                            <input name="NumOfDay" class="form-input element-form-data input-number-right"
                                 data-type="int" type="text" placeholder="Days">
                         </div>
                         <div>
-                            <input max='10000' name="Percent" class="form-input element-form-data input-number-right"
-                                data-type="int" type="text" placeholder="Procenat">
+                            <input max='10000' name="Percent"
+                                class="form-input element-form-data input-number-right element-percent" data-type="int"
+                                type="text" placeholder="Procenat">
                         </div>
                         <div>
                             <button class="secundarybutton element-multilanguage" data-translation-key="Add"
@@ -79,8 +81,9 @@
                                 data-type="int" type="text" placeholder="Hours">
                         </div>
                         <div>
-                            <input max='10000' name="Percent" class="form-input element-form-data input-number-right"
-                                data-type="int" type="text" placeholder="Procenat">
+                            <input max='10000' name="Percent"
+                                class="form-input element-form-data input-number-right element-percent" data-type="int"
+                                type="text" placeholder="Procenat">
                         </div>
                         <div>
                             <button class="secundarybutton element-multilanguage" data-translation-key="Add"
@@ -95,13 +98,15 @@
         <div id="jackpot-grows-by-bet" class="hidden jackpot-pattern-tab-content">
             <div>
                 <label class="element-multilanguage" data-translation-key="Percent[%]"></label>
-                <input max='10000' name="Percent" class="form-input element-form-data input-number-right"
-                    data-type="float" type="text" placeholder="Percent">
+                <input max='10000' name="Percent"
+                    class="form-input element-form-data input-number-right element-percent" data-type="float"
+                    type="text" placeholder="Percent">
             </div>
             <div>
                 <label class="element-multilanguage" data-translation-key="Hidden[%]"></label>
-                <input max='10000' name="HiddenPercent" class="form-input element-form-data input-number-right"
-                    data-type="float" type="text" placeholder="Hidden">
+                <input max='10000' name="HiddenPercent"
+                    class="form-input element-form-data input-number-right element-percent" data-type="float"
+                    type="text" placeholder="Hidden">
             </div>
             <div>
                 <label class="element-multilanguage" data-translation-key="MinimumBetForGrowth"></label>
@@ -207,7 +212,7 @@
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="Value"></label> -->
                             <input validNumber name="Value" class="form-input element-form-data input-number-right"
-                                data-type="float" type="text" placeholder="Value">
+                                data-type="int" type="text" placeholder="Value">
                         </div>
 
                         <div id="rain-add-level-button" class="center">
@@ -263,7 +268,7 @@
                         <div>
                             <!-- <label class="element-multilanguage" data-translation-key="Value"></label> -->
                             <input validNumber name="Value" class="form-input element-form-data input-number-right"
-                                data-type="float" type="text" placeholder="Value">
+                                data-type="int" type="text" placeholder="Value">
                         </div>
 
                         <div id="tournament-add-level-button" class="center">
@@ -273,7 +278,7 @@
                                 data-translation-key="EditLevel" data-value="tournament-input-wrapper"></button>
                         </div>
                     </div>
-                    <div id='tournament-dropdown-jackpot-wrapper' class="not-clickable">
+                    <div id='tournament-dropdown-jackpot-wrapper' class="hidden">
                         <div id="tournament-dropdown-jackpot">
                             <div></div>
                         </div>
@@ -334,7 +339,7 @@
                         <div>
 
                             <input validNumber name="Value" class="form-input element-form-data input-number-right"
-                                data-type="float" type="text" placeholder="Value">
+                                data-type="int" type="text" placeholder="Value">
                         </div>
 
                         <div id="custom-add-level-condition-button" class="center">
@@ -344,7 +349,7 @@
                         </div>
                     </div>
 
-                    <div id='custom-dropdown-jackpot-wrapper' class="not-clickable">
+                    <div id='custom-dropdown-jackpot-wrapper' class="hidden">
                         <div id="custom-dropdown-jackpot">
                             <div></div>
                         </div>

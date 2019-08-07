@@ -69,6 +69,7 @@ const jackpotFilter = (function () {
     //close add new jackpot form
     jackpotTab.addEventListener('click', function () {
         addNewJackpotWrapper.classList.add('hidden');
+        addJackpot.classList.remove('not-active-button');
     });
 
     //show add new jackpot form
@@ -78,8 +79,8 @@ const jackpotFilter = (function () {
         data.successAction = 'jackpot/get-add-jackpot';
         trigger(communication.events.jackpots.addJackpot, { data, EntryData });
         addNewJackpotWrapper.classList.toggle('hidden');
+        addJackpot.classList.add('not-active-button')
         //todo jel ovde praznim polja?
-        //trigger('jackpot/clear-add-jackpot-input');
         addNewJackpot.reset();
     }
 

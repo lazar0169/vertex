@@ -27,7 +27,12 @@ const checkboxChangeState = (function () {
         for (let radio of radioWrapper.getElementsByClassName('form-radio')) {
             let input = radio.children[0];
             radio.onclick = function () {
-                checkboxIsChecked(input, true)
+                if (input.checked) {
+                    checkboxIsChecked(input, false)
+                }
+                else {
+                    checkboxIsChecked(input, true)
+                }
             }
         }
     }

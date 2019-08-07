@@ -341,7 +341,8 @@ const aft = (function () {
             requestType: request,
             data: data,
             successEvent: successEvent,
-            errorEvent: errorEvent
+            errorEvent: errorEvent,
+            additionalData: params.data.EndpointId
         });
     });
     //aft cancel pending transaction

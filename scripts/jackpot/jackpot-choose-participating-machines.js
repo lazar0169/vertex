@@ -379,6 +379,7 @@ const jackpotChooseParticipatingMachines = (function () {
     };
     removeAllMachines.onclick = function (e) {
         e.target.parentNode.parentNode.settings = {}
+        e.target.parentNode.parentNode.getElementsByClassName('showing-participating-machines')[0].innerHTML = `0/${addNewJackpot.settings.MachineList.Items.length}`
     };
 
 

@@ -185,25 +185,36 @@ const dropdown = (function () {
 
 
         select.reset = function () {
-            selected.dataset.id = optionsArray[0].Id !== -1 ? optionsArray[0].Id : null;
-            selected.dataset.value = optionsArray[0].Name;
-            selected.children[0].innerHTML = localization.translateMessage(optionsArray[0].Name);
-            selected.title = selected.children[0].innerHTML;
+            // selected.dataset.id = optionsArray[0].Id !== -1 ? optionsArray[0].Id : null;
+            // selected.dataset.value = optionsArray[0].Name;
+            // selected.children[0].innerHTML = localization.translateMessage(optionsArray[0].Name);
+            // selected.title = selected.children[0].innerHTML;
             if (dropdownType[type] == 2) {
                 for (let check of optionGroup.children) {
-                    check.children[0].children[0].checked = false;
+                    if (check.children[0].children[0].checked) {
+                        check.click()
+                    }
+                    // check.children[0].children[0].checked = false;
                 }
+            }
+            else {
+                optionGroup.children[0].click();
             }
             return selected;
         }
 
         select.set = function (params) {
-            selected.dataset.id = params;
+
+            if (!Array.isArray(params)) {
+                params = [`${params}`]
+            }
+
+            //selected.dataset.id = params;
             for (let option of optionGroup.children) {
                 for (let setId of params) {
                     switch (dropdownType[type]) {
                         case 1:
-                            if (setId === option.dataset.id) {
+                            if (setId.toString() === option.dataset.id) {
                                 // selected.firstChild.innerHTML = localization.translateMessage(option.innerHTML);
                                 // selected.title = option.innerHTML;
                                 // selected.dataset.value = option.innerHTML;
@@ -212,7 +223,7 @@ const dropdown = (function () {
                             break;
 
                         case 2:
-                            if (setId === option.dataset.id) {
+                            if (setId.toString() === option.dataset.id) {
                                 // if (selected.firstChild.innerHTML === '-') {
                                 //     selected.firstChild.innerHTML = option.children[0].children[2].innerHTML;
                                 // } else {

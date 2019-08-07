@@ -1,11 +1,11 @@
 
 
 let aftAddTransactions = (function () {
-
     let promo = $$('#add-transaction-promo');
     let cashable = $$('#add-transaction-cashable');
     let expiration = $$('#add-transaction-expiration');
     let addTransaction = $$('#add-transaction-save-button').children[0];
+
     function initInputByFilter(dropdown) {
         initInputByFilter(dropdown.children[0].dataset.value)
         for (let option of dropdown.children[1].children) {
@@ -34,7 +34,7 @@ let aftAddTransactions = (function () {
         }
     }
 
-    addTransaction.addEventListener('click', function () {
+    addTransaction.onclick = function () {
         let data = {}
         let form = addTransaction.parentNode.parentNode;
         let inputs = form.getElementsByClassName('element-form-data');
@@ -48,7 +48,11 @@ let aftAddTransactions = (function () {
                     data[input.name] = parseInt(input.dataset.value);
                 }
                 else {
-                    data[input.name] = input.value === "" ? 0 : parseInt(input.dataset.value);
+                    if (checkValidationField(input.parentNode)) {
+                        data[input.name] = input.value === "" ? 0 : parseInt(input.dataset.value);
+                    } else {
+                        return;
+                    }
                 }
             }
             else {
@@ -57,7 +61,7 @@ let aftAddTransactions = (function () {
         }
         data['EndpointName'] = JSON.parse(sessionStorage.categoryAndLink).server
         trigger(communication.events.aft.transactions.addTransaction, { data: data })
-    });
+    };
 
     on('aft/aft-add-transaction', function (params) {
         initInputByFilter(params.dropdown)
@@ -71,5 +75,6 @@ let aftAddTransactions = (function () {
             type: params.data.MessageType,
         });
         aftFilters.clearAftFilters();
+        // trigger(communication.events.aft.transactions.getTransactions, { data: { EndpointId: params.additionalData } });
     });
 })();

@@ -342,10 +342,10 @@ let operatorAndMinMaxEnum = [
     }
 ]
 
-let daysInWeek = [
+let DayOfWeek = [
     {
         Name: "AllDays",
-        Id: 0
+        Id: -1
     },
     {
         Name: "Monday",
@@ -373,9 +373,20 @@ let daysInWeek = [
     },
     {
         Name: "Sunday",
-        Id: 7
+        Id: 0
     }
 ]
+
+let DayOfWeekNumeration = {
+    '-1': "AllDays",
+    '1': "Monday",
+    '2': "Tuesday",
+    '3': "Wednesday",
+    '4': "Thursday",
+    '5': "Friday",
+    '6': "Saturday",
+    '0': "Sunday"
+}
 
 let testDataMachinesInCasino = {
     'Casino1': {

@@ -272,8 +272,8 @@ let communication = (function () {
             errorResponse = xhr.responseText;
         }
         trigger('notifications/show', {
-            message: localization.translateMessage(errorResponse.MessageCode.toString()),
-            type: errorResponse.MessageType
+            message: errorResponse.Message ? localization.translateMessage(errorResponse.Message.toString()) : localization.translateMessage(errorResponse.MessageCode.toString()),
+            type: errorResponse.MessageType ? errorResponse.MessageType : notifications.messageTypes.error
         });
 
         //ToDo: refactor to send xhr only ---nesketov deo nisam istrazio sta je
