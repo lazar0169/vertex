@@ -59,11 +59,11 @@
                 <div id="add-new-jackpot-growth-pattern-by-day">
                     <div class="grid-3-columns">
                         <div>
-                            <input name="NumOfDay" class="form-input element-form-data input-number-right"
+                            <input min="1" name="NumOfDay" class="form-input element-form-data input-number-right"
                                 data-type="int" type="text" placeholder="Days">
                         </div>
                         <div>
-                            <input max='10000' name="Percent"
+                            <input min='1' max='99' name="Percent"
                                 class="form-input element-form-data input-number-right element-percent" data-type="int"
                                 type="text" placeholder="Procenat">
                         </div>
@@ -77,11 +77,11 @@
 
                     <div class="grid-3-columns">
                         <div>
-                            <input max="24" name="Time" class="form-input element-form-data input-number-right"
+                            <input max="23" name="Time" class="form-input element-form-data input-number-right"
                                 data-type="int" type="text" placeholder="Hours">
                         </div>
                         <div>
-                            <input max='10000' name="Percent"
+                            <input min='1' max='99' name="Percent"
                                 class="form-input element-form-data input-number-right element-percent" data-type="int"
                                 type="text" placeholder="Procenat">
                         </div>
@@ -359,7 +359,7 @@
 
                     </div>
 
-                    <div id="custom-radio-buttons" class="element-form-data" data-type="radio" data-name="_Conditions">
+                    <div id="jackpot-grows-discreetly-custom-radio-buttons" class="element-form-data" data-type="radio" data-name="_Conditions">
                         <label class="form-radio" data-value="1">
                             <input type="radio" data-type="radio" name="CustomConditions" class="form-input " checked>
                             <i class="form-icon"></i>

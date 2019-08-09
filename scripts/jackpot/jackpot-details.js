@@ -5,7 +5,6 @@ const jackpotDetailsBar = (function () {
     let closeJackpotDetails = $$('#jackpot-close-details-bar');
     let jackpotDetailsChosenMachine = $$('#jackpot-details-chosen-machine');
     let blackArea = $$('#black-area');
-
     let jackpotDetailsClose = function () {
         return {
             hide: function () {
@@ -19,13 +18,9 @@ const jackpotDetailsBar = (function () {
             }
         };
     }();
-
-
     blackArea.addEventListener('click', function () {
         jackpotDetailsClose.hide();
-
     });
-
     //select all checkboxes in jackpot details
     $$('#jackpot-edit-details-conditions-header').children[1].onclick = function () {
         for (let checkbox of $$('#jackpot-edit-details-conditions-checkbox').children) {
@@ -34,7 +29,6 @@ const jackpotDetailsBar = (function () {
             }
         }
     }
-
     //chosen machine click
     jackpotDetailsChosenMachine.onclick = function (e) {
         e.target.parentNode.children[1].classList.toggle("hidden");
@@ -42,7 +36,6 @@ const jackpotDetailsBar = (function () {
     closeJackpotDetails.onclick = function (e) {
         jackpotDetailsClose.hide()
     }
-
     //delete jackpot
     jackpotDetailsBarWrapper.getElementsByClassName('button-wrapper jackpot-details-buttons-wrapper')[0].children[0].onclick = function () {
         let data = {}
@@ -50,7 +43,6 @@ const jackpotDetailsBar = (function () {
         data.Id = jackpotDetailsBarWrapper.settings.Id;
         trigger(communication.events.jackpots.removeJackpot, data);
     }
-
     jackpotDetailsBarWrapper.getElementsByClassName('button-wrapper jackpot-details-buttons-wrapper')[0].children[1].onclick = function () {
         let data = {}
         data.EndpointId = jackpots.getEndpointId().EndpointId;
@@ -61,18 +53,14 @@ const jackpotDetailsBar = (function () {
                 data.IgnoreList.push(parseInt(checkbox.dataset.id));
             }
         }
-        //todo procitati izabranu masinu iz chooseMachineForAssingJackpot
         data.SelectedMachineId = jackpotDetailsChosenMachine.settings ? jackpotDetailsChosenMachine.settings.Id : -1;
         trigger(communication.events.jackpots.setIgnoreRestrictions, data);
     }
-
     function generateMachinesList(data) {
         if (jackpotMachinesListWrapper.children.length !== 0) {
             jackpotMachinesListWrapper.innerHTML = '';
         }
-
         let fragment = document.createDocumentFragment();
-
         for (let casino of data) {
             if (casino.MachineList.length !== 0) {
                 let casinoWrapper = document.createElement('div');
@@ -97,29 +85,21 @@ const jackpotDetailsBar = (function () {
             }
         }
         jackpotMachinesListWrapper.appendChild(fragment);
-
         if (jackpotMachinesListWrapper.children.length === 0) {
             jackpotMachinesListWrapper.innerHTML = `<div class="jackpot-details-empty-machine-content">${localization.translateMessage("Data not found...")}</div>`
         }
     }
-
     jackpotDetailsSearchMachine.addEventListener('keyup', function (event) {
         let results;
         results = searchMachine(jackpotDetailsSearchMachine.value.toLowerCase(), jackpotDetailsBarWrapper.settings.MachineRestrictionList);
         generateMachinesList(results);
     });
-
     function searchMachine(termin, data) {
         let newData = [];
-        // if (category) {
-        //     newData[category] = searchMachine(termin, category);
-        // } else {
         for (let casino in data) {
             newData[casino] = searchMachine(termin, casino);
-            // }
         }
         return newData;
-
         function searchMachine(termin, casino) {
             let i = 0;
             let arrayResult = [];
@@ -148,5 +128,4 @@ const jackpotDetailsBar = (function () {
     return {
         generateMachinesList
     }
-
 })();

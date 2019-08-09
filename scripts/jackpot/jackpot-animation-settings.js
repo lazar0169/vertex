@@ -10,7 +10,6 @@ const jackpotanimationSettings = (function () {
     let saveAnimationSettings = $$('#jackpot-animation-settings-buttons').children[0];
     let animationBackgroundDropdown = $$('#jackpot-animation-general-settings-background');
     let animationBackgroundPicture = $$('#new-york-landscape-animation-background');
-
     saveAnimationSettings.onclick = function () {
         let EntryData = {}
         EntryData = jackpots.getEndpointId();
@@ -19,7 +18,6 @@ const jackpotanimationSettings = (function () {
         EntryData.JackpotBackgroundList = jackpotAnimationSettingsContent.settings.JackpotBackgroundList;
         EntryData.Background = "https://api.fazigaming.com//Images/Template Images/New York.png"
         EntryData.IsLocal = jackpotAnimationSettingsContent.settings.IsLocal;
-
         EntryData.InfoLine = infoLineText.value;
         for (let checkbox of jackpotAnimationSettingsContent.getElementsByClassName('form-checkbox')) {
             EntryData[checkbox.parentNode.dataset.name] = checkboxChangeState.getCheckboxState(checkbox.parentNode);
@@ -34,13 +32,11 @@ const jackpotanimationSettings = (function () {
             type: params.data.MessageType,
         });
     });
-
     for (let check of jackpotAnimationGeneralCheckbox) {
         let data = {}
         data.checkbox = check;
         data.isChecked = false;
         checkboxChangeState.generateCheckbox(data);
-
         check.addEventListener('click', function () {
             if (!checkboxChangeState.getCheckboxState(jackpotanimationGeneralSettingsHousing)) {
                 drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
@@ -54,13 +50,11 @@ const jackpotanimationSettings = (function () {
             }
         });
     }
-
     for (let check of jackpotanimationWinCheckbox) {
         let data = {}
         data.checkbox = check;
         data.isChecked = false;
         checkboxChangeState.generateCheckbox(data);
-
         check.addEventListener('click', function (e) {
             drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[1].children[0], $$('#new-york-winning-animation-background'));
             drawWinningJackpotLabel('#ShowHousing', housingCoordinateWin, '500.00');
@@ -71,7 +65,6 @@ const jackpotanimationSettings = (function () {
             }
         });
     }
-
     infoLineCheckbox.addEventListener('click', function (e) {
         if (checkboxChangeState.getCheckboxState(infoLineCheckbox)) {
             drawJackpotInfoLine(infoLineCoordinate, infoLineWrapper.children[0].value);
@@ -81,19 +74,15 @@ const jackpotanimationSettings = (function () {
         }
         infoLineWrapper.classList.toggle('hidden');
     });
-
-
     on('jackpot/get-jackpot-animation-settings', function (params) {
         let EntryData = jackpots.getEndpointId()
         let data = {};
         data.successAction = 'jackpot/show-jackpots-animation-settings'
         trigger(communication.events.jackpots.getJackpotPlasmaSettings, { data, EntryData });
     });
-
     on('jackpot/show-jackpots-animation-settings', function (params) {
         let data = params.data.Data;
         animationBackgroundPicture.src = data.Background;
-
         animationBackgroundPicture.onload = function () {
             drawanimationPicture($$('#jackpot-animation-settings-animations-picture').children[0].children[0], animationBackgroundPicture);
             for (let check of jackpotAnimationGeneralCheckbox) {
@@ -111,7 +100,6 @@ const jackpotanimationSettings = (function () {
         jackpotAnimationSettingsContent.settings = data;
         dropdown.generate({ values: data.JackpotBackgroundList, parent: animationBackgroundDropdown });
         infoLineText.value = data.InfoLine;
-
         for (let check of jackpotanimationWinCheckbox) {
             for (let checkName of Object.keys(data)) {
                 if (checkName === check.dataset.name) {
@@ -122,7 +110,6 @@ const jackpotanimationSettings = (function () {
             }
         }
     });
-
     //first
     let topLabelCoordinate1 = {
         x: 535,
@@ -142,7 +129,6 @@ const jackpotanimationSettings = (function () {
         w: 50,
         h: 50
     }
-
     let housingCoordinate1 = {
         x: 435,
         y: 85,
@@ -168,7 +154,6 @@ const jackpotanimationSettings = (function () {
         w: 45,
         h: 45
     }
-
     let housingCoordinate2 = {
         x: 465,
         y: 275,
@@ -194,7 +179,6 @@ const jackpotanimationSettings = (function () {
         w: 40,
         h: 40
     }
-
     let housingCoordinate3 = {
         x: 485,
         y: 450,
@@ -220,21 +204,18 @@ const jackpotanimationSettings = (function () {
         w: 35,
         h: 35
     }
-
     let housingCoordinate4 = {
         x: 505,
         y: 615,
         w: 380,
         h: 75
     }
-
     let infoLineCoordinate = {
         x: 0,
         y: 750,
         w: 1400,
         h: 50
     }
-
     // winning jackpot
     let topLabelCoordinateWin = {
         x: 400,
@@ -254,21 +235,18 @@ const jackpotanimationSettings = (function () {
         w: 77,
         h: 77
     }
-
     let housingCoordinateWin = {
         x: 220,
         y: 460,
         w: 951,
         h: 192
     }
-
     function drawanimationPicture(div, imgId) {
         let canvas = div;
         let ctx = canvas.getContext("2d");
         let img = imgId;
         ctx.drawImage(img, 0, 0, 1400, 800);
     }
-
     function drawJackpotLabel(imgId, coordinate, text) {
         let canvas = $$('#jackpot-animation-settings-animations-picture').children[0].children[0];
         let ctx = canvas.getContext("2d");
@@ -279,7 +257,6 @@ const jackpotanimationSettings = (function () {
         ctx.drawImage(img, coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 7 / 8);
     }
-
     function drawWinningJackpotLabel(imgId, coordinate, text) {
         let canvas = $$('#jackpot-animation-settings-animations-picture').children[1].children[0];
         let ctx = canvas.getContext("2d");
@@ -290,7 +267,6 @@ const jackpotanimationSettings = (function () {
         ctx.drawImage(img, coordinate.x, coordinate.y, coordinate.w, coordinate.h);
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 7 / 8);
     }
-
     function drawJackpotInfoLine(coordinate, text) {
         let canvas = $$('#jackpot-animation-settings-animations-picture').children[0].children[0];
         let ctx = canvas.getContext("2d");
@@ -302,7 +278,6 @@ const jackpotanimationSettings = (function () {
         ctx.font = `bold ${coordinate.h - 5}px Open Sans`;
         ctx.fillText(txt, coordinate.x + coordinate.w / 2 - (ctx.measureText(txt).width / 2), coordinate.y + coordinate.h * 4 / 5);
     }
-
     function callDrawJackpotLabelOnGeneralCheck(checkedLabel) {
         switch (checkedLabel) {
             case 'ShowTopLabel':
@@ -390,7 +365,6 @@ const jackpotanimationSettings = (function () {
                 break;
         }
     }
-
     function callDrawJackpotLabelOnWinCheck(checkedLabel) {
         switch (checkedLabel) {
             case 'ShowTopLabelWin':
@@ -404,7 +378,6 @@ const jackpotanimationSettings = (function () {
                 break;
         }
     }
-
     applyInfoLineText.addEventListener('click', function () {
         infoLineText.value = infoLineText.value;
         drawJackpotInfoLine(infoLineCoordinate, infoLineText.value);

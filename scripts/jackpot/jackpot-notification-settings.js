@@ -1,29 +1,23 @@
 let jackpotNotificationSettings = (function () {
-
     let enumSort = {
         0: 'None',
         1: 'OrdinalNumber',
         2: 'Value'
     }
-  
     let formSettingsSmsSettings = {};
     formSettingsSmsSettings.formContainerSelector = '#jackpot-notification-settings-tab-info';
     formSettingsSmsSettings.getData = communication.events.jackpots.getJackpotSettings;
     formSettingsSmsSettings.submitEvent = communication.events.jackpots.setJackpotSettings;
     checkboxChangeState.radioClick($$('#jackpot-sort-by'));
-
     formSettingsSmsSettings.afterDisplayData = function (formSettings, data) {
         let enableSMS = data.Data.EnableSms === true;
         let enableEmail = data.Data.EnableEmail === true;
-
         if (enableSMS || enableEmail) {
             $$('#jackpot-enable-notification-mode').parentNode.vertexToggle.check();
-        }
-        else {
+        } else {
             $$('#jackpot-enable-notification-mode').parentNode.vertexToggle.uncheck();
         }
     };
-
     formSettingsSmsSettings.beforeSubmit = function (formSettings, data) {
         // console.log('data to be sent', data);
         if ($$('#jackpot-enable-notification-mode').parentNode.vertexToggle.getState()) {
@@ -39,23 +33,17 @@ let jackpotNotificationSettings = (function () {
         else {
             data.EnableEmail = false;
             data.EnableSMS = false;
-            
         }
-        //todo: dorada sta ako je globalni islocal je na false
-        //data.IsLocal = true;
         let jackpotId = jackpots.getEndpointId();
         data.EndpointId = jackpotId.EndpointId;
         data.Sort = parseInt(checkboxChangeState.getRadioState($$('#jackpot-sort-by')));
         return data;
     };
-
-
     on('jackpot/tab/notification-settings', function (params) {
         formSettingsSmsSettings.endpointId = params.endpointId;
         trigger('form/init', { formSettings: formSettingsSmsSettings });
         trigger('form/getData', { formSettings: formSettingsSmsSettings });
     });
-
     return {
         enumSort
     }

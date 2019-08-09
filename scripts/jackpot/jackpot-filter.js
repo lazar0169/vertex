@@ -12,7 +12,6 @@ const jackpotFilter = (function () {
     let jackpotAdvanceFilterClearButton = $$('#jackpot-advance-table-filter-clear').children[0];
     let advanceTableFilterInfobar = $$('#jackpot-advance-table-filter-active-infobar');
     let clearButtonAdvanceFilterInfobar = $$('#jackpot-advance-table-filter-active-infobar-button').children[0];
-
     //region event listeners
     jackpotAdvanceFilterApplyButton.addEventListener('click', function () {
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
@@ -25,22 +24,18 @@ const jackpotFilter = (function () {
         $$('#table-container-jackpot-history').resetFilters();
         filterJackpotsHistoryTable();
     });
-
     jackpotAdvanceFilterClearButton.addEventListener('click', function () {
         trigger('clear/dropdown/filter', { data: advanceTableFilterActive });
     });
-
     function filterJackpotsHistoryTable() {
         let filters = prepareJackpotHistoryFilters();
         trigger(communication.events.jackpots.previewJackpotHistory, { data: filters });
     }
     function prepareJackpotHistoryFilters() {
         let table = $$('#table-container-jackpot-history');
-
         let machineList = $$('#jackpot-advance-table-filter-machine').children[1].get();
         let jackpotList = $$('#jackpot-advance-table-filter-jackpot').children[1].getValue();
         let casinoList = $$('#jackpot-advance-table-filter-casino').children[1].getValue();
-
         let filters = {
             'EndpointId': jackpots.getEndpointId().EndpointId,
             'SelectedPeriod': $$('#jackpot-advance-table-filter-date-range').children[1].get(),
@@ -51,7 +46,6 @@ const jackpotFilter = (function () {
         filters = table.getFilters(filters);
         return filters;
     }
-
     on('jackpot/set-filters', function (params) {
         let filters = params.data.Data.Filter;
         dropdownDate.generate({ values: filters.PeriodList, parent: jackpotFilterDataRange, name: 'PeriodList' });
@@ -59,31 +53,26 @@ const jackpotFilter = (function () {
         dropdown.generate({ values: filters.JackpotNameList, parent: jackpotFilterJackpot, type: 'multi' });
         dropdown.generate({ values: filters.MachineNameList, parent: jackpotFilterMachine, type: 'multi' });
     });
-
     advanceTableFilter.children[0].addEventListener('click', function () {
         advanceTableFilter.classList.toggle('advance-filter-active');
         trigger('opened-arrow', { div: advanceTableFilter.children[0] });
         advanceTableFilterActive.classList.toggle('hidden');
     });
-
     //close add new jackpot form
     jackpotTab.addEventListener('click', function () {
         addNewJackpotWrapper.classList.add('hidden');
         addJackpot.classList.remove('not-active-button');
     });
-
     //show add new jackpot form
     addJackpot.onclick = function () {
+        addNewJackpot.reset();
         let EntryData = jackpots.getEndpointId();
         let data = {};
         data.successAction = 'jackpot/get-add-jackpot';
         trigger(communication.events.jackpots.addJackpot, { data, EntryData });
         addNewJackpotWrapper.classList.toggle('hidden');
         addJackpot.classList.add('not-active-button')
-        //todo jel ovde praznim polja?
-        addNewJackpot.reset();
     }
-
     return {
         prepareJackpotHistoryFilters
     }
